@@ -1,0 +1,1 @@
+C:\Users\Надежда\Documents\GitHub\qyoga-back\QYoga\build\classes\kotlin\main\nsu\fit\qyoga\QYogaApplication.class;C:\Users\Надежда\Documents\GitHub\qyoga-back\QYoga\build\classes\kotlin\main\nsu\fit\qyoga\QYogaApplicationKt.class;C:\Users\Надежда\Documents\GitHub\qyoga-back\QYoga\build\classes\kotlin\main\nsu\fit\qyoga\StarterController.class
