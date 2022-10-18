@@ -1,4 +1,4 @@
-package nsu.fit.qyoga
+package nsu.fit.qyoga.app
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
