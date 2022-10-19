@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    username: postgres
+    password: P@ssw0rd
+    url: jdbc:postgresql://localhost:54501/qyoga
+
+qyoga:
+
+  auth:
+    jwt-secret: 12<40iHT)JpDVOG$%P9pKf?VB0P8dd?2T1$
