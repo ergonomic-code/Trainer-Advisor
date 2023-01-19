@@ -1,20 +1,19 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "2.7.3"
-	id("io.spring.dependency-management") version "1.0.13.RELEASE"
-	kotlin("jvm") version "1.7.10"
-	kotlin("plugin.spring") version "1.7.10"
-	kotlin("plugin.jpa") version "1.7.10"
+	id("org.springframework.boot") version "2.7.4"
+	id("io.spring.dependency-management") version "1.0.14.RELEASE"
+	kotlin("jvm") version "1.7.20"
+	kotlin("plugin.spring") version "1.7.20"
 }
 
 group = "nsu.fit"
 version = "0.0.1-SNAPSHOT"
-java.sourceCompatibility = JavaVersion.VERSION_17
+extra["testcontainersVersion"] = "1.17.4"
 
-configurations {
-	compileOnly {
-		extendsFrom(configurations.annotationProcessor.get())
+java {
+	toolchain {
+		languageVersion.set(JavaLanguageVersion.of(17))
 	}
 }
 
@@ -23,16 +22,44 @@ repositories {
 }
 
 dependencies {
-	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-	compileOnly("org.projectlombok:lombok")
+	implementation("org.flywaydb:flyway-core")
+	implementation("jakarta.validation:jakarta.validation-api:3.0.2")
+
+	api("io.jsonwebtoken:jjwt-api:0.11.5")
+	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
+	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
+
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
-	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	runtimeOnly("org.postgresql:postgresql:42.3.2")
+	testImplementation("org.testcontainers:junit-jupiter")
+	testImplementation("org.testcontainers:postgresql")
+	testImplementation("io.rest-assured:rest-assured:5.2.0")
+	testImplementation("io.rest-assured:kotlin-extensions:5.2.0")
+	testImplementation("io.kotest:kotest-runner-junit5:5.5.0")
+	testImplementation("io.kotest:kotest-assertions-core:5.5.0")
+
+	runtimeOnly("org.postgresql:postgresql:42.5.0")
+
+    modules {
+        module("org.codehaus.groovy:groovy") {
+            replacedBy("org.apache.groovy:groovy", "conflicts in current rest-assured version")
+        }
+        module("org.codehaus.groovy:groovy-xml") {
+            replacedBy("org.apache.groovy:groovy-xml", "conflicts in current rest-assured version")
+        }
+    }
+}
+
+dependencyManagement {
+	imports {
+		mavenBom("org.testcontainers:testcontainers-bom:${property("testcontainersVersion")}")
+	}
 }
 
 tasks.withType<KotlinCompile> {
@@ -45,3 +72,4 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
+
