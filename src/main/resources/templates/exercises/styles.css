@@ -1,0 +1,153 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    outline: none;
+    border: none;
+    text-decoration: none;
+    box-sizing: border-box;
+    font-family: "Roboto", sans-serif;
+}
+
+body {
+    background: rgb(226, 226, 226);
+}
+
+nav {
+    position: sticky;
+    top: 0;
+    bottom: 0;
+    height: 100vh;
+    left: 0;
+    /*width: 90px;*/
+    width: 100px;
+    background: #fff;
+    overflow: hidden;
+    transition: 1s;
+}
+
+nav:hover {
+    width: 280px;
+    transition: 1s;
+}
+
+.logo {
+    text-align: center;
+    display: flex;
+    margin-top: 20px;
+    margin-left: 20px;
+    padding-bottom: 1rem;
+}
+
+.logo img {
+    width: 40px;
+    height: 40px;
+    color: #929ECC;
+}
+
+.logo span {
+    color: #181818;
+    font-weight: bold;
+    padding-top: 10px;
+    font-size: 18px;
+}
+
+.logo .nav-item {
+    margin-left: 30px;
+}
+
+.menu-item img {
+    width: 18px;
+    height: 20px;
+    margin-left: 30px;
+}
+
+a {
+    position: relative;
+    width: 280px;
+    font-size: 14px;
+    font-weight: 450;
+    color: #324054;
+    display: table;
+    padding: 10px;
+}
+
+nav .fas {
+    position: relative;
+    width: 70px;
+    height: 40px;
+    top: 10px;
+    font-size: 20px;
+    text-align: center;
+}
+
+.nav-item {
+    position: relative;
+    top: -5px;
+    margin-left: 42px;
+    text-align-all: center;
+}
+
+.logo:hover {
+    background: white;
+}
+
+a:hover {
+    background: #eee;
+}
+
+/*main section*/
+.container {
+    display: flex;
+}
+
+.main {
+    position: relative;
+    padding: 20px;
+    width: 100%;
+}
+
+.main-top {
+    display: flex;
+    width: 100%;
+    height: 25%;
+    align-content: center;
+    border-radius: 10px;
+    background-color: #E7ECFF;
+
+}
+
+.main-top h1 {
+    font-size: 20px;
+    font-weight: normal;
+    margin-left: 20px;
+    margin-top: 10px;
+    align-content: flex-start;
+}
+
+.horizontal-line {
+    width: 100%;
+    border-bottom: black;
+    height: 100px;
+}
+
+.exercises {
+    display: flex;
+    width: 100%;
+    height: 65%;
+    margin-top: 10px;
+    align-content: center;
+    border-radius: 10px;
+    background-color: #E7ECFF;
+}
+
+
+
+
+
+
+
+
+
+
