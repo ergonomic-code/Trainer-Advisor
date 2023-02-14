@@ -18,6 +18,7 @@ class ExercisesServiceImpl(
         exerciseType: ExerciseType?,
         therapeuticTask: String?
     ): Page<Exercise> {
-        TODO("Not yet implemented")
+        val result = null
+        return Page.empty()
     }
 }

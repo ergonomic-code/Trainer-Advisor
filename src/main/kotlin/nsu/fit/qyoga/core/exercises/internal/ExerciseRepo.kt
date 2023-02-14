@@ -10,4 +10,5 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(readOnly = true)
 interface ExerciseRepo : CrudRepository<Exercise, Long>, PagingAndSortingRepository<Exercise, Long> {
 
+
 }
