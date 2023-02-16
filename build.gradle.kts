@@ -6,6 +6,7 @@ plugins {
 	kotlin("jvm") version "1.7.20"
 	kotlin("plugin.spring") version "1.7.20"
 	id("io.gitlab.arturbosch.detekt") version "1.22.0"
+	id("org.jetbrains.kotlinx.kover") version "0.6.1"
 }
 
 group = "nsu.fit"
@@ -85,5 +86,47 @@ detekt {
 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
 	reports {
 		html.required.set(true)
+	}
+}
+
+kover {
+	htmlReport {
+		onCheck.set(true)
+	}
+	verify {
+		onCheck.set(true)
+
+		rule {
+			isEnabled = true
+			name = "Line coverage"
+
+			target = kotlinx.kover.api.VerificationTarget.ALL
+
+			bound {
+				minValue = 85
+				maxValue = 100
+				counter = kotlinx.kover.api.CounterType.LINE
+				valueType = kotlinx.kover.api.VerificationValueType.COVERED_PERCENTAGE
+			}
+		}
+
+
+		rule {
+			isEnabled = true
+			name = "Endpoints coverage"
+
+			target = kotlinx.kover.api.VerificationTarget.CLASS
+
+			overrideClassFilter {
+				includes += "nsu.fit.qyoga.*Controller"
+			}
+
+			// add rule bound
+			bound {
+				minValue = 100
+				counter = kotlinx.kover.api.CounterType.INSTRUCTION
+				valueType = kotlinx.kover.api.VerificationValueType.COVERED_PERCENTAGE
+			}
+		}
 	}
 }
