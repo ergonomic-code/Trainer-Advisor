@@ -2,7 +2,6 @@ package nsu.fit.qyoga.infra
 
 import org.testcontainers.containers.PostgreSQLContainer
 
-
 val pgContainer by lazy {
     PostgreSQLContainer("postgres:14.2")
         .withExposedPorts(5432)
@@ -14,4 +13,3 @@ val pgContainer by lazy {
         .withReuse(true)
         .apply { start() }
 }
-

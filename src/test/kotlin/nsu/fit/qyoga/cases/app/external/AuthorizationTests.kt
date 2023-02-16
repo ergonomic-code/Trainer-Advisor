@@ -4,20 +4,19 @@ import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
 import nsu.fit.qyoga.infra.QYogaAppTestBase
-import nsu.fit.qyoga.infra.fixture.adminToken
-import nsu.fit.qyoga.infra.fixture.brokenAdminToken
-import nsu.fit.qyoga.infra.fixture.editedAdminToken
+import nsu.fit.qyoga.infra.fixture.ADMIN_TOKEN
+import nsu.fit.qyoga.infra.fixture.BROKEN_ADMIN_TOKEN
+import nsu.fit.qyoga.infra.fixture.EDITED_ADMIN_TOKEN
 import nsu.fit.qyoga.infra.fixture.token
 import org.apache.http.HttpStatus
 import org.junit.jupiter.api.Test
 
-
-class AuthorizationTest : QYogaAppTestBase() {
+class AuthorizationTests : QYogaAppTestBase() {
 
     @Test
     fun `QYoga should allow access to admin's endpoints with valid admin token`() {
         Given {
-            token(adminToken)
+            token(ADMIN_TOKEN)
         } When {
             post("users")
         } Then {
@@ -39,7 +38,7 @@ class AuthorizationTest : QYogaAppTestBase() {
     @Test
     fun `QYoga should prohibit access to restricted endpoint with edited token`() {
         Given {
-            token(editedAdminToken)
+            token(EDITED_ADMIN_TOKEN)
         } When {
             post("users")
         } Then {
@@ -50,7 +49,7 @@ class AuthorizationTest : QYogaAppTestBase() {
     @Test
     fun `QYoga should prohibit access to restricted endpoint with broken token`() {
         Given {
-            token(brokenAdminToken)
+            token(BROKEN_ADMIN_TOKEN)
         } When {
             post("users")
         } Then {

@@ -1,6 +1,5 @@
 package nsu.fit.qyoga.app
 
-
 import nsu.fit.qyoga.core.users.AuthService
 import org.slf4j.LoggerFactory
 import org.springframework.security.authentication.AuthenticationManager
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Component
 private const val BEARER = "Bearer "
 
 @Component
-class QyogaAuthenticationManager(
+class QYogaAuthenticationManager(
     private val authService: AuthService
 ) : AuthenticationManager {
 

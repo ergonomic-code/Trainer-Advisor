@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 
-
 /**
  * Базовый класс для Spring обработчиков исключений модулей ядра.
  *

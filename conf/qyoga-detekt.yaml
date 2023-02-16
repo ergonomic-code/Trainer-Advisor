@@ -1,0 +1,117 @@
+complexity:
+  NamedArguments:
+    active: true
+
+  NestedScopeFunctions:
+    active: true
+
+  StringLiteralDuplication:
+    active: true
+
+naming:
+  PackageNaming:
+    active: false
+
+  FunctionNaming:
+    active: false
+
+style:
+  MaxLineLength:
+    maxLineLength: 140
+    excludeRawStrings: true
+
+  WildcardImport:
+    excludeImports: [ 'java.util.*', 'nsu.fit.qyoga.*' ]
+
+  AlsoCouldBeApply:
+    active: true
+
+  CanBeNonNullable:
+    active: true
+
+  ClassOrdering:
+    active: true
+
+  CollapsibleIfStatements:
+    active: true
+
+  DataClassShouldBeImmutable:
+    active: true
+
+  EqualsOnSignatureLine:
+    active: true
+
+  MandatoryBracesIfStatements:
+    active: true
+
+  MandatoryBracesLoops:
+    active: true
+
+  MultilineRawStringIndentation:
+    active: true
+
+  NoTabs:
+    active: true
+
+  NullableBooleanCheck:
+    active: true
+
+  OptionalUnit:
+    active: true
+
+  OptionalWhenBraces:
+    active: true
+
+  TrailingWhitespace:
+    active: true
+
+  UnderscoresInNumericLiterals:
+    active: true
+
+  UnnecessaryLet:
+    active: true
+
+  UntilInsteadOfRangeTo:
+    active: true
+
+  UnusedImports:
+    active: true
+
+  UseDataClass:
+    active: true
+
+  UseSumOfInsteadOfFlatMapSize:
+    active: true
+
+  UselessCallOnNotNull:
+    active: true
+
+
+performance:
+  CouldBeSequence:
+    active: true
+
+  SpreadOperator:
+    active: false
+
+
+potential-bugs:
+  DoubleMutabilityForCollection:
+    active: true
+
+  UnconditionalJumpStatementInLoop:
+    active: true
+
+
+formatting:
+  AnnotationOnSeparateLine:
+    active: false
+
+  MaximumLineLength:
+    active: false
+
+  NoWildcardImports:
+    active: false
+
+  NoBlankLineBeforeRbrace:
+    active: false

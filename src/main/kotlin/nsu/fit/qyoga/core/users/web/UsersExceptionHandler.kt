@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.context.request.WebRequest
 
-
 @ControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 class UsersExceptionHandler : MappingExceptionHandler<UsersException>() {

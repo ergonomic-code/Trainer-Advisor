@@ -5,6 +5,7 @@ plugins {
 	id("io.spring.dependency-management") version "1.0.14.RELEASE"
 	kotlin("jvm") version "1.7.20"
 	kotlin("plugin.spring") version "1.7.20"
+	id("io.gitlab.arturbosch.detekt") version "1.22.0"
 }
 
 group = "nsu.fit"
@@ -46,14 +47,16 @@ dependencies {
 
 	runtimeOnly("org.postgresql:postgresql:42.5.0")
 
-    modules {
-        module("org.codehaus.groovy:groovy") {
-            replacedBy("org.apache.groovy:groovy", "conflicts in current rest-assured version")
-        }
-        module("org.codehaus.groovy:groovy-xml") {
-            replacedBy("org.apache.groovy:groovy-xml", "conflicts in current rest-assured version")
-        }
-    }
+	detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.22.0")
+
+	modules {
+		module("org.codehaus.groovy:groovy") {
+			replacedBy("org.apache.groovy:groovy", "conflicts in current rest-assured version")
+		}
+		module("org.codehaus.groovy:groovy-xml") {
+			replacedBy("org.apache.groovy:groovy-xml", "conflicts in current rest-assured version")
+		}
+	}
 }
 
 dependencyManagement {
@@ -73,3 +76,14 @@ tasks.withType<Test> {
 	useJUnitPlatform()
 }
 
+detekt {
+	buildUponDefaultConfig = true
+	allRules = false
+	config = files("$projectDir/conf/qyoga-detekt.yaml")
+}
+
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+	reports {
+		html.required.set(true)
+	}
+}

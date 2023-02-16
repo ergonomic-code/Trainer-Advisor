@@ -7,7 +7,6 @@ import org.springframework.web.context.request.ServletWebRequest
 import org.springframework.web.context.request.WebRequest
 import java.time.Instant
 
-
 data class ExceptionResponse(
     @NotBlank
     val path: String,
