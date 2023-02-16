@@ -17,7 +17,7 @@ naming:
 
 style:
   MaxLineLength:
-    maxLineLength: 140
+    maxLineLength: 150
     excludeRawStrings: true
 
   WildcardImport:

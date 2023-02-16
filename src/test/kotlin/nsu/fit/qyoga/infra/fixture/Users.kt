@@ -8,12 +8,7 @@ val adminWithInvalidPasswordLoginRequest = adminLoginRequest.copy(password = "in
 
 val notExistingUserLoginRequest = LoginRequest("not-existing", "any")
 
-const val ADMIN_TOKEN = "eyJhbGciOiJIUzI1NiJ9." +
-        "eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInN1YiI6IjEiLCJpYXQiOjE2NjYxNDg1MDR9." +
-        "nE37BqZhBidqR2C_voONJjJAMmrpt-_JrHeWrNlLat0"
-
-const val EDITED_ADMIN_TOKEN = "eyJhbGciOiJIUzI1NiJ9." +
-        "eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInN1YiI6IjIiLCJpYXQiOjE2NjYxNDg1MDR9" +
-        ".nE37BqZhBidqR2C_voONJjJAMmrpt-_JrHeWrNlLat0"
+const val EDITED_ADMIN_TOKEN =
+    "eyJhbGciOiJIUzI1NiJ9." + "eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInN1YiI6IjIiLCJpYXQiOjE2NjYxNDg1MDR9" + ".nE37BqZhBidqR2C_voONJjJAMmrpt-_JrHeWrNlLat0"
 
 const val BROKEN_ADMIN_TOKEN = "YiI6IjIiLCJpYXQiOjE2NjYxNDg1MDR9.nE37BqZhBidqR2C_voONJjJAMmrpt-_JrHeWrNlLat0"
