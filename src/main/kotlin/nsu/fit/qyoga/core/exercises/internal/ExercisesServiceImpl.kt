@@ -16,9 +16,8 @@ class ExercisesServiceImpl(
         contradiction: String?,
         duration: String?,
         exerciseType: ExerciseType?,
-        therapeuticTask: String?
+        therapeuticPurpose: String?
     ): Page<Exercise> {
-        val result = null
-        return Page.empty()
+        return exerciseRepo.getExercisesByFilters(title, contradiction, duration, exerciseType, therapeuticPurpose)
     }
 }

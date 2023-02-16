@@ -49,23 +49,23 @@ CREATE TABLE programs
     date  VARCHAR(128)
 );
 
-CREATE TABLE therapeutic_purpose
+CREATE TABLE therapeutic_purposes
 (
     id      SERIAL NOT NULL
-        CONSTRAINT pk_programs PRIMARY KEY,
+        CONSTRAINT pk_therapeutic_purposes PRIMARY KEY,
     purpose VARCHAR(255)
 );
 
 create table purpose_programs
 (
-    purpose_id BIGINT REFERENCES therapeutic_purpose (id) ON UPDATE CASCADE ON DELETE CASCADE,
+    purpose_id BIGINT REFERENCES therapeutic_purposes (id) ON UPDATE CASCADE ON DELETE CASCADE,
     program_id BIGINT REFERENCES programs (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 create table exercise_purposes
 (
     exercise_id BIGINT REFERENCES exercises (id) ON UPDATE CASCADE ON DELETE CASCADE,
-    purpose_id  BIGINT REFERENCES therapeutic_purpose (id) ON UPDATE CASCADE ON DELETE CASCADE
+    purpose_id BIGINT REFERENCES therapeutic_purposes (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 

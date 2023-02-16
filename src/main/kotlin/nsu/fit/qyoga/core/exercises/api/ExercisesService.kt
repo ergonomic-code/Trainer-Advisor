@@ -10,6 +10,6 @@ interface ExercisesService {
         contradiction: String?,
         duration: String?,
         exerciseType: ExerciseType?,
-        therapeuticTask: String?
+        therapeuticPurpose: String?
     ): Page<Exercise>
 }

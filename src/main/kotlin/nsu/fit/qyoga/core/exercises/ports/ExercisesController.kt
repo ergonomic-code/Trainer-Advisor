@@ -22,9 +22,9 @@ class ExercisesController(
         @RequestParam(value = "contraindication", required = false) contradiction: String?,
         @RequestParam(value = "duration", required = false) duration: String?,
         @RequestParam(value = "exerciseType", required = false) exerciseType: ExerciseType?,
-        @RequestParam(value = "therapeuticTask", required = false) therapeuticTask: String?
+        @RequestParam(value = "therapeuticPurpose", required = false) therapeuticPurpose: String?
     ): Page<Exercise> {
-        return exercisesService.getExercises(title, contradiction, duration, exerciseType, therapeuticTask)
+        return exercisesService.getExercises(title, contradiction, duration, exerciseType, therapeuticPurpose)
     }
 
     /**
