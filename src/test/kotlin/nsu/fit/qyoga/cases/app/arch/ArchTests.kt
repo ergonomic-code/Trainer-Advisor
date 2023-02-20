@@ -37,4 +37,23 @@ class ArchTests {
             .check(qyogaClasses)
     }
 
+
+    @Test
+    fun `QYoga modules should conform to ergonomic structure`() {
+        layeredArchitecture()
+            .consideringOnlyDependenciesInLayers()
+            .layer("Factory").definedBy("nsu.fit.qyoga.core.*")
+            .layer("API").definedBy("nsu.fit.qyoga.core..api..")
+            .layer("Internal").definedBy("nsu.fit.qyoga.core..internal..")
+            .layer("Ports").definedBy("nsu.fit.qyoga.core..ports..")
+            .layer("Api").definedBy("nsu.fit.qyoga.core..api..")
+            .layer("Platform").definedBy("nsu.fit.platform..")
+
+            .whereLayer("Factory").mayOnlyBeAccessedByLayers("Factory")
+            .whereLayer("Internal").mayOnlyBeAccessedByLayers("Factory")
+            .whereLayer("Ports").mayOnlyBeAccessedByLayers("Factory")
+            .whereLayer("Api").mayOnlyAccessLayers("Api", "Platform")
+            .check(qyogaClasses)
+    }
+
 }

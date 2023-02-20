@@ -1,6 +1,6 @@
 package nsu.fit.qyoga.infra.fixture
 
-import nsu.fit.qyoga.core.users.LoginRequest
+import nsu.fit.qyoga.core.users.api.LoginRequest
 
 val adminLoginRequest = LoginRequest("admin", "diem-Synergy5")
 

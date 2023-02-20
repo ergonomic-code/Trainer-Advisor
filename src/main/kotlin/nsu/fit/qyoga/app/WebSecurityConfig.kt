@@ -1,6 +1,6 @@
 package nsu.fit.qyoga.app
 
-import nsu.fit.qyoga.core.users.model.Role
+import nsu.fit.qyoga.core.users.api.Role
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod

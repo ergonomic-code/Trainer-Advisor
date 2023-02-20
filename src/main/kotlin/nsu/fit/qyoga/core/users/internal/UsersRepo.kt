@@ -1,4 +1,4 @@
-package nsu.fit.qyoga.core.users.model
+package nsu.fit.qyoga.core.users.internal
 
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository

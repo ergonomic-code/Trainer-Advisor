@@ -1,4 +1,4 @@
-package nsu.fit.qyoga.core.users
+package nsu.fit.qyoga.core.users.api
 
 import nsu.fit.platform.errors.DomainException
 

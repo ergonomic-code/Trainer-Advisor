@@ -1,6 +1,6 @@
 package nsu.fit.qyoga.app
 
-import nsu.fit.qyoga.core.users.AuthService
+import nsu.fit.qyoga.core.users.api.AuthService
 import org.slf4j.LoggerFactory
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.BadCredentialsException
