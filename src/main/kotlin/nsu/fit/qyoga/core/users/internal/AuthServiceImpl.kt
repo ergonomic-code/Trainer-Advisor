@@ -1,11 +1,13 @@
-package nsu.fit.qyoga.core.users
+package nsu.fit.qyoga.core.users.internal
 
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jws
 import io.jsonwebtoken.JwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
-import nsu.fit.qyoga.core.users.model.UsersRepo
+import nsu.fit.qyoga.core.users.api.AuthService
+import nsu.fit.qyoga.core.users.api.BadCredentials
+import nsu.fit.qyoga.core.users.api.LoginRequest
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.authentication.BadCredentialsException
@@ -13,17 +15,12 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.*
 
-data class LoginRequest(
-    val username: String,
-    val password: String
-)
-
 @Service
-class AuthService(
+class AuthServiceImpl(
     @Value("\${qyoga.auth.jwt-secret}") secretKey: String,
     private val usersRepo: UsersRepo,
     private val passwordEncoder: PasswordEncoder
-) {
+) : AuthService {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -33,7 +30,7 @@ class AuthService(
         .setSigningKey(key)
         .build()
 
-    fun login(request: LoginRequest): String {
+    override fun login(request: LoginRequest): String {
         val user = usersRepo.findByUsername(request.username)
 
         if (user == null || !passwordEncoder.matches(request.password, user.passwordHash)) {
@@ -48,7 +45,7 @@ class AuthService(
             .compact()
     }
 
-    fun parseJwt(jwtString: String): Jws<Claims> =
+    override fun parseJwt(jwtString: String): Jws<Claims> =
         try {
             jwtParser.parseClaimsJws(jwtString)
         } catch (e: JwtException) {

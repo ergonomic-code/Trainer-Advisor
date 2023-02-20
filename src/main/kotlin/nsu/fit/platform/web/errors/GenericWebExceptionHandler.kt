@@ -1,7 +1,7 @@
-package nsu.fit.qyoga.platform.web.errors
+package nsu.fit.platform.web.errors
 
 import jakarta.validation.ConstraintViolationException
-import nsu.fit.qyoga.platform.errors.ResourceNotFound
+import nsu.fit.platform.errors.ResourceNotFound
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
 import org.springframework.http.HttpStatus

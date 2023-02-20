@@ -45,8 +45,9 @@ dependencies {
 	testImplementation("io.rest-assured:kotlin-extensions:5.2.0")
 	testImplementation("io.kotest:kotest-runner-junit5:5.5.0")
 	testImplementation("io.kotest:kotest-assertions-core:5.5.0")
+	testImplementation("com.tngtech.archunit:archunit:1.0.1")
 
-	runtimeOnly("org.postgresql:postgresql:42.5.0")
+	runtimeOnly("org.postgresql:postgresql:42.5.1")
 
 	detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.22.0")
 

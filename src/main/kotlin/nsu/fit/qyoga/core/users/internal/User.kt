@@ -1,15 +1,7 @@
-package nsu.fit.qyoga.core.users.model
+package nsu.fit.qyoga.core.users.internal
 
+import nsu.fit.qyoga.core.users.api.Role
 import org.springframework.data.relational.core.mapping.Table
-
-enum class Role {
-
-    ROLE_ANONYMOUS,
-    ROLE_CLIENT,
-    ROLE_THERAPIST,
-    ROLE_ADMIN
-
-}
 
 @Table("users")
 data class User(
