@@ -47,7 +47,7 @@ dependencies {
 	testImplementation("io.kotest:kotest-assertions-core:5.5.0")
 	testImplementation("com.tngtech.archunit:archunit:1.0.1")
 
-	runtimeOnly("org.postgresql:postgresql:42.5.0")
+	runtimeOnly("org.postgresql:postgresql:42.5.1")
 
 	detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.22.0")
 
