@@ -21,7 +21,7 @@ style:
     excludeRawStrings: true
 
   WildcardImport:
-    excludeImports: [ 'java.util.*', 'nsu.fit.qyoga.*' ]
+    excludeImports: [ 'java.util.*', 'nsu.fit.qyoga.*', 'org.springframework.*' ]
 
   AlsoCouldBeApply:
     active: true

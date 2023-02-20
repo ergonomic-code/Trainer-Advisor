@@ -37,7 +37,6 @@ class ArchTests {
             .check(qyogaClasses)
     }
 
-
     @Test
     fun `QYoga modules should conform to ergonomic structure`() {
         layeredArchitecture()

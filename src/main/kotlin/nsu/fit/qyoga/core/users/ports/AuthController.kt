@@ -27,7 +27,6 @@ class AuthController(
 
 }
 
-
 @ControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 class UsersExceptionHandler : MappingExceptionHandler<UsersException>() {
