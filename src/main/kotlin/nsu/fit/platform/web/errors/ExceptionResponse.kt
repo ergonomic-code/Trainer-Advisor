@@ -1,4 +1,4 @@
-package nsu.fit.qyoga.platform.web.errors
+package nsu.fit.platform.web.errors
 
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.PastOrPresent

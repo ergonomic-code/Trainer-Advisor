@@ -1,4 +1,4 @@
-package nsu.fit.qyoga.platform.errors
+package nsu.fit.platform.errors
 
 open class ResourceNotFound(
     override val message: String

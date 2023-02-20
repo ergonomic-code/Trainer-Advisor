@@ -1,4 +1,4 @@
-package nsu.fit.qyoga.platform.web.errors
+package nsu.fit.platform.web.errors
 
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
