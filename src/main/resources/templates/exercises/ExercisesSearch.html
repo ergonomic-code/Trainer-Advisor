@@ -14,24 +14,24 @@
     <nav>
         <ul>
             <li><a class="logo" href="#">
-                <img src="logo.png">
+                <img src="icons/logo.png">
                 <span class="nav-item">Qyoga</span>
             </a></li>
 
             <li><a class="menu-item" href="#">
-                <img src="home.png">
+                <img src="icons/home.png">
                 <span class="nav-item">Главная</span>
             </a></li>
             <li><a class="menu-item" href="#">
-                <img src="clients.png">
+                <img src="icons/clients.png">
                 <span class="nav-item">Клиенты</span>
             </a></li>
             <li><a class="menu-item" href="#">
-                <img src="programs.png">
+                <img src="icons/programs.png">
                 <span class="nav-item">Программы</span>
             </a></li>
             <li><a class="menu-item" href="#">
-                <img src="exercises.png">
+                <img src="icons/exercises.png">
                 <span class="nav-item">Упражнения</span>
             </a></li>
         </ul>
@@ -39,16 +39,78 @@
 
 
     <section class="main">
-        <div class="main-top">
+        <div class="top-title">
             <h1>Упражнения</h1>
-            <hr class="horizontal-line">
         </div>
+        <form>
+            <div class="filters">
+                <h1>Фильтры</h1>
+                <input id="name" onkeyup="myFunction()" placeholder="Название" type="text">
+                <input id="contraindications" placeholder="Противопоказание" type="text">
+                <input id="duration" placeholder="Длительность" type="text">
+                <select id="exerciseType" itemtype="text">
+                    <option disabled hidden id="first-option" selected value="null">Тип упражнения</option>
+                    <option class="opt" value="first">1 type</option>
+                    <option class="opt" value="second">2 type</option>
+                </select>
+                <input id="therapeuticTask" placeholder="Терапевтическая задача" type="text">
+
+            </div>
+        </form>
+
 
         <div class="exercises">
-            <h1>Упражнения</h1>
+
+            <table id="myTable">
+                <tr class="header">
+                    <th style="width:10%;">Название</th>
+                    <th style="width:15%;">Противопоказание</th>
+                    <th style="width:15%;">Длительность</th>
+                    <th style="width:15%;">Тип упражнения</th>
+                    <th style="width:20%;">Терапевтическая задача</th>
+                </tr>
+                <tr>
+                    <td>Название</td>
+                    <td>Отсутствует</td>
+                    <td>1 час</td>
+                    <td>Разминка</td>
+                    <td>Задача</td>
+                </tr>
+                <tr>
+                    <td>Название</td>
+                    <td>Отсутствует</td>
+                    <td>1 час</td>
+                    <td>Разминка</td>
+                    <td>Задача</td>
+                </tr>
+                <tr>
+                    <td>Название</td>
+                    <td>Отсутствует</td>
+                    <td>1 час</td>
+                    <td>Разминка</td>
+                    <td>Задача</td>
+                </tr>
+            </table>
 
         </div>
+
+        <div class="pagination">
+            <a href="#">«</a>
+            <a href="#">1</a>
+            <a class="active" href="#">2</a>
+            <a href="#">3</a>
+            <a href="#">4</a>
+            <a href="#">5</a>
+            <a href="#">6</a>
+            <a href="#">»</a>
+        </div>
+        <div>
+            <button>Новое Упражнение</button>
+        </div>
+
+
     </section>
+
 
 </div>
 
