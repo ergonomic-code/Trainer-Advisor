@@ -3,7 +3,6 @@ package nsu.fit.qyoga.core.exercises.internal
 import nsu.fit.qyoga.core.exercises.api.ExercisesService
 import nsu.fit.qyoga.core.exercises.api.model.Exercise
 import nsu.fit.qyoga.core.exercises.api.model.ExerciseType
-import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
 
 @Service
@@ -17,7 +16,11 @@ class ExercisesServiceImpl(
         duration: String?,
         exerciseType: ExerciseType?,
         therapeuticPurpose: String?
-    ): Page<Exercise> {
+    ): List<Exercise> {
         return exerciseRepo.getExercisesByFilters(title, contradiction, duration, exerciseType, therapeuticPurpose)
+    }
+
+    override fun getExerciseTypes(): List<ExerciseType> {
+        return exerciseRepo.getExerciseTypes()
     }
 }

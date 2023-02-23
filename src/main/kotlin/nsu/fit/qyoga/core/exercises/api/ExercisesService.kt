@@ -2,7 +2,6 @@ package nsu.fit.qyoga.core.exercises.api
 
 import nsu.fit.qyoga.core.exercises.api.model.Exercise
 import nsu.fit.qyoga.core.exercises.api.model.ExerciseType
-import org.springframework.data.domain.Page
 
 interface ExercisesService {
     fun getExercises(
@@ -11,5 +10,7 @@ interface ExercisesService {
         duration: String?,
         exerciseType: ExerciseType?,
         therapeuticPurpose: String?
-    ): Page<Exercise>
+    ): List<Exercise>
+
+    fun getExerciseTypes(): List<ExerciseType>
 }
