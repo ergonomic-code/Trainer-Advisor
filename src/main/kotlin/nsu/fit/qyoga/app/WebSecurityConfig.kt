@@ -28,8 +28,8 @@ class WebSecurityConfig(
             .and()
             .authorizeHttpRequests { authz ->
                 authz
-                    .antMatchers(HttpMethod.POST, "/users").hasAuthority(Role.ROLE_ADMIN.toString())
-                    .antMatchers("/users/login").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/users").hasAuthority(Role.ROLE_ADMIN.toString())
+                    .requestMatchers("/users/login").permitAll()
                     .anyRequest().authenticated()
             }
         // @formatter:on
