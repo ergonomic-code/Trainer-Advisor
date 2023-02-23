@@ -3,7 +3,11 @@ spring:
     username: postgres
     password: P@ssw0rd
     url: jdbc:postgresql://localhost:54501/qyoga
-
+#logging:
+#  level:
+#    org:
+#      springframework:
+#        security: DEBUG
 qyoga:
 
   auth:

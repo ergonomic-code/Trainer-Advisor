@@ -32,6 +32,8 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("org.flywaydb:flyway-core")
 	implementation("jakarta.validation:jakarta.validation-api:3.0.2")
+	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+	implementation("org.webjars.npm:htmx.org:1.8.4")
 
 	api("io.jsonwebtoken:jjwt-api:0.11.5")
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")

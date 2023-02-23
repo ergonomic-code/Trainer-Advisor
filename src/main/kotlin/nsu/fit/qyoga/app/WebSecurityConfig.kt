@@ -30,7 +30,8 @@ class WebSecurityConfig(
                 authz
                     .requestMatchers(HttpMethod.POST, "/users").hasAuthority(Role.ROLE_ADMIN.toString())
                     .requestMatchers("/users/login").permitAll()
-                    .anyRequest().authenticated()
+                    .requestMatchers(HttpMethod.GET, "/exercises/**").permitAll()
+                    .anyRequest().permitAll()
             }
         // @formatter:on
         return http.build()

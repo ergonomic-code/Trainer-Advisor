@@ -147,14 +147,14 @@ a:hover {
     position: relative;
     color: black;
     display: flex;
-    background-image: url('icons/search.png'); /* Add a search icon to input */
+    background-image: url('../icons/search.png'); /* Add a search icon to input */
     background-position: 10px 10px; /* Position the search icon */
     background-repeat: no-repeat; /* Do not repeat the icon image */
     width: 20%; /* Full-width */
     height: 40px;
     font-size: 12px; /* Increase font-size */
     border: 1px solid #ddd; /* Add a grey border */
-    padding: 10px 70px 10px 32px;
+    padding: 10px 60px 10px 32px;
     margin-bottom: 12px; /* Add some space below the input */
     margin-top: 60px;
     margin-left: 5px;

@@ -2,7 +2,6 @@ package nsu.fit.qyoga.core.exercises.internal
 
 import nsu.fit.qyoga.core.exercises.api.model.Exercise
 import nsu.fit.qyoga.core.exercises.api.model.ExerciseType
-import org.springframework.data.domain.Page
 import org.springframework.data.jdbc.repository.query.Query
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.PagingAndSortingRepository
@@ -12,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional
 @Repository
 @Transactional(readOnly = true)
 interface ExerciseRepo : CrudRepository<Exercise, Long>, PagingAndSortingRepository<Exercise, Long> {
-
 
     @Query(
         """
@@ -32,6 +30,14 @@ interface ExerciseRepo : CrudRepository<Exercise, Long>, PagingAndSortingReposit
         contradiction: String?,
         duration: String?,
         exerciseType: ExerciseType?,
-        therapeuticPurpose: String?
-    ): Page<Exercise>
+        therapeuticPurpose: String?,
+    ): List<Exercise>
+
+
+    @Query(
+        """
+        SELECT et.id, et.name FROM exercise_types et
+    """
+    )
+    fun getExerciseTypes(): List<ExerciseType>
 }
