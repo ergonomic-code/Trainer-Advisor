@@ -59,6 +59,7 @@ class ExercisesController(
         )
         model.addAttribute("types", exercisesService.getExerciseTypes())
         model.addAttribute("exercises", exercises)
+        model.addAttribute("searchDto", ExerciseSearchDto())
         model.addAttribute(
             "pageNumbers",
             IntStream.rangeClosed(1, exercises.totalPages).boxed().collect(Collectors.toList())
@@ -74,6 +75,7 @@ class ExercisesController(
         model: Model
     ): String {
         model.addAttribute("searchDto", searchDto)
+        println(searchDto.exerciseType)
         val exercises = exercisesService.getExercises(
             searchDto.title,
             searchDto.contradiction,

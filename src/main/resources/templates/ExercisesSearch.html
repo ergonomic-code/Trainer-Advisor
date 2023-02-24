@@ -46,7 +46,7 @@
         <div class="top-title">
             <h1>Упражнения</h1>
         </div>
-        <form class="filters" method="get" th:action="@{/exercises/search}" th:object="${searchDto}">
+        <form class="filters" method="get" th:action="@{/exercises/}" th:object="${searchDto}">
             <div class="filters">
                 <h1>Фильтры</h1>
 
@@ -54,49 +54,51 @@
                        hx-get="/exercises/search"
                        hx-indicator=".htmx-indicator"
                        hx-target="#exercises-list"
-                       hx-trigger="keyup changed delay:500ms, search"
                        id="name"
                        placeholder="Название"
+                       hx-sync="closest form:abort"
                        th:field="${searchDto.title}"
                        type="text">
 
-                <input hx-get="/exercises/search"
-                       hx-indicator=".htmx-indicator"
-                       hx-target="#exercises-list"
-                       hx-trigger="keyup changed delay:500ms, search"
-                       id="contraindications"
-                       placeholder="Противопоказание"
-                       th:field="${searchDto.contradiction}"
-                       type="text"
+                <input
+                        hx-indicator=".htmx-indicator"
+                        hx-sync="closest form:abort"
+                        hx-target="#exercises-list"
+                        id="contraindications"
+                        placeholder="Противопоказание"
+                        th:field="${searchDto.contradiction}"
+                        type="text"
                 >
                 <input hx-get="/exercises/search"
                        hx-indicator=".htmx-indicator"
                        hx-target="#exercises-list"
-                       hx-trigger="keyup changed delay:500ms, search"
                        id="duration"
                        placeholder="Длительность"
+                       hx-sync="closest form:abort"
                        th:field="${searchDto.duration}"
                        type="text">
-                <select hx-get="/exercises/search"
-                        hx-indicator=".htmx-indicator"
+                <select hx-indicator=".htmx-indicator"
                         hx-target="#exercises-list"
-                        hx-trigger="keyup changed delay:500ms, search"
                         id="exerciseType"
                         itemtype="text"
-                        th:field="${searchDto.exerciseType}">
-                    <option disabled hidden id="first-option" selected value="null">Тип упражнения</option>
+                        hx-sync="closest form:abort"
+                        th:field="${searchDto.exerciseType}"
+                >
+                    <option id="first-option" selected th:value="null">Тип упражнения</option>
                     <option th:each="type : ${types}" th:text="${type.name()}" th:value="${type.name()}"></option>
                 </select>
                 <input hx-get="/exercises/search"
                        hx-indicator=".htmx-indicator"
                        hx-target="#exercises-list"
-                       hx-trigger="keyup changed delay:500ms, search"
                        id="therapeuticTask"
                        placeholder="Терапевтическая задача"
+                       hx-sync="closest form:abort"
                        th:field="${searchDto.therapeuticPurpose}"
                        type="text">
 
             </div>
+            <button style="position: absolute" type="submit">Поиск</button>
+
         </form>
 
 
@@ -124,7 +126,7 @@
             </table>
         </div>
 
-        <div style="margin-left: 40%">
+        <div id="pageable" style="margin-left: 40%">
             <div class="pagination" style="margin-left: 0; margin-right: 40px"
                  th:classappend="${(exercises.pageNum == 0) ? 'disabled' : ''}">
                 <a th:href="@{'/exercises/?pageNumber=' + ${exercises.pageNum}}" th:if="${exercises.pageNum >= 1}">Previous</a>
