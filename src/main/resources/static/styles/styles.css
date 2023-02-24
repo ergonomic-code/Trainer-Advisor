@@ -14,7 +14,7 @@ body {
     background: rgb(226, 226, 226);
 }
 
-nav {
+.menu {
     position: sticky;
     top: 0;
     bottom: 0;
@@ -27,7 +27,7 @@ nav {
     transition: 1s;
 }
 
-nav:hover {
+.menu:hover {
     width: 280px;
     transition: 1s;
 }
@@ -73,7 +73,7 @@ a {
     padding: 10px;
 }
 
-nav .fas {
+.menu .fas {
     position: relative;
     width: 70px;
     height: 40px;
@@ -237,16 +237,17 @@ button {
 .pagination {
     display: inline-block;
     position: relative;
-    width: 50%;
-    margin-left: 35%;
+    align-self: center;
+    align-items: center;
+    width: 40px;
     margin-top: 10px;
+    padding-right: 5px;
+    padding-left: 5px;
 }
 
 .pagination a {
     color: black;
-    float: left;
-    padding: 8px 16px;
-    width: 20px;
+    width: 30px;
     text-decoration: none;
 }
 

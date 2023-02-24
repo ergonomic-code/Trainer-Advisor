@@ -26,7 +26,7 @@ class ExercisesServiceImpl(
             duration,
             exerciseType,
             therapeuticPurpose,
-            pageable.pageNumber,
+            pageable.pageNumber * pageable.pageSize,
             pageable.pageSize
         )
         val count = exercisesRepo.countExercises(title, contradiction, duration, exerciseType, therapeuticPurpose)

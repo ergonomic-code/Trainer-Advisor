@@ -25,7 +25,7 @@ interface ExercisesRepo : CrudRepository<Exercise, Long>, PagingAndSortingReposi
         AND (ex.duration LIKE '%' || :duration || '%' OR :duration IS NULL)
         AND (et.name LIKE '%' || :exerciseType || '%' OR :exerciseType IS NULL)
         AND (tp.purpose LIKE '%' || :therapeuticPurpose || '%' OR :therapeuticPurpose IS NULL)
-        LIMIT :pageSize OFFSET :pageNumber
+        LIMIT :pageSize OFFSET :offset
     """
     )
     fun getExercisesByFilters(
@@ -34,7 +34,7 @@ interface ExercisesRepo : CrudRepository<Exercise, Long>, PagingAndSortingReposi
         duration: String?,
         exerciseType: ExerciseType?,
         therapeuticPurpose: String?,
-        pageNumber: Int,
+        offset: Int,
         pageSize: Int
     ): List<ExerciseDto>
 
