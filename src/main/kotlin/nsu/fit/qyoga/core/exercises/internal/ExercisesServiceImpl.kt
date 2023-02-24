@@ -1,13 +1,15 @@
 package nsu.fit.qyoga.core.exercises.internal
 
+import nsu.fit.platform.web.pages.Page
 import nsu.fit.qyoga.core.exercises.api.ExercisesService
-import nsu.fit.qyoga.core.exercises.api.model.Exercise
+import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseDto
 import nsu.fit.qyoga.core.exercises.api.model.ExerciseType
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
 class ExercisesServiceImpl(
-    private val exerciseRepo: ExerciseRepo
+    private val exercisesRepo: ExercisesRepo,
 ) : ExercisesService {
 
     override fun getExercises(
@@ -15,12 +17,23 @@ class ExercisesServiceImpl(
         contradiction: String?,
         duration: String?,
         exerciseType: ExerciseType?,
-        therapeuticPurpose: String?
-    ): List<Exercise> {
-        return exerciseRepo.getExercisesByFilters(title, contradiction, duration, exerciseType, therapeuticPurpose)
+        therapeuticPurpose: String?,
+        pageable: Pageable
+    ): Page<ExerciseDto> {
+        val result = exercisesRepo.getExercisesByFilters(
+            title,
+            contradiction,
+            duration,
+            exerciseType,
+            therapeuticPurpose,
+            pageable.pageNumber,
+            pageable.pageSize
+        )
+        val count = exercisesRepo.countExercises(title, contradiction, duration, exerciseType, therapeuticPurpose)
+        return Page(result, pageable.pageNumber, pageable.pageSize, count)
     }
 
     override fun getExerciseTypes(): List<ExerciseType> {
-        return exerciseRepo.getExerciseTypes()
+        return exercisesRepo.getExerciseTypes().map { ExerciseType.valueOf(it.name) }
     }
 }

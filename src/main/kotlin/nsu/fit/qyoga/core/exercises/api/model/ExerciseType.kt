@@ -1,10 +1,10 @@
 package nsu.fit.qyoga.core.exercises.api.model
 
-enum class ExerciseType(val id: Long, val value: String) {
-    ResistanceBreathing(1, "ResistanceBreathing"),
-    Balance(2, "Balance"),
-    Stretching(3, "Stretching"),
-    WeightBearingExercise(4, "WeightBearingExercise"),
-    StrengthTraining(5, "StrengthTraining"),
-    CardioTraining(6, "CardioTraining")
+enum class ExerciseType(val id: Int) {
+    ResistanceBreathing(1),
+    Balance(2),
+    Stretching(3),
+    WeightBearingExercise(4),
+    StrengthTraining(5),
+    CardioTraining(6)
 }
