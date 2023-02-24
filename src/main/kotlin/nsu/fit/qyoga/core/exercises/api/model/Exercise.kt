@@ -12,6 +12,6 @@ data class Exercise(
     val indications: String,
     val contradictions: String,
     val duration: String,
-    val exerciseType: ExerciseType,
+    val exerciseTypeId: Int,
     val therapistId: Long
 )
