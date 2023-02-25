@@ -1,5 +1,6 @@
 package nsu.fit.qyoga.core.exercises.ports
 
+import nsu.fit.platform.web.view.addExercisePageAttributes
 import nsu.fit.qyoga.core.exercises.api.ExercisesService
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseSearchDto
 import nsu.fit.qyoga.core.exercises.api.model.ExerciseType
@@ -7,31 +8,21 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
-import java.util.stream.Collectors
-import java.util.stream.IntStream
 
 @Controller
 @RequestMapping("/exercises/")
 class ExercisesController(
     private val exercisesService: ExercisesService
 ) {
-    companion object {
-        private val DEFAULT_PAGE_REQUEST = PageRequest.of(0, 10)
-    }
 
     /**
      * Отображение страницы со списком упражнений
      */
     @GetMapping("all")
     fun getExercisesPage(model: Model): String {
+        val search = ExerciseSearchDto()
         val exercises = exercisesService.getExercises(null, null, null, null, null, DEFAULT_PAGE_REQUEST)
-        model.addAttribute("searchDto", ExerciseSearchDto())
-        model.addAttribute("types", exercisesService.getExerciseTypes())
-        model.addAttribute("exercises", exercises)
-        model.addAttribute(
-            "pageNumbers",
-            IntStream.rangeClosed(1, exercises.totalPages).boxed().collect(Collectors.toList())
-        )
+        addExercisePageAttributes(model, exercises, exercisesService)
         return "ExercisesSearch"
     }
 
@@ -57,13 +48,7 @@ class ExercisesController(
             therapeuticPurpose,
             PageRequest.of(pageNumber - 1, pageSize)
         )
-        model.addAttribute("types", exercisesService.getExerciseTypes())
-        model.addAttribute("exercises", exercises)
-        model.addAttribute("searchDto", ExerciseSearchDto())
-        model.addAttribute(
-            "pageNumbers",
-            IntStream.rangeClosed(1, exercises.totalPages).boxed().collect(Collectors.toList())
-        )
+        addExercisePageAttributes(model, exercises, exercisesService)
         return "ExercisesSearch"
     }
 
@@ -75,7 +60,6 @@ class ExercisesController(
         model: Model
     ): String {
         model.addAttribute("searchDto", searchDto)
-        println(searchDto.exerciseType)
         val exercises = exercisesService.getExercises(
             searchDto.title,
             searchDto.contradiction,
@@ -95,5 +79,9 @@ class ExercisesController(
     @ResponseBody
     fun getExerciseTypes(): List<ExerciseType> {
         return exercisesService.getExerciseTypes()
+    }
+
+    companion object {
+        private val DEFAULT_PAGE_REQUEST = PageRequest.of(0, 10)
     }
 }
