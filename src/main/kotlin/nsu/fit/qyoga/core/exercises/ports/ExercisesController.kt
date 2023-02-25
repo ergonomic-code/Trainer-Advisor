@@ -20,7 +20,7 @@ class ExercisesController(
      */
     @GetMapping("all")
     fun getExercisesPage(model: Model): String {
-        val exercises = exercisesService.getExercises(null, null, null, null, null, DEFAULT_PAGE_REQUEST)
+        val exercises = exercisesService.getExercises(ExerciseSearchDto(), DEFAULT_PAGE_REQUEST)
         addExercisePageAttributes(model, exercises, exercisesService)
         return "ExercisesSearch"
     }
@@ -30,21 +30,13 @@ class ExercisesController(
      */
     @GetMapping
     fun getExercises(
-        @RequestParam(value = "title", required = false) title: String?,
-        @RequestParam(value = "contraindication", required = false) contradiction: String?,
-        @RequestParam(value = "duration", required = false) duration: String?,
-        @RequestParam(value = "exerciseType", required = false) exerciseType: ExerciseType?,
-        @RequestParam(value = "therapeuticPurpose", required = false) therapeuticPurpose: String?,
+        @RequestParam searchDto: ExerciseSearchDto?,
         @RequestParam(value = "pageSize", required = false, defaultValue = "10") pageSize: Int,
         @RequestParam(value = "pageNumber", required = false, defaultValue = "1") pageNumber: Int,
         model: Model
     ): String {
         val exercises = exercisesService.getExercises(
-            title,
-            contradiction,
-            duration,
-            exerciseType,
-            therapeuticPurpose,
+            searchDto ?: ExerciseSearchDto(),
             PageRequest.of(pageNumber - 1, pageSize)
         )
         addExercisePageAttributes(model, exercises, exercisesService)
@@ -63,11 +55,7 @@ class ExercisesController(
     ): String {
         model.addAttribute("searchDto", searchDto)
         val exercises = exercisesService.getExercises(
-            searchDto.title,
-            searchDto.contradiction,
-            searchDto.duration,
-            searchDto.exerciseType,
-            searchDto.therapeuticPurpose,
+            searchDto,
             PageRequest.of(pageNumber - 1, pageSize)
         )
         model.addAttribute("exercises", exercises)
