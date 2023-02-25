@@ -1,4 +1,4 @@
-package nsu.fit.platform.web.pages
+package nsu.fit.qyoga.core.exercises.utils.pages
 
 import kotlin.math.ceil
 

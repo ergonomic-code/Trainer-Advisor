@@ -1,9 +1,9 @@
-package nsu.fit.platform.web.view
+package nsu.fit.qyoga.core.exercises.utils.view
 
-import nsu.fit.platform.web.pages.Page
 import nsu.fit.qyoga.core.exercises.api.ExercisesService
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseSearchDto
+import nsu.fit.qyoga.core.exercises.utils.pages.Page
 import org.springframework.ui.Model
 import java.util.stream.Collectors
 import java.util.stream.IntStream
