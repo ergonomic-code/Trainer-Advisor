@@ -9,8 +9,4 @@ data class Page<T>(
     val totalElements: Long = 0,
 ) {
     val totalPages: Int = ceil(totalElements.toDouble() / pageSize).toInt()
-
-    companion object {
-        fun <T> empty() = Page<T>()
-    }
 }

@@ -12,7 +12,6 @@ class ExercisesTest : QYogaAppTestBase() {
     @Test
     fun `QYoga should return list of exercise types`() {
         var types = listOf<String>()
-
         When {
             get("/exercises/types")
         } Then {
@@ -29,6 +28,4 @@ class ExercisesTest : QYogaAppTestBase() {
             "CardioTraining"
         )
     }
-
-
 }
