@@ -1,9 +1,9 @@
 package nsu.fit.qyoga.core.exercises.ports
 
-import nsu.fit.platform.web.view.addExercisePageAttributes
 import nsu.fit.qyoga.core.exercises.api.ExercisesService
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseSearchDto
 import nsu.fit.qyoga.core.exercises.api.model.ExerciseType
+import nsu.fit.qyoga.core.exercises.utils.view.addExercisePageAttributes
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -16,18 +16,17 @@ class ExercisesController(
 ) {
 
     /**
-     * Отображение страницы со списком упражнений
+     * Отображение страницы со списком упражнений при первом переходе в раздел упражнеий
      */
     @GetMapping("all")
     fun getExercisesPage(model: Model): String {
-        val search = ExerciseSearchDto()
         val exercises = exercisesService.getExercises(null, null, null, null, null, DEFAULT_PAGE_REQUEST)
         addExercisePageAttributes(model, exercises, exercisesService)
         return "ExercisesSearch"
     }
 
     /**
-     * Получение списка упражнений
+     * Отображение страницы при пагинации
      */
     @GetMapping
     fun getExercises(
@@ -52,6 +51,9 @@ class ExercisesController(
         return "ExercisesSearch"
     }
 
+    /**
+     * Получение только списка упражнений в качестве элемента отображения
+     */
     @GetMapping("search")
     fun searchExercises(
         @ModelAttribute("searchDto") searchDto: ExerciseSearchDto,
