@@ -9,6 +9,8 @@ CREATE TABLE users
 -- password: diem-Synergy5
 INSERT INTO users (username, password_hash, roles)
 VALUES ('admin', '$2a$12$wAIeyLso8yKIlIlv62EeL.R1co2DmJdb5DitjmdP.qYZflJNMP.ua', '{"ROLE_ADMIN"}');
+INSERT INTO users (username, password_hash, roles)
+VALUES ('nn', '$2a$10$TxvjNQs6p6PyaKaS8VzVLum4QIP.AwTvLoP4L1KHsZZn.IyGB3.zK', '{"ROLE_ADMIN"}');
 
 
 CREATE TABLE therapists

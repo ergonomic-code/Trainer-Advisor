@@ -1,3 +1,6 @@
+logging:
+  level:
+    web: error
 spring:
   datasource:
     username: postgres

@@ -11,19 +11,27 @@ import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.context.request.WebRequest
 
-@RestController
+@Controller
 @RequestMapping("/users")
 class AuthController(
     private val authService: AuthService
 ) {
 
-    @PostMapping("login")
+    @PostMapping("/login")
     fun login(@RequestBody request: LoginRequest): String {
+
         return authService.login(request)
     }
+
+    @GetMapping("/login")
+    fun getLoginPage(): String {
+        return "auth"
+    }
+
 
 }
 
