@@ -34,12 +34,12 @@ CREATE TABLE exercise_steps
 );
 
 INSERT INTO exercise_types(name)
-VALUES ('ResistanceBreathing'),
-       ('Balance'),
+VALUES ('WarmUp'),
+       ('Mobilization'),
+       ('Strengthening'),
        ('Stretching'),
-       ('WeightBearingExercise'),
-       ('StrengthTraining'),
-       ('CardioTraining');
+       ('Relaxation'),
+       ('Traction');
 
 CREATE TABLE programs
 (
