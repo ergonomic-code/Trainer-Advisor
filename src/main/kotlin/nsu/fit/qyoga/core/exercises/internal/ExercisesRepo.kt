@@ -17,14 +17,14 @@ interface ExercisesRepo : CrudRepository<Exercise, Long>, PagingAndSortingReposi
     @Query(
         """
         SELECT ex.id as id, title, description, indications, contradictions, duration, et.name as type, tp.purpose as purpose FROM exercises ex
-        INNER JOIN exercise_purposes ep ON ex.id = ep.exercise_id
-        INNER JOIN therapeutic_purposes tp ON tp.id = ep.purpose_id
-        INNER JOIN exercise_types et on ex.exercise_type_id = et.id
+            INNER JOIN exercise_purposes ep ON ex.id = ep.exercise_id
+            INNER JOIN therapeutic_purposes tp ON tp.id = ep.purpose_id
+            INNER JOIN exercise_types et on ex.exercise_type_id = et.id
         WHERE (ex.title LIKE '%' || :title || '%' OR :title IS NULL) 
-        AND (ex.contradictions LIKE '%' || :contradiction || '%' OR :contradiction IS NULL)
-        AND (ex.duration LIKE '%' || :duration || '%' OR :duration IS NULL)
-        AND (et.name LIKE '%' || :exerciseType || '%' OR :exerciseType IS NULL)
-        AND (tp.purpose LIKE '%' || :therapeuticPurpose || '%' OR :therapeuticPurpose IS NULL)
+            AND (ex.contradictions LIKE '%' || :contradiction || '%' OR :contradiction IS NULL)
+            AND (ex.duration LIKE '%' || :duration || '%' OR :duration IS NULL)
+            AND (et.name LIKE '%' || :exerciseType || '%' OR :exerciseType IS NULL)
+            AND (tp.purpose LIKE '%' || :therapeuticPurpose || '%' OR :therapeuticPurpose IS NULL)
         LIMIT :pageSize OFFSET :offset
     """
     )
@@ -41,14 +41,14 @@ interface ExercisesRepo : CrudRepository<Exercise, Long>, PagingAndSortingReposi
     @Query(
         """
         SELECT count(*) FROM exercises ex
-        INNER JOIN exercise_purposes ep ON ex.id = ep.exercise_id
-        INNER JOIN therapeutic_purposes tp ON tp.id = ep.purpose_id
-        INNER JOIN exercise_types et on ex.exercise_type_id = et.id
+            INNER JOIN exercise_purposes ep ON ex.id = ep.exercise_id
+            INNER JOIN therapeutic_purposes tp ON tp.id = ep.purpose_id
+            INNER JOIN exercise_types et on ex.exercise_type_id = et.id
         WHERE (ex.title LIKE '%' || :title || '%' OR :title IS NULL) 
-        AND (ex.contradictions LIKE '%' || :contradiction || '%' OR :contradiction IS NULL)
-        AND (ex.duration LIKE '%' || :duration || '%' OR :duration IS NULL)
-        AND (et.name LIKE '%' || :exerciseType || '%' OR :exerciseType IS NULL)
-        AND (tp.purpose LIKE '%' || :therapeuticPurpose || '%' OR :therapeuticPurpose IS NULL)
+            AND (ex.contradictions LIKE '%' || :contradiction || '%' OR :contradiction IS NULL)
+            AND (ex.duration LIKE '%' || :duration || '%' OR :duration IS NULL)
+            AND (et.name LIKE '%' || :exerciseType || '%' OR :exerciseType IS NULL)
+            AND (tp.purpose LIKE '%' || :therapeuticPurpose || '%' OR :therapeuticPurpose IS NULL)
     """
     )
     fun countExercises(
