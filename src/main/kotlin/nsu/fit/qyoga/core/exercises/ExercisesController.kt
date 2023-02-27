@@ -1,30 +1,25 @@
-package nsu.fit.qyoga.core.exercises.ports
+package nsu.fit.qyoga.core.exercises
 
 import nsu.fit.qyoga.core.exercises.api.ExercisesService
+import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseSearchDto
 import nsu.fit.qyoga.core.exercises.api.model.ExerciseType
-import nsu.fit.qyoga.core.exercises.utils.view.addExercisePageAttributes
+import nsu.fit.qyoga.core.exercises.utils.pages.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
+import java.util.stream.Collectors
+import java.util.stream.IntStream
 
 @Controller
 @RequestMapping("/exercises/")
 class ExercisesController(
     private val exercisesService: ExercisesService
 ) {
-
-    /**
-     * Отображение страницы со списком упражнений при первом переходе в раздел упражнеий
-     */
-    @GetMapping("all")
-    fun getExercisesPage(model: Model): String {
-        val exercises = exercisesService.getExercises(null, null, null, null, null, DEFAULT_PAGE_REQUEST)
-        addExercisePageAttributes(model, exercises, exercisesService)
-        return "ExercisesSearch"
-    }
-
     /**
      * Отображение страницы при пагинации
      */
@@ -74,16 +69,13 @@ class ExercisesController(
         return "ExercisesSearch :: exercises"
     }
 
-    /**
-     * Получение типов упражнений
-     */
-    @GetMapping("types")
-    @ResponseBody
-    fun getExerciseTypes(): List<ExerciseType> {
-        return exercisesService.getExerciseTypes()
-    }
-
-    companion object {
-        private val DEFAULT_PAGE_REQUEST = PageRequest.of(0, 10)
+    fun addExercisePageAttributes(model: Model, exercises: Page<ExerciseDto>, exercisesService: ExercisesService) {
+        model.addAttribute("searchDto", ExerciseSearchDto())
+        model.addAttribute("types", exercisesService.getExerciseTypes())
+        model.addAttribute("exercises", exercises)
+        model.addAttribute(
+            "pageNumbers",
+            IntStream.rangeClosed(1, exercises.totalPages).boxed().collect(Collectors.toList())
+        )
     }
 }
