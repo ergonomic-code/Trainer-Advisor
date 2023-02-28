@@ -25,7 +25,7 @@ class ExercisesServiceTests(
     @BeforeEach
     fun setupDb() {
         dbInitializer.executeScripts(
-            "/db/profile-init-script.sql" to "profilesDataSource",
+            "/db/exercises-init-script.sql" to "dataSource",
         )
     }
 
