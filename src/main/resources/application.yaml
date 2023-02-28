@@ -1,8 +1,11 @@
 spring:
+  flyway:
+    locations: classpath:db/migration/common
   datasource:
     username: postgres
     password: P@ssw0rd
     url: jdbc:postgresql://localhost:54501/qyoga
+
 qyoga:
 
   auth:

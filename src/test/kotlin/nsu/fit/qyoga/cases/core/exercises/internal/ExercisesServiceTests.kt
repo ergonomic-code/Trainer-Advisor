@@ -5,6 +5,7 @@ import nsu.fit.qyoga.core.exercises.api.ExercisesService
 import nsu.fit.qyoga.infra.QYogaModuleBaseTest
 import nsu.fit.qyoga.infra.TestContainerDbContextInitializer
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
@@ -27,6 +28,12 @@ class ExercisesServiceTests(
         dbInitializer.executeScripts(
             "/db/exercises-init-script.sql" to "dataSource",
         )
+    }
+
+    @Test
+    fun test() {
+        var types = exercisesService.getExerciseTypes()
+        println(types)
     }
 
 }
