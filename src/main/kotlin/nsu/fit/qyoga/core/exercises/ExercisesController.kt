@@ -3,7 +3,6 @@ package nsu.fit.qyoga.core.exercises
 import nsu.fit.qyoga.core.exercises.api.ExercisesService
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseSearchDto
-import nsu.fit.qyoga.core.exercises.api.model.ExerciseType
 import nsu.fit.qyoga.core.exercises.utils.pages.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Controller
@@ -25,25 +24,21 @@ class ExercisesController(
      */
     @GetMapping
     fun getExercises(
-        @RequestParam(value = "title", required = false) title: String?,
-        @RequestParam(value = "contraindication", required = false) contradiction: String?,
-        @RequestParam(value = "duration", required = false) duration: String?,
-        @RequestParam(value = "exerciseType", required = false) exerciseType: ExerciseType?,
-        @RequestParam(value = "therapeuticPurpose", required = false) therapeuticPurpose: String?,
+        @ModelAttribute("searchDto") searchDto: ExerciseSearchDto,
         @RequestParam(value = "pageSize", required = false, defaultValue = "10") pageSize: Int,
         @RequestParam(value = "pageNumber", required = false, defaultValue = "1") pageNumber: Int,
         model: Model
     ): String {
         val exercises = exercisesService.getExercises(
-            title,
-            contradiction,
-            duration,
-            exerciseType,
-            therapeuticPurpose,
+            searchDto.title,
+            searchDto.contradiction,
+            searchDto.duration,
+            searchDto.exerciseType,
+            searchDto.therapeuticPurpose,
             PageRequest.of(pageNumber - 1, pageSize)
         )
         addExercisePageAttributes(model, exercises, exercisesService)
-        return "ExercisesSearch"
+        return "exercise-search"
     }
 
     /**
@@ -66,7 +61,7 @@ class ExercisesController(
             PageRequest.of(pageNumber - 1, pageSize)
         )
         model.addAttribute("exercises", exercises)
-        return "ExercisesSearch :: exercises"
+        return "exercise-search :: exercises"
     }
 
     fun addExercisePageAttributes(model: Model, exercises: Page<ExerciseDto>, exercisesService: ExercisesService) {
