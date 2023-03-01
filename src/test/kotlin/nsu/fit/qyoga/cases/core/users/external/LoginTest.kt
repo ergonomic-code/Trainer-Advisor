@@ -12,13 +12,12 @@ import org.hamcrest.Matchers
 import org.junit.jupiter.api.Test
 
 class LoginTest : QYogaAppTestBase() {
-
     @Test
     fun `QYoga should allow users to login`() {
         Given {
             body(adminLoginRequest)
         } When {
-            post("users/login")
+            post("/users/login")
         } Then {
             statusCode(HttpStatus.SC_OK)
             body(Matchers.matchesRegex(".+\\..+\\..+"))
@@ -30,9 +29,9 @@ class LoginTest : QYogaAppTestBase() {
         Given {
             body(notExistingUserLoginRequest)
         } When {
-            post("users/login")
+            post("/users/login")
         } Then {
-            statusCode(HttpStatus.SC_UNAUTHORIZED)
+            statusCode(HttpStatus.SC_MOVED_TEMPORARILY)
         }
     }
 
@@ -43,7 +42,7 @@ class LoginTest : QYogaAppTestBase() {
         } When {
             post("users/login")
         } Then {
-            statusCode(HttpStatus.SC_UNAUTHORIZED)
+            statusCode(HttpStatus.SC_MOVED_TEMPORARILY)
         }
     }
 

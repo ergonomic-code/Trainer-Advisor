@@ -48,6 +48,10 @@ dependencies {
 	testImplementation("io.kotest:kotest-assertions-core:5.5.0")
 	testImplementation("com.tngtech.archunit:archunit:1.0.1")
 
+	testImplementation("org.seleniumhq.selenium:selenium-htmlunit-driver:2.45.0")
+	testImplementation ("org.gebish:geb-spock:0.10.0")
+	testImplementation ("org.spockframework:spock-spring:1.0-groovy-2.4")
+
 	runtimeOnly("org.postgresql:postgresql:42.5.1")
 
 	detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.22.0")

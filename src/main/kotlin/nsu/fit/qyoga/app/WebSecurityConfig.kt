@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.HttpStatusEntryPoint
@@ -21,8 +20,6 @@ class WebSecurityConfig(
     private val userDetailsService: UserDetailsServiceImpl,
     private val encoder: PasswordEncoder,
 ) {
-
-
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         // @formatter:off
@@ -45,20 +42,17 @@ class WebSecurityConfig(
             .loginPage("/users/login")
             .defaultSuccessUrl("/users")
             .permitAll()
-        //http.sessionManagement()
-        //    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-
-
+        http.authenticationProvider(authenticationProvider())
         // @formatter:on
         return http.build()
     }
+
     @Bean
     fun authenticationProvider(): DaoAuthenticationProvider {
-        val authProvider: DaoAuthenticationProvider  = DaoAuthenticationProvider ();
-        authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(encoder);
-
-        return authProvider;
+        val authProvider: DaoAuthenticationProvider = DaoAuthenticationProvider()
+        authProvider.setUserDetailsService(userDetailsService)
+        authProvider.setPasswordEncoder(encoder)
+        return authProvider
     }
     private fun requestHeaderAuthenticationFilter(authenticationManager: AuthenticationManager): RequestHeaderAuthenticationFilter {
         val requestHeaderAuthenticationFilter = RequestHeaderAuthenticationFilter()
