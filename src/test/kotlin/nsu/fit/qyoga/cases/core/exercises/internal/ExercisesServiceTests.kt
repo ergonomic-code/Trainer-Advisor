@@ -38,11 +38,7 @@ class ExercisesServiceTests(
     fun `QYoga can retrieve exercises without filters`() {
         val searchDto = ExerciseSearchDto()
         val exercises = exercisesService.getExercises(
-            searchDto.title,
-            searchDto.contradiction,
-            searchDto.duration,
-            searchDto.exerciseType,
-            searchDto.therapeuticPurpose,
+            searchDto,
             PageRequest.of(0, 10)
         )
         exercises.content.size shouldBe 5
@@ -54,15 +50,12 @@ class ExercisesServiceTests(
     fun `QYoga can retrieve exercises with filters`() {
         val searchDto = ExerciseSearchDto(title = "Разминка")
         val exercises = exercisesService.getExercises(
-            searchDto.title,
-            searchDto.contradiction,
-            searchDto.duration,
-            searchDto.exerciseType,
-            searchDto.therapeuticPurpose,
+            searchDto,
             PageRequest.of(0, 10)
         )
         exercises.content.size shouldBe 1
         exercises.totalElements shouldBe 1
+        exercises.content.map { it.title }[0].startsWith("Разминка")
         exercises.content.map { it.id } shouldBe listOf(1)
     }
 
@@ -70,11 +63,7 @@ class ExercisesServiceTests(
     fun `QYoga shouldn't retrieve exercises with invalid filter`() {
         val searchDto = ExerciseSearchDto(title = "====")
         val exercises = exercisesService.getExercises(
-            searchDto.title,
-            searchDto.contradiction,
-            searchDto.duration,
-            searchDto.exerciseType,
-            searchDto.therapeuticPurpose,
+            searchDto,
             PageRequest.of(0, 10)
         )
         exercises.content.size shouldBe 0

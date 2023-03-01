@@ -2,6 +2,7 @@ package nsu.fit.qyoga.core.exercises.internal
 
 import nsu.fit.qyoga.core.exercises.api.ExercisesService
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseDto
+import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseSearchDto
 import nsu.fit.qyoga.core.exercises.api.model.ExerciseType
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
@@ -14,23 +15,15 @@ class ExercisesServiceImpl(
 ) : ExercisesService {
 
     override fun getExercises(
-        title: String?,
-        contradiction: String?,
-        duration: String?,
-        exerciseType: ExerciseType?,
-        therapeuticPurpose: String?,
+        searchDto: ExerciseSearchDto,
         pageable: Pageable
     ): Page<ExerciseDto> {
         val result = exercisesRepo.getExercisesByFilters(
-            title,
-            contradiction,
-            duration,
-            exerciseType,
-            therapeuticPurpose,
+            searchDto,
             pageable.pageNumber * pageable.pageSize,
             pageable.pageSize
         )
-        val count = exercisesRepo.countExercises(title, contradiction, duration, exerciseType, therapeuticPurpose)
+        val count = exercisesRepo.countExercises(searchDto)
         return PageImpl(result, pageable, count)
     }
 
