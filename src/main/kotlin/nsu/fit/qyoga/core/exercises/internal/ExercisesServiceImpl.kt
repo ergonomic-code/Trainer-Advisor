@@ -3,6 +3,7 @@ package nsu.fit.qyoga.core.exercises.internal
 import nsu.fit.qyoga.core.exercises.api.ExercisesService
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseDto
 import nsu.fit.qyoga.core.exercises.api.model.ExerciseType
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -19,7 +20,7 @@ class ExercisesServiceImpl(
         exerciseType: ExerciseType?,
         therapeuticPurpose: String?,
         pageable: Pageable
-    ): PageImpl<ExerciseDto> {
+    ): Page<ExerciseDto> {
         val result = exercisesRepo.getExercisesByFilters(
             title,
             contradiction,
