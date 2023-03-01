@@ -28,4 +28,6 @@ class ExercisesTest : QYogaAppTestBase() {
             "CardioTraining"
         )
     }
+
+
 }

@@ -2,7 +2,7 @@ package nsu.fit.qyoga.core.exercises.api
 
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseDto
 import nsu.fit.qyoga.core.exercises.api.model.ExerciseType
-import nsu.fit.qyoga.core.exercises.utils.pages.Page
+import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 
 interface ExercisesService {
@@ -13,7 +13,7 @@ interface ExercisesService {
         exerciseType: ExerciseType?,
         therapeuticPurpose: String?,
         pageable: Pageable
-    ): Page<ExerciseDto>
+    ): PageImpl<ExerciseDto>
 
     fun getExerciseTypes(): List<ExerciseType>
 }
