@@ -30,11 +30,7 @@ class ExercisesController(
         model: Model
     ): String {
         val exercises = exercisesService.getExercises(
-            searchDto.title,
-            searchDto.contradiction,
-            searchDto.duration,
-            searchDto.exerciseType,
-            searchDto.therapeuticPurpose,
+            searchDto,
             PageRequest.of(pageNumber - 1, pageSize)
         )
         addExercisePageAttributes(model, exercises, exercisesService)
@@ -53,11 +49,7 @@ class ExercisesController(
     ): String {
         model.addAttribute("searchDto", searchDto)
         val exercises = exercisesService.getExercises(
-            searchDto.title,
-            searchDto.contradiction,
-            searchDto.duration,
-            searchDto.exerciseType,
-            searchDto.therapeuticPurpose,
+            searchDto,
             PageRequest.of(pageNumber - 1, pageSize)
         )
         model.addAttribute("exercises", exercises)

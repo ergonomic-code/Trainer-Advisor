@@ -1,17 +1,14 @@
 package nsu.fit.qyoga.core.exercises.api
 
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseDto
+import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseSearchDto
 import nsu.fit.qyoga.core.exercises.api.model.ExerciseType
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 
 interface ExercisesService {
     fun getExercises(
-        title: String?,
-        contradiction: String?,
-        duration: String?,
-        exerciseType: ExerciseType?,
-        therapeuticPurpose: String?,
+        searchDto: ExerciseSearchDto,
         pageable: Pageable
     ): Page<ExerciseDto>
 
