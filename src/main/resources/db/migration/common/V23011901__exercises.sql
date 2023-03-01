@@ -6,8 +6,7 @@ CREATE TABLE exercise_types
 
 CREATE TABLE exercises
 (
-    id               SERIAL   NOT NULL
-        CONSTRAINT pk_exercises PRIMARY KEY,
+    id               BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     title            VARCHAR  NOT NULL,
     description      TEXT     NOT NULL,
     indications      TEXT     NOT NULL,
@@ -23,8 +22,7 @@ CREATE TABLE exercises
 
 CREATE TABLE exercise_steps
 (
-    id          SERIAL  NOT NULL
-        CONSTRAINT pk_exercise_steps PRIMARY KEY,
+    id          BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     description VARCHAR NOT NULL,
     photo       VARCHAR,
     exercise_id INTEGER NOT NULL
@@ -42,16 +40,14 @@ VALUES ('WarmUp'),
 
 CREATE TABLE programs
 (
-    id    SERIAL NOT NULL
-        CONSTRAINT pk_programs PRIMARY KEY,
+    id    BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     title VARCHAR,
     date  TIMESTAMP
 );
 
 CREATE TABLE therapeutic_purposes
 (
-    id      SERIAL NOT NULL
-        CONSTRAINT pk_therapeutic_purposes PRIMARY KEY,
+    id      BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     purpose VARCHAR
 );
 
