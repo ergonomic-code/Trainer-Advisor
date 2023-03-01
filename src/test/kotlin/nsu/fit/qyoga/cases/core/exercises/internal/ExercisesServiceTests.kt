@@ -46,7 +46,6 @@ class ExercisesServiceTests(
             PageRequest.of(0, 10)
         )
         exercises.content.size shouldBe 5
-        exercises.pageSize shouldBe 10
         exercises.totalElements shouldBe 5
         exercises.content.map { it.id } shouldBe listOf(1, 2, 3, 4, 5)
     }
@@ -63,7 +62,6 @@ class ExercisesServiceTests(
             PageRequest.of(0, 10)
         )
         exercises.content.size shouldBe 1
-        exercises.pageSize shouldBe 10
         exercises.totalElements shouldBe 1
         exercises.content.map { it.id } shouldBe listOf(1)
     }
@@ -80,7 +78,6 @@ class ExercisesServiceTests(
             PageRequest.of(0, 10)
         )
         exercises.content.size shouldBe 0
-        exercises.pageSize shouldBe 10
         exercises.totalElements shouldBe 0
     }
 
