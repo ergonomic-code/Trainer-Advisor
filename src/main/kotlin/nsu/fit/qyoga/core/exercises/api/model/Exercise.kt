@@ -2,6 +2,7 @@ package nsu.fit.qyoga.core.exercises.api.model
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
+import java.time.Duration
 
 @Table("exercises")
 data class Exercise(
@@ -11,7 +12,7 @@ data class Exercise(
     val description: String,
     val indications: String,
     val contradictions: String,
-    val duration: String,
+    val duration: Duration,
     val exerciseTypeId: Int,
     val therapistId: Long
 )
