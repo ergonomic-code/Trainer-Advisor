@@ -1,4 +1,22 @@
--- TRUNCATE exercise_types, exercises, exercise_purposes, programs, exercise_steps CASCADE;
+CREATE TABLE users
+(
+    id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    username      VARCHAR UNIQUE,
+    password_hash VARCHAR,
+    roles         VARCHAR[]
+);
+
+-- password: diem-Synergy5
+INSERT INTO users (username, password_hash, roles)
+VALUES ('admin', '$2a$12$wAIeyLso8yKIlIlv62EeL.R1co2DmJdb5DitjmdP.qYZflJNMP.ua', '{"ROLE_ADMIN"}');
+
+
+CREATE TABLE therapists
+(
+    id      BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    user_id BIGINT REFERENCES users,
+    name    VARCHAR
+);
 
 CREATE TABLE exercise_types
 (
@@ -68,5 +86,3 @@ create table exercise_purposes
     exercise_id BIGINT REFERENCES exercises (id) ON UPDATE CASCADE ON DELETE CASCADE,
     purpose_id  BIGINT REFERENCES therapeutic_purposes (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
-
-
