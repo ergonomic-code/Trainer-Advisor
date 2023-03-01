@@ -27,7 +27,7 @@ interface ExercisesRepo : CrudRepository<Exercise, Long>, PagingAndSortingReposi
             AND (:#{#search.duration}::interval IS NULL OR ex.duration = :#{#search.duration}::interval)
             AND (et.name LIKE '%' || :#{#search.exerciseType} || '%' OR :#{#search.exerciseType} IS NULL)
             AND (tp.purpose LIKE '%' || :#{#search.therapeuticPurpose} || '%' OR :#{#search.therapeuticPurpose} IS NULL)
-        ORDER BY ex.id
+        ORDER BY ex.title
         LIMIT :pageSize OFFSET :offset
     """
     )
