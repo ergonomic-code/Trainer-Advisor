@@ -18,12 +18,15 @@ class ExercisesServiceImpl(
         searchDto: ExerciseSearchDto,
         pageable: Pageable
     ): Page<ExerciseDto> {
-        val result = exercisesRepo.getExercisesByFilters(
-            searchDto,
-            pageable.pageNumber * pageable.pageSize,
-            pageable.pageSize
+        val result = mapExercisesItems(
+            exercisesRepo.getExercisesByFilters(
+                searchDto,
+                searchDto.duration,
+                pageable.pageNumber * pageable.pageSize,
+                pageable.pageSize
+            )
         )
-        val count = exercisesRepo.countExercises(searchDto)
+        val count = exercisesRepo.countExercises(searchDto, searchDto.duration)
         return PageImpl(result, pageable, count)
     }
 
