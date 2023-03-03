@@ -1,5 +1,3 @@
-TRUNCATE exercises, exercise_purposes, programs, exercise_steps CASCADE;
-
 INSERT INTO programs(title, date)
 VALUES ('Программа Людмила Пименова', '2022-05-16 00:00');
 

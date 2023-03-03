@@ -12,10 +12,10 @@ CREATE TABLE exercises
     indications      TEXT     NOT NULL,
     contradictions   TEXT     NOT NULL,
     duration         INTERVAL NOT NULL,
-    exercise_type_id INTEGER  NOT NULL
+    exercise_type_id BIGINT NOT NULL
         CONSTRAINT fk_exercises_exercise_type_ids REFERENCES exercise_types
             ON DELETE CASCADE,
-    therapist_id     INTEGER  NOT NULL
+    therapist_id     BIGINT NOT NULL
         CONSTRAINT fk_exercises_therapist_ids REFERENCES therapists
             ON DELETE CASCADE
 );
@@ -25,7 +25,7 @@ CREATE TABLE exercise_steps
     id          BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     description VARCHAR NOT NULL,
     photo       VARCHAR,
-    exercise_id INTEGER NOT NULL
+    exercise_id BIGINT NOT NULL
         CONSTRAINT fk_exercise_steps_exercises REFERENCES exercises
             ON DELETE CASCADE
 );
@@ -62,5 +62,3 @@ create table exercise_purposes
     exercise_id BIGINT REFERENCES exercises (id) ON UPDATE CASCADE ON DELETE CASCADE,
     purpose_id BIGINT REFERENCES therapeutic_purposes (id) ON UPDATE CASCADE ON DELETE CASCADE
 );
-
-

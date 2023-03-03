@@ -33,7 +33,6 @@ class ExercisesServiceTests(
             "/db/exercises-insert-data-script.sql" to "dataSource"
         )
     }
-
     @Test
     fun `QYoga can retrieve exercises without filters`() {
         val searchDto = ExerciseSearchDto()
