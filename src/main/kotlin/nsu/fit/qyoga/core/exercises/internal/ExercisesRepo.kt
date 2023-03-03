@@ -26,14 +26,12 @@ interface ExercisesRepo : CrudRepository<Exercise, Long>, PagingAndSortingReposi
             AND (ex.contradictions LIKE '%' || :#{#search?.contradiction ?: ""} || '%' OR :#{#search.contradiction ?: ""} IS NULL)
             AND (et.name LIKE '%' || :#{#search.exerciseType?.name ?: ""} || '%' OR :#{#search.exerciseType?.name ?: ""} IS NULL)
             AND (tp.purpose LIKE '%' || :#{#search.therapeuticPurpose ?: ""} || '%' OR :#{#search.therapeuticPurpose ?: ""} IS NULL)
-            AND (:duration IS NULL OR ex.duration = :duration::interval)
         ORDER BY ex.title
         LIMIT :pageSize OFFSET :offset
     """
     )
     fun getExercisesByFilters(
         @Param("search") search: ExerciseSearchDto,
-        duration: String?,
         offset: Int,
         pageSize: Int
     ): List<ExerciseDto>
@@ -49,12 +47,10 @@ interface ExercisesRepo : CrudRepository<Exercise, Long>, PagingAndSortingReposi
             AND (ex.contradictions LIKE '%' || :#{#search?.contradiction ?: ""} || '%' OR :#{#search.contradiction ?: ""} IS NULL)
             AND (et.name LIKE '%' || :#{#search.exerciseType?.name ?: ""} || '%' OR :#{#search.exerciseType?.name ?: ""} IS NULL)
             AND (tp.purpose LIKE '%' || :#{#search.therapeuticPurpose ?: ""} || '%' OR :#{#search.therapeuticPurpose ?: ""} IS NULL)
-            AND (:duration IS NULL OR ex.duration = :duration::interval)
     """
     )
     fun countExercises(
         @Param("search") search: ExerciseSearchDto,
-        duration: String?
     ): Long
 
     @Query(
@@ -64,24 +60,3 @@ interface ExercisesRepo : CrudRepository<Exercise, Long>, PagingAndSortingReposi
     )
     fun getExerciseTypes(): List<ExerciseTypeDto>
 }
-
-fun mapExercisesItems(result: List<ExerciseDto>): List<ExerciseDto> =
-    result.map { e ->
-        val durationArray = e.duration.split(":")
-        ExerciseDto(
-            e.id,
-            e.title,
-            e.description,
-            e.indications,
-            e.contradictions,
-            String.format(
-                "%02d:%02d:%02d",
-                durationArray[2].toLong(),
-                durationArray[1].toLong(),
-                durationArray[0].toLong()
-            ),
-            e.type,
-            e.purpose
-        )
-    }
-
