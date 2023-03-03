@@ -4,6 +4,7 @@ import io.kotest.matchers.shouldBe
 import nsu.fit.qyoga.cases.core.exercises.ExercisesTestConfig
 import nsu.fit.qyoga.core.exercises.api.ExercisesService
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseSearchDto
+import nsu.fit.qyoga.core.exercises.api.model.ExerciseType
 import nsu.fit.qyoga.infra.QYogaModuleBaseTest
 import nsu.fit.qyoga.infra.TestContainerDbContextInitializer
 import org.junit.jupiter.api.BeforeEach
@@ -67,6 +68,18 @@ class ExercisesServiceTests(
         )
         exercises.content.size shouldBe 0
         exercises.totalElements shouldBe 0
+    }
+
+    @Test
+    fun `QYoga can retrieve exercises with type filter`() {
+        val searchDto = ExerciseSearchDto(exerciseType = ExerciseType.WarmUp)
+        val exercises = exercisesService.getExercises(
+            searchDto,
+            PageRequest.of(0, 10)
+        )
+        exercises.totalElements shouldBe 1
+        exercises.content[0].title shouldBe "Разминка для шеи"
+        exercises.content[0].duration shouldBe "00:10:00"
     }
 
 }
