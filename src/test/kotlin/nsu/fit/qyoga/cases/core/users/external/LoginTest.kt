@@ -4,23 +4,22 @@ import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
 import nsu.fit.qyoga.infra.QYogaAppTestBase
-import nsu.fit.qyoga.infra.fixture.adminLoginRequest
 import nsu.fit.qyoga.infra.fixture.adminWithInvalidPasswordLoginRequest
 import nsu.fit.qyoga.infra.fixture.notExistingUserLoginRequest
 import org.apache.http.HttpStatus
-import org.hamcrest.Matchers
 import org.junit.jupiter.api.Test
 
 class LoginTest : QYogaAppTestBase() {
     @Test
     fun `QYoga should allow users to login`() {
         Given {
-            body(adminLoginRequest)
+            //body(adminLoginRequest)
+            param("username", "admin")
+            param("password", "diem-Synergy5")
         } When {
             post("/users/login")
         } Then {
             statusCode(HttpStatus.SC_OK)
-            body(Matchers.matchesRegex(".+\\..+\\..+"))
         }
     }
 

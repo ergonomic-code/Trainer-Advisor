@@ -33,7 +33,6 @@ class WebSecurityConfig(
             .authorizeHttpRequests { authz ->
                 authz
                     .antMatchers(HttpMethod.POST, "/users").hasAuthority(Role.ROLE_ADMIN.toString())
-                    .antMatchers(HttpMethod.GET, "/second").hasAuthority(Role.ROLE_ADMIN.toString())
                     .antMatchers("/users/login", "/error", "/").permitAll()
                     .antMatchers(HttpMethod.GET, "/css/**", "/img/**").permitAll()
                     .anyRequest().authenticated()

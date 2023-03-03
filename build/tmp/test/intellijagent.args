@@ -1,0 +1,8 @@
+/home/ntrif/IdeaProjects/QYoga/build/kover/test.ic
+false
+false
+true
+false
+-exclude
+android\..*
+com\.android\..*

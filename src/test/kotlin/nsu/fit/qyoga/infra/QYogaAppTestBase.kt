@@ -5,7 +5,8 @@ import io.restassured.builder.RequestSpecBuilder
 import io.restassured.config.LogConfig
 import io.restassured.config.RestAssuredConfig
 import io.restassured.filter.log.LogDetail
-import io.restassured.http.ContentType
+import io.restassured.filter.log.RequestLoggingFilter
+import io.restassured.filter.log.ResponseLoggingFilter
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.boot.test.web.server.LocalServerPort
 
@@ -23,8 +24,10 @@ class QYogaAppTestBase {
 
         RestAssured.requestSpecification = RequestSpecBuilder()
             .setBaseUri("http://localhost:$port")
-            .setContentType(ContentType.JSON)
+            .setContentType("application/json")
             .setRelaxedHTTPSValidation()
+            .addFilter(ResponseLoggingFilter())
+            .addFilter(RequestLoggingFilter())
             .setConfig(config)
             .build()
     }

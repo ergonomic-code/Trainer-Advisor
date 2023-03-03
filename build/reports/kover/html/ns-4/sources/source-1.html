@@ -1,0 +1,139 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > UsersConfig</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">nsu.fit.qyoga.core.users</a>
+</div>
+
+<h1>Coverage Summary for Class: UsersConfig (nsu.fit.qyoga.core.users)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+<th class="coverageStat 
+">
+  Instruction, %
+</th>
+</tr>
+<tr>
+  <td class="name">UsersConfig</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+    <td class="coverageStat"/>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (6/6)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package nsu.fit.qyoga.core.users
+&nbsp;
+&nbsp;import org.springframework.context.annotation.Bean
+&nbsp;import org.springframework.context.annotation.ComponentScan
+&nbsp;import org.springframework.context.annotation.Configuration
+&nbsp;import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories
+&nbsp;import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+&nbsp;import org.springframework.security.crypto.password.PasswordEncoder
+&nbsp;
+<b class="fc">&nbsp;@ComponentScan</b>
+&nbsp;@Configuration
+&nbsp;@EnableJdbcRepositories
+&nbsp;class UsersConfig {
+&nbsp;
+&nbsp;    @Bean
+&nbsp;    fun passwordEncoder(): PasswordEncoder =
+<b class="fc">&nbsp;        BCryptPasswordEncoder()</b>
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-02-21 22:34</div>
+</div>
+</body>
+</html>

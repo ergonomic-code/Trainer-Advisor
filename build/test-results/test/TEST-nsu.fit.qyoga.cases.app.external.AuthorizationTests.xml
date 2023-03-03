@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="nsu.fit.qyoga.cases.app.external.AuthorizationTests" tests="3" skipped="0" failures="0" errors="0" timestamp="2023-03-03T14:30:29" hostname="ntrif" time="0.331">
+  <properties/>
+  <testcase name="QYoga should prohibit access to restricted endpoint with broken token()" classname="nsu.fit.qyoga.cases.app.external.AuthorizationTests" time="0.14"/>
+  <testcase name="QYoga should prohibit access to restricted endpoint without auth header()" classname="nsu.fit.qyoga.cases.app.external.AuthorizationTests" time="0.092"/>
+  <testcase name="QYoga should prohibit access to restricted endpoint with edited token()" classname="nsu.fit.qyoga.cases.app.external.AuthorizationTests" time="0.094"/>
+  <system-out><![CDATA[2023-03-03 21:30:29.139 [Test worker] INFO  o.s.t.c.s.AbstractContextLoader - Could not detect default resource locations for test class [nsu.fit.qyoga.infra.QYogaAppTestBase]: no resource found for suffixes {-context.xml, Context.groovy}.
+2023-03-03 21:30:29.158 [Test worker] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener, org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.event.ApplicationEventsTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener, org.springframework.test.context.event.EventPublishingTestExecutionListener]
+2023-03-03 21:30:29.163 [Test worker] INFO  o.s.b.t.c.SpringBootTestContextBootstrapper - Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@4b8339dc, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@2c117bdc, org.springframework.test.context.event.ApplicationEventsTestExecutionListener@59f6ba23, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener@48dec659, org.springframework.boot.test.autoconfigure.SpringBootDependencyInjectionTestExecutionListener@1ac15b47, org.springframework.test.context.support.DirtiesContextTestExecutionListener@3da90c58, org.springframework.test.context.transaction.TransactionalTestExecutionListener@51629e6c, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@6f307617, org.springframework.test.context.event.EventPublishingTestExecutionListener@7f3b13d5, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener@a050ba6, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener@4fd16574, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener@233d2257, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener@4bf385e, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener@26c55b54, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener@62fb603d]
+Request method:	POST
+Request URI:	http://localhost:46203/users
+Proxy:			<none>
+Request params:	<none>
+Query params:	<none>
+Form params:	<none>
+Path params:	<none>
+Headers:		Authorization=Bearer YiI6IjIiLCJpYXQiOjE2NjYxNDg1MDR9.nE37BqZhBidqR2C_voONJjJAMmrpt-_JrHeWrNlLat0
+				Accept=*/*
+				Content-Type=application/json
+Cookies:		<none>
+Multiparts:		<none>
+Body:			<none>
+Request method:	POST
+Request URI:	http://localhost:46203/users
+Proxy:			<none>
+Request params:	<none>
+Query params:	<none>
+Form params:	<none>
+Path params:	<none>
+Headers:		Authorization=Bearer YiI6IjIiLCJpYXQiOjE2NjYxNDg1MDR9.nE37BqZhBidqR2C_voONJjJAMmrpt-_JrHeWrNlLat0
+				Accept=*/*
+				Content-Type=application/json
+Cookies:		<none>
+Multiparts:		<none>
+Body:			<none>
+Request method:	POST
+Request URI:	http://localhost:46203/users
+Proxy:			<none>
+Request params:	<none>
+Query params:	<none>
+Form params:	<none>
+Path params:	<none>
+Headers:		Authorization=Bearer YiI6IjIiLCJpYXQiOjE2NjYxNDg1MDR9.nE37BqZhBidqR2C_voONJjJAMmrpt-_JrHeWrNlLat0
+				Accept=*/*
+				Content-Type=application/json
+Cookies:		<none>
+Multiparts:		<none>
+Body:			<none>
+Request method:	POST
+Request URI:	http://localhost:46203/users
+Proxy:			<none>
+Request params:	<none>
+Query params:	<none>
+Form params:	<none>
+Path params:	<none>
+Headers:		Authorization=Bearer YiI6IjIiLCJpYXQiOjE2NjYxNDg1MDR9.nE37BqZhBidqR2C_voONJjJAMmrpt-_JrHeWrNlLat0
+				Accept=*/*
+				Content-Type=application/json
+Cookies:		<none>
+Multiparts:		<none>
+Body:			<none>
+HTTP/1.1 401 
+Set-Cookie: JSESSIONID=F4612DB441C6026F4DCE3C1FE37D2071; Path=/; HttpOnly
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 0
+Date: Fri, 03 Mar 2023 14:30:29 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+HTTP/1.1 401 
+Set-Cookie: JSESSIONID=F4612DB441C6026F4DCE3C1FE37D2071; Path=/; HttpOnly
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 0
+Date: Fri, 03 Mar 2023 14:30:29 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+HTTP/1.1 401 
+Set-Cookie: JSESSIONID=F4612DB441C6026F4DCE3C1FE37D2071; Path=/; HttpOnly
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 0
+Date: Fri, 03 Mar 2023 14:30:29 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+HTTP/1.1 401 
+Set-Cookie: JSESSIONID=F4612DB441C6026F4DCE3C1FE37D2071; Path=/; HttpOnly
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 0
+Date: Fri, 03 Mar 2023 14:30:29 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+Request method:	POST
+Request URI:	http://localhost:46203/users
+Proxy:			<none>
+Request params:	<none>
+Query params:	<none>
+Form params:	<none>
+Path params:	<none>
+Headers:		Accept=*/*
+				Content-Type=application/json
+Cookies:		<none>
+Multiparts:		<none>
+Body:			<none>
+Request method:	POST
+Request URI:	http://localhost:46203/users
+Proxy:			<none>
+Request params:	<none>
+Query params:	<none>
+Form params:	<none>
+Path params:	<none>
+Headers:		Accept=*/*
+				Content-Type=application/json
+Cookies:		<none>
+Multiparts:		<none>
+Body:			<none>
+Request method:	POST
+Request URI:	http://localhost:46203/users
+Proxy:			<none>
+Request params:	<none>
+Query params:	<none>
+Form params:	<none>
+Path params:	<none>
+Headers:		Accept=*/*
+				Content-Type=application/json
+Cookies:		<none>
+Multiparts:		<none>
+Body:			<none>
+Request method:	POST
+Request URI:	http://localhost:46203/users
+Proxy:			<none>
+Request params:	<none>
+Query params:	<none>
+Form params:	<none>
+Path params:	<none>
+Headers:		Accept=*/*
+				Content-Type=application/json
+Cookies:		<none>
+Multiparts:		<none>
+Body:			<none>
+Request method:	POST
+Request URI:	http://localhost:46203/users
+Proxy:			<none>
+Request params:	<none>
+Query params:	<none>
+Form params:	<none>
+Path params:	<none>
+Headers:		Accept=*/*
+				Content-Type=application/json
+Cookies:		<none>
+Multiparts:		<none>
+Body:			<none>
+HTTP/1.1 401 
+Set-Cookie: JSESSIONID=5DC93BB0CC4722F2336675AEE246A66F; Path=/; HttpOnly
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 0
+Date: Fri, 03 Mar 2023 14:30:29 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+HTTP/1.1 401 
+Set-Cookie: JSESSIONID=5DC93BB0CC4722F2336675AEE246A66F; Path=/; HttpOnly
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 0
+Date: Fri, 03 Mar 2023 14:30:29 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+HTTP/1.1 401 
+Set-Cookie: JSESSIONID=5DC93BB0CC4722F2336675AEE246A66F; Path=/; HttpOnly
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 0
+Date: Fri, 03 Mar 2023 14:30:29 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+HTTP/1.1 401 
+Set-Cookie: JSESSIONID=5DC93BB0CC4722F2336675AEE246A66F; Path=/; HttpOnly
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 0
+Date: Fri, 03 Mar 2023 14:30:29 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+HTTP/1.1 401 
+Set-Cookie: JSESSIONID=5DC93BB0CC4722F2336675AEE246A66F; Path=/; HttpOnly
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 0
+Date: Fri, 03 Mar 2023 14:30:29 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+Request method:	POST
+Request URI:	http://localhost:46203/users
+Proxy:			<none>
+Request params:	<none>
+Query params:	<none>
+Form params:	<none>
+Path params:	<none>
+Headers:		Authorization=Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInN1YiI6IjIiLCJpYXQiOjE2NjYxNDg1MDR9.nE37BqZhBidqR2C_voONJjJAMmrpt-_JrHeWrNlLat0
+				Accept=*/*
+				Content-Type=application/json
+Cookies:		<none>
+Multiparts:		<none>
+Body:			<none>
+Request method:	POST
+Request URI:	http://localhost:46203/users
+Proxy:			<none>
+Request params:	<none>
+Query params:	<none>
+Form params:	<none>
+Path params:	<none>
+Headers:		Authorization=Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInN1YiI6IjIiLCJpYXQiOjE2NjYxNDg1MDR9.nE37BqZhBidqR2C_voONJjJAMmrpt-_JrHeWrNlLat0
+				Accept=*/*
+				Content-Type=application/json
+Cookies:		<none>
+Multiparts:		<none>
+Body:			<none>
+Request method:	POST
+Request URI:	http://localhost:46203/users
+Proxy:			<none>
+Request params:	<none>
+Query params:	<none>
+Form params:	<none>
+Path params:	<none>
+Headers:		Authorization=Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInN1YiI6IjIiLCJpYXQiOjE2NjYxNDg1MDR9.nE37BqZhBidqR2C_voONJjJAMmrpt-_JrHeWrNlLat0
+				Accept=*/*
+				Content-Type=application/json
+Cookies:		<none>
+Multiparts:		<none>
+Body:			<none>
+Request method:	POST
+Request URI:	http://localhost:46203/users
+Proxy:			<none>
+Request params:	<none>
+Query params:	<none>
+Form params:	<none>
+Path params:	<none>
+Headers:		Authorization=Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInN1YiI6IjIiLCJpYXQiOjE2NjYxNDg1MDR9.nE37BqZhBidqR2C_voONJjJAMmrpt-_JrHeWrNlLat0
+				Accept=*/*
+				Content-Type=application/json
+Cookies:		<none>
+Multiparts:		<none>
+Body:			<none>
+Request method:	POST
+Request URI:	http://localhost:46203/users
+Proxy:			<none>
+Request params:	<none>
+Query params:	<none>
+Form params:	<none>
+Path params:	<none>
+Headers:		Authorization=Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInN1YiI6IjIiLCJpYXQiOjE2NjYxNDg1MDR9.nE37BqZhBidqR2C_voONJjJAMmrpt-_JrHeWrNlLat0
+				Accept=*/*
+				Content-Type=application/json
+Cookies:		<none>
+Multiparts:		<none>
+Body:			<none>
+Request method:	POST
+Request URI:	http://localhost:46203/users
+Proxy:			<none>
+Request params:	<none>
+Query params:	<none>
+Form params:	<none>
+Path params:	<none>
+Headers:		Authorization=Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX0FETUlOIl0sInN1YiI6IjIiLCJpYXQiOjE2NjYxNDg1MDR9.nE37BqZhBidqR2C_voONJjJAMmrpt-_JrHeWrNlLat0
+				Accept=*/*
+				Content-Type=application/json
+Cookies:		<none>
+Multiparts:		<none>
+Body:			<none>
+HTTP/1.1 401 
+Set-Cookie: JSESSIONID=1B9487C2C8A385FA1A02F8527C574882; Path=/; HttpOnly
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 0
+Date: Fri, 03 Mar 2023 14:30:29 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+HTTP/1.1 401 
+Set-Cookie: JSESSIONID=1B9487C2C8A385FA1A02F8527C574882; Path=/; HttpOnly
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 0
+Date: Fri, 03 Mar 2023 14:30:29 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+HTTP/1.1 401 
+Set-Cookie: JSESSIONID=1B9487C2C8A385FA1A02F8527C574882; Path=/; HttpOnly
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 0
+Date: Fri, 03 Mar 2023 14:30:29 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+HTTP/1.1 401 
+Set-Cookie: JSESSIONID=1B9487C2C8A385FA1A02F8527C574882; Path=/; HttpOnly
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 0
+Date: Fri, 03 Mar 2023 14:30:29 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+HTTP/1.1 401 
+Set-Cookie: JSESSIONID=1B9487C2C8A385FA1A02F8527C574882; Path=/; HttpOnly
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 0
+Date: Fri, 03 Mar 2023 14:30:29 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+HTTP/1.1 401 
+Set-Cookie: JSESSIONID=1B9487C2C8A385FA1A02F8527C574882; Path=/; HttpOnly
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+Pragma: no-cache
+Expires: 0
+X-Frame-Options: DENY
+Content-Length: 0
+Date: Fri, 03 Mar 2023 14:30:29 GMT
+Keep-Alive: timeout=60
+Connection: keep-alive
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

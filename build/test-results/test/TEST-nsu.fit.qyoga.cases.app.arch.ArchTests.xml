@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="nsu.fit.qyoga.cases.app.arch.ArchTests" tests="3" skipped="0" failures="0" errors="0" timestamp="2023-03-03T14:30:23" hostname="ntrif" time="5.766">
+  <properties/>
+  <testcase name="QYoga modules should conform to ergonomic structure()" classname="nsu.fit.qyoga.cases.app.arch.ArchTests" time="1.135"/>
+  <testcase name="QYoga should not contain cycles in packages()" classname="nsu.fit.qyoga.cases.app.arch.ArchTests" time="0.17"/>
+  <testcase name="QYoga should conform to ergonomic system architecture()" classname="nsu.fit.qyoga.cases.app.arch.ArchTests" time="0.302"/>
+  <system-out><![CDATA[2023-03-03 21:30:20.930 [Test worker] INFO  c.tngtech.archunit.core.PluginLoader - Detected Java version 17.0.6
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
