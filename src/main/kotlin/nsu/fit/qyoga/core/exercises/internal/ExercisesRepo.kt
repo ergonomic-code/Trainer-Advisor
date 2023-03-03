@@ -24,7 +24,7 @@ interface ExercisesRepo : CrudRepository<Exercise, Long>, PagingAndSortingReposi
             INNER JOIN exercise_types et on ex.exercise_type_id = et.id
         WHERE (ex.title LIKE '%' || :#{#search.title ?: ""} || '%' OR :#{#search.title ?: ""} IS NULL)
             AND (ex.contradictions LIKE '%' || :#{#search?.contradiction ?: ""} || '%' OR :#{#search.contradiction ?: ""} IS NULL)
-            AND (:#{#search.duration} IS NULL OR ex.duration = :#{#search.duration}::interval)
+            AND (:#{#search.duration ?: 'null'} = 'null' OR ex.duration = :#{#search.duration ?: '00:00:00'}::interval)
             AND (et.name LIKE '%' || :#{#search.exerciseType ?: ""} || '%' OR :#{#search.exerciseType ?: ""} IS NULL)
             AND (tp.purpose LIKE '%' || :#{#search.therapeuticPurpose ?: ""} || '%' OR :#{#search.therapeuticPurpose ?: ""} IS NULL)
         ORDER BY ex.title
@@ -46,7 +46,7 @@ interface ExercisesRepo : CrudRepository<Exercise, Long>, PagingAndSortingReposi
             INNER JOIN exercise_types et on ex.exercise_type_id = et.id
         WHERE (ex.title LIKE '%' || :#{#search.title ?: ""} || '%' OR :#{#search.title ?: ""} IS NULL)
             AND (ex.contradictions LIKE '%' || :#{#search?.contradiction ?: ""} || '%' OR :#{#search.contradiction ?: ""} IS NULL)
-            AND (:#{#search.duration} IS NULL OR ex.duration = :#{#search.duration}::interval)
+            AND (:#{#search.duration ?: 'null'} = 'null' OR ex.duration = :#{#search.duration ?: '00:00:00'}::interval)
             AND (et.name LIKE '%' || :#{#search?.exerciseType ?: ""} || '%' OR :#{#search?.exerciseType ?: ""} IS NULL)
             AND (tp.purpose LIKE '%' || :#{#search?.therapeuticPurpose ?: ""} || '%' OR :#{#search?.therapeuticPurpose ?: ""} IS NULL)
     """
