@@ -22,11 +22,11 @@ interface ExercisesRepo : CrudRepository<Exercise, Long>, PagingAndSortingReposi
             INNER JOIN exercise_purposes ep ON ex.id = ep.exercise_id
             INNER JOIN therapeutic_purposes tp ON tp.id = ep.purpose_id
             INNER JOIN exercise_types et on ex.exercise_type_id = et.id
-        WHERE (ex.title LIKE '%' || :#{#search.title} || '%' OR :#{#search.title} IS NULL)
-            AND (ex.contradictions LIKE '%' || :#{#search.contradiction} || '%' OR :#{#search.contradiction} IS NULL)
+        WHERE (:#{#search?.title ?: ""} IS NULL OR ex.title LIKE '%' || :#{#search?.title ?: ""} || '%')
+            AND (ex.contradictions LIKE '%' || :#{#search?.contradiction ?: ""} || '%' OR :#{#search?.contradiction ?: ""} IS NULL)
             AND (:#{#search.duration}::interval IS NULL OR ex.duration = :#{#search.duration}::interval)
-            AND (et.name LIKE '%' || :#{#search.exerciseType} || '%' OR :#{#search.exerciseType} IS NULL)
-            AND (tp.purpose LIKE '%' || :#{#search.therapeuticPurpose} || '%' OR :#{#search.therapeuticPurpose} IS NULL)
+            AND (et.name LIKE '%' || :#{#search?.exerciseType ?: ""} || '%' OR :#{#search?.exerciseType ?: ""} IS NULL)
+            AND (tp.purpose LIKE '%' || :#{#search?.therapeuticPurpose ?: ""} || '%' OR :#{#search?.therapeuticPurpose ?: ""} IS NULL)
         ORDER BY ex.title
         LIMIT :pageSize OFFSET :offset
     """
@@ -44,15 +44,15 @@ interface ExercisesRepo : CrudRepository<Exercise, Long>, PagingAndSortingReposi
             INNER JOIN exercise_purposes ep ON ex.id = ep.exercise_id
             INNER JOIN therapeutic_purposes tp ON tp.id = ep.purpose_id
             INNER JOIN exercise_types et on ex.exercise_type_id = et.id
-        WHERE (ex.title LIKE '%' || :#{#searchDto.title} || '%' OR :#{#searchDto.title} IS NULL) 
-            AND (ex.contradictions LIKE '%' || :#{#searchDto.contradiction} || '%' OR :#{#searchDto.contradiction} IS NULL)
-            AND (:#{#searchDto.duration}::interval IS NULL OR ex.duration = :#{#searchDto.duration}::interval)
-            AND (et.name LIKE '%' || :#{#searchDto.exerciseType} || '%' OR :#{#searchDto.exerciseType} IS NULL)
-            AND (tp.purpose LIKE '%' || :#{#searchDto.therapeuticPurpose} || '%' OR :#{#searchDto.therapeuticPurpose} IS NULL)
+        WHERE (:#{#search?.title ?: ""} IS NULL OR ex.title LIKE '%' || :#{#search?.title ?: ""} || '%')
+            AND (ex.contradictions LIKE '%' || :#{#search?.contradiction ?: ""} || '%' OR :#{#search?.contradiction ?: ""} IS NULL)
+            AND (:#{#search?.duration ?: ""}::interval IS NULL OR ex.duration = :#{#search?.duration ?: ""}::interval)
+            AND (et.name LIKE '%' || :#{#search?.exerciseType ?: ""} || '%' OR :#{#search?.exerciseType ?: ""} IS NULL)
+            AND (tp.purpose LIKE '%' || :#{#search?.therapeuticPurpose ?: ""} || '%' OR :#{#search?.therapeuticPurpose ?: ""} IS NULL)
     """
     )
     fun countExercises(
-        @Param("searchDto") searchDto: ExerciseSearchDto,
+        @Param("search") search: ExerciseSearchDto,
     ): Long
 
     @Query(
