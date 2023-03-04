@@ -34,7 +34,7 @@ class WebSecurityConfig(
                 authz
                     .antMatchers(HttpMethod.POST, "/users").hasAuthority(Role.ROLE_ADMIN.toString())
                     .antMatchers("/users/login", "/error", "/").permitAll()
-                    .antMatchers(HttpMethod.GET, "/css/**", "/img/**").permitAll()
+                    .antMatchers(HttpMethod.GET, "/styles/**", "/img/**").permitAll()
                     .anyRequest().authenticated()
             }
             .formLogin()

@@ -13,7 +13,6 @@ class LoginTest : QYogaAppTestBase() {
     @Test
     fun `QYoga should allow users to login`() {
         Given {
-            //body(adminLoginRequest)
             param("username", "admin")
             param("password", "diem-Synergy5")
         } When {

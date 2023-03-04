@@ -7,21 +7,21 @@ import org.springframework.security.core.userdetails.UserDetails
 import java.util.stream.Collectors
 
 class UserDetailsImpl(
-    private val username: String?,
-    private val password: String?,
-    private val roles: Collection<out GrantedAuthority>?,
-    private val id: Long?
+    private val username: String,
+    private val password: String,
+    private val roles: Collection<out GrantedAuthority>,
+    private val id: Long
 ) : UserDetails {
     override fun isAccountNonLocked(): Boolean {
         return true
     }
-    override fun getAuthorities(): Collection<out GrantedAuthority>? {
+    override fun getAuthorities(): Collection<out GrantedAuthority> {
         return this.roles
     }
-    override fun getPassword(): String? {
+    override fun getPassword(): String {
         return this.password
     }
-    override fun getUsername(): String? {
+    override fun getUsername(): String {
         return this.username
     }
     override fun isAccountNonExpired(): Boolean {
@@ -34,17 +34,17 @@ class UserDetailsImpl(
         return true
     }
     companion object {
-        fun build(user: User?): UserDetailsImpl {
-            val authorities: List<GrantedAuthority> = user?.roles?.stream()
-                ?.map { role: Role ->
+        fun build(user: User): UserDetailsImpl {
+            val authorities: List<GrantedAuthority> = user.roles.stream()
+                .map { role: Role ->
                     SimpleGrantedAuthority(role.toString())
                 }
-                ?.collect(Collectors.toList())!!
+                .collect(Collectors.toList())
             return UserDetailsImpl(
-                user?.username,
-                user?.passwordHash,
+                user.username,
+                user.passwordHash,
                 authorities,
-                user?.id
+                user.id
             )
         }
     }
