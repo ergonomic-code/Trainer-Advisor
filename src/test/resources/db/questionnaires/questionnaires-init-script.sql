@@ -1,0 +1,1 @@
+TRUNCATE questionnaires RESTART IDENTITY;
