@@ -24,7 +24,7 @@ class QYogaAppTestBase {
 
         RestAssured.requestSpecification = RequestSpecBuilder()
             .setBaseUri("http://localhost:$port")
-            .setContentType("application/json")
+            .setContentType("application/x-www-form-urlencoded")
             .setRelaxedHTTPSValidation()
             .addFilter(ResponseLoggingFilter())
             .addFilter(RequestLoggingFilter())

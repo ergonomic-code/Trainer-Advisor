@@ -1,6 +1,7 @@
 package nsu.fit.qyoga.core.users.internal
 
 import nsu.fit.qyoga.core.users.api.Role
+import nsu.fit.qyoga.core.users.api.User
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
@@ -9,15 +10,16 @@ import java.util.stream.Collectors
 class UserDetailsImpl(
     private val username: String,
     private val password: String,
-    private val roles: Collection<out GrantedAuthority>,
-    private val id: Long
+    private val roles: Collection<GrantedAuthority>
 ) : UserDetails {
     override fun isAccountNonLocked(): Boolean {
         return true
     }
-    override fun getAuthorities(): Collection<out GrantedAuthority> {
+
+    override fun getAuthorities(): Collection<GrantedAuthority> {
         return this.roles
     }
+
     override fun getPassword(): String {
         return this.password
     }
@@ -43,8 +45,7 @@ class UserDetailsImpl(
             return UserDetailsImpl(
                 user.username,
                 user.passwordHash,
-                authorities,
-                user.id
+                authorities
             )
         }
     }

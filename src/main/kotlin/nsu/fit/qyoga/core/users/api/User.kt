@@ -1,6 +1,5 @@
-package nsu.fit.qyoga.core.users.internal
+package nsu.fit.qyoga.core.users.api
 
-import nsu.fit.qyoga.core.users.api.Role
 import org.springframework.data.relational.core.mapping.Table
 
 @Table("users")
