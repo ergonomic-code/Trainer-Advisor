@@ -1,0 +1,157 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+>
+<html lang="en">
+<head>
+    <link href="/icons/rounded-logo.png" rel="icon" style="border-radius: 10px" type="image/x-icon">
+    <meta charset="utf-8">
+    <title>Поиск упражнения</title>
+    <link rel="stylesheet" th:href="@{/styles/styles.css}">
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <script crossorigin="anonymous"
+            integrity="sha384-7aHh9lqPYGYZ7sTHvzP1t3BAfLhYSTy9ArHdP3Xsr9/3TlGurYgcPBoFmXX2TX/w"
+            src="https://unpkg.com/htmx.org@1.8.5"></script>
+</head>
+<body>
+<div class="container">
+    <nav class="menu">
+        <ul>
+            <li><a class="logo" href="#">
+                <img src="/icons/logo.png">
+                <span class="nav-item">Qyoga</span>
+            </a></li>
+
+            <li><a class="menu-item" href="#">
+                <img src="/icons/home.png">
+                <span class="nav-item">Главная</span>
+            </a></li>
+            <li><a class="menu-item" href="#">
+                <img src="/icons/clients.png">
+                <span class="nav-item">Клиенты</span>
+            </a></li>
+            <li><a class="menu-item" href="#">
+                <img src="/icons/programs.png">
+                <span class="nav-item">Программы</span>
+            </a></li>
+            <li><a class="menu-item" href="#">
+                <img src="/icons/exercises.png">
+                <span class="nav-item">Упражнения</span>
+            </a></li>
+        </ul>
+    </nav>
+
+
+    <section class="main">
+        <div class="top-title">
+            <h1>Упражнения</h1>
+        </div>
+        <form class="filters" method="get" th:action="@{/exercises/}" th:object="${searchDto}">
+            <div class="filters">
+                <h1>Фильтры</h1>
+
+                <input class="form-control"
+                       hx-get="/exercises/search"
+                       hx-indicator=".htmx-indicator"
+                       hx-target="#exercises-list"
+                       id="name"
+                       placeholder="Название"
+                       hx-sync="closest form:abort"
+                       th:field="${searchDto.title}"
+                       type="text">
+
+                <input
+                        hx-indicator=".htmx-indicator"
+                        hx-sync="closest form:abort"
+                        hx-target="#exercises-list"
+                        id="contraindications"
+                        placeholder="Противопоказание"
+                        th:field="${searchDto.contradiction}"
+                        type="text"
+                >
+                <input hx-get="/exercises/search"
+                       hx-indicator=".htmx-indicator"
+                       hx-target="#exercises-list"
+                       id="duration"
+                       placeholder="Длительность"
+                       hx-sync="closest form:abort"
+                       th:field="${searchDto.duration}"
+                       type="text">
+                <select hx-indicator=".htmx-indicator"
+                        hx-target="#exercises-list"
+                        id="exerciseType"
+                        itemtype="text"
+                        hx-sync="closest form:abort"
+                        th:field="${searchDto.exerciseType}"
+                >
+                    <option id="first-option" selected th:value="null">Тип упражнения</option>
+                    <option th:each="type : ${types}" th:text="${type.name()}" th:value="${type.name()}"></option>
+                </select>
+                <input hx-get="/exercises/search"
+                       hx-indicator=".htmx-indicator"
+                       hx-target="#exercises-list"
+                       id="therapeuticTask"
+                       placeholder="Терапевтическая задача"
+                       hx-sync="closest form:abort"
+                       th:field="${searchDto.therapeuticPurpose}"
+                       type="text">
+
+            </div>
+            <button style="position: absolute" type="submit">Поиск</button>
+
+        </form>
+
+
+        <div class="exercises">
+
+            <table id="myTable">
+                <thead>
+                <tr class="header">
+                    <th style="width:10%;">Название</th>
+                    <th style="width:15%;">Противопоказание</th>
+                    <th style="width:15%;">Длительность</th>
+                    <th style="width:15%;">Тип упражнения</th>
+                    <th style="width:20%;">Терапевтическая задача</th>
+                </tr>
+                </thead>
+                <tbody id="exercises-list">
+                <tr th:each="exercise : ${exercises.content}" th:fragment="exercises">
+                    <td th:text="${exercise.title}"/>
+                    <td th:text="${exercise.contradictions}"/>
+                    <td th:text="${exercise.duration}"/>
+                    <td th:text="${exercise.type}"/>
+                    <td th:text="${exercise.purpose}"/>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="pageable" style="margin-left: 40%">
+            <div class="pagination" style="margin-left: 0; margin-right: 40px"
+                 th:classappend="${(exercises.pageNum == 0) ? 'disabled' : ''}">
+                <a th:href="@{'/exercises/?pageNumber=' + ${exercises.pageNum}}" th:if="${exercises.pageNum >= 1}">Previous</a>
+            </div>
+            <div class="pagination"
+                 th:each="pageNumber : ${pageNumbers}"
+                 th:style="${pageNumber == exercises.pageNum + 1} ? 'background: #E7ECFF; border-radius: 5px;'"
+                 th:if="${exercises.totalPages > 0}">
+                <a th:class="${pageNumber == exercises.totalPages + 1} ? active"
+                   th:href="@{/exercises/(pageSize=${exercises.pageSize}, pageNumber=${pageNumber})}"
+                   th:text="${pageNumber}"></a>
+            </div>
+            <div class="pagination" th:classappend="${!(exercises.pageNum < exercises.totalPages)? 'disabled' : ''}">
+                <a th:href="@{'/exercises/?pageNumber=' + ${exercises.pageNum + 2}}"
+                   th:if="${exercises.pageNum < exercises.totalPages - 1}">Next</a>
+            </div>
+        </div>
+        <div>
+            <button>Новое Упражнение</button>
+        </div>
+
+
+    </section>
+
+
+</div>
+</body>
+</html>

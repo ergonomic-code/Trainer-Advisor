@@ -32,6 +32,7 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("org.flywaydb:flyway-core")
 	implementation("jakarta.validation:jakarta.validation-api:3.0.2")
+	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 
 	api("io.jsonwebtoken:jjwt-api:0.11.5")
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
@@ -46,6 +47,7 @@ dependencies {
 	testImplementation("io.kotest:kotest-runner-junit5:5.5.0")
 	testImplementation("io.kotest:kotest-assertions-core:5.5.0")
 	testImplementation("com.tngtech.archunit:archunit:1.0.1")
+    testImplementation("net.sourceforge.htmlunit:htmlunit:2.70.0")
 
 	runtimeOnly("org.postgresql:postgresql:42.5.1")
 
