@@ -9,5 +9,4 @@ import org.junit.jupiter.api.Test
 
 class QuestionnairesTest : QYogaAppTestBase() {
 
-
 }

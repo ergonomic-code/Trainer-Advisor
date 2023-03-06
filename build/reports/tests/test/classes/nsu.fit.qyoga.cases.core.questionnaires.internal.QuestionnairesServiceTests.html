@@ -23,7 +23,7 @@
 <tr>
 <td>
 <div class="infoBox" id="tests">
-<div class="counter">4</div>
+<div class="counter">6</div>
 <p>tests</p>
 </div>
 </td>
@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">1.979s</div>
+<div class="counter">1.531s</div>
 <p>duration</p>
 </div>
 </td>
@@ -81,23 +81,33 @@
 </tr>
 </thead>
 <tr>
+<td class="success">QYoga can retrieve count of questionnaires with title()</td>
+<td class="success">0.065s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">QYoga can retrieve count of questionnaires without title()</td>
+<td class="success">0.029s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
 <td class="success">QYoga can retrieve questionnaires by title()</td>
-<td class="success">0.122s</td>
+<td class="success">0.049s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">QYoga can retrieve questionnaires page by page()</td>
-<td class="success">1.766s</td>
+<td class="success">1.332s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">QYoga can retrieve questionnaires with different type of sort()</td>
-<td class="success">0.052s</td>
+<td class="success">0.035s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">QYoga can retrieve questionnaires without title()</td>
-<td class="success">0.039s</td>
+<td class="success">0.021s</td>
 <td class="success">passed</td>
 </tr>
 </table>
@@ -114,53 +124,55 @@
  =========|_|==============|___/=/_/_/_/
  :: Spring Boot ::                (v3.0.2)
 
-2023-03-05 19:58:37.062 [Test worker] INFO  o.t.utility.ImageNameSubstitutor - Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
-2023-03-05 19:58:37.168 [Test worker] INFO  o.t.d.DockerClientProviderStrategy - Loaded org.testcontainers.dockerclient.NpipeSocketClientProviderStrategy from ~/.testcontainers.properties, will try it first
-2023-03-05 19:58:39.019 [Test worker] INFO  o.t.d.DockerClientProviderStrategy - Found Docker environment with local Npipe socket (npipe:////./pipe/docker_engine)
-2023-03-05 19:58:39.023 [Test worker] INFO  o.testcontainers.DockerClientFactory - Docker host IP address is localhost
-2023-03-05 19:58:39.065 [Test worker] INFO  o.testcontainers.DockerClientFactory - Connected to docker: 
+2023-03-06 21:30:29.420 [Test worker] INFO  o.t.utility.ImageNameSubstitutor - Image name substitution will be performed by: DefaultImageNameSubstitutor (composite of 'ConfigurationFileImageNameSubstitutor' and 'PrefixingImageNameSubstitutor')
+2023-03-06 21:30:29.503 [Test worker] INFO  o.t.d.DockerClientProviderStrategy - Loaded org.testcontainers.dockerclient.NpipeSocketClientProviderStrategy from ~/.testcontainers.properties, will try it first
+2023-03-06 21:30:31.104 [Test worker] INFO  o.t.d.DockerClientProviderStrategy - Found Docker environment with local Npipe socket (npipe:////./pipe/docker_engine)
+2023-03-06 21:30:31.107 [Test worker] INFO  o.testcontainers.DockerClientFactory - Docker host IP address is localhost
+2023-03-06 21:30:31.140 [Test worker] INFO  o.testcontainers.DockerClientFactory - Connected to docker: 
   Server Version: 20.10.23
   API Version: 1.41
   Operating System: Docker Desktop
   Total Memory: 17546 MB
-2023-03-05 19:58:39.137 [Test worker] INFO  docker[testcontainers/ryuk:0.3.4] - Creating container for image: testcontainers/ryuk:0.3.4
-2023-03-05 19:58:39.435 [Test worker] INFO  o.t.utility.RegistryAuthLocator - Credential helper/store (docker-credential-desktop) does not have credentials for https://index.docker.io/v1/
-2023-03-05 19:58:39.715 [Test worker] INFO  docker[testcontainers/ryuk:0.3.4] - Container testcontainers/ryuk:0.3.4 is starting: 62cfd4cdda3ef60b8bdf01dab1ae8d488ac65114fad29f7d20f54865946dd1ea
-2023-03-05 19:58:40.722 [Test worker] INFO  docker[testcontainers/ryuk:0.3.4] - Container testcontainers/ryuk:0.3.4 started in PT1.6265753S
-2023-03-05 19:58:40.734 [Test worker] INFO  o.t.utility.RyukResourceReaper - Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
-2023-03-05 19:58:40.735 [Test worker] INFO  o.testcontainers.DockerClientFactory - Checking the system...
-2023-03-05 19:58:40.737 [Test worker] INFO  o.testcontainers.DockerClientFactory - ?? Docker server version should be at least 1.6.0
-2023-03-05 19:58:40.738 [Test worker] INFO  docker[postgres:14.2] - Creating container for image: postgres:14.2
-2023-03-05 19:58:40.741 [Test worker] WARN  docker[postgres:14.2] - Reuse was requested but the environment does not support the reuse of containers
+2023-03-06 21:30:31.188 [Test worker] INFO  docker[testcontainers/ryuk:0.3.4] - Creating container for image: testcontainers/ryuk:0.3.4
+2023-03-06 21:30:31.470 [Test worker] INFO  o.t.utility.RegistryAuthLocator - Credential helper/store (docker-credential-desktop) does not have credentials for https://index.docker.io/v1/
+2023-03-06 21:30:31.707 [Test worker] INFO  docker[testcontainers/ryuk:0.3.4] - Container testcontainers/ryuk:0.3.4 is starting: a1770a18f5cdd36cbbb636bb7bd22ce885339b92ab0b80019e23f1f955efa4a0
+2023-03-06 21:30:32.467 [Test worker] INFO  docker[testcontainers/ryuk:0.3.4] - Container testcontainers/ryuk:0.3.4 started in PT1.3084229S
+2023-03-06 21:30:32.475 [Test worker] INFO  o.t.utility.RyukResourceReaper - Ryuk started - will monitor and terminate Testcontainers containers on JVM exit
+2023-03-06 21:30:32.476 [Test worker] INFO  o.testcontainers.DockerClientFactory - Checking the system...
+2023-03-06 21:30:32.478 [Test worker] INFO  o.testcontainers.DockerClientFactory - ?? Docker server version should be at least 1.6.0
+2023-03-06 21:30:32.479 [Test worker] INFO  docker[postgres:14.2] - Creating container for image: postgres:14.2
+2023-03-06 21:30:32.480 [Test worker] WARN  docker[postgres:14.2] - Reuse was requested but the environment does not support the reuse of containers
 To enable reuse of containers, you must set 'testcontainers.reuse.enable=true' in a file located at C:\Users\zerta\.testcontainers.properties
-2023-03-05 19:58:40.848 [Test worker] INFO  docker[postgres:14.2] - Container postgres:14.2 is starting: 45445a9702094bbba72ee96dac233a30cf291896568678139130ddd09ce8ba0a
-2023-03-05 19:58:42.631 [Test worker] INFO  docker[postgres:14.2] - Container postgres:14.2 started in PT1.8937058S
-2023-03-05 19:58:42.640 [Test worker] INFO  n.f.q.c.c.q.i.QuestionnairesServiceTests - Starting QuestionnairesServiceTests using Java 17.0.3 with PID 1580 (started by zerta in C:\Users\zerta\IdeaProjects\QYoga)
-2023-03-05 19:58:42.642 [Test worker] INFO  n.f.q.c.c.q.i.QuestionnairesServiceTests - The following 1 profile is active: &quot;test&quot;
-2023-03-05 19:58:44.074 [Test worker] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
-2023-03-05 19:58:44.165 [Test worker] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 80 ms. Found 1 JDBC repository interfaces.
-2023-03-05 19:58:45.439 [Test worker] INFO  o.f.c.i.license.VersionPrinter - Flyway Community Edition 9.5.1 by Redgate
-2023-03-05 19:58:45.439 [Test worker] INFO  o.f.c.i.license.VersionPrinter - See what's new here: https://flywaydb.org/documentation/learnmore/releaseNotes#9.5.1
-2023-03-05 19:58:45.440 [Test worker] INFO  o.f.c.i.license.VersionPrinter - 
-2023-03-05 19:58:45.466 [Test worker] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
-2023-03-05 19:58:46.179 [Test worker] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@2181d6ab
-2023-03-05 19:58:46.188 [Test worker] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
-2023-03-05 19:58:46.279 [Test worker] INFO  o.f.c.i.d.base.BaseDatabaseType - Database: jdbc:postgresql://localhost:56824/qyoga (PostgreSQL 14.2)
-2023-03-05 19:58:46.492 [Test worker] INFO  o.f.core.internal.command.DbValidate - Successfully validated 2 migrations (execution time 00:00.116s)
-2023-03-05 19:58:46.555 [Test worker] INFO  o.f.c.i.s.JdbcTableSchemaHistory - Creating Schema History table &quot;public&quot;.&quot;flyway_schema_history&quot; ...
-2023-03-05 19:58:46.731 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Current version of schema &quot;public&quot;: &lt;&lt; Empty Schema &gt;&gt;
-2023-03-05 19:58:46.764 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema &quot;public&quot; to version &quot;22101801 - users&quot;
-2023-03-05 19:58:46.862 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema &quot;public&quot; to version &quot;23012001 - questionnaires&quot;
-2023-03-05 19:58:46.904 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Successfully applied 2 migrations to schema &quot;public&quot;, now at version v23012001 (execution time 00:00.206s)
-2023-03-05 19:58:50.038 [Test worker] INFO  n.f.q.c.c.q.i.QuestionnairesServiceTests - Started QuestionnairesServiceTests in 14.255 seconds (process running for 28.191)
-Hi
+2023-03-06 21:30:32.544 [Test worker] INFO  docker[postgres:14.2] - Container postgres:14.2 is starting: a983f535dcfc9bd4a44bd29feb14e8178257271c973658aea85bcd7ab14a10f2
+2023-03-06 21:30:33.998 [Test worker] INFO  docker[postgres:14.2] - Container postgres:14.2 started in PT1.5193186S
+2023-03-06 21:30:34.016 [Test worker] INFO  org.testcontainers.ext.ScriptUtils - Executing database script from db/qyoga-db-init.sql
+2023-03-06 21:30:34.570 [Test worker] INFO  org.testcontainers.ext.ScriptUtils - Executed database script from db/qyoga-db-init.sql in 553 ms.
+2023-03-06 21:30:34.578 [Test worker] INFO  n.f.q.c.c.q.i.QuestionnairesServiceTests - Starting QuestionnairesServiceTests using Java 17.0.3 with PID 13316 (started by zerta in C:\Users\zerta\IdeaProjects\QYoga)
+2023-03-06 21:30:34.579 [Test worker] INFO  n.f.q.c.c.q.i.QuestionnairesServiceTests - The following 1 profile is active: &quot;test&quot;
+2023-03-06 21:30:35.966 [Test worker] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JDBC repositories in DEFAULT mode.
+2023-03-06 21:30:36.047 [Test worker] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 71 ms. Found 1 JDBC repository interfaces.
+2023-03-06 21:30:37.113 [Test worker] INFO  o.f.c.i.license.VersionPrinter - Flyway Community Edition 9.5.1 by Redgate
+2023-03-06 21:30:37.113 [Test worker] INFO  o.f.c.i.license.VersionPrinter - See what's new here: https://flywaydb.org/documentation/learnmore/releaseNotes#9.5.1
+2023-03-06 21:30:37.114 [Test worker] INFO  o.f.c.i.license.VersionPrinter - 
+2023-03-06 21:30:37.142 [Test worker] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2023-03-06 21:30:37.241 [Test worker] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@11bd2433
+2023-03-06 21:30:37.247 [Test worker] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2023-03-06 21:30:37.287 [Test worker] INFO  o.f.c.i.d.base.BaseDatabaseType - Database: jdbc:postgresql://localhost:56097/qyoga (PostgreSQL 14.2)
+2023-03-06 21:30:37.362 [Test worker] INFO  o.f.core.internal.command.DbValidate - Successfully validated 3 migrations (execution time 00:00.035s)
+2023-03-06 21:30:37.391 [Test worker] INFO  o.f.c.i.s.JdbcTableSchemaHistory - Creating Schema History table &quot;public&quot;.&quot;flyway_schema_history&quot; ...
+2023-03-06 21:30:37.453 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Current version of schema &quot;public&quot;: &lt;&lt; Empty Schema &gt;&gt;
+2023-03-06 21:30:37.467 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema &quot;public&quot; to version &quot;22101801 - users&quot;
+2023-03-06 21:30:37.527 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema &quot;public&quot; to version &quot;23011901 - exercises&quot;
+2023-03-06 21:30:37.583 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Migrating schema &quot;public&quot; to version &quot;23012001 - questionnaires&quot;
+2023-03-06 21:30:37.611 [Test worker] INFO  o.f.core.internal.command.DbMigrate - Successfully applied 3 migrations to schema &quot;public&quot;, now at version v23012001 (execution time 00:00.172s)
+2023-03-06 21:30:38.893 [Test worker] INFO  n.f.q.c.c.q.i.QuestionnairesServiceTests - Started QuestionnairesServiceTests in 10.542 seconds (process running for 25.576)
 </pre>
 </span>
 </div>
 <div id="tab2" class="tab">
 <h2>Standard error</h2>
 <span class="code">
-<pre>[2023.03.05 19:58:35] (Coverage): Error during class instrumentation: org.springframework.boot.logging.log4j2.Log4J2LoggingSystem: java.lang.RuntimeException: java.io.IOException: Class org/apache/logging/log4j/core/config/composite/CompositeConfiguration not found
+<pre>[2023.03.06 21:30:28] (Coverage): Error during class instrumentation: org.springframework.boot.logging.log4j2.Log4J2LoggingSystem: java.lang.RuntimeException: java.io.IOException: Class org/apache/logging/log4j/core/config/composite/CompositeConfiguration not found
 </pre>
 </span>
 </div>
@@ -172,7 +184,7 @@ Hi
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 7.5</a> at 5 мар. 2023 г., 19:58:53</p>
+<a href="http://www.gradle.org">Gradle 7.5</a> at 6 мар. 2023 г., 21:30:41</p>
 </div>
 </div>
 </body>

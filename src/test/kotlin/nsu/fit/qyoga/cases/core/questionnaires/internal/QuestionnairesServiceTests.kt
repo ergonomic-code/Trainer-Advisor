@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
-import org.testcontainers.shaded.org.bouncycastle.util.encoders.UTF8
 
 
 @ContextConfiguration(
@@ -44,6 +43,18 @@ class QuestionnairesServiceTests(
         val questionnairesDESK = questionnaireService.findQuestionnaires(null, Page(orderType = OrderType.DESK))
         questionnairesASK.size shouldBe 10
         questionnairesDESK.size shouldBe 10
+    }
+
+    @Test
+    fun `QYoga can retrieve count of questionnaires without title`() {
+        val questionnairesCount =questionnaireService.getQuestionnairesCount(null)
+        questionnairesCount shouldBe 12
+    }
+
+    @Test
+    fun `QYoga can retrieve count of questionnaires with title`() {
+        val questionnairesCount =questionnaireService.getQuestionnairesCount("test")
+        questionnairesCount shouldBe 6
     }
 
     @Test
