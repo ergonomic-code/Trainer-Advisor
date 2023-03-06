@@ -4,10 +4,24 @@ import io.github.ulfs.assertj.jsoup.Assertions
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
 import nsu.fit.qyoga.infra.QYogaAppTestBase
+import nsu.fit.qyoga.infra.db.DbInitializer
 import org.jsoup.Jsoup
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
 
 class ExerciseViewTest : QYogaAppTestBase() {
+
+    @Autowired
+    lateinit var dbInitializer: DbInitializer
+
+    @BeforeEach
+    fun setupDb() {
+        dbInitializer.executeScripts(
+            "/db/exercises-init-script.sql" to "dataSource",
+            "/db/exercises-insert-data-script.sql" to "dataSource"
+        )
+    }
 
     @Test
     fun `QYoga returns exercise-search page with exercise table`() {
@@ -17,7 +31,8 @@ class ExerciseViewTest : QYogaAppTestBase() {
             val body = Jsoup.parse(extract().body().asString())
             Assertions.assertThatSpec(body) {
                 node("#exercisesTable") { exists() }
-                node("#exerciseRow") { exists() }
+                node("#exercises-list") { exists() }
+                node("td") { exists() }
             }
         }
     }
@@ -33,7 +48,6 @@ class ExerciseViewTest : QYogaAppTestBase() {
                 node("#contradictionFilter") { exists() }
                 node("#therapeuticPurposeFilter") { exists() }
                 node("#exerciseTypeFilter") { exists() }
-
             }
         }
     }
