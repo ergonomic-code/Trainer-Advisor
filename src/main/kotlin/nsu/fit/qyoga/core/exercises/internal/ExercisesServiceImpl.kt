@@ -23,7 +23,6 @@ class ExercisesServiceImpl(
             pageable.pageNumber * pageable.pageSize,
             pageable.pageSize
         )
-        println(result)
         val count = exercisesRepo.countExercises(searchDto)
         return PageImpl(result, pageable, count)
     }

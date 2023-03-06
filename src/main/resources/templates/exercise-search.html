@@ -1,14 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <style>
-        .form-control.is-valid:focus, .was-validated :valid.form-control {
-            border-color: inherit !important;
-            background-image: inherit !important;
-            box-shadow: inherit !important;
-        }
-
-    </style>
     <meta charset="utf-8"/>
     <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
@@ -184,21 +176,54 @@
                             </tbody>
                         </table>
 
-                        <nav aria-label="...">
+                        <div hx-swap-oob="true" id="pagination">
+
                             <ul class="pagination justify-content-center">
-                                <li class="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1">Previous</a>
-                                </li>
-                                <li class="page-item "><a class="page-link" href="#">1</a></li>
-                                <li class="page-item active">
-                                    <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
-                                </li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item">
-                                    <a class="page-link" href="#">Next</a>
-                                </li>
+                                <div class="pagination">
+                                    <li class="page-item"
+                                        th:classappend="${(exercises.getPageable().pageNumber == 0) ? 'disabled' : ''}">
+                                        <a class="page-link"
+                                           hx-select="#exercises-list"
+                                           hx-target="#exercises-list"
+                                           hx-trigger="click"
+                                           style="cursor: pointer"
+                                           th:attr="hx-get=@{/exercises/(pageNumber=${exercises.getPageable().pageNumber}, searchDto=${searchDto})}"
+                                           th:if="${exercises.getPageable().pageNumber >= 1}"
+                                        >Назад</a>
+                                    </li>
+                                </div>
+
+                                <div class="pagination" hx-swap="outerHTML"
+                                     th:each="pageNumber : ${#numbers.sequence(1, exercises.getTotalPages(), 1)}"
+                                     th:if="${exercises.totalPages > 0}">
+                                    <li class="page-item"
+                                        th:classappend="${pageNumber == (exercises.getPageable().pageNumber + 1)} ? ' active' : ''">
+                                        <a class="page-link"
+                                           hx-select="#exercises-list"
+                                           hx-target="#exercises-list"
+                                           hx-trigger="click"
+                                           style="cursor: pointer"
+                                           th:attr="hx-get=@{/exercises/(pageNumber=${pageNumber}, searchDto=${searchDto})}"
+                                           th:text="${pageNumber}"></a>
+                                    </li>
+                                </div>
+
+                                <div class="pagination">
+                                    <li class="page-item"
+                                        th:classappend="${!(exercises.getPageable().pageNumber < exercises.totalPages) ? 'disabled' : ''}">
+                                        <a class="page-link"
+                                           hx-select="#exercises-list"
+                                           hx-target="#exercises-list"
+                                           hx-trigger="click"
+                                           style="cursor: pointer"
+                                           th:attr="hx-get=@{/exercises/(pageNumber=${exercises.getPageable().pageNumber + 2}, searchDto=${searchDto})}"
+                                           th:if="${exercises.getPageable().pageNumber < exercises.totalPages - 1}"
+                                        >Вперед</a>
+                                    </li>
+                                </div>
                             </ul>
-                        </nav>
+                        </div>
+
                     </div>
                 </div>
 
@@ -207,7 +232,8 @@
                 </div>
             </div>
         </main>
-        <footer class="py-4 bg-light mt-auto" hx-swap="none">
+
+        <footer class="py-4 bg-light mt-auto">
             <div class="container-fluid px-4">
                 <div class="d-flex align-items-center justify-content-between small">
                     <div class="text-muted">Copyright &copy; QYoga 2023</div>
