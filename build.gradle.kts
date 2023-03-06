@@ -47,7 +47,9 @@ dependencies {
 	testImplementation("io.kotest:kotest-runner-junit5:5.5.0")
 	testImplementation("io.kotest:kotest-assertions-core:5.5.0")
 	testImplementation("com.tngtech.archunit:archunit:1.0.1")
-    testImplementation("net.sourceforge.htmlunit:htmlunit:2.70.0")
+	testImplementation("net.sourceforge.htmlunit:htmlunit:2.70.0")
+	testImplementation("org.jsoup:jsoup:1.15.3")
+	testImplementation("io.github.ulfs:assertj-jsoup:0.1.4")
 
 	runtimeOnly("org.postgresql:postgresql:42.5.1")
 
