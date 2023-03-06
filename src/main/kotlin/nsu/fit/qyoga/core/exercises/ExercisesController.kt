@@ -37,25 +37,6 @@ class ExercisesController(
         return "exercise-search"
     }
 
-    /**
-     * Получение только списка упражнений в качестве элемента отображения
-     */
-    @GetMapping("search")
-    fun searchExercises(
-        @ModelAttribute("searchDto") searchDto: ExerciseSearchDto,
-        @RequestParam(value = "pageSize", required = false, defaultValue = "10") pageSize: Int,
-        @RequestParam(value = "pageNumber", required = false, defaultValue = "1") pageNumber: Int,
-        model: Model
-    ): String {
-        model.addAttribute("searchDto", searchDto)
-        val exercises = exercisesService.getExercises(
-            searchDto,
-            PageRequest.of(pageNumber - 1, pageSize)
-        )
-        model.addAttribute("exercises", exercises)
-        return "exercise-search :: exercises"
-    }
-
     fun addExercisePageAttributes(model: Model, exercises: Page<ExerciseDto>, exercisesService: ExercisesService) {
         model.addAttribute("searchDto", ExerciseSearchDto())
         model.addAttribute("types", exercisesService.getExerciseTypes())
