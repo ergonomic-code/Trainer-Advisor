@@ -4,6 +4,7 @@ import io.kotest.matchers.shouldBe
 import nsu.fit.qyoga.cases.core.exercises.ExercisesTestConfig
 import nsu.fit.qyoga.core.exercises.api.ExercisesService
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseSearchDto
+import nsu.fit.qyoga.core.exercises.api.model.Exercise
 import nsu.fit.qyoga.core.exercises.api.model.ExerciseType
 import nsu.fit.qyoga.infra.QYogaModuleBaseTest
 import nsu.fit.qyoga.infra.TestContainerDbContextInitializer
@@ -14,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.domain.PageRequest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
+import java.time.Duration
 
 @ContextConfiguration(
     classes = [ExercisesTestConfig::class],
@@ -90,6 +92,16 @@ class ExercisesServiceTests(
     fun `QYoga can retrieve exercises with type filter`() {
         // Given
         val searchDto = ExerciseSearchDto(exerciseType = ExerciseType.WarmUp)
+        val expectedExercise = Exercise(
+            id = 1,
+            title = "Разминка для шеи",
+            description = "",
+            indications = "",
+            contradictions = "",
+            duration = Duration.ofMinutes(10),
+            exerciseTypeId = 1,
+            therapistId = 1
+        )
 
         // When
         val exercises = exercisesService.getExercises(
@@ -99,7 +111,8 @@ class ExercisesServiceTests(
 
         // Then
         exercises.totalElements shouldBe 1
-        exercises.content[0].title shouldBe "Разминка для шеи"
-        exercises.content[0].duration shouldBe "00:10:00"
+        exercises.content[0].title shouldBe expectedExercise.title
+        exercises.content[0].duration.substring(3, 5).toLong() shouldBe expectedExercise.duration.toMinutes()
+        exercises.content[0].type.id shouldBe expectedExercise.exerciseTypeId
     }
 }
