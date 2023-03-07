@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(readOnly = false)
 interface QuestionnaireRepo : CrudRepository<Questionnaire, Long>, PagingAndSortingRepository<Questionnaire, Long> {
 
-    fun countAllByTitleContaining(title: String) : Long
+    fun countAllByTitleContaining(title: String): Long
 
     fun findAllByTitleContaining(title: String, pageable: Pageable): List<Questionnaire>
 }

@@ -1,6 +1,5 @@
 package nsu.fit.qyoga.cases.core.questionnaires.internal
 
-
 import io.kotest.matchers.ints.shouldBeLessThan
 import io.kotest.matchers.shouldBe
 import nsu.fit.qyoga.cases.core.questionnaires.QuestionnairesTestConfig
@@ -15,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
-
 
 @ContextConfiguration(
     classes = [QuestionnairesTestConfig::class],
@@ -47,7 +45,7 @@ class QuestionnairesServiceTests(
 
     @Test
     fun `QYoga can retrieve count of questionnaires without title`() {
-        val questionnairesCount =questionnaireService.getQuestionnairesCount(null)
+        val questionnairesCount = questionnaireService.getQuestionnairesCount(null)
         questionnairesCount shouldBe 12
     }
 
