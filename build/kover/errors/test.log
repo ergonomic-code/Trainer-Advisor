@@ -1,4 +1,4 @@
-[2023.03.06 21:30:28] (Coverage): Error during class instrumentation: org.springframework.boot.logging.log4j2.Log4J2LoggingSystem
+[2023.03.07 09:19:51] (Coverage): Error during class instrumentation: org.springframework.boot.logging.log4j2.Log4J2LoggingSystem
 java.lang.RuntimeException: java.io.IOException: Class org/apache/logging/log4j/core/config/composite/CompositeConfiguration not found
 	at com.intellij.rt.coverage.instrumentation.AbstractIntellijClassfileTransformer$MyClassWriter.getCommonSuperClass(AbstractIntellijClassfileTransformer.java:201)
 	at org.jetbrains.coverage.org.objectweb.asm.SymbolTable.addMergedType(SymbolTable.java:1202)

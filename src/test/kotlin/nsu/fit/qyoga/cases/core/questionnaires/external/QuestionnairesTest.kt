@@ -9,4 +9,23 @@ import org.junit.jupiter.api.Test
 
 class QuestionnairesTest : QYogaAppTestBase() {
 
+    @Test
+    fun `QYoga should return list of exercise types`() {
+        var types = listOf<String>()
+        When {
+            get("/questionnaires")
+        } Then {
+            statusCode(HttpStatus.SC_OK)
+            types = this.extract().jsonPath().getList("$")
+        }
+        types.size shouldBe 6
+        types shouldBe listOf(
+            "ResistanceBreathing",
+            "Balance",
+            "Stretching",
+            "WeightBearingExercise",
+            "StrengthTraining",
+            "CardioTraining"
+        )
+    }
 }

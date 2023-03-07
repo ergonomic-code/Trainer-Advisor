@@ -25,7 +25,7 @@ class QuestionnairesController(
     @GetMapping()
     fun getQuestionnairesList(model: Model) : String{
         model.addAttribute("questionnaires", questionnaireService.findQuestionnaires(null, Page()))
-        return "questionnaire/QuestionnaireList.html"
+        return "questionnaire/questionnaire-list"
     }
 
     @PostMapping("/sort")
@@ -34,7 +34,7 @@ class QuestionnairesController(
         model: Model
     ): String{
         addQuestionnairePageAttributes(model, searchDto)
-        return "QuestionnairePages/QuestionnaireList :: questionnaires"
+        return "questionnaire/questionnaire-list :: questionnaires"
     }
 
     @PostMapping("/search")
@@ -43,7 +43,7 @@ class QuestionnairesController(
         model: Model
     ): String{
         addQuestionnairePageAttributes(model, searchDto)
-        return "QuestionnairePages/QuestionnaireList :: questionnaires"
+        return "questionnaire/questionnaire-list :: questionnaires"
     }
 
     fun addQuestionnairePageAttributes(model: Model, searchDto: QuestionnaireSearchDto) {

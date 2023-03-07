@@ -20,19 +20,19 @@ class QuestionnaireServiceImpl(
         }else{
             PageRequest.of(page.pageNum-1, page.pageSize, Sort.by("title"))
         }
-        title?.let {
-            return questionnaireRepo.findAllByTitleContaining(title, pageable)
+        return  title?.let {
+            questionnaireRepo.findAllByTitleContaining(title, pageable).map{QuestionnaireDto(id=it.id, title=it.title)}.toList()
         }?:let {
-            return questionnaireRepo.findAll(pageable).map{QuestionnaireDto(id=it.id, title=it.title)}.toList()
+            questionnaireRepo.findAll(pageable).map{QuestionnaireDto(id=it.id, title=it.title)}.toList()
         }
 
     }
 
     override fun getQuestionnairesCount(title: String?): Long {
-        title?.let {
-            return questionnaireRepo.countAllByTitleContaining(title)
+        return title?.let {
+            questionnaireRepo.countAllByTitleContaining(title)
         }?:let {
-            return questionnaireRepo.countAll()
+            questionnaireRepo.count()
         }
 
     }
