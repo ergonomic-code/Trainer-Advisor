@@ -25,7 +25,7 @@ class WebSecurityConfig(
             .authorizeHttpRequests { authz ->
                 authz
                     .antMatchers("/therapist/**").hasAuthority(Role.ROLE_THERAPIST.toString())
-                    .antMatchers("/users/login", "/error", "/").permitAll()
+                    .antMatchers("/users/login", "/error").permitAll()
                     .antMatchers(HttpMethod.GET, "/styles/**", "/img/**").permitAll()
                     .anyRequest().authenticated()
             }
