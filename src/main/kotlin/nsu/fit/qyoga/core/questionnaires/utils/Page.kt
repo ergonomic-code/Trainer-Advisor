@@ -1,6 +1,5 @@
 package nsu.fit.qyoga.core.questionnaires.utils
 
-import java.lang.Math.ceil
 
 data class Page(
     val pageNum: Int = 1,
@@ -9,4 +8,5 @@ data class Page(
 ) {
     val pageSize: Int = 10
     val totalPages: Long = (totalElements+pageSize-1)/pageSize
+
 }

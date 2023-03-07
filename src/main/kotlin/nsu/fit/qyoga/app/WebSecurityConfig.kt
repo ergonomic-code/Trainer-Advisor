@@ -30,7 +30,6 @@ class WebSecurityConfig(
                 authz
                     .requestMatchers(HttpMethod.POST, "/users").hasAuthority(Role.ROLE_ADMIN.toString())
                     .requestMatchers("/users/login").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/exercises/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/questionnaires/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/styles/**", "/js/**", "/img/**").permitAll()
                     .anyRequest().authenticated()

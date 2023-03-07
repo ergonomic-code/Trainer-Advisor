@@ -41,6 +41,7 @@ class QuestionnairesViewTest : QYogaAppTestBase(){
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
                 node("#questionnaire-list") { exists() }
+                node("#questionnaire-navigation-bar") { exists() }
             }
         }
     }
@@ -57,6 +58,7 @@ class QuestionnairesViewTest : QYogaAppTestBase(){
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
                 node("#questionnaire-list") { exists() }
+                node("#questionnaire-navigation-bar") { exists() }
             }
         }
     }
