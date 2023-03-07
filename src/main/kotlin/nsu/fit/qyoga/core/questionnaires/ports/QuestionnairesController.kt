@@ -1,6 +1,5 @@
 package nsu.fit.qyoga.core.questionnaires.ports
 
-
 import nsu.fit.qyoga.core.questionnaires.api.QuestionnaireService
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireSearchDto
 import nsu.fit.qyoga.core.questionnaires.utils.Page
@@ -15,10 +14,10 @@ import org.springframework.web.bind.annotation.RequestParam
 @RequestMapping("/questionnaires/")
 class QuestionnairesController(
     private val questionnaireService: QuestionnaireService
-){
+) {
 
     @GetMapping()
-    fun getQuestionnairesList(model: Model) : String{
+    fun getQuestionnairesList(model: Model): String {
         model.addAttribute("questionnaires", questionnaireService.findQuestionnaires(null, Page()))
         model.addAttribute("pages", Page())
         return "questionnaire/questionnaire-list"
@@ -28,7 +27,7 @@ class QuestionnairesController(
     fun sortQuestionnaires(
         @RequestParam("searchDto") searchDto: QuestionnaireSearchDto,
         model: Model
-    ): String{
+    ): String {
         addQuestionnairePageAttributes(model, searchDto)
         return "questionnaire/questionnaire-list :: questionnaires"
     }
@@ -37,19 +36,27 @@ class QuestionnairesController(
     fun searchQuestionnaires(
         @RequestParam("searchDto") searchDto: QuestionnaireSearchDto,
         model: Model
-    ): String{
+    ): String {
         addQuestionnairePageAttributes(model, searchDto)
         return "questionnaire/questionnaire-list :: questionnaires"
     }
 
     fun addQuestionnairePageAttributes(model: Model, searchDto: QuestionnaireSearchDto) {
-        model.addAttribute("questionnaires", questionnaireService.findQuestionnaires(searchDto.title, Page(orderType = searchDto.page.orderType)))
-        model.addAttribute("searchDto",
+        model.addAttribute(
+            "questionnaires",
+            questionnaireService.findQuestionnaires(searchDto.title, Page(orderType = searchDto.page.orderType)
+            )
+        )
+        model.addAttribute(
+            "searchDto",
             QuestionnaireSearchDto(
                 title = searchDto.title,
                 page = Page(
                     orderType = searchDto.page.orderType,
-                    totalElements = questionnaireService.getQuestionnairesCount(searchDto.title))))
+                    totalElements = questionnaireService.getQuestionnairesCount(searchDto.title)
+                )
+            )
+        )
     }
 
 }

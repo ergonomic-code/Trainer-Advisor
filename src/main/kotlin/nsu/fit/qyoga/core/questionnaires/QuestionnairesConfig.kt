@@ -7,5 +7,4 @@ import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories
 @ComponentScan
 @Configuration
 @EnableJdbcRepositories
-class QuestionnairesConfig {
-}
+class QuestionnairesConfig
