@@ -12,17 +12,17 @@ import org.springframework.stereotype.Service
 @Service
 class QuestionnaireServiceImpl(
     private val questionnaireRepo: QuestionnaireRepo
-) : QuestionnaireService{
+) : QuestionnaireService {
 
-    override fun findQuestionnaires(title: String?, page: Page) : List<QuestionnaireDto>{
-        val pageable: PageRequest = if(page.orderType == OrderType.DESK){
+    override fun findQuestionnaires(title: String?, page: Page) : List<QuestionnaireDto> {
+        val pageable: PageRequest = if(page.orderType == OrderType.DESK) {
             PageRequest.of(page.pageNum-1, page.pageSize, Sort.by("title").descending())
-        }else{
+        } else {
             PageRequest.of(page.pageNum-1, page.pageSize, Sort.by("title"))
         }
         return  title?.let {
             questionnaireRepo.findAllByTitleContaining(title, pageable).map{QuestionnaireDto(id=it.id, title=it.title)}.toList()
-        }?:let {
+        } ?:let {
             questionnaireRepo.findAll(pageable).map{QuestionnaireDto(id=it.id, title=it.title)}.toList()
         }
 

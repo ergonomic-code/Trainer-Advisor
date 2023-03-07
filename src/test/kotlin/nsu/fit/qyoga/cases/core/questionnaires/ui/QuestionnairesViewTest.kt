@@ -11,7 +11,6 @@ import nsu.fit.qyoga.infra.QYogaAppTestBase
 import org.jsoup.Jsoup
 import org.junit.jupiter.api.Test
 
-
 class QuestionnairesViewTest : QYogaAppTestBase(){
 
     @Test
@@ -62,7 +61,5 @@ class QuestionnairesViewTest : QYogaAppTestBase(){
             }
         }
     }
-
-
 
 }

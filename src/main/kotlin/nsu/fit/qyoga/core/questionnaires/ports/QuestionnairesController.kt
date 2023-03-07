@@ -44,8 +44,7 @@ class QuestionnairesController(
     fun addQuestionnairePageAttributes(model: Model, searchDto: QuestionnaireSearchDto) {
         model.addAttribute(
             "questionnaires",
-            questionnaireService.findQuestionnaires(searchDto.title, Page(orderType = searchDto.page.orderType)
-            )
+            questionnaireService.findQuestionnaires(searchDto.title, Page(orderType = searchDto.page.orderType))
         )
         model.addAttribute(
             "searchDto",
