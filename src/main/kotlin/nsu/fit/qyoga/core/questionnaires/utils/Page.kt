@@ -5,7 +5,10 @@ data class Page(
     val totalElements: Long = 0,
     val orderType: OrderType = OrderType.ASK
 ) {
-    val pageSize: Int = 10
     val totalPages: Long = (totalElements + pageSize - 1) / pageSize
+
+    companion object {
+        const val pageSize: Int = 10
+    }
 
 }

@@ -51,7 +51,7 @@ class QuestionnairesServiceTests(
 
     @Test
     fun `QYoga can retrieve count of questionnaires with title`() {
-        val questionnairesCount =questionnaireService.getQuestionnairesCount("test")
+        val questionnairesCount = questionnaireService.getQuestionnairesCount("test")
         questionnairesCount shouldBe 6
     }
 

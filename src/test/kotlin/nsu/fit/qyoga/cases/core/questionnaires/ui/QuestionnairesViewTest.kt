@@ -11,7 +11,7 @@ import nsu.fit.qyoga.infra.QYogaAppTestBase
 import org.jsoup.Jsoup
 import org.junit.jupiter.api.Test
 
-class QuestionnairesViewTest : QYogaAppTestBase(){
+class QuestionnairesViewTest : QYogaAppTestBase() {
 
     @Test
     fun `QYoga returns questionnaire-list page with questionnaires`() {
