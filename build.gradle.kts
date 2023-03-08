@@ -32,7 +32,7 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("org.flywaydb:flyway-core")
 	implementation("jakarta.validation:jakarta.validation-api:3.0.2")
-	implementation("org.springframework.boot:spring-boot-starter-thymeleaf:2.7.5")
+	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

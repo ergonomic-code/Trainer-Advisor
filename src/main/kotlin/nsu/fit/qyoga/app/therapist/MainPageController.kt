@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 private const val MAIN_PAGE = "therapist/main"
 
 @Controller
-@RequestMapping("/main")
+@RequestMapping("/therapist/main")
 class MainPageController {
 
     @GetMapping

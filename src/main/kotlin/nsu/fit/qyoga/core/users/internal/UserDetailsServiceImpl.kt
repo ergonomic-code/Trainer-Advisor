@@ -12,7 +12,7 @@ class UserDetailsServiceImpl(
 
     override fun loadUserByUsername(username: String): UserDetails {
         val user = usersRepo.findByUsername(username) ?: throw BadCredentials()
-        return UserDetailsImpl.Companion.build(user)
+        return UserDetailsImpl.build(user)
     }
 
 }

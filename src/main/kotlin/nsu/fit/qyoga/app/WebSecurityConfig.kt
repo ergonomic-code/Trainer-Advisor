@@ -24,14 +24,14 @@ class WebSecurityConfig(
             .csrf().disable()
             .authorizeHttpRequests { authz ->
                 authz
-                    .antMatchers("/therapist/**").hasAuthority(Role.ROLE_THERAPIST.toString())
-                    .antMatchers("/users/login", "/error").permitAll()
-                    .antMatchers(HttpMethod.GET, "/styles/**", "/img/**").permitAll()
+                    .requestMatchers("/therapist/**").hasAuthority(Role.ROLE_THERAPIST.toString())
+                    .requestMatchers("/users/login", "/error").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/styles/**", "/img/**").permitAll()
                     .anyRequest().authenticated()
             }
             .formLogin()
             .loginPage("/users/login")
-            .defaultSuccessUrl("/main")
+            .defaultSuccessUrl("/therapist/main")
             .permitAll()
         http.authenticationProvider(authenticationProvider())
         // @formatter:on

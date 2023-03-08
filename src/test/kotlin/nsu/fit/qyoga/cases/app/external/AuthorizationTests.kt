@@ -1,7 +1,6 @@
 package nsu.fit.qyoga.cases.app.external
 
 import io.github.ulfs.assertj.jsoup.Assertions
-import io.restassured.http.Cookie
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
@@ -10,7 +9,11 @@ import org.hamcrest.core.StringEndsWith.endsWith
 import org.jsoup.Jsoup
 import org.junit.jupiter.api.Test
 
+private const val USERNAME_FORM_PARAM = "username"
+private const val PASSWORD_FORM_PARAM = "password"
+
 class AuthorizationTests : QYogaAppTestBase() {
+
     @Test
     fun `Unauthorized access to therapist's page should be restricted`() {
         Given {
@@ -22,22 +25,23 @@ class AuthorizationTests : QYogaAppTestBase() {
             Assertions.assertThatSpec(body) {
                 node("title") { hasText("Вход в систему") }
                 node("#loginForm") { exists() }
+                node("#loginForm input[name=$USERNAME_FORM_PARAM]") { exists() }
+                node("#loginForm input[name=$PASSWORD_FORM_PARAM]") { exists() }
             }
         }
     }
 
     @Test
     fun `authorized access to therapist's page should be allowed`() {
-        val cookie: Cookie
-        cookie = Given {
-            formParam("username", "admin")
-            formParam("password", "diem-Synergy5")
+        val cookie = Given {
+            formParam(USERNAME_FORM_PARAM, "therapist")
+            formParam(PASSWORD_FORM_PARAM, "diem-Synergy5")
         }.post("/users/login").thenReturn().detailedCookie("JSESSIONID")
 
         Given {
             this.cookie(cookie)
         } When {
-            get("/main")
+            get("/therapist/main")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             Assertions.assertThatSpec(body) {
@@ -49,8 +53,8 @@ class AuthorizationTests : QYogaAppTestBase() {
     @Test
     fun `When user provides valid credentials he should be redirected to main page`() {
         Given {
-            formParam("username", "admin")
-            formParam("password", "diem-Synergy5")
+            formParam(USERNAME_FORM_PARAM, "admin")
+            formParam(PASSWORD_FORM_PARAM, "diem-Synergy5")
         } When {
             post("/users/login")
         } Then {
@@ -62,8 +66,8 @@ class AuthorizationTests : QYogaAppTestBase() {
     @Test
     fun `When user provides invalid password an error page should be displayed`() {
         Given {
-            formParam("username", "admin")
-            formParam("password", "fail-password")
+            formParam(USERNAME_FORM_PARAM, "admin")
+            formParam(PASSWORD_FORM_PARAM, "fail-password")
         } When {
             post("/users/login")
         } Then {
@@ -75,8 +79,8 @@ class AuthorizationTests : QYogaAppTestBase() {
     @Test
     fun `When user provides no credentials an error page should be displayed`() {
         Given {
-            formParam("username", "")
-            formParam("password", "")
+            formParam(USERNAME_FORM_PARAM, "")
+            formParam(PASSWORD_FORM_PARAM, "")
         } When {
             post("/users/login")
         } Then {
@@ -88,8 +92,8 @@ class AuthorizationTests : QYogaAppTestBase() {
     @Test
     fun `When user provides invalid login an error page should be displayed`() {
         Given {
-            formParam("username", "admin1")
-            formParam("password", "diem-Synergy5")
+            formParam(USERNAME_FORM_PARAM, "admin1")
+            formParam(PASSWORD_FORM_PARAM, "diem-Synergy5")
         } When {
             post("/users/login")
         } Then {
@@ -101,8 +105,8 @@ class AuthorizationTests : QYogaAppTestBase() {
     @Test
     fun `When user provides invalid credentials an error page should be displayed`() {
         Given {
-            formParam("username", "admin1")
-            formParam("password", "fail-password")
+            formParam(USERNAME_FORM_PARAM, "admin1")
+            formParam(PASSWORD_FORM_PARAM, "fail-password")
         } When {
             post("/users/login")
         } Then {
