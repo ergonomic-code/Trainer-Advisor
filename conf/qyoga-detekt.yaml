@@ -115,3 +115,7 @@ formatting:
 
   NoBlankLineBeforeRbrace:
     active: false
+
+  NoUnusedImports:
+    active: false
+
