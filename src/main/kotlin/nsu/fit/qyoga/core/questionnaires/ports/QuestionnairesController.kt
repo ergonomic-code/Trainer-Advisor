@@ -1,61 +1,76 @@
 package nsu.fit.qyoga.core.questionnaires.ports
 
 import nsu.fit.qyoga.core.questionnaires.api.QuestionnaireService
+import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireSearchDto
-import nsu.fit.qyoga.core.questionnaires.utils.Page
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.*
 
 @Controller
-@RequestMapping("/questionnaires/")
+@RequestMapping("/questionnaires")
 class QuestionnairesController(
     private val questionnaireService: QuestionnaireService
 ) {
 
     @GetMapping()
-    fun getQuestionnairesList(model: Model): String {
-        model.addAttribute("questionnaires", questionnaireService.findQuestionnaires(null, Page()))
-        model.addAttribute("pages", Page())
+    fun getQuestionnairesList(
+        @ModelAttribute("questionnaireSearchDto") questionnaireSearchDto: QuestionnaireSearchDto,
+        @RequestParam(value = "pageSize", required = false, defaultValue = "10") pageSize: Int,
+        @RequestParam(value = "pageNumber", required = false, defaultValue = "1") pageNumber: Int,
+        model: Model
+    ): String {
+        val questionnaires = questionnaireService.findQuestionnaires(
+            questionnaireSearchDto,
+            PageRequest.of(pageNumber - 1, pageSize)
+        )
+        addQuestionnairePageAttributes(model, questionnaireSearchDto, questionnaires)
         return "questionnaire/questionnaire-list"
     }
 
-    @PostMapping("/sort")
+    @GetMapping("/pages")
+    fun getQuestionnairesPage(
+        @ModelAttribute("questionnaireSearchDto") questionnaireSearchDto: QuestionnaireSearchDto,
+        @RequestParam(value = "pageSize", required = false, defaultValue = "10") pageSize: Int,
+        @RequestParam(value = "pageNumber", required = false, defaultValue = "1") pageNumber: Int,
+        model: Model
+    ): String {
+        println(questionnaireSearchDto.title)
+        println(questionnaireSearchDto.orderType)
+        val questionnaires = questionnaireService.findQuestionnaires(
+            questionnaireSearchDto,
+            PageRequest.of(pageNumber - 1, pageSize)
+        )
+        addQuestionnairePageAttributes(model, questionnaireSearchDto, questionnaires)
+        return "questionnaire/questionnaire-list :: pagination-content"
+    }
+
+    @GetMapping("/action")
     fun sortQuestionnaires(
-        @RequestParam("searchDto") searchDto: QuestionnaireSearchDto,
+        @ModelAttribute("questionnaireSearchDto") questionnaireSearchDto: QuestionnaireSearchDto,
+        @RequestParam(value = "pageSize", required = false, defaultValue = "10") pageSize: Int,
+        @RequestParam(value = "pageNumber", required = false, defaultValue = "1") pageNumber: Int,
         model: Model
     ): String {
-        addQuestionnairePageAttributes(model, searchDto)
-        return "questionnaire/questionnaire-list :: questionnaires"
+        println(questionnaireSearchDto.title)
+        println(questionnaireSearchDto.orderType)
+        val questionnaires = questionnaireService.findQuestionnaires(
+            questionnaireSearchDto,
+            PageRequest.of(0, pageSize)
+        )
+        addQuestionnairePageAttributes(model, questionnaireSearchDto, questionnaires)
+        return "questionnaire/questionnaire-list :: page-content"
     }
 
-    @PostMapping("/search")
-    fun searchQuestionnaires(
-        @RequestParam("searchDto") searchDto: QuestionnaireSearchDto,
-        model: Model
-    ): String {
-        addQuestionnairePageAttributes(model, searchDto)
-        return "questionnaire/questionnaire-list :: questionnaires"
-    }
-
-    fun addQuestionnairePageAttributes(model: Model, searchDto: QuestionnaireSearchDto) {
-        model.addAttribute(
-            "questionnaires",
-            questionnaireService.findQuestionnaires(searchDto.title, Page(orderType = searchDto.page.orderType))
-        )
-        model.addAttribute(
-            "searchDto",
-            QuestionnaireSearchDto(
-                title = searchDto.title,
-                page = Page(
-                    orderType = searchDto.page.orderType,
-                    totalElements = questionnaireService.getQuestionnairesCount(searchDto.title)
-                )
-            )
-        )
+    fun addQuestionnairePageAttributes(
+        model: Model,
+        questionnaireSearchDto: QuestionnaireSearchDto,
+        questionnaires: Page<QuestionnaireDto>
+    ) {
+        model.addAttribute("questionnaires", questionnaires)
+        model.addAttribute("questionnaireSearchDto", questionnaireSearchDto)
     }
 
 }

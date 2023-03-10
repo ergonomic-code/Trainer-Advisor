@@ -2,10 +2,8 @@ package nsu.fit.qyoga.core.questionnaires.internal
 
 import nsu.fit.qyoga.core.questionnaires.api.QuestionnaireService
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireDto
-import nsu.fit.qyoga.core.questionnaires.utils.OrderType
-import nsu.fit.qyoga.core.questionnaires.utils.Page
-import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Sort
+import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireSearchDto
+import org.springframework.data.domain.*
 import org.springframework.stereotype.Service
 
 @Service
@@ -13,29 +11,31 @@ class QuestionnaireServiceImpl(
     private val questionnaireRepo: QuestionnaireRepo
 ) : QuestionnaireService {
 
-    override fun findQuestionnaires(title: String?, page: Page): List<QuestionnaireDto> {
-        val pageable: PageRequest = if (page.orderType == OrderType.DESK) {
-            PageRequest.of(page.pageNum - 1, Page.pageSize, Sort.by("title").descending())
+    override fun findQuestionnaires(
+        questionnaireSearchDto: QuestionnaireSearchDto,
+        pageable: Pageable
+    ): Page<QuestionnaireDto> {
+        val sort = if (questionnaireSearchDto.orderType == "DESK") {
+            Sort.by("title").descending()
         } else {
-            PageRequest.of(page.pageNum - 1, Page.pageSize, Sort.by("title"))
+            Sort.by("title").ascending()
         }
-        return title?.let {
-            questionnaireRepo.findAllByTitleContaining(
-                title,
-                pageable
-            ).map { QuestionnaireDto(id = it.id, title = it.title) }.toList()
-        } ?: let {
-            questionnaireRepo.findAll(pageable).map { QuestionnaireDto(id = it.id, title = it.title) }.toList()
+        val pageRequest = PageRequest.of(pageable.pageNumber, pageable.pageSize, sort)
+        val title = questionnaireSearchDto.title
+        val entities = if (title == null) {
+            questionnaireRepo.findAll(pageRequest)
+        } else {
+            questionnaireRepo.findAllByTitleContaining(title, pageRequest)
         }
-
+        val count = getQuestionnairesCount(questionnaireSearchDto.title)
+        return PageImpl(entities.map { QuestionnaireDto(id = it.id, title = it.title) }.toList(), pageRequest, count)
     }
 
     override fun getQuestionnairesCount(title: String?): Long {
-        return title?.let {
+        return  if (title != null) {
             questionnaireRepo.countAllByTitleContaining(title)
-        } ?: let {
+        } else {
             questionnaireRepo.count()
         }
-
     }
 }

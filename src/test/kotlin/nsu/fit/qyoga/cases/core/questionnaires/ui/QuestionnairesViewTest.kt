@@ -5,8 +5,6 @@ import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireSearchDto
-import nsu.fit.qyoga.core.questionnaires.utils.OrderType
-import nsu.fit.qyoga.core.questionnaires.utils.Page
 import nsu.fit.qyoga.infra.QYogaAppTestBase
 import org.jsoup.Jsoup
 import org.junit.jupiter.api.Test
@@ -30,7 +28,7 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
 
     @Test
     fun `QYoga returns questionnaire list, navigation elements then user change sort type`() {
-        val request = QuestionnaireSearchDto(title = null, page = Page(orderType = OrderType.DESK))
+        val request = QuestionnaireSearchDto(title = null, page = Page<Any>(orderType = OrderType.DESK))
         Given {
             contentType(ContentType.JSON)
             body(request)
@@ -47,7 +45,7 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
 
     @Test
     fun `QYoga returns questionnaire list, navigation elements then user change search title`() {
-        val request = QuestionnaireSearchDto(title = "test", page = Page(orderType = OrderType.DESK))
+        val request = QuestionnaireSearchDto(title = "test", page = Page<Any>(orderType = OrderType.DESK))
         Given {
             contentType(ContentType.JSON)
             body(request)
