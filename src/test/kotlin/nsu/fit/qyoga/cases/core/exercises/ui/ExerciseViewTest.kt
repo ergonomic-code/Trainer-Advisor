@@ -51,4 +51,19 @@ class ExerciseViewTest : QYogaAppTestBase() {
             }
         }
     }
+
+    @Test
+    fun `QYoga returns exercises table with pagination`() {
+        When {
+            get("/exercises/search")
+        } Then {
+            val body = Jsoup.parse(extract().body().asString())
+            Assertions.assertThatSpec(body) {
+                node("#exercisesTable") { exists() }
+                node("#exercises-list") { exists() }
+                node("td") { exists() }
+                node("#pagination") { exists() }
+            }
+        }
+    }
 }
