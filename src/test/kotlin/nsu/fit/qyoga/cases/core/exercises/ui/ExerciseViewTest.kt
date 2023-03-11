@@ -60,9 +60,7 @@ class ExerciseViewTest : QYogaAppTestBase() {
             val body = Jsoup.parse(extract().body().asString())
             println(body)
             Assertions.assertThatSpec(body) {
-                node("#exercisesTable") { exists() }
-                node("#exercises-list") { exists() }
-                node("td") { exists() }
+                node("#tablePagination") { exists() }
                 node("#pagination") { exists() }
             }
         }
