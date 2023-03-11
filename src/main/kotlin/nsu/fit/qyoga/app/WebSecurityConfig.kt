@@ -26,6 +26,7 @@ class WebSecurityConfig(
                 authz
                     .requestMatchers("/therapist/**").hasAuthority(Role.ROLE_THERAPIST.toString())
                     .requestMatchers("/users/login", "/error").permitAll()
+                    .requestMatchers("/exercises/**").permitAll()
                     .requestMatchers(HttpMethod.GET, "/styles/**", "/img/**").permitAll()
                     .anyRequest().authenticated()
             }

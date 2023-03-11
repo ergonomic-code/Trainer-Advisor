@@ -1,16 +1,20 @@
 package nsu.fit.qyoga.infra
 
-import nsu.fit.qyoga.app.QYogaApplication
 import nsu.fit.qyoga.infra.db.DbInitializer
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
 
-@Retention(AnnotationRetention.RUNTIME)
 @ContextConfiguration(
-    classes = [QYogaApplication::class, DbInitializer::class],
+    classes = [DbInitializer::class],
     initializers = [TestContainerDbContextInitializer::class]
 )
 @SpringBootTest(
-    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+    webEnvironment = SpringBootTest.WebEnvironment.NONE,
 )
-annotation class QYogaAppTest
+class QYogaModuleBaseTest {
+
+    @Autowired
+    lateinit var dbInitializer: DbInitializer
+
+}
