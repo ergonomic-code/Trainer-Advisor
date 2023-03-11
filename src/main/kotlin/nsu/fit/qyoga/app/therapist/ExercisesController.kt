@@ -1,4 +1,4 @@
-package nsu.fit.qyoga.core.exercises
+package nsu.fit.qyoga.app.therapist
 
 import nsu.fit.qyoga.core.exercises.api.ExercisesService
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseDto
