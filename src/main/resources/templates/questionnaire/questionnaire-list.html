@@ -55,7 +55,7 @@
                                        placeholder="Название опросника"
                                        style="border-color:inherit" type="text"
                                        hx-trigger="keyup changed delay:500ms, search"
-                                       th:attr="hx-get=@{/questionnaires/action(questionnaireSearchDto=${questionnaireSearchDto})}"
+                                       th:attr="hx-get=@{/questionnaires/action(pageNumber=${pageNumber}, orderType=${questionnaireSearchDto.orderType})}"
                                        hx-target="#card-body">
                             </div>
 
@@ -64,10 +64,10 @@
                                     <label class="input-group-text" for="inputGroupSelect01">Сортировка:</label>
                                 </div>
                                 <select class="custom-select w-auto float-md-end" id="inputGroupSelect01"
-                                        th:value="${questionnaireSearchDto.orderType}"
                                         th:field="*{questionnaireSearchDto.orderType}"
+                                        hx-params="*"
                                         hx-trigger="change"
-                                        th:attr="hx-get=@{/questionnaires/action(questionnaireSearchDto=${questionnaireSearchDto})}"
+                                        th:attr="hx-get=@{/questionnaires/action(pageNumber=${pageNumber}, title=${questionnaireSearchDto.title})}"
                                         hx-target = "#card-body">
                                     <option selected value="ASC">От А до Я</option>
                                     <option value="DESK">От Я до А</option>
@@ -104,7 +104,7 @@
                                                hx-target="#tablePag"
                                                hx-trigger="click"
                                                style="cursor: pointer"
-                                               th:attr="hx-get=@{/questionnaires/pages(questionnaireSearchDto=${questionnaireSearchDto}, pageNumber=${1})}"
+                                               th:attr="hx-get=@{/questionnaires/pages(orderType=${questionnaireSearchDto.orderType}, title=${questionnaireSearchDto.title}, pageNumber=${1})}"
                                             >Первая</a>
                                         </li>
                                     </div>
@@ -116,7 +116,7 @@
                                                hx-target="#tablePag"
                                                hx-trigger="click"
                                                style="cursor: pointer"
-                                               th:attr="hx-get=@{/questionnaires/pages(questionnaireSearchDto=${questionnaireSearchDto}, pageNumber=${questionnaires.getPageable().pageNumber})}"
+                                               th:attr="hx-get=@{/questionnaires/pages(orderType=${questionnaireSearchDto.orderType}, title=${questionnaireSearchDto.title}, pageNumber=${questionnaires.getPageable().pageNumber})}"
                                             >Назад</a>
                                         </li>
                                     </div>
@@ -130,7 +130,7 @@
                                                hx-target="#tablePag"
                                                hx-trigger="click"
                                                style="cursor: pointer"
-                                               th:attr="hx-get=@{/questionnaires/pages(pageNumber=${pageNumber}, questionnaireSearchDto=${questionnaireSearchDto})}"
+                                               th:attr="hx-get=@{/questionnaires/pages(pageNumber=${pageNumber}, orderType=${questionnaireSearchDto.orderType}, title=${questionnaireSearchDto.title})}"
                                                th:text="${pageNumber}"></a>
                                         </li>
                                     </div>
@@ -142,7 +142,7 @@
                                                hx-target="#tablePag"
                                                hx-trigger="click"
                                                style="cursor: pointer"
-                                               th:attr="hx-get=@{/questionnaires/pages(questionnaireSearchDto=${questionnaireSearchDto}, pageNumber=${questionnaires.getPageable().pageNumber + 2})}"
+                                               th:attr="hx-get=@{/questionnaires/pages(orderType=${questionnaireSearchDto.orderType}, title=${questionnaireSearchDto.title}, pageNumber=${questionnaires.getPageable().pageNumber + 2})}"
                                             >Вперед</a>
                                         </li>
                                     </div>
@@ -154,7 +154,7 @@
                                                hx-target="#tablePag"
                                                hx-trigger="click"
                                                style="cursor: pointer"
-                                               th:attr="hx-get=@{/questionnaires/pages(questionnaireSearchDto=${questionnaireSearchDto}, pageNumber=${questionnaires.totalPages})}"
+                                               th:attr="hx-get=@{/questionnaires/pages(orderType=${questionnaireSearchDto.orderType}, title=${questionnaireSearchDto.title}, pageNumber=${questionnaires.totalPages})}"
                                             >Последняя</a>
                                         </li>
                                     </div>
