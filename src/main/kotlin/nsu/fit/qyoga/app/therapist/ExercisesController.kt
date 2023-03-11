@@ -1,16 +1,14 @@
 package nsu.fit.qyoga.app.therapist
 
 import nsu.fit.qyoga.core.exercises.api.ExercisesService
+import nsu.fit.qyoga.core.exercises.api.dtos.CreateExerciseDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseSearchDto
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.*
 import java.util.stream.Collectors
 import java.util.stream.IntStream
 
@@ -53,6 +51,27 @@ class ExercisesController(
         )
         addExercisePageAttributes(model, exercises, exercisesService)
         return "exercise-search :: exercises"
+    }
+
+    /**
+     * Получение страницы создания упражнения
+     */
+    @GetMapping("/create")
+    fun getCreateExercisePage(
+        model: Model
+    ): String {
+        return "exercise-create"
+    }
+
+    @PostMapping
+    fun createExercise(
+        @ModelAttribute("createExerciseDto") createExerciseDto: CreateExerciseDto,
+        model: Model
+    ): String {
+        exercisesService.createExercise(createExerciseDto)
+        val exercises = exercisesService.getExercises(ExerciseSearchDto(), PageRequest.of(0, 10))
+        addExercisePageAttributes(model, exercises, exercisesService)
+        return "exercise-search"
     }
 
     fun addExercisePageAttributes(model: Model, exercises: Page<ExerciseDto>, exercisesService: ExercisesService) {

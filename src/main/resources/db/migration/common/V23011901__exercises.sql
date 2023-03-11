@@ -24,8 +24,8 @@ CREATE TABLE exercise_steps
 (
     id          BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     description VARCHAR NOT NULL,
-    photo       VARCHAR,
-    exercise_id BIGINT NOT NULL
+    photo       BYTEA,
+    exercise_id BIGINT  NOT NULL
         CONSTRAINT fk_exercise_steps_exercises REFERENCES exercises
             ON DELETE CASCADE
 );

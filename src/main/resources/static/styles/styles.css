@@ -12380,3 +12380,7 @@ body {
     background-color: #040404 !Important;
     border: solid 1px #040404;
 }
+
+.form-control {
+    language: "ru";
+}

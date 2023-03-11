@@ -1,6 +1,7 @@
 package nsu.fit.qyoga.core.exercises.internal
 
 import nsu.fit.qyoga.core.exercises.api.ExercisesService
+import nsu.fit.qyoga.core.exercises.api.dtos.CreateExerciseDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseSearchDto
 import nsu.fit.qyoga.core.exercises.api.model.ExerciseType
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service
 @Service
 class ExercisesServiceImpl(
     private val exercisesRepo: ExercisesRepo,
+    private val exerciseStepsRepo: ExerciseStepsRepo
 ) : ExercisesService {
 
     override fun getExercises(
@@ -25,6 +27,10 @@ class ExercisesServiceImpl(
         )
         val count = exercisesRepo.countExercises(searchDto)
         return PageImpl(result, pageable, count)
+    }
+
+    override fun createExercise(createExerciseDto: CreateExerciseDto): ExerciseDto {
+        TODO()
     }
 
     override fun getExerciseTypes(): List<ExerciseType> {

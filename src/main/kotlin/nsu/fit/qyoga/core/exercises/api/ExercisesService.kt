@@ -1,5 +1,6 @@
 package nsu.fit.qyoga.core.exercises.api
 
+import nsu.fit.qyoga.core.exercises.api.dtos.CreateExerciseDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseSearchDto
 import nsu.fit.qyoga.core.exercises.api.model.ExerciseType
@@ -11,6 +12,10 @@ interface ExercisesService {
         searchDto: ExerciseSearchDto,
         pageable: Pageable
     ): Page<ExerciseDto>
+
+    fun createExercise(
+        createExerciseDto: CreateExerciseDto
+    ): ExerciseDto
 
     fun getExerciseTypes(): List<ExerciseType>
 }
