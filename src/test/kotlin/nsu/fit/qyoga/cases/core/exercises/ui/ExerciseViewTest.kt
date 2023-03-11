@@ -58,7 +58,6 @@ class ExerciseViewTest : QYogaAppTestBase() {
             get("/exercises/search")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
-            println(body)
             Assertions.assertThatSpec(body) {
                 node("#exercisesTable") { exists() }
                 node("#exercises-list") { exists() }
