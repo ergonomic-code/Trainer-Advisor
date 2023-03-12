@@ -9,6 +9,16 @@ create table public.clients
     email               varchar,
     distribution_sourse varchar,
     id                  bigint generated always as identity
-        constraint id
             primary key
+);
+
+create table public.appointment
+(
+    id                  bigint generated always as identity
+            primary key,
+    date_app date not null,
+    client_id     BIGINT NOT NULL
+        CONSTRAINT fk_appointments_clients_ids REFERENCES clients
+            ON DELETE CASCADE
+
 );

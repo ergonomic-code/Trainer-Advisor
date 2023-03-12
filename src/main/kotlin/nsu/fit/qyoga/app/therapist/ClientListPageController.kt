@@ -3,7 +3,6 @@ package nsu.fit.qyoga.app.therapist
 import nsu.fit.qyoga.core.clients.api.ClientService
 import nsu.fit.qyoga.core.clients.api.Dto.ClientListDto
 import nsu.fit.qyoga.core.clients.api.Dto.ClientListSearchDto
-import nsu.fit.qyoga.core.clients.internal.ClientServiceImpl
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Controller
@@ -13,8 +12,8 @@ import java.util.stream.Collectors
 import java.util.stream.IntStream
 
 @Controller
-@RequestMapping("/clients/")
-class ClientListPageController (
+@RequestMapping("/clients")
+class ClientListPageController(
     private val clientService: ClientService
 ) {
     @GetMapping
@@ -29,7 +28,7 @@ class ClientListPageController (
             PageRequest.of(pageNumber - 1, pageSize)
         )
         addClientsPageAttributes(model, clients, clientService)
-        return "clients-search"
+        return "clients-list"
     }
 
     /**
