@@ -1,14 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
-    <style>
-        .form-control.is-valid:focus, .was-validated :valid.form-control {
-            border-color: inherit !important;
-            background-image: inherit !important;
-            box-shadow: inherit !important;
-        }
-
-    </style>
     <meta charset="utf-8"/>
     <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
     <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
@@ -18,20 +10,39 @@
     <title>Список опросников</title>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet"/>
     <link href="/styles/styles.css" rel="stylesheet"/>
-    <link href="/styles/scrollbar-style.css" rel="stylesheet"/>
     <script crossorigin="anonymous" src="https://use.fontawesome.com/releases/v6.1.0/js/all.js"></script>
-    <script crossorigin="anonymous" integrity="sha384-7aHh9lqPYGYZ7sTHvzP1t3BAfLhYSTy9ArHdP3Xsr9/3TlGurYgcPBoFmXX2TX/w"
-            src="https://unpkg.com/htmx.org@1.8.5"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', event => {
+
+            // Toggle the side navigation
+            const sidebarToggle = document.body.querySelector('#sidebarToggle');
+            if (sidebarToggle) {
+                // Uncomment Below to persist sidebar toggle between refreshes
+                // if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
+                //     document.body.classList.toggle('sb-sidenav-toggled');
+                // }
+                sidebarToggle.addEventListener('click', event => {
+                    event.preventDefault();
+                    document.body.classList.toggle('sb-sidenav-toggled');
+                    localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+                });
+            }
+
+        });
+    </script>
+    <script crossorigin="anonymous"
+            integrity="sha384-Bj8qm/6B+71E6FQSySofJOUjA/gq330vEqjFx9LakWybUySyI1IQHwPtbTU7bNwx"
+            src="https://unpkg.com/htmx.org@1.8.6"></script>
 </head>
 
 <body class="sb-nav-fixed">
 
-<div th:insert="~{fragments/headerNavPanel :: headerNavPanel}" ></div>
+<div th:replace="~{fragments/headerNavPanel :: headerNavPanel}" ></div>
 
 
 <div id="layoutSidenav">
 
-    <div id="layoutSidenav_nav" th:insert="~{/fragments/leftNavPanel.html :: leftNavPanel}" ></div>
+    <div th:replace="~{/fragments/leftNavPanel.html :: leftNavPanel}" ></div>
 
     <div id="layoutSidenav_content" >
         <main>
@@ -80,85 +91,21 @@
 
                             <div th:fragment="pagination-content">
 
-                            <table class="table table-hover" id="questionnaires-list" >
-                                <thead></thead>
-                                <tbody>
-                                    <tr th:each="questionnaire : ${questionnaires.content}" th:fragment="questionnaires" class="questionnaire">
-                                        <td>
-                                            <a th:href="@{/questionnaires/{id}(id=${questionnaire.id})}"
-                                               th:text="${questionnaire.title}" class="field">
-                                                questionnaire
-                                            </a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                                <table class="table table-hover" id="questionnaires-list" >
+                                    <thead></thead>
+                                    <tbody>
+                                        <tr th:each="questionnaire : ${questionnaires.content}" th:fragment="questionnaires" class="questionnaire">
+                                            <td>
+                                                <a th:href="@{/questionnaires/{id}(id=${questionnaire.id})}"
+                                                   th:text="${questionnaire.title}" class="field">
+                                                    questionnaire
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
 
-                            <div id="questionnaires-navigation-bar">
-                                <ul class="pagination justify-content-center">
-                                    <div class="pagination">
-                                        <li class="page-item"
-                                            th:classappend="${(questionnaires.getPageable().pageNumber == 0) ? 'disabled' : ''}">
-                                            <a class="page-link"
-                                               hx-target="#tablePag"
-                                               hx-trigger="click"
-                                               style="cursor: pointer"
-                                               th:attr="hx-get=@{/questionnaires/pages(orderType=${questionnaireSearchDto.orderType}, title=${questionnaireSearchDto.title}, pageNumber=${1})}"
-                                            >Первая</a>
-                                        </li>
-                                    </div>
-
-                                    <div class="pagination">
-                                        <li class="page-item"
-                                            th:classappend="${(questionnaires.getPageable().pageNumber == 0) ? 'disabled' : ''}">
-                                            <a class="page-link"
-                                               hx-target="#tablePag"
-                                               hx-trigger="click"
-                                               style="cursor: pointer"
-                                               th:attr="hx-get=@{/questionnaires/pages(orderType=${questionnaireSearchDto.orderType}, title=${questionnaireSearchDto.title}, pageNumber=${questionnaires.getPageable().pageNumber})}"
-                                            >Назад</a>
-                                        </li>
-                                    </div>
-
-                                    <div class="pagination" style="max-width: 50%;">
-
-                                        <li class="page-item"
-                                            th:each="pageNumber : ${#numbers.sequence(((questionnaires.getPageable().pageNumber - 1 >= 0)? questionnaires.getPageable().pageNumber: questionnaires.getPageable().pageNumber + 1), ((questionnaires.getPageable().pageNumber + 3 < questionnaires.totalPages)? questionnaires.getPageable().pageNumber + 2 : questionnaires.totalPages), 1)}"
-                                            th:classappend="${(pageNumber == questionnaires.getPageable().pageNumber + 1) ? 'active' : ''}">
-                                            <a class="page-link"
-                                               hx-target="#tablePag"
-                                               hx-trigger="click"
-                                               style="cursor: pointer"
-                                               th:attr="hx-get=@{/questionnaires/pages(pageNumber=${pageNumber}, orderType=${questionnaireSearchDto.orderType}, title=${questionnaireSearchDto.title})}"
-                                               th:text="${pageNumber}"></a>
-                                        </li>
-                                    </div>
-
-                                    <div class="pagination">
-                                        <li class="page-item"
-                                            th:classappend="${!(questionnaires.getPageable().pageNumber < questionnaires.totalPages - 1) ? 'disabled' : ''}">
-                                            <a class="page-link"
-                                               hx-target="#tablePag"
-                                               hx-trigger="click"
-                                               style="cursor: pointer"
-                                               th:attr="hx-get=@{/questionnaires/pages(orderType=${questionnaireSearchDto.orderType}, title=${questionnaireSearchDto.title}, pageNumber=${questionnaires.getPageable().pageNumber + 2})}"
-                                            >Вперед</a>
-                                        </li>
-                                    </div>
-
-                                    <div class="pagination">
-                                        <li class="page-item"
-                                            th:classappend="${!(questionnaires.getPageable().pageNumber < questionnaires.totalPages - 1) ? 'disabled' : ''}">
-                                            <a class="page-link"
-                                               hx-target="#tablePag"
-                                               hx-trigger="click"
-                                               style="cursor: pointer"
-                                               th:attr="hx-get=@{/questionnaires/pages(orderType=${questionnaireSearchDto.orderType}, title=${questionnaireSearchDto.title}, pageNumber=${questionnaires.totalPages})}"
-                                            >Последняя</a>
-                                        </li>
-                                    </div>
-                                </ul>
-                            </div>
+                                <div th:replace="~{/fragments/pageNavigationButtons.html :: pageNavigationButtons (questionnaireSearchDto=${questionnaireSearchDto},questionnaires=${questionnaires})}"></div>
 
                             </div>
 

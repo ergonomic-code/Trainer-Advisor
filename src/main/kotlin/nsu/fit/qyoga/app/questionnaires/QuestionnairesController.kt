@@ -10,7 +10,7 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 
 @Controller
-@RequestMapping("/questionnaires")
+@RequestMapping("/questionnaires/")
 class QuestionnairesController(
     private val questionnaireService: QuestionnaireService
 ) {
@@ -33,7 +33,7 @@ class QuestionnairesController(
     /**
      * Отображение страницы при пагинации
      */
-    @GetMapping("/pages")
+    @GetMapping("pages")
     fun getQuestionnairesPage(
         @ModelAttribute("questionnaireSearchDto") questionnaireSearchDto: QuestionnaireSearchDto,
         @RequestParam(value = "pageSize", required = false, defaultValue = "10") pageSize: Int,
@@ -53,7 +53,7 @@ class QuestionnairesController(
     /**
      * Фильтрация опросников
      */
-    @GetMapping("/action")
+    @GetMapping("action")
     fun sortQuestionnaires(
         @ModelAttribute("questionnaireSearchDto") questionnaireSearchDto: QuestionnaireSearchDto,
         @RequestParam(value = "pageSize", required = false, defaultValue = "10") pageSize: Int,
