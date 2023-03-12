@@ -6,7 +6,7 @@ data class ClientListSearchDto(
     val name: String? = null,
     val secondname: String? = null,
     val surname: String? = null,
-    val phone_number: Long? = null,
-    val last_appointment: Date? = null,
+    val phoneNumber: String? = null,
+    val dateAppointment: Date? = null, //date-time
     val diagnose: String? = null
 )

@@ -15,15 +15,15 @@ import org.springframework.transaction.annotation.Transactional
 interface ClientRepo: CrudRepository<Client, Long>, PagingAndSortingRepository<Client, Long> {
     @Query(
         """
-        SELECT cl.id as id, name, secondname, surname, phone_number, diagnose, ap.date_app as last_appointment
+        SELECT cl.id as id, _name, secondname, surname, phone_number, diagnose, ap.date_app as dateAppointment
         FROM clients cl
             INNER JOIN appointment ap ON cl.id = ap.client_id
-        WHERE (cl.name LIKE '%' || :#{#search.name ?: ""} || '%' OR :#{#search.name ?: ""} IS NULL)
+        WHERE (cl._name LIKE '%' || :#{#search.name ?: ""} || '%' OR :#{#search.name ?: ""} IS NULL)
             AND (cl.secondname LIKE '%' || :#{#search.secondname ?: ""} || '%' OR :#{#search.secondname ?: ""} IS NULL)
             AND (cl.surname LIKE '%' || :#{#search.surname ?: ""} || '%' OR :#{#search.surname ?: ""} IS NULL)
-            AND (cl.phone_number LIKE '%' || :#{#search?.phone_number ?: ""} || '%' OR :#{#search.phone_number ?: ""} IS NULL)
+            AND (cl.phone_number LIKE '%' || :#{#search?.phoneNumber ?: ""} || '%' OR :#{#search.phoneNumber ?: ""} IS NULL)
             AND (cl.diagnose LIKE '%' || :#{#search.diagnose?.name ?: ""} || '%' OR :#{#search.diagnose ?: ""} IS NULL)
-            AND (ap.date_app LIKE '%' || :#{#search.date_app ?: ""} || '%' OR :#{#search.date_app ?: ""} IS NULL)
+            AND (ap.date_app::varchar LIKE '%' || :#{#search.dateAppointment ?: ""} || '%' OR :#{#search.dateAppointment ?: ""} IS NULL)
         ORDER BY cl.surname
         LIMIT :pageSize OFFSET :offset
     """
@@ -39,14 +39,12 @@ interface ClientRepo: CrudRepository<Client, Long>, PagingAndSortingRepository<C
         SELECT count(*) 
         FROM clients cl
             INNER JOIN appointment ap ON cl.id = ap.client_id
-        WHERE (cl.name LIKE '%' || :#{#search.name ?: ""} || '%' OR :#{#search.name ?: ""} IS NULL)
+        WHERE (cl._name LIKE '%' || :#{#search.name ?: ""} || '%' OR :#{#search.name ?: ""} IS NULL)
             AND (cl.secondname LIKE '%' || :#{#search.secondname ?: ""} || '%' OR :#{#search.secondname ?: ""} IS NULL)
             AND (cl.surname LIKE '%' || :#{#search.surname ?: ""} || '%' OR :#{#search.surname ?: ""} IS NULL)
-            AND (cl.phone_number LIKE '%' || :#{#search?.phone_number ?: ""} || '%' OR :#{#search.phone_number ?: ""} IS NULL)
+            AND (cl.phone_number LIKE '%' || :#{#search?.phoneNumber ?: ""} || '%' OR :#{#search.phoneNumber ?: ""} IS NULL)
             AND (cl.diagnose LIKE '%' || :#{#search.diagnose?.name ?: ""} || '%' OR :#{#search.diagnose ?: ""} IS NULL)
-            AND (ap.date_app LIKE '%' || :#{#search.date_app ?: ""} || '%' OR :#{#search.date_app ?: ""} IS NULL)
-        ORDER BY cl.surname
-        LIMIT :pageSize OFFSET :offset
+            AND (ap.date_app::varchar LIKE '%' || :#{#search.dateAppointment ?: ""} || '%' OR :#{#search.dateAppointment ?: ""} IS NULL)
     """
     )
     fun countClients(

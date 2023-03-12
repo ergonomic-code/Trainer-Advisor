@@ -38,7 +38,7 @@
 <body class="sb-nav-fixed">
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
     <!-- Navbar Brand-->
-    <a class="navbar-brand ps-3" href="exercise-search.html">QYoga</a>
+    <a class="navbar-brand ps-3" href="clients-list.html">QYoga</a>
     <!-- Sidebar Toggle-->
     <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" href="#!" id="sidebarToggle"><i
             class="fas fa-bars"></i></button>
@@ -68,7 +68,7 @@
                     </a>
                     <a aria-controls="collapseLayouts" aria-expanded="false" class="nav-link collapsed"
                        data-bs-target="#collapseLayouts"
-                       data-bs-toggle="collapse" href="#">
+                       data-bs-toggle="collapse" href="clients-list.html">
                         <div class="sb-nav-link-icon"><i class="fa fa-users"></i></div>
                         Клиенты
                         <div class="sb-sidenav-collapse-arrow"></div>
@@ -125,33 +125,59 @@
                     </div>
                     <div class="card-body">
 
-                        <form hx-get="/exercises/search" hx-target="#tablePagination"
+                        <form hx-get="/clients/search-cl" hx-target="#tablePagination"
                               hx-trigger="submit"
                               th:object="${searchDto}">
-                            <div class="input-group mb-3 m-auto" id="searchExercisesFilterForm">
-                                <div class="mt-3 mb-3 w-25" id="titleFilter">
+                            <div class="input-group mb-3 m-auto" id="searchClientsFilterForm">
+                                <div class="mt-3 mb-3 w-25" id="surnameFilter">
                                     <input aria-describedby="basic-addon2"
                                            class="form-control"
-                                           placeholder="Название"
+                                           placeholder="Фамилия"
                                            style="border-color:inherit"
-                                           th:field="${searchDto.title}"
+                                           th:field="${searchDto.surname}"
                                            type="text">
                                 </div>
 
-                                <div class="mt-3 mb-3 w-25" id="contradictionFilter">
+                                <div class="mt-3 mb-3 w-25" id="nameFilter">
                                     <input aria-describedby="basic-addon2"
                                            class="form-control"
-                                           placeholder="Противопоказание"
+                                           placeholder="Имя"
                                            style="border-color:inherit"
-                                           th:field="${searchDto.contradiction}" type="text">
+                                           th:field="${searchDto.name}"
+                                           type="text">
                                 </div>
 
-                                <div class="mt-3 mb-3 w-25" id="therapeuticPurposeFilter">
+                                <div class="mt-3 mb-3 w-25" id="secondnameFilter">
                                     <input aria-describedby="basic-addon2"
                                            class="form-control"
-                                           placeholder="Терапевтическая задача"
+                                           placeholder="Отчество"
                                            style="border-color:inherit"
-                                           th:field="${searchDto.therapeuticPurpose}" type="text">
+                                           th:field="${searchDto.secondname}"
+                                           type="text">
+                                </div>
+
+                                <div class="mt-3 mb-3 w-25" id="phoneFilter">
+                                    <input aria-describedby="basic-addon2"
+                                           class="form-control"
+                                           placeholder="Номер телефона"
+                                           style="border-color:inherit"
+                                           th:field="${searchDto.phoneNumber}" type="text">
+                                </div>
+
+                                <div class="mt-3 mb-3 w-25" id="diagnoseFilter">
+                                    <input aria-describedby="basic-addon2"
+                                           class="form-control"
+                                           placeholder="Диагноз"
+                                           style="border-color:inherit"
+                                           th:field="${searchDto.diagnose}" type="text">
+                                </div>
+
+                                <div class="mt-3 mb-3 w-25" id="lastAppointmentFilter">
+                                    <input aria-describedby="basic-addon2"
+                                           class="form-control"
+                                           placeholder="Диагноз"
+                                           style="border-color:inherit"
+                                           th:field="${searchDto.dateAppointment}" type="date">
                                 </div>
 
                                 <div class="input-group mt-2 mb-5">
@@ -173,7 +199,7 @@
                                 </thead>
                                 <tbody id="clients-list">
                                 <tr th:each="client : ${clients.content}">
-                                    <td th:text="${client.surname} ${client._name} ${client.secondname}"></td>
+                                    <td th:text="${client.surname} ${client.name} ${client.secondname}"></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -188,34 +214,34 @@
                                                hx-target="#tablePagination"
                                                hx-trigger="click"
                                                style="cursor: pointer"
-                                               th:attr="hx-get=@{/clients/search-cl(pageNumber=${exercises.getPageable().pageNumber}, searchDto=${searchDto})}"
-                                               th:if="${exercises.getPageable().pageNumber >= 1}"
+                                               th:attr="hx-get=@{/clients/search-cl(pageNumber=${clients.getPageable().pageNumber}, searchDto=${searchDto})}"
+                                               th:if="${clients.getPageable().pageNumber >= 1}"
                                             >Назад</a>
                                         </li>
                                     </div>
 
                                     <div class="pagination"
-                                         th:each="pageNumber : ${#numbers.sequence(1, exercises.getTotalPages(), 1)}"
-                                         th:if="${exercises.totalPages > 0}">
+                                         th:each="pageNumber : ${#numbers.sequence(1, clients.getTotalPages(), 1)}"
+                                         th:if="${clients.totalPages > 0}">
                                         <li class="page-item"
-                                            th:classappend="${pageNumber == (exercises.getPageable().pageNumber + 1)} ? 'active' : ''">
+                                            th:classappend="${pageNumber == (clients.getPageable().pageNumber + 1)} ? 'active' : ''">
                                             <a class="page-link"
                                                hx-target="#tablePagination"
                                                hx-trigger="click"
                                                style="cursor: pointer"
-                                               th:attr="hx-get=@{/exercises/search(pageNumber=${pageNumber}, searchDto=${searchDto})}"
+                                               th:attr="hx-get=@{/clients/search-cl(pageNumber=${pageNumber}, searchDto=${searchDto})}"
                                                th:text="${pageNumber}"></a>
                                         </li>
                                     </div>
 
                                     <div class="pagination">
                                         <li class="page-item"
-                                            th:classappend="${!(clients.getPageable().pageNumber < exercises.totalPages) ? 'disabled' : ''}">
+                                            th:classappend="${!(clients.getPageable().pageNumber < clients.totalPages) ? 'disabled' : ''}">
                                             <a class="page-link"
                                                hx-target="#tablePagination"
                                                hx-trigger="click"
                                                style="cursor: pointer"
-                                               th:attr="hx-get=@{/clients/search-cl(pageNumber=${exercises.getPageable().pageNumber + 2}, searchDto=${searchDto})}"
+                                               th:attr="hx-get=@{/clients/search-cl(pageNumber=${clients.getPageable().pageNumber + 2}, searchDto=${searchDto})}"
                                                th:if="${clients.getPageable().pageNumber < clients.totalPages - 1}"
                                             >Вперед</a>
                                         </li>
@@ -229,7 +255,7 @@
 
                 <div class="input-group">
                     <a href="/clients/new-client">
-                        <button class="btn btn-secondary" id="btnNewExercise" type="button">
+                        <button class="btn btn-secondary" id="btnNewClient" type="button">
                             Добавить клиента
                         </button>
                     </a>
