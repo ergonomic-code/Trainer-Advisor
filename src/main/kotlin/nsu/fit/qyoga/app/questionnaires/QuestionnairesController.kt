@@ -1,4 +1,4 @@
-package nsu.fit.qyoga.core.questionnaires.ports
+package nsu.fit.qyoga.app.questionnaires
 
 import nsu.fit.qyoga.core.questionnaires.api.QuestionnaireService
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireDto
@@ -19,17 +19,20 @@ class QuestionnairesController(
     fun getQuestionnairesList(
         @ModelAttribute("questionnaireSearchDto") questionnaireSearchDto: QuestionnaireSearchDto,
         @RequestParam(value = "pageSize", required = false, defaultValue = "10") pageSize: Int,
-        @RequestParam(value = "pageNumber", required = false, defaultValue = "1") pageNumber: Int,
+        @RequestParam(value = "pageNumber", required = false, defaultValue = "0") pageNumber: Int,
         model: Model
     ): String {
         val questionnaires = questionnaireService.findQuestionnaires(
             questionnaireSearchDto,
-            PageRequest.of(pageNumber - 1, pageSize)
+            PageRequest.of(pageNumber, pageSize)
         )
         addQuestionnairePageAttributes(model, questionnaireSearchDto, questionnaires)
         return "questionnaire/questionnaire-list"
     }
 
+    /**
+     * Отображение страницы при пагинации
+     */
     @GetMapping("/pages")
     fun getQuestionnairesPage(
         @ModelAttribute("questionnaireSearchDto") questionnaireSearchDto: QuestionnaireSearchDto,
@@ -47,6 +50,9 @@ class QuestionnairesController(
         return "questionnaire/questionnaire-list :: pagination-content"
     }
 
+    /**
+     * Фильтрация опросников
+     */
     @GetMapping("/action")
     fun sortQuestionnaires(
         @ModelAttribute("questionnaireSearchDto") questionnaireSearchDto: QuestionnaireSearchDto,
@@ -54,8 +60,6 @@ class QuestionnairesController(
         @RequestParam(value = "pageNumber", required = false, defaultValue = "1") pageNumber: Int,
         model: Model
     ): String {
-        println(questionnaireSearchDto.title)
-        println(questionnaireSearchDto.orderType)
         val questionnaires = questionnaireService.findQuestionnaires(
             questionnaireSearchDto,
             PageRequest.of(0, pageSize)

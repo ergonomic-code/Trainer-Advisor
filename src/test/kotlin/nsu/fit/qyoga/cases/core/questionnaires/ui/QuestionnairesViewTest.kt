@@ -14,48 +14,71 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga returns questionnaire-list page with questionnaires`() {
         When {
-            get("/questionnaires/")
+            get("/questionnaires")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#questionnaire-list") { exists() }
-                node("#questionnaire-sort-bar") { exists() }
-                node("#questionnaire-find-bar") { exists() }
-                node("#questionnaire-navigation-bar") { exists() }
+                node("#questionnaires-list") { exists() }
+                node("#questionnaires-sort-bar") { exists() }
+                node("#questionnaires-find-bar") { exists() }
+                node("#questionnaires-navigation-bar") { exists() }
             }
         }
     }
 
     @Test
-    fun `QYoga returns questionnaire list, navigation elements then user change sort type`() {
-        val request = QuestionnaireSearchDto(title = null, page = Page<Any>(orderType = OrderType.DESK))
+    fun `QYoga returns part of page questionnaire-list then user change sort type`() {
+        val request = QuestionnaireSearchDto(orderType = "DESK")
         Given {
             contentType(ContentType.JSON)
             body(request)
         } When {
-            post("/questionnaires/sort")
+            post("/questionnaires/action")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#questionnaire-list") { exists() }
-                node("#questionnaire-navigation-bar") { exists() }
+                node("#questionnaires-list") { exists() }
+                node("#questionnaires-sort-bar") { exists() }
+                node("#questionnaires-find-bar") { exists() }
+                node("#questionnaires-navigation-bar") { exists() }
             }
         }
     }
 
     @Test
-    fun `QYoga returns questionnaire list, navigation elements then user change search title`() {
-        val request = QuestionnaireSearchDto(title = "test", page = Page<Any>(orderType = OrderType.DESK))
+    fun `QYoga returns part of page questionnaire-list then user change title`() {
+        val request = QuestionnaireSearchDto(title = "test", orderType = "DESK")
         Given {
             contentType(ContentType.JSON)
             body(request)
         } When {
-            post("/questionnaires/sort")
+            post("/questionnaires/action")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#questionnaire-list") { exists() }
-                node("#questionnaire-navigation-bar") { exists() }
+                node("#questionnaires-list") { exists() }
+                node("#questionnaires-sort-bar") { exists() }
+                node("#questionnaires-find-bar") { exists() }
+                node("#questionnaires-navigation-bar") { exists() }
+            }
+        }
+    }
+
+    @Test
+    fun `QYoga returns part of page questionnaire-list then user change page`() {
+        val request = QuestionnaireSearchDto(title = "test", orderType = "DESK")
+        Given {
+            contentType(ContentType.JSON)
+            body(request)
+        } When {
+            post("/questionnaires/action")
+        } Then {
+            val body = Jsoup.parse(extract().body().asString())
+            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
+                node("#questionnaires-list") { exists() }
+                node("#questionnaires-sort-bar") { exists() }
+                node("#questionnaires-find-bar") { exists() }
+                node("#questionnaires-navigation-bar") { exists() }
             }
         }
     }

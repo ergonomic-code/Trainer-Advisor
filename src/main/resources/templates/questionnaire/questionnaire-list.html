@@ -45,9 +45,9 @@
                     </div>
                     <div id="card-body" class="card-body" th:fragment="page-content">
 
-                        <div class="input-group mb-3" id="searchQuestionnairesFilterForm">
+                        <div class="input-group mb-3">
 
-                            <div class="mt-3 mb-3 w-75 me-auto" id="titleFilter">
+                            <div class="mt-3 mb-3 w-75 me-auto" id="questionnaires-find-bar">
                                 <input aria-describedby="basic-addon2"
                                        th:value="${questionnaireSearchDto.title}"
                                        th:field="*{questionnaireSearchDto.title}"
@@ -59,11 +59,11 @@
                                        hx-target="#card-body">
                             </div>
 
-                            <div class="input-group mb-3 mt-3 w-auto" id="orderTypeFilter">
+                            <div class="input-group mb-3 mt-3 w-auto" id="questionnaires-sort-bar">
                                 <div class="input-group-prepend w-auto float-md-end">
-                                    <label class="input-group-text" for="inputGroupSelect01">Сортировка:</label>
+                                    <label class="input-group-text" for="sort-type-select">Сортировка:</label>
                                 </div>
-                                <select class="custom-select w-auto float-md-end" id="inputGroupSelect01"
+                                <select class="custom-select w-auto float-md-end" id="sort-type-select"
                                         th:field="*{questionnaireSearchDto.orderType}"
                                         hx-params="*"
                                         hx-trigger="change"
@@ -80,10 +80,10 @@
 
                             <div th:fragment="pagination-content">
 
-                            <table class="table table-hover" id="questionnaireTable" >
+                            <table class="table table-hover" id="questionnaires-list" >
                                 <thead></thead>
-                                <tbody id="questionnaires-list">
-                                    <tr th:each="questionnaire : ${questionnaires.content}" th:fragment="questionnaires">
+                                <tbody>
+                                    <tr th:each="questionnaire : ${questionnaires.content}" th:fragment="questionnaires" class="questionnaire">
                                         <td>
                                             <a th:href="@{/questionnaires/{id}(id=${questionnaire.id})}"
                                                th:text="${questionnaire.title}" class="field">
@@ -94,8 +94,7 @@
                                 </tbody>
                             </table>
 
-                            <div id="pagination">
-
+                            <div id="questionnaires-navigation-bar">
                                 <ul class="pagination justify-content-center">
                                     <div class="pagination">
                                         <li class="page-item"
@@ -162,6 +161,7 @@
                             </div>
 
                             </div>
+
                         </div>
 
                     </div>
