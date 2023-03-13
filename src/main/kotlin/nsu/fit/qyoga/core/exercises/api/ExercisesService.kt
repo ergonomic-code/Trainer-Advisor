@@ -14,7 +14,8 @@ interface ExercisesService {
     ): Page<ExerciseDto>
 
     fun createExercise(
-        createExerciseDto: CreateExerciseDto
+        createExerciseDto: CreateExerciseDto,
+        id: Long
     ): ExerciseDto
 
     fun getExerciseTypes(): List<ExerciseType>

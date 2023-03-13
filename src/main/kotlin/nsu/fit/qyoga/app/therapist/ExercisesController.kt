@@ -4,8 +4,10 @@ import nsu.fit.qyoga.core.exercises.api.ExercisesService
 import nsu.fit.qyoga.core.exercises.api.dtos.CreateExerciseDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseSearchDto
+import nsu.fit.qyoga.core.users.internal.UserPrincipal
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -65,10 +67,12 @@ class ExercisesController(
 
     @PostMapping
     fun createExercise(
+        @AuthenticationPrincipal userPrincipal: UserPrincipal,
         @ModelAttribute("createExerciseDto") createExerciseDto: CreateExerciseDto,
         model: Model
     ): String {
-        exercisesService.createExercise(createExerciseDto)
+        println(userPrincipal.getId())
+        exercisesService.createExercise(createExerciseDto, userPrincipal.getId())
         val exercises = exercisesService.getExercises(ExerciseSearchDto(), PageRequest.of(0, 10))
         addExercisePageAttributes(model, exercises, exercisesService)
         return "exercise-search"

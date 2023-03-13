@@ -29,7 +29,7 @@ class ExercisesServiceImpl(
         return PageImpl(result, pageable, count)
     }
 
-    override fun createExercise(createExerciseDto: CreateExerciseDto): ExerciseDto {
+    override fun createExercise(createExerciseDto: CreateExerciseDto, id: Long): ExerciseDto {
         TODO()
     }
 
