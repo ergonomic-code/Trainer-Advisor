@@ -14,7 +14,7 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga returns questionnaire-list page with questionnaires`() {
         When {
-            get("/questionnaires")
+            get("/questionnaires/")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
