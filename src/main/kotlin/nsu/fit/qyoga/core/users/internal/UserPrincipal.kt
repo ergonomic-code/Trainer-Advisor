@@ -7,7 +7,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import java.util.stream.Collectors
 
-
 data class UserPrincipal(private val user: User) : UserDetails {
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
         return user.roles.stream()
