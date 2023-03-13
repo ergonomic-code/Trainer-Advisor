@@ -6,7 +6,7 @@ import org.springframework.data.relational.core.mapping.Table
 @Table("exercise_steps")
 data class ExerciseStep(
     @Id
-    val id: Long,
+    val id: Long = 0,
     val description: String,
     val imageId: Long,
     val exerciseId: Long

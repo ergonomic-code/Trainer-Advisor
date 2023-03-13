@@ -7,7 +7,7 @@ import java.time.Duration
 @Table("exercises")
 data class Exercise(
     @Id
-    val id: Long,
+    val id: Long = 0,
     val title: String,
     val description: String,
     val indications: String,

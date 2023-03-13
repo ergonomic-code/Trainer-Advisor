@@ -71,7 +71,6 @@ class ExercisesController(
         @ModelAttribute("createExerciseDto") createExerciseDto: CreateExerciseDto,
         model: Model
     ): String {
-        println(userPrincipal.getId())
         exercisesService.createExercise(createExerciseDto, userPrincipal.getId())
         val exercises = exercisesService.getExercises(ExerciseSearchDto(), PageRequest.of(0, 10))
         addExercisePageAttributes(model, exercises, exercisesService)
