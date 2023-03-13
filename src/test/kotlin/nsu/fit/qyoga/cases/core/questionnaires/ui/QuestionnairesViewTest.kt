@@ -33,7 +33,7 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
             contentType(ContentType.JSON)
             body(request)
         } When {
-            post("/questionnaires/action")
+            get("/questionnaires/action")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
@@ -52,7 +52,7 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
             contentType(ContentType.JSON)
             body(request)
         } When {
-            post("/questionnaires/action")
+            get("/questionnaires/action")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
@@ -71,7 +71,7 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
             contentType(ContentType.JSON)
             body(request)
         } When {
-            post("/questionnaires/action")
+            get("/questionnaires/action")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
