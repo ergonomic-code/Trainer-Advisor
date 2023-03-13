@@ -50,7 +50,7 @@ class QuestionnairesServiceTests(
         questionnairesASK.content.size shouldBe 10
         questionnairesASK.content.map { it.id.toInt() } shouldBe listOf(2, 16, 17, 18, 6, 4, 8, 9, 12, 13)
         questionnairesDESK.content.size shouldBe 10
-        questionnairesDESK.content.map { it.id.toInt() } shouldBe listOf(5, 1, 7, 3, 11, 10, 15, 14, 13, 12)
+        questionnairesDESK.content.map { it.id.toInt() } shouldBe listOf(10, 5, 1, 11, 7, 3, 15, 14, 13, 12)
     }
 
     @Test
