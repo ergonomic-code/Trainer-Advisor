@@ -32,7 +32,7 @@ class QuestionnaireServiceImpl(
     }
 
     override fun getQuestionnairesCount(title: String?): Long {
-        return  if (title != null) {
+        return if (title != null) {
             questionnaireRepo.countAllByTitleContaining(title)
         } else {
             questionnaireRepo.count()

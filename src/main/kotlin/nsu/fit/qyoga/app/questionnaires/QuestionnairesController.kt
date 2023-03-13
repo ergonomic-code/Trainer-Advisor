@@ -57,7 +57,6 @@ class QuestionnairesController(
     fun sortQuestionnaires(
         @ModelAttribute("questionnaireSearchDto") questionnaireSearchDto: QuestionnaireSearchDto,
         @RequestParam(value = "pageSize", required = false, defaultValue = "10") pageSize: Int,
-        @RequestParam(value = "pageNumber", required = false, defaultValue = "1") pageNumber: Int,
         model: Model
     ): String {
         val questionnaires = questionnaireService.findQuestionnaires(

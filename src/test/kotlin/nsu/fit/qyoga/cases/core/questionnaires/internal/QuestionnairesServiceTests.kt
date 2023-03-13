@@ -48,9 +48,9 @@ class QuestionnairesServiceTests(
             PageRequest.of(0, 10)
         )
         questionnairesASK.content.size shouldBe 10
-        questionnairesASK.content.map{it.id.toInt()} shouldBe listOf(2, 16, 17, 18, 6, 4, 8, 9, 12, 13)
+        questionnairesASK.content.map { it.id.toInt() } shouldBe listOf(2, 16, 17, 18, 6, 4, 8, 9, 12, 13)
         questionnairesDESK.content.size shouldBe 10
-        questionnairesDESK.content.map{it.id.toInt()} shouldBe listOf(5, 1, 7, 3, 11, 10, 15, 14, 13, 12)
+        questionnairesDESK.content.map { it.id.toInt() } shouldBe listOf(5, 1, 7, 3, 11, 10, 15, 14, 13, 12)
     }
 
     @Test
@@ -72,7 +72,7 @@ class QuestionnairesServiceTests(
             PageRequest.of(0, 10)
         )
         questionnaires.content.size shouldBe 10
-        questionnaires.content.map{it.id.toInt()} shouldBe listOf(2, 16, 17, 18, 6, 4, 8, 9, 12, 13)
+        questionnaires.content.map { it.id.toInt() } shouldBe listOf(2, 16, 17, 18, 6, 4, 8, 9, 12, 13)
     }
 
     @Test
@@ -87,14 +87,14 @@ class QuestionnairesServiceTests(
             PageRequest.of(1, 10)
         )
         questionnairesPage2.content.size shouldBeLessThan 10
-        questionnairesPage1.content.map{
+        questionnairesPage1.content.map {
             it.id.toInt()
-        }.sorted() shouldNotBe questionnairesPage2.content.map{
+        }.sorted() shouldNotBe questionnairesPage2.content.map {
             it.id.toInt()
         }.sorted()
-        questionnairesPage1.content.map{it.id.toInt()}.plus(
-            questionnairesPage2.content.map{it.id.toInt()}
-        ).sorted() shouldBe (1 .. 18).toList()
+        questionnairesPage1.content.map { it.id.toInt() }.plus(
+            questionnairesPage2.content.map { it.id.toInt() }
+        ).sorted() shouldBe (1..18).toList()
     }
 
     @Test
@@ -109,7 +109,7 @@ class QuestionnairesServiceTests(
             PageRequest.of(0, 10)
         )
         questionnairesTest.content.size shouldBe 10
-        for(questionnaire in questionnairesTest.content){
+        for (questionnaire in questionnairesTest.content) {
             questionnaire.title shouldContain "test"
         }
     }
