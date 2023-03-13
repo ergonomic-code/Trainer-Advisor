@@ -12,19 +12,28 @@ CREATE TABLE exercises
     indications      TEXT     NOT NULL,
     contradictions   TEXT     NOT NULL,
     duration         INTERVAL NOT NULL,
-    exercise_type_id BIGINT NOT NULL
+    exercise_type_id BIGINT   NOT NULL
         CONSTRAINT fk_exercises_exercise_type_ids REFERENCES exercise_types
             ON DELETE CASCADE,
-    therapist_id     BIGINT NOT NULL
+    therapist_id     BIGINT   NOT NULL
         CONSTRAINT fk_exercises_therapist_ids REFERENCES therapists
             ON DELETE CASCADE
+);
+
+create table images
+(
+    id         BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name       VARCHAR,
+    media_type VARCHAR NOT NULL,
+    size       BIGINT,
+    data       BYTEA
 );
 
 CREATE TABLE exercise_steps
 (
     id          BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     description VARCHAR NOT NULL,
-    image_id    BIGINT  NOT NULL
+    image_id    BIGINT
         CONSTRAINT fk_exercise_steps_images REFERENCES images ON DELETE CASCADE,
     exercise_id BIGINT  NOT NULL
         CONSTRAINT fk_exercise_steps_exercises REFERENCES exercises
@@ -62,13 +71,4 @@ create table exercise_purposes
 (
     exercise_id BIGINT REFERENCES exercises (id) ON UPDATE CASCADE ON DELETE CASCADE,
     purpose_id  BIGINT REFERENCES therapeutic_purposes (id) ON UPDATE CASCADE ON DELETE CASCADE
-);
-
-create table images
-(
-    id         BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    name       VARCHAR,
-    media_type VARCHAR NOT NULL,
-    size       BIGINT,
-    data       BYTEA
 );
