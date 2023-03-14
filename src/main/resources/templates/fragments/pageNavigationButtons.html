@@ -27,8 +27,8 @@
         <div class="pagination" style="max-width: 50%;">
 
             <li class="page-item"
-                th:each="pageNumber : ${#numbers.sequence(((questionnaires.getPageable().pageNumber - 1 >= 0)? questionnaires.getPageable().pageNumber: questionnaires.getPageable().pageNumber + 1), ((questionnaires.getPageable().pageNumber + 3 < questionnaires.totalPages)? questionnaires.getPageable().pageNumber + 2 : questionnaires.totalPages), 1)}"
-                th:classappend="${(pageNumber == questionnaires.getPageable().pageNumber + 1) ? 'active' : ''}">
+                th:classappend="${(pageNumber == questionnaires.getPageable().pageNumber + 1) ? 'active' : ''}"
+                th:each="pageNumber : ${#numbers.sequence(((questionnaires.getPageable().pageNumber - 1 >= 0)? questionnaires.getPageable().pageNumber: questionnaires.getPageable().pageNumber + 1), ((questionnaires.getPageable().pageNumber + 3 < questionnaires.totalPages)? questionnaires.getPageable().pageNumber + 2 : questionnaires.totalPages), 1)}">
                 <a class="page-link"
                    hx-target="#tablePag"
                    hx-trigger="click"

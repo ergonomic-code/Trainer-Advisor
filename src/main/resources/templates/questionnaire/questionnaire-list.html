@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
     <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
@@ -37,14 +37,14 @@
 
 <body class="sb-nav-fixed">
 
-<div th:replace="~{fragments/headerNavPanel :: headerNavPanel}" ></div>
+<div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
 
 
 <div id="layoutSidenav">
 
-    <div th:replace="~{/fragments/leftNavPanel.html :: leftNavPanel}" ></div>
+    <div th:replace="~{/fragments/leftNavPanel.html :: leftNavPanel}"></div>
 
-    <div id="layoutSidenav_content" >
+    <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
                 <h1 class="mt-4">Опросники</h1>
@@ -54,32 +54,32 @@
                         <i class="fas fa-table me-1"></i>
                         Список опросников
                     </div>
-                    <div id="card-body" class="card-body" th:fragment="page-content">
+                    <div class="card-body" id="card-body" th:fragment="page-content">
 
                         <div class="input-group mb-3">
 
                             <div class="mt-3 mb-3 w-75 me-auto" id="questionnaires-find-bar">
                                 <input aria-describedby="basic-addon2"
-                                       th:value="${questionnaireSearchDto.title}"
-                                       th:field="*{questionnaireSearchDto.title}"
-                                       class="form-control"
+                                       hx-target="#card-body"
                                        placeholder="Название опросника"
-                                       style="border-color:inherit" type="text"
+                                       class="form-control"
+                                       style="border-color:inherit"
+                                       th:attr="hx-get=@{/questionnaires/action(pageNumber=${pageNumber}, orderType=${questionnaireSearchDto.orderType})}" th:field="*{questionnaireSearchDto.title}"
                                        hx-trigger="keyup changed delay:500ms, search"
-                                       th:attr="hx-get=@{/questionnaires/action(pageNumber=${pageNumber}, orderType=${questionnaireSearchDto.orderType})}"
-                                       hx-target="#card-body">
+                                       th:value="${questionnaireSearchDto.title}"
+                                       type="text">
                             </div>
 
                             <div class="input-group mb-3 mt-3 w-auto" id="questionnaires-sort-bar">
                                 <div class="input-group-prepend w-auto float-md-end">
                                     <label class="input-group-text" for="sort-type-select">Сортировка:</label>
                                 </div>
-                                <select class="custom-select w-auto float-md-end" id="sort-type-select"
-                                        th:field="*{questionnaireSearchDto.orderType}"
-                                        hx-params="*"
+                                <select class="custom-select w-auto float-md-end" hx-params="*"
+                                        hx-target="#card-body"
+                                        id="sort-type-select"
                                         hx-trigger="change"
                                         th:attr="hx-get=@{/questionnaires/action(pageNumber=${pageNumber}, title=${questionnaireSearchDto.title})}"
-                                        hx-target = "#card-body">
+                                        th:field="*{questionnaireSearchDto.orderType}">
                                     <option selected value="ASC">От А до Я</option>
                                     <option value="DESK">От Я до А</option>
                                 </select>
@@ -91,17 +91,18 @@
 
                             <div th:fragment="pagination-content">
 
-                                <table class="table table-hover" id="questionnaires-list" >
+                                <table class="table table-hover" id="questionnaires-list">
                                     <thead></thead>
                                     <tbody>
-                                        <tr th:each="questionnaire : ${questionnaires.content}" th:fragment="questionnaires" class="questionnaire">
-                                            <td>
-                                                <a th:href="@{/questionnaires/{id}(id=${questionnaire.id})}"
-                                                   th:text="${questionnaire.title}" class="field">
-                                                    questionnaire
-                                                </a>
-                                            </td>
-                                        </tr>
+                                    <tr class="questionnaire" th:each="questionnaire : ${questionnaires.content}"
+                                        th:fragment="questionnaires">
+                                        <td>
+                                            <a class="field"
+                                               th:href="@{/questionnaires/{id}(id=${questionnaire.id})}" th:text="${questionnaire.title}">
+                                                questionnaire
+                                            </a>
+                                        </td>
+                                    </tr>
                                     </tbody>
                                 </table>
 
@@ -115,8 +116,8 @@
                 </div>
 
 
-                <form class="input-group" th:method="GET" th:action="@{/questionnaires/new}">
-                    <button type="submit" class="btn btn-secondary"  >Новый опросник</button>
+                <form class="input-group" th:action="@{/questionnaires/new}" th:method="GET">
+                    <button class="btn btn-secondary" type="submit">Новый опросник</button>
                 </form>
 
             </div>
