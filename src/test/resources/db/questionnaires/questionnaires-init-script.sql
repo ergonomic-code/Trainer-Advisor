@@ -1,1 +1,1 @@
-TRUNCATE questionnaires, questions, answers, images RESTART IDENTITY;
+TRUNCATE questionnaires RESTART IDENTITY;
