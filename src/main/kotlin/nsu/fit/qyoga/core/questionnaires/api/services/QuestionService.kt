@@ -1,14 +1,10 @@
 package nsu.fit.qyoga.core.questionnaires.api.services
 
-import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionWithAnswersDto
+import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionDto
+import org.springframework.stereotype.Service
 
-
+@Service
 interface QuestionService {
-    fun createQuestion(id: Long): QuestionWithAnswersDto
 
-    fun updateQuestion(
-        createQuestionDto: QuestionWithAnswersDto,
-        questionnaireId: Long,
-        questionImageId: Long?
-    )
+    fun createQuestion(questionDto: QuestionDto)
 }

@@ -1,17 +1,17 @@
 package nsu.fit.qyoga.core.questionnaires.api.model
 
-import nsu.fit.qyoga.core.questionnaires.api.dtos.enums.QuestionType
+import nsu.fit.qyoga.core.questionnaires.api.enums.QuestionType
 import org.springframework.data.annotation.Id
-import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
+import java.nio.file.Path
 
 @Table("questions")
 data class Question(
     @Id
-    val id: Long = 0,
-    val title: String?,
+    val id: Long,
+    val text: String,
     val questionType: QuestionType,
-    val imageId: Long?,
-    @MappedCollection(idColumn = "question_id")
-    val answers: Set<Answer>
+    val optionsFoto: Path?,
+    val questionnaireId: Long,
+    val imageId: Long
 )

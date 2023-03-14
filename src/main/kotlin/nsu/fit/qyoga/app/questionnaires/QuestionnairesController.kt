@@ -1,7 +1,8 @@
 package nsu.fit.qyoga.app.questionnaires
 
-import nsu.fit.qyoga.core.questionnaires.api.dtos.*
-import nsu.fit.qyoga.core.questionnaires.api.services.*
+import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
+import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireDto
+import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireSearchDto
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
@@ -10,14 +11,11 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 
 @Controller
-@RequestMapping("/therapist/questionnaires")
+@RequestMapping("/questionnaires/")
 class QuestionnairesController(
     private val questionnaireService: QuestionnaireService
 ) {
 
-    /**
-     * Получение списка опросников
-     */
     @GetMapping()
     fun getQuestionnairesList(
         @ModelAttribute("questionnaireSearchDto") questionnaireSearchDto: QuestionnaireSearchDto,
@@ -45,6 +43,9 @@ class QuestionnairesController(
             questionnaireSearchDto,
             pageable
         )
+        println(questionnaires.sort.getOrderFor("title"))
+        println(questionnaires.sort.isSorted)
+        println(questionnaires.sort.isUnsorted)
         addQuestionnairePageAttributes(model, questionnaireSearchDto, questionnaires)
         return "questionnaire/questionnaire-list :: page-content"
     }
@@ -61,4 +62,5 @@ class QuestionnairesController(
             questionnaires.sort.getOrderFor("title").toString().substringAfter(' ')
         )
     }
+
 }
