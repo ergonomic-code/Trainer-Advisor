@@ -1,0 +1,65 @@
+<div id="questionnaires-navigation-bar" th:fragment="pageNavigationButtons">
+    <ul class="pagination justify-content-center">
+        <div class="pagination">
+            <li class="page-item"
+                th:classappend="${(questionnaires.getPageable().pageNumber == 0) ? 'disabled' : ''}">
+                <a class="page-link"
+                   hx-target="#tablePag"
+                   hx-trigger="click"
+                   style="cursor: pointer"
+                   th:attr="hx-get=@{/questionnaires/pages(orderType=${questionnaireSearchDto.orderType}, title=${questionnaireSearchDto.title}, pageNumber=${1})}"
+                >Первая</a>
+            </li>
+        </div>
+
+        <div class="pagination">
+            <li class="page-item"
+                th:classappend="${(questionnaires.getPageable().pageNumber == 0) ? 'disabled' : ''}">
+                <a class="page-link"
+                   hx-target="#tablePag"
+                   hx-trigger="click"
+                   style="cursor: pointer"
+                   th:attr="hx-get=@{/questionnaires/pages(orderType=${questionnaireSearchDto.orderType}, title=${questionnaireSearchDto.title}, pageNumber=${questionnaires.getPageable().pageNumber})}"
+                >Назад</a>
+            </li>
+        </div>
+
+        <div class="pagination" style="max-width: 50%;">
+
+            <li class="page-item"
+                th:classappend="${(pageNumber == questionnaires.getPageable().pageNumber + 1) ? 'active' : ''}"
+                th:each="pageNumber : ${#numbers.sequence(((questionnaires.getPageable().pageNumber - 1 >= 0)? questionnaires.getPageable().pageNumber: questionnaires.getPageable().pageNumber + 1), ((questionnaires.getPageable().pageNumber + 3 < questionnaires.totalPages)? questionnaires.getPageable().pageNumber + 2 : questionnaires.totalPages), 1)}">
+                <a class="page-link"
+                   hx-target="#tablePag"
+                   hx-trigger="click"
+                   style="cursor: pointer"
+                   th:attr="hx-get=@{/questionnaires/pages(pageNumber=${pageNumber}, orderType=${questionnaireSearchDto.orderType}, title=${questionnaireSearchDto.title})}"
+                   th:text="${pageNumber}"></a>
+            </li>
+        </div>
+
+        <div class="pagination">
+            <li class="page-item"
+                th:classappend="${!(questionnaires.getPageable().pageNumber < questionnaires.totalPages - 1) ? 'disabled' : ''}">
+                <a class="page-link"
+                   hx-target="#tablePag"
+                   hx-trigger="click"
+                   style="cursor: pointer"
+                   th:attr="hx-get=@{/questionnaires/pages(orderType=${questionnaireSearchDto.orderType}, title=${questionnaireSearchDto.title}, pageNumber=${questionnaires.getPageable().pageNumber + 2})}"
+                >Вперед</a>
+            </li>
+        </div>
+
+        <div class="pagination">
+            <li class="page-item"
+                th:classappend="${!(questionnaires.getPageable().pageNumber < questionnaires.totalPages - 1) ? 'disabled' : ''}">
+                <a class="page-link"
+                   hx-target="#tablePag"
+                   hx-trigger="click"
+                   style="cursor: pointer"
+                   th:attr="hx-get=@{/questionnaires/pages(orderType=${questionnaireSearchDto.orderType}, title=${questionnaireSearchDto.title}, pageNumber=${questionnaires.totalPages})}"
+                >Последняя</a>
+            </li>
+        </div>
+    </ul>
+</div>
