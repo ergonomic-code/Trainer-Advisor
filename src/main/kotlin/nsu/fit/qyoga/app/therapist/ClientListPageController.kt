@@ -31,9 +31,6 @@ class ClientListPageController(
         return "clients-list"
     }
 
-    /**
-     * Фильтрация клиентов
-     */
     @GetMapping("/search-cl")
     fun getExercisesFiltered(
         @ModelAttribute("searchDto") searchDto: ClientListSearchDto,
@@ -46,7 +43,7 @@ class ClientListPageController(
             PageRequest.of(pageNumber - 1, pageSize)
         )
         addClientsPageAttributes(model, clients, clientService)
-        return "clients-search :: client"
+        return "clients-list :: clients"
     }
 
     fun addClientsPageAttributes(model: Model, clients: Page<ClientListDto>, clientService: ClientService) {
