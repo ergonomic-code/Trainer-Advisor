@@ -7,16 +7,12 @@
         <option name="envVars">
           <list>
             <DockerEnvVarImpl>
-              <option name="name" value="POSTGRES_DB"/>
-              <option name="value" value="qyoga"/>
+              <option name="name" value="POSTGRES_DB" />
+              <option name="value" value="qyoga" />
             </DockerEnvVarImpl>
             <DockerEnvVarImpl>
-              <option name="name" value="POSTGRES_PASSWORD"/>
-              <option name="value" value="P@ssw0rd"/>
-            </DockerEnvVarImpl>
-            <DockerEnvVarImpl>
-              <option name="name" value="LANG"/>
-              <option name="value" value="ru_RU.UTF-8"/>
+              <option name="name" value="POSTGRES_PASSWORD" />
+              <option name="value" value="P@ssw0rd" />
             </DockerEnvVarImpl>
           </list>
         </option>
