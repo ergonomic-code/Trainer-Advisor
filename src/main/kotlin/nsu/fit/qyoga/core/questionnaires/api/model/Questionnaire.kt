@@ -6,6 +6,6 @@ import org.springframework.data.relational.core.mapping.Table
 @Table("questionnaires")
 data class Questionnaire(
     @Id
-    val id: Long = 0,
+    val id: Long,
     val title: String
 )
