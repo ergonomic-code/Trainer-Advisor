@@ -126,16 +126,16 @@
                     </div>
                     <div class="card-body">
 
-                        <form hx-get="/exercises/search" hx-target="#exercises-list"
+                        <form hx-post="/exercises/" hx-target="#exercises-list"
                               hx-trigger="submit"
-                              th:object="${createExerciseDto}">
-                            <div class="input-group mb-3 m-auto" id="createExercisesForm">
+                              th:object="${createDto}">
+                            <div class="input-group mb-3 m-auto" id="createExerciseForm">
                                 <div class="mt-3 mb-3 w-100" id="titleFilter">
                                     <input aria-describedby="basic-addon2"
                                            class="form-control"
                                            placeholder="Название"
                                            style="border-color:inherit"
-
+                                           th:field="${createDto.title}"
                                            type="text">
                                 </div>
 
@@ -144,6 +144,7 @@
                                            class="form-control"
                                            placeholder="Противопоказания"
                                            style="border-color:inherit"
+                                           th:field="${createDto.contradiction}"
                                            type="text">
                                 </div>
 
@@ -152,6 +153,7 @@
                                            class="form-control"
                                            placeholder="Показания"
                                            style="border-color:inherit"
+                                           th:field="${createDto.indications}"
                                            type="text">
                                 </div>
 
@@ -160,6 +162,7 @@
                                            class="form-control"
                                            placeholder="Длительность"
                                            style="border-color:inherit"
+                                           th:field="${createDto.duration}"
                                            type="text">
                                 </div>
 
@@ -168,6 +171,7 @@
                                            class="form-control"
                                            placeholder="Терапевтическая задача"
                                            style="border-color:inherit"
+                                           th:field="${createDto.therapeuticPurpose}"
                                            type="text">
                                 </div>
 
@@ -177,6 +181,7 @@
                                     </div>
                                     <select class="custom-select w-75"
                                             id="inputGroupSelect01"
+                                            th:field="${createDto.exerciseType}"
                                     >
                                         <option selected th:value="null">Тип упражнения</option>
                                         <option th:each="type : ${types}" th:text="${type.title}"
@@ -189,6 +194,7 @@
                                         <span class="input-group-text h-100">Описание</span>
                                     </div>
                                     <textarea aria-label="With textarea"
+                                              th:field="${createDto.description}"
                                               class="form-control"></textarea>
                                 </div>
 
@@ -196,18 +202,20 @@
 
                             <h4 class="mt-4">Шаги</h4>
 
-                            <div class="border bg-light p-3 mb-2" id="step" style="border-radius: 5px;">
+                            <div class="border bg-light p-3 mb-2" id="step" style="border-radius: 5px;"
+                                 th:each="exercise : ${createDto.exerciseSteps}">
                                 <h6 class="">Шаг</h6>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text h-100">Описание</span>
                                     </div>
-                                    <textarea aria-label="With textarea" class="form-control"></textarea>
+                                    <textarea aria-label="With textarea" class="form-control"
+                                              th:field="${exercise.description}"></textarea>
                                 </div>
 
                                 <div class="mb-3 mt-3">
                                     <label class="form-label">Фото шага упражнения</label>
-                                    <input class="form-control" type="file" xml:lang="ru">
+                                    <input class="form-control" th:field="${exercise.photo}" type="file" xml:lang="ru">
                                 </div>
                             </div>
 
@@ -218,10 +226,12 @@
 
                 <div class="col-12 w-100 mb-3" id="buttons">
                     <button class="btn btn-secondary" id="btnNewStep" type="button">Добавить шаг</button>
-                    <button class="btn btn-secondary float-end " id="btnCreateExercise" type="button">Создать
+                    <button class="btn btn-secondary float-end " id="btnCreateExercise" type="submit">Создать
                         упражнение
                     </button>
-                    <button class="btn btn-secondary float-end mx-2" id="btnCancel" type="button">Отмена</button>
+                    <button class="btn btn-secondary float-end mx-2" hx-get="/exercises/" hx-trigger="click"
+                            id="btnCancel" type="button">Отмена
+                    </button>
                 </div>
 
             </div>

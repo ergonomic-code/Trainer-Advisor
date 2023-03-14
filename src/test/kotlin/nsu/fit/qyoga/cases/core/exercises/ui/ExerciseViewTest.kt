@@ -66,4 +66,18 @@ class ExerciseViewTest : QYogaAppTestBase() {
             }
         }
     }
+
+    @Test
+    fun `QYoga returns exercise creation page`() {
+        When {
+            get("/exercises/create")
+        } Then {
+            val body = Jsoup.parse(extract().body().asString())
+            Assertions.assertThatSpec(body) {
+                node("#createExerciseForm") { exists() }
+                node("#step") { exists() }
+                node("#buttons") { exists() }
+            }
+        }
+    }
 }

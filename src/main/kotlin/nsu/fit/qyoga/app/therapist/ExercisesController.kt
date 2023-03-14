@@ -4,6 +4,7 @@ import nsu.fit.qyoga.core.exercises.api.ExercisesService
 import nsu.fit.qyoga.core.exercises.api.dtos.CreateExerciseDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseSearchDto
+import nsu.fit.qyoga.core.exercises.api.model.ExerciseType
 import nsu.fit.qyoga.core.users.internal.UserPrincipal
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -60,18 +61,20 @@ class ExercisesController(
      */
     @GetMapping("/create")
     fun getCreateExercisePage(
+        @ModelAttribute("createDto") createDto: CreateExerciseDto,
         model: Model
     ): String {
+        model.addAttribute("createDto", CreateExerciseDto("", "", "", "", "", ExerciseType.WarmUp, "", listOf()))
         return "exercise-create"
     }
 
     @PostMapping
     fun createExercise(
+        @ModelAttribute("createDto") createDto: CreateExerciseDto,
         @AuthenticationPrincipal userPrincipal: UserPrincipal,
-        @ModelAttribute("createExerciseDto") createExerciseDto: CreateExerciseDto,
         model: Model
     ): String {
-        exercisesService.createExercise(createExerciseDto, userPrincipal.getId())
+        exercisesService.createExercise(createDto, userPrincipal.getId())
         val exercises = exercisesService.getExercises(ExerciseSearchDto(), PageRequest.of(0, 10))
         addExercisePageAttributes(model, exercises, exercisesService)
         return "exercise-search"
