@@ -5,7 +5,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldContain
 import nsu.fit.qyoga.cases.core.questionnaires.QuestionnairesTestConfig
-import nsu.fit.qyoga.core.questionnaires.api.QuestionnaireService
+import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireSearchDto
 import nsu.fit.qyoga.infra.QYogaModuleBaseTest
 import nsu.fit.qyoga.infra.TestContainerDbContextInitializer
@@ -112,6 +112,11 @@ class QuestionnairesServiceTests(
         for (questionnaire in questionnairesTest.content) {
             questionnaire.title shouldContain "test"
         }
+    }
+
+    @Test
+    fun `QYoga can save questionnaire without Image`() {
+
     }
 
 }
