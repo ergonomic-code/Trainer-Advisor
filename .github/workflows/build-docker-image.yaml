@@ -6,6 +6,25 @@ on:
       - 'deploy-pipeline'
 
 jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: Run build with Gradle Wrapper
+        run: ./gradlew build -x check
+
   docker:
     runs-on: ubuntu-latest
     steps:
@@ -21,4 +40,4 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          tags: d-r-q/QYoga:latest
+          tags: d-r-q/qyoga:latest
