@@ -44,14 +44,18 @@ class QuestionnaireServiceImpl(
         )
         val savedQuestionnaire = questionnaireRepo.save(questionnaire)
         createQuestionnaireDto.questions.map {
-            val imageId = imagesService.uploadImage(
-                ImageDto(
-                    it.photo?.name,
-                    it.photo?.contentType?: "application/octet-stream",
-                    it.photo!!.size,
-                    it.photo.inputStream
+            val imageId = if (it.photo != null) {
+                imagesService.uploadImage(
+                    ImageDto(
+                        it.photo.name,
+                        it.photo.contentType ?: "application/octet-stream",
+                        it.photo.size,
+                        it.photo.inputStream
+                    )
                 )
-            )
+            } else {
+                null
+            }
             questionService.createQuestion(it, savedQuestionnaire.id, imageId)
         }
         return savedQuestionnaire
