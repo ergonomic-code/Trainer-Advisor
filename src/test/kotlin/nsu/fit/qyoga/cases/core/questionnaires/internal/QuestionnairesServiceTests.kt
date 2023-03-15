@@ -5,8 +5,12 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldContain
 import nsu.fit.qyoga.cases.core.questionnaires.QuestionnairesTestConfig
-import nsu.fit.qyoga.core.questionnaires.api.QuestionnaireService
+import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateAnswerDto
+import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionnaireDto
+import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionDto
+import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireSearchDto
+import nsu.fit.qyoga.core.questionnaires.api.enums.QuestionType
 import nsu.fit.qyoga.infra.QYogaModuleBaseTest
 import nsu.fit.qyoga.infra.TestContainerDbContextInitializer
 import org.junit.jupiter.api.BeforeEach
@@ -111,6 +115,62 @@ class QuestionnairesServiceTests(
         questionnairesTest.content.size shouldBe 10
         for (questionnaire in questionnairesTest.content) {
             questionnaire.title shouldContain "test"
+        }
+    }
+
+    @Test
+    fun `QYoga can save empty questionnaire`() {
+        val createQuestionnaireDto = CreateQuestionnaireDto(
+            title = "create questionnaire test",
+            questions = emptyList()
+        )
+        val savedQuestionnaire = questionnaireService.createQuestionnaire(createQuestionnaireDto)
+        val inDBQuestionnaire = questionnaireService.loadQuestionnairesWithQuestions(savedQuestionnaire.id)
+        savedQuestionnaire.title shouldBe inDBQuestionnaire.title
+        createQuestionnaireDto.title shouldBe inDBQuestionnaire.title
+        inDBQuestionnaire.questions.size shouldBe 0
+    }
+
+    @Test
+    fun `QYoga can save questionnaire with questions without image and answers`() {
+        val questionnaireWithCreateQuestionDto = CreateQuestionnaireDto(
+            title = "create questionnaire test",
+            questions = listOf(
+                CreateQuestionDto(text = null, questionType = QuestionType.TEXT, photo = null, answers = emptyList()),
+                CreateQuestionDto(text = null, questionType = QuestionType.SEVERAL, photo = null, answers = emptyList()),
+                CreateQuestionDto(text = "qTest", questionType = QuestionType.TEXT, photo = null, answers = emptyList())
+            )
+        )
+        val savedQuestionnaire = questionnaireService.createQuestionnaire(questionnaireWithCreateQuestionDto)
+        val inDBQuestionnaire = questionnaireService.loadQuestionnairesWithQuestions(savedQuestionnaire.id)
+        savedQuestionnaire.title shouldBe inDBQuestionnaire.title
+        inDBQuestionnaire.questions.size shouldBe 3
+        for (question in inDBQuestionnaire.questions){
+            question.answers.size shouldBe 0
+        }
+    }
+
+    @Test
+    fun `QYoga can save questionnaire with questions and answers without image`() {
+        val questionnaireWithCreateQuestionDto = CreateQuestionnaireDto(
+            title = "create questionnaire test",
+            questions = listOf(
+                CreateQuestionDto(
+                    text = null,
+                    questionType = QuestionType.TEXT,
+                    photo = null,
+                    answers = listOf(
+                        CreateAnswerDto()
+                    )
+                )
+            )
+        )
+        val savedQuestionnaire = questionnaireService.createQuestionnaire(questionnaireWithCreateQuestionDto)
+        val inDBQuestionnaire = questionnaireService.loadQuestionnairesWithQuestions(savedQuestionnaire.id)
+        savedQuestionnaire.title shouldBe inDBQuestionnaire.title
+        inDBQuestionnaire.questions.size shouldBe 3
+        for (question in inDBQuestionnaire.questions){
+            question.answers.size shouldBe 0
         }
     }
 
