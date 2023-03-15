@@ -5,5 +5,5 @@ import org.springframework.stereotype.Service
 
 interface QuestionService {
 
-    fun createQuestion(questionDto: QuestionDto, questionnaireId: Long, imageId: Long)
+    fun createQuestion(questionDto: QuestionDto, questionnaireId: Long, imageId: Long?)
 }
