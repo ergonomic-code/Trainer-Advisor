@@ -1,8 +1,9 @@
-package nsu.fit.qyoga.core.questionnaires.internal
+package nsu.fit.qyoga.core.questionnaires.internal.serviceImpl
 
 import nsu.fit.qyoga.core.questionnaires.api.dtos.ImageDto
 import nsu.fit.qyoga.core.questionnaires.api.model.Image
 import nsu.fit.qyoga.core.questionnaires.api.services.ImagesService
+import nsu.fit.qyoga.core.questionnaires.internal.repository.ImagesRepo
 import org.springframework.stereotype.Service
 
 @Service

@@ -2,14 +2,16 @@ package nsu.fit.qyoga.core.questionnaires.api.model
 
 import nsu.fit.qyoga.core.questionnaires.api.enums.QuestionType
 import org.springframework.data.annotation.Id
-import org.springframework.data.relational.core.mapping.Table
 
-@Table("questions")
-data class Question(
+data class Answer(
     @Id
     val id: Long = 0,
     val title: String?,
-    val questionType: QuestionType,
-    val questionnaireId: Long,
-    val imageId: Long?
+    var lowerBound: Int?,
+    var lowerBoundText: String?,
+    var upperBound: Int?,
+    var upperBoundText: String?,
+    var score: Int?,
+    val imageId: Long?,
+    val questionId: Long
 )
