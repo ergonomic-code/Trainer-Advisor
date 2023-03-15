@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - 'master'
+      - 'server-provisioning'
 
 jobs:
   build-docker-image:
@@ -46,5 +47,6 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: .
+          file: { context }/deploy/Dockerfile
           push: true
           tags: ghcr.io/d-r-q/qyoga:latest
