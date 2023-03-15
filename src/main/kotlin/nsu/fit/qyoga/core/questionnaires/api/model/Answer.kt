@@ -2,9 +2,7 @@ package nsu.fit.qyoga.core.questionnaires.api.model
 
 import nsu.fit.qyoga.core.questionnaires.api.enums.QuestionType
 import org.springframework.data.annotation.Id
-import org.springframework.data.relational.core.mapping.Table
 
-@Table("answers")
 data class Answer(
     @Id
     val id: Long = 0,

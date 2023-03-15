@@ -16,4 +16,6 @@ interface QuestionnaireService {
     fun createQuestionnaire(createQuestionnaireDto: CreateQuestionnaireDto): Questionnaire
 
     fun getQuestionnairesCount(title: String?): Long
+
+    fun loadQuestionnairesWithQuestions(id: Long): CreateQuestionnaireDto
 }

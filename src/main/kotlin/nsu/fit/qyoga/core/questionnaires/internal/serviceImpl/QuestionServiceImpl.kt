@@ -13,7 +13,7 @@ class QuestionServiceImpl(
 
     override fun createQuestion(createQuestionDto: CreateQuestionDto, questionnaireId: Long, imageId: Long?) {
         val questionToSave = Question(
-            title = createQuestionDto.text?: "",
+            text = createQuestionDto.text?: "",
             questionType = createQuestionDto.questionType,
             questionnaireId = questionnaireId,
             imageId = imageId
