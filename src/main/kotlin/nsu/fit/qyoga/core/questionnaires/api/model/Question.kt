@@ -12,5 +12,5 @@ data class Question(
     val text: String,
     val questionType: QuestionType,
     val questionnaireId: Long,
-    val imageId: Long
+    val imageId: Long?
 )

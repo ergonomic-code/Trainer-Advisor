@@ -5,6 +5,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldContain
 import nsu.fit.qyoga.cases.core.questionnaires.QuestionnairesTestConfig
+import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionnaireDto
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireSearchDto
 import nsu.fit.qyoga.infra.QYogaModuleBaseTest
@@ -115,8 +116,13 @@ class QuestionnairesServiceTests(
     }
 
     @Test
-    fun `QYoga can save questionnaire without Image`() {
-
+    fun `QYoga can save empty questionnaire`() {
+        val createQuestionnaireDto = CreateQuestionnaireDto(
+            title = "create questionnaire test",
+            questions = emptyList()
+        )
+        val savedQuestionnaire = questionnaireService.createQuestionnaire(createQuestionnaireDto)
+        savedQuestionnaire.title shouldBe createQuestionnaireDto.title
     }
 
 }
