@@ -10,7 +10,7 @@ class QuestionServiceImpl(
     private val questionRepo: QuestionRepo
 ) : QuestionService {
 
-    override fun createQuestion(questionDto: QuestionDto, questionnaireId: Long, imageId: Long) {
+    override fun createQuestion(questionDto: QuestionDto, questionnaireId: Long, imageId: Long?) {
         val questionToSave = Question(
             text = questionDto.text?: "",
             questionType = questionDto.questionType,
