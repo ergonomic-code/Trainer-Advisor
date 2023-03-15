@@ -8,10 +8,9 @@ import java.nio.file.Path
 @Table("questions")
 data class Question(
     @Id
-    val id: Long,
+    val id: Long = 0,
     val text: String,
     val questionType: QuestionType,
-    val optionsFoto: Path?,
     val questionnaireId: Long,
     val imageId: Long
 )
