@@ -1,0 +1,6 @@
+CREATE TABLE questions
+(
+    id    BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    title VARCHAR
+
+)

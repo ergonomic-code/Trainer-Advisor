@@ -52,9 +52,9 @@ class QuestionnaireServiceImpl(
                     it.photo.inputStream
                 )
             )
-            questionService.createQuestion(it)
+            questionService.createQuestion(it, savedQuestionnaire.id, imageId)
         }
-        return questionnaire
+        return savedQuestionnaire
     }
 
     override fun getQuestionnairesCount(title: String?): Long {
