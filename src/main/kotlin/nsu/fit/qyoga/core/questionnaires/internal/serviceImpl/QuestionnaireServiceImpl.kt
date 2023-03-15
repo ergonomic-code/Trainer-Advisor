@@ -1,4 +1,4 @@
-package nsu.fit.qyoga.core.questionnaires.internal
+package nsu.fit.qyoga.core.questionnaires.internal.serviceImpl
 
 import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionnaireDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.ImageDto
@@ -8,6 +8,7 @@ import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireSearchDto
 import nsu.fit.qyoga.core.questionnaires.api.model.Questionnaire
 import nsu.fit.qyoga.core.questionnaires.api.services.ImagesService
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionService
+import nsu.fit.qyoga.core.questionnaires.internal.repository.QuestionnaireRepo
 import org.springframework.data.domain.*
 import org.springframework.stereotype.Service
 
@@ -67,5 +68,14 @@ class QuestionnaireServiceImpl(
         } else {
             questionnaireRepo.count()
         }
+    }
+
+    override fun loadQuestionnairesWithQuestions(id: Long): CreateQuestionnaireDto {
+        val questionnaire = questionnaireRepo.findById(id)
+        val questions = questionService.loadQuestionsWithAnswers(id)
+        return CreateQuestionnaireDto(
+            title = questionnaire.get().title,
+            questions = emptyList()
+        )
     }
 }
