@@ -1,4 +1,4 @@
-package nsu.fit.qyoga.core.questionnaires.internal
+package nsu.fit.qyoga.core.questionnaires.internal.repository
 
 import nsu.fit.qyoga.core.questionnaires.api.model.Questionnaire
 import org.springframework.data.domain.Page
