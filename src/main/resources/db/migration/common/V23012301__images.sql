@@ -1,0 +1,7 @@
+CREATE TABLE answers
+(
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name VARCHAR,
+    media_type VARCHAR,
+    size
+)
