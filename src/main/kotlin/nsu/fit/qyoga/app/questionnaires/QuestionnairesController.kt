@@ -31,37 +31,19 @@ class QuestionnairesController(
     }
 
     /**
-     * Отображение страницы при пагинации
-     */
-    @GetMapping("pages")
-    fun getQuestionnairesPage(
-        @ModelAttribute("questionnaireSearchDto") questionnaireSearchDto: QuestionnaireSearchDto,
-        @RequestParam(value = "pageSize", required = false, defaultValue = "10") pageSize: Int,
-        @RequestParam(value = "pageNumber", required = false, defaultValue = "1") pageNumber: Int,
-        model: Model
-    ): String {
-        println(questionnaireSearchDto.title)
-        println(questionnaireSearchDto.orderType)
-        val questionnaires = questionnaireService.findQuestionnaires(
-            questionnaireSearchDto,
-            PageRequest.of(pageNumber - 1, pageSize)
-        )
-        addQuestionnairePageAttributes(model, questionnaireSearchDto, questionnaires)
-        return "questionnaire/questionnaire-list :: pagination-content"
-    }
-
-    /**
      * Фильтрация опросников
      */
     @GetMapping("action")
     fun sortQuestionnaires(
         @ModelAttribute("questionnaireSearchDto") questionnaireSearchDto: QuestionnaireSearchDto,
         @RequestParam(value = "pageSize", required = false, defaultValue = "10") pageSize: Int,
+        @RequestParam(value = "pageNumber", required = false, defaultValue = "1") pageNumber: Int,
         model: Model
     ): String {
+        println(questionnaireSearchDto.orderType)
         val questionnaires = questionnaireService.findQuestionnaires(
             questionnaireSearchDto,
-            PageRequest.of(0, pageSize)
+            PageRequest.of(pageNumber - 1, pageSize)
         )
         addQuestionnairePageAttributes(model, questionnaireSearchDto, questionnaires)
         return "questionnaire/questionnaire-list :: page-content"

@@ -1,6 +1,10 @@
 package nsu.fit.qyoga.core.questionnaires.internal
 
+import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireDto
 import nsu.fit.qyoga.core.questionnaires.api.model.Questionnaire
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.PagingAndSortingRepository
@@ -14,4 +18,9 @@ interface QuestionnaireRepo : CrudRepository<Questionnaire, Long>, PagingAndSort
     fun countAllByTitleContaining(title: String): Long
 
     fun findAllByTitleContaining(title: String, pageable: Pageable): List<Questionnaire>
+}
+fun QuestionnaireRepo.findPageByTitle(title: String, pageRequest: PageRequest): Page<QuestionnaireDto> {
+    val entities = this.findAllByTitleContaining(title, pageRequest)
+    val count = this.countAllByTitleContaining(title)
+    return PageImpl(entities.map { QuestionnaireDto(id = it.id, title = it.title) }.toList(), pageRequest, count)
 }
