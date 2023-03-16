@@ -160,7 +160,15 @@ class QuestionnairesServiceTests(
                     questionType = QuestionType.TEXT,
                     photo = null,
                     answers = listOf(
-                        CreateAnswerDto()
+                        CreateAnswerDto(
+                            title = "test save",
+                            lowerBound = null,
+                            lowerBoundText = null,
+                            upperBound = null,
+                            upperBoundText = null,
+                            score = null,
+                            photo = null
+                        )
                     )
                 )
             )

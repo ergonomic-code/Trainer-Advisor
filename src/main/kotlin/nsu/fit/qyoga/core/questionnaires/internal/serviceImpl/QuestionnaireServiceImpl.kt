@@ -40,9 +40,7 @@ class QuestionnaireServiceImpl(
     }
 
     override fun createQuestionnaire(createQuestionnaireDto: CreateQuestionnaireDto): Questionnaire {
-        val questionnaire = Questionnaire(
-            title = createQuestionnaireDto.title?: "unnamed"
-        )
+        val questionnaire = Questionnaire(title = createQuestionnaireDto.title)
         val savedQuestionnaire = questionnaireRepo.save(questionnaire)
         createQuestionnaireDto.questions.map {
             val imageId = if (it.photo != null) {
@@ -72,7 +70,6 @@ class QuestionnaireServiceImpl(
 
     override fun loadQuestionnairesWithQuestions(id: Long): CreateQuestionnaireDto {
         val questionnaire = questionnaireRepo.findById(id)
-        val questions = questionService.loadQuestionsWithAnswers(id)
         return CreateQuestionnaireDto(
             title = questionnaire.get().title,
             questions = emptyList()
