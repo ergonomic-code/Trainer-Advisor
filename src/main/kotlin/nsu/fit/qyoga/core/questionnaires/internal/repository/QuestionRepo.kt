@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface QuestionRepo :  CrudRepository<Question, Long> {
+    fun findAllByQuestionnaireId(id: Long): List<Question>
 }
