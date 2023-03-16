@@ -21,7 +21,7 @@ class QuestionnaireServiceImpl(
             Sort.by("title").ascending()
         }
         return questionnaireRepo.findPageByTitle(
-            questionnaireSearchDto.title?: "",
+            questionnaireSearchDto.title ?: "",
             PageRequest.of(pageable.pageNumber, pageable.pageSize, sort)
         )
     }
