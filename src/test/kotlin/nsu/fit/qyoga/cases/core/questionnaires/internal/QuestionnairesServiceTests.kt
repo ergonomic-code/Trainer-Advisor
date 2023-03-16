@@ -44,7 +44,7 @@ class QuestionnairesServiceTests(
             PageRequest.of(0, 10)
         )
         val questionnairesDESK = questionnaireService.findQuestionnaires(
-            QuestionnaireSearchDto(orderType = "DESK"),
+            QuestionnaireSearchDto(orderType = "DESC"),
             PageRequest.of(0, 10)
         )
         questionnairesASK.content.size shouldBe 10
