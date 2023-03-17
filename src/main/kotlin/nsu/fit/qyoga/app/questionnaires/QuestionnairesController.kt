@@ -4,9 +4,7 @@ import nsu.fit.qyoga.core.questionnaires.api.QuestionnaireService
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireSearchDto
 import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
-import org.springframework.data.domain.Sort.Direction
 import org.springframework.data.web.PageableDefault
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model

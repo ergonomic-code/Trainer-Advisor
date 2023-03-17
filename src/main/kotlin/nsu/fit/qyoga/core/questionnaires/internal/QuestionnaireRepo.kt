@@ -1,10 +1,8 @@
 package nsu.fit.qyoga.core.questionnaires.internal
 
-import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireDto
 import nsu.fit.qyoga.core.questionnaires.api.model.Questionnaire
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
-import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.PagingAndSortingRepository
