@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 
@@ -41,11 +42,11 @@ class QuestionnairesServiceTests(
     fun `QYoga can retrieve questionnaires with different type of sort`() {
         val questionnairesASK = questionnaireService.findQuestionnaires(
             QuestionnaireSearchDto(),
-            PageRequest.of(0, 10)
+            PageRequest.of(0, 10, Sort.by("title").ascending())
         )
         val questionnairesDESK = questionnaireService.findQuestionnaires(
             QuestionnaireSearchDto(),
-            PageRequest.of(0, 10)
+            PageRequest.of(0, 10, Sort.by("title").descending())
         )
         questionnairesASK.content.size shouldBe 10
         questionnairesASK.content.map { it.id.toInt() } shouldBe listOf(2, 16, 17, 18, 6, 4, 8, 9, 12, 13)
@@ -57,7 +58,7 @@ class QuestionnairesServiceTests(
     fun `QYoga can retrieve questionnaires without title`() {
         val questionnaires = questionnaireService.findQuestionnaires(
             QuestionnaireSearchDto(),
-            PageRequest.of(0, 10)
+            PageRequest.of(0, 10, Sort.by("title").ascending())
         )
         questionnaires.content.size shouldBe 10
         questionnaires.content.map { it.id.toInt() } shouldBe listOf(2, 16, 17, 18, 6, 4, 8, 9, 12, 13)
