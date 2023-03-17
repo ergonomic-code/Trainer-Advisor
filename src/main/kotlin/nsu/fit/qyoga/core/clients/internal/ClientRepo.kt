@@ -1,19 +1,23 @@
 package nsu.fit.qyoga.core.clients.internal
 
 import nsu.fit.qyoga.core.clients.api.Client
-import nsu.fit.qyoga.core.clients.api.Dto.ClientListDto
-import nsu.fit.qyoga.core.clients.api.Dto.ClientListSearchDto
-import org.springframework.data.jdbc.repository.query.Query
+import org.springframework.data.domain.Example
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.PagingAndSortingRepository
-import org.springframework.data.repository.query.Param
+import org.springframework.data.repository.query.QueryByExampleExecutor
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 
 @Repository
 @Transactional(readOnly = false)
-interface ClientRepo: CrudRepository<Client, Long>, PagingAndSortingRepository<Client, Long> {
-    @Query(
+interface ClientRepo : CrudRepository<Client, Long>, PagingAndSortingRepository<Client, Long> , QueryByExampleExecutor<Client>{
+    override fun <S : Client?> findAll(example: Example<S>, pageable: Pageable): Page<S> {
+
+    }
+
+/*    @Query(
         """
         SELECT cl.id as id, _name, secondname, surname, phone_number, diagnose, ap.date_app as dateAppointment
         FROM clients cl
@@ -50,5 +54,5 @@ interface ClientRepo: CrudRepository<Client, Long>, PagingAndSortingRepository<C
     fun countClients(
         @Param("search") search: ClientListSearchDto,
     ): Long
-
+*/
 }
