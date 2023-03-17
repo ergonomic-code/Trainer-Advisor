@@ -5,7 +5,6 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
 import java.util.*
 
-
 @Table("clients")
 data class Client(
     @Id
@@ -17,6 +16,6 @@ data class Client(
     val email: Email,
     val phoneNumber: Long,
     val address: String,
-    val distribution_sourse: String,
-    val working_dignose: String
+    val distributionSourse: String,
+    val workingDignose: String
 )

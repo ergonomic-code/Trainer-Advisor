@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
-class ClientServiceImpl (
+class ClientServiceImpl(
     private val clientRepo: ClientRepo
 ) : ClientService {
 
