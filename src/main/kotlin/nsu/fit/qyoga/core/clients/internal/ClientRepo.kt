@@ -1,9 +1,6 @@
 package nsu.fit.qyoga.core.clients.internal
 
 import nsu.fit.qyoga.core.clients.api.Client
-import org.springframework.data.domain.Example
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.CrudRepository
 import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.data.repository.query.QueryByExampleExecutor
@@ -13,9 +10,7 @@ import org.springframework.transaction.annotation.Transactional
 @Repository
 @Transactional(readOnly = false)
 interface ClientRepo : CrudRepository<Client, Long>, PagingAndSortingRepository<Client, Long> , QueryByExampleExecutor<Client>{
-    override fun <S : Client?> findAll(example: Example<S>, pageable: Pageable): Page<S> {
 
-    }
 
 /*    @Query(
         """
