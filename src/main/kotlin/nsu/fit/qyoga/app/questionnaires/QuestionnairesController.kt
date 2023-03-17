@@ -5,6 +5,9 @@ import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireSearchDto
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort.Direction
+import org.springframework.data.web.PageableDefault
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -18,13 +21,12 @@ class QuestionnairesController(
     @GetMapping()
     fun getQuestionnairesList(
         @ModelAttribute("questionnaireSearchDto") questionnaireSearchDto: QuestionnaireSearchDto,
-        @RequestParam(value = "pageSize", required = false, defaultValue = "10") pageSize: Int,
-        @RequestParam(value = "pageNumber", required = false, defaultValue = "0") pageNumber: Int,
+        @PageableDefault(value = 10, page = 0, sort = ["title"]) pageable: Pageable,
         model: Model
     ): String {
         val questionnaires = questionnaireService.findQuestionnaires(
             questionnaireSearchDto,
-            PageRequest.of(pageNumber, pageSize)
+            pageable
         )
         addQuestionnairePageAttributes(model, questionnaireSearchDto, questionnaires)
         return "questionnaire/questionnaire-list"
@@ -36,15 +38,16 @@ class QuestionnairesController(
     @GetMapping("action")
     fun sortQuestionnaires(
         @ModelAttribute("questionnaireSearchDto") questionnaireSearchDto: QuestionnaireSearchDto,
-        @RequestParam(value = "pageSize", required = false, defaultValue = "10") pageSize: Int,
-        @RequestParam(value = "pageNumber", required = false, defaultValue = "1") pageNumber: Int,
+        @PageableDefault(value = 10, page = 0, sort = ["title"]) pageable: Pageable,
         model: Model
     ): String {
-        println(questionnaireSearchDto.orderType)
         val questionnaires = questionnaireService.findQuestionnaires(
             questionnaireSearchDto,
-            PageRequest.of(pageNumber - 1, pageSize)
+            pageable
         )
+        println(questionnaires.sort.getOrderFor("title"))
+        println(questionnaires.sort.isSorted)
+        println(questionnaires.sort.isUnsorted)
         addQuestionnairePageAttributes(model, questionnaireSearchDto, questionnaires)
         return "questionnaire/questionnaire-list :: page-content"
     }
@@ -56,6 +59,10 @@ class QuestionnairesController(
     ) {
         model.addAttribute("questionnaires", questionnaires)
         model.addAttribute("questionnaireSearchDto", questionnaireSearchDto)
+        model.addAttribute(
+            "sortType",
+            questionnaires.sort.getOrderFor("title").toString().substringAfter(' ')
+        )
     }
 
 }

@@ -62,7 +62,7 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
             cookie(cookie)
             contentType(ContentType.JSON)
             param("title", "test")
-            param("orderType", "DESC")
+            param("sort", "title,desc")
         } When {
             get("/questionnaires/action")
         } Then {
@@ -105,8 +105,8 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
             cookie(cookie)
             contentType(ContentType.JSON)
             param("title", "test")
-            param("orderType", "DESC")
-            param("pageNumber", 2)
+            param("sort", "title,desc")
+            param("page", 1)
         } When {
             get("/questionnaires/action")
         } Then {

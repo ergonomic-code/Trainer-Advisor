@@ -10,6 +10,4 @@ interface QuestionnaireService {
         questionnaireSearchDto: QuestionnaireSearchDto,
         pageable: Pageable
     ): Page<QuestionnaireDto>
-
-    fun getQuestionnairesCount(title: String?): Long
 }

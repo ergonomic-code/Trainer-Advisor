@@ -16,11 +16,10 @@ import org.springframework.transaction.annotation.Transactional
 interface QuestionnaireRepo : CrudRepository<Questionnaire, Long>, PagingAndSortingRepository<Questionnaire, Long> {
 
     fun countAllByTitleContaining(title: String): Long
-
     fun findAllByTitleContaining(title: String, pageable: Pageable): List<Questionnaire>
 }
-fun QuestionnaireRepo.findPageByTitle(title: String, pageRequest: PageRequest): Page<QuestionnaireDto> {
-    val entities = this.findAllByTitleContaining(title, pageRequest)
+fun QuestionnaireRepo.findPageByTitle(title: String, pageable: Pageable): Page<Questionnaire> {
+    val entities = this.findAllByTitleContaining(title, pageable)
     val count = this.countAllByTitleContaining(title)
-    return PageImpl(entities.map { QuestionnaireDto(id = it.id, title = it.title) }.toList(), pageRequest, count)
+    return PageImpl(entities.map { Questionnaire(id = it.id, title = it.title) }.toList(), pageable, count)
 }

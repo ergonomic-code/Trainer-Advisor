@@ -44,25 +44,13 @@ class QuestionnairesServiceTests(
             PageRequest.of(0, 10)
         )
         val questionnairesDESK = questionnaireService.findQuestionnaires(
-            QuestionnaireSearchDto(orderType = "DESC"),
+            QuestionnaireSearchDto(),
             PageRequest.of(0, 10)
         )
         questionnairesASK.content.size shouldBe 10
         questionnairesASK.content.map { it.id.toInt() } shouldBe listOf(2, 16, 17, 18, 6, 4, 8, 9, 12, 13)
         questionnairesDESK.content.size shouldBe 10
         questionnairesDESK.content.map { it.id.toInt() } shouldBe listOf(10, 5, 1, 11, 7, 3, 15, 14, 13, 12)
-    }
-
-    @Test
-    fun `QYoga can retrieve count of questionnaires without title`() {
-        val questionnairesCount = questionnaireService.getQuestionnairesCount(null)
-        questionnairesCount shouldBe 18
-    }
-
-    @Test
-    fun `QYoga can retrieve count of questionnaires with title`() {
-        val questionnairesCount = questionnaireService.getQuestionnairesCount("test")
-        questionnairesCount shouldBe 12
     }
 
     @Test

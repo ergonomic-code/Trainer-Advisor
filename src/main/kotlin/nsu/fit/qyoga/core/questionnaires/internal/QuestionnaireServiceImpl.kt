@@ -15,22 +15,10 @@ class QuestionnaireServiceImpl(
         questionnaireSearchDto: QuestionnaireSearchDto,
         pageable: Pageable
     ): Page<QuestionnaireDto> {
-        val sort = if (questionnaireSearchDto.orderType == "DESC") {
-            Sort.by("title").descending()
-        } else {
-            Sort.by("title").ascending()
-        }
-        return questionnaireRepo.findPageByTitle(
-            questionnaireSearchDto.title ?: "",
-            PageRequest.of(pageable.pageNumber, pageable.pageSize, sort)
+        val page = questionnaireRepo.findPageByTitle(
+            title = questionnaireSearchDto.title ?: "",
+            pageable = pageable
         )
-    }
-
-    override fun getQuestionnairesCount(title: String?): Long {
-        return if (title != null) {
-            questionnaireRepo.countAllByTitleContaining(title)
-        } else {
-            questionnaireRepo.count()
-        }
+        return page.map { QuestionnaireDto(id = it.id, title = it.title) }
     }
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="utf-8"/>
     <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
@@ -7,7 +7,7 @@
     <meta content="" name="description"/>
     <meta content="" name="author"/>
     <link href="/img/caret-down-square-fill.svg" rel="icon" type="image/x-icon">
-    <title>Список опросников</title>
+    <title>Список упражнений</title>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet"/>
     <link href="/styles/styles.css" rel="stylesheet"/>
     <script crossorigin="anonymous" src="https://use.fontawesome.com/releases/v6.1.0/js/all.js"></script>
@@ -39,7 +39,6 @@
 
 <div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
 
-
 <div id="layoutSidenav">
 
     <div th:replace="~{/fragments/leftNavPanel.html :: leftNavPanel}"></div>
@@ -54,135 +53,139 @@
                         <i class="fas fa-table me-1"></i>
                         Список опросников
                     </div>
-                    <div class="card-body" id="card-body" th:fragment="page-content">
+                    <div class="card-body" id="card-body" >
+                        <div th:fragment="page-content">
+                            <div class="input-group mb-3">
 
-                        <div class="input-group mb-3">
-
-                            <div class="mt-3 mb-3 w-75 me-auto" id="questionnaires-find-bar">
-                                <input aria-describedby="basic-addon2"
-                                       hx-target="#card-body"
-                                       placeholder="Название опросника"
-                                       class="form-control"
-                                       style="border-color:inherit"
-                                       th:attr="hx-get=@{/questionnaires/action(pageNumber=${pageNumber}, orderType=${questionnaireSearchDto.orderType}, pageNumber=${1})}" th:field="*{questionnaireSearchDto.title}"
-                                       hx-trigger="keyup changed delay:500ms, search"
-                                       th:value="${questionnaireSearchDto.title}"
-                                       type="text">
-                            </div>
-
-                            <div class="input-group mb-3 mt-3 w-auto" id="questionnaires-sort-bar">
-                                <div class="input-group-prepend w-auto float-md-end">
-                                    <label class="input-group-text" for="sort-type-select">Сортировка:</label>
+                                <div class="mt-3 mb-3 w-75 me-auto" id="questionnaires-find-bar">
+                                    <input aria-describedby="basic-addon2"
+                                           hx-target="#card-body"
+                                           placeholder="Название опросника"
+                                           class="form-control"
+                                           style="border-color:inherit"
+                                           th:attr="hx-get=@{/questionnaires/action(sort=${'title,'+sortType})}"
+                                           th:field="*{questionnaireSearchDto.title}"
+                                           hx-trigger="keyup changed delay:500ms, search"
+                                           th:value="${questionnaireSearchDto.title}"
+                                           type="text">
                                 </div>
-                                <select class="custom-select w-auto float-md-end" hx-params="*"
-                                        hx-target="#card-body"
-                                        id="sort-type-select"
-                                        hx-trigger="change"
-                                        th:attr="hx-get=@{/questionnaires/action(pageNumber=${pageNumber}, title=${questionnaireSearchDto.title}, pageNumber=${1})}"
-                                        th:field="*{questionnaireSearchDto.orderType}">
-                                    <option selected value="ASC">От А до Я</option>
-                                    <option value="DESC">От Я до А</option>
-                                </select>
-                            </div>
 
-                        </div>
-
-                        <div id="tablePag">
-
-                            <div th:fragment="pagination-content">
-
-                                <table class="table table-hover" id="questionnaires-list">
-                                    <thead></thead>
-                                    <tbody>
-                                    <tr class="questionnaire" th:each="questionnaire : ${questionnaires.content}"
-                                        th:fragment="questionnaires">
-                                        <td>
-                                            <a class="field"
-                                               th:href="@{/questionnaires/{id}(id=${questionnaire.id})}" th:text="${questionnaire.title}">
-                                                questionnaire
-                                            </a>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-
-                                <div id="questionnaires-navigation-bar">
-                                    <ul class="pagination justify-content-center">
-                                        <div class="pagination">
-                                            <li class="page-item"
-                                                th:classappend="${(questionnaires.getPageable().pageNumber == 0) ? 'disabled' : ''}">
-                                                <a class="page-link"
-                                                   hx-target="#tablePag"
-                                                   hx-trigger="click"
-                                                   style="cursor: pointer"
-                                                   th:attr="hx-get=@{/questionnaires/action(orderType=${questionnaireSearchDto.orderType}, title=${questionnaireSearchDto.title}, pageNumber=${1})}"
-                                                >Первая</a>
-                                            </li>
-                                        </div>
-
-                                        <div class="pagination">
-                                            <li class="page-item"
-                                                th:classappend="${(questionnaires.getPageable().pageNumber == 0) ? 'disabled' : ''}">
-                                                <a class="page-link"
-                                                   hx-target="#tablePag"
-                                                   hx-trigger="click"
-                                                   style="cursor: pointer"
-                                                   th:attr="hx-get=@{/questionnaires/action(orderType=${questionnaireSearchDto.orderType}, title=${questionnaireSearchDto.title}, pageNumber=${questionnaires.getPageable().pageNumber})}"
-                                                >Назад</a>
-                                            </li>
-                                        </div>
-
-                                        <div class="pagination" style="max-width: 50%;">
-
-                                            <li class="page-item"
-                                                th:classappend="${(pageNumber == questionnaires.getPageable().pageNumber + 1) ? 'active' : ''}"
-                                                th:each="pageNumber : ${#numbers.sequence(((questionnaires.getPageable().pageNumber - 1 >= 0)? questionnaires.getPageable().pageNumber: questionnaires.getPageable().pageNumber + 1), ((questionnaires.getPageable().pageNumber + 3 < questionnaires.totalPages)? questionnaires.getPageable().pageNumber + 2 : questionnaires.totalPages), 1)}">
-                                                <a class="page-link"
-                                                   hx-target="#tablePag"
-                                                   hx-trigger="click"
-                                                   style="cursor: pointer"
-                                                   th:attr="hx-get=@{/questionnaires/action(pageNumber=${pageNumber}, orderType=${questionnaireSearchDto.orderType}, title=${questionnaireSearchDto.title})}"
-                                                   th:text="${pageNumber}"></a>
-                                            </li>
-                                        </div>
-
-                                        <div class="pagination">
-                                            <li class="page-item"
-                                                th:classappend="${!(questionnaires.getPageable().pageNumber < questionnaires.totalPages - 1) ? 'disabled' : ''}">
-                                                <a class="page-link"
-                                                   hx-target="#tablePag"
-                                                   hx-trigger="click"
-                                                   style="cursor: pointer"
-                                                   th:attr="hx-get=@{/questionnaires/action(orderType=${questionnaireSearchDto.orderType}, title=${questionnaireSearchDto.title}, pageNumber=${questionnaires.getPageable().pageNumber + 2})}"
-                                                >Вперед</a>
-                                            </li>
-                                        </div>
-
-                                        <div class="pagination">
-                                            <li class="page-item"
-                                                th:classappend="${!(questionnaires.getPageable().pageNumber < questionnaires.totalPages - 1) ? 'disabled' : ''}">
-                                                <a class="page-link"
-                                                   hx-target="#tablePag"
-                                                   hx-trigger="click"
-                                                   style="cursor: pointer"
-                                                   th:attr="hx-get=@{/questionnaires/action(orderType=${questionnaireSearchDto.orderType}, title=${questionnaireSearchDto.title}, pageNumber=${questionnaires.totalPages})}"
-                                                >Последняя</a>
-                                            </li>
-                                        </div>
-                                    </ul>
+                                <div class="input-group mb-3 mt-3 w-auto" id="questionnaires-sort-bar">
+                                    <div class="input-group-prepend w-auto float-md-end">
+                                        <label class="input-group-text" for="sort-type-select">Сортировка:</label>
+                                    </div>
+                                    <select class="custom-select w-auto float-md-end" hx-params="*"
+                                            hx-target="#card-body"
+                                            id="sort-type-select"
+                                            hx-trigger="change"
+                                            th:attr="hx-get=@{/questionnaires/action(title=${questionnaireSearchDto.title}, page=${0})}"
+                                            th:name="sort">
+                                        <option th:if="${sortType} == 'ASC'" selected disabled hidden>От А до Я</option>
+                                        <option th:if="${sortType} == 'DESC'" selected disabled hidden>От Я до А</option>
+                                        <option value='title,asc'>От А до Я</option>
+                                        <option value='title,desc'>От Я до А</option>
+                                    </select>
                                 </div>
 
                             </div>
 
-                        </div>
+                            <div id="tablePag">
 
+                                <div th:fragment="pagination-content">
+
+                                    <table class="table table-hover" id="questionnaires-list">
+                                        <thead></thead>
+                                        <tbody>
+                                        <tr class="questionnaire" th:each="questionnaire : ${questionnaires.content}"
+                                            th:fragment="questionnaires">
+                                            <td>
+                                                <a class="field"
+                                                   th:href="@{/questionnaires/{id}(id=${questionnaire.id})}" th:text="${questionnaire.title}">
+                                                    questionnaire
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
+                                    <div id="questionnaires-navigation-bar">
+                                        <ul class="pagination justify-content-center">
+                                            <div class="pagination">
+                                                <li class="page-item"
+                                                    th:classappend="${(questionnaires.getPageable().pageNumber == 0) ? 'disabled' : ''}">
+                                                    <a class="page-link"
+                                                       hx-target="#card-body"
+                                                       hx-trigger="click"
+                                                       style="cursor: pointer"
+                                                       th:attr="hx-get=@{/questionnaires/action(sort=${'title,'+sortType}, title=${questionnaireSearchDto.title}, page=${0})}"
+                                                    >Первая</a>
+                                                </li>
+                                            </div>
+
+                                            <div class="pagination">
+                                                <li class="page-item"
+                                                    th:classappend="${(questionnaires.getPageable().pageNumber == 0) ? 'disabled' : ''}">
+                                                    <a class="page-link"
+                                                       hx-target="#card-body"
+                                                       hx-trigger="click"
+                                                       style="cursor: pointer"
+                                                       th:attr="hx-get=@{/questionnaires/action(sort=${'title,'+sortType}, title=${questionnaireSearchDto.title}, page=${questionnaires.getPageable().pageNumber - 1})}"
+                                                    >Назад</a>
+                                                </li>
+                                            </div>
+
+                                            <div class="pagination" style="max-width: 50%;">
+
+                                                <li class="page-item"
+                                                    th:classappend="${(pageNumber == questionnaires.getPageable().pageNumber + 1) ? 'active' : ''}"
+                                                    th:each="pageNumber : ${#numbers.sequence(((questionnaires.getPageable().pageNumber - 1 >= 0)? questionnaires.getPageable().pageNumber: questionnaires.getPageable().pageNumber + 1), ((questionnaires.getPageable().pageNumber + 3 < questionnaires.totalPages)? questionnaires.getPageable().pageNumber + 2 : questionnaires.totalPages), 1)}">
+                                                    <a class="page-link"
+                                                       hx-target="#card-body"
+                                                       hx-trigger="click"
+                                                       style="cursor: pointer"
+                                                       th:attr="hx-get=@{/questionnaires/action(page=${pageNumber}, sort=${'title,'+sortType}, title=${questionnaireSearchDto.title})}"
+                                                       th:text="${pageNumber}"></a>
+                                                </li>
+                                            </div>
+
+                                            <div class="pagination">
+                                                <li class="page-item"
+                                                    th:classappend="${!(questionnaires.getPageable().pageNumber < questionnaires.totalPages - 1) ? 'disabled' : ''}">
+                                                    <a class="page-link"
+                                                       hx-target="#card-body"
+                                                       hx-trigger="click"
+                                                       style="cursor: pointer"
+                                                       th:attr="hx-get=@{/questionnaires/action(sort=${'title,'+sortType}, title=${questionnaireSearchDto.title}, page=${questionnaires.getPageable().pageNumber + 1})}"
+                                                    >Вперед</a>
+                                                </li>
+                                            </div>
+
+                                            <div class="pagination">
+                                                <li class="page-item"
+                                                    th:classappend="${!(questionnaires.getPageable().pageNumber < questionnaires.totalPages - 1) ? 'disabled' : ''}">
+                                                    <a class="page-link"
+                                                       hx-target="#card-body"
+                                                       hx-trigger="click"
+                                                       style="cursor: pointer"
+                                                       th:attr="hx-get=@{/questionnaires/action(sort=${'title,'+sortType}, title=${questionnaireSearchDto.title}, page=${questionnaires.totalPages - 1})}"
+                                                    >Последняя</a>
+                                                </li>
+                                            </div>
+                                        </ul>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
                     </div>
+
+
+                    <form class="input-group" th:action="@{/questionnaires/new}" th:method="GET">
+                        <button class="btn btn-secondary" type="submit">Новый опросник</button>
+                    </form>
                 </div>
-
-
-                <form class="input-group" th:action="@{/questionnaires/new}" th:method="GET">
-                    <button class="btn btn-secondary" type="submit">Новый опросник</button>
-                </form>
 
             </div>
         </main>
@@ -191,12 +194,10 @@
 </div>
 
 <div w3-include-html=""></div>
+
 <script crossorigin="anonymous"
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="/js/scripts.js"></script>
 <script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
 <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>
 </body>
-
-
 </html>
