@@ -1,5 +1,6 @@
 package nsu.fit.qyoga.core.clients.internal
 
+import nsu.fit.platform.lang.dataClassToMap
 import nsu.fit.platform.spring.queryForPage
 import nsu.fit.qyoga.core.clients.api.Dto.ClientListDto
 import nsu.fit.qyoga.core.clients.api.Dto.ClientListSearchDto
@@ -39,16 +40,7 @@ class ClientRepo(
             HAVING (:appointmentDate::varchar IS NULL OR :appointmentDate =ANY (ARRAY_AGG(DATE_TRUNC('day', appointments.datetime))))
         """.trimIndent()
 
-        val filterParams = mapOf(
-            "firstName" to search.firstName,
-            "lastName" to search.lastName,
-            "patronymic" to search.patronymic,
-            "phoneNumber" to search.phoneNumber,
-            "diagnose" to search.diagnose,
-            "appointmentDate" to search.appointmentDate,
-        )
-
-        return jdbcTemplate.queryForPage(query, filterParams, page) { rs, _ ->
+        return jdbcTemplate.queryForPage(query, dataClassToMap(search), page) { rs, _ ->
             ClientListDto(
                 rs.getLong("id"),
                 rs.getString("first_name"),
