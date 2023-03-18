@@ -1,53 +1,61 @@
 package nsu.fit.qyoga.core.clients.internal
 
-import nsu.fit.qyoga.core.clients.api.Client
-import org.springframework.data.repository.CrudRepository
-import org.springframework.data.repository.PagingAndSortingRepository
-import org.springframework.data.repository.query.QueryByExampleExecutor
+import nsu.fit.platform.spring.queryForPage
+import nsu.fit.qyoga.core.clients.api.Dto.ClientListDto
+import nsu.fit.qyoga.core.clients.api.Dto.ClientListSearchDto
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.Pageable
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
-import org.springframework.transaction.annotation.Transactional
 
 @Repository
-@Transactional(readOnly = false)
-interface ClientRepo : CrudRepository<Client, Long>, PagingAndSortingRepository<Client, Long> , QueryByExampleExecutor<Client>{
+class ClientRepo(
+    private val jdbcTemplate: NamedParameterJdbcOperations
+) {
 
-
-/*    @Query(
-        """
-        SELECT cl.id as id, _name, secondname, surname, phone_number, diagnose, ap.date_app as dateAppointment
-        FROM clients cl
-            INNER JOIN appointment ap ON cl.id = ap.client_id
-        WHERE (cl._name LIKE '%' || :#{#search?.name ?: ""} || '%' OR :#{#search.name ?: ""} IS NULL)
-            AND (cl.secondname LIKE '%' || :#{#search?.secondname ?: ""} || '%' OR :#{#search.secondname ?: ""} IS NULL)
-            AND (cl.surname LIKE '%' || :#{#search?.surname ?: ""} || '%' OR :#{#search.surname ?: ""} IS NULL)
-            AND (cl.phone_number LIKE '%' || :#{#search?.phoneNumber ?: ""} || '%' OR :#{#search.phoneNumber ?: ""} IS NULL)
-            AND (cl.diagnose LIKE '%' || :#{#search.diagnose?.name ?: ""} || '%' OR :#{#search.diagnose ?: ""} IS NULL)
-            AND (ap.date_app::varchar LIKE '%' || :#{#search?.dateAppointment ?: ""} || '%' OR :#{#search.dateAppointment ?: ""} IS NULL)
-        ORDER BY cl.surname
-        LIMIT :pageSize OFFSET :offset
-    """
-    )
     fun getClientsByFilters(
-        @Param("search") search: ClientListSearchDto,
-        offset: Int,
-        pageSize: Int
-    ): List<ClientListDto>
+        search: ClientListSearchDto,
+        page: Pageable
+    ): PageImpl<ClientListDto> {
+        val query = """
+            SELECT clients.id,
+                   clients.first_name,
+                   clients.last_name,
+                   clients.patronymic,
+                   clients.birth_date,
+                   clients.phone_number,
+                   clients.diagnose,
+                   clients.email,
+                   clients.distribution_source
+            FROM appointments
+                     INNER JOIN clients ON clients.id = appointments.client_id
+            WHERE
+                (:firstName::varchar IS NULL OR first_name ilike '%' || :firstName || '%') AND
+                (:lastName::varchar IS NULL OR last_name ilike  '%' || :lastName || '%') AND
+                (:patronymic::varchar IS NULL OR patronymic ilike  '%' || :patronymic || '%') AND
+                (:phoneNumber::varchar IS NULL OR phone_number ilike '%' || :phoneNumber || '%') AND
+                (:diagnose::varchar IS NULL OR diagnose ilike    '%' || :diagnose || '%') 
+            GROUP BY clients.id
+            HAVING (:appointmentDate::varchar IS NULL OR :appointmentDate =ANY (ARRAY_AGG(DATE_TRUNC('day', appointments.datetime))))
+        """.trimIndent()
 
-    @Query(
-        """
-        SELECT count(*) 
-        FROM clients cl
-            INNER JOIN appointment ap ON cl.id = ap.client_id
-        WHERE (cl._name LIKE '%' || :#{#search?.name ?: ""} || '%' OR :#{#search.name ?: ""} IS NULL)
-            AND (cl.secondname LIKE '%' || :#{#search?.secondname ?: ""} || '%' OR :#{#search.secondname ?: ""} IS NULL)
-            AND (cl.surname LIKE '%' || :#{#search?.surname ?: ""} || '%' OR :#{#search.surname ?: ""} IS NULL)
-            AND (cl.phone_number LIKE '%' || :#{#search?.phoneNumber ?: ""} || '%' OR :#{#search.phoneNumber ?: ""} IS NULL)
-            AND (cl.diagnose LIKE '%' || :#{#search?.diagnose?.name ?: ""} || '%' OR :#{#search.diagnose ?: ""} IS NULL)
-            AND (ap.date_app::varchar LIKE '%' || :#{#search?.dateAppointment ?: ""} || '%' OR :#{#search.dateAppointment ?: ""} IS NULL)
-    """
-    )
-    fun countClients(
-        @Param("search") search: ClientListSearchDto,
-    ): Long
-*/
+        val filterParams = mapOf(
+            "firstName" to search.firstName,
+            "lastName" to search.lastName,
+            "patronymic" to search.patronymic,
+            "phoneNumber" to search.phoneNumber,
+            "diagnose" to search.diagnose,
+            "appointmentDate" to search.appointmentDate,
+        )
+
+        return jdbcTemplate.queryForPage(query, filterParams, page) { rs, _ ->
+            ClientListDto(
+                rs.getLong("id"),
+                rs.getString("first_name"),
+                rs.getString("last_name"),
+                rs.getString("patronymic")
+            )
+        }
+    }
+
 }
