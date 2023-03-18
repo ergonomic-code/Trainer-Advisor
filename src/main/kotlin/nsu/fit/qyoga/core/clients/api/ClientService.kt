@@ -8,6 +8,6 @@ import org.springframework.data.domain.Pageable
 interface ClientService {
     fun getClients(
         searchDto: ClientListSearchDto,
-        pageable: Pageable
+        page: Pageable
     ): Page<ClientListDto>
 }
