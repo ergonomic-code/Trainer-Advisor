@@ -6,6 +6,7 @@ import nsu.fit.qyoga.core.clients.api.Dto.ClientListDto
 import nsu.fit.qyoga.core.clients.api.Dto.ClientListSearchDto
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
+import org.springframework.jdbc.core.DataClassRowMapper
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
 
@@ -40,14 +41,7 @@ class ClientRepo(
             HAVING (:appointmentDate::varchar IS NULL OR :appointmentDate =ANY (ARRAY_AGG(DATE_TRUNC('day', appointments.datetime))))
         """.trimIndent()
 
-        return jdbcTemplate.queryForPage(query, dataClassToMap(search), page) { rs, _ ->
-            ClientListDto(
-                rs.getLong("id"),
-                rs.getString("first_name"),
-                rs.getString("last_name"),
-                rs.getString("patronymic")
-            )
-        }
+        return jdbcTemplate.queryForPage(query, dataClassToMap(search), page, DataClassRowMapper(ClientListDto::class.java))
     }
 
 }

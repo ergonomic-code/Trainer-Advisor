@@ -67,7 +67,7 @@ class ClientsServiceTests(
         // Then
         clients.content.size shouldBe 1
         clients.totalElements shouldBe 1
-        clients.content.forAll { it.secondName shouldContain ("Иванов") }
+        clients.content.forAll { it.lastName shouldContain ("Иванов") }
     }
 
     @Test
