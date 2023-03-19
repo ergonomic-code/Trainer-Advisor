@@ -5,9 +5,12 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldContain
 import nsu.fit.qyoga.cases.core.questionnaires.QuestionnairesTestConfig
-import nsu.fit.qyoga.core.questionnaires.api.dtos.*
-import nsu.fit.qyoga.core.questionnaires.api.dtos.enums.QuestionType
+import nsu.fit.qyoga.core.questionnaires.api.dtos.AnswerDto
+import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireWithQuestionDto
+import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionWithAnswersDto
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
+import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireSearchDto
+import nsu.fit.qyoga.core.questionnaires.api.enums.QuestionType
 import nsu.fit.qyoga.infra.QYogaModuleBaseTest
 import nsu.fit.qyoga.infra.TestContainerDbContextInitializer
 import org.junit.jupiter.api.BeforeEach
@@ -27,7 +30,7 @@ import org.springframework.test.context.ContextConfiguration
     webEnvironment = SpringBootTest.WebEnvironment.NONE
 )
 @ActiveProfiles("test")
-class QuestionnairesServiceTest(
+class QuestionnairesServiceTests(
     @Autowired private val questionnaireService: QuestionnaireService
 ) : QYogaModuleBaseTest() {
 
@@ -42,11 +45,11 @@ class QuestionnairesServiceTest(
     @Test
     fun `QYoga can retrieve questionnaires with different type of sort`() {
         val questionnairesASK = questionnaireService.findQuestionnaires(
-            QuestionnaireSearchDto(title = null),
+            QuestionnaireSearchDto(),
             PageRequest.of(0, 10, Sort.by("title").ascending())
         )
         val questionnairesDESK = questionnaireService.findQuestionnaires(
-            QuestionnaireSearchDto(title = null),
+            QuestionnaireSearchDto(),
             PageRequest.of(0, 10, Sort.by("title").descending())
         )
         questionnairesASK.content.size shouldBe 10
@@ -58,7 +61,7 @@ class QuestionnairesServiceTest(
     @Test
     fun `QYoga can retrieve questionnaires without title`() {
         val questionnaires = questionnaireService.findQuestionnaires(
-            QuestionnaireSearchDto(title = null),
+            QuestionnaireSearchDto(),
             PageRequest.of(0, 10, Sort.by("title").ascending())
         )
         questionnaires.content.size shouldBe 10
@@ -68,12 +71,12 @@ class QuestionnairesServiceTest(
     @Test
     fun `QYoga can retrieve questionnaires page by page`() {
         val questionnairesPage1 = questionnaireService.findQuestionnaires(
-            QuestionnaireSearchDto(title = null),
+            QuestionnaireSearchDto(),
             PageRequest.of(0, 10)
         )
         questionnairesPage1.content.size shouldBe 10
         val questionnairesPage2 = questionnaireService.findQuestionnaires(
-            QuestionnaireSearchDto(title = null),
+            QuestionnaireSearchDto(),
             PageRequest.of(1, 10)
         )
         questionnairesPage2.content.size shouldBeLessThan 10
@@ -106,80 +109,66 @@ class QuestionnairesServiceTest(
 
     @Test
     fun `QYoga can save empty questionnaire`() {
-        val createQuestionnaireDto = CreateQuestionnaireDto(
-            id = 0,
+        val questionnaireWithQuestionDto = QuestionnaireWithQuestionDto(
             title = "create questionnaire test",
-            questions = mutableListOf()
+            questions = emptyList()
         )
-        val savedQuestionnaire = questionnaireService.updateQuestionnaire(createQuestionnaireDto)
+        val savedQuestionnaire = questionnaireService.createQuestionnaire(questionnaireWithQuestionDto)
         val inDBQuestionnaire = questionnaireService.findQuestionnaireWithQuestions(savedQuestionnaire.id)
-        inDBQuestionnaire shouldNotBe null
-        savedQuestionnaire.title shouldBe createQuestionnaireDto.title
-        createQuestionnaireDto.title shouldBe inDBQuestionnaire.title
+        savedQuestionnaire.title shouldBe questionnaireWithQuestionDto.title
+        questionnaireWithQuestionDto.title shouldBe inDBQuestionnaire.title
         inDBQuestionnaire.questions.size shouldBe 0
     }
 
     @Test
     fun `QYoga can save questionnaire with questions without image and answers`() {
-        val question1 = CreateQuestionDto()
-        question1.title = ""
-        question1.questionType = QuestionType.TEXT
-        val question2 = CreateQuestionDto()
-        question2.title = ""
-        question2.questionType = QuestionType.SEVERAL
-        val question3 = CreateQuestionDto()
-        question3.title = ""
-        question3.questionType = QuestionType.TEXT
-        val questionnaireWithCreateQuestionDto = CreateQuestionnaireDto(
-            id = 0,
+        val questionnaireWithQuestionWithAnswersDto = QuestionnaireWithQuestionDto(
             title = "create questionnaire test",
-            questions = mutableListOf(
-                question1,
-                question2,
-                question3
+            questions = listOf(
+                QuestionWithAnswersDto(text = null, questionType = QuestionType.TEXT, photo = null, answers = emptyList()),
+                QuestionWithAnswersDto(text = null, questionType = QuestionType.SEVERAL, photo = null, answers = emptyList()),
+                QuestionWithAnswersDto(text = "qTest", questionType = QuestionType.TEXT, photo = null, answers = emptyList())
             )
         )
-        val savedQuestionnaire = questionnaireService.updateQuestionnaire(questionnaireWithCreateQuestionDto)
+        val savedQuestionnaire = questionnaireService.createQuestionnaire(questionnaireWithQuestionWithAnswersDto)
         val inDBQuestionnaire = questionnaireService.findQuestionnaireWithQuestions(savedQuestionnaire.id)
-        inDBQuestionnaire shouldNotBe null
         savedQuestionnaire.title shouldBe inDBQuestionnaire.title
         inDBQuestionnaire.questions.size shouldBe 3
-        for (question in inDBQuestionnaire.questions) {
+        for (question in inDBQuestionnaire.questions){
             question.answers.size shouldBe 0
         }
     }
 
     @Test
     fun `QYoga can save questionnaire with questions and answers without image`() {
-        val questionnaireWithCreateQuestionDto = CreateQuestionnaireDto(
-            id = 0,
-            title = "create questionnaire test"
+        val questionnaireWithQuestionWithAnswersDto = QuestionnaireWithQuestionDto(
+            title = "create questionnaire test",
+            questions = listOf(
+                QuestionWithAnswersDto(
+                    text = null,
+                    questionType = QuestionType.TEXT,
+                    photo = null,
+                    answers = listOf(
+                        AnswerDto(
+                            title = "test save",
+                            lowerBound = null,
+                            lowerBoundText = null,
+                            upperBound = null,
+                            upperBoundText = null,
+                            score = null,
+                            photo = null
+                        )
+                    )
+                )
+            )
         )
-        val savedQuestionnaire = questionnaireService.updateQuestionnaire(questionnaireWithCreateQuestionDto)
-        questionService.createQuestion(savedQuestionnaire.id)
+        val savedQuestionnaire = questionnaireService.createQuestionnaire(questionnaireWithQuestionWithAnswersDto)
         val inDBQuestionnaire = questionnaireService.findQuestionnaireWithQuestions(savedQuestionnaire.id)
         savedQuestionnaire.title shouldBe inDBQuestionnaire.title
-        inDBQuestionnaire.questions.size shouldBe 1
-        inDBQuestionnaire.questions[0].answers.size shouldBe 1
+        inDBQuestionnaire.questions.size shouldBe 3
+        for (question in inDBQuestionnaire.questions){
+            question.answers.size shouldBe 0
+        }
     }
 
-    @Test
-    fun `QYoga can create empty questionnaire by default`() {
-        val questionnaireId = questionnaireService.createQuestionnaire()
-        val questionnaire = questionnaireService.findQuestionnaireWithQuestions(questionnaireId)
-        questionnaire.id shouldBe questionnaireId
-        questionnaire.title shouldBe ""
-        questionnaire.questions.size shouldBe 0
-    }
-
-    @Test
-    fun `QYoga can QuestionnaireDto`() {
-        val savedQuestionnaire = questionnaireService.updateQuestionnaire(
-            QuestionnaireDto(id = 0, title = "test")
-        )
-        val inDbQuestionnaire = questionnaireService.findQuestionnaireWithQuestions(savedQuestionnaire.id)
-        savedQuestionnaire.id shouldBe inDbQuestionnaire.id
-        savedQuestionnaire.title shouldBe inDbQuestionnaire.title
-        inDbQuestionnaire.questions.size shouldBe 0
-    }
 }

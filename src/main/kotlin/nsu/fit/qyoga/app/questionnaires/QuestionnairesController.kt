@@ -1,7 +1,8 @@
 package nsu.fit.qyoga.app.questionnaires
 
-import nsu.fit.qyoga.core.questionnaires.api.dtos.*
-import nsu.fit.qyoga.core.questionnaires.api.services.*
+import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireDto
+import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireSearchDto
+import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
@@ -15,13 +16,10 @@ class QuestionnairesController(
     private val questionnaireService: QuestionnaireService
 ) {
 
-    /**
-     * Получение списка опросников
-     */
     @GetMapping()
     fun getQuestionnairesList(
         @ModelAttribute("questionnaireSearchDto") questionnaireSearchDto: QuestionnaireSearchDto,
-        @PageableDefault(value = 7, page = 0, sort = ["title"]) pageable: Pageable,
+        @PageableDefault(value = 10, page = 0, sort = ["title"]) pageable: Pageable,
         model: Model
     ): String {
         val questionnaires = questionnaireService.findQuestionnaires(
@@ -35,10 +33,10 @@ class QuestionnairesController(
     /**
      * Фильтрация опросников
      */
-    @GetMapping("/action")
+    @GetMapping("action")
     fun sortQuestionnaires(
         @ModelAttribute("questionnaireSearchDto") questionnaireSearchDto: QuestionnaireSearchDto,
-        @PageableDefault(value = 7, page = 0, sort = ["title"]) pageable: Pageable,
+        @PageableDefault(value = 10, page = 0, sort = ["title"]) pageable: Pageable,
         model: Model
     ): String {
         val questionnaires = questionnaireService.findQuestionnaires(
@@ -61,4 +59,5 @@ class QuestionnairesController(
             questionnaires.sort.getOrderFor("title").toString().substringAfter(' ')
         )
     }
+
 }
