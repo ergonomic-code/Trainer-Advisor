@@ -4,7 +4,7 @@ import nsu.fit.qyoga.core.exercises.api.ExercisesService
 import nsu.fit.qyoga.core.exercises.api.dtos.CreateExerciseDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseSearchDto
-import nsu.fit.qyoga.core.exercises.api.model.ExerciseType
+import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseStepDto
 import nsu.fit.qyoga.core.users.internal.UserPrincipal
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -64,7 +64,8 @@ class ExercisesController(
         @ModelAttribute("createDto") createDto: CreateExerciseDto,
         model: Model
     ): String {
-        model.addAttribute("createDto", CreateExerciseDto("", "", "", "", "", ExerciseType.WarmUp, "", listOf()))
+        model.addAttribute("createDto", CreateExerciseDto(exerciseSteps = listOf(ExerciseStepDto("nklnj", null))))
+        model.addAttribute("types", exercisesService.getExerciseTypes())
         return "exercise-create"
     }
 

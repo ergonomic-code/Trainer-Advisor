@@ -39,16 +39,16 @@ class ExercisesServiceImpl(
         val savedExercise =
             exercisesRepo.save(
                 Exercise(
-                    title = createExerciseDto.title,
-                    description = createExerciseDto.description,
-                    indications = createExerciseDto.indications,
-                    contradictions = createExerciseDto.contradiction,
+                    title = createExerciseDto.title!!,
+                    description = createExerciseDto.description!!,
+                    indications = createExerciseDto.indications!!,
+                    contradictions = createExerciseDto.contradiction!!,
                     duration = Duration.parse(createExerciseDto.duration),
-                    exerciseTypeId = createExerciseDto.exerciseType.id,
+                    exerciseTypeId = createExerciseDto.exerciseType!!.id,
                     therapistId = id
                 )
             )
-        createExerciseDto.exerciseSteps.map {
+        createExerciseDto.exerciseSteps!!.map {
             val imageId = imagesService.uploadImage(
                 ImageDto(
                     it.photo?.name,

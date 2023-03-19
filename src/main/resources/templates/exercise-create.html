@@ -37,83 +37,13 @@
             src="https://unpkg.com/htmx.org@1.8.6"></script>
 </head>
 <body class="sb-nav-fixed">
-<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-    <!-- Navbar Brand-->
-    <a class="navbar-brand ps-3" href="exercise-create.html">QYoga</a>
-    <!-- Sidebar Toggle-->
-    <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" href="#!" id="sidebarToggle"><i
-            class="fas fa-bars"></i></button>
-    <!-- Navbar-->
-    <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
-        <li class="nav-item dropdown">
-            <a aria-expanded="false" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#"
-               id="navbarDropdown"
-               role="button"><i class="fas fa-user fa-fw"></i></a>
-            <ul aria-labelledby="navbarDropdown" class="dropdown-menu dropdown-menu-end">
-                <li><a class="dropdown-item" href="#">Настройки</a></li>
-                <li><a class="dropdown-item" href="#">Выйти</a></li>
-            </ul>
-        </li>
-    </ul>
 
-</nav>
+<div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
+
 <div id="layoutSidenav">
-    <div id="layoutSidenav_nav">
-        <nav class="sb-sidenav accordion sb-sidenav-light " id="sidenavAccordion">
-            <div class="sb-sidenav-menu">
-                <div class="nav">
-                    <div class="sb-sidenav-menu-heading">Основные разделы</div>
-                    <a class="nav-link" href="exercise-create.html">
-                        <div class="sb-nav-link-icon"><i class="fas fa-home"></i></div>
-                        Главная
-                    </a>
-                    <a aria-controls="collapseLayouts" aria-expanded="false" class="nav-link collapsed"
-                       data-bs-target="#collapseLayouts"
-                       data-bs-toggle="collapse" href="#">
-                        <div class="sb-nav-link-icon"><i class="fa fa-users"></i></div>
-                        Клиенты
-                        <div class="sb-sidenav-collapse-arrow"></div>
-                    </a>
 
-                    <a aria-controls="collapsePages" aria-expanded="false" class="nav-link collapsed"
-                       data-bs-target="#collapsePages"
-                       data-bs-toggle="collapse" href="#">
-                        <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                        Программы
-                        <div class="sb-sidenav-collapse-arrow"></div>
-                    </a>
-                    <a class="nav-link" href="#">
-                        <div class="sb-nav-link-icon"><i class="fas fa-pray"></i></div>
-                        Упражнения
-                    </a>
-                    <a class="nav-link" href="#">
-                        <div class="sb-nav-link-icon"><i class="fas fa-calendar-alt"></i></div>
-                        Расписание
-                    </a>
-                    <a class="nav-link" href="#">
-                        <div class="sb-nav-link-icon"><i class="fas fa-hat-wizard"></i></div>
-                        Волшебник авто
-                    </a>
-                    <a class="nav-link" href="#">
-                        <div class="sb-nav-link-icon"><i class="fa fa-magic"></i></div>
-                        Ручной волшебник
-                    </a>
-                    <a class="nav-link" href="#">
-                        <div class="sb-nav-link-icon"><i class="fas fa-address-book"></i></div>
-                        Опросы
-                    </a>
-                    <a class="nav-link" href="#">
-                        <div class="sb-nav-link-icon"><i class="fas fa-hand-holding-medical"></i></div>
-                        Приемы
-                    </a>
-                </div>
-            </div>
-            <div class="sb-sidenav-footer">
-                <div class="small"></div>
-                Малахова Мария
-            </div>
-        </nav>
-    </div>
+    <div th:replace="~{fragments/leftNavPanel.html :: leftNavPanel}"></div>
+
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
@@ -181,8 +111,7 @@
                                     </div>
                                     <select class="custom-select w-75"
                                             id="inputGroupSelect01"
-                                            th:field="${createDto.exerciseType}"
-                                    >
+                                            th:field="${createDto.exerciseType}">
                                         <option selected th:value="null">Тип упражнения</option>
                                         <option th:each="type : ${types}" th:text="${type.title}"
                                                 th:value="${type.name}"></option>
