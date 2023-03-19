@@ -9,6 +9,6 @@ CREATE TABLE answers
     score INT,
     question_id BIGINT,
     image_id BIGINT,
-    FOREIGN KEY (question_id) REFERENCES questions (id) ON DELETE CASCADE,
-    FOREIGN KEY (image_id) REFERENCES images (id) ON DELETE SET NULL
+    FOREIGN KEY (question_id) REFERENCES questions (id),
+    FOREIGN KEY (image_id) REFERENCES images (id)
 )

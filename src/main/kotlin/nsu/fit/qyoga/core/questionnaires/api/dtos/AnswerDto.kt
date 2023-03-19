@@ -2,7 +2,7 @@ package nsu.fit.qyoga.core.questionnaires.api.dtos
 
 import org.springframework.web.multipart.MultipartFile
 
-data class CreateAnswerDto(
+data class AnswerDto(
     val title: String?,
     var lowerBound: Int?,
     var lowerBoundText: String?,
