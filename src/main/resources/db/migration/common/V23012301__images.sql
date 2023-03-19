@@ -1,7 +1,8 @@
-CREATE TABLE answers
+CREATE TABLE images
 (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name VARCHAR,
     media_type VARCHAR,
-    size
+    size BIGINT,
+    data bytea
 )
