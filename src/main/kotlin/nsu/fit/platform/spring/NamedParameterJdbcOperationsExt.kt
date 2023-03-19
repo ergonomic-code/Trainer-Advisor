@@ -5,7 +5,6 @@ import org.springframework.data.domain.Pageable
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 
-
 fun <T : Any> NamedParameterJdbcOperations.queryForPage(
     baseSql: String,
     filterParams: Map<String, Any?>,
@@ -13,10 +12,10 @@ fun <T : Any> NamedParameterJdbcOperations.queryForPage(
     rowMapper: RowMapper<T>
 ): PageImpl<T> {
     val dataQuery = """
-            SELECT * FROM ($baseSql) data
-            LIMIT :pageSize
-            OFFSET :offset
-        """.trimIndent()
+        SELECT * FROM ($baseSql) data
+        LIMIT :pageSize
+        OFFSET :offset
+    """.trimIndent()
 
     val data = this.query(
         dataQuery,

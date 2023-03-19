@@ -41,7 +41,15 @@ class ClientRepo(
             HAVING (:appointmentDate::varchar IS NULL OR :appointmentDate =ANY (ARRAY_AGG(DATE_TRUNC('day', appointments.datetime))))
         """.trimIndent()
 
-        return jdbcTemplate.queryForPage(query, dataClassToMap(search), page, DataClassRowMapper(ClientListDto::class.java))
+        return jdbcTemplate.queryForPage(
+            query,
+            dataClassToMap(search),
+            page,
+            DataClassRowMapper(
+                ClientListDto::class.java
+            )
+        )
+
     }
 
 }

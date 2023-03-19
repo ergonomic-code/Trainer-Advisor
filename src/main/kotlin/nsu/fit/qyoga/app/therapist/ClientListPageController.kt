@@ -27,7 +27,7 @@ class ClientListPageController(
             searchDto,
             PageRequest.of(pageNumber - 1, pageSize)
         )
-        addClientsPageAttributes(model, clients, clientService)
+        addClientsPageAttributes(model, clients)
         return "clients-list"
     }
 
@@ -42,11 +42,11 @@ class ClientListPageController(
             searchDto,
             PageRequest.of(pageNumber - 1, pageSize)
         )
-        addClientsPageAttributes(model, clients, clientService)
+        addClientsPageAttributes(model, clients)
         return "clients-list :: clients"
     }
 
-    fun addClientsPageAttributes(model: Model, clients: Page<ClientListDto>, clientService: ClientService) {
+    fun addClientsPageAttributes(model: Model, clients: Page<ClientListDto>) {
         model.addAttribute("searchDto", ClientListSearchDto())
         model.addAttribute("clients", clients)
         model.addAttribute(

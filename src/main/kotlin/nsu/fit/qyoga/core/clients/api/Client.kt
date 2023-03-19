@@ -9,7 +9,7 @@ import java.util.*
 data class Client(
     @Id
     val id: Long,
-    var name: String,
+    val name: String,
     val secondname: String,
     val surname: String,
     val birthdate: Date,

@@ -29,13 +29,13 @@ class ClientsServiceTests(
     @Autowired private val clientService: ClientService
 ) : QYogaModuleBaseTest() {
 
-        @BeforeEach
-        fun setupDb() {
-            dbInitializer.executeScripts(
-                "/db/clients-init-script.sql" to "dataSource",
-                "/db/insert-clients.sql" to "dataSource"
-            )
-        }
+    @BeforeEach
+    fun setupDb() {
+        dbInitializer.executeScripts(
+            "/db/clients-init-script.sql" to "dataSource",
+            "/db/insert-clients.sql" to "dataSource"
+        )
+    }
 
     @Test
     fun `QYoga can retrieve clients without filters`() {
@@ -85,7 +85,6 @@ class ClientsServiceTests(
         clients.content.size shouldBe 2
         clients.totalElements shouldBe 2
     }
-
 
     @Test
     fun `QYoga shouldn't retrieve clients with invalid filter`() {
