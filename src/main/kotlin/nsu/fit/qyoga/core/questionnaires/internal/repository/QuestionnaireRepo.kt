@@ -1,6 +1,6 @@
 package nsu.fit.qyoga.core.questionnaires.internal.repository
 
-import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireDto
+import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireWithQuestionDto
 import nsu.fit.qyoga.core.questionnaires.api.model.Questionnaire
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
@@ -28,7 +28,7 @@ interface QuestionnaireRepo : CrudRepository<Questionnaire, Long>, PagingAndSort
         WHERE ques.id = :id
         """
     )
-    fun getQuestionnaireWithQuestionById(id: Long): List<QuestionnaireDto>
+    fun findQuestionnaireWithQuestionsById(id: Long): QuestionnaireWithQuestionDto
 }
 fun QuestionnaireRepo.findPageByTitle(title: String, pageable: Pageable): Page<Questionnaire> {
     val entities = this.findAllByTitleContaining(title, pageable)

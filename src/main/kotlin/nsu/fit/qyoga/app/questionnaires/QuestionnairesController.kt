@@ -1,8 +1,8 @@
 package nsu.fit.qyoga.app.questionnaires
 
-import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireSearchDto
+import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
@@ -43,9 +43,6 @@ class QuestionnairesController(
             questionnaireSearchDto,
             pageable
         )
-        println(questionnaires.sort.getOrderFor("title"))
-        println(questionnaires.sort.isSorted)
-        println(questionnaires.sort.isUnsorted)
         addQuestionnairePageAttributes(model, questionnaireSearchDto, questionnaires)
         return "questionnaire/questionnaire-list :: page-content"
     }

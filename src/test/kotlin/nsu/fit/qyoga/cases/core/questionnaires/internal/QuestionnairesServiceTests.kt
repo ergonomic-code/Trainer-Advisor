@@ -5,9 +5,9 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldContain
 import nsu.fit.qyoga.cases.core.questionnaires.QuestionnairesTestConfig
-import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateAnswerDto
-import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionnaireDto
-import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionDto
+import nsu.fit.qyoga.core.questionnaires.api.dtos.AnswerDto
+import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireWithQuestionDto
+import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionWithAnswersDto
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireSearchDto
 import nsu.fit.qyoga.core.questionnaires.api.enums.QuestionType
@@ -109,29 +109,29 @@ class QuestionnairesServiceTests(
 
     @Test
     fun `QYoga can save empty questionnaire`() {
-        val createQuestionnaireDto = CreateQuestionnaireDto(
+        val questionnaireWithQuestionDto = QuestionnaireWithQuestionDto(
             title = "create questionnaire test",
             questions = emptyList()
         )
-        val savedQuestionnaire = questionnaireService.createQuestionnaire(createQuestionnaireDto)
-        val inDBQuestionnaire = questionnaireService.loadQuestionnairesWithQuestions(savedQuestionnaire.id)
-        savedQuestionnaire.title shouldBe inDBQuestionnaire.title
-        createQuestionnaireDto.title shouldBe inDBQuestionnaire.title
+        val savedQuestionnaire = questionnaireService.createQuestionnaire(questionnaireWithQuestionDto)
+        val inDBQuestionnaire = questionnaireService.findQuestionnaireWithQuestions(savedQuestionnaire.id)
+        savedQuestionnaire.title shouldBe questionnaireWithQuestionDto.title
+        questionnaireWithQuestionDto.title shouldBe inDBQuestionnaire.title
         inDBQuestionnaire.questions.size shouldBe 0
     }
 
     @Test
     fun `QYoga can save questionnaire with questions without image and answers`() {
-        val questionnaireWithCreateQuestionDto = CreateQuestionnaireDto(
+        val questionnaireWithQuestionWithAnswersDto = QuestionnaireWithQuestionDto(
             title = "create questionnaire test",
             questions = listOf(
-                CreateQuestionDto(text = null, questionType = QuestionType.TEXT, photo = null, answers = emptyList()),
-                CreateQuestionDto(text = null, questionType = QuestionType.SEVERAL, photo = null, answers = emptyList()),
-                CreateQuestionDto(text = "qTest", questionType = QuestionType.TEXT, photo = null, answers = emptyList())
+                QuestionWithAnswersDto(text = null, questionType = QuestionType.TEXT, photo = null, answers = emptyList()),
+                QuestionWithAnswersDto(text = null, questionType = QuestionType.SEVERAL, photo = null, answers = emptyList()),
+                QuestionWithAnswersDto(text = "qTest", questionType = QuestionType.TEXT, photo = null, answers = emptyList())
             )
         )
-        val savedQuestionnaire = questionnaireService.createQuestionnaire(questionnaireWithCreateQuestionDto)
-        val inDBQuestionnaire = questionnaireService.loadQuestionnairesWithQuestions(savedQuestionnaire.id)
+        val savedQuestionnaire = questionnaireService.createQuestionnaire(questionnaireWithQuestionWithAnswersDto)
+        val inDBQuestionnaire = questionnaireService.findQuestionnaireWithQuestions(savedQuestionnaire.id)
         savedQuestionnaire.title shouldBe inDBQuestionnaire.title
         inDBQuestionnaire.questions.size shouldBe 3
         for (question in inDBQuestionnaire.questions){
@@ -141,15 +141,15 @@ class QuestionnairesServiceTests(
 
     @Test
     fun `QYoga can save questionnaire with questions and answers without image`() {
-        val questionnaireWithCreateQuestionDto = CreateQuestionnaireDto(
+        val questionnaireWithQuestionWithAnswersDto = QuestionnaireWithQuestionDto(
             title = "create questionnaire test",
             questions = listOf(
-                CreateQuestionDto(
+                QuestionWithAnswersDto(
                     text = null,
                     questionType = QuestionType.TEXT,
                     photo = null,
                     answers = listOf(
-                        CreateAnswerDto(
+                        AnswerDto(
                             title = "test save",
                             lowerBound = null,
                             lowerBoundText = null,
@@ -162,8 +162,8 @@ class QuestionnairesServiceTests(
                 )
             )
         )
-        val savedQuestionnaire = questionnaireService.createQuestionnaire(questionnaireWithCreateQuestionDto)
-        val inDBQuestionnaire = questionnaireService.loadQuestionnairesWithQuestions(savedQuestionnaire.id)
+        val savedQuestionnaire = questionnaireService.createQuestionnaire(questionnaireWithQuestionWithAnswersDto)
+        val inDBQuestionnaire = questionnaireService.findQuestionnaireWithQuestions(savedQuestionnaire.id)
         savedQuestionnaire.title shouldBe inDBQuestionnaire.title
         inDBQuestionnaire.questions.size shouldBe 3
         for (question in inDBQuestionnaire.questions){
