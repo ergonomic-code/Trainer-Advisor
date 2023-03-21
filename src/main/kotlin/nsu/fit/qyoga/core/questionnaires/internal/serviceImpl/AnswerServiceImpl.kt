@@ -1,6 +1,6 @@
 package nsu.fit.qyoga.core.questionnaires.internal.serviceImpl
 
-import nsu.fit.qyoga.core.questionnaires.api.dtos.AnswerDto
+import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateAnswerDto
 import nsu.fit.qyoga.core.questionnaires.api.model.Answer
 import nsu.fit.qyoga.core.questionnaires.api.services.AnswerService
 import nsu.fit.qyoga.core.questionnaires.internal.repository.AnswerRepo
@@ -11,15 +11,15 @@ class AnswerServiceImpl(
      private val answerRepo: AnswerRepo
 ) :AnswerService {
 
-    override fun createAnswer(answerDto: AnswerDto, questionId: Long, answerImageId: Long?) {
+    override fun createAnswer(createAnswerDto: CreateAnswerDto, questionId: Long, answerImageId: Long?) {
         answerRepo.save(
             Answer(
-                title = answerDto.title,
-                lowerBound = answerDto.lowerBound,
-                lowerBoundText = answerDto.lowerBoundText,
-                upperBound = answerDto.upperBound,
-                upperBoundText = answerDto.upperBoundText,
-                score = answerDto.score,
+                title = createAnswerDto.title,
+                lowerBound = createAnswerDto.lowerBound,
+                lowerBoundText = createAnswerDto.lowerBoundText,
+                upperBound = createAnswerDto.upperBound,
+                upperBoundText = createAnswerDto.upperBoundText,
+                score = createAnswerDto.score,
                 imageId = answerImageId,
                 questionId = questionId
             )

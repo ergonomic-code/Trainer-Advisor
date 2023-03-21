@@ -18,6 +18,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 
@@ -45,11 +46,11 @@ class QuestionnairesServiceTests(
     fun `QYoga can retrieve questionnaires with different type of sort`() {
         val questionnairesASK = questionnaireService.findQuestionnaires(
             QuestionnaireSearchDto(),
-            PageRequest.of(0, 10)
+            PageRequest.of(0, 10, Sort.by("title").ascending())
         )
         val questionnairesDESK = questionnaireService.findQuestionnaires(
-            QuestionnaireSearchDto(orderType = "DESK"),
-            PageRequest.of(0, 10)
+            QuestionnaireSearchDto(),
+            PageRequest.of(0, 10, Sort.by("title").descending())
         )
         questionnairesASK.content.size shouldBe 10
         questionnairesASK.content.map { it.id.toInt() } shouldBe listOf(2, 16, 17, 18, 6, 4, 8, 9, 12, 13)
@@ -58,22 +59,10 @@ class QuestionnairesServiceTests(
     }
 
     @Test
-    fun `QYoga can retrieve count of questionnaires without title`() {
-        val questionnairesCount = questionnaireService.getQuestionnairesCount(null)
-        questionnairesCount shouldBe 18
-    }
-
-    @Test
-    fun `QYoga can retrieve count of questionnaires with title`() {
-        val questionnairesCount = questionnaireService.getQuestionnairesCount("test")
-        questionnairesCount shouldBe 12
-    }
-
-    @Test
     fun `QYoga can retrieve questionnaires without title`() {
         val questionnaires = questionnaireService.findQuestionnaires(
             QuestionnaireSearchDto(),
-            PageRequest.of(0, 10)
+            PageRequest.of(0, 10, Sort.by("title").ascending())
         )
         questionnaires.content.size shouldBe 10
         questionnaires.content.map { it.id.toInt() } shouldBe listOf(2, 16, 17, 18, 6, 4, 8, 9, 12, 13)
@@ -125,10 +114,11 @@ class QuestionnairesServiceTests(
             questions = emptyList()
         )
         val savedQuestionnaire = questionnaireService.createQuestionnaire(createQuestionnaireDto)
-        val inDBQuestionnaire = questionnaireService.loadQuestionnairesWithQuestions(savedQuestionnaire.id)
-        savedQuestionnaire.title shouldBe inDBQuestionnaire.title
-        createQuestionnaireDto.title shouldBe inDBQuestionnaire.title
-        inDBQuestionnaire.questions.size shouldBe 0
+        val inDBQuestionnaire = questionnaireService.findQuestionnaireWithQuestions(savedQuestionnaire.id)
+        inDBQuestionnaire shouldNotBe null
+        savedQuestionnaire.title shouldBe createQuestionnaireDto.title
+        createQuestionnaireDto.title shouldBe inDBQuestionnaire?.title
+        inDBQuestionnaire?.questions?.size shouldBe 0
     }
 
     @Test
@@ -136,16 +126,17 @@ class QuestionnairesServiceTests(
         val questionnaireWithCreateQuestionDto = CreateQuestionnaireDto(
             title = "create questionnaire test",
             questions = listOf(
-                CreateQuestionDto(text = null, questionType = QuestionType.TEXT, photo = null, answers = emptyList()),
-                CreateQuestionDto(text = null, questionType = QuestionType.SEVERAL, photo = null, answers = emptyList()),
-                CreateQuestionDto(text = "qTest", questionType = QuestionType.TEXT, photo = null, answers = emptyList())
+                CreateQuestionDto(text = null, questionType = QuestionType.TEXT, photoId = null, answers = emptyList()),
+                CreateQuestionDto(text = null, questionType = QuestionType.SEVERAL, photoId = null, answers = emptyList()),
+                CreateQuestionDto(text = "qTest", questionType = QuestionType.TEXT, photoId = null, answers = emptyList())
             )
         )
         val savedQuestionnaire = questionnaireService.createQuestionnaire(questionnaireWithCreateQuestionDto)
-        val inDBQuestionnaire = questionnaireService.loadQuestionnairesWithQuestions(savedQuestionnaire.id)
-        savedQuestionnaire.title shouldBe inDBQuestionnaire.title
-        inDBQuestionnaire.questions.size shouldBe 3
-        for (question in inDBQuestionnaire.questions){
+        val inDBQuestionnaire = questionnaireService.findQuestionnaireWithQuestions(savedQuestionnaire.id)
+        inDBQuestionnaire shouldNotBe null
+        savedQuestionnaire.title shouldBe inDBQuestionnaire?.title
+        inDBQuestionnaire?.questions?.size shouldBe 3
+        for (question in inDBQuestionnaire?.questions!!){
             question.answers.size shouldBe 0
         }
     }
@@ -158,7 +149,7 @@ class QuestionnairesServiceTests(
                 CreateQuestionDto(
                     text = null,
                     questionType = QuestionType.TEXT,
-                    photo = null,
+                    photoId = null,
                     answers = listOf(
                         CreateAnswerDto(
                             title = "test save",
@@ -167,17 +158,17 @@ class QuestionnairesServiceTests(
                             upperBound = null,
                             upperBoundText = null,
                             score = null,
-                            photo = null
+                            photoId = null
                         )
                     )
                 )
             )
         )
         val savedQuestionnaire = questionnaireService.createQuestionnaire(questionnaireWithCreateQuestionDto)
-        val inDBQuestionnaire = questionnaireService.loadQuestionnairesWithQuestions(savedQuestionnaire.id)
-        savedQuestionnaire.title shouldBe inDBQuestionnaire.title
-        inDBQuestionnaire.questions.size shouldBe 3
-        for (question in inDBQuestionnaire.questions){
+        val inDBQuestionnaire = questionnaireService.findQuestionnaireWithQuestions(savedQuestionnaire.id)
+        savedQuestionnaire.title shouldBe inDBQuestionnaire?.title
+        inDBQuestionnaire?.questions?.size shouldBe 3
+        for (question in inDBQuestionnaire?.questions!!){
             question.answers.size shouldBe 0
         }
     }
