@@ -3,6 +3,9 @@ VALUES ('Иван', 'Иванович', 'Иванов', '1970.01.01', '+79231233
        ('Пётр', 'Петрович', 'Петров', '1978.01.01', '+79231233446', 'Корь', 'petrov@ya.ru', null),
        ('Сергей', 'Иванович', 'Сергеев', '1990.01.01', '+79231233447', 'Краснуха', 'sergeev@ya.ru', null);
 
+INSERT INTO programs(title, date)
+VALUES ('Программа Людмила Пименова', '2022-05-16 00:00');
+
 insert into appointments (datetime, complaints, photo, client_id, program_id, therapist_id, payed)
 VALUES ('2023-03-18 04:05:00', 'Болит пальчик', null, (select id from clients where email = 'ivanoff@ya.ru'),
         (select id from programs limit 1), (select id from therapists limit 1), false),
