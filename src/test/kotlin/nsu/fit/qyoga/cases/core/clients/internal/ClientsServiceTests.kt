@@ -33,7 +33,7 @@ class ClientsServiceTests(
     fun setupDb() {
         dbInitializer.executeScripts(
             "/db/clients-init-script.sql" to "dataSource",
-            "/db/insert-clients.sql" to "dataSource"
+            "/db/insert-clients.sql" to "dataSource",
         )
     }
 

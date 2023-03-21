@@ -32,7 +32,7 @@ class ClientListPageController(
     }
 
     @GetMapping("/search-cl")
-    fun getExercisesFiltered(
+    fun getClientsFiltered(
         @ModelAttribute("searchDto") searchDto: ClientListSearchDto,
         @RequestParam(value = "pageSize", required = false, defaultValue = "10") pageSize: Int,
         @RequestParam(value = "pageNumber", required = false, defaultValue = "1") pageNumber: Int,
