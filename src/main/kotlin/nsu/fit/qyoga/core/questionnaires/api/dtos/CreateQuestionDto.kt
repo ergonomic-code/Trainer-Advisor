@@ -2,9 +2,9 @@ package nsu.fit.qyoga.core.questionnaires.api.dtos
 
 import nsu.fit.qyoga.core.questionnaires.api.enums.QuestionType
 
-data class QuestionWithAnswersDto(
-    val title: String?,
+data class CreateQuestionDto(
+    val text: String?,
     val questionType: QuestionType,
-    val imageDto: ImageDto?,
-    val answers: MutableList<AnswerDto> = mutableListOf()
+    val photoId: Long?,
+    val answers: List<CreateAnswerDto>
 )

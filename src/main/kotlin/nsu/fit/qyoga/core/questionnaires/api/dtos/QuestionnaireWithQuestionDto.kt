@@ -1,6 +1,6 @@
 package nsu.fit.qyoga.core.questionnaires.api.dtos
 
 data class QuestionnaireWithQuestionDto(
-    val title: String,
-    val questions: List<QuestionWithAnswersDto>
+    var title: String? = null,
+    val questions: MutableList<QuestionWithAnswersDto> = mutableListOf()
 )
