@@ -56,8 +56,8 @@ class QuestionnaireJdbcTemplateRepo(
         val questionMap: MutableMap<Long, QuestionWithAnswersDto?> = mutableMapOf()
         jdbcTemplate.query(
             query,
-            MapSqlParameterSource("id", id),
-        ){ rs: ResultSet, _: Int ->
+            MapSqlParameterSource("id", id)
+        ) { rs: ResultSet, _: Int ->
             if (value.title  == null) {
                 value.title = rs.getString("questionnaireTitle")
             }

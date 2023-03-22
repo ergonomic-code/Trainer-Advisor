@@ -51,12 +51,14 @@ class QuestionnairesController(
 
     @GetMapping("new")
     fun getCreateQuestionnairePage(model: Model): String {
+        model.addAttribute("questionnaire", CreateQuestionnaireDto())
         return "questionnaire/createQuestionnaire"
     }
 
-    @PostMapping("new")
+    @PostMapping("new/{questionnaireId}")
     fun createQuestionnaire(
-        @ModelAttribute("createQuestionnaire") createQuestionnaireDto: CreateQuestionnaireDto
+        @ModelAttribute("createQuestionnaire") createQuestionnaireDto: CreateQuestionnaireDto,
+        @PathVariable questionnaireId: Long
     ): String {
         return "redirect:/questionnaires/"
     }
