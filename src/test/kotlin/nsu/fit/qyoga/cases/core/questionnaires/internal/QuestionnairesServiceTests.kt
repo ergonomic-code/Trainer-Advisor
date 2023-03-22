@@ -167,10 +167,8 @@ class QuestionnairesServiceTests(
         val savedQuestionnaire = questionnaireService.createQuestionnaire(questionnaireWithCreateQuestionDto)
         val inDBQuestionnaire = questionnaireService.findQuestionnaireWithQuestions(savedQuestionnaire.id)
         savedQuestionnaire.title shouldBe inDBQuestionnaire?.title
-        inDBQuestionnaire?.questions?.size shouldBe 3
-        for (question in inDBQuestionnaire?.questions!!){
-            question.answers.size shouldBe 0
-        }
+        inDBQuestionnaire?.questions?.size shouldBe 1
+        inDBQuestionnaire?.questions!![0].answers.size shouldBe 1
     }
 
 }
