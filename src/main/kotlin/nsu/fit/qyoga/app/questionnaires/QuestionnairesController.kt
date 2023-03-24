@@ -1,8 +1,7 @@
 package nsu.fit.qyoga.app.questionnaires
 
-import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionnaireDto
-import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireDto
-import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireSearchDto
+import nsu.fit.qyoga.core.questionnaires.api.dtos.*
+import nsu.fit.qyoga.core.questionnaires.api.services.QuestionService
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -15,7 +14,8 @@ import org.springframework.web.multipart.MultipartFile
 @Controller
 @RequestMapping("/therapist/questionnaires")
 class QuestionnairesController(
-    private val questionnaireService: QuestionnaireService
+    private val questionnaireService: QuestionnaireService,
+    private val questionService: QuestionService
 ) {
 
     @GetMapping()
@@ -49,19 +49,40 @@ class QuestionnairesController(
         return "questionnaire/questionnaire-list :: page-content"
     }
 
+    /**
+     * Создание нового опросника
+     */
     @GetMapping("new")
     fun getCreateQuestionnairePage(model: Model): String {
-        return "questionnaire/createQuestionnaire"
+        val questionnaire = questionnaireService.createQuestionnaire()
+        val question = CreateQuestionDto()
+        question.answers.add(CreateAnswerDto())
+        questionnaire.questions.add(question)
+        model.addAttribute("questionnaire", questionnaire)
+        return "questionnaire/create-questionnaire"
     }
 
-    @PostMapping("new")
+    /**
+     * Добавление нового вопроса
+     */
+    @GetMapping("new/{id}/add-question")
+    fun addNewQuestionToQuestionnaire(
+        @PathVariable id: Long,
+        model: Model
+    ): String {
+        model.addAttribute("question", questionService.createQuestion(id))
+        return ""
+    }
+
+    @PostMapping("new/{id}")
     fun createQuestionnaire(
-        @ModelAttribute("createQuestionnaire") createQuestionnaireDto: CreateQuestionnaireDto
+        @ModelAttribute("createQuestionnaire") createQuestionnaireDto: CreateQuestionnaireDto,
+        @PathVariable id: Long
     ): String {
         return "redirect:/questionnaires/"
     }
 
-    @PostMapping("new/question/{id}/addImage")
+    @PostMapping("new/question/{id}/image")
     fun addImageToQuestion(
         @RequestParam("file") file: MultipartFile,
         @PathVariable id: String
@@ -69,9 +90,23 @@ class QuestionnairesController(
         return ""
     }
 
-    @PostMapping("new/answer/{id}/addImage")
+    @DeleteMapping("new/question/{id}/image")
+    fun deleteImageFromQuestion(
+        @PathVariable id: String
+    ): String {
+        return ""
+    }
+
+    @PostMapping("new/answer/{id}/image")
     fun addImageToAnswer(
         @RequestParam("file") file: MultipartFile,
+        @PathVariable id: String
+    ): String {
+        return ""
+    }
+
+    @DeleteMapping("new/answer/{id}/image")
+    fun deleteImageFromAnswer(
         @PathVariable id: String
     ): String {
         return ""
@@ -83,14 +118,6 @@ class QuestionnairesController(
         @PathVariable questionId: String
     ): String {
         println(type)
-        return ""
-    }
-
-    @GetMapping("new/{questionnaireId}/addQuestion")
-    fun addNewQuestionToQuestionnaire(
-        @PathVariable questionnaireId: String
-    ): String {
-        println("New Question!")
         return ""
     }
 

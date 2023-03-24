@@ -10,15 +10,17 @@
     <title>Список упражнений</title>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet"/>
     <link href="/styles/styles.css" rel="stylesheet"/>
-    <link href="/styles/upload-file-style.css" rel="stylesheet">
-    <link href="/styles/input-number-style.css" rel="stylesheet">
     <script crossorigin="anonymous" src="https://use.fontawesome.com/releases/v6.1.0/js/all.js"></script>
     <script>
-        window.addEventListener('DOMContentLoaded', _ => {
+        window.addEventListener('DOMContentLoaded', event => {
 
             // Toggle the side navigation
             const sidebarToggle = document.body.querySelector('#sidebarToggle');
             if (sidebarToggle) {
+                // Uncomment Below to persist sidebar toggle between refreshes
+                // if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
+                //     document.body.classList.toggle('sb-sidenav-toggled');
+                // }
                 sidebarToggle.addEventListener('click', event => {
                     event.preventDefault();
                     document.body.classList.toggle('sb-sidenav-toggled');
@@ -33,60 +35,256 @@
             src="https://unpkg.com/htmx.org@1.8.6"></script>
 </head>
 
-<body class="sb-nav-fixed sb-sidenav-toggled">
+<body class="sb-nav-fixed">
 
 <div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
 
 <div id="layoutSidenav">
 
-    <div th:replace="~{fragments/leftNavPanel.html :: leftNavPanel}"></div>
+    <div th:replace="~{/fragments/leftNavPanel.html :: leftNavPanel}"></div>
 
     <div id="layoutSidenav_content">
 
-
-        <form id="questionnaire" style="padding-left: 15%; padding-right: 15%; margin-bottom: 100px"
+        <form id="questionnaire" style="padding-left: 15%; padding-right: 15%"
               th:method="POST"
-              th:action="@{/questionnaires/edit(id = ${session.questionnaire.id})}"
-              th:object="${session.questionnaire}">
+              th:action="@{/questionnaires/new/{id}(id = ${questionnaire.id})}"
+              th:object="${questionnaire}">
 
             <div id="questionnaire-title" class="bg-dark form-control-lg mt-4"
-            style="text-align: center; padding-bottom: 20px; border-radius: 10px">
+            style="text-align: center; height: 105px; min-width: 400px; border-radius: 10px">
                 <span style="font-size: 28px; color: white; margin-top: 10px">Название опросника</span>
                 <br>
-                <input hidden th:name="id" th:value="${session.questionnaire.id}">
                 <label style="width: 100%">
-                    <input type="text" style="width: 70%; margin-top: 15px; border-radius: 5px; min-width: 100px"
-                           th:value="${session.questionnaire.title}"
-                           required th:name="title"
-                           hx-trigger="keyup changed delay:500ms"
-                           hx-swap="none"
-                           hx-post= "/questionnaires/edit/title">
+                    <input type="text" style="width: 70%; margin-top: 15px; border-radius: 5px"
+                           th:value="${questionnaire.title}"
+                           th:field="*{title}" required>
                 </label>
             </div>
 
-            <div id="questions" >
-                  <div th:each="question, i : ${session.questionnaire.question}"
-                       th:fragment="questions" th:id="|question${question.id}|">
-                      <div th:replace="~{fragments/create-questionnaire-answer::question(${question}, ${i.index}) }"></div>
-                  </div>
+            <div id="questions">
+                  <div th:each="question, i : ${questionnaire.questions}" th:id="|question${question.id}|" th:fragment="question">
+                    <div class="question">
+
+                        <div th:id="|question${question.id}Header|" th:fragment="questionHeader">
+
+                            <div class="question-header">
+                                <input class="question-text" type="text" name="questionText" th:value="${question.text}" required>
+
+                                <div>
+                                    <img class="add-img-to-question" src="/img/add-file.png" alt="Добавить изображение">
+                                    <input name="file" type="file" class="input-file" aria-hidden="true"
+                                           hx-trigger="change"
+                                           hx-encoding="multipart/form-data"
+                                           th:attr = "
+                                        hx-post=|@{/questionnaires/new/question/{id}/image(id=${question.id})}|,
+                                        hx-target=|#question${question.id}Img|">
+                                </div>
+
+                                <select name="question-type"
+                                        hx-trigger="change"
+                                        th:attr = "
+                                        hx-get=|@{/questionnaires/questions/{questionId}/changeType(questionId=${question.id})}|,
+                                        hx-target=|#question${question.id}Body|"
+                                        class="sortBtn">
+                                    <option value="one" th:if="${question.questionType.text} == 'one'" selected disabled hidden>один из списка</option>
+                                    <option value="several" th:if="${question.questionType.text} == 'several'" selected disabled hidden>несколько из списка</option>
+                                    <option value="range" th:if="${question.questionType.text} == 'range'" selected disabled hidden>интервал</option>
+                                    <option value="text" th:if="${question.questionType.text} == 'text'" selected disabled hidden>текст</option>
+                                    <option value="one">один из списка</option>
+                                    <option value="several">несколько из списка</option>
+                                    <option value="range">интервал</option>
+                                    <option value="text">текст</option>
+                                </select>
+
+                            </div>
+
+                            <div th:id="|question${question.id}Img|" th:fragment="questionImg">
+                            </div>
+                        </div>
+
+                        <div th:id="|question${question.id}Body|">
+                            <div th:id="|answers${question.id}|">
+                                <div th:each="answer,j : ${question.answers}" th:switch="${question.type.text}" th:fragment="answer">
+
+                                    <!--<div th:case="one" th:id="|answer${answer.id}|" class="answer" >
+
+                                        <div class="question-header">
+                                            <img src="/img/circle.png" alt="answer type">
+                                            <label style="width: 90%;">
+                                                <input class="answerText" type="text" name="answer" placeholder="ответ" th:value="${answer.title}"
+                                                       th:name="|questions[${i.index + questionOffset}].answers[${j.index}].title|"
+                                            </label>
+                                            <div>
+                                                <img class="add-img-to-question" src="/img/add-file.png">
+                                                <input name="file" type="file" class="input_file" aria-hidden="true"
+                                                       hx-trigger="change"
+                                                       hx-encoding="multipart/form-data"
+                                                       th:attr = "
+                                                           hx-post=|@{/questionnaires/new/answer/{id}/image(id=${answer.id})}|,
+                                                           hx-target=|#answer${answer.id}Img|">
+                                            </div>
+                                            <img class="deleteAnswer" src="/img/cross-in-circle.png" alt="delete answer"
+                                                 hx-trigger="click"
+                                                 th:attr = "
+                                                     hx-delete=|@{/questionnaires/new/answers/{id}(id=${answer.id})}|,
+                                                     hx-target=|#answers${question.id}|">
+                                        </div>
+
+                                        <div th:id="|answer${answer.id}Img|" th:fragment="answerImg">
+                                            <img th:if="${question.image() != null}" class="questionImage" th.src="*{answer.image}" alt="answer image">
+                                            <img class="cross" src="/img/cross-in-circle.png" alt="delete image"
+                                                 hx-trigger="click"
+                                                 th:attr = "hx-delete=|@{/questionnaires/answers/{id}/image(id=${answer.id})}|">
+                                        </div>
+                                    </div>
+
+                                    <div th:case="several" th:id="|answer${answer.id}|" class="answer" >
+                                        <div class="question-header">
+                                            <img style="padding-right: 1%; height: 16px; width: 16px" src="/Img/square.png" alt="answer type">
+                                            <label style="width: 90%;">
+                                                <input class="answerText" type="text" name="answer" placeholder="answer" th:value="${answer.optionsText}"
+                                                       th:name="|questions[${i.index + questionOffset}].answers[${j.index}].optionsText|"
+                                                       hx-trigger="keyup changed delay:200ms, search"
+                                                       th:attr = "hx-post=|@{/questionnaires/answers/{answerId}/setText(answerId=${answer.id})}|">
+                                            </label>
+                                            <div>
+                                                <img class="addFileImg" src="/Img/addImg.png">
+                                                <input name="file" type="file" class="input_file" aria-hidden="true"
+                                                       hx-trigger="change"
+                                                       hx-encoding="multipart/form-data"
+                                                       th:attr = "
+                                                           hx-post=|@{/questionnaires/answers/{answerId}/image(answerId=${answer.getId()})}|,
+                                                           hx-target=|#answer${answer.id}Img|">
+                                            </div>
+                                            <img class="deleteAnswer" src="/Img/deleteAnswer.png" alt="delete answer"
+                                                 hx-trigger="click"
+                                                 th:attr = "
+                                                     hx-delete=|@{/questionnaires/answers/{answerId}(answerId=${answer.getId()})}|,
+                                                     hx-target=|#answers${question.id}|">
+                                        </div>
+
+                                        &lt;!&ndash;<img th:if="${question.getImage() != null}" class="questionImage" th.src="*{answer.getImage()}" alt="answer image">&ndash;&gt;
+                                        <div th:id="|answer${answer.id}Img|" th:fragment="answerImg">
+                                            <img class="questionImage" src="https://notivory.com/upload/medialibrary/b16/b16d5342127a9811d38d97015f83c230.jpg" alt="answer image">
+                                            <img class="cross" src="/Img/deleteImg.png" alt="delete image"
+                                                 hx-trigger="click"
+                                                 th:attr = "hx-delete=|@{/questionnaires/answers/{answerId}/image(answerId=${answer.id})}|">
+                                        </div>
+                                    </div>
+
+                                    <div th:case="text" th:id="|answer${answer.id}|" class="answer" style="margin-top: 5%" >
+                                        <label style="width: 90%">
+                                            <input class="answerText" type="text" name="answer" placeholder="answer" disabled="" >
+                                        </label>
+                                    </div>
+
+                                    <div th:case="range" th:id="|answer${answer.id}|" class="answer" >
+
+                                        <div class="rangeBorder">
+                                            <select name="range"
+                                                    hx-trigger="change"
+                                                    th:attr = "
+                                                        hx-post=|@{/questionnaires/answers/{answerId}/LeftBorder(answerId=${answer.id})}|,
+                                                        hx-target=|#leftBorder${answer.id}|"
+                                                    class="sortBtn" style="width: 42px"
+                                                    th:name="|questions[${i.index + questionOffset}].answers[${j.index}].optionsLowerBound|">
+                                                <option value="" selected disabled hidden th:text="${answer.optionsLowerBound}">lower bound</option>
+                                                <option value="0">0</option>
+                                                <option value="1">1</option>
+                                            </select>
+                                            <span style="margin-left: 10px">-</span>
+                                            <select name="range"
+                                                    hx-trigger="change"
+                                                    th:attr = "
+                                                        hx-post=|@{/questionnaires/answers/{answerId}/RightBorder(answerId=${answerid})}|,
+                                                        hx-target=|#rightBorder${answer.id}|"
+                                                    class="sortBtn" style="width: 42px"
+                                                    th:name="|questions[${i.index + questionOffset}].answers[${j.index}].optionsUpperBound|">
+                                                <option value="" selected disabled hidden th:text="${answer.optionsUpperBound}">upper bound</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
+                                                <option value="9">9</option>
+                                                <option value="10">10</option>
+                                            </select>
+                                        </div>
+                                        <div style="padding-top: 15px; width: 100%">
+                                            <div style="display:flex; ">
+                                                <div th:id="|leftBorder${answer.id}|" style="width: 20px">
+                                                    <span th:text="${answer.optionsLowerBound}">0</span>
+                                                </div>
+                                                <div style="width: 50%; margin-left: 20px">
+                                                    <input type="text" class="answerText" th:value="${answer.optionsLowerBoundText}"
+                                                           th:name="|questions[${i.index + questionOffset}].answers[${j.index}].optionsLowerBoundText|"
+                                                           hx-trigger="keyup changed delay:200ms, search"
+                                                           th:attr = "hx-post=|@{/questionnaires/answers/{answerId}/setText(answerId=${answer.id})}|">
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div  style="display:flex; ">
+                                                <div th:id="|rightBorder${answer.id}|" style="width: 20px">
+                                                    <span th:text="${answer.optionsUpperBound}" >2</span>
+                                                </div>
+                                                <div style="width: 50%; margin-left: 20px">
+                                                    <input type="text" class="answerText" th:value="${answer.optionsUpperBoundText}"
+                                                           th:name="|questions[${i.index + questionOffset}].answers[${j.index}].optionsUpperBoundText|"
+                                                           hx-trigger="keyup changed delay:200ms, search"
+                                                           th:attr = "hx-post=|@{/questionnaires/answers/{answerId}/setText(answerId=${answer.id})}|">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>-->
+                                </div>
+                            </div>
+
+
+                            <div th:if="${question.questionType.text} == 'one' or ${question.questionType.text} == 'several' " class="answer">
+                                <label style="width: 90%; margin-left: 26px">
+                                    <input class="answerText" type="text" name="answer" placeholder="нажмите, чтобы добавить новый ответ" disabled="" >
+                                </label>
+                            </div>
+                        </div>
+
+                        <div style="border-top: 1px solid black; margin-top: 7px; padding: 7px">
+                            <div>
+                                <img class="delete-question" src="/Img/trashIcon.png" alt="delete q btn"
+                                     hx-trigger="click"
+                                     th:attr = "hx-delete=|@{/questionnaires/question/{questionId}(questionId=${question.getId()})}|"
+                                     hx-target="#questions">
+                            </div>
+                            <div th:if="'range' != ${question.type.text} and 'text' != ${question.type.text}">
+                                <button type="button" class="navigation-btn" style="float: left"
+                                        hx-trigger="click"
+                                        th:attr = "
+                                        hx-get=|@{/questionnaires/question/{questionNum}/{questionId}/setScores
+                                        (questionId=${question.getId()}, questionNum=${i.index + questionOffset})}|,
+                                        hx-target=|#question${question.id}|"
+                                >Задать баллы</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
-            <div class="position-fixed bottom-0 start-0 w-100 text-end bg-white"
+            <div class="position-fixed bottom-0 start-0 w-100 text-end"
                  style="height: 75px; box-sizing: border-box; padding-top: 10px; padding-right: 5%;">
                 <button class="btn btn-secondary" type="submit" style="height: 50px">Задать ключи</button>
             </div>
 
-
         </form>
 
-        <div class="position-fixed bottom-0" style="margin-bottom: 5rem; margin-left: 3%">
+
+        <div class="navbar-nav" style="margin-bottom: 5rem; margin-left: 4rem">
             <input type="image" width="60px" src="/img/plus-in-circle.png" alt="Добавить новый вопрос"
                    hx-trigger="click"
-                   hx-get="/questionnaires/edit/add-question"
+                   th:attr="hx-get=|@{/questionnaires/new/{id}/add-question(id=${questionnaire.id})}|"
+                   hx-swap="beforeend"
                    hx-target="#questions">
         </div>
-
-        <div id="errors" style="position:fixed; width:100%; bottom:80px;"></div>
     </div>
 </div>
 

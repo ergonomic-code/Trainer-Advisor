@@ -13,7 +13,9 @@ interface QuestionnaireService {
         pageable: Pageable
     ): Page<QuestionnaireDto>
 
-    fun createQuestionnaire(createQuestionnaireDto: CreateQuestionnaireDto): QuestionnaireDto
+    fun createQuestionnaire(): CreateQuestionnaireDto
+
+    fun updateQuestionnaire(createQuestionnaireDto: CreateQuestionnaireDto): QuestionnaireDto
 
     fun findQuestionnaireWithQuestions(id: Long): QuestionnaireWithQuestionDto?
 }

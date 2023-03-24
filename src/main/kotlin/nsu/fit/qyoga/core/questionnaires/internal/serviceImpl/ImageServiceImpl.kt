@@ -22,6 +22,7 @@ class ImageServiceImpl(
     }
 
     override fun getImage(id: Long): Image? {
-        return imageRepo.findById(id).map { it }.orElse(null)
+        TODO()
+        return imageRepo.findById(id)
     }
 }
