@@ -31,10 +31,19 @@ class QuestionnaireServiceImpl(
         return page.map { QuestionnaireDto(id = it.id, title = it.title) }
     }
 
-    override fun createQuestionnaire(createQuestionnaireDto: CreateQuestionnaireDto): QuestionnaireDto {
+    override fun createQuestionnaire(): CreateQuestionnaireDto {
+        val createdQuestionnaire = questionnaireRepo.save(Questionnaire(title = ""))
+        return CreateQuestionnaireDto(
+            id = createdQuestionnaire.id,
+            title = createdQuestionnaire.title,
+            questions = mutableListOf()
+        )
+    }
+
+    override fun updateQuestionnaire(createQuestionnaireDto: CreateQuestionnaireDto): QuestionnaireDto {
         val savedQuestionnaire = questionnaireRepo.save(Questionnaire(title = createQuestionnaireDto.title))
         createQuestionnaireDto.questions.map {
-            questionService.createQuestion(it, savedQuestionnaire.id, it.photoId)
+            questionService.updateQuestion(it, savedQuestionnaire.id, it.photoId)
         }
         return QuestionnaireDto(savedQuestionnaire.id, savedQuestionnaire.title)
     }
