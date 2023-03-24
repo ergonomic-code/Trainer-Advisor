@@ -45,15 +45,24 @@
 
     <div id="layoutSidenav_content">
 
-        <form id="questionnaire" th:method="POST" th:action="@{/questionnaires/new/{questionnaireId}(questionnaireId = ${questionnaire.id})}" th:object="${questionnaire}">
+        <form id="questionnaire" style="padding-left: 15%; padding-right: 15%"
+              th:method="POST"
+              th:action="@{/questionnaires/new/{id}(id = ${questionnaire.id})}"
+              th:object="${questionnaire}">
 
-            <div id="questionnaire-title">
-                <span>Название опросника</span>
-                <input type="text"  th:value="${questionnaire.title}" th:field="*{title}" required>
+            <div id="questionnaire-title" class="bg-dark form-control-lg mt-4"
+            style="text-align: center; height: 105px; min-width: 400px; border-radius: 10px">
+                <span style="font-size: 28px; color: white; margin-top: 10px">Название опросника</span>
+                <br>
+                <label style="width: 100%">
+                    <input type="text" style="width: 70%; margin-top: 15px; border-radius: 5px"
+                           th:value="${questionnaire.title}"
+                           th:field="*{title}" required>
+                </label>
             </div>
 
             <div id="questions">
-                <div th:each="question, i : ${questionnaire.questions}" th:id="|question${question.id}|" th:fragment="question">
+                  <div th:each="question, i : ${questionnaire.questions}" th:id="|question${question.id}|" th:fragment="question">
                     <div class="question">
 
                         <div th:id="|question${question.id}Header|" th:fragment="questionHeader">
@@ -67,7 +76,7 @@
                                            hx-trigger="change"
                                            hx-encoding="multipart/form-data"
                                            th:attr = "
-                                        hx-post=|@{new/question/{id}/addImage(id=${question.id})}|,
+                                        hx-post=|@{/questionnaires/new/question/{id}/image(id=${question.id})}|,
                                         hx-target=|#question${question.id}Img|">
                                 </div>
 
@@ -77,10 +86,10 @@
                                         hx-get=|@{/questionnaires/questions/{questionId}/changeType(questionId=${question.id})}|,
                                         hx-target=|#question${question.id}Body|"
                                         class="sortBtn">
-                                    <option value="one" th:if="${question.type.text} == 'one'" selected disabled hidden>один из списка</option>
-                                    <option value="several" th:if="${question.type.text} == 'several'" selected disabled hidden>несколько из списка</option>
-                                    <option value="range" th:if="${question.type.text} == 'range'" selected disabled hidden>интервал</option>
-                                    <option value="text" th:if="${question.type.text} == 'text'" selected disabled hidden>текст</option>
+                                    <option value="one" th:if="${question.questionType.text} == 'one'" selected disabled hidden>один из списка</option>
+                                    <option value="several" th:if="${question.questionType.text} == 'several'" selected disabled hidden>несколько из списка</option>
+                                    <option value="range" th:if="${question.questionType.text} == 'range'" selected disabled hidden>интервал</option>
+                                    <option value="text" th:if="${question.questionType.text} == 'text'" selected disabled hidden>текст</option>
                                     <option value="one">один из списка</option>
                                     <option value="several">несколько из списка</option>
                                     <option value="range">интервал</option>
@@ -90,49 +99,42 @@
                             </div>
 
                             <div th:id="|question${question.id}Img|" th:fragment="questionImg">
-                                <img th:src="${question.getImage()}" width="400" >
-                                <img src="/img/cross-in-circle.png" alt="delete image"
-                                     hx-trigger="click"
-                                     th:attr = "hx-delete=|@{/questionnaires/questions/{questionId}/image(questionId=${question.id})}|">
                             </div>
                         </div>
 
                         <div th:id="|question${question.id}Body|">
-
                             <div th:id="|answers${question.id}|">
                                 <div th:each="answer,j : ${question.answers}" th:switch="${question.type.text}" th:fragment="answer">
 
-                                    <div th:case="one" th:id="|answer${answer.id}|" class="answer" >
+                                    <!--<div th:case="one" th:id="|answer${answer.id}|" class="answer" >
 
                                         <div class="question-header">
                                             <img src="/img/circle.png" alt="answer type">
                                             <label style="width: 90%;">
-+                                                <input class="answerText" type="text" name="answer" placeholder="текст ответа" th:value="${answer.optionsText}"
-                                                       th:name="|questions[${i.index + questionOffset}].answers[${j.index}].optionsText|"
-                                                       hx-trigger="keyup changed delay:200ms, search"
-                                                       th:attr = "hx-post=|@{/questionnaires/answers/{answerId}/setText(answerId=${answer.id})}|">
+                                                <input class="answerText" type="text" name="answer" placeholder="ответ" th:value="${answer.title}"
+                                                       th:name="|questions[${i.index + questionOffset}].answers[${j.index}].title|"
                                             </label>
                                             <div>
-                                                <img class="addFileImg" src="/Img/addImg.png">
+                                                <img class="add-img-to-question" src="/img/add-file.png">
                                                 <input name="file" type="file" class="input_file" aria-hidden="true"
                                                        hx-trigger="change"
                                                        hx-encoding="multipart/form-data"
                                                        th:attr = "
-                                                           hx-post=|@{/questionnaires/answers/{answerId}/image(answerId=${answer.getId()})}|,
+                                                           hx-post=|@{/questionnaires/new/answer/{id}/image(id=${answer.id})}|,
                                                            hx-target=|#answer${answer.id}Img|">
                                             </div>
-                                            <img class="deleteAnswer" src="/Img/deleteAnswer.png" alt="delete answer"
+                                            <img class="deleteAnswer" src="/img/cross-in-circle.png" alt="delete answer"
                                                  hx-trigger="click"
                                                  th:attr = "
-                                                     hx-delete=|@{/questionnaires/answers/{answerId}(answerId=${answer.getId()})}|,
+                                                     hx-delete=|@{/questionnaires/new/answers/{id}(id=${answer.id})}|,
                                                      hx-target=|#answers${question.id}|">
                                         </div>
-                                        <!--<img th:if="${question.getImage() != null}" class="questionImage" th.src="*{answer.getImage()}" alt="answer image">-->
+
                                         <div th:id="|answer${answer.id}Img|" th:fragment="answerImg">
-                                            <img class="questionImage" src="https://notivory.com/upload/medialibrary/b16/b16d5342127a9811d38d97015f83c230.jpg" alt="answer image">
-                                            <img class="cross" src="/Img/deleteImg.png" alt="delete image"
+                                            <img th:if="${question.image() != null}" class="questionImage" th.src="*{answer.image}" alt="answer image">
+                                            <img class="cross" src="/img/cross-in-circle.png" alt="delete image"
                                                  hx-trigger="click"
-                                                 th:attr = "hx-delete=|@{/questionnaires/answers/{answerId}/image(answerId=${answer.id})}|">
+                                                 th:attr = "hx-delete=|@{/questionnaires/answers/{id}/image(id=${answer.id})}|">
                                         </div>
                                     </div>
 
@@ -161,7 +163,7 @@
                                                      hx-target=|#answers${question.id}|">
                                         </div>
 
-                                        <!--<img th:if="${question.getImage() != null}" class="questionImage" th.src="*{answer.getImage()}" alt="answer image">-->
+                                        &lt;!&ndash;<img th:if="${question.getImage() != null}" class="questionImage" th.src="*{answer.getImage()}" alt="answer image">&ndash;&gt;
                                         <div th:id="|answer${answer.id}Img|" th:fragment="answerImg">
                                             <img class="questionImage" src="https://notivory.com/upload/medialibrary/b16/b16d5342127a9811d38d97015f83c230.jpg" alt="answer image">
                                             <img class="cross" src="/Img/deleteImg.png" alt="delete image"
@@ -235,12 +237,12 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>-->
                                 </div>
                             </div>
 
 
-                            <div th:if="${question.type.text} == 'one' or ${question.type.text} == 'several' " class="answer">
+                            <div th:if="${question.questionType.text} == 'one' or ${question.questionType.text} == 'several' " class="answer">
                                 <label style="width: 90%; margin-left: 26px">
                                     <input class="answerText" type="text" name="answer" placeholder="нажмите, чтобы добавить новый ответ" disabled="" >
                                 </label>
@@ -268,26 +270,27 @@
                 </div>
             </div>
 
-            <div class="navPanel">
-                <button type="submit" class="navigation-btn" >Задать ключи</button>
+            <div class="position-fixed bottom-0 start-0 w-100 text-end"
+                 style="height: 75px; box-sizing: border-box; padding-top: 10px; padding-right: 5%;">
+                <button class="btn btn-secondary" type="submit" style="height: 50px">Задать ключи</button>
             </div>
 
         </form>
 
-        <div class="navbar-nav">
+
+        <div class="navbar-nav" style="margin-bottom: 5rem; margin-left: 4rem">
             <input type="image" width="60px" src="/img/plus-in-circle.png" alt="Добавить новый вопрос"
                    hx-trigger="click"
-                   th:attr="hx-get=|@{/questionnaires/{questionnaireId}/addQuestion(questionnaireId=${questionnaire.id})}|"
+                   th:attr="hx-get=|@{/questionnaires/new/{id}/add-question(id=${questionnaire.id})}|"
                    hx-swap="beforeend"
                    hx-target="#questions">
         </div>
     </div>
 </div>
 
-<div w3-include-html=""></div>
-
 <script crossorigin="anonymous"
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js">
+</script>
 <script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
 <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>
 </body>
