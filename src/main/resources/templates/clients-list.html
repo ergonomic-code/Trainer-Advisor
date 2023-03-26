@@ -8,7 +8,7 @@
     <meta content="" name="description"/>
     <meta content="" name="author"/>
     <link href="/img/caret-down-square-fill.svg" rel="icon" type="image/x-icon">
-    <title>Список упражнений</title>
+    <title>Список клиентов</title>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet"/>
     <link href="/styles/styles.css" rel="stylesheet"/>
     <script crossorigin="anonymous" src="https://use.fontawesome.com/releases/v6.1.0/js/all.js"></script>
@@ -177,7 +177,7 @@
                                            class="form-control"
                                            placeholder="Дата приема"
                                            style="border-color:inherit"
-                                           th:field="${searchDto.appoinmentDatetime}" type="date">
+                                           th:field="${searchDto.appointmentDate}" type="date">
                                 </div>
 
                                 <div class="input-group mt-2 mb-5">
@@ -199,7 +199,7 @@
                                 </thead>
                                 <tbody id="clients-list">
                                 <tr th:each="client : ${clients.content}">
-                                    <td th:text="${client.lastname} ${client.firstname} ${client.patronymic}"></td>
+                                    <td th:text="${client.lastName} + ${client.firstName} + ${client.patronymic}"></td>
                                 </tr>
                                 </tbody>
                             </table>
