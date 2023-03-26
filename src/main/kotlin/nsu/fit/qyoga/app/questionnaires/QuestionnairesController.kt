@@ -56,7 +56,10 @@ class QuestionnairesController(
      */
     @GetMapping("new")
     fun getCreateQuestionnairePage(model: Model): String {
-        return "redirect:/questionnaires/${questionnaireService.createQuestionnaire()}/edit"
+        val questionnaireId = questionnaireService.createQuestionnaire()
+        val question = questionService.createQuestion(questionnaireId)
+        answerService.createAnswer(question.id)
+        return "redirect:/questionnaires/${questionnaireId}/edit"
     }
 
     /**
@@ -68,9 +71,6 @@ class QuestionnairesController(
         @PathVariable id: Long
     ): String {
         val questionnaire = questionnaireService.findQuestionnaireWithQuestions(id)
-        val question = questionService.createQuestion(questionnaire.id)
-        question.answers.add(answerService.createAnswer(question.id))
-        questionnaire.questions.add(question)
         model.addAttribute("questionnaire", questionnaire)
         return "questionnaire/create-questionnaire"
     }
