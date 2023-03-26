@@ -10,9 +10,10 @@
     <title>Список упражнений</title>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet"/>
     <link href="/styles/styles.css" rel="stylesheet"/>
+    <link href="/styles/upload-file-style.css" rel="stylesheet">
     <script crossorigin="anonymous" src="https://use.fontawesome.com/releases/v6.1.0/js/all.js"></script>
     <script>
-        window.addEventListener('DOMContentLoaded', event => {
+        window.addEventListener('DOMContentLoaded' => {
 
             // Toggle the side navigation
             const sidebarToggle = document.body.querySelector('#sidebarToggle');
@@ -51,7 +52,7 @@
               th:object="${questionnaire}">
 
             <div id="questionnaire-title" class="bg-dark form-control-lg mt-4"
-            style="text-align: center; height: 115px; min-width: 400px; border-radius: 10px">
+            style="text-align: center; padding-bottom: 20px; border-radius: 10px">
                 <span style="font-size: 28px; color: white; margin-top: 10px">Название опросника</span>
                 <br>
                 <label style="width: 100%">
@@ -62,19 +63,20 @@
             </div>
 
             <div id="questions">
-                  <div style="margin-top: 20px; background-color: #d4d4d4; border-radius: 8px" class="question p-3"
+                  <div style="margin-top: 20px; background-color: #d4d4d4; border-radius: 8px;" class="question p-3"
                        th:each="question, i : ${questionnaire.questions}"
                        th:id="|question${question.id}|"
                        th:fragment="question" >
 
                       <div th:id="|question${question.id}Header|" th:fragment="questionHeader">
 
-                            <div class="d-inline-block">
-                                <input class="question-text" type="text" name="questionText" th:value="${question.title}" required>
+                            <div class="d-print-flex flex-row justify-content-start d-flex">
+                                <input class="question-text" type="text" name="questionText" th:value="${question.title}" required
+                                style="width: calc(100% - 220px)">
 
-                                <div>
-                                    <img class="add-img-to-question" src="/img/add-file.png" alt="Добавить изображение">
-                                    <input name="file" type="file" class="input-file" aria-hidden="true"
+                                <div style="width: 60px">
+                                    <img class="add-img-to-question-btn" src="/img/add-file.png" alt="Добавить изображение">
+                                    <input name="file" type="file" class="input-file" aria-hidden="true" style="margin-top: 3px;"
                                            hx-trigger="change"
                                            hx-encoding="multipart/form-data"
                                            th:attr = "
@@ -83,11 +85,11 @@
                                 </div>
 
                                 <select name="question-type"
-                                        hx-trigger="change"
+                                        hx-trigger="change" style="width: 160px"
                                         th:attr = "
                                         hx-get=|@{/questionnaires/questions/{questionId}/changeType(questionId=${question.id})}|,
                                         hx-target=|#question${question.id}Body|"
-                                        class="sortBtn">
+                                        class="sort-btn">
                                     <option value="one" th:if="${question.questionType.text} == 'one'" selected disabled hidden>один из списка</option>
                                     <option value="several" th:if="${question.questionType.text} == 'several'" selected disabled hidden>несколько из списка</option>
                                     <option value="range" th:if="${question.questionType.text} == 'range'" selected disabled hidden>интервал</option>
@@ -279,7 +281,7 @@
         </form>
 
 
-        <div class="position-fixed bottom-0" style="margin-bottom: 5rem; margin-left: 5%">
+        <div class="position-fixed bottom-0" style="margin-bottom: 5rem; margin-left: 3%">
             <input type="image" width="60px" src="/img/plus-in-circle.png" alt="Добавить новый вопрос"
                    hx-trigger="click"
                    th:attr="hx-get=|@{/questionnaires/new/{id}/add-question(id=${questionnaire.id})}|"
