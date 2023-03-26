@@ -18,4 +18,7 @@ class ClientServiceImpl(
         return clientRepo.getClientsByFilters(searchDto, page)
     }
 
+    override fun deleteClient(id: String): Boolean {
+        return clientRepo.deleteClient(id)
+    }
 }
