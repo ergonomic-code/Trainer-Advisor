@@ -10,4 +10,6 @@ interface ClientService {
         searchDto: ClientListSearchDto,
         page: Pageable
     ): Page<ClientListDto>
+
+    fun deleteClient(id: String): Boolean
 }

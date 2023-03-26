@@ -46,6 +46,14 @@ class ClientListPageController(
         return "clients-list :: clients"
     }
 
+    @DeleteMapping("clients/delete/{id}")
+    fun deleteClient(
+        @PathVariable id: String
+    ): String {
+        clientService.deleteClient(id)
+        return "clients-list"
+    }
+
     fun addClientsPageAttributes(model: Model, clients: Page<ClientListDto>) {
         model.addAttribute("searchDto", ClientListSearchDto())
         model.addAttribute("clients", clients)

@@ -199,7 +199,16 @@
                                 </thead>
                                 <tbody id="clients-list">
                                 <tr th:each="client : ${clients.content}">
-                                    <td th:text="${client.lastName} + ${client.firstName} + ${client.patronymic}"></td>
+                                    <td th:text="${client.lastName}"></td>
+                                    <td th:text="${client.firstName}"></td>
+                                    <td th:text="${client.patronymic}"></td>
+                                    <td>
+                                        <form th:action="@{/clients/delete/{id} (id=${client.id})}" method="post">
+                                            <button class="btn btn-secondary" id="btnDeleteClient" type="button">
+                                                Удалить
+                                            </button>
+                                        </form>
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>

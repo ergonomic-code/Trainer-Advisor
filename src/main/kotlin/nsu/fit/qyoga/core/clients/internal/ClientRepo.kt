@@ -52,4 +52,10 @@ class ClientRepo(
 
     }
 
+    fun deleteClient(id: String): Boolean {
+        val sql = "DELETE FROM clients WHERE id = :id?"
+        val paramMap: HashMap<String, Any> = HashMap<String, Any>()
+        paramMap["id"] = id
+        return jdbcTemplate.update(sql, paramMap) == 1
+    }
 }
