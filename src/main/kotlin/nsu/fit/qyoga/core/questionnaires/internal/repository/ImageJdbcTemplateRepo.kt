@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.jdbc.support.GeneratedKeyHolder
 import org.springframework.stereotype.Repository
+import java.sql.ResultSet
 
 
 @Repository
@@ -26,7 +27,28 @@ class ImageJdbcTemplateRepo(
         return keyHolder.key!!.toLong()
     }
 
-    fun findById(id: Long) {
-
+    fun findById(id: Long): Image? {
+        val query = """
+        SELECT 
+            id AS imageId,
+            name AS imageName, 
+            media_type AS imageMediaType, 
+            size AS imageSize, 
+            data AS imageData
+        FROM images  
+       WHERE id = :id
+        """.trimIndent()
+        return jdbcTemplate.queryForObject<Image>(
+            query,
+            MapSqlParameterSource("id", id)
+        ) { rs: ResultSet, _: Int ->
+            Image(
+                id = rs.getLong("imageId"),
+                name = rs.getString("imageName"),
+                mediaType = rs.getString("imageMediaType"),
+                size = rs.getLong("imageSize"),
+                data = rs.getBytes("imageData")
+            )
+        }
     }
 }
