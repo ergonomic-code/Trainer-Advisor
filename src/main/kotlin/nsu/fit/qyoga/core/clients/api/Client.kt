@@ -9,9 +9,9 @@ import java.util.*
 data class Client(
     @Id
     val id: Long,
-    val name: String,
-    val secondname: String,
-    val surname: String,
+    val firstname: String,
+    val patronymic: String,
+    val lastname: String,
     val birthdate: Date,
     val email: Email,
     val phoneNumber: Long,
