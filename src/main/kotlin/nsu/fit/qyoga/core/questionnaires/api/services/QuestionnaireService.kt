@@ -1,6 +1,5 @@
 package nsu.fit.qyoga.core.questionnaires.api.services
 
-import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionnaireDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireSearchDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireWithQuestionDto
@@ -13,9 +12,9 @@ interface QuestionnaireService {
         pageable: Pageable
     ): Page<QuestionnaireDto>
 
-    fun createQuestionnaire(): CreateQuestionnaireDto
+    fun createQuestionnaire(): Long
 
-    fun updateQuestionnaire(createQuestionnaireDto: CreateQuestionnaireDto): QuestionnaireDto
+    fun updateQuestionnaire(createQuestionnaireDto: QuestionnaireWithQuestionDto): QuestionnaireDto
 
-    fun findQuestionnaireWithQuestions(id: Long): QuestionnaireWithQuestionDto?
+    fun findQuestionnaireWithQuestions(id: Long): QuestionnaireWithQuestionDto
 }

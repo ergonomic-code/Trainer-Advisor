@@ -51,7 +51,7 @@
               th:object="${questionnaire}">
 
             <div id="questionnaire-title" class="bg-dark form-control-lg mt-4"
-            style="text-align: center; height: 105px; min-width: 400px; border-radius: 10px">
+            style="text-align: center; height: 115px; min-width: 400px; border-radius: 10px">
                 <span style="font-size: 28px; color: white; margin-top: 10px">Название опросника</span>
                 <br>
                 <label style="width: 100%">
@@ -62,13 +62,15 @@
             </div>
 
             <div id="questions">
-                  <div th:each="question, i : ${questionnaire.questions}" th:id="|question${question.id}|" th:fragment="question">
-                    <div class="question">
+                  <div style="margin-top: 20px; background-color: #d4d4d4; border-radius: 8px" class="question p-3"
+                       th:each="question, i : ${questionnaire.questions}"
+                       th:id="|question${question.id}|"
+                       th:fragment="question" >
 
-                        <div th:id="|question${question.id}Header|" th:fragment="questionHeader">
+                      <div th:id="|question${question.id}Header|" th:fragment="questionHeader">
 
-                            <div class="question-header">
-                                <input class="question-text" type="text" name="questionText" th:value="${question.text}" required>
+                            <div class="d-inline-block">
+                                <input class="question-text" type="text" name="questionText" th:value="${question.title}" required>
 
                                 <div>
                                     <img class="add-img-to-question" src="/img/add-file.png" alt="Добавить изображение">
@@ -76,7 +78,7 @@
                                            hx-trigger="change"
                                            hx-encoding="multipart/form-data"
                                            th:attr = "
-                                        hx-post=|@{/questionnaires/new/question/{id}/image(id=${question.id})}|,
+                                        hx-post=|@{/questionnaires/new/{id}/image(id=${question.id})}|,
                                         hx-target=|#question${question.id}Img|">
                                 </div>
 
@@ -100,13 +102,13 @@
 
                             <div th:id="|question${question.id}Img|" th:fragment="questionImg">
                             </div>
-                        </div>
+                      </div>
 
-                        <div th:id="|question${question.id}Body|">
+                      <!--<div th:id="|question${question.id}Body|">
                             <div th:id="|answers${question.id}|">
                                 <div th:each="answer,j : ${question.answers}" th:switch="${question.type.text}" th:fragment="answer">
 
-                                    <!--<div th:case="one" th:id="|answer${answer.id}|" class="answer" >
+                                    <div th:case="one" th:id="|answer${answer.id}|" class="answer" >
 
                                         <div class="question-header">
                                             <img src="/img/circle.png" alt="answer type">
@@ -237,7 +239,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>-->
+                                    </div>
                                 </div>
                             </div>
 
@@ -247,16 +249,16 @@
                                     <input class="answerText" type="text" name="answer" placeholder="нажмите, чтобы добавить новый ответ" disabled="" >
                                 </label>
                             </div>
-                        </div>
+                        </div>-->
 
-                        <div style="border-top: 1px solid black; margin-top: 7px; padding: 7px">
+                      <!--<div style="border-top: 1px solid black; margin-top: 7px; padding: 7px">
                             <div>
-                                <img class="delete-question" src="/Img/trashIcon.png" alt="delete q btn"
+                                <img class="delete-question" src="/img/trash-icon.png" alt="delete q btn"
                                      hx-trigger="click"
                                      th:attr = "hx-delete=|@{/questionnaires/question/{questionId}(questionId=${question.getId()})}|"
                                      hx-target="#questions">
                             </div>
-                            <div th:if="'range' != ${question.type.text} and 'text' != ${question.type.text}">
+                            <div th:if="'range' != ${question.questionType.text} and 'text' != ${question.questionType.text}">
                                 <button type="button" class="navigation-btn" style="float: left"
                                         hx-trigger="click"
                                         th:attr = "
@@ -265,12 +267,11 @@
                                         hx-target=|#question${question.id}|"
                                 >Задать баллы</button>
                             </div>
-                        </div>
-                    </div>
+                        </div>-->
                 </div>
             </div>
 
-            <div class="position-fixed bottom-0 start-0 w-100 text-end"
+            <div class="position-fixed bottom-0 start-0 w-100 text-end bg-white"
                  style="height: 75px; box-sizing: border-box; padding-top: 10px; padding-right: 5%;">
                 <button class="btn btn-secondary" type="submit" style="height: 50px">Задать ключи</button>
             </div>
@@ -278,7 +279,7 @@
         </form>
 
 
-        <div class="navbar-nav" style="margin-bottom: 5rem; margin-left: 4rem">
+        <div class="position-fixed bottom-0" style="margin-bottom: 5rem; margin-left: 5%">
             <input type="image" width="60px" src="/img/plus-in-circle.png" alt="Добавить новый вопрос"
                    hx-trigger="click"
                    th:attr="hx-get=|@{/questionnaires/new/{id}/add-question(id=${questionnaire.id})}|"

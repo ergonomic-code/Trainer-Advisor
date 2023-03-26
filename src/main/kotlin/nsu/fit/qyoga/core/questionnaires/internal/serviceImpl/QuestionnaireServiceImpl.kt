@@ -1,9 +1,9 @@
 package nsu.fit.qyoga.core.questionnaires.internal.serviceImpl
 
-import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionnaireDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireSearchDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireWithQuestionDto
+import nsu.fit.qyoga.core.questionnaires.api.errors.QuestionnaireException
 import nsu.fit.qyoga.core.questionnaires.api.model.Questionnaire
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionService
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
@@ -31,24 +31,20 @@ class QuestionnaireServiceImpl(
         return page.map { QuestionnaireDto(id = it.id, title = it.title) }
     }
 
-    override fun createQuestionnaire(): CreateQuestionnaireDto {
-        val createdQuestionnaire = questionnaireRepo.save(Questionnaire(title = ""))
-        return CreateQuestionnaireDto(
-            id = createdQuestionnaire.id,
-            title = createdQuestionnaire.title,
-            questions = mutableListOf()
-        )
+    override fun createQuestionnaire(): Long {
+        return questionnaireRepo.save(Questionnaire(title = "")).id
     }
 
-    override fun updateQuestionnaire(createQuestionnaireDto: CreateQuestionnaireDto): QuestionnaireDto {
+    override fun updateQuestionnaire(createQuestionnaireDto: QuestionnaireWithQuestionDto): QuestionnaireDto {
         val savedQuestionnaire = questionnaireRepo.save(Questionnaire(title = createQuestionnaireDto.title))
         createQuestionnaireDto.questions.map {
-            questionService.updateQuestion(it, savedQuestionnaire.id, it.photoId)
+            questionService.updateQuestion(it, savedQuestionnaire.id, it.imageId)
         }
         return QuestionnaireDto(savedQuestionnaire.id, savedQuestionnaire.title)
     }
 
-    override fun findQuestionnaireWithQuestions(id: Long): QuestionnaireWithQuestionDto? {
+    override fun findQuestionnaireWithQuestions(id: Long): QuestionnaireWithQuestionDto {
         return questionnaireJdbcTemplateRepo.findQuestionnaireWithQuestionsById(id)
+            ?: throw QuestionnaireException("Выбранный опросник не найден")
     }
 }
