@@ -1,6 +1,6 @@
 package nsu.fit.qyoga.core.questionnaires.internal.serviceImpl
 
-import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionDto
+import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionWithAnswersDto
 import nsu.fit.qyoga.core.questionnaires.api.enums.QuestionType
 import nsu.fit.qyoga.core.questionnaires.api.model.Question
 import nsu.fit.qyoga.core.questionnaires.api.services.AnswerService
@@ -14,36 +14,39 @@ class QuestionServiceImpl(
     private val answerService: AnswerService,
 ) : QuestionService {
 
-    override fun createQuestion(id: Long): CreateQuestionDto {
-        val createdQuestion = Question(
-            title = "",
-            questionType = QuestionType.SINGLE,
-            questionnaireId = id,
-            imageId = null
+    override fun createQuestion(id: Long): QuestionWithAnswersDto {
+        val createdQuestion = questionRepo.save(
+            Question(
+                title = "",
+                questionType = QuestionType.SINGLE,
+                questionnaireId = id,
+                imageId = null
+            )
         )
-        return CreateQuestionDto(
+        return QuestionWithAnswersDto(
             id = createdQuestion.id,
+            title = createdQuestion.title,
             questionType = createdQuestion.questionType,
-            photoId = createdQuestion.imageId,
+            imageId = createdQuestion.imageId,
             answers = mutableListOf()
         )
     }
 
     override fun updateQuestion(
-        createQuestionDto: CreateQuestionDto,
+        createQuestionDto: QuestionWithAnswersDto,
         questionnaireId: Long,
         questionImageId: Long?
     ) {
         val savedQuestion = questionRepo.save(
             Question(
-                title = createQuestionDto.text,
+                title = createQuestionDto.title,
                 questionType = createQuestionDto.questionType,
                 questionnaireId = questionnaireId,
                 imageId = questionImageId
             )
         )
         createQuestionDto.answers.map {
-            answerService.createAnswer(it, savedQuestion.id, it.photoId)
+            answerService.updateAnswer(it, savedQuestion.id, it.imageId)
         }
     }
 }

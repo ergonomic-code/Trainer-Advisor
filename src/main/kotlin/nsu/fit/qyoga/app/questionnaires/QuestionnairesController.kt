@@ -1,6 +1,7 @@
 package nsu.fit.qyoga.app.questionnaires
 
 import nsu.fit.qyoga.core.questionnaires.api.dtos.*
+import nsu.fit.qyoga.core.questionnaires.api.services.AnswerService
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionService
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
 import org.springframework.data.domain.Page
@@ -15,7 +16,8 @@ import org.springframework.web.multipart.MultipartFile
 @RequestMapping("/questionnaires/")
 class QuestionnairesController(
     private val questionnaireService: QuestionnaireService,
-    private val questionService: QuestionService
+    private val questionService: QuestionService,
+    private val answerService: AnswerService
 ) {
 
     @GetMapping()
@@ -54,9 +56,20 @@ class QuestionnairesController(
      */
     @GetMapping("new")
     fun getCreateQuestionnairePage(model: Model): String {
-        val questionnaire = questionnaireService.createQuestionnaire()
-        val question = CreateQuestionDto()
-        question.answers.add(CreateAnswerDto())
+        return "redirect:/questionnaires/${questionnaireService.createQuestionnaire()}/edit"
+    }
+
+    /**
+     * Редактирование опросника
+     */
+    @GetMapping("{id}/edit")
+    fun editQuestionnaire(
+        model: Model,
+        @PathVariable id: Long
+    ): String {
+        val questionnaire = questionnaireService.findQuestionnaireWithQuestions(id)
+        val question = questionService.createQuestion(questionnaire.id)
+        question.answers.add(answerService.createAnswer(question.id))
         questionnaire.questions.add(question)
         model.addAttribute("questionnaire", questionnaire)
         return "questionnaire/create-questionnaire"
@@ -76,46 +89,39 @@ class QuestionnairesController(
 
     @PostMapping("new/{id}")
     fun createQuestionnaire(
-        @ModelAttribute("createQuestionnaire") createQuestionnaireDto: CreateQuestionnaireDto,
+        @ModelAttribute("createQuestionnaire") questionnaire: QuestionnaireWithQuestionDto,
         @PathVariable id: Long
     ): String {
         return "redirect:/questionnaires/"
     }
 
-    @PostMapping("new/question/{id}/image")
+    @GetMapping("new/{id}/image")
+    fun loadImageToPage(
+        @RequestParam("file") file: MultipartFile,
+        @PathVariable id: Long
+    ): String {
+        return ""
+    }
+
+    @PostMapping("new/{id}/image")
     fun addImageToQuestion(
         @RequestParam("file") file: MultipartFile,
-        @PathVariable id: String
+        @PathVariable id: Long
     ): String {
         return ""
     }
 
-    @DeleteMapping("new/question/{id}/image")
+    @DeleteMapping("new/{id}/image")
     fun deleteImageFromQuestion(
-        @PathVariable id: String
+        @PathVariable id: Long
     ): String {
         return ""
     }
 
-    @PostMapping("new/answer/{id}/image")
-    fun addImageToAnswer(
-        @RequestParam("file") file: MultipartFile,
-        @PathVariable id: String
-    ): String {
-        return ""
-    }
-
-    @DeleteMapping("new/answer/{id}/image")
-    fun deleteImageFromAnswer(
-        @PathVariable id: String
-    ): String {
-        return ""
-    }
-
-    @GetMapping("new/{questionId}/changeType")
+    @GetMapping("new/{id}/change-type")
     fun changeAnswerType(
         @RequestParam("question-type") type: String,
-        @PathVariable questionId: String
+        @PathVariable id: Long
     ): String {
         println(type)
         return ""
@@ -153,3 +159,4 @@ class QuestionnairesController(
     }
 
 }
+// при создании опросника нас должно редиректить на страницу его редактирования те с /new/ -> /{id}/edit
