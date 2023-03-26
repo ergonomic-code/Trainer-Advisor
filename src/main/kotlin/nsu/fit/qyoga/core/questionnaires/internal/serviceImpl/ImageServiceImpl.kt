@@ -1,6 +1,5 @@
 package nsu.fit.qyoga.core.questionnaires.internal.serviceImpl
 
-import nsu.fit.qyoga.core.questionnaires.api.dtos.ImageDto
 import nsu.fit.qyoga.core.questionnaires.api.model.Image
 import nsu.fit.qyoga.core.questionnaires.api.services.ImageService
 import nsu.fit.qyoga.core.questionnaires.internal.repository.ImageRepo
@@ -10,19 +9,18 @@ import org.springframework.stereotype.Service
 class ImageServiceImpl(
     private val imageRepo: ImageRepo
 ) :ImageService {
-    override fun uploadImage(image: ImageDto): Long {
+    override fun uploadImage(image: Image): Long {
         return imageRepo.save(
             Image(
-                name = image.name ?: "",
+                name = image.name,
                 mediaType = image.mediaType,
                 size = image.size,
-                data = image.data.readAllBytes()
+                data = image.data
             )
         ).id
     }
 
     override fun getImage(id: Long): Image? {
-        TODO()
         return imageRepo.findById(id)
     }
 }

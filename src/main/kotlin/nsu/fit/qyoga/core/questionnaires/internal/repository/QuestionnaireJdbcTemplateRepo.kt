@@ -33,18 +33,20 @@ class QuestionnaireJdbcTemplateRepo(
     fun findQuestionnaireWithQuestionsById(id: Long): QuestionnaireWithQuestionDto? {
         val query = """
         SELECT 
+           questionnaires.id AS questionnaireId,
            questionnaires.title AS questionnaireTitle,
            questions.id AS questionId,
            questions.title AS questionTitle,
            questions.question_type AS questionType,
-           questionImage.data AS questionImage,
+           questionImage.id AS questionImageId,
+           answers.id AS answerId,
            answers.title AS answerTitle,
            answers.lower_bound AS answerLowerBound,
            answers.lower_bound_text AS answerLowerBoundText,
            answers.upper_bound AS answerUpperBound,
            answers.upper_bound_text AS answerUpperBoundText,
            answers.score AS answerScore,
-           answerImage.data AS answerImage
+           answerImage.id AS answerImageId
         FROM questionnaires
             LEFT JOIN questions ON questionnaires.id = questions.questionnaire_id
             LEFT JOIN images questionImage ON questions.image_id = questionImage.id
@@ -52,31 +54,38 @@ class QuestionnaireJdbcTemplateRepo(
             LEFT JOIN images answerImage ON answers.image_id = answerImage.id
         WHERE questionnaires.id = :id
         """.trimIndent()
-        val value = QuestionnaireWithQuestionDto(title = null)
+        var value: QuestionnaireWithQuestionDto? = null
         val questionMap: MutableMap<Long, QuestionWithAnswersDto?> = mutableMapOf()
         jdbcTemplate.query(
             query,
-            MapSqlParameterSource("id", id),
-        ){ rs: ResultSet, _: Int ->
-            if (value.title  == null) {
-                value.title = rs.getString("questionnaireTitle")
+            MapSqlParameterSource("id", id)
+        ) { rs: ResultSet, _: Int ->
+            if (value  == null) {
+                value = QuestionnaireWithQuestionDto(
+                    id = rs.getLong("questionnaireId"),
+                    title = rs.getString("questionnaireTitle"),
+                    questions = mutableListOf()
+                )
             }
             val questionId = rs.getLong("questionId")
             val questionFromDB = QuestionWithAnswersDto(
-                rs.getString("questionTitle"),
-                QuestionType.valueOf(rs.getString("questionType") ?: return@query),
-                null
+                id = rs.getLong("questionId"),
+                title = rs.getString("questionTitle"),
+                questionType = QuestionType.valueOf(rs.getString("questionType") ?: return@query),
+                imageId = rs.getLong("questionImageId"),
+                answers = mutableListOf()
             )
             val answer = AnswerDto(
-                rs.getString("answerTitle"),
-                rs.getInt("answerLowerBound"),
-                rs.getString("answerLowerBoundText"),
-                rs.getInt("answerUpperBound"),
-                rs.getString("answerUpperBoundText"),
-                rs.getInt("answerScore"),
-                null
+                id = rs.getLong("answerId"),
+                title = rs.getString("answerTitle"),
+                lowerBound = rs.getInt("answerLowerBound"),
+                lowerBoundText = rs.getString("answerLowerBoundText"),
+                upperBound = rs.getInt("answerUpperBound"),
+                upperBoundText = rs.getString("answerUpperBoundText"),
+                score = rs.getInt("answerScore"),
+                imageId = rs.getLong("answerImageId"),
             )
-            val question = getQuestion(questionMap, questionId, questionFromDB, value)
+            val question = getQuestion(questionMap, questionId, questionFromDB, value!!)
             if(!(answer.title == null && answer.lowerBound == 0 && answer.upperBound == 0)) {
                 question.answers.add(answer)
             }
