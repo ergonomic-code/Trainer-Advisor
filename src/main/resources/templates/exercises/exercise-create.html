@@ -7,7 +7,7 @@
     <meta content="" name="description"/>
     <meta content="" name="author"/>
     <link href="/img/caret-down-square-fill.svg" rel="icon" type="image/x-icon">
-    <title>Список упражнений</title>
+    <title>Создание упражнения</title>
     <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet"/>
     <link href="../styles/styles.css" rel="stylesheet"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -24,7 +24,7 @@
         });
     </script>
     <script>
-        var num = 1;
+        var num = 0;
         $(document).ready(function () {
             $("#btnNewStep").click(function () {
                 $("#step").clone().prop('id', "step" + ++num).appendTo("form");
@@ -132,19 +132,18 @@
                             <h4 class="mt-4">Шаги</h4>
 
                             <div class="border bg-light p-3 mb-2" id="step" style="border-radius: 5px;"
-                                 th:each="exercise : ${createDto.exerciseSteps}">
+                            >
                                 <h6 class="">Шаг</h6>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <span class="input-group-text h-100">Описание</span>
                                     </div>
-                                    <textarea aria-label="With textarea" class="form-control"
-                                              th:field="${exercise.description}"></textarea>
+                                    <textarea aria-label="With textarea" class="form-control"></textarea>
                                 </div>
 
                                 <div class="mb-3 mt-3">
                                     <label class="form-label">Фото шага упражнения</label>
-                                    <input class="form-control" th:field="${exercise.photo}" type="file" xml:lang="ru">
+                                    <input class="form-control" type="file" xml:lang="ru">
                                 </div>
                             </div>
 

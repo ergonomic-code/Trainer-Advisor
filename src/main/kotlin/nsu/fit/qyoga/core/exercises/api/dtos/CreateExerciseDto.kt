@@ -10,5 +10,5 @@ data class CreateExerciseDto(
     val duration: String? = null,
     val exerciseType: ExerciseType? = null,
     val therapeuticPurpose: String? = null,
-    val exerciseSteps: List<ExerciseStepDto>? = null
+    val exerciseSteps: List<ExerciseStepDto> = listOf()
 )

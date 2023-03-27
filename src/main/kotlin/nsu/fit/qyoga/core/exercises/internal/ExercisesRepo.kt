@@ -1,5 +1,6 @@
 package nsu.fit.qyoga.core.exercises.internal
 
+import nsu.fit.qyoga.core.exercises.api.dtos.CreateExerciseDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseSearchDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseTypeDto
@@ -59,4 +60,12 @@ interface ExercisesRepo : CrudRepository<Exercise, Long>, PagingAndSortingReposi
     """
     )
     fun getExerciseTypes(): List<ExerciseTypeDto>
+
+    @Query(
+        """
+            INSERT INTO exercises(title, description, indications, contradictions, duration, exercise_type_id, therapist_id)
+            VALUES (:#{#create?.title}, :#{#create?.description}, :#{#create?.indications}, :#{#create?.contradiction}, :#{#create?.duration}::interval, :#{#create?.exerciseType?.id}, :therapistId) 
+        """
+    )
+    fun insertExercise(create: CreateExerciseDto, therapistId: Long): Exercise
 }

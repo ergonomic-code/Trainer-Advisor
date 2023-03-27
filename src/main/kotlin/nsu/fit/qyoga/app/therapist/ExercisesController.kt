@@ -4,7 +4,6 @@ import nsu.fit.qyoga.core.exercises.api.ExercisesService
 import nsu.fit.qyoga.core.exercises.api.dtos.CreateExerciseDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseSearchDto
-import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseStepDto
 import nsu.fit.qyoga.core.users.internal.UserPrincipal
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -35,7 +34,7 @@ class ExercisesController(
             PageRequest.of(pageNumber - 1, pageSize)
         )
         addExercisePageAttributes(model, exercises, exercisesService)
-        return "exercise-search"
+        return "exercises/exercise-search"
     }
 
     /**
@@ -53,7 +52,7 @@ class ExercisesController(
             PageRequest.of(pageNumber - 1, pageSize)
         )
         addExercisePageAttributes(model, exercises, exercisesService)
-        return "exercise-search :: exercises"
+        return "exercises/xercise-search :: exercises"
     }
 
     /**
@@ -64,9 +63,9 @@ class ExercisesController(
         @ModelAttribute("createDto") createDto: CreateExerciseDto,
         model: Model
     ): String {
-        model.addAttribute("createDto", CreateExerciseDto(exerciseSteps = listOf(ExerciseStepDto("nklnj", null))))
+        model.addAttribute("createDto", CreateExerciseDto())
         model.addAttribute("types", exercisesService.getExerciseTypes())
-        return "exercise-create"
+        return "exercises/exercise-create"
     }
 
     @PostMapping
@@ -78,7 +77,7 @@ class ExercisesController(
         exercisesService.createExercise(createDto, userPrincipal.getId())
         val exercises = exercisesService.getExercises(ExerciseSearchDto(), PageRequest.of(0, 10))
         addExercisePageAttributes(model, exercises, exercisesService)
-        return "exercise-search"
+        return "exercises/exercise-search"
     }
 
     fun addExercisePageAttributes(model: Model, exercises: Page<ExerciseDto>, exercisesService: ExercisesService) {

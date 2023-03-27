@@ -13,7 +13,6 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
-import java.time.Duration
 
 @Service
 class ExercisesServiceImpl(
@@ -35,20 +34,9 @@ class ExercisesServiceImpl(
         return PageImpl(result, pageable, count)
     }
 
-    override fun createExercise(createExerciseDto: CreateExerciseDto, id: Long): Exercise {
-        val savedExercise =
-            exercisesRepo.save(
-                Exercise(
-                    title = createExerciseDto.title!!,
-                    description = createExerciseDto.description!!,
-                    indications = createExerciseDto.indications!!,
-                    contradictions = createExerciseDto.contradiction!!,
-                    duration = Duration.parse(createExerciseDto.duration),
-                    exerciseTypeId = createExerciseDto.exerciseType!!.id,
-                    therapistId = id
-                )
-            )
-        createExerciseDto.exerciseSteps!!.map {
+    override fun createExercise(createExerciseDto: CreateExerciseDto, therapistId: Long): Exercise {
+        val savedExercise = exercisesRepo.insertExercise(createExerciseDto, therapistId)
+        createExerciseDto.exerciseSteps.map {
             val imageId = imagesService.uploadImage(
                 ImageDto(
                     it.photo?.name,

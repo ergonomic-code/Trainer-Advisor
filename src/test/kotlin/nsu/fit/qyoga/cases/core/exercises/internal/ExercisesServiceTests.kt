@@ -3,6 +3,7 @@ package nsu.fit.qyoga.cases.core.exercises.internal
 import io.kotest.matchers.shouldBe
 import nsu.fit.qyoga.cases.core.exercises.ExercisesTestConfig
 import nsu.fit.qyoga.core.exercises.api.ExercisesService
+import nsu.fit.qyoga.core.exercises.api.dtos.CreateExerciseDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseSearchDto
 import nsu.fit.qyoga.core.exercises.api.model.Exercise
 import nsu.fit.qyoga.core.exercises.api.model.ExerciseType
@@ -112,7 +113,44 @@ class ExercisesServiceTests(
         // Then
         exercises.totalElements shouldBe 1
         exercises.content[0].title shouldBe expectedExercise.title
-        exercises.content[0].duration.substring(3, 5).toLong() shouldBe expectedExercise.duration.toMinutes()
+        exercises.content[0].duration shouldBe expectedExercise.duration
         exercises.content[0].type.id shouldBe expectedExercise.exerciseTypeId
+    }
+
+    @Test
+    fun `QYoga can create new exercises without steps`() {
+        // Given
+        val createDto = CreateExerciseDto(
+            title = "Разминка для спины",
+            description = "",
+            indications = "",
+            contradiction = "",
+            duration = "00:10:00",
+            exerciseType = ExerciseType.WarmUp
+        )
+        val expectedExercise = Exercise(
+            id = 6,
+            title = "Разминка для спины",
+            description = "",
+            indications = "",
+            contradictions = "",
+            duration = Duration.ofMinutes(10),
+            exerciseTypeId = 1,
+            therapistId = 1
+        )
+
+        // When
+        val savedExercise = exercisesService.createExercise(createDto, therapistId = 1)
+
+        // Then
+        savedExercise.title shouldBe expectedExercise.title
+        savedExercise.exerciseTypeId shouldBe expectedExercise.exerciseTypeId
+        savedExercise.duration shouldBe expectedExercise.duration
+        savedExercise.therapistId shouldBe expectedExercise.therapistId
+    }
+
+    @Test
+    fun `QYoga can create new exercise with steps`() {
+
     }
 }
