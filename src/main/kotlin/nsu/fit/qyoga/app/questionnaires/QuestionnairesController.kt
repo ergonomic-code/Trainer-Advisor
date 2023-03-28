@@ -78,7 +78,7 @@ class QuestionnairesController(
     /**
      * Добавление нового вопроса
      */
-    @GetMapping("new/{id}/add-question")
+    @GetMapping("{id}/edit/add-question")
     fun addNewQuestionToQuestionnaire(
         @PathVariable id: Long,
         model: Model
@@ -87,7 +87,7 @@ class QuestionnairesController(
         return ""
     }
 
-    @PostMapping("new/{id}")
+    @PostMapping("{id}/edit")
     fun createQuestionnaire(
         @ModelAttribute("createQuestionnaire") questionnaire: QuestionnaireWithQuestionDto,
         @PathVariable id: Long
@@ -95,7 +95,7 @@ class QuestionnairesController(
         return "redirect:/questionnaires/"
     }
 
-    @GetMapping("new/{id}/image")
+    @GetMapping("{id}/edit/image")
     fun loadImageToPage(
         @RequestParam("file") file: MultipartFile,
         @PathVariable id: Long
@@ -103,7 +103,7 @@ class QuestionnairesController(
         return ""
     }
 
-    @PostMapping("new/{id}/image")
+    @PostMapping("{id}/edit/image")
     fun addImageToQuestion(
         @RequestParam("file") file: MultipartFile,
         @PathVariable id: Long
@@ -111,14 +111,21 @@ class QuestionnairesController(
         return ""
     }
 
-    @DeleteMapping("new/{id}/image")
+    @DeleteMapping("{id}/edit/image")
     fun deleteImageFromQuestion(
         @PathVariable id: Long
     ): String {
         return ""
     }
 
-    @GetMapping("new/{id}/change-type")
+    @DeleteMapping("question/{id}")
+    fun deleteQuestionFromQuestionnaire(
+        @PathVariable id: Long
+    ): String {
+        return ""
+    }
+
+    @GetMapping("{id}/edit/change-type")
     fun changeAnswerType(
         @RequestParam("question-type") type: String,
         @PathVariable id: Long
@@ -127,7 +134,7 @@ class QuestionnairesController(
         return ""
     }
 
-    @GetMapping("new/{questionNum}/{questionId}/setScores")
+    @GetMapping("edit/{questionNum}/{questionId}/setScores")
     fun setQuestionScore(
         @PathVariable questionId: Int,
         model : Model,
@@ -136,7 +143,7 @@ class QuestionnairesController(
         return ""
     }
 
-    @GetMapping("new/{questionNum}/{questionId}/setAnswers")
+    @GetMapping("edit/{questionNum}/{questionId}/setAnswers")
     fun setQuestionAnswers(
         @PathVariable questionId: Int,
         model : Model,
