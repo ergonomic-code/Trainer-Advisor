@@ -8,6 +8,6 @@ data class ExerciseStep(
     @Id
     val id: Long = 0,
     val description: String,
-    val imageId: Long,
+    val imageId: Long?,
     val exerciseId: Long
 )

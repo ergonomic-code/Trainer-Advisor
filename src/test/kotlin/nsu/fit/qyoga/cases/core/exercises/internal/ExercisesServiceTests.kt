@@ -3,20 +3,26 @@ package nsu.fit.qyoga.cases.core.exercises.internal
 import io.kotest.matchers.shouldBe
 import nsu.fit.qyoga.cases.core.exercises.ExercisesTestConfig
 import nsu.fit.qyoga.core.exercises.api.ExercisesService
+import nsu.fit.qyoga.core.exercises.api.ImagesService
 import nsu.fit.qyoga.core.exercises.api.dtos.CreateExerciseDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseSearchDto
+import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseStepDto
 import nsu.fit.qyoga.core.exercises.api.model.Exercise
 import nsu.fit.qyoga.core.exercises.api.model.ExerciseType
+import nsu.fit.qyoga.core.exercises.internal.ExerciseStepsRepo
 import nsu.fit.qyoga.infra.QYogaModuleBaseTest
 import nsu.fit.qyoga.infra.TestContainerDbContextInitializer
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.postgresql.util.PGInterval
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.core.io.ClassPathResource
 import org.springframework.data.domain.PageRequest
+import org.springframework.http.MediaType
+import org.springframework.mock.web.MockMultipartFile
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
-import java.time.Duration
 
 @ContextConfiguration(
     classes = [ExercisesTestConfig::class],
@@ -27,7 +33,9 @@ import java.time.Duration
 )
 @ActiveProfiles("test")
 class ExercisesServiceTests(
-    @Autowired private val exercisesService: ExercisesService
+    @Autowired private val exercisesService: ExercisesService,
+    @Autowired private val imagesService: ImagesService,
+    @Autowired private val exerciseStepsRepo: ExerciseStepsRepo
 ) : QYogaModuleBaseTest() {
 
     @BeforeEach
@@ -99,7 +107,7 @@ class ExercisesServiceTests(
             description = "",
             indications = "",
             contradictions = "",
-            duration = Duration.ofMinutes(10),
+            duration = PGInterval("00:10:00"),
             exerciseTypeId = 1,
             therapistId = 1
         )
@@ -134,7 +142,7 @@ class ExercisesServiceTests(
             description = "",
             indications = "",
             contradictions = "",
-            duration = Duration.ofMinutes(10),
+            duration = PGInterval("00:10:00"),
             exerciseTypeId = 1,
             therapistId = 1
         )
@@ -150,7 +158,98 @@ class ExercisesServiceTests(
     }
 
     @Test
-    fun `QYoga can create new exercise with steps`() {
+    fun `QYoga can create new exercise with steps without image`() {
+        // Given
+        val createDto = CreateExerciseDto(
+            title = "Разминка для спины",
+            description = "",
+            indications = "",
+            contradiction = "",
+            duration = "00:10:00",
+            exerciseType = ExerciseType.WarmUp,
+            exerciseSteps = listOf(ExerciseStepDto("Step 1", null), ExerciseStepDto("Step 2", null))
+        )
+        val expectedExercise = Exercise(
+            id = 6,
+            title = "Разминка для спины",
+            description = "",
+            indications = "",
+            contradictions = "",
+            duration = PGInterval("00:10:00"),
+            exerciseTypeId = 1,
+            therapistId = 1
+        )
 
+        // When
+        val savedExercise = exercisesService.createExercise(createDto, therapistId = 1)
+        val savedSteps = exerciseStepsRepo.findAll()
+
+        // Then
+        savedExercise.title shouldBe expectedExercise.title
+        savedExercise.exerciseTypeId shouldBe expectedExercise.exerciseTypeId
+        savedExercise.duration shouldBe expectedExercise.duration
+        savedExercise.therapistId shouldBe expectedExercise.therapistId
+        savedSteps.filter { it.exerciseId == savedExercise.id }
+            .map { it.description } shouldBe createDto.exerciseSteps.map { it.description }
+
+        savedSteps.filter { it.exerciseId == savedExercise.id }.size shouldBe 2
+        savedSteps.filter { it.exerciseId == savedExercise.id }[0]
+            .imageId shouldBe savedSteps.filter { it.exerciseId == savedExercise.id }[1].imageId shouldBe null
+    }
+
+    @Test
+    fun `QYoga can create new exercise with steps with image`() {
+        // Given
+        val createDto = CreateExerciseDto(
+            title = "Разминка для спины",
+            description = "",
+            indications = "",
+            contradiction = "",
+            duration = "00:10:00",
+            exerciseType = ExerciseType.WarmUp,
+            exerciseSteps = listOf(
+                ExerciseStepDto("Step 1", createExampleMultipartFile()),
+                ExerciseStepDto("Step 2", createExampleMultipartFile())
+            )
+        )
+        val expectedExercise = Exercise(
+            id = 6,
+            title = "Разминка для спины",
+            description = "",
+            indications = "",
+            contradictions = "",
+            duration = PGInterval("00:10:00"),
+            exerciseTypeId = 1,
+            therapistId = 1
+        )
+
+        // When
+        val savedExercise = exercisesService.createExercise(createDto, therapistId = 1)
+        val savedSteps = exerciseStepsRepo.findAll()
+        val imagesIds = savedSteps.mapNotNull { it.imageId }
+        val savedImages = listOf(imagesService.getImage(imagesIds[0]), imagesService.getImage(imagesIds[1]))
+
+        // Then
+        savedExercise.title shouldBe expectedExercise.title
+        savedExercise.exerciseTypeId shouldBe expectedExercise.exerciseTypeId
+        savedExercise.duration shouldBe expectedExercise.duration
+        savedExercise.therapistId shouldBe expectedExercise.therapistId
+        savedSteps.filter { it.exerciseId == savedExercise.id }
+            .map { it.description } shouldBe createDto.exerciseSteps.map { it.description }
+
+        savedSteps.filter { it.exerciseId == savedExercise.id }.size shouldBe 2
+        savedImages.map { it?.size } shouldBe createDto.exerciseSteps.map { it.photo }.map { it?.size }
+        savedImages.map { it?.data } shouldBe createDto.exerciseSteps.map { it.photo }.map { it?.bytes }
+    }
+
+    private fun createExampleMultipartFile(): MockMultipartFile {
+        val fileResource = ClassPathResource("files/pug.jpg")
+        println(fileResource)
+        return MockMultipartFile(
+            "file",
+            fileResource.filename,
+            MediaType.MULTIPART_FORM_DATA_VALUE,
+            fileResource.inputStream
+        )
     }
 }

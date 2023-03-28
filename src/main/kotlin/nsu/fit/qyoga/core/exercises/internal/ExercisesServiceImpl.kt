@@ -9,6 +9,7 @@ import nsu.fit.qyoga.core.exercises.api.dtos.ImageDto
 import nsu.fit.qyoga.core.exercises.api.model.Exercise
 import nsu.fit.qyoga.core.exercises.api.model.ExerciseStep
 import nsu.fit.qyoga.core.exercises.api.model.ExerciseType
+import org.postgresql.util.PGInterval
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
@@ -35,16 +36,29 @@ class ExercisesServiceImpl(
     }
 
     override fun createExercise(createExerciseDto: CreateExerciseDto, therapistId: Long): Exercise {
-        val savedExercise = exercisesRepo.insertExercise(createExerciseDto, therapistId)
-        createExerciseDto.exerciseSteps.map {
-            val imageId = imagesService.uploadImage(
-                ImageDto(
-                    it.photo?.name,
-                    it.photo?.contentType ?: "application/octet-stream",
-                    it.photo!!.size,
-                    it.photo.inputStream
-                )
+        val savedExercise = exercisesRepo.save(
+            Exercise(
+                title = createExerciseDto.title!!,
+                description = createExerciseDto.description!!,
+                indications = createExerciseDto.indications!!,
+                contradictions = createExerciseDto.contradiction!!,
+                duration = PGInterval(createExerciseDto.duration!!),
+                exerciseTypeId = createExerciseDto.exerciseType!!.id,
+                therapistId = therapistId
             )
+        )
+        createExerciseDto.exerciseSteps.map {
+            var imageId: Long? = null
+            if (it.photo != null) {
+                imageId = imagesService.uploadImage(
+                    ImageDto(
+                        it.photo.name,
+                        it.photo.contentType ?: "application/octet-stream",
+                        it.photo.size,
+                        it.photo.inputStream
+                    )
+                )
+            }
             exerciseStepsRepo.save(
                 ExerciseStep(
                     description = it.description,
