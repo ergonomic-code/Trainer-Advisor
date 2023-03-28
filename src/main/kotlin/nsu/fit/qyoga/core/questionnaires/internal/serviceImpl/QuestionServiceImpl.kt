@@ -2,6 +2,7 @@ package nsu.fit.qyoga.core.questionnaires.internal.serviceImpl
 
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionWithAnswersDto
 import nsu.fit.qyoga.core.questionnaires.api.enums.QuestionType
+import nsu.fit.qyoga.core.questionnaires.api.errors.QuestionException
 import nsu.fit.qyoga.core.questionnaires.api.model.Question
 import nsu.fit.qyoga.core.questionnaires.api.services.AnswerService
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionService
@@ -30,6 +31,13 @@ class QuestionServiceImpl(
             imageId = createdQuestion.imageId,
             answers = mutableListOf()
         )
+    }
+
+    override fun deleteQuestion(id: Long): Long {
+        val question: Question = questionRepo.findById(id).orElse(null)
+            ?: throw QuestionException("Выбранный вопрос не найден")
+        questionRepo.deleteById(id)
+        return question.questionnaireId
     }
 
     override fun updateQuestion(
