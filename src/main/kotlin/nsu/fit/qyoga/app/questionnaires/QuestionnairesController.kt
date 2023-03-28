@@ -83,10 +83,15 @@ class QuestionnairesController(
         @PathVariable id: Long,
         model: Model
     ): String {
-        model.addAttribute("question", questionService.createQuestion(id))
-        return ""
+        val question = questionService.createQuestion(id)
+        question.answers.add(answerService.createAnswer(question.id))
+        model.addAttribute("question", question)
+        return "questionnaire/create-questionnaire::question"
     }
 
+    /**
+     * Создание опросника
+     */
     @PostMapping("{id}/edit")
     fun createQuestionnaire(
         @ModelAttribute("createQuestionnaire") questionnaire: QuestionnaireWithQuestionDto,
@@ -118,11 +123,19 @@ class QuestionnairesController(
         return ""
     }
 
-    @DeleteMapping("question/{id}")
+    /**
+     * Удаление вопроса из опросника
+     */
+    @DeleteMapping("edit/{questionId}")
     fun deleteQuestionFromQuestionnaire(
-        @PathVariable id: Long
+        @PathVariable questionId: Long,
+        model: Model
     ): String {
-        return ""
+        model.addAttribute(
+            "questionnaire",
+            questionnaireService.findQuestionnaireWithQuestions(questionService.deleteQuestion(questionId))
+        )
+        return "questionnaire/create-questionnaire::questions"
     }
 
     @GetMapping("{id}/edit/change-type")
