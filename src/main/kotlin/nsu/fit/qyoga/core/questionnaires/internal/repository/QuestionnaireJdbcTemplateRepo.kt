@@ -72,7 +72,7 @@ class QuestionnaireJdbcTemplateRepo(
                 id = rs.getLong("questionId"),
                 title = rs.getString("questionTitle"),
                 questionType = QuestionType.valueOf(rs.getString("questionType") ?: return@query),
-                imageId = rs.getLong("questionImageId"),
+                imageId = rs.getString("questionImageId")?.toLong(),
                 answers = mutableListOf()
             )
             val answer = AnswerDto(
@@ -83,7 +83,7 @@ class QuestionnaireJdbcTemplateRepo(
                 upperBound = rs.getInt("answerUpperBound"),
                 upperBoundText = rs.getString("answerUpperBoundText"),
                 score = rs.getInt("answerScore"),
-                imageId = rs.getLong("answerImageId"),
+                imageId = rs.getString("answerImageId")?.toLong()
             )
             val question = getQuestion(questionMap, questionId, questionFromDB, value!!)
             if(!(answer.title == null && answer.lowerBound == 0 && answer.upperBound == 0)) {

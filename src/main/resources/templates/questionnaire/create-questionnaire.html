@@ -102,7 +102,12 @@
 
                                 </div>
 
-                                <div th:id="|question${question.id}Img|"></div>
+                                <div th:id="|question${question.id}Img|" >
+                                    <div th:fragment="image" th:if="${question.imageId} != null">
+                                        <img th:src="@{'/questionnaires/image/'+${question.imageId}}" width="400">
+                                        <img class="cross" src="/img/cross-in-circle.png" alt="delete image">
+                                    </div>
+                                </div>
                           </div>
 
                           <div th:id="|question${question.id}Body|">
