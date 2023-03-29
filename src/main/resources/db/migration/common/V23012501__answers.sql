@@ -10,5 +10,5 @@ CREATE TABLE answers
     question_id BIGINT,
     image_id BIGINT,
     FOREIGN KEY (question_id) REFERENCES questions (id) ON DELETE CASCADE,
-    FOREIGN KEY (image_id) REFERENCES images (id)
+    FOREIGN KEY (image_id) REFERENCES images (id) ON DELETE SET NULL
 )

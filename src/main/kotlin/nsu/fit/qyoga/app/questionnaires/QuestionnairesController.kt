@@ -2,11 +2,15 @@ package nsu.fit.qyoga.app.questionnaires
 
 import nsu.fit.qyoga.core.questionnaires.api.dtos.*
 import nsu.fit.qyoga.core.questionnaires.api.services.AnswerService
+import nsu.fit.qyoga.core.questionnaires.api.services.ImageService
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionService
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
+import org.springframework.core.io.InputStreamResource
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -17,7 +21,8 @@ import org.springframework.web.multipart.MultipartFile
 class QuestionnairesController(
     private val questionnaireService: QuestionnaireService,
     private val questionService: QuestionService,
-    private val answerService: AnswerService
+    private val answerService: AnswerService,
+    private val imageService: ImageService
 ) {
 
     @GetMapping()
@@ -100,20 +105,38 @@ class QuestionnairesController(
         return "redirect:/questionnaires/"
     }
 
-    @GetMapping("{id}/edit/image")
+    @GetMapping("image/{id}")
+    @ResponseBody
     fun loadImageToPage(
-        @RequestParam("file") file: MultipartFile,
         @PathVariable id: Long
-    ): String {
-        return ""
+    ): ResponseEntity<InputStreamResource> {
+        val image = imageService.getImage(id)
+        return ResponseEntity.ok()
+            .contentLength(image.size)
+            .contentType(MediaType.parseMediaType(image.mediaType))
+            .body(InputStreamResource(image.data.inputStream()))
     }
 
     @PostMapping("{id}/edit/image")
     fun addImageToQuestion(
         @RequestParam("file") file: MultipartFile,
-        @PathVariable id: Long
+        @PathVariable id: Long,
+        model: Model
     ): String {
-        return ""
+        val question = questionService.findQuestion(id)
+        if( question.imageId != null) {
+            imageService.deleteImage(id)
+        }
+        val questionDto = QuestionDto(
+            id = question.id,
+            title = question.title,
+            questionType = question.questionType,
+            questionnaireId = question.questionnaireId,
+            imageId = imageService.uploadImage(file)
+        )
+        questionService.updateQuestion(questionDto)
+        model.addAttribute("question", questionDto)
+        return "questionnaire/create-questionnaire::image"
     }
 
     @DeleteMapping("{id}/edit/image")
