@@ -48,10 +48,12 @@ class ClientListPageController(
 
     @DeleteMapping("clients/delete/{id}")
     fun deleteClient(
-        @PathVariable id: String
+        @PathVariable id: Int
     ): String {
-        clientService.deleteClient(id)
-        return "clients-list"
+        if(clientService.deleteClient(id)) {
+            return "redirect: /clients-list"
+        }
+        return "redirect: /clients-list"
     }
 
     fun addClientsPageAttributes(model: Model, clients: Page<ClientListDto>) {

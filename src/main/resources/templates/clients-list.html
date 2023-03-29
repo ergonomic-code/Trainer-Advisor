@@ -203,8 +203,8 @@
                                     <td th:text="${client.firstName}"></td>
                                     <td th:text="${client.patronymic}"></td>
                                     <td>
-                                        <form th:action="@{/clients/delete/{id} (id=${client.id})}" method="post">
-                                            <button class="btn btn-secondary" id="btnDeleteClient" type="button">
+                                        <form th:object="${client}" th:action="@{/clients/delete/{id} (id=${client.id})}" th:method="delete">
+                                            <button class="btn btn-secondary" id="btnDeleteClient" type="submit">
                                                 Удалить
                                             </button>
                                         </form>

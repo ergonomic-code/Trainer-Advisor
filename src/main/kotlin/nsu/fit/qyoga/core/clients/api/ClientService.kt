@@ -11,5 +11,5 @@ interface ClientService {
         page: Pageable
     ): Page<ClientListDto>
 
-    fun deleteClient(id: String): Boolean
+    fun deleteClient(id: Int): Boolean
 }
