@@ -10,6 +10,7 @@ import java.util.stream.Collectors
 class UserDetailsImpl(
     private val username: String,
     private val password: String,
+    private val id: Long,
     private val roles: Collection<GrantedAuthority>
 ) : UserDetails {
     override fun isAccountNonLocked(): Boolean {
@@ -23,18 +24,27 @@ class UserDetailsImpl(
     override fun getPassword(): String {
         return this.password
     }
+
     override fun getUsername(): String {
         return this.username
     }
+
     override fun isAccountNonExpired(): Boolean {
         return true
     }
+
     override fun isCredentialsNonExpired(): Boolean {
         return true
     }
+
     override fun isEnabled(): Boolean {
         return true
     }
+
+    fun getId(): Long {
+        return id
+    }
+
     companion object {
         fun build(user: User): UserDetailsImpl {
             val authorities: List<GrantedAuthority> = user.roles.stream()
@@ -45,6 +55,7 @@ class UserDetailsImpl(
             return UserDetailsImpl(
                 user.username,
                 user.passwordHash,
+                user.id,
                 authorities
             )
         }
