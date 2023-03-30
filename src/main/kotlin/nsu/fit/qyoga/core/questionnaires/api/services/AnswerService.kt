@@ -6,4 +6,7 @@ interface AnswerService {
 
     fun createAnswer(id: Long): AnswerDto
     fun updateAnswer(createAnswerDto: AnswerDto, questionId: Long, answerImageId: Long?)
+    fun findAnswer(id: Long): AnswerDto
+
+    fun updateAnswer(createAnswerDto: AnswerDto)
 }

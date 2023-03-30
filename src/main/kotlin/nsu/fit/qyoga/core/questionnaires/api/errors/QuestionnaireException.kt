@@ -1,3 +1,5 @@
 package nsu.fit.qyoga.core.questionnaires.api.errors
 
-open class QuestionnaireException(message: String) : Exception(message)
+import nsu.fit.platform.errors.ResourceNotFound
+
+open class QuestionnaireException(message: String) : ResourceNotFound(message)

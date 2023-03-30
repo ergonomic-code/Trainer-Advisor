@@ -79,7 +79,7 @@
                                                hx-trigger="change"
                                                hx-encoding="multipart/form-data"
                                                th:attr = "
-                                            hx-post=|@{/questionnaires/{id}/edit/image(id=${question.id})}|,
+                                            hx-post=|@{/questionnaires/question/{id}/image(id=${question.id})}|,
                                             hx-target=|#question${question.id}Img|">
                                     </div>
 
@@ -103,9 +103,12 @@
                                 </div>
 
                                 <div th:id="|question${question.id}Img|" >
-                                    <div th:fragment="image" th:if="${question.imageId} != null">
+                                    <div th:if="${question.imageId} != null">
                                         <img th:src="@{'/questionnaires/image/'+${question.imageId}}" width="400">
-                                        <img class="cross" src="/img/cross-in-circle.png" alt="delete image">
+                                        <img class="cross" src="/img/cross-in-circle.png" alt="delete image"
+                                             th:attr = "
+                                            hx-delete=|@{/questionnaires/image/{id}(id=${question.imageId})}|,
+                                            hx-target=|#question${question.id}Img|">
                                     </div>
                                 </div>
                           </div>
@@ -125,12 +128,25 @@
                                                 </label>
                                                 <div style="width: 40px">
                                                     <img class="add-img-to-question-btn" src="/img/add-file.png" alt="Добавить изображение">
-                                                    <input name="file" type="file" class="input-file" aria-hidden="true" style="margin-top: 3px;">
+                                                    <input name="file" type="file" class="input-file" aria-hidden="true" style="margin-top: 3px;"
+                                                           hx-trigger="change"
+                                                           hx-encoding="multipart/form-data"
+                                                           th:attr = "
+                                                           hx-post=|@{/questionnaires/answer/{id}/image(id=${answer.id})}|,
+                                                           hx-target=|#answer${answer.id}Img|">
                                                 </div>
                                                 <img class="delete-answer" src="/img/cross.png" alt="delete answer" style="width: 30px; height: 30px">
                                             </div>
 
-                                            <div th:id="|answer${answer.id}Img|"></div>
+                                            <div th:id="|answer${answer.id}Img|">
+                                                <div th:if="${answer.imageId} != null">
+                                                    <img th:src="@{'/questionnaires/image/'+${answer.imageId}}" width="400">
+                                                    <img class="cross" src="/img/cross-in-circle.png" alt="delete image"
+                                                         th:attr = "
+                                                         hx-delete=|@{/questionnaires/image/{id}(id=${answer.imageId})}|,
+                                                         hx-target=|#answer${answer.id}Img|">
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <div th:case="several">
@@ -141,12 +157,25 @@
                                                 </label>
                                                 <div style="width: 40px">
                                                     <img class="add-img-to-question-btn" src="/img/add-file.png" alt="Добавить изображение">
-                                                    <input name="file" type="file" class="input-file" aria-hidden="true" style="margin-top: 3px;">
+                                                    <input name="file" type="file" class="input-file" aria-hidden="true" style="margin-top: 3px;"
+                                                           hx-trigger="change"
+                                                           hx-encoding="multipart/form-data"
+                                                           th:attr = "
+                                                           hx-post=|@{/questionnaires/answer/{id}/image(id=${question.id})}|,
+                                                           hx-target=|#answer${answer.id}Img|">
                                                 </div>
                                                 <img class="delete-answer" src="/img/cross.png" alt="delete answer" style="width: 30px; height: 30px">
                                             </div>
 
-                                            <div th:id="|answer${answer.id}Img|"></div>
+                                            <div th:id="|answer${answer.id}Img|">
+                                                <div th:if="${answer.imageId} != null">
+                                                    <img th:src="@{'/questionnaires/image/'+${answer.imageId}}" width="400">
+                                                    <img class="cross" src="/img/cross-in-circle.png" alt="delete image"
+                                                         th:attr = "
+                                                         hx-delete=|@{/questionnaires/image/{id}(id=${answer.imageId})}|,
+                                                         hx-target=|#answer${answer.id}Img|">
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <div th:case="text" style="margin-top: 20px" >
