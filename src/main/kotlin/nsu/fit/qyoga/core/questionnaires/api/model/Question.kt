@@ -1,6 +1,6 @@
 package nsu.fit.qyoga.core.questionnaires.api.model
 
-import nsu.fit.qyoga.core.questionnaires.api.enums.QuestionType
+import nsu.fit.qyoga.core.questionnaires.api.dtos.enums.QuestionType
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
 

@@ -117,7 +117,7 @@ class QuestionnairesController(
             .body(InputStreamResource(image.data.inputStream()))
     }
 
-    @PostMapping("{id}/edit/image")
+    @PostMapping("question/{id}/image")
     fun addImageToQuestion(
         @RequestParam("file") file: MultipartFile,
         @PathVariable id: Long,
@@ -136,13 +136,41 @@ class QuestionnairesController(
         )
         questionService.updateQuestion(questionDto)
         model.addAttribute("question", questionDto)
-        return "questionnaire/create-questionnaire::image"
+        return "fragments/create-questionnaire-image::questionImage"
     }
 
-    @DeleteMapping("{id}/edit/image")
+    @PostMapping("answer/{id}/image")
+    fun addImageToAnswer(
+        @RequestParam("file") file: MultipartFile,
+        @PathVariable id: Long,
+        model: Model
+    ): String {
+        val answer = answerService.findAnswer(id)
+        if( answer.imageId != null) {
+            imageService.deleteImage(id)
+        }
+        val answerDto = AnswerDto(
+            id = answer.id,
+            title = answer.title,
+            lowerBound = answer.lowerBound,
+            lowerBoundText = answer.lowerBoundText,
+            upperBound = answer.upperBound,
+            upperBoundText = answer.upperBoundText,
+            score = answer.score,
+            imageId = imageService.uploadImage(file),
+            questionId = answer.questionId
+        )
+        answerService.updateAnswer(answerDto)
+        model.addAttribute("answer", answerDto)
+        return "fragments/create-questionnaire-image::answerImage"
+    }
+
+    @DeleteMapping("image/{id}")
+    @ResponseBody
     fun deleteImageFromQuestion(
         @PathVariable id: Long
     ): String {
+        imageService.deleteImage(id)
         return ""
     }
 

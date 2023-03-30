@@ -1,9 +1,11 @@
 package nsu.fit.qyoga.core.questionnaires.internal.serviceImpl
 
 import nsu.fit.qyoga.core.questionnaires.api.dtos.AnswerDto
+import nsu.fit.qyoga.core.questionnaires.api.errors.AnswerException
 import nsu.fit.qyoga.core.questionnaires.api.model.Answer
 import nsu.fit.qyoga.core.questionnaires.api.services.AnswerService
 import nsu.fit.qyoga.core.questionnaires.internal.repository.AnswerRepo
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException
 import org.springframework.stereotype.Service
 
 @Service
@@ -32,6 +34,7 @@ class AnswerServiceImpl(
             upperBoundText = answer.upperBoundText,
             score = answer.score,
             imageId = answer.imageId,
+            questionId = answer.questionId
         )
     }
 
@@ -47,6 +50,38 @@ class AnswerServiceImpl(
                 imageId = answerImageId,
                 questionId = questionId
             )
+        )
+    }
+
+    override fun updateAnswer(createAnswerDto: AnswerDto) {
+        answerRepo.save(
+            Answer(
+                id = createAnswerDto.id,
+                title = createAnswerDto.title,
+                lowerBound = createAnswerDto.lowerBound,
+                lowerBoundText = createAnswerDto.lowerBoundText,
+                upperBound = createAnswerDto.upperBound,
+                upperBoundText = createAnswerDto.upperBoundText,
+                score = createAnswerDto.score,
+                imageId = createAnswerDto.imageId,
+                questionId = createAnswerDto.questionId
+            )
+        )
+    }
+
+    override fun findAnswer(id: Long): AnswerDto {
+        val answer = answerRepo.findById(id).orElse(null)
+            ?: throw AnswerException("Выбранный ответ не найден")
+        return AnswerDto(
+            id = answer.id,
+            title = answer.title,
+            lowerBound = answer.lowerBound,
+            lowerBoundText = answer.lowerBoundText,
+            upperBound = answer.upperBound,
+            upperBoundText = answer.upperBoundText,
+            score = answer.score,
+            imageId = answer.imageId,
+            questionId = answer.questionId
         )
     }
 }

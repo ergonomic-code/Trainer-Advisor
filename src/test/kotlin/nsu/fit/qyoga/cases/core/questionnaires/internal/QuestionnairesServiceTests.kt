@@ -10,7 +10,7 @@ import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionWithAnswersDto
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireSearchDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireWithQuestionDto
-import nsu.fit.qyoga.core.questionnaires.api.enums.QuestionType
+import nsu.fit.qyoga.core.questionnaires.api.dtos.enums.QuestionType
 import nsu.fit.qyoga.infra.QYogaModuleBaseTest
 import nsu.fit.qyoga.infra.TestContainerDbContextInitializer
 import org.junit.jupiter.api.BeforeEach
@@ -181,7 +181,8 @@ class QuestionnairesServiceTests(
                             upperBound = null,
                             upperBoundText = null,
                             score = null,
-                            imageId = null
+                            imageId = null,
+                            questionId = 0
                         )
                     )
                 )
