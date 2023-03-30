@@ -7,8 +7,6 @@ CREATE TABLE answers
     upper_bound INT,
     upper_bound_text VARCHAR,
     score INT,
-    question_id BIGINT,
-    image_id BIGINT,
-    FOREIGN KEY (question_id) REFERENCES questions (id) ON DELETE CASCADE,
-    FOREIGN KEY (image_id) REFERENCES images (id) ON DELETE SET NULL
+    question_id BIGINT NOT NULL REFERENCES questions (id) ON DELETE CASCADE,
+    image_id BIGINT REFERENCES images (id) ON DELETE SET NULL
 )

@@ -1,7 +1,7 @@
 package nsu.fit.qyoga.core.questionnaires.internal.repository
 
 import nsu.fit.qyoga.core.questionnaires.api.dtos.*
-import nsu.fit.qyoga.core.questionnaires.api.enums.QuestionType
+import nsu.fit.qyoga.core.questionnaires.api.dtos.enums.QuestionType
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
@@ -83,7 +83,8 @@ class QuestionnaireJdbcTemplateRepo(
                 upperBound = rs.getInt("answerUpperBound"),
                 upperBoundText = rs.getString("answerUpperBoundText"),
                 score = rs.getInt("answerScore"),
-                imageId = rs.getString("answerImageId")?.toLong()
+                imageId = rs.getString("answerImageId")?.toLong(),
+                questionId = questionId
             )
             val question = getQuestion(questionMap, questionId, questionFromDB, value!!)
             if(!(answer.title == null && answer.lowerBound == 0 && answer.upperBound == 0)) {

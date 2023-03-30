@@ -2,7 +2,7 @@ package nsu.fit.qyoga.core.questionnaires.internal.serviceImpl
 
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionWithAnswersDto
-import nsu.fit.qyoga.core.questionnaires.api.enums.QuestionType
+import nsu.fit.qyoga.core.questionnaires.api.dtos.enums.QuestionType
 import nsu.fit.qyoga.core.questionnaires.api.errors.QuestionException
 import nsu.fit.qyoga.core.questionnaires.api.model.Question
 import nsu.fit.qyoga.core.questionnaires.api.services.AnswerService
@@ -64,7 +64,6 @@ class QuestionServiceImpl(
             )
         )
     }
-
 
     override fun updateQuestion(
         createQuestionDto: QuestionWithAnswersDto,
