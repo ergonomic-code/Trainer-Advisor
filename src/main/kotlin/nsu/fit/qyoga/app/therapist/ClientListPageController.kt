@@ -53,9 +53,9 @@ class ClientListPageController(
         @PathVariable id: Int
     ): String {
         if (clientService.deleteClient(id)) {
-            return CLIENT_PAGE
+            return "redirect:/clients"
         }
-        return CLIENT_PAGE
+        return "redirect:/clients"
     }
 
     fun addClientsPageAttributes(model: Model, clients: Page<ClientListDto>) {
