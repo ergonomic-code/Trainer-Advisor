@@ -106,13 +106,13 @@ class ClientsServiceTests(
     fun `QYoga should delete clients with delete-button`() {
         // Given
         val searchDto = ClientListSearchDto()
+        clientService.deleteClient(1)
+
+        // When
         val clients = clientService.getClients(
             searchDto,
             PageRequest.of(0, 10)
         )
-        // When
-
-        clientService.deleteClient(4)
 
         // Then
         clients.content.size shouldBe 2
