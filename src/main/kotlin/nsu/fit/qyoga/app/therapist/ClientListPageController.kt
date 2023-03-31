@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*
 import java.util.stream.Collectors
 import java.util.stream.IntStream
 
+const val CLIENT_PAGE = "clients-list"
+
 @Controller
 @RequestMapping("/clients")
 class ClientListPageController(
@@ -28,7 +30,7 @@ class ClientListPageController(
             PageRequest.of(pageNumber - 1, pageSize)
         )
         addClientsPageAttributes(model, clients)
-        return "clients-list"
+        return CLIENT_PAGE
     }
 
     @GetMapping("/search-cl")
@@ -46,14 +48,14 @@ class ClientListPageController(
         return "clients-list :: clients"
     }
 
-    @DeleteMapping("clients/delete/{id}")
+    @PostMapping("/delete/{id}")
     fun deleteClient(
         @PathVariable id: Int
     ): String {
-        if(clientService.deleteClient(id)) {
-            return "redirect: /clients-list"
+        if (clientService.deleteClient(id)) {
+            return CLIENT_PAGE
         }
-        return "redirect: /clients-list"
+        return CLIENT_PAGE
     }
 
     fun addClientsPageAttributes(model: Model, clients: Page<ClientListDto>) {
