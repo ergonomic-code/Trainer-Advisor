@@ -5,6 +5,6 @@ import org.springframework.web.multipart.MultipartFile
 
 interface ImageService {
     fun uploadImage(file: MultipartFile): Long
-    fun deleteImage(id: Long)
+    fun deleteImage(id: Long): Image
     fun getImage(id: Long): Image
 }

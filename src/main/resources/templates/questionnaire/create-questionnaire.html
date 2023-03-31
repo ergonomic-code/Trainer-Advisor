@@ -102,14 +102,8 @@
 
                                 </div>
 
-                                <div th:id="|question${question.id}Img|" >
-                                    <div th:if="${question.imageId} != null">
-                                        <img th:src="@{'/questionnaires/image/'+${question.imageId}}" width="400">
-                                        <img class="cross" src="/img/cross-in-circle.png" alt="delete image"
-                                             th:attr = "
-                                            hx-delete=|@{/questionnaires/image/{id}(id=${question.imageId})}|,
-                                            hx-target=|#question${question.id}Img|">
-                                    </div>
+                                <div th:id="|question${question.id}Img|" style="margin-top: 20px">
+                                    <div th:replace="~{/fragments/create-questionnaire-image.html :: questionImage(${question}) }"></div>
                                 </div>
                           </div>
 
@@ -138,14 +132,8 @@
                                                 <img class="delete-answer" src="/img/cross.png" alt="delete answer" style="width: 30px; height: 30px">
                                             </div>
 
-                                            <div th:id="|answer${answer.id}Img|">
-                                                <div th:if="${answer.imageId} != null">
-                                                    <img th:src="@{'/questionnaires/image/'+${answer.imageId}}" width="400">
-                                                    <img class="cross" src="/img/cross-in-circle.png" alt="delete image"
-                                                         th:attr = "
-                                                         hx-delete=|@{/questionnaires/image/{id}(id=${answer.imageId})}|,
-                                                         hx-target=|#answer${answer.id}Img|">
-                                                </div>
+                                            <div th:id="|answer${answer.id}Img|" style="margin-top: 20px">
+                                                <div th:replace="~{/fragments/create-questionnaire-image.html :: answerImage(${answer}) }"></div>
                                             </div>
                                         </div>
 
@@ -167,14 +155,8 @@
                                                 <img class="delete-answer" src="/img/cross.png" alt="delete answer" style="width: 30px; height: 30px">
                                             </div>
 
-                                            <div th:id="|answer${answer.id}Img|">
-                                                <div th:if="${answer.imageId} != null">
-                                                    <img th:src="@{'/questionnaires/image/'+${answer.imageId}}" width="400">
-                                                    <img class="cross" src="/img/cross-in-circle.png" alt="delete image"
-                                                         th:attr = "
-                                                         hx-delete=|@{/questionnaires/image/{id}(id=${answer.imageId})}|,
-                                                         hx-target=|#answer${answer.id}Img|">
-                                                </div>
+                                            <div th:id="|answer${answer.id}Img|" style="margin-top: 20px">
+                                                <div th:replace="~{/fragments/create-questionnaire-image.html :: answerImage(${answer}) }"></div>
                                             </div>
                                         </div>
 

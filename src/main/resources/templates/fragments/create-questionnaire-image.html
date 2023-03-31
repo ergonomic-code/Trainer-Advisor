@@ -1,14 +1,16 @@
-<div th:fragment="questionImage" th:if="${question.imageId} != null">
-    <img th:src="@{'/questionnaires/image/'+${question.imageId}}" width="400">
+<div th:fragment="questionImage (question)" th:if="${question.imageId} != null">
+    <img th:src="@{'/questionnaires/image/'+${question.imageId}}" width="250">
     <img class="cross" src="/img/cross-in-circle.png" alt="delete image"
+         style="position: absolute; width: 25px; margin-top: -13px; margin-left: -13px;"
          th:attr = "
          hx-delete=|@{/questionnaires/image/{id}(id=${question.imageId})}|,
          hx-target=|#question${question.id}Img|">
 </div>
 
-<div th:fragment="answerImage" th:if="${answer.imageId} != null">
-    <img th:src="@{'/questionnaires/image/'+${answer.imageId}}" width="400">
+<div th:fragment="answerImage (answer)" th:if="${answer.imageId} != null">
+    <img th:src="@{'/questionnaires/image/'+${answer.imageId}}" width="250">
     <img class="cross" src="/img/cross-in-circle.png" alt="delete image"
+         style="position: absolute; width: 25px; margin-top: -13px; margin-left: -13px;"
          th:attr = "
          hx-delete=|@{/questionnaires/image/{id}(id=${answer.imageId})}|,
          hx-target=|#answer${answer.id}Img|">
