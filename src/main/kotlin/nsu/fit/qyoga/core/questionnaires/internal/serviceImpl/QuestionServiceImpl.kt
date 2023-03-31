@@ -53,8 +53,8 @@ class QuestionServiceImpl(
         )
     }
 
-    override fun updateQuestion(question: QuestionDto) {
-        questionRepo.save(
+    override fun updateQuestion(question: QuestionDto): Long {
+        return questionRepo.save(
             Question(
                 id = question.id,
                 title = question.title,
@@ -62,14 +62,14 @@ class QuestionServiceImpl(
                 questionnaireId = question.questionnaireId,
                 imageId = question.imageId
             )
-        )
+        ).id
     }
 
     override fun updateQuestion(
         createQuestionDto: QuestionWithAnswersDto,
         questionnaireId: Long,
         questionImageId: Long?
-    ) {
+    ): Long {
         val savedQuestion = questionRepo.save(
             Question(
                 title = createQuestionDto.title,
@@ -81,5 +81,6 @@ class QuestionServiceImpl(
         createQuestionDto.answers.map {
             answerService.updateAnswer(it, savedQuestion.id, it.imageId)
         }
+        return savedQuestion.id
     }
 }
