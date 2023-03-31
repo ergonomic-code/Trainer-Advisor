@@ -25,7 +25,7 @@ import org.springframework.test.context.ContextConfiguration
     webEnvironment = SpringBootTest.WebEnvironment.NONE
 )
 @ActiveProfiles("test")
-class QuestionServiceTest(
+class QuestionServiceTest (
     @Autowired private val questionService: QuestionService
 ) : QYogaModuleBaseTest() {
 
@@ -47,22 +47,23 @@ class QuestionServiceTest(
     }
 
     @Test
-    fun `QYoga can create question from QuestionWithAnswersDto and find them`() {
+    fun `QYoga can create question from QuestionWithAnswersDto`() {
         val questionId = questionService.updateQuestion(
             QuestionWithAnswersDto(
                 id = 0,
                 title = "test",
                 questionType = QuestionType.RANGE,
                 imageId = null,
-                questionnaireId = 1
-            )
+                answers = mutableListOf()
+            ),
+            questionnaireId = 1,
+            questionImageId = null
         )
         val question = questionService.findQuestionWithAnswers(questionId)
         question.questionnaireId shouldBe 1
         question.questionType shouldBe QuestionType.RANGE
         question.imageId shouldBe null
         question.title shouldBe "test"
-        question.answers.size shouldBe 1
     }
 
     @Test
@@ -99,5 +100,9 @@ class QuestionServiceTest(
             QuestionException::class.java
         ) { questionService.findQuestion(questionId) }
         Assertions.assertEquals("Выбранный вопрос не найден", thrown1.message)
+        val thrown: QuestionException = Assertions.assertThrows(
+            QuestionException::class.java
+        ) { questionService.deleteQuestion(questionId) }
+        Assertions.assertEquals("Выбранный вопрос не найден", thrown.message)
     }
 }

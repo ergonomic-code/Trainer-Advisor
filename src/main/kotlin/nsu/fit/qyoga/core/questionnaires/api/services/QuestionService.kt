@@ -11,11 +11,11 @@ interface QuestionService {
 
     fun findQuestion(id: Long): QuestionDto
 
-    fun updateQuestion(question: QuestionDto)
+    fun updateQuestion(question: QuestionDto): Long
 
     fun updateQuestion(
         createQuestionDto: QuestionWithAnswersDto,
         questionnaireId: Long,
         questionImageId: Long?
-    )
+    ): Long
 }
