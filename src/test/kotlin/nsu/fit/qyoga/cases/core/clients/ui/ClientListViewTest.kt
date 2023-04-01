@@ -65,4 +65,17 @@ class ClientListViewTest : QYogaAppTestBase() {
             }
         }
     }
+
+    fun `QYoga returns clients table with deleted client`() {
+        When {
+            post("/clients/delete/1")
+        } Then {
+            val body = Jsoup.parse(extract().body().asString())
+            Assertions.assertThatSpec(body) {
+                node("#clientsTable") { exists() }
+                node("#clients-list") { exists() }
+                node("td") { exists() }
+            }
+        }
+    }
 }

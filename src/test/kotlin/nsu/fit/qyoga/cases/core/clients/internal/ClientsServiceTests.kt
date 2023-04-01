@@ -8,6 +8,7 @@ import nsu.fit.qyoga.core.clients.api.ClientService
 import nsu.fit.qyoga.core.clients.api.Dto.ClientListSearchDto
 import nsu.fit.qyoga.infra.QYogaModuleBaseTest
 import nsu.fit.qyoga.infra.TestContainerDbContextInitializer
+import org.hamcrest.core.StringEndsWith
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.domain.PageRequest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.web.client.match.MockRestRequestMatchers.header
 import java.time.LocalDate
 
 @ContextConfiguration(
@@ -106,16 +108,34 @@ class ClientsServiceTests(
     fun `QYoga should delete clients with delete-button`() {
         // Given
         val searchDto = ClientListSearchDto()
+
+        // When
         clientService.deleteClient(1)
+        val clients = clientService.getClients(
+            searchDto,
+            PageRequest.of(0, 10)
+        )
+        // Then
+        header("Location", StringEndsWith.endsWith("1"))
+        clients.content.size shouldBe 2
+        clients.totalElements shouldBe 2
+        header("Location", StringEndsWith.endsWith("clients"))
+    }
+
+    @Test
+    fun `QYoga should redirect to clients-list when delete can't client`() {
+        // Given
+        val searchDto = ClientListSearchDto()
+        clientService.deleteClient(100)
 
         // When
         val clients = clientService.getClients(
             searchDto,
             PageRequest.of(0, 10)
         )
-
         // Then
-        clients.content.size shouldBe 2
-        clients.totalElements shouldBe 2
+        clients.content.size shouldBe 3
+        clients.totalElements shouldBe 3
+        header("Location", StringEndsWith.endsWith("clients"))
     }
 }
