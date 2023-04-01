@@ -10,9 +10,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
-private const val USERNAME_FORM_PARAM = "username"
-private const val PASSWORD_FORM_PARAM = "password"
-
 class ClientListExtTest : QYogaAppTestBase() {
 
     @Autowired
@@ -28,12 +25,8 @@ class ClientListExtTest : QYogaAppTestBase() {
 
     @Test
     fun `When user delete valid client he should be redirected to client page`() {
-        val cookie = Given {
-            formParam(USERNAME_FORM_PARAM, "therapist")
-            formParam(PASSWORD_FORM_PARAM, "diem-Synergy5")
-        }.post("/users/login").thenReturn().detailedCookie("JSESSIONID")
         Given {
-            this.cookie(cookie)
+            this.cookie(GetAuthCookie())
         } When {
             post("/clients/delete/1")
         } Then {
@@ -44,12 +37,8 @@ class ClientListExtTest : QYogaAppTestBase() {
 
     @Test
     fun `When user delete not valid client he should be redirected to client page`() {
-        val cookie = Given {
-            formParam(USERNAME_FORM_PARAM, "therapist")
-            formParam(PASSWORD_FORM_PARAM, "diem-Synergy5")
-        }.post("/users/login").thenReturn().detailedCookie("JSESSIONID")
         Given {
-            this.cookie(cookie)
+            this.cookie(GetAuthCookie())
         } When {
             post("/clients/delete/1111")
         } Then {

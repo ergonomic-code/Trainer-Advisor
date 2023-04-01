@@ -33,13 +33,8 @@ class AuthorizationTests : QYogaAppTestBase() {
 
     @Test
     fun `authorized access to therapist's page should be allowed`() {
-        val cookie = Given {
-            formParam(USERNAME_FORM_PARAM, "therapist")
-            formParam(PASSWORD_FORM_PARAM, "diem-Synergy5")
-        }.post("/users/login").thenReturn().detailedCookie("JSESSIONID")
-
         Given {
-            this.cookie(cookie)
+            this.cookie(GetAuthCookie())
         } When {
             get("/therapist/main")
         } Then {
