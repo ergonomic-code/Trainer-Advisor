@@ -177,14 +177,15 @@
                                         <textarea
                                                 aria-label="With textarea"
                                                 class="form-control"
-                                                th:field="*{exerciseSteps[__${stat.index}__].description}"></textarea>
+                                                th:field="*{createDto.exerciseSteps[__${stat.index}__].description}"></textarea>
                                     </div>
 
                                     <div class="mb-3 mt-3">
                                         <label class="form-label">Фото шага упражнения</label>
                                         <input
                                                 class="form-control"
-                                                th:field="*{exerciseSteps[__${stat.index}__].photo}" type="file"
+                                                th:field="*{createDto.exerciseSteps[__${stat.index}__].photo}"
+                                                type="file"
                                                 xml:lang="ru">
                                     </div>
                                 </div>

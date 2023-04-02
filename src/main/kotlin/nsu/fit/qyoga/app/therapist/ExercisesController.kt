@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*
 import java.util.stream.Collectors
 import java.util.stream.IntStream
 
+private const val BASIC_PAGE_SIZE = 10
+
 @Controller
 @RequestMapping("/exercises")
 class ExercisesController(
@@ -60,7 +62,6 @@ class ExercisesController(
      */
     @GetMapping("/create")
     fun getCreateExercisePage(
-        @ModelAttribute("createDto") createDto: CreateExerciseDto,
         model: Model
     ): String {
         model.addAttribute("createDto", CreateExerciseDto())
@@ -75,9 +76,8 @@ class ExercisesController(
         model: Model
     ): String {
         val userPrincipal = authentication.principal as UserDetailsImpl
-        println(createDto)
         exercisesService.createExercise(createDto, userPrincipal.getId())
-        val exercises = exercisesService.getExercises(ExerciseSearchDto(), PageRequest.of(0, 10))
+        val exercises = exercisesService.getExercises(ExerciseSearchDto(), PageRequest.of(0, BASIC_PAGE_SIZE))
         addExercisePageAttributes(model, exercises, exercisesService)
         return "exercises/exercise-search"
     }
