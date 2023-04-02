@@ -7,5 +7,6 @@ data class QuestionWithAnswersDto(
     val title: String?,
     val questionType: QuestionType,
     val imageId: Long?,
+    val questionnaireId: Long,
     val answers: MutableList<AnswerDto>
 )

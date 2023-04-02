@@ -16,5 +16,7 @@ interface QuestionnaireService {
 
     fun updateQuestionnaire(createQuestionnaireDto: QuestionnaireWithQuestionDto): QuestionnaireDto
 
+    fun updateQuestionnaire(questionnaire: QuestionnaireDto): Long
+
     fun findQuestionnaireWithQuestions(id: Long): QuestionnaireWithQuestionDto
 }
