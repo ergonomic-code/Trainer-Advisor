@@ -58,20 +58,27 @@
                 <label style="width: 100%">
                     <input type="text" style="width: 70%; margin-top: 15px; border-radius: 5px; min-width: 100px"
                            th:value="${questionnaire.title}"
-                           th:field="*{title}" required>
+                           th:name="title" required
+                           hx-trigger="keyup changed delay:100ms"
+                           hx-swap="none" th:attr = "
+                           hx-get=|@{/questionnaires/{id}/edit/title(id=${questionnaire.id})}|">
                 </label>
             </div>
 
-            <div id="questions" th:fragment="questions">
+            <div id="questions" >
                   <div th:each="question, i : ${questionnaire.questions}">
-                      <div th:id="|question${question.id}|" th:fragment="question" class="p-3"
-                           style="margin-top: 20px; background-color: #dcdcdc; border-radius: 8px;">
+                      <div  th:fragment="question" class="p-3" th:id="|question${question.id}|"
+                           style="margin-top: 20px; background-color: #dcdcdc; border-radius: 8px;" >
 
                           <div th:id="|question${question.id}Header|" th:fragment="questionHeader">
 
                                 <div class="flex-row justify-content-start d-flex" style="flex-wrap: wrap">
-                                    <input class="question-text" type="text" name="questionText" th:value="${question.title}" required
-                                    style="width: calc(80% - 40px); border-radius: 5px; min-width: 60px">
+                                    <input class="question-text" type="text"
+                                           style="width: calc(80% - 40px); border-radius: 5px; min-width: 60px"
+                                           hx-trigger="keyup changed delay:100ms"
+                                           th:name="title" th:value="${question.title}" required
+                                           hx-swap="none" th:attr = "
+                                           hx-get=|@{/questionnaires/question/{id}/title(id=${question.id})}|">
 
                                     <div style="width: 40px">
                                         <img class="add-img-to-question-btn" src="/img/add-file.png" alt="Добавить изображение">
@@ -86,18 +93,19 @@
                                     <select name="question-type"
                                             hx-trigger="change"
                                             style="width: 20%; border-radius: 5px; max-width: 200px"
+                                            hx-swap="outerHTML"
                                             th:attr = "
-                                            hx-get=|@{/questionnaires/questions/{questionId}/changeType(questionId=${question.id})}|,
-                                            hx-target=|#question${question.id}Body|"
-                                            class="sort-btn">
-                                        <option value="one" th:if="${question.questionType.text} == 'one'" selected disabled hidden>один из списка</option>
-                                        <option value="several" th:if="${question.questionType.text} == 'several'" selected disabled hidden>несколько из списка</option>
-                                        <option value="range" th:if="${question.questionType.text} == 'range'" selected disabled hidden>интервал</option>
-                                        <option value="text" th:if="${question.questionType.text} == 'text'" selected disabled hidden>текст</option>
-                                        <option value="one">один из списка</option>
-                                        <option value="several">несколько из списка</option>
-                                        <option value="range">интервал</option>
-                                        <option value="text">текст</option>
+                                             hx-get=|@{/questionnaires/question/{id}/change-type(id=${question.id})}|,
+                                             hx-target=|#question${question.id}|"
+                                            class="sort-btn" th:name="questionType">
+                                        <option value="SINGLE" th:if="${question.questionType.text} == 'one'" selected disabled hidden>один из списка</option>
+                                        <option value="SEVERAL" th:if="${question.questionType.text} == 'several'" selected disabled hidden>несколько из списка</option>
+                                        <option value="RANGE" th:if="${question.questionType.text} == 'range'" selected disabled hidden>интервал</option>
+                                        <option value="TEXT" th:if="${question.questionType.text} == 'text'" selected disabled hidden>текст</option>
+                                        <option value="SINGLE">один из списка</option>
+                                        <option value="SEVERAL">несколько из списка</option>
+                                        <option value="RANGE">интервал</option>
+                                        <option value="TEXT">текст</option>
                                     </select>
 
                                 </div>
@@ -107,12 +115,11 @@
                                 </div>
                           </div>
 
-                          <div th:id="|question${question.id}Body|">
+                          <div th:id="|question${question.id}Body|" th:fragment="answers">
                                 <div style="margin-top: 20px"
                                         th:id="|answer${question.id}|"
                                         th:each="answer,j : ${question.answers}"
-                                        th:switch="${question.questionType.text}"
-                                        th:fragment="answers">
+                                        th:switch="${question.questionType.text}">
 
                                         <div th:case="one">
                                             <div class="d-flex flex-row">
@@ -149,7 +156,7 @@
                                                            hx-trigger="change"
                                                            hx-encoding="multipart/form-data"
                                                            th:attr = "
-                                                           hx-post=|@{/questionnaires/answer/{id}/image(id=${question.id})}|,
+                                                           hx-post=|@{/questionnaires/answer/{id}/image(id=${answer.id})}|,
                                                            hx-target=|#answer${answer.id}Img|">
                                                 </div>
                                                 <img class="delete-answer" src="/img/cross.png" alt="delete answer" style="width: 30px; height: 30px">
@@ -221,26 +228,28 @@
                                     </label>
                                 </div>
 
+                              <div th:id="|question${question.id}Footer|" style="border-top: 1px solid black; margin-top: 7px; padding-top: 10px; justify-content: space-between"
+                                   class="d-flex flex-row">
+                                  <div class="d-flex">
+                                      <img src="/img/trash-icon.png" alt="delete q btn"
+                                           class="delete-question"
+                                           style="margin-left: 5px; cursor: pointer; width: 25px;"
+                                           hx-trigger="click"
+                                           th:attr = "hx-delete=|@{/questionnaires/edit/{questionId}(questionId=${question.id})}|"
+                                           hx-target="#questions">
+                                  </div>
+                                  <div class="d-flex"
+                                       th:if="'range' != ${question.questionType.text} and 'text' != ${question.questionType.text}">
+                                      <button type="button"
+                                              style=" border-radius: 5px; color: black; padding: 2px; text-decoration: none;background-color: #c2c2c2; cursor: pointer;"
+                                              th:attr = "hx-get=|@{/questionnaires/question/{id}/setScores(id=${question.id})}|,
+                                            hx-target=|#question${question.id}|">Задать баллы</button>
+                                  </div>
+                              </div>
+
                           </div>
 
-                          <div th:id="|question${question.id}Footer|" style="border-top: 1px solid black; margin-top: 7px; padding-top: 10px; justify-content: space-between"
-                          class="d-flex flex-row">
-                              <div class="d-flex">
-                                    <img src="/img/trash-icon.png" alt="delete q btn"
-                                         class="delete-question"
-                                    style="margin-left: 5px; cursor: pointer; width: 25px;"
-                                         hx-trigger="click"
-                                         th:attr = "hx-delete=|@{/questionnaires/edit/{questionId}(questionId=${question.id})}|"
-                                         hx-target="#questions">
-                              </div>
-                              <div class="d-flex"
-                                   th:if="'range' != ${question.questionType.text} and 'text' != ${question.questionType.text}">
-                                    <button type="button"
-                                            style=" border-radius: 5px; color: black; padding: 2px; text-decoration: none;background-color: #c2c2c2; cursor: pointer;"
-                                            th:attr = "hx-get=|@{/questionnaires/question/{id}/setScores(id=${question.id})}|,
-                                            hx-target=|#question${question.id}|">Задать баллы</button>
-                              </div>
-                          </div>
+
 
                       </div>
                   </div>

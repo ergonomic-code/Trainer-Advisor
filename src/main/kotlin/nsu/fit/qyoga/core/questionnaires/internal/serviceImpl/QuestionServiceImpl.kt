@@ -7,6 +7,7 @@ import nsu.fit.qyoga.core.questionnaires.api.errors.QuestionException
 import nsu.fit.qyoga.core.questionnaires.api.model.Question
 import nsu.fit.qyoga.core.questionnaires.api.services.AnswerService
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionService
+import nsu.fit.qyoga.core.questionnaires.internal.repository.QuestionJdbcTemplateRepo
 import nsu.fit.qyoga.core.questionnaires.internal.repository.QuestionRepo
 import org.springframework.stereotype.Service
 
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service
 class QuestionServiceImpl(
     private val questionRepo: QuestionRepo,
     private val answerService: AnswerService,
+    private val questionJdbcTemplateRepo: QuestionJdbcTemplateRepo
 ) : QuestionService {
 
     override fun createQuestion(id: Long): QuestionWithAnswersDto {
@@ -30,8 +32,14 @@ class QuestionServiceImpl(
             title = createdQuestion.title,
             questionType = createdQuestion.questionType,
             imageId = createdQuestion.imageId,
-            answers = mutableListOf()
+            answers = mutableListOf(),
+            questionnaireId = id
         )
+    }
+
+    override fun findQuestionWithAnswers(id: Long): QuestionWithAnswersDto {
+        return questionJdbcTemplateRepo.findQuestionWithAnswersById(id)
+            ?: throw QuestionException("Выбранный вопрос не найден")
     }
 
     override fun deleteQuestion(id: Long): Long {
@@ -82,5 +90,13 @@ class QuestionServiceImpl(
             answerService.updateAnswer(it, savedQuestion.id, it.imageId)
         }
         return savedQuestion.id
+    }
+
+    override fun updateQuestionTitle(id: Long, title: String) {
+        questionJdbcTemplateRepo.updateQuestionTitleById(id, title)
+    }
+
+    override fun updateQuestionType(id: Long, questionType: QuestionType) {
+        questionJdbcTemplateRepo.updateQuestionTypeById(id, questionType)
     }
 }

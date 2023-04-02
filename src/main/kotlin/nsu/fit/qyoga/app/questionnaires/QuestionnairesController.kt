@@ -1,6 +1,7 @@
 package nsu.fit.qyoga.app.questionnaires
 
 import nsu.fit.qyoga.core.questionnaires.api.dtos.*
+import nsu.fit.qyoga.core.questionnaires.api.dtos.enums.QuestionType
 import nsu.fit.qyoga.core.questionnaires.api.services.AnswerService
 import nsu.fit.qyoga.core.questionnaires.api.services.ImageService
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionService
@@ -9,6 +10,7 @@ import org.springframework.core.io.InputStreamResource
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -25,6 +27,9 @@ class QuestionnairesController(
     private val imageService: ImageService
 ) {
 
+    /**
+     * Получение списка опросников
+     */
     @GetMapping()
     fun getQuestionnairesList(
         @ModelAttribute("questionnaireSearchDto") questionnaireSearchDto: QuestionnaireSearchDto,
@@ -105,6 +110,9 @@ class QuestionnairesController(
         return "redirect:/questionnaires/"
     }
 
+    /**
+     * Получение изображение по id
+     */
     @GetMapping("image/{id}")
     @ResponseBody
     fun loadImageToPage(
@@ -117,6 +125,9 @@ class QuestionnairesController(
             .body(InputStreamResource(image.data.inputStream()))
     }
 
+    /**
+     * Добавление изображение вопросу
+     */
     @PostMapping("question/{id}/image")
     fun addImageToQuestion(
         @RequestParam("file") file: MultipartFile,
@@ -125,7 +136,7 @@ class QuestionnairesController(
     ): String {
         val question = questionService.findQuestion(id)
         if( question.imageId != null) {
-            imageService.deleteImage(id)
+            imageService.deleteImage(question.imageId)
         }
         val questionDto = QuestionDto(
             id = question.id,
@@ -139,6 +150,9 @@ class QuestionnairesController(
         return "fragments/create-questionnaire-image::questionImage"
     }
 
+    /**
+     * Добавление изображение ответу
+     */
     @PostMapping("answer/{id}/image")
     fun addImageToAnswer(
         @RequestParam("file") file: MultipartFile,
@@ -147,7 +161,7 @@ class QuestionnairesController(
     ): String {
         val answer = answerService.findAnswer(id)
         if( answer.imageId != null) {
-            imageService.deleteImage(id)
+            imageService.deleteImage(answer.imageId)
         }
         val answerDto = AnswerDto(
             id = answer.id,
@@ -165,13 +179,16 @@ class QuestionnairesController(
         return "fragments/create-questionnaire-image::answerImage"
     }
 
+    /**
+     * Удаление изображения
+     */
     @DeleteMapping("image/{id}")
     @ResponseBody
     fun deleteImageFromQuestion(
         @PathVariable id: Long
-    ): String {
+    ): ResponseEntity<String> {
         imageService.deleteImage(id)
-        return ""
+        return ResponseEntity.ok().body("")
     }
 
     /**
@@ -189,13 +206,47 @@ class QuestionnairesController(
         return "questionnaire/create-questionnaire::questions"
     }
 
-    @GetMapping("{id}/edit/change-type")
-    fun changeAnswerType(
-        @RequestParam("question-type") type: String,
+    /**
+     * Изменить тип вопроса
+     */
+    @GetMapping("question/{id}/change-type")
+    fun changeAnswersType(
+        questionType: QuestionType,
+        model: Model,
         @PathVariable id: Long
     ): String {
-        println(type)
-        return ""
+        questionService.updateQuestionType(id, questionType)
+        val deletedAnswers = answerService.deleteAllByQuestionId(id)
+        for(answer in deletedAnswers){
+            if(answer.imageId != null){
+                imageService.deleteImage(answer.imageId)
+            }
+        }
+        answerService.createAnswer(id)
+        model.addAttribute(
+            "question",
+            questionService.findQuestionWithAnswers(id)
+        )
+        return "questionnaire/create-questionnaire::question"
+    }
+
+    @GetMapping("question/{id}/title")
+    @ResponseBody
+    fun changeQuestionTitle(
+        title: String,
+        @PathVariable id: Long
+    ): HttpStatus{
+        questionService.updateQuestionTitle(id, title)
+        return HttpStatus.OK
+    }
+
+    @GetMapping("{id}/edit/title")
+    @ResponseBody
+    fun changeQuestionnaireTitle(
+        questionnaire: QuestionnaireDto
+    ): HttpStatus{
+        questionnaireService.updateQuestionnaire(questionnaire)
+        return HttpStatus.OK
     }
 
     @GetMapping("edit/{questionNum}/{questionId}/setScores")
@@ -230,4 +281,3 @@ class QuestionnairesController(
     }
 
 }
-// при создании опросника нас должно редиректить на страницу его редактирования те с /new/ -> /{id}/edit
