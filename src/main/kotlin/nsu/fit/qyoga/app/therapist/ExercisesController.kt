@@ -75,6 +75,7 @@ class ExercisesController(
         model: Model
     ): String {
         val userPrincipal = authentication.principal as UserDetailsImpl
+        println(createDto)
         exercisesService.createExercise(createDto, userPrincipal.getId())
         val exercises = exercisesService.getExercises(ExerciseSearchDto(), PageRequest.of(0, 10))
         addExercisePageAttributes(model, exercises, exercisesService)

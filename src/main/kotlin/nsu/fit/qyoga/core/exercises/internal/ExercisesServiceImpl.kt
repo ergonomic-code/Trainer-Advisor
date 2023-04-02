@@ -9,6 +9,7 @@ import nsu.fit.qyoga.core.exercises.api.dtos.ImageDto
 import nsu.fit.qyoga.core.exercises.api.model.Exercise
 import nsu.fit.qyoga.core.exercises.api.model.ExerciseStep
 import nsu.fit.qyoga.core.exercises.api.model.ExerciseType
+import nsu.fit.qyoga.core.exercises.api.model.Purpose
 import org.postgresql.util.PGInterval
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
@@ -19,7 +20,8 @@ import org.springframework.stereotype.Service
 class ExercisesServiceImpl(
     private val exercisesRepo: ExercisesRepo,
     private val exerciseStepsRepo: ExerciseStepsRepo,
-    private val imagesService: ImagesService
+    private val imagesService: ImagesService,
+    private val therapeuticPurposesRepo: TherapeuticPurposesRepo
 ) : ExercisesService {
 
     override fun getExercises(
@@ -47,6 +49,15 @@ class ExercisesServiceImpl(
                 therapistId = therapistId
             )
         )
+        val purposes = therapeuticPurposesRepo.findAll().filter { it.purpose == createExerciseDto.therapeuticPurpose }
+        val newPurpose: Purpose = if (purposes.isEmpty()) {
+            Purpose(purpose = createExerciseDto.therapeuticPurpose, exercises = HashSet())
+        } else {
+            purposes[0]
+        }
+
+        newPurpose.addExercise(savedExercise)
+        therapeuticPurposesRepo.save(newPurpose)
         createExerciseDto.exerciseSteps.map {
             var imageId: Long? = null
             if (it.photo != null) {
