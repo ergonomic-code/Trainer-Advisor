@@ -34,6 +34,7 @@
                                             <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
                                                 <input class="btn btn-primary" type="submit"/>
                                             </div>
+                                            <div th:if="${loginError!=null}" th:text="${loginError}" style="color: red">
                                         </form>
                                     </div>
                                 </div>

@@ -19,7 +19,7 @@ class AuthorizationTests : QYogaAppTestBase() {
         Given {
             this
         } When {
-            get("/main")
+            get("/clients")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             Assertions.assertThatSpec(body) {
@@ -36,11 +36,11 @@ class AuthorizationTests : QYogaAppTestBase() {
         Given {
             this.cookie(GetAuthCookie())
         } When {
-            get("/therapist/main")
+            get("/clients")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             Assertions.assertThatSpec(body) {
-                node("title") { hasText("QYoga") }
+                node("title") { hasText("Список клиентов") }
             }
         }
     }
@@ -54,7 +54,7 @@ class AuthorizationTests : QYogaAppTestBase() {
             post("/users/login")
         } Then {
             statusCode(302)
-            header("Location", endsWith("main"))
+            header("Location", endsWith("clients"))
         }
     }
 
@@ -67,7 +67,7 @@ class AuthorizationTests : QYogaAppTestBase() {
             post("/users/login")
         } Then {
             statusCode(302)
-            header("Location", endsWith("error"))
+            header("Location", endsWith("error-login"))
         }
     }
 
@@ -80,7 +80,7 @@ class AuthorizationTests : QYogaAppTestBase() {
             post("/users/login")
         } Then {
             statusCode(302)
-            header("Location", endsWith("error"))
+            header("Location", endsWith("error-login"))
         }
     }
 
@@ -93,7 +93,7 @@ class AuthorizationTests : QYogaAppTestBase() {
             post("/users/login")
         } Then {
             statusCode(302)
-            header("Location", endsWith("error"))
+            header("Location", endsWith("error-login"))
         }
     }
 
@@ -106,7 +106,7 @@ class AuthorizationTests : QYogaAppTestBase() {
             post("/users/login")
         } Then {
             statusCode(302)
-            header("Location", endsWith("error"))
+            header("Location", endsWith("error-login"))
         }
     }
 }

@@ -27,13 +27,14 @@ class WebSecurityConfig(
                     .requestMatchers("/therapist/**").hasAuthority(Role.ROLE_THERAPIST.toString())
                     .requestMatchers("/users/login", "/error").permitAll()
                     .requestMatchers("/exercises/**").permitAll()
-                    .requestMatchers("/clients/**").permitAll()
+                    .requestMatchers("/clients/**").hasAuthority(Role.ROLE_THERAPIST.toString())
                     .requestMatchers(HttpMethod.GET, "/styles/**", "/img/**").permitAll()
                     .anyRequest().authenticated()
             }
             .formLogin()
             .loginPage("/users/login")
-            .defaultSuccessUrl("/therapist/main")
+            .defaultSuccessUrl("/clients")
+            .failureUrl("/error-login")
             .permitAll()
         http.authenticationProvider(authenticationProvider())
         // @formatter:on
