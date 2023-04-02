@@ -4,13 +4,15 @@ import nsu.fit.qyoga.core.questionnaires.api.dtos.AnswerDto
 import nsu.fit.qyoga.core.questionnaires.api.errors.AnswerException
 import nsu.fit.qyoga.core.questionnaires.api.model.Answer
 import nsu.fit.qyoga.core.questionnaires.api.services.AnswerService
+import nsu.fit.qyoga.core.questionnaires.internal.repository.AnswerJdbcTemplateRepo
 import nsu.fit.qyoga.core.questionnaires.internal.repository.AnswerRepo
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException
 import org.springframework.stereotype.Service
 
 @Service
 class AnswerServiceImpl(
-     private val answerRepo: AnswerRepo
+     private val answerRepo: AnswerRepo,
+     private val answerJdbcTemplateRepo: AnswerJdbcTemplateRepo
 ) :AnswerService {
     override fun createAnswer(id: Long): AnswerDto {
         val answer = answerRepo.save(
@@ -83,5 +85,15 @@ class AnswerServiceImpl(
             imageId = answer.imageId,
             questionId = answer.questionId
         )
+    }
+
+    override fun deleteAllByQuestionId(id: Long): List<Answer> {
+        val answersToDelete = answerRepo.findAllByQuestionId(id)
+        answerJdbcTemplateRepo.deleteAnswerByQuestionId(id)
+        return answersToDelete
+    }
+
+    override fun updateAnswerTitle(id: Long, title: String) {
+        answerJdbcTemplateRepo.updateAnswerTitleById(id, title)
     }
 }
