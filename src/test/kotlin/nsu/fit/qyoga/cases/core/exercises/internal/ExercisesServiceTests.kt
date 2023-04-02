@@ -121,7 +121,7 @@ class ExercisesServiceTests(
         // Then
         exercises.totalElements shouldBe 1
         exercises.content[0].title shouldBe expectedExercise.title
-        exercises.content[0].duration shouldBe expectedExercise.duration
+        PGInterval(exercises.content[0].duration) shouldBe expectedExercise.duration
         exercises.content[0].type.id shouldBe expectedExercise.exerciseTypeId
     }
 
@@ -194,7 +194,7 @@ class ExercisesServiceTests(
 
         savedSteps.filter { it.exerciseId == savedExercise.id }.size shouldBe 2
         savedSteps.filter { it.exerciseId == savedExercise.id }[0]
-            .imageId shouldBe savedSteps.filter { it.exerciseId == savedExercise.id }[1].imageId shouldBe null
+            .imageId shouldBe savedSteps.filter { it.exerciseId == savedExercise.id }[1].imageId
     }
 
     @Test

@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+    <link href="/img/caret-down-square-fill.svg" rel="icon" type="image/x-icon">
+    <title>Список программ</title>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet"/>
+    <link href="/styles/styles.css" rel="stylesheet"/>
+    <script crossorigin="anonymous" src="https://use.fontawesome.com/releases/v6.1.0/js/all.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const sidebarToggle = document.body.querySelector('#sidebarToggle');
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', event => {
+                    event.preventDefault();
+                    document.body.classList.toggle('sb-sidenav-toggled');
+                    localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+                });
+            }
+        });
+    </script>
+    <script crossorigin="anonymous"
+            integrity="sha384-Bj8qm/6B+71E6FQSySofJOUjA/gq330vEqjFx9LakWybUySyI1IQHwPtbTU7bNwx"
+            src="https://unpkg.com/htmx.org@1.8.6"></script>
+</head>
+<body class="sb-nav-fixed">
+
+<div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
+
+<div id="layoutSidenav">
+
+    <div th:replace="~{/fragments/leftNavPanel.html :: leftNavPanel}"></div>
+
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">Программы</h1>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-book-open me-1"></i>
+                        Список программ
+                    </div>
+                    <div class="card-body">
+
+                        <form hx-get="/programs/search" hx-target="#tablePagination"
+                              hx-trigger="submit"
+                              th:object="${searchProgramsDto}">
+                            <div class="input-group mb-3 m-auto" id="searchExercisesFilterForm">
+                                <div class="mt-3 mb-3 w-25" id="titleFilter">
+                                    <input aria-describedby="basic-addon2"
+                                           class="form-control"
+                                           placeholder="Название"
+                                           style="border-color:inherit"
+                                           th:field="${searchProgramsDto.title}"
+                                           type="text">
+                                </div>
+
+                                <div class="mt-3 mb-3 w-25" id="therapeuticPurposeFilter">
+                                    <input aria-describedby="basic-addon2"
+                                           class="form-control"
+                                           placeholder="Терапевтическая задача"
+                                           style="border-color:inherit"
+                                           th:field="${searchProgramsDto.therapeuticPurpose}" type="text">
+                                </div>
+
+                                <div class="mt-3 mb-3 w-25" id="dateFilter">
+                                    <input aria-describedby="basic-addon2"
+                                           class="form-control"
+                                           placeholder="Дата"
+                                           style="border-color:inherit"
+                                           th:field="${searchProgramsDto.date}" type="text">
+                                </div>
+
+
+                                <div class="input-group mt-2 mb-5">
+                                    <button class="btn btn-secondary" style="position: absolute" type="submit">Поиск
+                                    </button>
+                                </div>
+
+                            </div>
+
+                        </form>
+
+                        <div id="tablePagination" th:fragment="exercises">
+
+                            <table class="table table-hover" id="exercisesTable">
+                                <thead>
+                                <tr>
+                                    <th>Название</th>
+                                    <th>Терапевтическая задача</th>
+                                    <th>Дата</th>
+                                </tr>
+                                </thead>
+                                <tbody id="exercises-list">
+                                <tr th:each="exercise : ${exercises.content}">
+                                    <td th:text="${exercise.title}"></td>
+                                    <td th:text="${exercise.purpose}"></td>
+                                    <td th:text="${exercise.date}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <div id="pagination">
+
+                                <ul class="pagination justify-content-center">
+                                    <div class="pagination">
+                                        <li class="page-item"
+                                            th:classappend="${(exercises.getPageable().pageNumber == 0) ? 'disabled' : ''}">
+                                            <a class="page-link"
+                                               hx-target="#tablePagination"
+                                               hx-trigger="click"
+                                               style="cursor: pointer"
+                                               th:attr="hx-get=@{/exercises/search(pageNumber=${exercises.getPageable().pageNumber}, searchDto=${searchDto})}"
+                                               th:if="${exercises.getPageable().pageNumber >= 1}"
+                                            >Назад</a>
+                                        </li>
+                                    </div>
+
+                                    <div class="pagination"
+                                         th:each="pageNumber : ${#numbers.sequence(1, exercises.getTotalPages(), 1)}"
+                                         th:if="${exercises.totalPages > 0}">
+                                        <li class="page-item"
+                                            th:classappend="${pageNumber == (exercises.getPageable().pageNumber + 1)} ? 'active' : ''">
+                                            <a class="page-link"
+                                               hx-target="#tablePagination"
+                                               hx-trigger="click"
+                                               style="cursor: pointer"
+                                               th:attr="hx-get=@{/exercises/search(pageNumber=${pageNumber}, searchDto=${searchDto})}"
+                                               th:text="${pageNumber}"></a>
+                                        </li>
+                                    </div>
+
+                                    <div class="pagination">
+                                        <li class="page-item"
+                                            th:classappend="${!(exercises.getPageable().pageNumber < exercises.totalPages) ? 'disabled' : ''}">
+                                            <a class="page-link"
+                                               hx-target="#tablePagination"
+                                               hx-trigger="click"
+                                               style="cursor: pointer"
+                                               th:attr="hx-get=@{/exercises/search(pageNumber=${exercises.getPageable().pageNumber + 2}, searchDto=${searchDto})}"
+                                               th:if="${exercises.getPageable().pageNumber < exercises.totalPages - 1}"
+                                            >Вперед</a>
+                                        </li>
+                                    </div>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <a href="#">
+                        <button class="btn btn-secondary" id="btnNewExercise" type="button">
+                            Новая программа
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </main>
+
+        <footer class="py-4 bg-light mt-auto" th:insert="~{/fragments/footer.html :: footer}"></footer>
+
+        </footer>
+    </div>
+</div>
+
+<div w3-include-html=""></div>
+<script crossorigin="anonymous"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+<script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>
+</body>
+</html>
