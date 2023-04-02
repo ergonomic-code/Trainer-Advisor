@@ -73,7 +73,8 @@ class QuestionnaireJdbcTemplateRepo(
                 title = rs.getString("questionTitle"),
                 questionType = QuestionType.valueOf(rs.getString("questionType") ?: return@query),
                 imageId = rs.getString("questionImageId")?.toLong(),
-                answers = mutableListOf()
+                answers = mutableListOf(),
+                questionnaireId = rs.getLong("questionnaireId")
             )
             val answer = AnswerDto(
                 id = rs.getLong("answerId"),

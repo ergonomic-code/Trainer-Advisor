@@ -43,6 +43,15 @@ class QuestionnaireServiceImpl(
         return QuestionnaireDto(savedQuestionnaire.id, savedQuestionnaire.title)
     }
 
+    override fun updateQuestionnaire(questionnaire: QuestionnaireDto): Long {
+        return questionnaireRepo.save(
+            Questionnaire(
+                id = questionnaire.id,
+                title = questionnaire.title
+            )
+        ).id
+    }
+
     override fun findQuestionnaireWithQuestions(id: Long): QuestionnaireWithQuestionDto {
         return questionnaireJdbcTemplateRepo.findQuestionnaireWithQuestionsById(id)
             ?: throw QuestionnaireException("Выбранный опросник не найден")
