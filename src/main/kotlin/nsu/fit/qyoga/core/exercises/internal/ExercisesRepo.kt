@@ -53,6 +53,19 @@ interface ExercisesRepo : CrudRepository<Exercise, Long>, PagingAndSortingReposi
         @Param("search") search: ExerciseSearchDto,
     ): Long
 
+
+    @Query(
+        """
+        SELECT ex.id as id, title, description, indications, contradictions, duration::varchar, et.name as type, tp.purpose as purpose
+        FROM exercises ex
+            INNER JOIN exercise_purposes ep ON ex.id = ep.exercise_id
+            INNER JOIN therapeutic_purposes tp ON tp.id = ep.purpose_id
+            INNER JOIN exercise_types et on ex.exercise_type_id = et.id
+        WHERE ex.id = :id
+        """
+    )
+    fun getByIdOrNull(id: Long): ExerciseDto?
+
     @Query(
         """
         SELECT id, name FROM exercise_types

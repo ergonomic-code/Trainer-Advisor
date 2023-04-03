@@ -83,8 +83,14 @@ class ExercisesServiceImpl(
         return savedExercise
     }
 
-    override fun getExerciseById(id: Long): Exercise {
-        return exercisesRepo.findByIdOrNull(id) ?: throw ResourceNotFound("No existing exercise with this id")
+    override fun editExercise(exerciseDto: ExerciseDto): Exercise {
+        val exerciseToEdit =
+            exercisesRepo.findByIdOrNull(exerciseDto.id) ?: throw ResourceNotFound("No existing exercise with this id")
+
+    }
+
+    override fun getExerciseById(id: Long): ExerciseDto {
+        return exercisesRepo.getByIdOrNull(id) ?: throw ResourceNotFound("No existing exercise with this id")
     }
 
     override fun getExerciseTypes(): List<ExerciseType> {

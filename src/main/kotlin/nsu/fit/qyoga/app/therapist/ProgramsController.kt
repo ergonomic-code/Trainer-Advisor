@@ -35,8 +35,25 @@ class ProgramsController(
             PageRequest.of(pageNumber - 1, pageSize)
         )
         addProgramsPageAttributes(model, programs)
-        return "exercises/exercise-search"
+        return "programs/program-search"
+    }
 
+    /**
+     * Фильтрация программ
+     */
+    @GetMapping("/search")
+    fun getProgramsFiltered(
+        @ModelAttribute("searchDto") searchDto: ProgramSearchDto,
+        @RequestParam(value = "pageSize", required = false, defaultValue = "10") pageSize: Int,
+        @RequestParam(value = "pageNumber", required = false, defaultValue = "1") pageNumber: Int,
+        model: Model
+    ): String {
+        val programs = programsService.getPrograms(
+            searchDto,
+            PageRequest.of(pageNumber - 1, pageSize)
+        )
+        addProgramsPageAttributes(model, programs)
+        return "programs/program-search :: programs"
     }
 
     fun addProgramsPageAttributes(model: Model, programs: Page<ProgramDto>) {

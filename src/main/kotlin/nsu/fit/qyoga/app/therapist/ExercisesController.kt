@@ -69,6 +69,9 @@ class ExercisesController(
         return "exercises/exercise-create"
     }
 
+    /**
+     * Создание и упражнения и переход на страницу поиска упражнений
+     */
     @PostMapping
     fun createExercise(
         @ModelAttribute("createDto") createDto: CreateExerciseDto,
@@ -82,6 +85,9 @@ class ExercisesController(
         return "exercises/exercise-search"
     }
 
+    /**
+     * Получение упражнения по id и переход на страницу редактирования упражнения
+     */
     @GetMapping("/{id}")
     fun getExerciseById(
         @PathVariable id: Long,
@@ -89,7 +95,7 @@ class ExercisesController(
     ): String {
         val exercise = exercisesService.getExerciseById(id)
         model.addAttribute("exercise", exercise)
-        return "exercises/exercise-create" // TODO: заполнить поля для редактирования
+        return "exercises/exercise-create"
     }
 
     fun addExercisePageAttributes(model: Model, exercises: Page<ExerciseDto>, exercisesService: ExercisesService) {

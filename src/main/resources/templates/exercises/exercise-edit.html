@@ -27,7 +27,30 @@
         var num = 0;
         $(document).ready(function () {
             $("#btnNewStep").click(function () {
-                $("#step").clone().prop('id', "step" + ++num).appendTo("form");
+                var newElement = $('<th:block th:each="step : ${createDto.exerciseSteps}">\n' +
+                    '\n' +
+                    '                                <div class="border bg-light p-3 mb-2" id="step" style="border-radius: 5px;">\n' +
+                    '                                    <h6 class="">Шаг</h6>\n' +
+                    '                                    <div class="input-group">\n' +
+                    '                                        <div class="input-group-prepend">\n' +
+                    '                                            <span class="input-group-text h-100">Описание</span>\n' +
+                    '                                        </div>\n' +
+                    '                                        <textarea\n' +
+                    '                                                th:name="${createDto.exerciseSteps[__${personStat.index}__].description}"\n' +
+                    '                                                th:value="${step.description}"\n' +
+                    '                                                aria-label="With textarea" class="form-control"></textarea>\n' +
+                    '                                    </div>\n' +
+                    '\n' +
+                    '                                    <div class="mb-3 mt-3">\n' +
+                    '                                        <label class="form-label">Фото шага упражнения</label>\n' +
+                    '                                        <input th:name="${createDto.exerciseSteps[__${personStat.index}__].photo}"\n' +
+                    '                                               th:value="${step.photo}"\n' +
+                    '\n' +
+                    '                                               class="form-control" type="file" xml:lang="ru">\n' +
+                    '                                    </div>\n' +
+                    '                                </div>\n' +
+                    '                            </th:block>')
+                $("#form").append(newElement);
             });
         });
     </script>
@@ -52,20 +75,20 @@
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-pray me-1"></i>
-                        Создание упражнения
+                        Редактирование упражнения
                     </div>
                     <div class="card-body">
 
                         <form hx-post="/exercises/" hx-target="#exercises-list"
                               hx-trigger="submit"
-                              th:object="${createDto}">
+                              th:object="${exercise}">
                             <div class="input-group mb-3 m-auto" id="createExerciseForm">
                                 <div class="mt-3 mb-3 w-100" id="titleFilter">
                                     <input aria-describedby="basic-addon2"
                                            class="form-control"
                                            placeholder="Название"
                                            style="border-color:inherit"
-                                           th:field="${createDto.title}"
+                                           th:field="${exercise.title}"
                                            type="text">
                                 </div>
 
@@ -74,7 +97,7 @@
                                            class="form-control"
                                            placeholder="Противопоказания"
                                            style="border-color:inherit"
-                                           th:field="${createDto.contradiction}"
+                                           th:field="${exercise.title}"
                                            type="text">
                                 </div>
 
@@ -83,7 +106,8 @@
                                            class="form-control"
                                            placeholder="Показания"
                                            style="border-color:inherit"
-                                           th:field="${createDto.indications}"
+                                           th:field="${exercise.title}"
+                                           ер
                                            type="text">
                                 </div>
 
@@ -92,7 +116,7 @@
                                            class="form-control"
                                            placeholder="Длительность"
                                            style="border-color:inherit"
-                                           th:field="${createDto.duration}"
+                                           th:field="${exercise.title}"
                                            type="text">
                                 </div>
 
@@ -101,7 +125,7 @@
                                            class="form-control"
                                            placeholder="Терапевтическая задача"
                                            style="border-color:inherit"
-                                           th:field="${createDto.therapeuticPurpose}"
+                                           th:field="${exercise.title}"
                                            type="text">
                                 </div>
 
@@ -111,7 +135,7 @@
                                     </div>
                                     <select class="custom-select w-75"
                                             id="inputGroupSelect01"
-                                            th:field="${createDto.exerciseType}">
+                                            th:field="${exercise.title}">
                                         <option selected th:value="null">Тип упражнения</option>
                                         <option th:each="type : ${types}" th:text="${type.title}"
                                                 th:value="${type.name}"></option>
@@ -124,44 +148,52 @@
                                     </div>
                                     <textarea aria-label="With textarea"
                                               class="form-control"
-                                              th:field="${createDto.description}"></textarea>
+                                              th:field="${exercise.title}"></textarea>
                                 </div>
 
                             </div>
 
-                            <h4 class="mt-4">Шаги</h4>
-                            <th:block th:each="step : ${stepBind}">
+                            <div class="col-12 w-100 mb-3 mt-3" id="buttons">
+                                <button class="btn btn-secondary" id="btnNewStep" type="button">Добавить шаг</button>
+                                <button class="btn btn-secondary float-end " id="btnCreateExercise" type="submit">
+                                    Редактировать
+                                    упражнение
+                                </button>
+                                <button class="btn btn-secondary float-end mx-2" hx-get="/exercises/"
+                                        hx-target="#layoutSidenav" hx-trigger="click"
+                                        id="btnCancel" type="button">Отмена
+                                </button>
+                            </div>
 
-                                <div class="border bg-light p-3 mb-2" id="step" style="border-radius: 5px;">
+                            <h4 class="mt-4">Шаги</h4>
+                            <div th:each="step, stat: ${exercise.exerciseSteps}">
+                                <div class="border bg-light p-3 mb-2"
+                                     id="step" style="border-radius: 5px;">
                                     <h6 class="">Шаг</h6>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text h-100">Описание</span>
                                         </div>
-                                        <textarea aria-label="With textarea" class="form-control"></textarea>
+                                        <textarea
+                                                aria-label="With textarea"
+                                                class="form-control"
+                                                th:field="*{exercise.exerciseSteps[__${stat.index}__].description}"></textarea>
                                     </div>
 
                                     <div class="mb-3 mt-3">
                                         <label class="form-label">Фото шага упражнения</label>
-                                        <input class="form-control" type="file" xml:lang="ru">
+                                        <input
+                                                class="form-control"
+                                                th:field="*{exercise.exerciseSteps[__${stat.index}__].photo}"
+                                                type="file"
+                                                xml:lang="ru">
                                     </div>
                                 </div>
-                            </th:block>
-                            >
+                            </div>
 
                         </form>
 
                     </div>
-                </div>
-
-                <div class="col-12 w-100 mb-3" id="buttons">
-                    <button class="btn btn-secondary" id="btnNewStep" type="button">Добавить шаг</button>
-                    <button class="btn btn-secondary float-end " id="btnCreateExercise" type="submit">Создать
-                        упражнение
-                    </button>
-                    <button class="btn btn-secondary float-end mx-2" hx-get="/exercises/" hx-trigger="click"
-                            id="btnCancel" type="button">Отмена
-                    </button>
                 </div>
 
             </div>
