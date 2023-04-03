@@ -83,7 +83,14 @@ class ExercisesController(
     }
 
     @GetMapping("/{id}")
-
+    fun getExerciseById(
+        @PathVariable id: Long,
+        model: Model
+    ): String {
+        val exercise = exercisesService.getExerciseById(id)
+        model.addAttribute("exercise", exercise)
+        return "exercises/exercise-create" // TODO: заполнить поля для редактирования
+    }
 
     fun addExercisePageAttributes(model: Model, exercises: Page<ExerciseDto>, exercisesService: ExercisesService) {
         model.addAttribute("searchDto", ExerciseSearchDto())

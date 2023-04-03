@@ -19,5 +19,7 @@ interface ExercisesService {
         therapistId: Long
     ): Exercise
 
+    fun getExerciseById(id: Long): Exercise
+
     fun getExerciseTypes(): List<ExerciseType>
 }

@@ -1,5 +1,6 @@
 package nsu.fit.qyoga.core.exercises.internal
 
+import nsu.fit.platform.errors.ResourceNotFound
 import nsu.fit.qyoga.core.exercises.api.ExercisesService
 import nsu.fit.qyoga.core.exercises.api.ImagesService
 import nsu.fit.qyoga.core.exercises.api.dtos.CreateExerciseDto
@@ -14,6 +15,7 @@ import org.postgresql.util.PGInterval
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
 @Service
@@ -79,6 +81,10 @@ class ExercisesServiceImpl(
             )
         }
         return savedExercise
+    }
+
+    override fun getExerciseById(id: Long): Exercise {
+        return exercisesRepo.findByIdOrNull(id) ?: throw ResourceNotFound("No existing exercise with this id")
     }
 
     override fun getExerciseTypes(): List<ExerciseType> {

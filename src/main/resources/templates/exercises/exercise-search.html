@@ -110,7 +110,10 @@
                                 </tr>
                                 </thead>
                                 <tbody id="exercises-list">
-                                <tr th:each="exercise : ${exercises.content}">
+                                <tr hx-target="#layoutSidenav"
+                                    hx-trigger="click"
+                                    th:attr="hx-get=@{/exercises/${exercise.id}}"
+                                    th:each="exercise : ${exercises.content}">
                                     <td th:text="${exercise.title}"></td>
                                     <td th:text="${exercise.contradictions}"></td>
                                     <td th:text="${exercise.duration}"></td>
