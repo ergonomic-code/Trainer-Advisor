@@ -82,6 +82,9 @@ class ExercisesController(
         return "exercises/exercise-search"
     }
 
+    @GetMapping("/{id}")
+
+
     fun addExercisePageAttributes(model: Model, exercises: Page<ExerciseDto>, exercisesService: ExercisesService) {
         model.addAttribute("searchDto", ExerciseSearchDto())
         model.addAttribute("types", exercisesService.getExerciseTypes())
