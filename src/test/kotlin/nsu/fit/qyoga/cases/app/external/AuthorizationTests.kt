@@ -66,8 +66,11 @@ class AuthorizationTests : QYogaAppTestBase() {
         } When {
             post("/users/login")
         } Then {
-            statusCode(302)
-            header("Location", endsWith("error-login"))
+            statusCode(200)
+            val body = Jsoup.parse(extract().body().asString())
+            Assertions.assertThatSpec(body) {
+                node("#errorText") { hasText("Неверный пароль") }
+            }
         }
     }
 
@@ -79,8 +82,11 @@ class AuthorizationTests : QYogaAppTestBase() {
         } When {
             post("/users/login")
         } Then {
-            statusCode(302)
-            header("Location", endsWith("error-login"))
+            statusCode(200)
+            val body = Jsoup.parse(extract().body().asString())
+            Assertions.assertThatSpec(body) {
+                node("#errorText") { hasText("Неверный логин") }
+            }
         }
     }
 
@@ -92,8 +98,11 @@ class AuthorizationTests : QYogaAppTestBase() {
         } When {
             post("/users/login")
         } Then {
-            statusCode(302)
-            header("Location", endsWith("error-login"))
+            statusCode(200)
+            val body = Jsoup.parse(extract().body().asString())
+            Assertions.assertThatSpec(body) {
+                node("#errorText") { hasText("Неверный логин") }
+            }
         }
     }
 
@@ -105,8 +114,11 @@ class AuthorizationTests : QYogaAppTestBase() {
         } When {
             post("/users/login")
         } Then {
-            statusCode(302)
-            header("Location", endsWith("error-login"))
+            statusCode(200)
+            val body = Jsoup.parse(extract().body().asString())
+            Assertions.assertThatSpec(body) {
+                node("#errorText") { hasText("Неверный логин") }
+            }
         }
     }
 }

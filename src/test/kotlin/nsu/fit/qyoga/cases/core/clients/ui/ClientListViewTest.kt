@@ -1,6 +1,7 @@
 package nsu.fit.qyoga.cases.core.clients.ui
 
 import io.github.ulfs.assertj.jsoup.Assertions
+import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
 import nsu.fit.qyoga.infra.QYogaAppTestBase
@@ -25,7 +26,9 @@ class ClientListViewTest : QYogaAppTestBase() {
 
     @Test
     fun `QYoga returns client-search page with clients table`() {
-        When {
+        Given {
+            this.cookie(GetAuthCookie())
+        } When {
             get("/clients")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
@@ -39,7 +42,9 @@ class ClientListViewTest : QYogaAppTestBase() {
 
     @Test
     fun `QYoga returns clients-search page with input fields`() {
-        When {
+        Given {
+            this.cookie(GetAuthCookie())
+        } When {
             get("/clients")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
@@ -53,7 +58,9 @@ class ClientListViewTest : QYogaAppTestBase() {
 
     @Test
     fun `QYoga returns clients table with pagination`() {
-        When {
+        Given {
+            this.cookie(GetAuthCookie())
+        } When {
             get("/clients/search-cl")
         } Then {
             val body = Jsoup.parse(extract().body().asString())

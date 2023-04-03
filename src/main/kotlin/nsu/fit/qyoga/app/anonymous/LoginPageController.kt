@@ -22,7 +22,7 @@ class LoginPageController(
         return AUTH
     }
 
-    @PostMapping("/error-login")
+    @PostMapping("/error-p")
     fun loginError(
         @ModelAttribute("username") username: String,
         model: Model

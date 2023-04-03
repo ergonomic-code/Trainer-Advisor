@@ -25,7 +25,7 @@ class WebSecurityConfig(
             .authorizeHttpRequests { authz ->
                 authz
                     .requestMatchers("/therapist/**").hasAuthority(Role.ROLE_THERAPIST.toString())
-                    .requestMatchers("/users/login", "/error").permitAll()
+                    .requestMatchers("/users/login", "/error-p").permitAll()
                     .requestMatchers("/exercises/**").permitAll()
                     .requestMatchers("/clients/**").hasAuthority(Role.ROLE_THERAPIST.toString())
                     .requestMatchers(HttpMethod.GET, "/styles/**", "/img/**").permitAll()
@@ -34,7 +34,7 @@ class WebSecurityConfig(
             .formLogin()
             .loginPage("/users/login")
             .defaultSuccessUrl("/clients")
-            .failureUrl("/error-login")
+            .failureForwardUrl("/error-p")
             .permitAll()
         http.authenticationProvider(authenticationProvider())
         // @formatter:on

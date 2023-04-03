@@ -11,6 +11,12 @@
         <link href="/styles/normalize.css" rel="stylesheet" />
     </head>
     <body class="bg-primary">
+        <style>
+            .bg-primary{
+                --bs-bg-opacity: 1;
+                background-color: #bacbe6;
+            }
+        </style>
         <div id="layoutAuthentication">
             <div id="layoutAuthentication_content">
                 <main>
@@ -34,7 +40,9 @@
                                             <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
                                                 <input class="btn btn-primary" type="submit"/>
                                             </div>
-                                            <div th:if="${loginError!=null}" th:text="${loginError}" style="color: red">
+                                            <output id="errorText"
+                                                    th:if="${loginError!=null}" th:text="${loginError}"  style="color: red">
+                                            </output>
                                         </form>
                                     </div>
                                 </div>
