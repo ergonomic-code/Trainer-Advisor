@@ -51,13 +51,8 @@ class ExercisesServiceImpl(
                 therapistId = therapistId
             )
         )
-        val purposes = therapeuticPurposesRepo.findAll().filter { it.purpose == createExerciseDto.therapeuticPurpose }
-        val newPurpose: Purpose = if (purposes.isEmpty()) {
-            Purpose(purpose = createExerciseDto.therapeuticPurpose, exercises = HashSet())
-        } else {
-            purposes[0]
-        }
 
+        val newPurpose = getTherapeuticPurpose(createExerciseDto.therapeuticPurpose!!)
         newPurpose.addExercise(savedExercise)
         therapeuticPurposesRepo.save(newPurpose)
         createExerciseDto.exerciseSteps.map {
@@ -84,16 +79,38 @@ class ExercisesServiceImpl(
     }
 
     override fun editExercise(exerciseDto: ExerciseDto): Exercise {
-        val exerciseToEdit =
-            exercisesRepo.findByIdOrNull(exerciseDto.id) ?: throw ResourceNotFound("No existing exercise with this id")
+        val targetExercise =
+            exercisesRepo.findByIdOrNull(exerciseDto.id)
+                ?: throw ResourceNotFound("No existing exercise with id = ${exerciseDto.id}")
+
+        val exercise = targetExercise.copy(
+            title = exerciseDto.title,
+            description = exerciseDto.description,
+            indications = exerciseDto.indications,
+            contradictions = exerciseDto.contradictions,
+            duration = PGInterval(exerciseDto.duration),
+            exerciseTypeId = exerciseDto.type.id
+        )
+
+        val purpose = getTherapeuticPurpose(exerciseDto.purpose)
+        return exercise
 
     }
 
     override fun getExerciseById(id: Long): ExerciseDto {
-        return exercisesRepo.getByIdOrNull(id) ?: throw ResourceNotFound("No existing exercise with this id")
+        return exercisesRepo.getByIdOrNull(id) ?: throw ResourceNotFound("No existing exercise with id = $id")
     }
 
     override fun getExerciseTypes(): List<ExerciseType> {
         return exercisesRepo.getExerciseTypes().map { ExerciseType.valueOf(it.name) }
+    }
+
+    private fun getTherapeuticPurpose(purpose: String): Purpose {
+        val purposes = therapeuticPurposesRepo.findAll().filter { it.purpose == purpose }
+        return if (purposes.isEmpty()) {
+            Purpose(purpose = purpose, exercises = HashSet())
+        } else {
+            purposes[0]
+        }
     }
 }
