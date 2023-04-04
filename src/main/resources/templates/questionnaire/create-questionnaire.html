@@ -55,38 +55,44 @@
             style="text-align: center; padding-bottom: 20px; border-radius: 10px">
                 <span style="font-size: 28px; color: white; margin-top: 10px">Название опросника</span>
                 <br>
+                <input hidden th:name="id" th:value="${questionnaire.id}">
                 <label style="width: 100%">
                     <input type="text" style="width: 70%; margin-top: 15px; border-radius: 5px; min-width: 100px"
                            th:value="${questionnaire.title}"
-                           th:name="title" required
+                           required th:name="title"
                            hx-trigger="keyup changed delay:100ms"
                            hx-swap="none" th:attr = "
                            hx-get=|@{/questionnaires/{id}/edit/title(id=${questionnaire.id})}|">
                 </label>
             </div>
 
-            <div id="questions" >
-                  <div th:each="question, i : ${questionnaire.questions}">
-                      <div  th:fragment="question" class="p-3" th:id="|question${question.id}|"
+            <div id="questions" th:fragment="questions">
+                  <div th:each="question, i : ${questionnaire.questions}" >
+                      <div class="p-3" th:id="|question${question.id}|"
                            style="margin-top: 20px; background-color: #dcdcdc; border-radius: 8px;" >
 
                           <div th:id="|question${question.id}Header|" th:fragment="questionHeader">
+                                <input hidden th:name="|questions[${i.index}].id|" th:value="${question.id}">
+                                <input hidden th:name="|questions[${i.index}].questionnaireId|"
+                                       th:value="${question.questionnaireId}">
 
                                 <div class="flex-row justify-content-start d-flex" style="flex-wrap: wrap">
                                     <input class="question-text" type="text"
                                            style="width: calc(80% - 40px); border-radius: 5px; min-width: 60px"
-                                           hx-trigger="keyup changed delay:100ms"
-                                           th:name="title" th:value="${question.title}" required
+                                           hx-trigger="keyup changed delay:300ms"
+                                           th:value="${question.title}" required
+                                           th:name="|questions[${i.index}].title|"
                                            hx-swap="none" th:attr = "
                                            hx-get=|@{/questionnaires/question/{id}/title(id=${question.id})}|">
 
                                     <div style="width: 40px">
                                         <img class="add-img-to-question-btn" src="/img/add-file.png" alt="Добавить изображение">
-                                        <input name="file" type="file" class="input-file" aria-hidden="true" style="margin-top: 3px;"
+                                        <input type="file" class="input-file" aria-hidden="true" style="margin-top: 3px;"
                                                hx-trigger="change"
                                                hx-encoding="multipart/form-data"
+                                               th:name="file"
                                                th:attr = "
-                                            hx-post=|@{/questionnaires/question/{id}/image(id=${question.id})}|,
+                                            hx-post=|@{/questionnaires/question/{id}/image(id=${question.id}, questionIndex=${i.index})}|,
                                             hx-target=|#question${question.id}Img|">
                                     </div>
 
@@ -94,14 +100,15 @@
                                             hx-trigger="change"
                                             style="width: 20%; border-radius: 5px; max-width: 200px"
                                             hx-swap="outerHTML"
+                                            th:name="|questions[${i.index}].questionType|"
                                             th:attr = "
                                              hx-get=|@{/questionnaires/question/{id}/change-type(id=${question.id})}|,
                                              hx-target=|#question${question.id}|"
-                                            class="sort-btn" th:name="questionType">
-                                        <option value="SINGLE" th:if="${question.questionType.text} == 'one'" selected disabled hidden>один из списка</option>
-                                        <option value="SEVERAL" th:if="${question.questionType.text} == 'several'" selected disabled hidden>несколько из списка</option>
-                                        <option value="RANGE" th:if="${question.questionType.text} == 'range'" selected disabled hidden>интервал</option>
-                                        <option value="TEXT" th:if="${question.questionType.text} == 'text'" selected disabled hidden>текст</option>
+                                            class="sort-btn">
+                                        <option value="SINGLE" th:if="${question.questionType.text} == 'one'" selected hidden>один из списка</option>
+                                        <option value="SEVERAL" th:if="${question.questionType.text} == 'several'" selected hidden>несколько из списка</option>
+                                        <option value="RANGE" th:if="${question.questionType.text} == 'range'" selected hidden>интервал</option>
+                                        <option value="TEXT" th:if="${question.questionType.text} == 'text'" selected hidden>текст</option>
                                         <option value="SINGLE">один из списка</option>
                                         <option value="SEVERAL">несколько из списка</option>
                                         <option value="RANGE">интервал</option>
@@ -111,7 +118,7 @@
                                 </div>
 
                                 <div th:id="|question${question.id}Img|" style="margin-top: 20px">
-                                    <div th:replace="~{/fragments/create-questionnaire-image.html :: questionImage(${question}) }"></div>
+                                    <div th:replace="~{/fragments/create-questionnaire-image.html :: questionImage(${question}, ${i.index}) }"></div>
                                 </div>
                           </div>
 
@@ -120,12 +127,15 @@
                                         th:id="|answer${question.id}|"
                                         th:each="answer,j : ${question.answers}"
                                         th:switch="${question.questionType.text}">
+                                    <input hidden th:name="|questions[${i.index}].answers[${j.index}].id|" th:value="${answer.id}">
+                                    <input hidden th:name="|questions[${i.index}].answers[${j.index}].questionId|" th:value="${answer.questionId}">
 
                                         <div th:case="one">
                                             <div class="d-flex flex-row">
                                                 <img src="/img/circle.png" alt="answer type" style="width: 25px; height: 25px">
                                                 <label style="width: calc(100% - 100px); margin-left: 10px">
-                                                    <input style="border-radius: 5px;" class="answerText w-100" type="text" name="answer" placeholder="ответ" th:value="${answer.title}">
+                                                    <input style="border-radius: 5px;" class="answerText w-100" type="text" name="answer" placeholder="ответ"
+                                                           th:name="|questions[${i.index}].answers[${j.index}].title|" th:value="${answer.title}">
                                                 </label>
                                                 <div style="width: 40px">
                                                     <img class="add-img-to-question-btn" src="/img/add-file.png" alt="Добавить изображение">
@@ -133,14 +143,15 @@
                                                            hx-trigger="change"
                                                            hx-encoding="multipart/form-data"
                                                            th:attr = "
-                                                           hx-post=|@{/questionnaires/answer/{id}/image(id=${answer.id})}|,
+                                                           hx-post=|@{/questionnaires/answer/{id}/image(id=${answer.id},
+                                                           questionIndex=${i.index}, answerIndex=${j.index})}|,
                                                            hx-target=|#answer${answer.id}Img|">
                                                 </div>
                                                 <img class="delete-answer" src="/img/cross.png" alt="delete answer" style="width: 30px; height: 30px">
                                             </div>
 
                                             <div th:id="|answer${answer.id}Img|" style="margin-top: 20px">
-                                                <div th:replace="~{/fragments/create-questionnaire-image.html :: answerImage(${answer}) }"></div>
+                                                <div th:replace="~{/fragments/create-questionnaire-image.html :: answerImage(${answer}, ${i.index}, ${j.index}) }"></div>
                                             </div>
                                         </div>
 
@@ -148,7 +159,8 @@
                                             <div class="d-flex flex-row">
                                                 <img src="/img/square.png" alt="answer type" style="width: 25px; height: 25px">
                                                 <label style="width: calc(100% - 100px); margin-left: 10px">
-                                                    <input style="border-radius: 5px;" class="answerText w-100" type="text" name="answer" placeholder="ответ" th:value="${answer.title}">
+                                                    <input style="border-radius: 5px;" class="answerText w-100" type="text" name="answer" placeholder="ответ"
+                                                           th:name="|questions[${i.index}].answers[${j.index}].title|" th:value="${answer.title}">
                                                 </label>
                                                 <div style="width: 40px">
                                                     <img class="add-img-to-question-btn" src="/img/add-file.png" alt="Добавить изображение">
@@ -156,67 +168,68 @@
                                                            hx-trigger="change"
                                                            hx-encoding="multipart/form-data"
                                                            th:attr = "
-                                                           hx-post=|@{/questionnaires/answer/{id}/image(id=${answer.id})}|,
+                                                           hx-post=|@{/questionnaires/answer/{id}/image(id=${answer.id},
+                                                           questionIndex=${i.index}, answerIndex=${j.index})}|,
                                                            hx-target=|#answer${answer.id}Img|">
                                                 </div>
                                                 <img class="delete-answer" src="/img/cross.png" alt="delete answer" style="width: 30px; height: 30px">
                                             </div>
 
                                             <div th:id="|answer${answer.id}Img|" style="margin-top: 20px">
-                                                <div th:replace="~{/fragments/create-questionnaire-image.html :: answerImage(${answer}) }"></div>
+                                                <div th:replace="~{/fragments/create-questionnaire-image.html :: answerImage(${answer}, ${i.index}, ${j.index}) }"></div>
                                             </div>
                                         </div>
 
-                                        <div th:case="text" style="margin-top: 20px" >
-                                            <label style="width: 100%">
-                                                <input style="width: 100%; border-radius: 5px" class="answerText" type="text" name="answer" placeholder="answer" disabled="" >
-                                            </label>
+                                    <!--<div th:case="text" style="margin-top: 20px" >
+                                        <label style="width: 100%">
+                                            <input style="width: 100%; border-radius: 5px" class="answerText" type="text" name="answer" placeholder="answer" disabled="" >
+                                        </label>
+                                    </div>
+
+                                    <div th:case="range" th:id="|answer${answer.id}|" class="answer" >
+
+                                        <div class="rangeBorder">
+                                            <select name="range"
+                                                    class="sortBtn" style="width: 42px">
+                                                <option value="" selected disabled hidden th:text="${answer.lowerBound}">lower bound</option>
+                                                <option value="0">0</option>
+                                                <option value="1">1</option>
+                                            </select>
+                                            <span style="margin-left: 10px">-</span>
+                                            <select name="range"
+                                                    class="sortBtn" style="width: 42px">
+                                                <option value="" selected disabled hidden th:text="${answer.upperBound}">upper bound</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
+                                                <option value="9">9</option>
+                                                <option value="10">10</option>
+                                            </select>
                                         </div>
-
-                                        <div th:case="range" th:id="|answer${answer.id}|" class="answer" >
-
-                                            <div class="rangeBorder">
-                                                <select name="range"
-                                                        class="sortBtn" style="width: 42px">
-                                                    <option value="" selected disabled hidden th:text="${answer.lowerBound}">lower bound</option>
-                                                    <option value="0">0</option>
-                                                    <option value="1">1</option>
-                                                </select>
-                                                <span style="margin-left: 10px">-</span>
-                                                <select name="range"
-                                                        class="sortBtn" style="width: 42px">
-                                                    <option value="" selected disabled hidden th:text="${answer.upperBound}">upper bound</option>
-                                                    <option value="2">2</option>
-                                                    <option value="3">3</option>
-                                                    <option value="4">4</option>
-                                                    <option value="5">5</option>
-                                                    <option value="6">6</option>
-                                                    <option value="7">7</option>
-                                                    <option value="8">8</option>
-                                                    <option value="9">9</option>
-                                                    <option value="10">10</option>
-                                                </select>
-                                            </div>
-                                            <div style="padding-top: 15px; width: 100%">
-                                                <div style="display:flex; ">
-                                                    <div th:id="|leftBorder${answer.id}|" style="width: 20px">
-                                                        <span th:text="${answer.lowerBound}">0</span>
-                                                    </div>
-                                                    <div style="width: 70%; margin-left: 20px">
-                                                        <input style="border-radius: 5px; width: 100%" type="text" class="answerText" th:value="${answer.lowerBoundText}">
-                                                    </div>
+                                        <div style="padding-top: 15px; width: 100%">
+                                            <div style="display:flex; ">
+                                                <div th:id="|leftBorder${answer.id}|" style="width: 20px">
+                                                    <span th:text="${answer.lowerBound}">0</span>
                                                 </div>
-                                                <br>
-                                                <div  style="display:flex; ">
-                                                    <div th:id="|rightBorder${answer.id}|" style="width: 20px">
-                                                        <span th:text="${answer.upperBound}">2</span>
-                                                    </div>
-                                                    <div style="width: 70%; margin-left: 20px">
-                                                        <input style="border-radius: 5px; width: 100%" type="text" class="answerText" th:value="${answer.upperBoundText}">
-                                                    </div>
+                                                <div style="width: 70%; margin-left: 20px">
+                                                    <input style="border-radius: 5px; width: 100%" type="text" class="answerText" th:value="${answer.lowerBoundText}">
                                                 </div>
                                             </div>
+                                            <br>
+                                            <div  style="display:flex; ">
+                                                <div th:id="|rightBorder${answer.id}|" style="width: 20px">
+                                                    <span th:text="${answer.upperBound}">2</span>
+                                                </div>
+                                                <div style="width: 70%; margin-left: 20px">
+                                                    <input style="border-radius: 5px; width: 100%" type="text" class="answerText" th:value="${answer.upperBoundText}">
+                                                </div>
+                                            </div>
                                         </div>
+                                    </div>-->
 
                                 </div>
 
@@ -228,7 +241,7 @@
                                     </label>
                                 </div>
 
-                              <div th:id="|question${question.id}Footer|" style="border-top: 1px solid black; margin-top: 7px; padding-top: 10px; justify-content: space-between"
+                                <div th:id="|question${question.id}Footer|" style="border-top: 1px solid black; margin-top: 7px; padding-top: 10px; justify-content: space-between"
                                    class="d-flex flex-row">
                                   <div class="d-flex">
                                       <img src="/img/trash-icon.png" alt="delete q btn"
@@ -248,9 +261,6 @@
                               </div>
 
                           </div>
-
-
-
                       </div>
                   </div>
             </div>
@@ -266,8 +276,8 @@
         <div class="position-fixed bottom-0" style="margin-bottom: 5rem; margin-left: 3%">
             <input type="image" width="60px" src="/img/plus-in-circle.png" alt="Добавить новый вопрос"
                    hx-trigger="click"
+                   hx-swap="outerHTML"
                    th:attr="hx-get=|@{/questionnaires/{id}/edit/add-question(id=${questionnaire.id})}|"
-                   hx-swap="beforeend"
                    hx-target="#questions">
         </div>
     </div>

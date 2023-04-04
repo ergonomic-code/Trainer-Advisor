@@ -1,13 +1,13 @@
 package nsu.fit.qyoga.core.questionnaires.api.dtos
 
 data class AnswerDto(
-    val id: Long,
-    val title: String?,
-    val lowerBound: Int?,
-    val lowerBoundText: String?,
-    val upperBound: Int?,
-    val upperBoundText: String?,
-    val score: Int?,
-    val imageId: Long?,
-    val questionId: Long
+    val id: Long = 0,
+    val title: String? = null,
+    val lowerBound: Int? = null,
+    val lowerBoundText: String? = null,
+    val upperBound: Int? = null,
+    val upperBoundText: String? = null,
+    val score: Int? = null,
+    val imageId: Long? = null,
+    val questionId: Long = 0
 )
