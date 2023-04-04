@@ -60,7 +60,7 @@ class QuestionJdbcTemplateRepo(
                 imageId = rs.getString("answerImageId")?.toLong(),
                 questionId = rs.getLong("questionId")
             )
-            value!!.answers.add(answer)
+            value!!.answers += answer
         }
         return value
     }

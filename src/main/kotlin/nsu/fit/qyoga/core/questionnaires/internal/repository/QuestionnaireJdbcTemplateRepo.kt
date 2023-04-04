@@ -25,7 +25,7 @@ class QuestionnaireJdbcTemplateRepo(
         if (question == null) {
             questionMap[id] = questionFromDB
             question = questionFromDB
-            questionnaire.questions.add(questionFromDB)
+            questionnaire.questions += questionFromDB
         }
         return question
     }
@@ -53,6 +53,7 @@ class QuestionnaireJdbcTemplateRepo(
             LEFT JOIN answers ON answers.question_id = questions.id
             LEFT JOIN images answerImage ON answers.image_id = answerImage.id
         WHERE questionnaires.id = :id
+        ORDER BY questionId, answerId
         """.trimIndent()
         var value: QuestionnaireWithQuestionDto? = null
         val questionMap: MutableMap<Long, QuestionWithAnswersDto?> = mutableMapOf()
@@ -89,7 +90,7 @@ class QuestionnaireJdbcTemplateRepo(
             )
             val question = getQuestion(questionMap, questionId, questionFromDB, value!!)
             if(!(answer.title == null && answer.lowerBound == 0 && answer.upperBound == 0)) {
-                question.answers.add(answer)
+                question.answers += answer
             }
         }
         return value

@@ -94,9 +94,9 @@ class QuestionnairesController(
         model: Model
     ): String {
         val question = questionService.createQuestion(id)
-        question.answers.add(answerService.createAnswer(question.id))
-        model.addAttribute("question", question)
-        return "questionnaire/create-questionnaire::question"
+        question.answers += answerService.createAnswer(question.id)
+        model.addAttribute("questionnaire", questionnaireService.findQuestionnaireWithQuestions(id))
+        return "questionnaire/create-questionnaire::questions"
     }
 
     /**
@@ -104,9 +104,11 @@ class QuestionnairesController(
      */
     @PostMapping("{id}/edit")
     fun createQuestionnaire(
-        @ModelAttribute("createQuestionnaire") questionnaire: QuestionnaireWithQuestionDto,
+        @ModelAttribute("questionnaire") questionnaire: QuestionnaireWithQuestionDto,
         @PathVariable id: Long
     ): String {
+        println(questionnaire.title)
+        println(questionnaire.questions.size)
         return "redirect:/questionnaires/"
     }
 
@@ -131,6 +133,7 @@ class QuestionnairesController(
     @PostMapping("question/{id}/image")
     fun addImageToQuestion(
         @RequestParam("file") file: MultipartFile,
+        @RequestParam("questionIndex") questionIndex: Int,
         @PathVariable id: Long,
         model: Model
     ): String {
@@ -147,6 +150,7 @@ class QuestionnairesController(
         )
         questionService.updateQuestion(questionDto)
         model.addAttribute("question", questionDto)
+        model.addAttribute("questionIndex", questionIndex)
         return "fragments/create-questionnaire-image::questionImage"
     }
 
@@ -156,11 +160,13 @@ class QuestionnairesController(
     @PostMapping("answer/{id}/image")
     fun addImageToAnswer(
         @RequestParam("file") file: MultipartFile,
+        @RequestParam("questionIndex") questionIndex: Int,
+        @RequestParam("answerIndex") answerIndex: Int,
         @PathVariable id: Long,
         model: Model
     ): String {
         val answer = answerService.findAnswer(id)
-        if( answer.imageId != null) {
+        if (answer.imageId != null) {
             imageService.deleteImage(answer.imageId)
         }
         val answerDto = AnswerDto(
@@ -176,6 +182,8 @@ class QuestionnairesController(
         )
         answerService.updateAnswer(answerDto)
         model.addAttribute("answer", answerDto)
+        model.addAttribute("questionIndex", questionIndex)
+        model.addAttribute("answerIndex", answerIndex)
         return "fragments/create-questionnaire-image::answerImage"
     }
 
