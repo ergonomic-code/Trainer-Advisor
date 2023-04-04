@@ -217,34 +217,71 @@ class QuestionnairesController(
     /**
      * Изменить тип вопроса
      */
-    @GetMapping("question/{id}/change-type")
+    @GetMapping("{questionnaireId}/edit/question/{questionId}/change-type")
     fun changeAnswersType(
-        questionType: QuestionType,
+        @RequestParam params : Map<String, String>,
         model: Model,
-        @PathVariable id: Long
+        @PathVariable questionId: Long,
+        @PathVariable questionnaireId: Long
     ): String {
-        questionService.updateQuestionType(id, questionType)
-        val deletedAnswers = answerService.deleteAllByQuestionId(id)
+        var questionType = QuestionType.SINGLE
+        val regex = Regex("questions\\[\\d+]\\.questionType")
+        params.forEach { (key, value) ->
+            run {
+                if (regex.matches(key)) {
+                    questionType = QuestionType.valueOf(value)
+                    return@run
+                }
+            }
+        }
+        questionService.updateQuestionType(questionId, questionType)
+        val deletedAnswers = answerService.deleteAllByQuestionId(questionId)
         for(answer in deletedAnswers){
             if(answer.imageId != null){
                 imageService.deleteImage(answer.imageId)
             }
         }
-        answerService.createAnswer(id)
+        answerService.createAnswer(questionId)
         model.addAttribute(
-            "question",
-            questionService.findQuestionWithAnswers(id)
+            "questionnaire",
+            questionnaireService.findQuestionnaireWithQuestions(questionnaireId)
         )
-        return "questionnaire/create-questionnaire::question"
+        return "questionnaire/create-questionnaire::questions"
     }
 
-    @GetMapping("question/{id}/title")
+    @GetMapping("question/{questionId}/title")
     @ResponseBody
     fun changeQuestionTitle(
-        title: String,
-        @PathVariable id: Long
+        @RequestParam params : Map<String, String>,
+        @PathVariable questionId: Long
     ): HttpStatus{
-        questionService.updateQuestionTitle(id, title)
+        val regex = Regex("questions\\[\\d+]\\.title")
+        params.forEach { (key, value) ->
+            run {
+                if (regex.matches(key)) {
+                    questionService.updateQuestionTitle(questionId, value)
+                    return@run
+                }
+            }
+        }
+        return HttpStatus.OK
+    }
+
+    @GetMapping("answer/{answerId}/title")
+    @ResponseBody
+    fun changeAnswerTitle(
+        @RequestParam params : Map<String, String>,
+        @PathVariable answerId: Long
+    ): HttpStatus{
+        val regex = Regex("questions\\[\\d+]\\.answers\\[\\d+]\\.title")
+        params.forEach { (key, value) ->
+            run {
+                if (regex.matches(key)) {
+                    answerService.updateAnswerTitle(answerId, value)
+                    return@run
+                }
+            }
+        }
         return HttpStatus.OK
     }
 

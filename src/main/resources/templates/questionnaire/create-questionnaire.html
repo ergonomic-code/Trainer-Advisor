@@ -66,8 +66,8 @@
                 </label>
             </div>
 
-            <div id="questions" th:fragment="questions">
-                  <div th:each="question, i : ${questionnaire.questions}" >
+            <div id="questions" >
+                  <div th:each="question, i : ${questionnaire.questions}"  th:fragment="questions">
                       <div class="p-3" th:id="|question${question.id}|"
                            style="margin-top: 20px; background-color: #dcdcdc; border-radius: 8px;" >
 
@@ -83,7 +83,8 @@
                                            th:value="${question.title}" required
                                            th:name="|questions[${i.index}].title|"
                                            hx-swap="none" th:attr = "
-                                           hx-get=|@{/questionnaires/question/{id}/title(id=${question.id})}|">
+                                           hx-get=|@{/questionnaires/question/{questionId}/title
+                                           (questionId=${question.id})}|">
 
                                     <div style="width: 40px">
                                         <img class="add-img-to-question-btn" src="/img/add-file.png" alt="Добавить изображение">
@@ -99,11 +100,11 @@
                                     <select name="question-type"
                                             hx-trigger="change"
                                             style="width: 20%; border-radius: 5px; max-width: 200px"
-                                            hx-swap="outerHTML"
                                             th:name="|questions[${i.index}].questionType|"
                                             th:attr = "
-                                             hx-get=|@{/questionnaires/question/{id}/change-type(id=${question.id})}|,
-                                             hx-target=|#question${question.id}|"
+                                             hx-get=|@{/questionnaires/{questionnaireId}/edit/question/{questionId}/change-type
+                                             (questionnaireId=${questionnaire.id}, questionId=${question.id})}|"
+                                             hx-target="#questions"
                                             class="sort-btn">
                                         <option value="SINGLE" th:if="${question.questionType.text} == 'one'" selected hidden>один из списка</option>
                                         <option value="SEVERAL" th:if="${question.questionType.text} == 'several'" selected hidden>несколько из списка</option>
@@ -135,8 +136,12 @@
                                                 <img src="/img/circle.png" alt="answer type" style="width: 25px; height: 25px">
                                                 <label style="width: calc(100% - 100px); margin-left: 10px">
                                                     <input style="border-radius: 5px;" class="answerText w-100" type="text" name="answer" placeholder="ответ"
-                                                           th:name="|questions[${i.index}].answers[${j.index}].title|" th:value="${answer.title}">
+                                                           th:name="|questions[${i.index}].answers[${j.index}].title|" th:value="${answer.title}"
+                                                           hx-trigger="keyup changed delay:300ms"
+                                                           th:attr = "
+                                                           hx-get=|@{/questionnaires/answer/{answerId}/title(answerId=${answer.id})}|">
                                                 </label>
+
                                                 <div style="width: 40px">
                                                     <img class="add-img-to-question-btn" src="/img/add-file.png" alt="Добавить изображение">
                                                     <input name="file" type="file" class="input-file" aria-hidden="true" style="margin-top: 3px;"
@@ -160,7 +165,10 @@
                                                 <img src="/img/square.png" alt="answer type" style="width: 25px; height: 25px">
                                                 <label style="width: calc(100% - 100px); margin-left: 10px">
                                                     <input style="border-radius: 5px;" class="answerText w-100" type="text" name="answer" placeholder="ответ"
-                                                           th:name="|questions[${i.index}].answers[${j.index}].title|" th:value="${answer.title}">
+                                                           th:name="|questions[${i.index}].answers[${j.index}].title|" th:value="${answer.title}"
+                                                           hx-trigger="keyup changed delay:300ms"
+                                                           th:attr = "
+                                                           hx-get=|@{/questionnaires/answer/{answerId}/title(answerId=${answer.id})}|">
                                                 </label>
                                                 <div style="width: 40px">
                                                     <img class="add-img-to-question-btn" src="/img/add-file.png" alt="Добавить изображение">
@@ -180,7 +188,7 @@
                                             </div>
                                         </div>
 
-                                    <!--<div th:case="text" style="margin-top: 20px" >
+                                    <div th:case="text" style="margin-top: 20px" >
                                         <label style="width: 100%">
                                             <input style="width: 100%; border-radius: 5px" class="answerText" type="text" name="answer" placeholder="answer" disabled="" >
                                         </label>
@@ -229,7 +237,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>-->
+                                    </div>
 
                                 </div>
 
@@ -261,6 +269,7 @@
                               </div>
 
                           </div>
+
                       </div>
                   </div>
             </div>
