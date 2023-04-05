@@ -9,5 +9,6 @@ data class Decoding(
     val id: Long = 0,
     val lowerBound: Int,
     val upperBound: Int,
-    val result: String
+    val result: String,
+    val questionId: Long
 )
