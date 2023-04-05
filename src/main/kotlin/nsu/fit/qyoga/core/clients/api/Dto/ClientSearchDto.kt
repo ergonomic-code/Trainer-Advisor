@@ -2,7 +2,7 @@ package nsu.fit.qyoga.core.clients.api.Dto
 
 import java.time.LocalDate
 
-data class ClientListSearchDto(
+data class ClientSearchDto(
     val firstName: String? = null,
     val patronymic: String? = null,
     val lastName: String? = null,
