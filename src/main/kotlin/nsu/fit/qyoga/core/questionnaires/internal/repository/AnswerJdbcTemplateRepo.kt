@@ -21,6 +21,55 @@ class AnswerJdbcTemplateRepo(
         jdbcTemplate.update(query, param)
     }
 
+    fun updateAnswerLowerBoundById(id: Long, value: Int){
+        val query = """
+            UPDATE answers
+            SET lower_bound = :value
+            WHERE id = :id
+        """.trimIndent()
+        val param = MapSqlParameterSource()
+        param.addValue("id", id)
+        param.addValue("value", value)
+        jdbcTemplate.update(query, param)
+    }
+
+    fun updateAnswerLowerBoundTitleById(id: Long, title: String){
+        val query = """
+            UPDATE answers
+            SET lower_bound_text = :title
+            WHERE id = :id
+        """.trimIndent()
+        val param = MapSqlParameterSource()
+        param.addValue("id", id)
+        param.addValue("title", title)
+        jdbcTemplate.update(query, param)
+    }
+
+    fun updateAnswerUpperBoundById(id: Long, value: Int){
+        val query = """
+            UPDATE answers
+            SET upper_bound = :value
+            WHERE id = :id
+        """.trimIndent()
+        val param = MapSqlParameterSource()
+        param.addValue("id", id)
+        param.addValue("value", value)
+        jdbcTemplate.update(query, param)
+    }
+
+    fun updateAnswerUpperBoundTitleById(id: Long, title: String){
+        val query = """
+            UPDATE answers
+            SET upper_bound_text = :title
+            WHERE id = :id
+        """.trimIndent()
+        val param = MapSqlParameterSource()
+        param.addValue("id", id)
+        param.addValue("title", title)
+        jdbcTemplate.update(query, param)
+    }
+
+
     fun deleteAnswerByQuestionId(id: Long){
         val query = """
             DELETE FROM answers

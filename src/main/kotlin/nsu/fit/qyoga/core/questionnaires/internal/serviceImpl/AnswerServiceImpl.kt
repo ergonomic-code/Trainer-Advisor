@@ -96,4 +96,20 @@ class AnswerServiceImpl(
     override fun updateAnswerTitle(id: Long, title: String) {
         answerJdbcTemplateRepo.updateAnswerTitleById(id, title)
     }
+
+    override fun updateAnswerLowerBound(id: Long, value: Int) {
+        answerJdbcTemplateRepo.updateAnswerLowerBoundById(id, value)
+    }
+
+    override fun updateAnswerLowerBoundTitle(id: Long, title: String) {
+        answerJdbcTemplateRepo.updateAnswerLowerBoundTitleById(id, title)
+    }
+
+    override fun updateAnswerUpperBound(id: Long, value: Int) {
+        answerJdbcTemplateRepo.updateAnswerUpperBoundById(id, value)
+    }
+
+    override fun updateAnswerUpperBoundTitle(id: Long, title: String) {
+        answerJdbcTemplateRepo.updateAnswerUpperBoundTitleById(id, title)
+    }
 }
