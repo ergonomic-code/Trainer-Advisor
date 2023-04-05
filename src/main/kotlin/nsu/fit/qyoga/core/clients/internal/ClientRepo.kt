@@ -2,8 +2,8 @@ package nsu.fit.qyoga.core.clients.internal
 
 import nsu.fit.platform.lang.dataClassToMap
 import nsu.fit.platform.spring.queryForPage
-import nsu.fit.qyoga.core.clients.api.Dto.ClientListDto
-import nsu.fit.qyoga.core.clients.api.Dto.ClientListSearchDto
+import nsu.fit.qyoga.core.clients.api.Dto.ClientDto
+import nsu.fit.qyoga.core.clients.api.Dto.ClientSearchDto
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.jdbc.core.DataClassRowMapper
@@ -16,9 +16,9 @@ class ClientRepo(
 ) {
 
     fun getClientsByFilters(
-        search: ClientListSearchDto,
+        search: ClientSearchDto,
         page: Pageable
-    ): PageImpl<ClientListDto> {
+    ): PageImpl<ClientDto> {
         val query = """
             SELECT clients.id,
                    clients.first_name,
@@ -46,7 +46,7 @@ class ClientRepo(
             dataClassToMap(search),
             page,
             DataClassRowMapper(
-                ClientListDto::class.java
+                ClientDto::class.java
             )
         )
 

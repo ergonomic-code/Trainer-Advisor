@@ -17,7 +17,7 @@ class QYogaAppTestBase {
 
     @LocalServerPort
     var port: Int = 0
-    fun GetAuthCookie(): Cookie {
+    fun getAuthCookie(): Cookie {
         val cookie = Given {
             formParam("username", "therapist")
             formParam("password", "diem-Synergy5")

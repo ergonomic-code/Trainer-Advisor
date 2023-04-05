@@ -13,7 +13,8 @@ data class Client(
     val patronymic: String,
     val lastname: String,
     val birthdate: Date,
-    val email: Email,
+    @Email
+    val email: String,
     val phoneNumber: Long,
     val address: String,
     val distributionSourse: String,

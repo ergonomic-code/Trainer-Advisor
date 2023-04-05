@@ -26,7 +26,7 @@ class ClientListExtTest : QYogaAppTestBase() {
     @Test
     fun `When user delete valid client he should be redirected to client page`() {
         Given {
-            this.cookie(GetAuthCookie())
+            this.cookie(getAuthCookie())
         } When {
             post("/clients/delete/1")
         } Then {
@@ -38,7 +38,7 @@ class ClientListExtTest : QYogaAppTestBase() {
     @Test
     fun `When user delete not valid client he should be redirected to client page`() {
         Given {
-            this.cookie(GetAuthCookie())
+            this.cookie(getAuthCookie())
         } When {
             post("/clients/delete/1111")
         } Then {

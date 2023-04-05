@@ -1,8 +1,8 @@
 package nsu.fit.qyoga.app.therapist
 
 import nsu.fit.qyoga.core.clients.api.ClientService
-import nsu.fit.qyoga.core.clients.api.Dto.ClientListDto
-import nsu.fit.qyoga.core.clients.api.Dto.ClientListSearchDto
+import nsu.fit.qyoga.core.clients.api.Dto.ClientDto
+import nsu.fit.qyoga.core.clients.api.Dto.ClientSearchDto
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Controller
@@ -20,7 +20,7 @@ class ClientListPageController(
 ) {
     @GetMapping
     fun getClients(
-        @ModelAttribute("searchDto") searchDto: ClientListSearchDto,
+        @ModelAttribute("searchDto") searchDto: ClientSearchDto,
         @RequestParam(value = "pageSize", required = false, defaultValue = "10") pageSize: Int,
         @RequestParam(value = "pageNumber", required = false, defaultValue = "1") pageNumber: Int,
         model: Model
@@ -35,7 +35,7 @@ class ClientListPageController(
 
     @GetMapping("/search-cl")
     fun getClientsFiltered(
-        @ModelAttribute("searchDto") searchDto: ClientListSearchDto,
+        @ModelAttribute("searchDto") searchDto: ClientSearchDto,
         @RequestParam(value = "pageSize", required = false, defaultValue = "10") pageSize: Int,
         @RequestParam(value = "pageNumber", required = false, defaultValue = "1") pageNumber: Int,
         model: Model
@@ -48,18 +48,16 @@ class ClientListPageController(
         return "clients-list :: clients"
     }
 
-    @PostMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     fun deleteClient(
         @PathVariable id: Int
     ): String {
-        if (clientService.deleteClient(id)) {
-            return "redirect:/clients"
-        }
-        return "redirect:/clients"
+        clientService.deleteClient(id)
+        return CLIENT_PAGE
     }
 
-    fun addClientsPageAttributes(model: Model, clients: Page<ClientListDto>) {
-        model.addAttribute("searchDto", ClientListSearchDto())
+    fun addClientsPageAttributes(model: Model, clients: Page<ClientDto>) {
+        model.addAttribute("searchDto", ClientSearchDto())
         model.addAttribute("clients", clients)
         model.addAttribute(
             "pageNumbers",

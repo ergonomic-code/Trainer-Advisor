@@ -27,7 +27,7 @@ class ClientListViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga returns client-search page with clients table`() {
         Given {
-            this.cookie(GetAuthCookie())
+            this.cookie(getAuthCookie())
         } When {
             get("/clients")
         } Then {
@@ -43,7 +43,7 @@ class ClientListViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga returns clients-search page with input fields`() {
         Given {
-            this.cookie(GetAuthCookie())
+            this.cookie(getAuthCookie())
         } When {
             get("/clients")
         } Then {
@@ -59,7 +59,7 @@ class ClientListViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga returns clients table with pagination`() {
         Given {
-            this.cookie(GetAuthCookie())
+            this.cookie(getAuthCookie())
         } When {
             get("/clients/search-cl")
         } Then {

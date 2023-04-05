@@ -5,10 +5,9 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import nsu.fit.qyoga.cases.core.clients.ClientsTestConfig
 import nsu.fit.qyoga.core.clients.api.ClientService
-import nsu.fit.qyoga.core.clients.api.Dto.ClientListSearchDto
+import nsu.fit.qyoga.core.clients.api.Dto.ClientSearchDto
 import nsu.fit.qyoga.infra.QYogaModuleBaseTest
 import nsu.fit.qyoga.infra.TestContainerDbContextInitializer
-import org.hamcrest.core.StringEndsWith
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -16,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.domain.PageRequest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.web.client.match.MockRestRequestMatchers.header
 import java.time.LocalDate
 
 @ContextConfiguration(
@@ -42,7 +40,7 @@ class ClientsServiceTests(
     @Test
     fun `QYoga can retrieve clients without filters`() {
         // Given
-        val searchDto = ClientListSearchDto()
+        val searchDto = ClientSearchDto()
 
         // When
         val clients = clientService.getClients(
@@ -58,7 +56,7 @@ class ClientsServiceTests(
     @Test
     fun `QYoga can retrieve clients with filters`() {
         // Given
-        val searchDto = ClientListSearchDto(lastName = "Иванов")
+        val searchDto = ClientSearchDto(lastName = "Иванов")
 
         // When
         val clients = clientService.getClients(
@@ -75,7 +73,7 @@ class ClientsServiceTests(
     @Test
     fun `QYoga can retrieve clients by appointment date`() {
         // Given
-        val searchDto = ClientListSearchDto(appointmentDate = LocalDate.of(2023, 3, 18))
+        val searchDto = ClientSearchDto(appointmentDate = LocalDate.of(2023, 3, 18))
 
         // When
         val clients = clientService.getClients(
@@ -91,7 +89,7 @@ class ClientsServiceTests(
     @Test
     fun `QYoga shouldn't retrieve clients with invalid filter`() {
         // Given
-        val searchDto = ClientListSearchDto(firstName = "---")
+        val searchDto = ClientSearchDto(firstName = "---")
 
         // When
         val clients = clientService.getClients(
@@ -107,7 +105,7 @@ class ClientsServiceTests(
     @Test
     fun `QYoga should delete clients with delete-button`() {
         // Given
-        val searchDto = ClientListSearchDto()
+        val searchDto = ClientSearchDto()
 
         // When
         clientService.deleteClient(1)
@@ -116,16 +114,14 @@ class ClientsServiceTests(
             PageRequest.of(0, 10)
         )
         // Then
-        header("Location", StringEndsWith.endsWith("1"))
         clients.content.size shouldBe 2
         clients.totalElements shouldBe 2
-        header("Location", StringEndsWith.endsWith("clients"))
     }
 
     @Test
     fun `QYoga should redirect to clients-list when delete can't client`() {
         // Given
-        val searchDto = ClientListSearchDto()
+        val searchDto = ClientSearchDto()
         clientService.deleteClient(100)
 
         // When
@@ -136,6 +132,5 @@ class ClientsServiceTests(
         // Then
         clients.content.size shouldBe 3
         clients.totalElements shouldBe 3
-        header("Location", StringEndsWith.endsWith("clients"))
     }
 }
