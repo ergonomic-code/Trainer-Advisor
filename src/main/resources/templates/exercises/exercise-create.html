@@ -27,7 +27,7 @@
         var num = 0;
         $(document).ready(function () {
             $("#btnNewStep").click(function () {
-                var newElement = $('<th:block th:each="step : ${createDto.exerciseSteps}">\n' +
+                var newElement = $(
                     '\n' +
                     '                                <div class="border bg-light p-3 mb-2" id="step" style="border-radius: 5px;">\n' +
                     '                                    <h6 class="">Шаг</h6>\n' +
@@ -36,21 +36,21 @@
                     '                                            <span class="input-group-text h-100">Описание</span>\n' +
                     '                                        </div>\n' +
                     '                                        <textarea\n' +
-                    '                                                th:name="${createDto.exerciseSteps[__${personStat.index}__].description}"\n' +
-                    '                                                th:value="${step.description}"\n' +
+                    '                                                name="exerciseSteps[' + num + '].description"\n' +
+                    '                                                value=""\n' +
                     '                                                aria-label="With textarea" class="form-control"></textarea>\n' +
                     '                                    </div>\n' +
                     '\n' +
-                    '                                    <div class="mb-3 mt-3">\n' +
-                    '                                        <label class="form-label">Фото шага упражнения</label>\n' +
-                    '                                        <input th:name="${createDto.exerciseSteps[__${personStat.index}__].photo}"\n' +
-                    '                                               th:value="${step.photo}"\n' +
-                    '\n' +
-                    '                                               class="form-control" type="file" xml:lang="ru">\n' +
-                    '                                    </div>\n' +
-                    '                                </div>\n' +
-                    '                            </th:block>')
+                    // '                                    <div class="mb-3 mt-3">\n' +
+                    // '                                        <label class="form-label">Фото шага упражнения</label>\n' +
+                    // '                                        <input name="exerciseFiles"\n' +
+                    // '                                               value=""\n' +
+                    // '\n' +
+                    // '                                               class="form-control" type="file" xml:lang="ru">\n' +
+                    // '                                    </div>\n' +
+                    '                                </div>\n')
                 $("#form").append(newElement);
+                num++;
             });
         });
     </script>

@@ -3,7 +3,6 @@ package nsu.fit.qyoga.cases.core.exercises.ui
 import io.github.ulfs.assertj.jsoup.Assertions
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
-import nsu.fit.qyoga.core.exercises.api.dtos.CreateExerciseDto
 import nsu.fit.qyoga.core.exercises.api.model.ExerciseType
 import nsu.fit.qyoga.infra.QYogaAppTestBase
 import nsu.fit.qyoga.infra.db.DbInitializer
@@ -85,19 +84,17 @@ class ExerciseViewTest : QYogaAppTestBase() {
 
     @Test
     fun `QYoga returns exercise search page after creating a new exercise`() {
-        val createDto = CreateExerciseDto(
-            title = "Разминка для спины",
-            description = "",
-            indications = "",
-            contradiction = "",
-            duration = "00:10:00",
-            exerciseType = ExerciseType.WarmUp
-        )
-
         Given {
             cookie(cookie)
         } When {
-//            param("createDto", createDto)
+            formParam("title", "Разминка для спины")
+            formParam("description", "")
+            formParam("indications", "")
+            formParam("contradiction", "")
+            formParam("duration", "00:10:00")
+            formParam("therapeuticPurpose", "purpose")
+            formParam("exerciseType", ExerciseType.WarmUp)
+
             post("/exercises/")
         } Then {
             val body = Jsoup.parse(extract().body().asString())

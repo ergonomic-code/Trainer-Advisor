@@ -8,7 +8,8 @@ INSERT INTO purpose_programs(purpose_id, program_id)
 VALUES (1, 1);
 
 INSERT INTO therapists(user_id, name)
-VALUES (1, 'Иванов И.И.');
+VALUES (1, 'Иванов И.И.'),
+       (2, 'Екатерина Маркова');
 
 INSERT INTO exercises(title, description, indications, contradictions, duration, exercise_type_id, therapist_id)
 VALUES ('Разминка для шеи', '', '', '', '00:10:00', 1, 1),

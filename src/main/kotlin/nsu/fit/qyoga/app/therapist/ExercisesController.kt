@@ -75,6 +75,7 @@ class ExercisesController(
     @PostMapping
     fun createExercise(
         @ModelAttribute("createDto") createDto: CreateExerciseDto,
+//        @RequestParam("exerciseFiles") files: Array<MultipartFile>,
         authentication: Authentication,
         model: Model
     ): String {

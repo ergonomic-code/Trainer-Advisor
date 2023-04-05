@@ -6,7 +6,6 @@ import nsu.fit.qyoga.core.exercises.api.ImagesService
 import nsu.fit.qyoga.core.exercises.api.dtos.CreateExerciseDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseSearchDto
-import nsu.fit.qyoga.core.exercises.api.dtos.ImageDto
 import nsu.fit.qyoga.core.exercises.api.model.Exercise
 import nsu.fit.qyoga.core.exercises.api.model.ExerciseStep
 import nsu.fit.qyoga.core.exercises.api.model.ExerciseType
@@ -57,16 +56,16 @@ class ExercisesServiceImpl(
         therapeuticPurposesRepo.save(newPurpose)
         createExerciseDto.exerciseSteps.map {
             var imageId: Long? = null
-            if (it.photo != null) {
-                imageId = imagesService.uploadImage(
-                    ImageDto(
-                        it.photo.name,
-                        it.photo.contentType ?: "application/octet-stream",
-                        it.photo.size,
-                        it.photo.inputStream
-                    )
-                )
-            }
+//            if (it.photo != null) {
+//                imageId = imagesService.uploadImage(
+//                    ImageDto(
+//                        it.photo.name,
+//                        it.photo.contentType ?: "application/octet-stream",
+//                        it.photo.size,
+//                        it.photo.inputStream
+//                    )
+//                )
+//            }
             exerciseStepsRepo.save(
                 ExerciseStep(
                     description = it.description,
