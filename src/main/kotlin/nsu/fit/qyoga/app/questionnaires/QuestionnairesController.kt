@@ -285,6 +285,60 @@ class QuestionnairesController(
         return HttpStatus.OK
     }
 
+    @GetMapping("answer/{answerId}/bound")
+    @ResponseBody
+    fun changeAnswerBound(
+        @RequestParam params : Map<String, String>,
+        @PathVariable answerId: Long
+    ): HttpStatus{
+        val lowerBoundRegex = Regex("questions\\[\\d+]\\.answers\\[\\d+]\\.lowerBound")
+        val upperBoundRegex = Regex("questions\\[\\d+]\\.answers\\[\\d+]\\.upperBound")
+        params.forEach { (key, value) ->
+            run {
+                if (lowerBoundRegex.matches(key)) {
+                    answerService.updateAnswerLowerBound(answerId, value.toInt())
+                }
+                if (upperBoundRegex.matches(key)) {
+                    answerService.updateAnswerUpperBound(answerId, value.toInt())
+                }
+            }
+        }
+        return HttpStatus.OK
+    }
+
+
+    /*@GetMapping("answer/{answerId}/boundTitle")
+    @ResponseBody
+    fun changeAnswerBoundTitle(
+        @RequestParam params : Map<String, String>,
+        @PathVariable answerId: Long
+    ): HttpStatus{
+        val lowerBoundRegex = Regex("questions\\[\\d+]\\.answers\\[\\d+]\\.lowerBoundTitle")
+        val upperBoundRegex = Regex("questions\\[\\d+]\\.answers\\[\\d+]\\.upperBoundTitle")
+        params.forEach { (key, value) ->
+            run {
+                if (lowerBoundRegex.matches(key)) {
+                    answerService.updateAnswerLowerBoundTitle(answerId, value)
+                }
+                if (upperBoundRegex.matches(key)) {
+                    answerService.updateAnswerUpperBoundTitle(answerId, value)
+                }
+            }
+        }
+        return HttpStatus.OK
+    }*/
+    @PostMapping("{questionnaireId}/answer/{answerId}/bound")
+    fun changeAnswerBoundTitle(
+        @ModelAttribute("questionnaire") questionnaire: QuestionnaireWithQuestionDto,
+        @PathVariable answerId: Long,
+        @PathVariable questionnaireId: String,
+        model: Model
+    ): String{
+        questionnaireService.updateQuestionnaire(questionnaire)
+        model.addAttribute(questionnaire)
+        return "questionnaire/create-questionnaire::questions"
+    }
+
     @GetMapping("{id}/edit/title")
     @ResponseBody
     fun changeQuestionnaireTitle(

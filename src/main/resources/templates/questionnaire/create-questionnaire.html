@@ -18,10 +18,6 @@
             // Toggle the side navigation
             const sidebarToggle = document.body.querySelector('#sidebarToggle');
             if (sidebarToggle) {
-                // Uncomment Below to persist sidebar toggle between refreshes
-                // if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
-                //     document.body.classList.toggle('sb-sidenav-toggled');
-                // }
                 sidebarToggle.addEventListener('click', event => {
                     event.preventDefault();
                     document.body.classList.toggle('sb-sidenav-toggled');
@@ -106,14 +102,9 @@
                                              (questionnaireId=${questionnaire.id}, questionId=${question.id})}|"
                                              hx-target="#questions"
                                             class="sort-btn">
-                                        <option value="SINGLE" th:if="${question.questionType.text} == 'one'" selected hidden>один из списка</option>
-                                        <option value="SEVERAL" th:if="${question.questionType.text} == 'several'" selected hidden>несколько из списка</option>
-                                        <option value="RANGE" th:if="${question.questionType.text} == 'range'" selected hidden>интервал</option>
-                                        <option value="TEXT" th:if="${question.questionType.text} == 'text'" selected hidden>текст</option>
-                                        <option value="SINGLE">один из списка</option>
-                                        <option value="SEVERAL">несколько из списка</option>
-                                        <option value="RANGE">интервал</option>
-                                        <option value="TEXT">текст</option>
+                                        <option th:each="types : ${T(nsu.fit.qyoga.core.questionnaires.api.dtos.enums.QuestionType).values()}"
+                                                th:value="${types}" th:text="${types.text}"
+                                                th:selected="${types.text==question.questionType.text}"></option>
                                     </select>
 
                                 </div>
@@ -198,6 +189,13 @@
 
                                         <div class="rangeBorder">
                                             <select name="range"
+                                                    hx-trigger="change"
+                                                    th:name="|questions[${i.index}].answers[${j.index}].lowerBound|"
+                                                    hx-swap="none"
+                                                    th:attr = "
+                                                    hx-post=|@{/questionnaires/{questionnaireId}/answer/{answerId}/bound
+                                                           (answerId=${answer.id}, questionnaireId=${questionnaire.id})}|,
+                                                    hx-target=|#questions|"
                                                     class="sortBtn" style="width: 42px">
                                                 <option value="" selected disabled hidden th:text="${answer.lowerBound}">lower bound</option>
                                                 <option value="0">0</option>
@@ -205,7 +203,14 @@
                                             </select>
                                             <span style="margin-left: 10px">-</span>
                                             <select name="range"
-                                                    class="sortBtn" style="width: 42px">
+                                                    hx-trigger="change"
+                                                    hx-swap="none"
+                                                    th:attr = "
+                                                    hx-post=|@{/questionnaires/{questionnaireId}/answer/{answerId}/bound
+                                                           (answerId=${answer.id}, questionnaireId=${questionnaire.id})}|,
+                                                    hx-target=|#questions|"
+                                                    class="sortBtn" style="width: 42px"
+                                                    th:name="|questions[${i.index}].answers[${j.index}].upperBound|">
                                                 <option value="" selected disabled hidden th:text="${answer.upperBound}">upper bound</option>
                                                 <option value="2">2</option>
                                                 <option value="3">3</option>
@@ -224,7 +229,13 @@
                                                     <span th:text="${answer.lowerBound}">0</span>
                                                 </div>
                                                 <div style="width: 70%; margin-left: 20px">
-                                                    <input style="border-radius: 5px; width: 100%" type="text" class="answerText" th:value="${answer.lowerBoundText}">
+                                                    <input style="border-radius: 5px; width: 100%" type="text" class="answerText"
+                                                           th:value="${answer.lowerBoundText}"
+                                                           hx-trigger="keyup changed delay:300ms"
+                                                           hx-swap="none"
+                                                           th:attr = "
+                                                           hx-get=|@{/questionnaires/answer/{answerId}/boundTitle(answerId=${answer.id})}|"
+                                                           th:name="|questions[${i.index}].answers[${j.index}].lowerBoundTitle|">
                                                 </div>
                                             </div>
                                             <br>
@@ -233,7 +244,13 @@
                                                     <span th:text="${answer.upperBound}">2</span>
                                                 </div>
                                                 <div style="width: 70%; margin-left: 20px">
-                                                    <input style="border-radius: 5px; width: 100%" type="text" class="answerText" th:value="${answer.upperBoundText}">
+                                                    <input style="border-radius: 5px; width: 100%" type="text" class="answerText"
+                                                           th:value="${answer.upperBoundText}"
+                                                           hx-trigger="keyup changed delay:300ms"
+                                                           hx-swap="none"
+                                                           th:attr = "
+                                                           hx-get=|@{/questionnaires/answer/{answerId}/boundTitle(answerId=${answer.id})}|"
+                                                           th:name="|questions[${i.index}].answers[${j.index}].upperBoundTitle|">
                                                 </div>
                                             </div>
                                         </div>
