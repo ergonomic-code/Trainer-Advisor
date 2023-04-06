@@ -1,7 +1,6 @@
 package nsu.fit.qyoga.app.questionnaires
 
 import nsu.fit.qyoga.core.questionnaires.api.dtos.*
-import nsu.fit.qyoga.core.questionnaires.api.dtos.enums.QuestionType
 import nsu.fit.qyoga.core.questionnaires.api.services.AnswerService
 import nsu.fit.qyoga.core.questionnaires.api.services.ImageService
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionService
@@ -66,7 +65,10 @@ class QuestionnairesController(
      */
     @GetMapping("new")
     fun getCreateQuestionnairePage(model: Model): String {
-        return "redirect:/questionnaires/${questionnaireService.createQuestionnaire()}/edit"
+        val questionnaireId = questionnaireService.createQuestionnaire()
+        val question = questionService.createQuestion(questionnaireId)
+        answerService.createAnswer(question.id)
+        return "redirect:/questionnaires/${questionnaireId}/edit"
     }
 
     /**
@@ -78,9 +80,6 @@ class QuestionnairesController(
         @PathVariable id: Long
     ): String {
         val questionnaire = questionnaireService.findQuestionnaireWithQuestions(id)
-        val question = questionService.createQuestion(questionnaire.id)
-        question.answers.add(answerService.createAnswer(question.id))
-        questionnaire.questions.add(question)
         model.addAttribute("questionnaire", questionnaire)
         return "questionnaire/create-questionnaire"
     }
@@ -94,9 +93,9 @@ class QuestionnairesController(
         model: Model
     ): String {
         val question = questionService.createQuestion(id)
-        question.answers.add(answerService.createAnswer(question.id))
-        model.addAttribute("question", question)
-        return "questionnaire/create-questionnaire::question"
+        question.answers += answerService.createAnswer(question.id)
+        model.addAttribute("questionnaire", questionnaireService.findQuestionnaireWithQuestions(id))
+        return "questionnaire/create-questionnaire::questions"
     }
 
     /**
@@ -104,9 +103,10 @@ class QuestionnairesController(
      */
     @PostMapping("{id}/edit")
     fun createQuestionnaire(
-        @ModelAttribute("createQuestionnaire") questionnaire: QuestionnaireWithQuestionDto,
+        @ModelAttribute("questionnaire") questionnaire: QuestionnaireWithQuestionDto,
         @PathVariable id: Long
     ): String {
+        questionnaireService.updateQuestionnaire(questionnaire)
         return "redirect:/questionnaires/"
     }
 
@@ -131,6 +131,7 @@ class QuestionnairesController(
     @PostMapping("question/{id}/image")
     fun addImageToQuestion(
         @RequestParam("file") file: MultipartFile,
+        @RequestParam("questionIndex") questionIndex: Int,
         @PathVariable id: Long,
         model: Model
     ): String {
@@ -147,6 +148,7 @@ class QuestionnairesController(
         )
         questionService.updateQuestion(questionDto)
         model.addAttribute("question", questionDto)
+        model.addAttribute("questionIndex", questionIndex)
         return "fragments/create-questionnaire-image::questionImage"
     }
 
@@ -156,12 +158,14 @@ class QuestionnairesController(
     @PostMapping("answer/{id}/image")
     fun addImageToAnswer(
         @RequestParam("file") file: MultipartFile,
+        @RequestParam("questionIndex") questionIndex: Int,
+        @RequestParam("answerIndex") answerIndex: Int,
         @PathVariable id: Long,
         model: Model
     ): String {
         val answer = answerService.findAnswer(id)
-        if( answer.imageId != null) {
-            imageService.deleteImage(answer.imageId)
+        answer.imageId?.let {
+            imageService.deleteImage(it)
         }
         val answerDto = AnswerDto(
             id = answer.id,
@@ -176,6 +180,8 @@ class QuestionnairesController(
         )
         answerService.updateAnswer(answerDto)
         model.addAttribute("answer", answerDto)
+        model.addAttribute("questionIndex", questionIndex)
+        model.addAttribute("answerIndex", answerIndex)
         return "fragments/create-questionnaire-image::answerImage"
     }
 
@@ -194,113 +200,149 @@ class QuestionnairesController(
     /**
      * Удаление вопроса из опросника
      */
-    @DeleteMapping("edit/{questionId}")
+    @DeleteMapping("{questionnaireId}/edit/question/{questionId}")
     fun deleteQuestionFromQuestionnaire(
         @PathVariable questionId: Long,
+        @PathVariable questionnaireId: Long,
         model: Model
     ): String {
+        questionService.deleteQuestion(questionId)
         model.addAttribute(
             "questionnaire",
-            questionnaireService.findQuestionnaireWithQuestions(questionService.deleteQuestion(questionId))
+            questionnaireService.findQuestionnaireWithQuestions(questionnaireId)
         )
         return "questionnaire/create-questionnaire::questions"
     }
 
     /**
-     * Изменить тип вопроса
+     * Добавление ответа в вопрос
      */
-    @GetMapping("question/{id}/change-type")
-    fun changeAnswersType(
-        questionType: QuestionType,
-        model: Model,
-        @PathVariable id: Long
-    ): String {
-        questionService.updateQuestionType(id, questionType)
-        val deletedAnswers = answerService.deleteAllByQuestionId(id)
-        for(answer in deletedAnswers){
-            if(answer.imageId != null){
-                imageService.deleteImage(answer.imageId)
-            }
-        }
-        answerService.createAnswer(id)
-        model.addAttribute(
-            "question",
-            questionService.findQuestionWithAnswers(id)
-        )
-        return "questionnaire/create-questionnaire::question"
-    }
-
-    @GetMapping("question/{id}/title")
-    @ResponseBody
-    fun changeQuestionTitle(
-        title: String,
-        @PathVariable id: Long
-    ): HttpStatus{
-        questionService.updateQuestionTitle(id, title)
-        return HttpStatus.OK
-    }
-
-    @GetMapping("answer/{answerId}/bound")
-    @ResponseBody
-    fun changeAnswerBound(
-        @RequestParam params : Map<String, String>,
-        @PathVariable answerId: Long
-    ): HttpStatus{
-        val lowerBoundRegex = Regex("questions\\[\\d+]\\.answers\\[\\d+]\\.lowerBound")
-        val upperBoundRegex = Regex("questions\\[\\d+]\\.answers\\[\\d+]\\.upperBound")
-        params.forEach { (key, value) ->
-            run {
-                if (lowerBoundRegex.matches(key)) {
-                    answerService.updateAnswerLowerBound(answerId, value.toInt())
-                }
-                if (upperBoundRegex.matches(key)) {
-                    answerService.updateAnswerUpperBound(answerId, value.toInt())
-                }
-            }
-        }
-        return HttpStatus.OK
-    }
-
-
-    /*@GetMapping("answer/{answerId}/boundTitle")
-    @ResponseBody
-    fun changeAnswerBoundTitle(
-        @RequestParam params : Map<String, String>,
-        @PathVariable answerId: Long
-    ): HttpStatus{
-        val lowerBoundRegex = Regex("questions\\[\\d+]\\.answers\\[\\d+]\\.lowerBoundTitle")
-        val upperBoundRegex = Regex("questions\\[\\d+]\\.answers\\[\\d+]\\.upperBoundTitle")
-        params.forEach { (key, value) ->
-            run {
-                if (lowerBoundRegex.matches(key)) {
-                    answerService.updateAnswerLowerBoundTitle(answerId, value)
-                }
-                if (upperBoundRegex.matches(key)) {
-                    answerService.updateAnswerUpperBoundTitle(answerId, value)
-                }
-            }
-        }
-        return HttpStatus.OK
-    }*/
-    @PostMapping("{questionnaireId}/answer/{answerId}/bound")
-    fun changeAnswerBoundTitle(
-        @ModelAttribute("questionnaire") questionnaire: QuestionnaireWithQuestionDto,
-        @PathVariable answerId: Long,
-        @PathVariable questionnaireId: String,
+    @GetMapping("{questionnaireId}/edit/question/{questionId}/addAnswer")
+    fun addAnswerToQuestion(
+        @PathVariable questionId: Long,
+        @PathVariable questionnaireId: Long,
         model: Model
-    ): String{
-        questionnaireService.updateQuestionnaire(questionnaire)
-        model.addAttribute(questionnaire)
+    ): String {
+        answerService.createAnswer(questionId)
+        model.addAttribute(
+            "questionnaire",
+            questionnaireService.findQuestionnaireWithQuestions(questionnaireId)
+        )
         return "questionnaire/create-questionnaire::questions"
     }
 
-    @GetMapping("{id}/edit/title")
+    /**
+     * Удаление ответа из вопроса
+     */
+    @DeleteMapping("{questionnaireId}/edit/answer/{answerId}")
+    fun deleteAnswerFromQuestion(
+        @PathVariable answerId: Long,
+        @PathVariable questionnaireId: Long,
+        model: Model
+    ): String {
+        answerService.deleteAnswer(answerId)
+        model.addAttribute(
+            "questionnaire",
+            questionnaireService.findQuestionnaireWithQuestions(questionnaireId)
+        )
+        return "questionnaire/create-questionnaire::questions"
+    }
+
+    @PostMapping("{id}/edit/title")
     @ResponseBody
     fun changeQuestionnaireTitle(
         questionnaire: QuestionnaireDto
     ): HttpStatus{
         questionnaireService.updateQuestionnaire(questionnaire)
         return HttpStatus.OK
+    }
+
+    /**
+     * Изменить тип вопроса
+     */
+    @PostMapping("{questionnaireId}/edit/question/{questionId}/change-type")
+    fun changeAnswersType(
+        @ModelAttribute("questionnaire") questionnaire: QuestionnaireWithQuestionDto,
+        model: Model,
+        @PathVariable questionId: Long,
+        @PathVariable questionnaireId: Long
+    ): String {
+        questionnaire.questions.forEach { question ->
+            if (question.id == questionId){
+                questionService.updateQuestion(
+                    QuestionDto(
+                        id = question.id,
+                        title = question.title,
+                        questionType = question.questionType,
+                        questionnaireId = question.questionnaireId,
+                        imageId = question.imageId
+                    )
+                )
+            }
+        }
+        val deletedAnswers = answerService.deleteAllByQuestionId(questionId)
+        for(answer in deletedAnswers){
+            if(answer.imageId != null){
+                imageService.deleteImage(answer.imageId)
+            }
+        }
+        answerService.createAnswer(questionId)
+        model.addAttribute(
+            "questionnaire",
+            questionnaireService.findQuestionnaireWithQuestions(questionnaireId)
+        )
+        return "questionnaire/create-questionnaire::questions"
+    }
+
+    /**
+     * обновить вопрос
+     */
+    @PostMapping("{questionnaireId}/edit/question/{questionId}/update")
+    @ResponseBody
+    fun changeQuestionTitle(
+        @ModelAttribute("questionnaire") questionnaire: QuestionnaireWithQuestionDto,
+        @PathVariable questionId: Long,
+        @PathVariable questionnaireId: Long
+    ): HttpStatus{
+        questionnaire.questions.forEach { question ->
+            if (question.id == questionId){
+                questionService.updateQuestion(
+                    QuestionDto(
+                        id = question.id,
+                        title = question.title,
+                        questionType = question.questionType,
+                        questionnaireId = question.questionnaireId,
+                        imageId = question.imageId
+                    )
+                )
+                return HttpStatus.OK
+            }
+        }
+        return HttpStatus.BAD_REQUEST
+    }
+
+    /**
+     * обновить ответ
+     */
+    @PostMapping("question/{questionId}/answer/{answerId}/update")
+    @ResponseBody
+    fun changeAnswerTitle(
+        @ModelAttribute("questionnaire") questionnaire: QuestionnaireWithQuestionDto,
+        @PathVariable answerId: Long,
+        @PathVariable questionId: Long
+    ): HttpStatus{
+
+        questionnaire.questions.forEach { question ->
+            if (question.id == questionId){
+                question.answers.forEach { answer ->
+                    if (answer.id == answerId){
+                        answerService.updateAnswer(answer)
+                        return HttpStatus.OK
+                    }
+                }
+            }
+        }
+        return HttpStatus.BAD_REQUEST
     }
 
     @GetMapping("edit/{questionNum}/{questionId}/setScores")

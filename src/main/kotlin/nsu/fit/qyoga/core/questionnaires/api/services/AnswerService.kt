@@ -15,4 +15,5 @@ interface AnswerService {
     fun updateAnswerUpperBound(id: Long, value: Int )
     fun updateAnswerUpperBoundTitle(id: Long, title: String)
     fun updateAnswer(createAnswerDto: AnswerDto)
+    fun deleteAnswer(id: Long): Long
 }
