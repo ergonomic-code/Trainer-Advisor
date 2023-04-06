@@ -167,7 +167,7 @@ class ExercisesServiceTests(
             contradiction = "",
             duration = "00:10:00",
             exerciseType = ExerciseType.WarmUp,
-            exerciseSteps = mutableListOf(ExerciseStepDto("Step 1", null), ExerciseStepDto("Step 2", null))
+            exerciseSteps = mutableListOf(ExerciseStepDto("Step 1"), ExerciseStepDto("Step 2"))
         )
         val expectedExercise = Exercise(
             id = 6,
@@ -208,8 +208,8 @@ class ExercisesServiceTests(
             duration = "00:10:00",
             exerciseType = ExerciseType.WarmUp,
             exerciseSteps = mutableListOf(
-                ExerciseStepDto("Step 1", createExampleMultipartFile()),
-                ExerciseStepDto("Step 2", createExampleMultipartFile())
+                ExerciseStepDto("Step 1"),
+                ExerciseStepDto("Step 2")
             )
         )
         val expectedExercise = Exercise(
@@ -238,8 +238,6 @@ class ExercisesServiceTests(
             .map { it.description } shouldBe createDto.exerciseSteps.map { it.description }
 
         savedSteps.filter { it.exerciseId == savedExercise.id }.size shouldBe 2
-        savedImages.map { it?.size } shouldBe createDto.exerciseSteps.map { it.photo }.map { it?.size }
-        savedImages.map { it?.data } shouldBe createDto.exerciseSteps.map { it.photo }.map { it?.bytes }
     }
 
     private fun createExampleMultipartFile(): MockMultipartFile {

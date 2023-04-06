@@ -40,19 +40,41 @@
                     '                                                value=""\n' +
                     '                                                aria-label="With textarea" class="form-control"></textarea>\n' +
                     '                                    </div>\n' +
-                    '\n' +
-                    // '                                    <div class="mb-3 mt-3">\n' +
-                    // '                                        <label class="form-label">Фото шага упражнения</label>\n' +
-                    // '                                        <input name="exerciseFiles"\n' +
-                    // '                                               value=""\n' +
-                    // '\n' +
-                    // '                                               class="form-control" type="file" xml:lang="ru">\n' +
-                    // '                                    </div>\n' +
-                    '                                </div>\n')
+                    '</div>\n')
                 $("#form").append(newElement);
                 num++;
             });
         });
+    </script>
+    <script>
+        function validateForm() {
+            var title = document.forms["form"]["title"].value;
+            var contradiction = document.forms["form"]["contradiction"].value;
+            var indications = document.forms["form"]["indications"].value;
+            var duration = document.forms["form"]["duration"].value;
+            var therapeuticPurpose = document.forms["form"]["therapeuticPurpose"].value;
+
+            if (title === "") {
+                alert("Название должно быть заполнено");
+                return false;
+            }
+            if (contradiction === "") {
+                alert("Противопоказание должно быть заполнено");
+                return false;
+            }
+            if (indications === "") {
+                alert("Показание должно быть заполнено");
+                return false;
+            }
+            if (duration === "") {
+                alert("Длительность должна быть заполнена");
+                return false;
+            }
+            if (therapeuticPurpose === "") {
+                alert("Терапевтическая задача должна быть заполнена");
+                return false;
+            }
+        }
     </script>
     <script crossorigin="anonymous" src="https://use.fontawesome.com/releases/v6.1.0/js/all.js"></script>
     <script crossorigin="anonymous"
@@ -80,12 +102,13 @@
                     <div class="card-body">
 
                         <form id="form" method="post"
+                              onsubmit="return validateForm()"
                               th:action="@{/exercises/}"
                               th:object="${createDto}">
                             <div class="input-group mb-3 m-auto" id="createExerciseForm">
-                                <div class="mt-3 mb-3 w-100" id="titleFilter">
+                                <div class="mt-3 mb-3 w-100" id="title">
                                     <input aria-describedby="basic-addon2"
-                                           class="form-control"
+                                           class="form-control is-valid"
                                            placeholder="Название"
                                            style="border-color:inherit"
                                            th:field="${createDto.title}"

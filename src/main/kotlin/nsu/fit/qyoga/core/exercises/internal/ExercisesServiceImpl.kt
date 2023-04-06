@@ -92,8 +92,10 @@ class ExercisesServiceImpl(
         )
 
         val purpose = getTherapeuticPurpose(exerciseDto.purpose)
-        return exercise
+        purpose.addExercise(exercise)
+        therapeuticPurposesRepo.save(purpose)
 
+        return exercise
     }
 
     override fun getExerciseById(id: Long): ExerciseDto {
