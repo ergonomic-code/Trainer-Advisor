@@ -1,7 +1,7 @@
 package nsu.fit.qyoga.app.anonymous
 
 import nsu.fit.qyoga.core.users.api.User
-import nsu.fit.qyoga.core.users.internal.UsersRepo
+import nsu.fit.qyoga.core.users.api.UserService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -14,7 +14,7 @@ private const val AUTH = "auth"
 @Controller
 @RequestMapping()
 class LoginPageController(
-    private val userRepo: UsersRepo
+    private val userService: UserService
 ) {
 
     @GetMapping("/users/login")
@@ -27,7 +27,7 @@ class LoginPageController(
         @ModelAttribute("username") username: String,
         model: Model
     ): String? {
-        val user: User? = userRepo.findByUsername(username)
+        val user: User? = userService.findByUsernameServ(username)
         if (user != null) {
             model.addAttribute("loginError", "Неверный пароль")
         } else {

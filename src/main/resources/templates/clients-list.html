@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <div th:replace="~{fragments/header::header (titleName=${'Список Клиентов'})}"></div>
+    <div th:replace="~{fragments/header::header (titleName=${'Список клиентов'})}"></div>
 </head>
 
 <body class="sb-nav-fixed">
@@ -103,7 +103,7 @@
                                     <td th:text="${client.firstName}"></td>
                                     <td th:text="${client.patronymic}"></td>
                                     <td>
-                                        <button class="btn btn-danger" id="btnDeleteClient" hx-success-event="/clients"  th:attr="hx-delete=@{/clients/delete/{id} (id=${client.id})}">
+                                        <button class="btn btn-danger" id="btnDeleteClient" hx-target="closest tr" hx-swap="outerHTML swap:1s"  th:attr="hx-delete=@{/clients/delete/{id} (id=${client.id})}">
                                             Удалить
                                         </button>
                                     </td>

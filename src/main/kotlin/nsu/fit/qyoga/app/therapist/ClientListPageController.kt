@@ -49,11 +49,12 @@ class ClientListPageController(
     }
 
     @DeleteMapping("/delete/{id}")
+    @ResponseBody
     fun deleteClient(
         @PathVariable id: Int
     ): String {
         clientService.deleteClient(id)
-        return CLIENT_PAGE
+        return ""
     }
 
     fun addClientsPageAttributes(model: Model, clients: Page<ClientDto>) {
