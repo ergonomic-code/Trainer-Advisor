@@ -107,8 +107,7 @@ class QuestionnairesController(
         @ModelAttribute("questionnaire") questionnaire: QuestionnaireWithQuestionDto,
         @PathVariable id: Long
     ): String {
-        println(questionnaire.title)
-        println(questionnaire.questions.size)
+        questionnaireService.updateQuestionnaire(questionnaire)
         return "redirect:/questionnaires/"
     }
 

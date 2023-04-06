@@ -118,11 +118,11 @@
                                 <div style="margin-top: 20px"
                                         th:id="|answer${question.id}|"
                                         th:each="answer,j : ${question.answers}"
-                                        th:switch="${question.questionType.text}">
+                                        th:switch="${question.questionType.name}">
                                     <input hidden th:name="|questions[${i.index}].answers[${j.index}].id|" th:value="${answer.id}">
                                     <input hidden th:name="|questions[${i.index}].answers[${j.index}].questionId|" th:value="${answer.questionId}">
 
-                                        <div th:case="one">
+                                    <div th:case="SINGLE">
                                             <div class="d-flex flex-row">
                                                 <img src="/img/circle.png" alt="answer type" style="width: 25px; height: 25px">
                                                 <label style="width: calc(100% - 100px); margin-left: 10px">
@@ -151,7 +151,7 @@
                                             </div>
                                         </div>
 
-                                        <div th:case="several">
+                                    <div th:case="SEVERAL">
                                             <div class="d-flex flex-row">
                                                 <img src="/img/square.png" alt="answer type" style="width: 25px; height: 25px">
                                                 <label style="width: calc(100% - 100px); margin-left: 10px">
@@ -179,13 +179,13 @@
                                             </div>
                                         </div>
 
-                                    <div th:case="text" style="margin-top: 20px" >
+                                    <div th:case="TEXT" style="margin-top: 20px" >
                                         <label style="width: 100%">
                                             <input style="width: 100%; border-radius: 5px" class="answerText" type="text" name="answer" placeholder="answer" disabled="" >
                                         </label>
                                     </div>
 
-                                    <div th:case="range" th:id="|answer${answer.id}|" class="answer" >
+                                    <div th:case="RANGE" th:id="|answer${answer.id}|" class="answer" >
 
                                         <div class="rangeBorder">
                                             <select name="range"
