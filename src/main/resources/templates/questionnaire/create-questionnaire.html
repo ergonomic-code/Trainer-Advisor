@@ -58,7 +58,7 @@
                            required th:name="title"
                            hx-trigger="keyup changed delay:100ms"
                            hx-swap="none" th:attr = "
-                           hx-get=|@{/questionnaires/{id}/edit/title(id=${questionnaire.id})}|">
+                           hx-post=|@{/questionnaires/{id}/edit/title(id=${questionnaire.id})}|">
                 </label>
             </div>
 
@@ -79,8 +79,8 @@
                                            th:value="${question.title}" required
                                            th:name="|questions[${i.index}].title|"
                                            hx-swap="none" th:attr = "
-                                           hx-get=|@{/questionnaires/question/{questionId}/title
-                                           (questionId=${question.id})}|">
+                                           hx-post=|@{/questionnaires/{questionnaireId}/edit/question/{questionId}/update
+                                           (questionnaireId=${questionnaire.id}, questionId=${question.id})}|">
 
                                     <div style="width: 40px">
                                         <img class="add-img-to-question-btn" src="/img/add-file.png" alt="Добавить изображение">
@@ -98,7 +98,7 @@
                                             style="width: 20%; border-radius: 5px; max-width: 200px"
                                             th:name="|questions[${i.index}].questionType|"
                                             th:attr = "
-                                             hx-get=|@{/questionnaires/{questionnaireId}/edit/question/{questionId}/change-type
+                                             hx-post=|@{/questionnaires/{questionnaireId}/edit/question/{questionId}/change-type
                                              (questionnaireId=${questionnaire.id}, questionId=${question.id})}|"
                                              hx-target="#questions"
                                             class="sort-btn">
@@ -121,6 +121,7 @@
                                         th:switch="${question.questionType.name}">
                                     <input hidden th:name="|questions[${i.index}].answers[${j.index}].id|" th:value="${answer.id}">
                                     <input hidden th:name="|questions[${i.index}].answers[${j.index}].questionId|" th:value="${answer.questionId}">
+                                    <input hidden th:name="|questions[${i.index}].answers[${j.index}].score|" th:value="${answer.score}">
 
                                     <div th:case="SINGLE">
                                             <div class="d-flex flex-row">
@@ -130,7 +131,8 @@
                                                            th:name="|questions[${i.index}].answers[${j.index}].title|" th:value="${answer.title}"
                                                            hx-trigger="keyup changed delay:300ms"
                                                            th:attr = "
-                                                           hx-get=|@{/questionnaires/answer/{answerId}/title(answerId=${answer.id})}|">
+                                                           hx-post=|@{/questionnaires/question/{questionId}/answer/{answerId}/update
+                                                           (questionId=${question.id},answerId=${answer.id})}|">
                                                 </label>
 
                                                 <div style="width: 40px">
@@ -139,11 +141,15 @@
                                                            hx-trigger="change"
                                                            hx-encoding="multipart/form-data"
                                                            th:attr = "
-                                                           hx-post=|@{/questionnaires/answer/{id}/image(id=${answer.id},
-                                                           questionIndex=${i.index}, answerIndex=${j.index})}|,
+                                                           hx-post=|@{/questionnaires/answer/{id}/image
+                                                           (id=${answer.id},questionIndex=${i.index}, answerIndex=${j.index})}|,
                                                            hx-target=|#answer${answer.id}Img|">
                                                 </div>
-                                                <img class="delete-answer" src="/img/cross.png" alt="delete answer" style="width: 30px; height: 30px">
+                                                <img class="delete-answer" src="/img/cross.png" alt="delete answer" style="width: 30px; height: 30px"
+                                                th:attr="
+                                                hx-delete=|@{/questionnaires/{questionnaireId}/edit/answer/{answerId}
+                                                (questionnaireId=${questionnaire.id}, answerId=${answer.id})}|"
+                                                hx-target="#questions">
                                             </div>
 
                                             <div th:id="|answer${answer.id}Img|" style="margin-top: 20px">
@@ -159,7 +165,8 @@
                                                            th:name="|questions[${i.index}].answers[${j.index}].title|" th:value="${answer.title}"
                                                            hx-trigger="keyup changed delay:300ms"
                                                            th:attr = "
-                                                           hx-get=|@{/questionnaires/answer/{answerId}/title(answerId=${answer.id})}|">
+                                                           hx-post=|@{/questionnaires/question/{questionId}/answer/{answerId}/update
+                                                           (questionId=${question.id},answerId=${answer.id})}|">
                                                 </label>
                                                 <div style="width: 40px">
                                                     <img class="add-img-to-question-btn" src="/img/add-file.png" alt="Добавить изображение">
@@ -171,7 +178,11 @@
                                                            questionIndex=${i.index}, answerIndex=${j.index})}|,
                                                            hx-target=|#answer${answer.id}Img|">
                                                 </div>
-                                                <img class="delete-answer" src="/img/cross.png" alt="delete answer" style="width: 30px; height: 30px">
+                                                <img class="delete-answer" src="/img/cross.png" alt="delete answer" style="width: 30px; height: 30px"
+                                                     th:attr="
+                                                hx-delete=|@{/questionnaires/{questionnaireId}/edit/answer/{answerId}
+                                                (questionnaireId=${questionnaire.id}, answerId=${answer.id})}|"
+                                                     hx-target="#questions">
                                             </div>
 
                                             <div th:id="|answer${answer.id}Img|" style="margin-top: 20px">
@@ -193,7 +204,7 @@
                                                     th:name="|questions[${i.index}].answers[${j.index}].lowerBound|"
                                                     hx-swap="none"
                                                     th:attr = "
-                                                    hx-post=|@{/questionnaires/{questionnaireId}/answer/{answerId}/bound
+                                                    hx-post=|@{/questionnaires/{questionnaireId}/answer/{answerId}/update
                                                            (answerId=${answer.id}, questionnaireId=${questionnaire.id})}|,
                                                     hx-target=|#questions|"
                                                     class="sortBtn" style="width: 42px">
@@ -206,7 +217,7 @@
                                                     hx-trigger="change"
                                                     hx-swap="none"
                                                     th:attr = "
-                                                    hx-post=|@{/questionnaires/{questionnaireId}/answer/{answerId}/bound
+                                                    hx-post=|@{/questionnaires/{questionnaireId}/answer/{answerId}/update
                                                            (answerId=${answer.id}, questionnaireId=${questionnaire.id})}|,
                                                     hx-target=|#questions|"
                                                     class="sortBtn" style="width: 42px"
@@ -234,7 +245,8 @@
                                                            hx-trigger="keyup changed delay:300ms"
                                                            hx-swap="none"
                                                            th:attr = "
-                                                           hx-get=|@{/questionnaires/answer/{answerId}/boundTitle(answerId=${answer.id})}|"
+                                                           hx-post=|@{/questionnaires/{questionnaireId}/answer/{answerId}/update
+                                                           (answerId=${answer.id}, questionnaireId=${questionnaire.id})}|"
                                                            th:name="|questions[${i.index}].answers[${j.index}].lowerBoundTitle|">
                                                 </div>
                                             </div>
@@ -249,7 +261,8 @@
                                                            hx-trigger="keyup changed delay:300ms"
                                                            hx-swap="none"
                                                            th:attr = "
-                                                           hx-get=|@{/questionnaires/answer/{answerId}/boundTitle(answerId=${answer.id})}|"
+                                                           hx-post=|@{/questionnaires/{questionnaireId}/answer/{answerId}/update
+                                                           (answerId=${answer.id}, questionnaireId=${questionnaire.id})}|"
                                                            th:name="|questions[${i.index}].answers[${j.index}].upperBoundTitle|">
                                                 </div>
                                             </div>
@@ -258,11 +271,18 @@
 
                                 </div>
 
-                                <div th:if="${question.questionType.text} == 'one' or ${question.questionType.text} == 'several' "
+                                <div th:if="'SINGLE' == ${question.questionType.name} or 'SEVERAL' == ${question.questionType.name}"
                                      class="answer"
                                      style="width: 100%; margin-top: 15px">
                                     <label style="width: 100%;">
-                                        <input style="margin-left: 35px; border-radius: 5px; width: calc(100% - 103px)" class="answerText" type="text" name="answer" placeholder="нажмите, чтобы добавить новый ответ" disabled="" >
+                                        <input style="margin-left: 35px; border-radius: 5px; width: calc(100% - 103px)" class="answerText" type="text" name="answer"
+                                               placeholder="нажмите, чтобы добавить новый ответ"
+                                               hx-trigger="click"
+                                               th:attr = "
+                                               hx-get=|@{/questionnaires/{questionnaireId}/edit/question/{questionId}/addAnswer
+                                               (questionId=${question.id}, questionnaireId=${questionnaire.id})}|"
+                                               hx-target="#questions"
+                                        >
                                     </label>
                                 </div>
 
@@ -273,11 +293,12 @@
                                            class="delete-question"
                                            style="margin-left: 5px; cursor: pointer; width: 25px;"
                                            hx-trigger="click"
-                                           th:attr = "hx-delete=|@{/questionnaires/edit/{questionId}(questionId=${question.id})}|"
+                                           th:attr = "hx-delete=|@{/questionnaires/{questionnaireId}/edit/question/{questionId}
+                                           (questionId=${question.id}, questionnaireId=${questionnaire.id})}|"
                                            hx-target="#questions">
                                   </div>
                                   <div class="d-flex"
-                                       th:if="'range' != ${question.questionType.text} and 'text' != ${question.questionType.text}">
+                                       th:if="'SINGLE' == ${question.questionType.name} or 'SEVERAL' == ${question.questionType.name}">
                                       <button type="button"
                                               style=" border-radius: 5px; color: black; padding: 2px; text-decoration: none;background-color: #c2c2c2; cursor: pointer;"
                                               th:attr = "hx-get=|@{/questionnaires/question/{id}/setScores(id=${question.id})}|,
@@ -302,7 +323,6 @@
         <div class="position-fixed bottom-0" style="margin-bottom: 5rem; margin-left: 3%">
             <input type="image" width="60px" src="/img/plus-in-circle.png" alt="Добавить новый вопрос"
                    hx-trigger="click"
-                   hx-swap="outerHTML"
                    th:attr="hx-get=|@{/questionnaires/{id}/edit/add-question(id=${questionnaire.id})}|"
                    hx-target="#questions">
         </div>

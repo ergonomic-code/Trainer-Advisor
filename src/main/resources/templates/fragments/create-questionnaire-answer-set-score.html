@@ -1,0 +1,94 @@
+<div th:id="|question${question.id}Body|" th:fragment="answersScore (questionIndex, answerIndex)">
+    <div style="margin-top: 20px"
+         th:id="|answer${question.id}|"
+         th:each="answer,j : ${question.answers}"
+         th:switch="${question.questionType.name}">
+        <input hidden th:name="|questions[${questionIndex}].answers[${answerIndex}].id|" th:value="${answer.id}">
+        <input hidden th:name="|questions[${questionIndex}].answers[${answerIndex}].questionId|" th:value="${answer.questionId}">
+        <input hidden th:name="|questions[${questionIndex}].answers[${answerIndex}].score|" th:value="${answer.score}">
+
+        <div th:case="SINGLE">
+            <div class="d-flex flex-row">
+                <img src="/img/circle.png" alt="answer type" style="width: 25px; height: 25px">
+                <input style="width: 50px;height: 18px; margin-left: 20px" type="number" min="0" max="100" value="0" th:value="${answer.optionsScore}"
+                       th:name="|questions[${questionNum}].answers[${j.index}].optionsScore|"
+                       hx-trigger="keyup changed delay:200ms, search"
+                       th:attr = "hx-post=|@{/questionnaires/answers/{answerId}/setScore(answerId=${answer.id})}|">
+            </div>
+
+            <div th:id="|answer${answer.id}Img|" style="margin-top: 20px">
+                <div th:replace="~{/fragments/create-questionnaire-image.html :: answerImage(${answer}, ${i.index}, ${j.index}) }"></div>
+            </div>
+        </div>
+
+        <div th:case="SEVERAL">
+            <div class="d-flex flex-row">
+                <img src="/img/square.png" alt="answer type" style="width: 25px; height: 25px">
+                <label style="width: calc(100% - 100px); margin-left: 10px">
+                    <input style="border-radius: 5px;" class="answerText w-100" type="text" name="answer" placeholder="ответ"
+                           th:name="|questions[${i.index}].answers[${j.index}].title|" th:value="${answer.title}"
+                           hx-trigger="keyup changed delay:300ms"
+                           th:attr = "
+                                                           hx-post=|@{/questionnaires/question/{questionId}/answer/{answerId}/update
+                                                           (questionId=${question.id},answerId=${answer.id})}|">
+                </label>
+                <div style="width: 40px">
+                    <img class="add-img-to-question-btn" src="/img/add-file.png" alt="Добавить изображение">
+                    <input name="file" type="file" class="input-file" aria-hidden="true" style="margin-top: 3px;"
+                           hx-trigger="change"
+                           hx-encoding="multipart/form-data"
+                           th:attr = "
+                                                           hx-post=|@{/questionnaires/answer/{id}/image(id=${answer.id},
+                                                           questionIndex=${i.index}, answerIndex=${j.index})}|,
+                                                           hx-target=|#answer${answer.id}Img|">
+                </div>
+                <img class="delete-answer" src="/img/cross.png" alt="delete answer" style="width: 30px; height: 30px"
+                     th:attr="
+                                                hx-delete=|@{/questionnaires/{questionnaireId}/edit/answer/{answerId}
+                                                (questionnaireId=${questionnaire.id}, answerId=${answer.id})}|"
+                     hx-target="#questions">
+            </div>
+
+            <div th:id="|answer${answer.id}Img|" style="margin-top: 20px">
+                <div th:replace="~{/fragments/create-questionnaire-image.html :: answerImage(${answer}, ${i.index}, ${j.index}) }"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <div th:if="'SINGLE' == ${question.questionType.name} or 'SEVERAL' == ${question.questionType.name}"
+         class="answer"
+         style="width: 100%; margin-top: 15px">
+        <label style="width: 100%;">
+            <input style="margin-left: 35px; border-radius: 5px; width: calc(100% - 103px)" class="answerText" type="text" name="answer"
+                   placeholder="нажмите, чтобы добавить новый ответ"
+                   hx-trigger="click"
+                   th:attr = "
+                                               hx-get=|@{/questionnaires/{questionnaireId}/edit/question/{questionId}/addAnswer
+                                               (questionId=${question.id}, questionnaireId=${questionnaire.id})}|"
+                   hx-target="#questions"
+            >
+        </label>
+    </div>
+
+    <div th:id="|question${question.id}Footer|" style="border-top: 1px solid black; margin-top: 7px; padding-top: 10px; justify-content: space-between"
+         class="d-flex flex-row">
+        <div class="d-flex">
+            <img src="/img/trash-icon.png" alt="delete q btn"
+                 class="delete-question"
+                 style="margin-left: 5px; cursor: pointer; width: 25px;"
+                 hx-trigger="click"
+                 th:attr = "hx-delete=|@{/questionnaires/{questionnaireId}/edit/question/{questionId}
+                                           (questionId=${question.id}, questionnaireId=${questionnaire.id})}|"
+                 hx-target="#questions">
+        </div>
+        <div class="d-flex"
+             th:if="'SINGLE' == ${question.questionType.name} or 'SEVERAL' == ${question.questionType.name}">
+            <button type="button"
+                    style=" border-radius: 5px; color: black; padding: 2px; text-decoration: none;background-color: #c2c2c2; cursor: pointer;"
+                    th:attr = "hx-get=|@{/questionnaires/question/{id}/setScores(id=${question.id})}|,
+                                            hx-target=|#question${question.id}|">Задать баллы</button>
+        </div>
+    </div>
+
+</div>
