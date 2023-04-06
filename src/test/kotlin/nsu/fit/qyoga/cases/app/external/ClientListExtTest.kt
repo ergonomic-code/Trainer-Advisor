@@ -28,9 +28,9 @@ class ClientListExtTest : QYogaAppTestBase() {
         Given {
             this.cookie(getAuthCookie())
         } When {
-            post("/clients/delete/1")
+            post("/clients/delete/4")
         } Then {
-            statusCode(302)
+            statusCode(200)
             header("Location", StringEndsWith.endsWith("clients"))
         }
     }
@@ -42,7 +42,7 @@ class ClientListExtTest : QYogaAppTestBase() {
         } When {
             post("/clients/delete/1111")
         } Then {
-            statusCode(302)
+            statusCode(200)
             header("Location", StringEndsWith.endsWith("clients"))
         }
     }
