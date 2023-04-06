@@ -46,7 +46,7 @@ class QuestionServiceImpl(
         val question: Question = questionRepo.findById(id).orElse(null)
             ?: throw QuestionException("Выбранный вопрос не найден")
         questionRepo.deleteById(id)
-        return question.questionnaireId
+        return question.id
     }
 
     override fun findQuestion(id: Long): QuestionDto {
@@ -80,6 +80,7 @@ class QuestionServiceImpl(
     ): Long {
         val savedQuestion = questionRepo.save(
             Question(
+                id = createQuestionDto.id,
                 title = createQuestionDto.title,
                 questionType = createQuestionDto.questionType,
                 questionnaireId = questionnaireId,
