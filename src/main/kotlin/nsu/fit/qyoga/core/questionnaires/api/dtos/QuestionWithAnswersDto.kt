@@ -4,7 +4,7 @@ import nsu.fit.qyoga.core.questionnaires.api.dtos.enums.QuestionType
 
 data class QuestionWithAnswersDto(
     var id: Long = 0,
-    val title: String? = null,
+    var title: String? = null,
     var questionType: QuestionType = QuestionType.SINGLE,
     var imageId: Long? = null,
     var questionnaireId: Long = 0,

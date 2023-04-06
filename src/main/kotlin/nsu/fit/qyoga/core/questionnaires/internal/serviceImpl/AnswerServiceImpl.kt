@@ -6,7 +6,6 @@ import nsu.fit.qyoga.core.questionnaires.api.model.Answer
 import nsu.fit.qyoga.core.questionnaires.api.services.AnswerService
 import nsu.fit.qyoga.core.questionnaires.internal.repository.AnswerJdbcTemplateRepo
 import nsu.fit.qyoga.core.questionnaires.internal.repository.AnswerRepo
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException
 import org.springframework.stereotype.Service
 
 @Service
@@ -112,4 +111,13 @@ class AnswerServiceImpl(
     override fun updateAnswerUpperBoundTitle(id: Long, title: String) {
         answerJdbcTemplateRepo.updateAnswerUpperBoundTitleById(id, title)
     }
+
+    override fun deleteAnswer(id: Long): Long {
+        val answer = answerRepo.findById(id).orElse(null)
+            ?: throw AnswerException("Выбранного ответа не существует")
+        answerRepo.deleteById(id)
+        return answer.id
+    }
+
+
 }
