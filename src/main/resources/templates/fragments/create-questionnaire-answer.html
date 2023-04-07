@@ -1,22 +1,24 @@
 <div class="p-3"
-     th:fragment="question (question, questionIndex)"
-     style="margin-top: 20px; background-color: #dcdcdc; border-radius: 8px;" th:id="|question${question.id}|">
+     th:fragment="question (question, questionnaire, questionIndex)"
+     style="margin-top: 20px; background-color: #dcdcdc; border-radius: 8px;" >
 <div th:id="|question${question.id}Header|" th:fragment="questionHeader">
-    <input hidden th:name="|question[${questionIndex}].id|" th:value="${question.id}">
+    <input hidden th:name="|questions[${questionIndex}].id|" th:value="${question.id}">
+    <input hidden th:name="|questions[${questionIndex}].questionnaireId|"
+           th:value="${question.questionnaireId}">
 
     <div class="flex-row justify-content-start d-flex" style="flex-wrap: wrap">
         <input class="question-text" type="text"
                style="width: calc(80% - 40px); border-radius: 5px; min-width: 60px"
                hx-trigger="keyup changed delay:300ms"
                th:value="${question.title}" required
-               th:name="|question[${questionIndex}].title|"
+               th:name="|questions[${questionIndex}].title|"
                hx-swap="none" th:attr = "
-               hx-post=|@{/questionnaires/edit/question/{questionId}/update
-               (questionId=${question.id})}|">
+                                           hx-post=|@{/questionnaires/{questionnaireId}/edit/question/{questionId}/update
+                                           (questionnaireId=${questionnaire.id}, questionId=${question.id})}|">
 
         <div style="width: 40px">
             <img class="add-img-to-question-btn" src="/img/add-file.png" alt="Добавить изображение">
-            <input type="file" class="input-file" aria-hidden="true" style="margin-top: 3px;" size="1048576"
+            <input type="file" class="input-file" aria-hidden="true" style="margin-top: 3px;"
                    hx-trigger="change"
                    hx-encoding="multipart/form-data"
                    th:name="file"
@@ -28,15 +30,14 @@
         <select name="question-type"
                 hx-trigger="change"
                 style="width: 20%; border-radius: 5px; max-width: 200px"
-                th:name="|question[${questionIndex}].questionType|"
+                th:name="|questions[${questionIndex}].questionType|"
                 th:attr = "
-                hx-post=|@{/questionnaires/edit/question/{questionId}/change-type
-                (questionId=${question.id})}|,
-                hx-target=|#question${question.id}|"
+                                             hx-post=|@{/questionnaires/{questionnaireId}/edit/question/{questionId}/change-type
+                                             (questionnaireId=${questionnaire.id}, questionId=${question.id})}|"
+                hx-target="#questions"
                 class="sort-btn">
             <option th:each="types : ${T(nsu.fit.qyoga.core.questionnaires.api.dtos.enums.QuestionType).values()}"
                     th:value="${types}" th:text="${types.text}"
-                    th:class="|type${types}|"
                     th:selected="${types.text==question.questionType.text}"></option>
         </select>
 
@@ -48,28 +49,28 @@
 </div>
 <div th:id="|question${question.id}Body|" >
     <div style="margin-top: 20px"
+         th:id="|answer${question.id}|"
          th:each="answer,j : ${question.answers}"
-         th:id="|answer${answer.id}|"
          th:switch="${question.questionType.name}">
-        <input th:class="|answer${j.index}Id|" hidden th:name="|question[${questionIndex}].answers[${j.index}].id|" th:value="${answer.id}">
-        <input th:class="|answer${j.index}QuestionId|" hidden th:name="|question[${questionIndex}].answers[${j.index}].questionId|" th:value="${question.id}">
-        <input th:class="|answer${j.index}Score|" hidden th:name="|question[${questionIndex}].answers[${j.index}].score|" th:value="${answer.score}">
+        <input hidden th:name="|questions[${questionIndex}].answers[${j.index}].id|" th:value="${answer.id}">
+        <input hidden th:name="|questions[${questionIndex}].answers[${j.index}].questionId|" th:value="${answer.questionId}">
+        <input hidden th:name="|questions[${questionIndex}].answers[${j.index}].score|" th:value="${answer.score}">
 
         <div th:case="SINGLE">
             <div class="d-flex flex-row">
                 <img src="/img/circle.png" alt="answer type" style="width: 25px; height: 25px">
                 <label style="width: calc(100% - 100px); margin-left: 10px">
                     <input style="border-radius: 5px;" class="answerText w-100" type="text" name="answer" placeholder="ответ"
-                           th:name="|question[${questionIndex}].answers[${j.index}].title|" th:value="${answer.title}"
+                           th:name="|questions[${questionIndex}].answers[${j.index}].title|" th:value="${answer.title}"
                            hx-trigger="keyup changed delay:300ms"
                            th:attr = "
-                           hx-post=|@{/questionnaires/edit/question/{questionId}/answer/{answerId}/update
-                           (answerId=${answer.id}, questionId=${question.id})}|">
+                                                           hx-post=|@{/questionnaires/question/{questionId}/answer/{answerId}/update
+                                                           (questionId=${question.id},answerId=${answer.id})}|">
                 </label>
 
                 <div style="width: 40px">
                     <img class="add-img-to-question-btn" src="/img/add-file.png" alt="Добавить изображение">
-                    <input name="file" type="file" class="input-file" aria-hidden="true" style="margin-top: 3px;" size="1048576"
+                    <input name="file" type="file" class="input-file" aria-hidden="true" style="margin-top: 3px;"
                            hx-trigger="change"
                            hx-encoding="multipart/form-data"
                            th:attr = "
@@ -79,9 +80,9 @@
                 </div>
                 <img class="delete-answer" src="/img/cross.png" alt="delete answer" style="width: 30px; height: 30px"
                      th:attr="
-                     hx-delete=|@{/questionnaires/edit/question/{questionId}/answer/{answerId}
-                     (answerId=${answer.id}, questionId=${question.id})}|,
-                     hx-target=|#question${question.id}|">
+                     hx-delete=|@{/questionnaires/{questionnaireId}/edit/answer/{answerId}
+                     (questionnaireId=${questionnaire.id}, answerId=${answer.id})}|"
+                     hx-target="#questions">
             </div>
 
             <div th:id="|answer${answer.id}Img|" style="margin-top: 20px">
@@ -94,27 +95,27 @@
                 <img src="/img/square.png" alt="answer type" style="width: 25px; height: 25px">
                 <label style="width: calc(100% - 100px); margin-left: 10px">
                     <input style="border-radius: 5px;" class="answerText w-100" type="text" name="answer" placeholder="ответ"
-                           th:name="|question[${questionIndex}].answers[${j.index}].title|" th:value="${answer.title}"
+                           th:name="|questions[${questionIndex}].answers[${j.index}].title|" th:value="${answer.title}"
                            hx-trigger="keyup changed delay:300ms"
                            th:attr = "
-                           hx-post=|@{/questionnaires/edit/question/{questionId}/answer/{answerId}/update
+                           hx-post=|@{/questionnaires/question/{questionId}/answer/{answerId}/update
                            (questionId=${question.id},answerId=${answer.id})}|">
                 </label>
                 <div style="width: 40px">
                     <img class="add-img-to-question-btn" src="/img/add-file.png" alt="Добавить изображение">
-                    <input name="file" type="file" class="input-file" aria-hidden="true" style="margin-top: 3px;" size="1048576"
+                    <input name="file" type="file" class="input-file" aria-hidden="true" style="margin-top: 3px;"
                            hx-trigger="change"
                            hx-encoding="multipart/form-data"
                            th:attr = "
-                           hx-post=|@{/questionnaires/edit/answer/{id}/image(id=${answer.id},
+                           hx-post=|@{/questionnaires/answer/{id}/image(id=${answer.id},
                            questionIndex=${questionIndex}, answerIndex=${j.index})}|,
                            hx-target=|#answer${answer.id}Img|">
                 </div>
                 <img class="delete-answer" src="/img/cross.png" alt="delete answer" style="width: 30px; height: 30px"
                      th:attr="
-                     hx-delete=|@{/questionnaires/edit/question/{questionId}/answer/{answerId}
-                     (questionId=${question.id},answerId=${answer.id})}|,
-                     hx-target=|#question${question.id}|">
+                     hx-delete=|@{/questionnaires/{questionnaireId}/edit/answer/{answerId}
+                     (questionnaireId=${questionnaire.id}, answerId=${answer.id})}|"
+                     hx-target="#questions">
             </div>
 
             <div th:id="|answer${answer.id}Img|" style="margin-top: 20px">
@@ -129,56 +130,76 @@
         </div>
 
         <div th:case="RANGE" th:id="|answer${answer.id}|" class="answer" >
-                <div style="display: flex">
-                    <select name="range"
-                            hx-trigger="change"
-                            th:name="|question[${questionIndex}].answers[${j.index}].bounds.lowerBound|"
-                            hx-swap="none"
-                            th:attr = "
-                            hx-post=|@{/questionnaires/edit/question/{questionId}/answer/{answerId}/update
-                            (answerId=${answer.id}, questionId=${question.id})}|,
-                            hx-target=|#questions|"
-                            class="sortBtn" style="width: 50px; border-radius: 5px">
-                        <option
-                                th:each="i: ${#numbers.sequence(0, 1)}"
-                                th:value="${i}" th:text="${i}"
-                                th:selected="${i==answer.bounds.lowerBound}"
-                        ></option>
-                    </select>
-                    <input style="border-radius: 5px; width: 100%; margin-left: 40px" type="text" class="answerText"
-                           th:value="${answer.bounds.lowerBoundText}"
-                           hx-trigger="keyup changed delay:300ms"
-                           hx-swap="none"
-                           th:attr = "
-                           hx-post=|@{/questionnaires/edit/question/{questionId}/answer/{answerId}/update
-                           (answerId=${answer.id}, questionId=${question.id})}|"
-                           th:name="|question[${questionIndex}].answers[${j.index}].bounds.lowerBoundText|">
+
+            <div class="rangeBorder">
+                <select name="range"
+                        hx-trigger="change"
+                        th:name="|questions[${questionIndex}].answers[${j.index}].lowerBound|"
+                        hx-swap="none"
+                        th:attr = "
+                                                    hx-post=|@{/questionnaires/{questionnaireId}/answer/{answerId}/update
+                                                           (answerId=${answer.id}, questionnaireId=${questionnaire.id})}|,
+                                                    hx-target=|#questions|"
+                        class="sortBtn" style="width: 42px">
+                    <option value="" selected disabled hidden th:text="${answer.lowerBound}">lower bound</option>
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                </select>
+                <span style="margin-left: 10px">-</span>
+                <select name="range"
+                        hx-trigger="change"
+                        hx-swap="none"
+                        th:attr = "
+                                                    hx-post=|@{/questionnaires/{questionnaireId}/answer/{answerId}/update
+                                                           (answerId=${answer.id}, questionnaireId=${questionnaire.id})}|,
+                                                    hx-target=|#questions|"
+                        class="sortBtn" style="width: 42px"
+                        th:name="|questions[${questionIndex}].answers[${j.index}].upperBound|">
+                    <option value="" selected disabled hidden th:text="${answer.upperBound}">upper bound</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                </select>
+            </div>
+            <div style="padding-top: 15px; width: 100%">
+                <div style="display:flex; ">
+                    <div th:id="|leftBorder${answer.id}|" style="width: 20px">
+                        <span th:text="${answer.lowerBound}">0</span>
+                    </div>
+                    <div style="width: 70%; margin-left: 20px">
+                        <input style="border-radius: 5px; width: 100%" type="text" class="answerText"
+                               th:value="${answer.lowerBoundText}"
+                               hx-trigger="keyup changed delay:300ms"
+                               hx-swap="none"
+                               th:attr = "
+                                                           hx-post=|@{/questionnaires/{questionnaireId}/answer/{answerId}/update
+                                                           (answerId=${answer.id}, questionnaireId=${questionnaire.id})}|"
+                               th:name="|questions[${questionIndex}].answers[${j.index}].lowerBoundTitle|">
+                    </div>
                 </div>
-                <div style="display: flex; margin-top: 20px">
-                    <select name="range"
-                            hx-trigger="change"
-                            hx-swap="none"
-                            th:attr = "
-                            hx-post=|@{/questionnaires/edit/question/{questionId}/answer/{answerId}/update
-                            (answerId=${answer.id}, questionId=${question.id})}|,
-                            hx-target=|#questions|"
-                            class="sortBtn" style="width: 50px; border-radius: 5px"
-                            th:name="|question[${questionIndex}].answers[${j.index}].bounds.upperBound|">
-                        <option
-                                th:each="i: ${#numbers.sequence(2, 10)}"
-                                th:value="${i}" th:text="${i}"
-                                th:selected="${i==answer.bounds.upperBound}"
-                        ></option>
-                    </select>
-                    <input style="border-radius: 5px; width: 100%; margin-left: 40px" type="text" class="answerText"
-                           th:value="${answer.bounds.upperBoundText}"
-                           hx-trigger="keyup changed delay:300ms"
-                           hx-swap="none"
-                           th:attr = "
-                               hx-post=|@{/questionnaires/edit/question/{questionId}/answer/{answerId}/update
-                               (answerId=${answer.id}, questionId=${question.id})}|"
-                           th:name="|question[${questionIndex}].answers[${j.index}].bounds.upperBoundText|">
+                <br>
+                <div  style="display:flex; ">
+                    <div th:id="|rightBorder${answer.id}|" style="width: 20px">
+                        <span th:text="${answer.upperBound}">2</span>
+                    </div>
+                    <div style="width: 70%; margin-left: 20px">
+                        <input style="border-radius: 5px; width: 100%" type="text" class="answerText"
+                               th:value="${answer.upperBoundText}"
+                               hx-trigger="keyup changed delay:300ms"
+                               hx-swap="none"
+                               th:attr = "
+                                                           hx-post=|@{/questionnaires/{questionnaireId}/answer/{answerId}/update
+                                                           (answerId=${answer.id}, questionnaireId=${questionnaire.id})}|"
+                               th:name="|questions[${questionIndex}].answers[${j.index}].upperBoundTitle|">
+                    </div>
                 </div>
+            </div>
         </div>
 
     </div>
@@ -191,9 +212,9 @@
                    placeholder="нажмите, чтобы добавить новый ответ"
                    hx-trigger="click"
                    th:attr = "
-                   hx-get=|@{/questionnaires/edit/question/{questionId}/addAnswer
-                   (questionId=${question.id})}|,
-                   hx-target=|#question${question.id}|"
+                                               hx-get=|@{/questionnaires/{questionnaireId}/edit/question/{questionId}/addAnswer
+                                               (questionId=${question.id}, questionnaireId=${questionnaire.id})}|"
+                   hx-target="#questions"
             >
         </label>
     </div>
@@ -205,23 +226,21 @@
                  class="delete-question"
                  style="margin-left: 5px; cursor: pointer; width: 25px;"
                  hx-trigger="click"
-                 th:attr = "
-                 hx-delete=|@{/questionnaires/edit/question/{questionId}
-                 (questionId=${question.id})}|"
+                 th:attr = "hx-delete=|@{/questionnaires/{questionnaireId}/edit/question/{questionId}
+                                           (questionId=${question.id}, questionnaireId=${questionnaire.id})}|"
                  hx-target="#questions">
         </div>
         <div class="d-flex"
              th:if="'SINGLE' == ${question.questionType.name} or 'SEVERAL' == ${question.questionType.name}">
-            <button type="button" class="setScore"
+            <button type="button"
                     style=" border-radius: 5px; color: black; padding: 2px; text-decoration: none;background-color: #c2c2c2; cursor: pointer;"
                     hx-swap="outerHTML"
                     th:attr = "
-                    hx-post=|@{/questionnaires/edit/question/{questionId}/answer/setScores
-                    (questionId=${question.id})}|,
+                    hx-get=|@{/questionnaires/question/{id}/setScores
+                    (id=${question.id}, questionIndex=${questionIndex})}|,
                     hx-target=|#question${question.id}Body|">Задать баллы</button>
         </div>
     </div>
 
 </div>
-
 </div>
