@@ -5,7 +5,6 @@ import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
 import nsu.fit.qyoga.infra.QYogaAppTestBase
 import nsu.fit.qyoga.infra.db.DbInitializer
-import org.hamcrest.core.StringEndsWith
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -28,10 +27,9 @@ class ClientListExtTest : QYogaAppTestBase() {
         Given {
             this.cookie(getAuthCookie())
         } When {
-            post("/clients/delete/4")
+            delete("/clients/delete/1")
         } Then {
             statusCode(200)
-            header("Location", StringEndsWith.endsWith("clients"))
         }
     }
 
@@ -40,10 +38,9 @@ class ClientListExtTest : QYogaAppTestBase() {
         Given {
             this.cookie(getAuthCookie())
         } When {
-            post("/clients/delete/1111")
+            delete("/clients/delete/1111")
         } Then {
             statusCode(200)
-            header("Location", StringEndsWith.endsWith("clients"))
         }
     }
 }

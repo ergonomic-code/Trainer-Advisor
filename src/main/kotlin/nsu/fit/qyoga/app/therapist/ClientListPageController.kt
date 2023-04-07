@@ -52,9 +52,8 @@ class ClientListPageController(
     @ResponseBody
     fun deleteClient(
         @PathVariable id: Int
-    ): String {
+    ) {
         clientService.deleteClient(id)
-        return ""
     }
 
     fun addClientsPageAttributes(model: Model, clients: Page<ClientDto>) {
