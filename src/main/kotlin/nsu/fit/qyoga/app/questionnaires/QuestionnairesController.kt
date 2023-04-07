@@ -322,7 +322,7 @@ class QuestionnairesController(
     }
 
     /**
-     * обновить ответ
+     * Обновление ответа
      */
     @PostMapping("question/{questionId}/answer/{answerId}/update")
     @ResponseBody
@@ -331,7 +331,6 @@ class QuestionnairesController(
         @PathVariable answerId: Long,
         @PathVariable questionId: Long
     ): HttpStatus{
-
         questionnaire.questions.forEach { question ->
             if (question.id == questionId){
                 question.answers.forEach { answer ->
@@ -345,22 +344,38 @@ class QuestionnairesController(
         return HttpStatus.BAD_REQUEST
     }
 
-    @GetMapping("edit/{questionNum}/{questionId}/setScores")
+    @GetMapping("question/{id}/setScores")
     fun setQuestionScore(
-        @PathVariable questionId: Int,
         model : Model,
-        @PathVariable questionNum: Int
+        @PathVariable id: Long,
+        @ModelAttribute("questionIndex") questionIndex: Int
     ): String {
-        return ""
+        val question = questionService.findQuestionWithAnswers(id)
+        model.addAttribute("question", question)
+        model.addAttribute("questionIndex", questionIndex)
+        return "fragments/create-questionnaire-answer-set-score::answersScore"
     }
 
-    @GetMapping("edit/{questionNum}/{questionId}/setAnswers")
+    @PostMapping("question/{id}/setAnswers")
     fun setQuestionAnswers(
-        @PathVariable questionId: Int,
         model : Model,
-        @PathVariable questionNum: Int
+        @PathVariable id: Long,
+        @ModelAttribute("questionIndex") questionIndex: Int,
+        @ModelAttribute("questionnaire") questionnaire: QuestionnaireWithQuestionDto
     ): String {
-        return ""
+        questionnaire.questions.forEach { question ->
+            if (question.id == id){
+                for(answer in question.answers){
+                    answerService.updateAnswer(answer)
+                }
+                return@forEach
+            }
+        }
+        val question = questionService.findQuestionWithAnswers(id)
+        model.addAttribute("questionnaire", questionnaire)
+        model.addAttribute("question", question)
+        model.addAttribute("questionIndex", questionIndex)
+        return "fragments/create-questionnaire-answer::question"
     }
 
     fun addQuestionnairePageAttributes(
