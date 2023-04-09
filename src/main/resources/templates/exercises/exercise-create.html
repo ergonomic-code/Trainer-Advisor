@@ -52,36 +52,6 @@
             });
         });
     </script>
-    <script>
-        function validateForm() {
-            var title = document.forms["form"]["title"].value;
-            var contradiction = document.forms["form"]["contradiction"].value;
-            var indications = document.forms["form"]["indications"].value;
-            var duration = document.forms["form"]["duration"].value;
-            var therapeuticPurpose = document.forms["form"]["therapeuticPurpose"].value;
-
-            if (title === "") {
-                alert("Название должно быть заполнено");
-                return false;
-            }
-            if (contradiction === "") {
-                alert("Противопоказание должно быть заполнено");
-                return false;
-            }
-            if (indications === "") {
-                alert("Показание должно быть заполнено");
-                return false;
-            }
-            if (duration === "") {
-                alert("Длительность должна быть заполнена");
-                return false;
-            }
-            if (therapeuticPurpose === "") {
-                alert("Терапевтическая задача должна быть заполнена");
-                return false;
-            }
-        }
-    </script>
     <script crossorigin="anonymous" src="https://use.fontawesome.com/releases/v6.1.0/js/all.js"></script>
     <script crossorigin="anonymous"
             integrity="sha384-Bj8qm/6B+71E6FQSySofJOUjA/gq330vEqjFx9LakWybUySyI1IQHwPtbTU7bNwx"
@@ -107,9 +77,8 @@
                     </div>
                     <div class="card-body">
 
-                        <form id="form" method="post"
+                        <form class="needs-validation" id="form" method="post"
                               enctype="multipart/form-data"
-                              onsubmit="return validateForm()"
                               th:action="@{/exercises/}"
                               th:object="${createDto}">
                             <div class="input-group mb-3 m-auto" id="createExerciseForm">
