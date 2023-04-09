@@ -4,5 +4,5 @@ CREATE TABLE decoding
     lower_bound INT,
     upper_bound INT,
     result VARCHAR,
-    question_id BIGINT NOT NULL REFERENCES questions (id) ON DELETE CASCADE
+    questionnaire_id BIGINT NOT NULL REFERENCES questionnaires (id) ON DELETE CASCADE
 )
