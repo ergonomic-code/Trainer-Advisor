@@ -112,7 +112,7 @@
                                 <tbody id="exercises-list">
                                 <tr hx-target="#layoutSidenav"
                                     hx-trigger="click"
-                                    th:attr="hx-get=@{/exercises/${exercise.id}}"
+                                    th:attr="hx-get=@{/exercises/{id}(id=${exercise.id})}"
                                     th:each="exercise : ${exercises.content}">
                                     <td th:text="${exercise.title}"></td>
                                     <td th:text="${exercise.contradictions}"></td>
@@ -174,7 +174,7 @@
 
                 <div class="input-group">
                     <a href="/exercises/create">
-                        <button class="btn btn-secondary" id="btnNewExercise" type="button">
+                        <button class="btn btn-secondary mb-3" id="btnNewExercise" type="button">
                             Новое упражнение
                         </button>
                     </a>

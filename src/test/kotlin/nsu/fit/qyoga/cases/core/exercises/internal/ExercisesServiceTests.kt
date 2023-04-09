@@ -4,9 +4,9 @@ import io.kotest.matchers.shouldBe
 import nsu.fit.qyoga.cases.core.exercises.ExercisesTestConfig
 import nsu.fit.qyoga.core.exercises.api.ExercisesService
 import nsu.fit.qyoga.core.exercises.api.ImagesService
-import nsu.fit.qyoga.core.exercises.api.dtos.CreateExerciseDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseSearchDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseStepDto
+import nsu.fit.qyoga.core.exercises.api.dtos.ModifiableExerciseDto
 import nsu.fit.qyoga.core.exercises.api.model.Exercise
 import nsu.fit.qyoga.core.exercises.api.model.ExerciseType
 import nsu.fit.qyoga.core.exercises.internal.ExerciseStepsRepo
@@ -128,7 +128,7 @@ class ExercisesServiceTests(
     @Test
     fun `QYoga can create new exercises without steps`() {
         // Given
-        val createDto = CreateExerciseDto(
+        val createDto = ModifiableExerciseDto(
             title = "Разминка для спины",
             description = "",
             indications = "",
@@ -160,14 +160,14 @@ class ExercisesServiceTests(
     @Test
     fun `QYoga can create new exercise with steps without image`() {
         // Given
-        val createDto = CreateExerciseDto(
+        val createDto = ModifiableExerciseDto(
             title = "Разминка для спины",
             description = "",
             indications = "",
             contradiction = "",
             duration = "00:10:00",
             exerciseType = ExerciseType.WarmUp,
-            exerciseSteps = mutableListOf(ExerciseStepDto("Step 1"), ExerciseStepDto("Step 2"))
+            exerciseSteps = mutableListOf(ExerciseStepDto("Step 1", null), ExerciseStepDto("Step 2", null))
         )
         val expectedExercise = Exercise(
             id = 6,
@@ -200,7 +200,7 @@ class ExercisesServiceTests(
     @Test
     fun `QYoga can create new exercise with steps with image`() {
         // Given
-        val createDto = CreateExerciseDto(
+        val createDto = ModifiableExerciseDto(
             title = "Разминка для спины",
             description = "",
             indications = "",
@@ -208,8 +208,8 @@ class ExercisesServiceTests(
             duration = "00:10:00",
             exerciseType = ExerciseType.WarmUp,
             exerciseSteps = mutableListOf(
-                ExerciseStepDto("Step 1"),
-                ExerciseStepDto("Step 2")
+                ExerciseStepDto("Step 1", createExampleMultipartFile()),
+                ExerciseStepDto("Step 2", createExampleMultipartFile())
             )
         )
         val expectedExercise = Exercise(
@@ -238,6 +238,27 @@ class ExercisesServiceTests(
             .map { it.description } shouldBe createDto.exerciseSteps.map { it.description }
 
         savedSteps.filter { it.exerciseId == savedExercise.id }.size shouldBe 2
+        savedImages.map { it?.size } shouldBe createDto.exerciseSteps.map { it.photo }.map { it?.size }
+        savedImages.map { it?.data } shouldBe createDto.exerciseSteps.map { it.photo }.map { it?.bytes }
+    }
+
+    @Test
+    fun `QYoga can retrieve exercise by id`() {
+        // Given
+        val expectedExercise = createExpectedExercise()
+
+        // When
+        val exercise = exercisesService.getExerciseById(1)
+
+        // Then
+        exercise.exerciseType shouldBe expectedExercise.exerciseType
+        exercise.description shouldBe expectedExercise.description
+        exercise.title shouldBe expectedExercise.title
+        exercise.duration shouldBe expectedExercise.duration
+        exercise.contradiction shouldBe expectedExercise.contradiction
+        exercise.indications shouldBe expectedExercise.indications
+        exercise.therapeuticPurpose shouldBe expectedExercise.therapeuticPurpose
+        exercise.exerciseSteps.size shouldBe expectedExercise.exerciseSteps.size
     }
 
     private fun createExampleMultipartFile(): MockMultipartFile {
@@ -249,4 +270,34 @@ class ExercisesServiceTests(
             fileResource.inputStream
         )
     }
+
+    private fun createExpectedExercise() = ModifiableExerciseDto(
+        title = "Разминка для шеи",
+        description = "",
+        indications = "",
+        contradiction = "",
+        duration = "00:10:00",
+        exerciseType = ExerciseType.WarmUp,
+        therapeuticPurpose = "Снятие гипертонуса с мышц шеи",
+        exerciseSteps = mutableListOf(
+            ExerciseStepDto(
+                "Встаньте ровно, прижмите пятки к полу, потянитесь макушкой к потолку, почувствуйте как вытягивается позвоночник.",
+                null
+            ),
+            ExerciseStepDto(
+                "На выдохе поворот головы в сторону, на вдохе возврат головы в центр, на следующем выдохе - голова в другую сторону. Прислушивайтесь к ощущениям в мышцах, сравнивайте ощущения справа и слева. По 5 поворотов головы в каждую сторону.",
+                null
+            ),
+            ExerciseStepDto(
+                "На выдохе наклон головы к плечу, на вдохе вытяжение макушки к потолку, на следующем выдохе- наклон к другому плечу. Прислушивайтесь к ощущениям в мышцах, сравнивайте ощущения справа и слева. По 5 наклонов головы в каждую сторону.",
+                null
+            ),
+            ExerciseStepDto(
+                "Положите обе ладони под яремную ямку и выполняйте медленные осознанные вращения головой, после каждого круга меняйте направление вращения. По 3 круга в каждом направлении.",
+                null
+            ),
+            ExerciseStepDto("Разомните массажным мячиком возле стены верхние трапеции и мышцы между лопаток.", null)
+
+        ),
+    )
 }

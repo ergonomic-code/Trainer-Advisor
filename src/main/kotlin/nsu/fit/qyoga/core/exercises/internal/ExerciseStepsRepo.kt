@@ -8,4 +8,7 @@ import org.springframework.transaction.annotation.Transactional
 
 @Repository
 @Transactional(readOnly = false)
-interface ExerciseStepsRepo : CrudRepository<ExerciseStep, Long>, PagingAndSortingRepository<ExerciseStep, Long>
+interface ExerciseStepsRepo : CrudRepository<ExerciseStep, Long>, PagingAndSortingRepository<ExerciseStep, Long> {
+
+    fun findAllByExerciseId(id: Long): List<ExerciseStep>
+}

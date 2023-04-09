@@ -1,6 +1,5 @@
 package nsu.fit.qyoga.app.therapist
 
-import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseSearchDto
 import nsu.fit.qyoga.core.programs.api.ProgramsService
 import nsu.fit.qyoga.core.programs.api.dtos.ProgramDto
 import nsu.fit.qyoga.core.programs.api.dtos.ProgramSearchDto
@@ -25,7 +24,7 @@ class ProgramsController(
      */
     @GetMapping
     fun getPrograms(
-        @ModelAttribute("searchDto") searchDto: ProgramSearchDto,
+        @ModelAttribute("searchProgramDto") searchDto: ProgramSearchDto,
         @RequestParam(value = "pageSize", required = false, defaultValue = "10") pageSize: Int,
         @RequestParam(value = "pageNumber", required = false, defaultValue = "1") pageNumber: Int,
         model: Model
@@ -43,7 +42,7 @@ class ProgramsController(
      */
     @GetMapping("/search")
     fun getProgramsFiltered(
-        @ModelAttribute("searchDto") searchDto: ProgramSearchDto,
+        @ModelAttribute("searchProgramDto") searchDto: ProgramSearchDto,
         @RequestParam(value = "pageSize", required = false, defaultValue = "10") pageSize: Int,
         @RequestParam(value = "pageNumber", required = false, defaultValue = "1") pageNumber: Int,
         model: Model
@@ -57,7 +56,7 @@ class ProgramsController(
     }
 
     fun addProgramsPageAttributes(model: Model, programs: Page<ProgramDto>) {
-        model.addAttribute("searchDto", ExerciseSearchDto())
+        model.addAttribute("searchProgramDto", ProgramSearchDto())
         model.addAttribute("programs", programs)
         model.addAttribute(
             "pageNumbers",

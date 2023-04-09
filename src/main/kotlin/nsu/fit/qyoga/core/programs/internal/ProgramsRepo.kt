@@ -16,12 +16,12 @@ interface ProgramsRepo : CrudRepository<Program, Long>, PagingAndSortingReposito
 
     @Query(
         """
-        SELECT p.id as id, title, date, tp.purpose as purpose
+        SELECT p.id as id, title, date::varchar, tp.purpose as purpose
         FROM programs p
             INNER JOIN purpose_programs pp ON p.id = pp.program_id
             INNER JOIN therapeutic_purposes tp ON tp.id = pp.purpose_id
         WHERE (p.title LIKE '%' || :#{#search.title ?: ""} || '%' OR :#{#search.title ?: ""} IS NULL)
-            AND (p.date LIKE '%' || :#{#search.date ?: ""} || '%' OR :#{#search.date ?: ""} IS NULL)
+            AND (p.date::varchar LIKE '%' || :#{#search.date ?: ""} || '%' OR :#{#search.date ?: ""} IS NULL)
             AND (tp.purpose LIKE '%' || :#{#search.therapeuticPurpose ?: ""} || '%' OR :#{#search.therapeuticPurpose ?: ""} IS NULL)
         ORDER BY p.title
         LIMIT :pageSize OFFSET :offset
@@ -40,7 +40,7 @@ interface ProgramsRepo : CrudRepository<Program, Long>, PagingAndSortingReposito
             INNER JOIN purpose_programs pp ON p.id = pp.program_id
             INNER JOIN therapeutic_purposes tp ON tp.id = pp.purpose_id
         WHERE (p.title LIKE '%' || :#{#search.title ?: ""} || '%' OR :#{#search.title ?: ""} IS NULL)
-            AND (p.date LIKE '%' || :#{#search.date ?: ""} || '%' OR :#{#search.date ?: ""} IS NULL)
+            AND (p.date::varchar LIKE '%' || :#{#search.date ?: ""} || '%' OR :#{#search.date ?: ""} IS NULL)
             AND (tp.purpose LIKE '%' || :#{#search.therapeuticPurpose ?: ""} || '%' OR :#{#search.therapeuticPurpose ?: ""} IS NULL)
     """
     )

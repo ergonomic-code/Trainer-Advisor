@@ -28,7 +28,6 @@
         $(document).ready(function () {
             $("#btnNewStep").click(function () {
                 var newElement = $(
-                    '\n' +
                     '                                <div class="border bg-light p-3 mb-2" id="step" style="border-radius: 5px;">\n' +
                     '                                    <h6 class="">Шаг</h6>\n' +
                     '                                    <div class="input-group">\n' +
@@ -40,6 +39,13 @@
                     '                                                value=""\n' +
                     '                                                aria-label="With textarea" class="form-control"></textarea>\n' +
                     '                                    </div>\n' +
+                    '                                        <div class="mb-3 mt-3">\n' +
+                    '                                        <label class="form-label">Фото шага упражнения</label>\n' +
+                    '                                        <input enctype="multipart/form-data" \n' +
+                    '                                                class="form-control"\n' +
+                    '                                                name="exerciseSteps[' + num + '].photo"\n' +
+                    '                                                type="file"\n' +
+                    '                                    </div>' +
                     '</div>\n')
                 $("#form").append(newElement);
                 num++;
@@ -102,6 +108,7 @@
                     <div class="card-body">
 
                         <form id="form" method="post"
+                              enctype="multipart/form-data"
                               onsubmit="return validateForm()"
                               th:action="@{/exercises/}"
                               th:object="${createDto}">

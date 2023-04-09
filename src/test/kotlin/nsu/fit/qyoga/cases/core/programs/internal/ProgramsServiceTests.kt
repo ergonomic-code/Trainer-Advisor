@@ -46,9 +46,9 @@ class ProgramsServiceTests(
         )
 
         // Then
-        programs.content.size shouldBe 5
-        programs.totalElements shouldBe 5
-        programs.content.map { it.id.toInt() }.sorted() shouldBe listOf(1, 2, 3, 4, 5)
+        programs.content.size shouldBe 1
+        programs.totalElements shouldBe 1
+        programs.content.map { it.id.toInt() }.sorted() shouldBe listOf(1)
     }
 
     @Test

@@ -2,6 +2,7 @@ package nsu.fit.qyoga.core.exercises.api.model
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
+import org.springframework.web.multipart.MultipartFile
 
 @Table("images")
 data class Image(
@@ -35,4 +36,8 @@ data class Image(
         result = 31 * result + data.contentHashCode()
         return result
     }
+}
+
+fun Image.toMultipartFile(): MultipartFile {
+    return QYogaMultipartFile(this)
 }

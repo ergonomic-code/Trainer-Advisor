@@ -1,9 +1,9 @@
 package nsu.fit.qyoga.app.therapist
 
 import nsu.fit.qyoga.core.exercises.api.ExercisesService
-import nsu.fit.qyoga.core.exercises.api.dtos.CreateExerciseDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseSearchDto
+import nsu.fit.qyoga.core.exercises.api.dtos.ModifiableExerciseDto
 import nsu.fit.qyoga.core.users.internal.UserDetailsImpl
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -64,7 +64,7 @@ class ExercisesController(
     fun getCreateExercisePage(
         model: Model
     ): String {
-        model.addAttribute("createDto", CreateExerciseDto())
+        model.addAttribute("createDto", ModifiableExerciseDto())
         model.addAttribute("types", exercisesService.getExerciseTypes())
         return "exercises/exercise-create"
     }
@@ -74,13 +74,23 @@ class ExercisesController(
      */
     @PostMapping
     fun createExercise(
-        @ModelAttribute("createDto") createDto: CreateExerciseDto,
-//        @RequestParam("exerciseFiles") files: Array<MultipartFile>,
+        @ModelAttribute("createDto") createDto: ModifiableExerciseDto,
         authentication: Authentication,
         model: Model
     ): String {
         val userPrincipal = authentication.principal as UserDetailsImpl
         exercisesService.createExercise(createDto, userPrincipal.getId())
+        val exercises = exercisesService.getExercises(ExerciseSearchDto(), PageRequest.of(0, BASIC_PAGE_SIZE))
+        addExercisePageAttributes(model, exercises, exercisesService)
+        return "exercises/exercise-search"
+    }
+
+    @PutMapping
+    fun editExercise(
+        @ModelAttribute("exercise") editDto: ModifiableExerciseDto,
+        model: Model
+    ): String {
+        exercisesService.editExercise(editDto)
         val exercises = exercisesService.getExercises(ExerciseSearchDto(), PageRequest.of(0, BASIC_PAGE_SIZE))
         addExercisePageAttributes(model, exercises, exercisesService)
         return "exercises/exercise-search"
@@ -96,7 +106,8 @@ class ExercisesController(
     ): String {
         val exercise = exercisesService.getExerciseById(id)
         model.addAttribute("exercise", exercise)
-        return "exercises/exercise-create"
+        model.addAttribute("types", exercisesService.getExerciseTypes())
+        return "exercises/exercise-edit"
     }
 
     fun addExercisePageAttributes(model: Model, exercises: Page<ExerciseDto>, exercisesService: ExercisesService) {

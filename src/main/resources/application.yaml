@@ -8,3 +8,7 @@ spring:
     username: postgres
     password: P@ssw0rd
     url: jdbc:postgresql://localhost:54501/qyoga
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB

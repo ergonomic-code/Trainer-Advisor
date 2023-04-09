@@ -2,7 +2,8 @@ package nsu.fit.qyoga.core.exercises.api.dtos
 
 import nsu.fit.qyoga.core.exercises.api.model.ExerciseType
 
-data class CreateExerciseDto(
+data class ModifiableExerciseDto(
+    val id: Long? = null,
     val title: String? = null,
     val description: String? = null,
     val indications: String? = null,

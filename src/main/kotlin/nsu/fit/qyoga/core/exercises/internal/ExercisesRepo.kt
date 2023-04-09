@@ -56,7 +56,7 @@ interface ExercisesRepo : CrudRepository<Exercise, Long>, PagingAndSortingReposi
 
     @Query(
         """
-        SELECT ex.id as id, title, description, indications, contradictions, duration::varchar, et.name as type, tp.purpose as purpose
+        SELECT ex.id as id, title, description, indications, contradictions, duration::varchar, et.name as type, tp.purpose as purpose 
         FROM exercises ex
             INNER JOIN exercise_purposes ep ON ex.id = ep.exercise_id
             INNER JOIN therapeutic_purposes tp ON tp.id = ep.purpose_id
@@ -64,7 +64,7 @@ interface ExercisesRepo : CrudRepository<Exercise, Long>, PagingAndSortingReposi
         WHERE ex.id = :id
         """
     )
-    fun getByIdOrNull(id: Long): ExerciseDto?
+    fun getExerciseByIdOrNull(id: Long): ExerciseDto?
 
     @Query(
         """

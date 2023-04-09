@@ -27,8 +27,7 @@
         var num = 0;
         $(document).ready(function () {
             $("#btnNewStep").click(function () {
-                var newElement = $('<th:block th:each="step : ${createDto.exerciseSteps}">\n' +
-                    '\n' +
+                var newElement = $(
                     '                                <div class="border bg-light p-3 mb-2" id="step" style="border-radius: 5px;">\n' +
                     '                                    <h6 class="">Шаг</h6>\n' +
                     '                                    <div class="input-group">\n' +
@@ -36,21 +35,20 @@
                     '                                            <span class="input-group-text h-100">Описание</span>\n' +
                     '                                        </div>\n' +
                     '                                        <textarea\n' +
-                    '                                                th:name="${createDto.exerciseSteps[__${personStat.index}__].description}"\n' +
-                    '                                                th:value="${step.description}"\n' +
+                    '                                                name="exerciseSteps[' + num + '].description"\n' +
+                    '                                                value=""\n' +
                     '                                                aria-label="With textarea" class="form-control"></textarea>\n' +
                     '                                    </div>\n' +
-                    '\n' +
-                    '                                    <div class="mb-3 mt-3">\n' +
+                    '                                        <div class="mb-3 mt-3">\n' +
                     '                                        <label class="form-label">Фото шага упражнения</label>\n' +
-                    '                                        <input th:name="${createDto.exerciseSteps[__${personStat.index}__].photo}"\n' +
-                    '                                               th:value="${step.photo}"\n' +
-                    '\n' +
-                    '                                               class="form-control" type="file" xml:lang="ru">\n' +
-                    '                                    </div>\n' +
-                    '                                </div>\n' +
-                    '                            </th:block>')
+                    '                                        <input enctype="multipart/form-data" \n' +
+                    '                                                class="form-control"\n' +
+                    '                                                name="exerciseSteps[' + num + '].photo"\n' +
+                    '                                                type="file"\n' +
+                    '                                    </div>' +
+                    '</div>\n')
                 $("#form").append(newElement);
+                num++;
             });
         });
     </script>
@@ -97,7 +95,7 @@
                                            class="form-control"
                                            placeholder="Противопоказания"
                                            style="border-color:inherit"
-                                           th:field="${exercise.title}"
+                                           th:field="${exercise.contradiction}"
                                            type="text">
                                 </div>
 
@@ -106,8 +104,7 @@
                                            class="form-control"
                                            placeholder="Показания"
                                            style="border-color:inherit"
-                                           th:field="${exercise.title}"
-                                           ер
+                                           th:field="${exercise.indications}"
                                            type="text">
                                 </div>
 
@@ -116,7 +113,7 @@
                                            class="form-control"
                                            placeholder="Длительность"
                                            style="border-color:inherit"
-                                           th:field="${exercise.title}"
+                                           th:field="${exercise.duration}"
                                            type="text">
                                 </div>
 
@@ -125,7 +122,7 @@
                                            class="form-control"
                                            placeholder="Терапевтическая задача"
                                            style="border-color:inherit"
-                                           th:field="${exercise.title}"
+                                           th:field="${exercise.therapeuticPurpose}"
                                            type="text">
                                 </div>
 
@@ -135,8 +132,9 @@
                                     </div>
                                     <select class="custom-select w-75"
                                             id="inputGroupSelect01"
-                                            th:field="${exercise.title}">
-                                        <option selected th:value="null">Тип упражнения</option>
+                                            th:field="${exercise.exerciseType}">
+                                        <option selected th:value="${exercise.exerciseType.title}">Тип упражнения
+                                        </option>
                                         <option th:each="type : ${types}" th:text="${type.title}"
                                                 th:value="${type.name}"></option>
                                     </select>
@@ -148,7 +146,7 @@
                                     </div>
                                     <textarea aria-label="With textarea"
                                               class="form-control"
-                                              th:field="${exercise.title}"></textarea>
+                                              th:field="${exercise.description}"></textarea>
                                 </div>
 
                             </div>
@@ -166,9 +164,8 @@
                             </div>
 
                             <h4 class="mt-4">Шаги</h4>
-                            <div th:each="step, stat: ${exercise.exerciseSteps}">
-                                <div class="border bg-light p-3 mb-2"
-                                     id="step" style="border-radius: 5px;">
+                            <div th:each="step: ${exercise.exerciseSteps}">
+                                <div class="border bg-light p-3 mb-2" id="step" style="border-radius: 5px;">
                                     <h6 class="">Шаг</h6>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
@@ -177,16 +174,14 @@
                                         <textarea
                                                 aria-label="With textarea"
                                                 class="form-control"
-                                                th:field="*{exercise.exerciseSteps[__${stat.index}__].description}"></textarea>
+                                                th:field="${step.description}" value=""></textarea>
                                     </div>
-
                                     <div class="mb-3 mt-3">
                                         <label class="form-label">Фото шага упражнения</label>
-                                        <input
-                                                class="form-control"
-                                                th:field="*{exercise.exerciseSteps[__${stat.index}__].photo}"
-                                                type="file"
-                                                xml:lang="ru">
+                                        <input class="form-control"
+                                               enctype="multipart/form-data"
+                                               th:field="${step.photo}"
+                                               type="file">
                                     </div>
                                 </div>
                             </div>
