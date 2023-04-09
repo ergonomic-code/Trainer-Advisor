@@ -93,11 +93,4 @@ class QuestionServiceImpl(
         return savedQuestion.id
     }
 
-    override fun updateQuestionTitle(id: Long, title: String) {
-        questionJdbcTemplateRepo.updateQuestionTitleById(id, title)
-    }
-
-    override fun updateQuestionType(id: Long, questionType: QuestionType) {
-        questionJdbcTemplateRepo.updateQuestionTypeById(id, questionType)
-    }
 }

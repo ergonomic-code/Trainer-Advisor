@@ -397,7 +397,20 @@ class QuestionnairesController(
         return "questionnaire/questionnaire-decoding"
     }
 
-    @GetMapping("setResults/{questionnaireId}/addResult")
+    @DeleteMapping("{questionnaireId}/setResults/{resultId}")
+    fun deleteResultRow(
+        model: Model,
+        @PathVariable resultId: Long,
+        @PathVariable questionnaireId: Long
+    ): String{
+        decodingService.deleteById(resultId)
+        model.addAttribute(
+            "results",
+            DecodingDtoList(decodingService.findDecodingByQuestionnaireId(questionnaireId)))
+        return "questionnaire/questionnaire-decoding::tableDecoding"
+    }
+
+    @GetMapping("{questionnaireId}/setResults/addResult")
     fun addResultToQuestionnaire(
         model: Model,
         @PathVariable questionnaireId: Long
@@ -407,6 +420,29 @@ class QuestionnairesController(
             "results",
             DecodingDtoList(decodingService.findDecodingByQuestionnaireId(questionnaireId)))
         return "questionnaire/questionnaire-decoding::tableDecoding"
+    }
+
+    @PostMapping("setResults/{resultId}/update")
+    @ResponseBody
+    fun updateResultsTableRow(
+        @PathVariable resultId: Long,
+        @ModelAttribute("results") results: DecodingDtoList,
+    ): HttpStatus{
+        results.decodingDtoList.forEach { result ->
+            if (result.id == resultId){
+                decodingService.saveDecoding(result)
+                return HttpStatus.OK
+            }
+        }
+        return HttpStatus.BAD_REQUEST
+    }
+
+    @PostMapping("setResults")
+    fun saveResultsTable(
+        @ModelAttribute("results") results: DecodingDtoList,
+    ): String{
+        decodingService.saveDecodingList(results.decodingDtoList)
+        return "redirect:/questionnaires/"
     }
 
 

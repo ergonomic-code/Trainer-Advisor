@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface DecodingRepo : CrudRepository<Decoding, Long> {
 
-    fun findAllByQuestionnaireId(id: Long): List<Decoding>
+    fun findAllByQuestionnaireIdOrderById(id: Long): List<Decoding>
 }
