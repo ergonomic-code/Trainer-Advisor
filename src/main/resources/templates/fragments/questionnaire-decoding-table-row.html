@@ -1,0 +1,23 @@
+<tr th:fragment="decoding-table-row (result, index)">
+    <td class="col">
+        <input type="text" class="field"
+               th:value="${result.lowerBound}"
+               th:name="|decoding[${index}].lowerBound|"/>
+    </td>
+    <td class="col">
+        <input type="text" class="field"
+               th:value="${result.upperBound}"
+               th:name="|decoding[${index}].upperBound|"/>
+    </td>
+    <td class="col">
+        <input type="text" class="field"
+               th:value="${result.result}"
+               th:name="|decoding[${index}].textResult|"/>
+    </td>
+    <td class="col">
+        <button class="field" style="cursor: pointer;"
+                th:attr="hx-delete=|@{/questionnaires/setResults/{resultId}(resultId=${result.id})}|">
+            Удалить
+        </button>
+    </td>
+</tr>
