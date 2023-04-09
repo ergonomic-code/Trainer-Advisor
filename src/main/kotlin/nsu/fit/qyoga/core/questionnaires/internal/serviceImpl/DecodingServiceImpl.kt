@@ -27,8 +27,43 @@ class DecodingServiceImpl(
         )
     }
 
+    override fun deleteById(id: Long) {
+        decodingRepo.deleteById(id)
+    }
+
+    override fun saveDecoding(decoding: DecodingDto): DecodingDto {
+        val savedDecoding = decodingRepo.save(
+            Decoding(
+                decoding.id,
+                decoding.lowerBound,
+                decoding.upperBound,
+                decoding.result,
+                decoding.questionnaireId
+            )
+        )
+        return DecodingDto(
+            savedDecoding.id,
+            savedDecoding.lowerBound,
+            savedDecoding.upperBound,
+            savedDecoding.result,
+            savedDecoding.questionnaireId
+        )
+    }
+
+    override fun saveDecodingList(decodingList: List<DecodingDto>): List<DecodingDto> {
+        return decodingRepo.saveAll(decodingList.map {
+            Decoding(
+                it.id,
+                it.lowerBound,
+                it.upperBound,
+                it.result,
+                it.questionnaireId
+            )
+        }).map { DecodingDto(it.id, it.lowerBound, it.upperBound, it.result, it.questionnaireId) }
+    }
+
     override fun findDecodingByQuestionnaireId(questionnaireId: Long): List<DecodingDto> {
-        val decodingList = decodingRepo.findAllByQuestionnaireId(questionnaireId)
+        val decodingList = decodingRepo.findAllByQuestionnaireIdOrderById(questionnaireId)
         return decodingList.map { DecodingDto(it.id, it.lowerBound, it.upperBound, it.result, it.questionnaireId) }
     }
 }

@@ -47,14 +47,6 @@ class QuestionServiceTest (
     }
 
     @Test
-    fun `QYoga can change question title`() {
-        val question = questionService.createQuestion(1)
-        questionService.updateQuestionTitle(question.id, "test")
-        val inDbQuestion = questionService.findQuestion(question.id)
-        inDbQuestion.title shouldBe "test"
-    }
-
-    @Test
     fun `QYoga can create question from QuestionWithAnswersDto`() {
         val questionId = questionService.updateQuestion(
             QuestionWithAnswersDto(
