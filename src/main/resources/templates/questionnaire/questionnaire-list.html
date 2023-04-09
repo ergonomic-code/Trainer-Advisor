@@ -46,16 +46,22 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
-                <h1 class="mt-4">Опросники</h1>
+                <div style="display: flex; justify-content:space-between; flex-direction: row;">
+                    <h1 class="mt-4">Опросники</h1>
+                    <form class="input-group" th:action="@{/questionnaires/new}" th:method="GET"
+                    style="height: 40px; margin-top: 26px; width: auto;">
+                        <button class="btn btn-secondary" type="submit">Новый опросник</button>
+                    </form>
+                </div>
 
                 <div class="card mb-4">
                     <div class="card-header">
                         <i class="fas fa-table me-1"></i>
                         Список опросников
                     </div>
-                    <div class="card-body" id="card-body" >
+                    <div class="card-body" id="card-body" style="padding: 0.5rem 0.5rem;" >
                         <div th:fragment="page-content">
-                            <div class="input-group mb-3">
+                            <div class="input-group mb-1">
 
                                 <div class="mt-3 mb-3 w-75 me-auto" id="questionnaires-find-bar">
                                     <input aria-describedby="basic-addon2"
@@ -180,13 +186,7 @@
 
                         </div>
                     </div>
-
-
-                    <form class="input-group" th:action="@{/questionnaires/new}" th:method="GET">
-                        <button class="btn btn-secondary" type="submit">Новый опросник</button>
-                    </form>
                 </div>
-
             </div>
         </main>
         <footer class="py-4 bg-light mt-auto" th:insert="~{/fragments/footer.html :: footer}"></footer>

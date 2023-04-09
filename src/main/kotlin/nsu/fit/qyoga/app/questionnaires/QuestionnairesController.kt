@@ -1,10 +1,7 @@
 package nsu.fit.qyoga.app.questionnaires
 
 import nsu.fit.qyoga.core.questionnaires.api.dtos.*
-import nsu.fit.qyoga.core.questionnaires.api.services.AnswerService
-import nsu.fit.qyoga.core.questionnaires.api.services.ImageService
-import nsu.fit.qyoga.core.questionnaires.api.services.QuestionService
-import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
+import nsu.fit.qyoga.core.questionnaires.api.services.*
 import org.springframework.core.io.InputStreamResource
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -23,7 +20,8 @@ class QuestionnairesController(
     private val questionnaireService: QuestionnaireService,
     private val questionService: QuestionService,
     private val answerService: AnswerService,
-    private val imageService: ImageService
+    private val imageService: ImageService,
+    private val decodingService: DecodingService
 ) {
 
     /**
@@ -64,7 +62,9 @@ class QuestionnairesController(
      * Создание нового опросника
      */
     @GetMapping("new")
-    fun getCreateQuestionnairePage(model: Model): String {
+    fun getCreateQuestionnairePage(
+        model: Model
+    ): String {
         val questionnaireId = questionnaireService.createQuestionnaire()
         val question = questionService.createQuestion(questionnaireId)
         answerService.createAnswer(question.id)
@@ -107,7 +107,7 @@ class QuestionnairesController(
         @PathVariable id: Long
     ): String {
         questionnaireService.updateQuestionnaire(questionnaire)
-        return "redirect:/questionnaires/"
+        return "redirect:/questionnaires/$id/setResult"
     }
 
     /**
@@ -344,6 +344,9 @@ class QuestionnairesController(
         return HttpStatus.BAD_REQUEST
     }
 
+    /**
+     * Получить фрагмент страницы задания баллов для ответов
+     */
     @GetMapping("question/{id}/setScores")
     fun setQuestionScore(
         model : Model,
@@ -356,6 +359,9 @@ class QuestionnairesController(
         return "fragments/create-questionnaire-answer-set-score::answersScore"
     }
 
+    /**
+     * Получить фрагмент страницы редактирования ответа
+     */
     @PostMapping("question/{id}/setAnswers")
     fun setQuestionAnswers(
         model : Model,
@@ -378,6 +384,32 @@ class QuestionnairesController(
         return "fragments/create-questionnaire-answer::question"
     }
 
+    @GetMapping("{questionnaireId}/setResult")
+    fun getSetResultPage(
+        model: Model,
+        @PathVariable questionnaireId: Long
+    ): String {
+        val test = DecodingDtoList(decodingService.findDecodingByQuestionnaireId(questionnaireId))
+        model.addAttribute(
+            "results",
+            test
+        )
+        return "questionnaire/questionnaire-decoding"
+    }
+
+    @GetMapping("setResults/{questionnaireId}/addResult")
+    fun addResultToQuestionnaire(
+        model: Model,
+        @PathVariable questionnaireId: Long
+    ): String {
+        decodingService.createNewDecoding(questionnaireId)
+        model.addAttribute(
+            "results",
+            DecodingDtoList(decodingService.findDecodingByQuestionnaireId(questionnaireId)))
+        return "questionnaire/questionnaire-decoding::tableDecoding"
+    }
+
+
     fun addQuestionnairePageAttributes(
         model: Model,
         questionnaireSearchDto: QuestionnaireSearchDto,
@@ -390,5 +422,4 @@ class QuestionnairesController(
             questionnaires.sort.getOrderFor("title").toString().substringAfter(' ')
         )
     }
-
 }

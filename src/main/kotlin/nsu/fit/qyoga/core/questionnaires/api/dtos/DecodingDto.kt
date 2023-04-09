@@ -5,5 +5,5 @@ data class DecodingDto (
     val lowerBound: Int?,
     val upperBound: Int?,
     val result: String,
-    val questionId: Long
+    val questionnaireId: Long
 )
