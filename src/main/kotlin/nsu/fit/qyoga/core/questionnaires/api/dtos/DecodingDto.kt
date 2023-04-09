@@ -1,9 +1,9 @@
 package nsu.fit.qyoga.core.questionnaires.api.dtos
 
 data class DecodingDto (
-    val id: Long = 0,
-    val lowerBound: Int?,
-    val upperBound: Int?,
-    val result: String,
-    val questionnaireId: Long
+    var id: Long = 0,
+    var lowerBound: Int = 0,
+    var upperBound: Int = 0,
+    var result: String = "",
+    var questionnaireId: Long = 0
 )

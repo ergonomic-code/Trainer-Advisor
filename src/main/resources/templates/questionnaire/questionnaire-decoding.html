@@ -57,36 +57,57 @@
                         </div>
                         <div class="card-body" id="card-body" style="overflow: auto">
                             <div th:fragment="page-content">
-                                <table style="width: 100%" >
+                                <table style="width: 100%; border-spacing: 0 10px" >
                                     <caption style="padding-bottom: 5px; font-size: 22px"></caption>
                                     <thead>
                                         <tr>
-                                            <th>Минимальное значение</th>
-                                            <th>Максимальное значение</th>
-                                            <th>Результат</th>
-                                            <th>Удалить</th>
+                                            <th style="text-align: center; width: 10%">Минимальное значение</th>
+                                            <th style="text-align: center; width: 10%">Максимальное значение</th>
+                                            <th style="text-align: center; width: 65%">Результат</th>
+                                            <th style="text-align: center; width: 15%">Удалить</th>
                                         </tr>
                                     </thead>
-                                    <tbody id="tableBody" hx-confirm="Are you sure?" hx-target="closest tr" hx-swap="outerHTML">
+                                    <tbody id="tableBody" style="gap: 10px">
                                         <tr th:each="result, i : ${results.decodingDtoList}" th:fragment="tableDecoding">
-                                            <td>
-                                                <input type="text" class="field" style="border-radius: 5px"
+                                            <input type="hidden" th:value="${result.id}" th:name="|decodingDtoList[${i.index}].id|">
+                                            <input type="hidden" th:value="${result.questionnaireId}" th:name="|decodingDtoList[${i.index}].questionnaireId|">
+                                            <td style="text-align: center">
+                                                <input type="number" min="0" max="100" oninput="validity.valid||(value='');"
+                                                       class="field" style="border-radius: 5px; width: 50%; text-align: center"
                                                        th:value="${result.lowerBound}"
-                                                       th:name="|decoding[${i.index}].lowerBound|"/>
+                                                       th:name="|decodingDtoList[${i.index}].lowerBound|"
+                                                       hx-trigger="keyup changed delay:500ms, search"
+                                                       hx-swap="none"
+                                                       th:attr = "
+                                                       hx-post=|@{/questionnaires/setResults/{resultId}/update
+                                                       (resultId=${result.id})}|"/>
                                             </td>
-                                            <td>
-                                                <input type="text" class="field" style="border-radius: 5px"
+                                            <td style="text-align: center">
+                                                <input type="number" min="0" max="100" oninput="validity.valid||(value='');"
+                                                       class="field" style="border-radius: 5px; width: 50%; text-align: center"
                                                        th:value="${result.upperBound}"
-                                                       th:name="|decoding[${i.index}].upperBound|"/>
+                                                       th:name="|decodingDtoList[${i.index}].upperBound|"
+                                                       hx-trigger="keyup changed delay:500ms, search"
+                                                       hx-swap="none"
+                                                       th:attr = "
+                                                       hx-post=|@{/questionnaires/setResults/{resultId}/update
+                                                       (resultId=${result.id})}|"/>
                                             </td>
-                                            <td>
-                                                <input type="text" class="field" style="border-radius: 5px"
+                                            <td style="text-align: center">
+                                                <input type="text" class="field" style="border-radius: 5px; width: 100%"
                                                        th:value="${result.result}"
-                                                       th:name="|decoding[${i.index}].textResult|"/>
+                                                       th:name="|decodingDtoList[${i.index}].result|"
+                                                       hx-trigger="keyup changed delay:500ms, search"
+                                                       hx-swap="none"
+                                                       th:attr = "
+                                                       hx-post=|@{/questionnaires/setResults/{resultId}/update
+                                                       (questionnaireId=${result.questionnaireId} ,resultId=${result.id})}|"/>
                                             </td>
                                             <td>
                                                 <button class="field" style="cursor: pointer; width: 100%; border-radius: 5px"
-                                                        th:attr="hx-delete=|@{/questionnaires/setResults/{resultId}(resultId=${result.id})}|">
+                                                        hx-target="#tableBody"
+                                                        th:attr="hx-delete=|@{/questionnaires/{questionnaireId}/setResults/{resultId}
+                                                        (questionnaireId=${questionnaireId}, resultId=${result.id})}|">
                                                     Удалить
                                                 </button>
                                             </td>
@@ -96,7 +117,7 @@
                                         <td colspan="4" class="col">
                                             <button class="field" style="cursor: pointer; width: 100%; border-radius: 5px" type="button"
                                                     hx-trigger="click"
-                                                    th:attr="hx-get=|@{/questionnaires/setResults/{questionnaireId}/addResult(questionnaireId=${questionnaireId})}|"
+                                                    th:attr="hx-get=|@{/questionnaires/{questionnaireId}/setResults/addResult(questionnaireId=${questionnaireId})}|"
                                                     hx-target="#tableBody"
                                             >Нажмите для добавления строки</button>
                                         </td>
