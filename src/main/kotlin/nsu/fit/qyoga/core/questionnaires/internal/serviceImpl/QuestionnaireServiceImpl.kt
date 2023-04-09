@@ -36,7 +36,12 @@ class QuestionnaireServiceImpl(
     }
 
     override fun updateQuestionnaire(createQuestionnaireDto: QuestionnaireWithQuestionDto): QuestionnaireDto {
-        val savedQuestionnaire = questionnaireRepo.save(Questionnaire(title = createQuestionnaireDto.title))
+        val savedQuestionnaire = questionnaireRepo.save(
+            Questionnaire(
+                id = createQuestionnaireDto.id,
+                title = createQuestionnaireDto.title
+            )
+        )
         createQuestionnaireDto.questions.map {
             questionService.updateQuestion(it, savedQuestionnaire.id, it.imageId)
         }

@@ -38,10 +38,10 @@ class AnswerServiceImpl(
             questionId = answer.questionId
         )
     }
-
     override fun updateAnswer(createAnswerDto: AnswerDto, questionId: Long, answerImageId: Long?) {
         answerRepo.save(
             Answer(
+                id = createAnswerDto.id,
                 title = createAnswerDto.title,
                 lowerBound = createAnswerDto.lowerBound,
                 lowerBoundText = createAnswerDto.lowerBoundText,
@@ -53,7 +53,6 @@ class AnswerServiceImpl(
             )
         )
     }
-
     override fun updateAnswer(createAnswerDto: AnswerDto) {
         answerRepo.save(
             Answer(
@@ -69,7 +68,6 @@ class AnswerServiceImpl(
             )
         )
     }
-
     override fun findAnswer(id: Long): AnswerDto {
         val answer = answerRepo.findById(id).orElse(null)
             ?: throw AnswerException("Выбранный ответ не найден")
@@ -85,39 +83,15 @@ class AnswerServiceImpl(
             questionId = answer.questionId
         )
     }
-
     override fun deleteAllByQuestionId(id: Long): List<Answer> {
         val answersToDelete = answerRepo.findAllByQuestionId(id)
         answerJdbcTemplateRepo.deleteAnswerByQuestionId(id)
         return answersToDelete
     }
-
-    override fun updateAnswerTitle(id: Long, title: String) {
-        answerJdbcTemplateRepo.updateAnswerTitleById(id, title)
-    }
-
-    override fun updateAnswerLowerBound(id: Long, value: Int) {
-        answerJdbcTemplateRepo.updateAnswerLowerBoundById(id, value)
-    }
-
-    override fun updateAnswerLowerBoundTitle(id: Long, title: String) {
-        answerJdbcTemplateRepo.updateAnswerLowerBoundTitleById(id, title)
-    }
-
-    override fun updateAnswerUpperBound(id: Long, value: Int) {
-        answerJdbcTemplateRepo.updateAnswerUpperBoundById(id, value)
-    }
-
-    override fun updateAnswerUpperBoundTitle(id: Long, title: String) {
-        answerJdbcTemplateRepo.updateAnswerUpperBoundTitleById(id, title)
-    }
-
     override fun deleteAnswer(id: Long): Long {
         val answer = answerRepo.findById(id).orElse(null)
             ?: throw AnswerException("Выбранного ответа не существует")
         answerRepo.deleteById(id)
         return answer.id
     }
-
-
 }
