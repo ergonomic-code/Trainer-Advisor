@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 class UserServiceImpl(
     private val userRepo: UsersRepo
 ) : UserService {
-    override fun findByUsernameServ(username: String): User? {
+    override fun findByUsername(username: String): User? {
         return userRepo.findByUsername(username)
     }
 }
