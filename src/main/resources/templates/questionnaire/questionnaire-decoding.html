@@ -45,7 +45,7 @@
 
         <form id="tableDecoding" th:method="POST" th:action="@{/questionnaires/setResults}" th:object="${results}">
 
-            <div id="main-container">
+            <div id="main-container" style="margin-bottom: 80px">
 
                 <div class="container-fluid px-4">
                     <h1 class="mt-4">Результаты опросника</h1>
@@ -83,7 +83,7 @@
                                                        (resultId=${result.id})}|"/>
                                             </td>
                                             <td style="text-align: center">
-                                                <input type="number" min="0" max="100" oninput="validity.valid||(value='');"
+                                                <input type="number" min="0" oninput="validity.valid||(value='');"
                                                        class="field" style="border-radius: 5px; width: 50%; text-align: center"
                                                        th:value="${result.upperBound}"
                                                        th:name="|decodingDtoList[${i.index}].upperBound|"
@@ -133,8 +133,9 @@
             </div>
 
 
-            <div class="navPanel">
-                <button type="submit" class="navigation-btn" >Сохранить</button>
+            <div class="position-fixed bottom-0 start-0 w-100 text-end bg-white"
+                 style="height: 75px; box-sizing: border-box; padding-top: 10px; padding-right: 1.5rem;">
+                <button class="btn btn-secondary" type="submit" style="height: 50px">Сохранить</button>
             </div>
 
         </form>

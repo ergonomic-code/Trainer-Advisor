@@ -43,18 +43,20 @@ class QuestionnaireServiceImpl(
             )
         )
         createQuestionnaireDto.questions.map {
-            questionService.updateQuestion(it, savedQuestionnaire.id, it.imageId)
+            it.questionnaireId = savedQuestionnaire.id
+            questionService.updateQuestion(it)
         }
         return QuestionnaireDto(savedQuestionnaire.id, savedQuestionnaire.title)
     }
 
-    override fun updateQuestionnaire(questionnaire: QuestionnaireDto): Long {
-        return questionnaireRepo.save(
+    override fun updateQuestionnaire(questionnaire: QuestionnaireDto): QuestionnaireDto {
+        val savedQuestionnaire =  questionnaireRepo.save(
             Questionnaire(
                 id = questionnaire.id,
                 title = questionnaire.title
             )
-        ).id
+        )
+        return QuestionnaireDto(savedQuestionnaire.id, savedQuestionnaire.title)
     }
 
     override fun findQuestionnaireWithQuestions(id: Long): QuestionnaireWithQuestionDto {

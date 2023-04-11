@@ -11,13 +11,14 @@ class DecodingServiceImpl(
     private val decodingRepo: DecodingRepo
 ): DecodingService {
     override fun createNewDecoding(questionnaireId: Long): DecodingDto {
-        val decoding = Decoding(
-            lowerBound = 0,
-            upperBound = 0,
-            result = "",
-            questionnaireId = questionnaireId
+        val inDbDecoding = decodingRepo.save(
+            Decoding(
+                lowerBound = 0,
+                upperBound = 0,
+                result = "",
+                questionnaireId = questionnaireId
+            )
         )
-        val inDbDecoding = decodingRepo.save(decoding)
         return DecodingDto(
             inDbDecoding.id,
             inDbDecoding.lowerBound,
