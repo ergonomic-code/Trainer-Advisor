@@ -40,7 +40,7 @@ class ImageServiceTest(
     }
 
     @Test
-    fun `QYoga can save image`() {
+    fun `QYoga can save image and find them`() {
         val file = File("src/test/resources/db/questionnaires/testLargeImage.jpg")
         val input = FileInputStream(file)
         val multipartFile: MultipartFile = MockMultipartFile(

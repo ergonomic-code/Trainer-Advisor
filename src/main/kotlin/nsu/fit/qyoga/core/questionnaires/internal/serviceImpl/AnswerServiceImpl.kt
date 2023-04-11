@@ -38,23 +38,8 @@ class AnswerServiceImpl(
             questionId = answer.questionId
         )
     }
-    override fun updateAnswer(createAnswerDto: AnswerDto, questionId: Long, answerImageId: Long?) {
-        answerRepo.save(
-            Answer(
-                id = createAnswerDto.id,
-                title = createAnswerDto.title,
-                lowerBound = createAnswerDto.lowerBound,
-                lowerBoundText = createAnswerDto.lowerBoundText,
-                upperBound = createAnswerDto.upperBound,
-                upperBoundText = createAnswerDto.upperBoundText,
-                score = createAnswerDto.score,
-                imageId = answerImageId,
-                questionId = questionId
-            )
-        )
-    }
-    override fun updateAnswer(createAnswerDto: AnswerDto) {
-        answerRepo.save(
+    override fun updateAnswer(createAnswerDto: AnswerDto): AnswerDto {
+        val answer = answerRepo.save(
             Answer(
                 id = createAnswerDto.id,
                 title = createAnswerDto.title,
@@ -66,6 +51,17 @@ class AnswerServiceImpl(
                 imageId = createAnswerDto.imageId,
                 questionId = createAnswerDto.questionId
             )
+        )
+        return AnswerDto(
+            answer.id,
+            answer.title,
+            answer.lowerBound,
+            answer.lowerBoundText,
+            answer.upperBound,
+            answer.upperBoundText,
+            answer.score,
+            answer.imageId,
+            answer.questionId
         )
     }
     override fun findAnswer(id: Long): AnswerDto {

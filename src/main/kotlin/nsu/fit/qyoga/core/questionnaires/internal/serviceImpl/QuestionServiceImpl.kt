@@ -74,23 +74,21 @@ class QuestionServiceImpl(
     }
 
     override fun updateQuestion(
-        createQuestionDto: QuestionWithAnswersDto,
-        questionnaireId: Long,
-        questionImageId: Long?
+        question: QuestionWithAnswersDto,
     ): Long {
         val savedQuestion = questionRepo.save(
             Question(
-                id = createQuestionDto.id,
-                title = createQuestionDto.title,
-                questionType = createQuestionDto.questionType,
-                questionnaireId = questionnaireId,
-                imageId = questionImageId
+                id = question.id,
+                title = question.title,
+                questionType = question.questionType,
+                questionnaireId = question.questionnaireId,
+                imageId = question.imageId
             )
         )
-        createQuestionDto.answers.map {
-            answerService.updateAnswer(it, savedQuestion.id, it.imageId)
+        question.answers.map {
+            it.questionId=savedQuestion.id
+            answerService.updateAnswer(it)
         }
         return savedQuestion.id
     }
-
 }

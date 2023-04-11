@@ -1,1 +1,1 @@
-INSERT INTO questions (title) VALUES ('title')
+INSERT INTO questions (title, questionnaire_id) VALUES ('title', 1)
