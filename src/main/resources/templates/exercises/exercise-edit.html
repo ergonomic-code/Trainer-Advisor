@@ -164,7 +164,7 @@
                             </div>
 
                             <h4 class="mt-4">Шаги</h4>
-                            <div th:each="step: ${exercise.exerciseSteps}">
+                            <div th:each="step, iter: ${exercise.exerciseSteps}">
                                 <div class="border bg-light p-3 mb-2" id="step" style="border-radius: 5px;">
                                     <h6 class="">Шаг</h6>
                                     <div class="input-group">
@@ -174,14 +174,16 @@
                                         <textarea
                                                 aria-label="With textarea"
                                                 class="form-control"
-                                                th:field="${step.description}" value=""></textarea>
+                                                th:field="*{exerciseSteps[__${iter.index}__].description}"
+                                                value=""></textarea>
                                     </div>
+
                                     <div class="mb-3 mt-3">
                                         <label class="form-label">Фото шага упражнения</label>
-                                        <input class="form-control"
-                                               enctype="multipart/form-data"
-                                               th:field="${step.photo}"
-                                               type="file">
+                                        <img alt="" th:src="*{'data:image/png;base64,'+ step.photo}"/> <input
+                                            class="form-control"
+                                            enctype="multipart/form-data"
+                                            type="file">
                                     </div>
                                 </div>
                             </div>
