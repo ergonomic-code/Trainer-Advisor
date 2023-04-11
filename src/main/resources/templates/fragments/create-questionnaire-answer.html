@@ -130,76 +130,59 @@
         </div>
 
         <div th:case="RANGE" th:id="|answer${answer.id}|" class="answer" >
-
-            <div class="rangeBorder">
-                <select name="range"
-                        hx-trigger="change"
-                        th:name="|questions[${questionIndex}].answers[${j.index}].lowerBound|"
-                        hx-swap="none"
-                        th:attr = "
-                                                    hx-post=|@{/questionnaires/{questionnaireId}/answer/{answerId}/update
-                                                           (answerId=${answer.id}, questionnaireId=${questionnaire.id})}|,
-                                                    hx-target=|#questions|"
-                        class="sortBtn" style="width: 42px">
-                    <option value="" selected disabled hidden th:text="${answer.lowerBound}">lower bound</option>
-                    <option value="0">0</option>
-                    <option value="1">1</option>
-                </select>
-                <span style="margin-left: 10px">-</span>
-                <select name="range"
-                        hx-trigger="change"
-                        hx-swap="none"
-                        th:attr = "
-                                                    hx-post=|@{/questionnaires/{questionnaireId}/answer/{answerId}/update
-                                                           (answerId=${answer.id}, questionnaireId=${questionnaire.id})}|,
-                                                    hx-target=|#questions|"
-                        class="sortBtn" style="width: 42px"
-                        th:name="|questions[${questionIndex}].answers[${j.index}].upperBound|">
-                    <option value="" selected disabled hidden th:text="${answer.upperBound}">upper bound</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
-                    <option value="7">7</option>
-                    <option value="8">8</option>
-                    <option value="9">9</option>
-                    <option value="10">10</option>
-                </select>
-            </div>
-            <div style="padding-top: 15px; width: 100%">
-                <div style="display:flex; ">
-                    <div th:id="|leftBorder${answer.id}|" style="width: 20px">
-                        <span th:text="${answer.lowerBound}">0</span>
-                    </div>
-                    <div style="width: 70%; margin-left: 20px">
-                        <input style="border-radius: 5px; width: 100%" type="text" class="answerText"
-                               th:value="${answer.lowerBoundText}"
-                               hx-trigger="keyup changed delay:300ms"
-                               hx-swap="none"
-                               th:attr = "
-                                                           hx-post=|@{/questionnaires/{questionnaireId}/answer/{answerId}/update
-                                                           (answerId=${answer.id}, questionnaireId=${questionnaire.id})}|"
-                               th:name="|questions[${questionIndex}].answers[${j.index}].lowerBoundTitle|">
-                    </div>
+                <div style="display: flex">
+                    <select name="range"
+                            hx-trigger="change"
+                            th:name="|questions[${questionIndex}].answers[${j.index}].lowerBound|"
+                            hx-swap="none"
+                            th:attr = "
+                            hx-post=|@{/questionnaires/question/{questionId}/answer/{answerId}/update
+                            (answerId=${answer.id}, questionId=${question.id})}|,
+                            hx-target=|#questions|"
+                            class="sortBtn" style="width: 50px; border-radius: 5px">
+                        <option value="" selected disabled hidden th:text="${answer.lowerBound}">lower bound</option>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                    </select>
+                    <input style="border-radius: 5px; width: 100%; margin-left: 40px" type="text" class="answerText"
+                           th:value="${answer.lowerBoundText}"
+                           hx-trigger="keyup changed delay:300ms"
+                           hx-swap="none"
+                           th:attr = "
+                           hx-post=|@{/questionnaires/question/{questionId}/answer/{answerId}/update
+                           (answerId=${answer.id}, questionId=${question.id})}|"
+                           th:name="|questions[${questionIndex}].answers[${j.index}].lowerBoundText|">
                 </div>
-                <br>
-                <div  style="display:flex; ">
-                    <div th:id="|rightBorder${answer.id}|" style="width: 20px">
-                        <span th:text="${answer.upperBound}">2</span>
-                    </div>
-                    <div style="width: 70%; margin-left: 20px">
-                        <input style="border-radius: 5px; width: 100%" type="text" class="answerText"
-                               th:value="${answer.upperBoundText}"
-                               hx-trigger="keyup changed delay:300ms"
-                               hx-swap="none"
-                               th:attr = "
-                                                           hx-post=|@{/questionnaires/{questionnaireId}/answer/{answerId}/update
-                                                           (answerId=${answer.id}, questionnaireId=${questionnaire.id})}|"
-                               th:name="|questions[${questionIndex}].answers[${j.index}].upperBoundTitle|">
-                    </div>
+                <div style="display: flex; margin-top: 20px">
+                    <select name="range"
+                            hx-trigger="change"
+                            hx-swap="none"
+                            th:attr = "
+                            hx-post=|@{/questionnaires/question/{questionId}/answer/{answerId}/update
+                            (answerId=${answer.id}, questionId=${question.id})}|,
+                            hx-target=|#questions|"
+                            class="sortBtn" style="width: 50px; border-radius: 5px"
+                            th:name="|questions[${questionIndex}].answers[${j.index}].upperBound|">
+                        <option value="" selected disabled hidden th:text="${answer.upperBound}">upper bound</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="6">6</option>
+                        <option value="7">7</option>
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                        <option value="10">10</option>
+                    </select>
+                    <input style="border-radius: 5px; width: 100%; margin-left: 40px" type="text" class="answerText"
+                           th:value="${answer.upperBoundText}"
+                           hx-trigger="keyup changed delay:300ms"
+                           hx-swap="none"
+                           th:attr = "
+                               hx-post=|@{/questionnaires/question/{questionId}/answer/{answerId}/update
+                               (answerId=${answer.id}, questionId=${question.id})}|"
+                           th:name="|questions[${questionIndex}].answers[${j.index}].upperBoundText|">
                 </div>
-            </div>
         </div>
 
     </div>
@@ -212,8 +195,8 @@
                    placeholder="нажмите, чтобы добавить новый ответ"
                    hx-trigger="click"
                    th:attr = "
-                                               hx-get=|@{/questionnaires/{questionnaireId}/edit/question/{questionId}/addAnswer
-                                               (questionId=${question.id}, questionnaireId=${questionnaire.id})}|"
+                   hx-get=|@{/questionnaires/{questionnaireId}/edit/question/{questionId}/addAnswer
+                   (questionId=${question.id}, questionnaireId=${questionnaire.id})}|"
                    hx-target="#questions"
             >
         </label>

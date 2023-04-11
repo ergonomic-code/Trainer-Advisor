@@ -89,9 +89,7 @@ class QuestionnaireJdbcTemplateRepo(
                 questionId = questionId
             )
             val question = getQuestion(questionMap, questionId, questionFromDB, value!!)
-            if(!(answer.title == null && answer.lowerBound == 0 && answer.upperBound == 0)) {
-                question.answers += answer
-            }
+            question.answers += answer
         }
         return value
     }

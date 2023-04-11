@@ -47,24 +47,22 @@ class QuestionServiceTest (
     }
 
     @Test
-    fun `QYoga can create question from QuestionWithAnswersDto`() {
+    fun `QYoga can create question from QuestionWithAnswersDto and find them`() {
         val questionId = questionService.updateQuestion(
             QuestionWithAnswersDto(
                 id = 0,
                 title = "test",
                 questionType = QuestionType.RANGE,
                 imageId = null,
-                answers = mutableListOf(),
                 questionnaireId = 1
-            ),
-            questionnaireId = 1,
-            questionImageId = null
+            )
         )
-        val question = questionService.findQuestion(questionId)
+        val question = questionService.findQuestionWithAnswers(questionId)
         question.questionnaireId shouldBe 1
         question.questionType shouldBe QuestionType.RANGE
         question.imageId shouldBe null
         question.title shouldBe "test"
+        question.answers.size shouldBe 1
     }
 
     @Test
