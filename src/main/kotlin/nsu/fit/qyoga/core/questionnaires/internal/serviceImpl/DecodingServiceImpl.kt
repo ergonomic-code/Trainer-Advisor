@@ -11,7 +11,7 @@ class DecodingServiceImpl(
     private val decodingRepo: DecodingRepo
 ): DecodingService {
     override fun createNewDecoding(questionnaireId: Long): DecodingDto {
-        val inDbDecoding = decodingRepo.save(
+        val savedDecoding = decodingRepo.save(
             Decoding(
                 lowerBound = 0,
                 upperBound = 0,
@@ -19,52 +19,44 @@ class DecodingServiceImpl(
                 questionnaireId = questionnaireId
             )
         )
-        return DecodingDto(
-            inDbDecoding.id,
-            inDbDecoding.lowerBound,
-            inDbDecoding.upperBound,
-            inDbDecoding.result,
-            inDbDecoding.questionnaireId
-        )
+        return decodingToDecodingDto(savedDecoding)
     }
 
-    override fun deleteById(id: Long) {
+    override fun deleteDecodingById(id: Long) {
         decodingRepo.deleteById(id)
     }
 
     override fun saveDecoding(decoding: DecodingDto): DecodingDto {
-        val savedDecoding = decodingRepo.save(
-            Decoding(
-                decoding.id,
-                decoding.lowerBound,
-                decoding.upperBound,
-                decoding.result,
-                decoding.questionnaireId
-            )
-        )
-        return DecodingDto(
-            savedDecoding.id,
-            savedDecoding.lowerBound,
-            savedDecoding.upperBound,
-            savedDecoding.result,
-            savedDecoding.questionnaireId
-        )
+        val savedDecoding = decodingRepo.save(decodingDtoToDecoding(decoding))
+        return decodingToDecodingDto(savedDecoding)
     }
 
     override fun saveDecodingList(decodingList: List<DecodingDto>): List<DecodingDto> {
-        return decodingRepo.saveAll(decodingList.map {
-            Decoding(
-                it.id,
-                it.lowerBound,
-                it.upperBound,
-                it.result,
-                it.questionnaireId
-            )
-        }).map { DecodingDto(it.id, it.lowerBound, it.upperBound, it.result, it.questionnaireId) }
+        return decodingRepo.saveAll(decodingList.map { decodingDtoToDecoding(it) }).map { decodingToDecodingDto(it) }
     }
 
     override fun findDecodingByQuestionnaireId(questionnaireId: Long): List<DecodingDto> {
         val decodingList = decodingRepo.findAllByQuestionnaireIdOrderById(questionnaireId)
-        return decodingList.map { DecodingDto(it.id, it.lowerBound, it.upperBound, it.result, it.questionnaireId) }
+        return decodingList.map { decodingToDecodingDto(it) }
+    }
+
+    fun decodingToDecodingDto(decoding: Decoding): DecodingDto {
+        return DecodingDto(
+            decoding.id,
+            decoding.lowerBound,
+            decoding.upperBound,
+            decoding.result,
+            decoding.questionnaireId
+        )
+    }
+
+    fun decodingDtoToDecoding(decodingDto: DecodingDto): Decoding {
+        return Decoding(
+            decodingDto.id,
+            decodingDto.lowerBound,
+            decodingDto.upperBound,
+            decodingDto.result,
+            decodingDto.questionnaireId
+        )
     }
 }

@@ -24,11 +24,8 @@ class ImageServiceImpl(
         )
     }
 
-    override fun deleteImage(id: Long): Image {
-        val image = imageRepo.findById(id).orElse(null)
-            ?: throw ImageException("Выбранное изображение не найдено")
+    override fun deleteImage(id: Long){
         imageRepo.deleteById(id)
-        return image
     }
 
     override fun getImage(id: Long): Image {

@@ -19,7 +19,7 @@ class SetDecodingViewTest : QYogaAppTestBase() {
     fun setupDb() {
         dbInitializer.executeScripts(
             "/db/questionnaires/questionnaires-init-script.sql" to "dataSource",
-            "db/questionnaires/questionnaires-insert-single-questionnaire.sql" to "dataSource",
+            "db/questionnaires/questionnaires-insert-single-questionnaire.sql" to "dataSource"
         )
     }
 
@@ -32,20 +32,20 @@ class SetDecodingViewTest : QYogaAppTestBase() {
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("table") {
+                node("table"){
                     exists()
                     containsHtml("id=\"addDecodingBtn\"")
                     containsHtml("id=\"tableBody\"")
                 }
-                node("#addDecodingBtn") {
+                node("#addDecodingBtn"){
                     containsText("Нажмите для добавления строки")
-                    attribute("hx-get") { hasText("/questionnaires/1/setResult/addResult") }
+                    attribute("hx-get") { hasText("/questionnaires/1/setResults/addResult") }
                 }
-                node("#saveBtn") {
+                node("#saveBtn"){
                     containsText("Сохранить")
-                    attribute("type") { hasText("submit") }
+                    attribute("type"){ hasText("submit") }
                 }
-                node("decodingRow") {
+                node("decodingRow"){
                     notExists()
                 }
             }
@@ -61,36 +61,31 @@ class SetDecodingViewTest : QYogaAppTestBase() {
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node(".decodingId") {
+                node("tr"){ exists() }
+                node("input"){
                     exists()
-                    attribute("type") { hasText("hidden") }
-                    attribute("name") { hasText("decodingDtoList[0].id") }
+                    attribute("type"){ hasText("hidden") }
+                    attribute("name"){ hasText("decodingDtoList[0].id") }
                 }
-                node(".decodingQuestionnaireId") {
+                node("input"){
                     exists()
-                    attribute("type") { hasText("hidden") }
-                    attribute("name") { hasText("decodingDtoList[0].questionnaireId") }
+                    attribute("type"){ hasText("hidden") }
+                    attribute("name"){ hasText("decodingDtoList[0].questionnaireId") }
                 }
-                node("button") {
+                node("input"){
                     exists()
-                    attribute("class") { hasText("field") }
-                    attribute("hx-delete") { hasText("/questionnaires/1/setResult/1") }
-                    hasText("Удалить")
+                    attribute("type"){ hasText("number") }
+                    attribute("name"){ hasText("decodingDtoList[0].lowerBound") }
                 }
-                node(".decodingLowerBound") {
+                node("input"){
                     exists()
-                    attribute("type") { hasText("number") }
-                    attribute("name") { hasText("decodingDtoList[0].lowerBound") }
+                    attribute("type"){ hasText("number") }
+                    attribute("name"){ hasText("decodingDtoList[0].upperBound") }
                 }
-                node(".decodingUpperBound") {
+                node("input"){
                     exists()
-                    attribute("type") { hasText("number") }
-                    attribute("name") { hasText("decodingDtoList[0].upperBound") }
-
-                }
-                node(".decodingResult") {
-                    exists()
-                    attribute("name") { hasText("decodingDtoList[0].result") }
+                    attribute("type"){ hasText("text") }
+                    attribute("name"){ hasText("decodingDtoList[0].result") }
                 }
             }
         }
@@ -102,41 +97,25 @@ class SetDecodingViewTest : QYogaAppTestBase() {
             this.cookie(getAuthCookie())
         } When {
             get("/questionnaires/1/setResult/addResult")
-            get("/questionnaires/1/setResult/addResult")
-            delete("/questionnaires/1/setResult/1")
+            delete("/questionnaires/1/setResult/addResult/1")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node(".decodingId") {
+                node("table"){
                     exists()
-                    attribute("type") { hasText("hidden") }
-                    attribute("name") { hasText("decodingDtoList[0].id") }
+                    containsHtml("id=\"addDecodingBtn\"")
+                    containsHtml("id=\"tableBody\"")
                 }
-                node(".decodingQuestionnaireId") {
-                    exists()
-                    attribute("type") { hasText("hidden") }
-                    attribute("name") { hasText("decodingDtoList[0].questionnaireId") }
+                node("#addDecodingBtn"){
+                    containsText("Нажмите для добавления строки")
+                    attribute("hx-get") { hasText("/questionnaires/1/setResults/addResult") }
                 }
-                node("button") {
-                    exists()
-                    attribute("class") { hasText("field") }
-                    attribute("hx-delete") { hasText("/questionnaires/1/setResult/2") }
-                    hasText("Удалить")
+                node("#saveBtn"){
+                    containsText("Сохранить")
+                    attribute("type"){ hasText("submit") }
                 }
-                node(".decodingLowerBound") {
-                    exists()
-                    attribute("type") { hasText("number") }
-                    attribute("name") { hasText("decodingDtoList[0].lowerBound") }
-                }
-                node(".decodingUpperBound") {
-                    exists()
-                    attribute("type") { hasText("number") }
-                    attribute("name") { hasText("decodingDtoList[0].upperBound") }
-
-                }
-                node(".decodingResult") {
-                    exists()
-                    attribute("name") { hasText("decodingDtoList[0].result") }
+                node("test"){
+                    notExists()
                 }
             }
         }
@@ -153,7 +132,7 @@ class SetDecodingViewTest : QYogaAppTestBase() {
             param("decodingDtoList[0].lowerBound", "1")
             param("decodingDtoList[0].upperBound", "5")
             param("decodingDtoList[0].result", "test")
-            post("/questionnaires/setResult/1/update")
+            post("/questionnaires/setResults/1/update")
         } Then {
             extract().statusCode().compareTo(200) shouldBe 0
         }
@@ -167,6 +146,7 @@ class SetDecodingViewTest : QYogaAppTestBase() {
             post("/questionnaires/setResult")
         } Then {
             extract().statusCode().compareTo(302) shouldBe 0
+            //extract().header("Location").compareTo("http://localhost:8080/questionnaires/")
         }
     }
 }

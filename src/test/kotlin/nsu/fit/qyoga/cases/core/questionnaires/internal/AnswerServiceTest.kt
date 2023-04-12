@@ -105,10 +105,10 @@ class AnswerServiceTest(
     @Test
     fun `QYoga can delete answers by id`() {
         val answer  = answerService.createAnswer(1)
-        val deletedAnswers = answerService.deleteAllByQuestionId(answer.id)
+        answerService.deleteAnswerById(answer.id)
         val thrown: AnswerException = Assertions.assertThrows(
             AnswerException::class.java
-        ) { answerService.findAnswer(deletedAnswers[0].id) }
+        ) { answerService.findAnswer(answer.id) }
         Assertions.assertEquals("Выбранный ответ не найден", thrown.message)
     }
 }
