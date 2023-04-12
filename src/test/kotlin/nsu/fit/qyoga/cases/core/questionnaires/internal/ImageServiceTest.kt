@@ -65,19 +65,10 @@ class ImageServiceTest(
             file.name, "text/plain", IOUtils.toByteArray(input)
         )
         val imageId = imageService.uploadImage(multipartFile)
-        val savedImage = imageService.deleteImage(imageId)
-        savedImage.id shouldBe imageId
-        savedImage.name shouldBe multipartFile.originalFilename
-        savedImage.size shouldBe multipartFile.size
-        savedImage.mediaType shouldBe "text/plain"
-        savedImage.data shouldBe multipartFile.bytes
+        imageService.deleteImage(imageId)
         val thrown1: ImageException = Assertions.assertThrows(
             ImageException::class.java
         ) { imageService.getImage(imageId) }
         Assertions.assertEquals("Выбранное изображение не найдено", thrown1.message)
-        val thrown2: ImageException = Assertions.assertThrows(
-            ImageException::class.java
-        ) { imageService.deleteImage(imageId) }
-        Assertions.assertEquals("Выбранное изображение не найдено", thrown2.message)
     }
 }

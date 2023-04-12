@@ -240,7 +240,7 @@ class QuestionnairesController(
         @PathVariable questionnaireId: Long,
         model: Model
     ): String {
-        answerService.deleteAnswer(answerId)
+        answerService.deleteAnswerById(answerId)
         model.addAttribute(
             "questionnaire",
             questionnaireService.findQuestionnaireWithQuestions(questionnaireId)
@@ -282,8 +282,8 @@ class QuestionnairesController(
         }
         val deletedAnswers = answerService.deleteAllByQuestionId(questionId)
         for(answer in deletedAnswers){
-            if(answer.imageId != null){
-                imageService.deleteImage(answer.imageId)
+            answer.imageId?.let {
+                imageService.deleteImage(it)
             }
         }
         answerService.createAnswer(questionId)
@@ -403,7 +403,7 @@ class QuestionnairesController(
         @PathVariable resultId: Long,
         @PathVariable questionnaireId: Long
     ): String{
-        decodingService.deleteById(resultId)
+        decodingService.deleteDecodingById(resultId)
         model.addAttribute(
             "results",
             DecodingDtoList(decodingService.findDecodingByQuestionnaireId(questionnaireId)))
@@ -415,6 +415,7 @@ class QuestionnairesController(
         model: Model,
         @PathVariable questionnaireId: Long
     ): String {
+        println(questionnaireId)
         decodingService.createNewDecoding(questionnaireId)
         model.addAttribute(
             "results",

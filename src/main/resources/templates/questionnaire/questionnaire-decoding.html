@@ -68,11 +68,11 @@
                                         </tr>
                                     </thead>
                                     <tbody id="tableBody" style="gap: 10px">
-                                        <tr th:each="result, i : ${results.decodingDtoList}" th:fragment="tableDecoding">
+                                        <tr th:each="result, i : ${results.decodingDtoList}" th:fragment="tableDecoding" class="decodingRow">
                                             <input type="hidden" th:value="${result.id}" th:name="|decodingDtoList[${i.index}].id|">
                                             <input type="hidden" th:value="${result.questionnaireId}" th:name="|decodingDtoList[${i.index}].questionnaireId|">
                                             <td style="text-align: center">
-                                                <input type="number" min="0" max="100" oninput="validity.valid||(value='');"
+                                                <input type="number" min="0" oninput="validity.valid||(value='');"
                                                        class="field" style="border-radius: 5px; width: 50%; text-align: center"
                                                        th:value="${result.lowerBound}"
                                                        th:name="|decodingDtoList[${i.index}].lowerBound|"
@@ -117,6 +117,7 @@
                                         <td colspan="4" class="col">
                                             <button class="field" style="cursor: pointer; width: 100%; border-radius: 5px" type="button"
                                                     hx-trigger="click"
+                                                    id="addDecodingBtn"
                                                     th:attr="hx-get=|@{/questionnaires/{questionnaireId}/setResults/addResult(questionnaireId=${questionnaireId})}|"
                                                     hx-target="#tableBody"
                                             >Нажмите для добавления строки</button>
@@ -135,7 +136,7 @@
 
             <div class="position-fixed bottom-0 start-0 w-100 text-end bg-white"
                  style="height: 75px; box-sizing: border-box; padding-top: 10px; padding-right: 1.5rem;">
-                <button class="btn btn-secondary" type="submit" style="height: 50px">Сохранить</button>
+                <button class="btn btn-secondary" id="saveBtn" type="submit" style="height: 50px">Сохранить</button>
             </div>
 
         </form>

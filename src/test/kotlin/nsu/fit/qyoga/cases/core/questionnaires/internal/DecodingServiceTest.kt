@@ -58,7 +58,7 @@ class DecodingServiceTest(
     @Test
     fun `QYoga can delete decoding by id`() {
         val decoding = decodingService.createNewDecoding(1)
-        decodingService.deleteById(decoding.id)
+        decodingService.deleteDecodingById(decoding.id)
         val decodingList = decodingService.findDecodingByQuestionnaireId(1)
         decodingList.size shouldBe 0
     }
