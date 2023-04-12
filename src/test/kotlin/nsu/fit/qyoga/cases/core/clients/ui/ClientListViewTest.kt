@@ -33,9 +33,17 @@ class ClientListViewTest : QYogaAppTestBase() {
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             Assertions.assertThatSpec(body) {
-                node("#clientsTable") { exists() }
-                node("#clients-list") { exists() }
-                node("td") { exists() }
+                node("#clientsTable") {
+                    hasText(
+                        "ФИО Петров Пётр Петрович Удалить Иванов Иван Иванович Удалить Сергеев Сергей Иванович Удалить"
+                    )
+                }
+                node("#clients-list") {
+                    hasText(
+                        "Петров Пётр Петрович Удалить Иванов Иван Иванович Удалить Сергеев Сергей Иванович Удалить"
+                    )
+                }
+                node("td") { hasText("Петров") }
             }
         }
     }
@@ -69,19 +77,6 @@ class ClientListViewTest : QYogaAppTestBase() {
                 node("#clients-list") { exists() }
                 node("td") { exists() }
                 node("#pagination") { exists() }
-            }
-        }
-    }
-
-    fun `QYoga returns clients table with deleted client`() {
-        When {
-            post("/clients/delete/1")
-        } Then {
-            val body = Jsoup.parse(extract().body().asString())
-            Assertions.assertThatSpec(body) {
-                node("#clientsTable") { exists() }
-                node("#clients-list") { exists() }
-                node("td") { exists() }
             }
         }
     }
