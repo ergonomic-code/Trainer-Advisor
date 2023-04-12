@@ -17,6 +17,11 @@ VALUES ('Разминка для шеи', '', '', '', '00:10:00', 1, 1),
        ('Укрепление глубоких сгибателей шеи', '', '', '', '00:04:00', 3, 1),
        ('Тракция и расслабление шеи в шавасане', '', '', '', '00:15:00', 6, 1);
 
+INSERT INTO exercise_programs(exercise_id, program_id)
+VALUES (1, 1),
+       (2, 1),
+       (3, 1);
+
 INSERT INTO exercise_purposes(exercise_id, purpose_id)
 VALUES (1, 1),
        (2, 1),

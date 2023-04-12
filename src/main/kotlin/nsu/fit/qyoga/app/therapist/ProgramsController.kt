@@ -7,10 +7,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
+import org.springframework.web.bind.annotation.*
 import java.util.stream.Collectors
 import java.util.stream.IntStream
 
@@ -53,6 +50,17 @@ class ProgramsController(
         )
         addProgramsPageAttributes(model, programs)
         return "programs/program-search :: programs"
+    }
+
+    /**
+     * Создание программы
+     */
+    @PostMapping
+    fun createProgram(
+        model: Model
+    ): String {
+        // TODO: implement
+        return "exercises/exercise-search"
     }
 
     fun addProgramsPageAttributes(model: Model, programs: Page<ProgramDto>) {
