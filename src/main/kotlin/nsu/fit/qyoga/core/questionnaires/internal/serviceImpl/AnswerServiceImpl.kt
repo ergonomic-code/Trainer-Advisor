@@ -26,17 +26,7 @@ class AnswerServiceImpl(
                 questionId = id
             )
         )
-        return AnswerDto(
-            id = answer.id,
-            title = answer.title,
-            lowerBound = answer.lowerBound,
-            lowerBoundText = answer.lowerBoundText,
-            upperBound = answer.upperBound,
-            upperBoundText = answer.upperBoundText,
-            score = answer.score,
-            imageId = answer.imageId,
-            questionId = answer.questionId
-        )
+        return answerToAnswerDtoMapper(answer)
     }
     override fun updateAnswer(createAnswerDto: AnswerDto): AnswerDto {
         val answer = answerRepo.save(
@@ -52,21 +42,25 @@ class AnswerServiceImpl(
                 questionId = createAnswerDto.questionId
             )
         )
-        return AnswerDto(
-            answer.id,
-            answer.title,
-            answer.lowerBound,
-            answer.lowerBoundText,
-            answer.upperBound,
-            answer.upperBoundText,
-            answer.score,
-            answer.imageId,
-            answer.questionId
-        )
+        return answerToAnswerDtoMapper(answer)
     }
     override fun findAnswer(id: Long): AnswerDto {
         val answer = answerRepo.findById(id).orElse(null)
             ?: throw AnswerException("Выбранный ответ не найден")
+        return answerToAnswerDtoMapper(answer)
+    }
+    override fun deleteAllByQuestionId(id: Long): List<AnswerDto> {
+        val answersToDelete = answerRepo.findAllByQuestionId(id)
+        answerJdbcTemplateRepo.deleteAnswerByQuestionId(id)
+        return answersToDelete.map{
+            answerToAnswerDtoMapper(it)
+        }
+    }
+    override fun deleteAnswerById(id: Long){
+        answerRepo.deleteById(id)
+    }
+
+    fun answerToAnswerDtoMapper(answer: Answer): AnswerDto {
         return AnswerDto(
             id = answer.id,
             title = answer.title,
@@ -78,16 +72,5 @@ class AnswerServiceImpl(
             imageId = answer.imageId,
             questionId = answer.questionId
         )
-    }
-    override fun deleteAllByQuestionId(id: Long): List<Answer> {
-        val answersToDelete = answerRepo.findAllByQuestionId(id)
-        answerJdbcTemplateRepo.deleteAnswerByQuestionId(id)
-        return answersToDelete
-    }
-    override fun deleteAnswer(id: Long): Long {
-        val answer = answerRepo.findById(id).orElse(null)
-            ?: throw AnswerException("Выбранного ответа не существует")
-        answerRepo.deleteById(id)
-        return answer.id
     }
 }
