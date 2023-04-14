@@ -15,6 +15,7 @@
                            th:value="${answer.title}">
                 </label>
                 <input style="width: 50px;height: 28px; margin-left: 20px; border-radius: 5px"
+                       class="answerScore"
                        type="number" min="0" max="100" value="0" oninput="validity.valid||(value='');"
                        th:value="${answer.score}"
                        th:name="|questions[${questionIndex}].answers[${j.index}].score|"
@@ -38,6 +39,7 @@
                            th:value="${answer.title}">
                 </label>
                 <input style="width: 50px;height: 28px; margin-left: 20px; border-radius: 5px"
+                       class="answerScore"
                        type="number" min="0" max="100" value="0" oninput="validity.valid||(value='');"
                        th:value="${answer.score}"
                        th:name="|questions[${questionIndex}].answers[${j.index}].score|"
@@ -57,7 +59,7 @@
     <div th:id="|question${question.id}Footer|" style="border-top: 1px solid black; margin-top: 7px; padding-top: 10px; justify-content: space-between"
          class="d-flex flex-row">
         <div class="d-flex" style="position: relative; width: 100%; height: 26px">
-            <button type="button"
+            <button type="button" class="saveScore"
                     style=" border-radius: 5px; color: black; padding: 2px; text-decoration: none;background-color: #c2c2c2; cursor: pointer; position: absolute; right: 0"
                     th:attr = "
                     hx-post=|@{/questionnaires/question/{id}/setAnswers
