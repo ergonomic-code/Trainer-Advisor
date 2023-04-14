@@ -45,7 +45,9 @@ class ImageServiceTest(
         val input = FileInputStream(file)
         val multipartFile: MultipartFile = MockMultipartFile(
             "file",
-            file.name, "text/plain", IOUtils.toByteArray(input)
+            file.name,
+            "text/plain",
+            IOUtils.toByteArray(input)
         )
         val imageId = imageService.uploadImage(multipartFile)
         val savedImage = imageService.getImage(imageId)
