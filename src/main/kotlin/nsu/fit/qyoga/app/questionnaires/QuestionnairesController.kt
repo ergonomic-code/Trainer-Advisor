@@ -295,7 +295,7 @@ class QuestionnairesController(
     }
 
     /**
-     * обновить вопрос
+     * Обновить вопрос
      */
     @PostMapping("{questionnaireId}/edit/question/{questionId}/update")
     @ResponseBody
@@ -347,12 +347,21 @@ class QuestionnairesController(
     /**
      * Получить фрагмент страницы задания баллов для ответов
      */
-    @GetMapping("question/{id}/setScores")
+    @PostMapping("question/{id}/setScores")
     fun setQuestionScore(
         model : Model,
         @PathVariable id: Long,
-        @ModelAttribute("questionIndex") questionIndex: Int
+        @ModelAttribute("questionIndex") questionIndex: Int,
+        @ModelAttribute("questionnaire") questionnaire: QuestionnaireWithQuestionDto
     ): String {
+        questionnaire.questions.forEach { question ->
+            if (question.id == id){
+                for(answer in question.answers){
+                    answerService.updateAnswer(answer)
+                }
+                return@forEach
+            }
+        }
         val question = questionService.findQuestionWithAnswers(id)
         model.addAttribute("question", question)
         model.addAttribute("questionIndex", questionIndex)
@@ -397,7 +406,7 @@ class QuestionnairesController(
         return "questionnaire/questionnaire-decoding"
     }
 
-    @DeleteMapping("{questionnaireId}/setResults/{resultId}")
+    @DeleteMapping("{questionnaireId}/setResult/{resultId}")
     fun deleteResultRow(
         model: Model,
         @PathVariable resultId: Long,
@@ -410,7 +419,7 @@ class QuestionnairesController(
         return "questionnaire/questionnaire-decoding::tableDecoding"
     }
 
-    @GetMapping("{questionnaireId}/setResults/addResult")
+    @GetMapping("{questionnaireId}/setResult/addResult")
     fun addResultToQuestionnaire(
         model: Model,
         @PathVariable questionnaireId: Long
@@ -423,7 +432,7 @@ class QuestionnairesController(
         return "questionnaire/questionnaire-decoding::tableDecoding"
     }
 
-    @PostMapping("setResults/{resultId}/update")
+    @PostMapping("setResult/{resultId}/update")
     @ResponseBody
     fun updateResultsTableRow(
         @PathVariable resultId: Long,
@@ -438,7 +447,7 @@ class QuestionnairesController(
         return HttpStatus.BAD_REQUEST
     }
 
-    @PostMapping("setResults")
+    @PostMapping("setResult")
     fun saveResultsTable(
         @ModelAttribute("results") results: DecodingDtoList,
     ): String{

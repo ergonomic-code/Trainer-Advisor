@@ -18,7 +18,7 @@
 
         <div style="width: 40px">
             <img class="add-img-to-question-btn" src="/img/add-file.png" alt="Добавить изображение">
-            <input type="file" class="input-file" aria-hidden="true" style="margin-top: 3px;"
+            <input type="file" class="input-file" aria-hidden="true" style="margin-top: 3px;"  accept=".image/*" size="1048576"
                    hx-trigger="change"
                    hx-encoding="multipart/form-data"
                    th:name="file"
@@ -38,6 +38,7 @@
                 class="sort-btn">
             <option th:each="types : ${T(nsu.fit.qyoga.core.questionnaires.api.dtos.enums.QuestionType).values()}"
                     th:value="${types}" th:text="${types.text}"
+                    th:class="|type${types}|"
                     th:selected="${types.text==question.questionType.text}"></option>
         </select>
 
@@ -49,12 +50,12 @@
 </div>
 <div th:id="|question${question.id}Body|" >
     <div style="margin-top: 20px"
-         th:id="|answer${question.id}|"
          th:each="answer,j : ${question.answers}"
+         th:id="|answer${answer.id}|"
          th:switch="${question.questionType.name}">
-        <input hidden th:name="|questions[${questionIndex}].answers[${j.index}].id|" th:value="${answer.id}">
-        <input hidden th:name="|questions[${questionIndex}].answers[${j.index}].questionId|" th:value="${answer.questionId}">
-        <input hidden th:name="|questions[${questionIndex}].answers[${j.index}].score|" th:value="${answer.score}">
+        <input th:class="|answer${j.index}Id|" hidden th:name="|questions[${questionIndex}].answers[${j.index}].id|" th:value="${answer.id}">
+        <input th:class="|answer${j.index}QuestionId|" hidden th:name="|questions[${questionIndex}].answers[${j.index}].questionId|" th:value="${answer.questionId}">
+        <input th:class="|answer${j.index}Score|" hidden th:name="|questions[${questionIndex}].answers[${j.index}].score|" th:value="${answer.score}">
 
         <div th:case="SINGLE">
             <div class="d-flex flex-row">
@@ -70,7 +71,7 @@
 
                 <div style="width: 40px">
                     <img class="add-img-to-question-btn" src="/img/add-file.png" alt="Добавить изображение">
-                    <input name="file" type="file" class="input-file" aria-hidden="true" style="margin-top: 3px;"
+                    <input name="file" type="file" class="input-file" aria-hidden="true" style="margin-top: 3px;" accept=".image/*" size="1048576"
                            hx-trigger="change"
                            hx-encoding="multipart/form-data"
                            th:attr = "
@@ -103,7 +104,7 @@
                 </label>
                 <div style="width: 40px">
                     <img class="add-img-to-question-btn" src="/img/add-file.png" alt="Добавить изображение">
-                    <input name="file" type="file" class="input-file" aria-hidden="true" style="margin-top: 3px;"
+                    <input name="file" type="file" class="input-file" aria-hidden="true" style="margin-top: 3px;" accept=".image/*" size="1048576"
                            hx-trigger="change"
                            hx-encoding="multipart/form-data"
                            th:attr = "
@@ -215,11 +216,11 @@
         </div>
         <div class="d-flex"
              th:if="'SINGLE' == ${question.questionType.name} or 'SEVERAL' == ${question.questionType.name}">
-            <button type="button"
+            <button type="button" class="setScore"
                     style=" border-radius: 5px; color: black; padding: 2px; text-decoration: none;background-color: #c2c2c2; cursor: pointer;"
                     hx-swap="outerHTML"
                     th:attr = "
-                    hx-get=|@{/questionnaires/question/{id}/setScores
+                    hx-post=|@{/questionnaires/question/{id}/setScores
                     (id=${question.id}, questionIndex=${questionIndex})}|,
                     hx-target=|#question${question.id}Body|">Задать баллы</button>
         </div>
