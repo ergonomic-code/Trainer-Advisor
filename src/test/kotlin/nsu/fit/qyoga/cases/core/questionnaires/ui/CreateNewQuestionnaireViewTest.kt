@@ -25,7 +25,7 @@ class CreateNewQuestionnaireViewTest : QYogaAppTestBase() {
     fun setupDb() {
         dbInitializer.executeScripts(
             "/db/questionnaires/questionnaires-init-script.sql" to "dataSource",
-            "db/questionnaires/questionnaires-insert-single-questionnaire.sql" to "dataSource",
+            "db/questionnaires/questionnaires-insert-single-questionnaire.sql" to "dataSource"
         )
     }
 
@@ -162,21 +162,44 @@ class CreateNewQuestionnaireViewTest : QYogaAppTestBase() {
             cookie(cookie)
         } When {
             get("/questionnaires/new")
-            get("/questionnaires/1/edit/question/1/addAnswer")
+            get("/questionnaires/2/edit/question/1/addAnswer")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#question1"){ notExists() }
-                node("#question1Header"){ notExists() }
-                node("#question1Body"){ notExists() }
-                node("#answer1"){ notExists() }
+                node("#question1"){ exists() }
+                node("#question1Header"){ exists() }
+                node("#question1Body"){ exists() }
 
+                node("#answer1"){ exists() }
+                node(".answer0Id"){ exists() }
+                node(".answer0QuestionId"){ exists() }
+                node(".answer0Score"){ exists() }
+                node("#answer2"){ exists() }
                 node(".answer1Id"){ exists() }
                 node(".answer1QuestionId"){ exists() }
                 node(".answer1Score"){ exists() }
-                node(".answer2Id"){ exists() }
-                node(".answer2QuestionId"){ exists() }
-                node(".answer2Score"){ exists() }
+            }
+        }
+    }
+
+    @Test
+    fun `QYoga can delete answer to question`() {
+        Given {
+            cookie(cookie)
+        } When {
+            get("/questionnaires/new")
+            delete("/questionnaires/2/edit/answer/1")
+        } Then {
+            val body = Jsoup.parse(extract().body().asString())
+            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
+                node("#question1"){ exists() }
+                node("#question1Header"){ exists() }
+                node("#question1Body"){ exists() }
+
+                node("#answer1"){ notExists() }
+                node(".answer0Id"){ notExists() }
+                node(".answer0QuestionId"){ notExists() }
+                node(".answer0Score"){ notExists() }
             }
         }
     }
