@@ -7,7 +7,7 @@ import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 
-@ComponentScan("nsu.fit.qyoga.core.users")
+@ComponentScan
 @Configuration
 @EnableJdbcRepositories
 class UsersConfig {
