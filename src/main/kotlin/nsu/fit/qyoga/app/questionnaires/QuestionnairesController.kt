@@ -1,6 +1,7 @@
 package nsu.fit.qyoga.app.questionnaires
 
 import nsu.fit.qyoga.core.questionnaires.api.dtos.*
+import nsu.fit.qyoga.core.questionnaires.api.errors.AnswerException
 import nsu.fit.qyoga.core.questionnaires.api.services.*
 import org.springframework.core.io.InputStreamResource
 import org.springframework.data.domain.Page
@@ -455,6 +456,10 @@ class QuestionnairesController(
         return "redirect:/questionnaires/"
     }
 
+    @GetMapping("error")
+    fun testError(): String{
+        throw AnswerException("test")
+    }
 
     fun addQuestionnairePageAttributes(
         model: Model,

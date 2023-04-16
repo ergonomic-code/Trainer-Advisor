@@ -1,5 +1,6 @@
 package nsu.fit.qyoga.app.questionnaires
 
+import jakarta.servlet.http.HttpServletResponse
 import nsu.fit.platform.errors.ResourceNotFound
 import nsu.fit.qyoga.core.questionnaires.api.errors.AnswerException
 import nsu.fit.qyoga.core.questionnaires.api.errors.ImageException
@@ -25,9 +26,12 @@ class QuestionnairesErrorController {
     @ExceptionHandler(QuestionException::class, ImageException::class, AnswerException::class)
     fun handleQuestionException(
         exception: ResourceNotFound,
+        httpServletResponse: HttpServletResponse,
         model: Model
     ): String {
-        model.addAttribute("errorText", exception.message)
-        return ""
+        httpServletResponse.addHeader("HX-Retarget", "#errors");
+        httpServletResponse.addHeader("HX-Reswap", "innerHTML");
+        model.addAttribute("message", exception.message)
+        return "fragments/error-window::error"
     }
 }
