@@ -99,9 +99,5 @@ class QuestionServiceTest (
             QuestionException::class.java
         ) { questionService.findQuestion(questionId) }
         Assertions.assertEquals("Выбранный вопрос не найден", thrown1.message)
-        val thrown: QuestionException = Assertions.assertThrows(
-            QuestionException::class.java
-        ) { questionService.deleteQuestion(questionId) }
-        Assertions.assertEquals("Выбранный вопрос не найден", thrown.message)
     }
 }

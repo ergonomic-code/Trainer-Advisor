@@ -1,0 +1,20 @@
+<div th:fragment="error"
+     style="
+     opacity: 0.8; background: red; display: flex;
+     width: inherit; height: 40px; font-size: 22px">
+    <div style="margin-left: auto; margin-right: auto;">
+        <span  style="text-align: center; margin-left: auto">
+            [[${message}]]
+            <button id="reload-page-btn"
+                    style="
+                background-color: red; border: none;
+                width: auto; color: blue; margin-right: auto;
+                font-size: 22px;
+                text-decoration-line: underline;"
+                    onclick="location.reload()"
+            >Перезагрузить</button>
+        </span>
+    </div>
+</div>
+
+
