@@ -42,11 +42,8 @@ class QuestionServiceImpl(
             ?: throw QuestionException("Выбранный вопрос не найден")
     }
 
-    override fun deleteQuestion(id: Long): Long {
-        val question: Question = questionRepo.findById(id).orElse(null)
-            ?: throw QuestionException("Выбранный вопрос не найден")
+    override fun deleteQuestion(id: Long) {
         questionRepo.deleteById(id)
-        return question.id
     }
 
     override fun findQuestion(id: Long): QuestionDto {
