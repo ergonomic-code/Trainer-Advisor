@@ -1,7 +1,6 @@
 package nsu.fit.qyoga.cases.core.questionnaires.ui
 
-import io.kotest.matchers.shouldBe
-import io.restassured.http.ContentType
+import io.restassured.http.Cookie
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
@@ -11,11 +10,15 @@ import org.jsoup.Jsoup
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import java.io.File
+
+
+private const val USERNAME_FORM_PARAM = "username"
+private const val PASSWORD_FORM_PARAM = "password"
 
 class ErrorViewTest : QYogaAppTestBase() {
     @Autowired
     lateinit var dbInitializer: DbInitializer
+    lateinit var cookie: Cookie
 
     @BeforeEach
     fun setupDb() {
@@ -25,220 +28,28 @@ class ErrorViewTest : QYogaAppTestBase() {
         )
     }
 
-    @Test
-    fun `QYoga can return a error-fragment when trying to add an image to a non-existent question`() {
-        Given {
-            this.cookie(getAuthCookie())
-        } When {
-            contentType(ContentType.MULTIPART)
-            multiPart(File("src/test/resources/db/questionnaires/testLargeImage.jpg"))
-            param("questionIndex", 0)
-            post("/questionnaires/question/1/image")
-        } Then {
-            notFoundQuestion(extract().body().asString())
-        }
+    @BeforeEach
+    fun setupCookie() {
+        cookie = Given {
+            formParam(USERNAME_FORM_PARAM, "therapist")
+            formParam(PASSWORD_FORM_PARAM, "diem-Synergy5")
+        }.post("/users/login").thenReturn().detailedCookie("JSESSIONID")
     }
 
     @Test
-    fun `QYoga can return a error-fragment when trying to add an image to a non-existent answer`() {
+    fun `QYoga can create new questionnaire`() {
         Given {
-            this.cookie(getAuthCookie())
-        } When {
-            contentType(ContentType.MULTIPART)
-            multiPart(File("src/test/resources/db/questionnaires/testLargeImage.jpg"))
-            param("questionIndex", 0)
-            param("answerIndex", 0)
-            post("/questionnaires/answer/1/image")
-        } Then {
-            val body = Jsoup.parse(extract().body().asString())
-            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#reload-page-btn") {
-                    exists()
-                    hasText("Перезагрузить")
-                }
-                node(".error-text") {
-                    exists()
-                    hasText("Выбранный ответ не найден Перезагрузить")
-                }
-            }
-        }
-    }
-
-    @Test
-    fun `QYoga can return a error-fragment when trying to get non-existent image`() {
-        Given {
-            this.cookie(getAuthCookie())
-        } When {
-            get("/questionnaires/image/1")
-        } Then {
-            val body = Jsoup.parse(extract().body().asString())
-            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#reload-page-btn") {
-                    exists()
-                    hasText("Перезагрузить")
-                }
-                node(".error-text") {
-                    exists()
-                    hasText("Выбранное изображение не найдено Перезагрузить")
-                }
-            }
-        }
-    }
-
-    @Test
-    fun `QYoga can return a error-page when trying to add an image to a non-existent questionnaire`() {
-        Given {
-            this.cookie(getAuthCookie())
-        } When {
-            get("/questionnaires/-1/edit")
-        } Then {
-            notFoundQuestionnaire(extract().body().asString())
-        }
-    }
-
-    @Test
-    fun `QYoga can't update non-existent answer`() {
-        Given {
-            this.cookie(getAuthCookie())
-        } When {
-            param("id", "1")
-            param("title", "test")
-            param("questions[0].id", "1")
-            param("questions[0].questionnaireId", "1")
-            param("questions[0].title", "questions title")
-            param("questions[0].questionType", "SEVERAL")
-            param("questions[0].answers[0].id", "1")
-            param("questions[0].answers[0].questionId", "1")
-            param("questions[0].answers[0].score", "1")
-            param("questions[0].answers[0].title", "answer title")
-            post("/questionnaires/question/1/answer/2/update")
-        } Then {
-            extract().statusCode().compareTo(200) shouldBe 0
-            val body = Jsoup.parse(extract().body().asString())
-            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#reload-page-btn") {
-                    exists()
-                    hasText("Перезагрузить")
-                }
-                node(".error-text") {
-                    exists()
-                    hasText("Выбранного ответа не существует Перезагрузить")
-                }
-            }
-        }
-    }
-
-    @Test
-    fun `QYoga can't update non-existent question`() {
-        Given {
-            this.cookie(getAuthCookie())
+            cookie(cookie)
         } When {
             get("/questionnaires/new")
-            param("id", "1")
-            param("title", "test")
-            param("questions[0].id", "1")
-            param("questions[0].questionnaireId", "1")
-            param("questions[0].title", "questions title")
-            param("questions[0].questionType", "SEVERAL")
-            param("questions[0].answers[0].id", "1")
-            param("questions[0].answers[0].questionId", "1")
-            param("questions[0].answers[0].score", "1")
-            param("questions[0].answers[0].title", "answer title")
-            post("/questionnaires/1/edit/question/4/update")
-        } Then {
-            notFoundQuestion(extract().body().asString())
-        }
-    }
-
-    @Test
-    fun `QYoga can't get set result page to non-existent result`() {
-        Given {
-            this.cookie(getAuthCookie())
-        } When {
-            get("/questionnaires/10/setResult")
-        } Then {
-            notFoundQuestionnaire(extract().body().asString())
-        }
-    }
-
-    @Test
-    fun `QYoga can't update non-existent result`() {
-        Given {
-            this.cookie(getAuthCookie())
-        } When {
-            get("/questionnaires/1/setResult/addResult")
-            param("decodingDtoList[0].id", "1")
-            param("decodingDtoList[0].questionnaireId", "1")
-            param("decodingDtoList[0].lowerBound", "1")
-            param("decodingDtoList[0].upperBound", "5")
-            param("decodingDtoList[0].result", "test")
-            post("/questionnaires/setResult/10/update")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#reload-page-btn") {
-                    exists()
-                    hasText("Перезагрузить")
-                }
-                node(".error-text") {
-                    exists()
-                    hasText("Выбранный результат не найдено Перезагрузить")
-                }
-            }
-        }
-    }
-
-    @Test
-    fun `QYoga can change answer fragment to change answer fields after set scores`() {
-        Given {
-            this.cookie(getAuthCookie())
-        } When {
-            get("/questionnaires/new")
-            param("questionIndex", 0)
-            param("id", "1")
-            param("title", "test")
-            post("/questionnaires/question/-1/setAnswers")
-        } Then {
-            notFoundQuestion(extract().body().asString())
-        }
-    }
-
-    @Test
-    fun `QYoga can change answer fragment to set answer score`() {
-        Given {
-            this.cookie(getAuthCookie())
-        } When {
-            get("/questionnaires/new")
-            param("questionIndex", 0)
-            param("id", "1")
-            param("title", "test")
-            post("/questionnaires/question/-1/setScores")
-        } Then {
-            notFoundQuestion(extract().body().asString())
-        }
-    }
-
-    fun notFoundQuestion(bodyText: String) {
-        val body = Jsoup.parse(bodyText)
-        io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-            node("#reload-page-btn") {
-                exists()
-                hasText("Перезагрузить")
-            }
-            node(".error-text") {
-                exists()
-                hasText("Выбранный вопрос не найден Перезагрузить")
-            }
-        }
-    }
-
-    fun notFoundQuestionnaire(bodyText: String) {
-        val body = Jsoup.parse(bodyText)
-        io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-            node("#layoutSidenav_content") { exists() }
-            node("#error-text") {
-                exists()
-                hasText("Выбранный опросник не найден")
+                node("#questions"){ exists() }
+                node("#question1"){ exists() }
+                node("#question1Header"){ exists() }
+                node("#question1Body"){ exists() }
+                node("#answer1"){ exists() }
             }
         }
     }

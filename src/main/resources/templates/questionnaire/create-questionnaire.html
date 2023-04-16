@@ -33,7 +33,7 @@
             src="https://unpkg.com/htmx.org@1.8.6"></script>
 </head>
 
-<body class="sb-nav-fixed">
+<body class="sb-nav-fixed sb-sidenav-toggled">
 
 <div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
 
@@ -78,13 +78,15 @@
 
         </form>
 
-
         <div class="position-fixed bottom-0" style="margin-bottom: 5rem; margin-left: 3%">
             <input type="image" width="60px" src="/img/plus-in-circle.png" alt="Добавить новый вопрос"
                    hx-trigger="click"
                    th:attr="hx-get=|@{/questionnaires/{id}/edit/add-question(id=${questionnaire.id})}|"
                    hx-target="#questions">
         </div>
+
+        <div id="errors" style="position:fixed; width:100%; bottom:80px;">
+        <div>
     </div>
 </div>
 
