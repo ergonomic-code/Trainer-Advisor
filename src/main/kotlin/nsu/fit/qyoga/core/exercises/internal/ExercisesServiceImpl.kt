@@ -85,6 +85,7 @@ class ExercisesServiceImpl(
         val steps = exerciseStepsRepo.findAllByExerciseId(plainExercise.id)
         val exerciseStepsWithPhotos = steps.map {
             ExerciseStepDto(
+                it.imageId,
                 it.description,
                 it.imageId?.let { imagesService.getImage(id)?.toMultipartFile() }
             )

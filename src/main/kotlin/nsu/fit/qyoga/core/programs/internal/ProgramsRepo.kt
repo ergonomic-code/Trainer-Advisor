@@ -47,4 +47,15 @@ interface ProgramsRepo : CrudRepository<Program, Long>, PagingAndSortingReposito
     fun countPrograms(
         @Param("search") search: ProgramSearchDto,
     ): Long
+
+    @Query(
+        """
+        SELECT p.id as id, title, date::varchar, tp.purpose as purpose
+        FROM programs p
+            INNER JOIN purpose_programs pp ON p.id = pp.program_id
+            INNER JOIN therapeutic_purposes tp ON tp.id = pp.purpose_id
+        WHERE p.id = :id
+    """
+    )
+    fun getProgramsById(id: Long): ProgramDto?
 }

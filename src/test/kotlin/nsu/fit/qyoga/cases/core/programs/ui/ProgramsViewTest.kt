@@ -53,4 +53,20 @@ class ProgramsViewTest : QYogaAppTestBase() {
         }
     }
 
+    @Test
+    fun `QYoga returns program-view page with exercises`() {
+        Given {
+            cookie(cookie)
+            pathParam("id", 1)
+        } When {
+            get("/programs/{id}")
+        } Then {
+            val body = Jsoup.parse(extract().body().asString())
+            Assertions.assertThatSpec(body) {
+                node("#buttons") { exists() }
+                node("#program") { exists() }
+            }
+        }
+    }
+
 }

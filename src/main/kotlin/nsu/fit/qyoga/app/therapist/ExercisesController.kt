@@ -1,12 +1,17 @@
 package nsu.fit.qyoga.app.therapist
 
+import nsu.fit.platform.errors.ResourceNotFound
 import nsu.fit.qyoga.core.exercises.api.ExercisesService
+import nsu.fit.qyoga.core.exercises.api.ImagesService
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseSearchDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ModifiableExerciseDto
 import nsu.fit.qyoga.core.users.internal.UserDetailsImpl
+import org.springframework.core.io.InputStreamResource
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
+import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -19,7 +24,8 @@ private const val BASIC_PAGE_SIZE = 10
 @Controller
 @RequestMapping("/exercises")
 class ExercisesController(
-    private val exercisesService: ExercisesService
+    private val exercisesService: ExercisesService,
+    private val imageService: ImagesService
 ) {
     /**
      * Отображение страницы при пагинации
@@ -108,6 +114,20 @@ class ExercisesController(
         model.addAttribute("exercise", exercise)
         model.addAttribute("types", exercisesService.getExerciseTypes())
         return "exercises/exercise-edit"
+    }
+
+    /**
+     * Получение изображения по id
+     */
+    @GetMapping("/image/{id}")
+    fun getImageByExerciseStep(
+        @PathVariable id: Long
+    ): ResponseEntity<InputStreamResource> {
+        val image = imageService.getImage(id) ?: throw ResourceNotFound("No existing image with id = $id")
+        return ResponseEntity.ok()
+            .contentLength(image.size)
+            .contentType(MediaType.parseMediaType(image.mediaType))
+            .body(InputStreamResource(image.data.inputStream()))
     }
 
     fun addExercisePageAttributes(model: Model, exercises: Page<ExerciseDto>, exercisesService: ExercisesService) {

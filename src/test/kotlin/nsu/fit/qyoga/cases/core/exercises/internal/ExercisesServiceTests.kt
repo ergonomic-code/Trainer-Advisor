@@ -167,7 +167,7 @@ class ExercisesServiceTests(
             contradiction = "",
             duration = "00:10:00",
             exerciseType = ExerciseType.WarmUp,
-            exerciseSteps = mutableListOf(ExerciseStepDto("Step 1", null), ExerciseStepDto("Step 2", null))
+            exerciseSteps = mutableListOf(ExerciseStepDto(1, "Step 1", null), ExerciseStepDto(2, "Step 2", null))
         )
         val expectedExercise = Exercise(
             id = 6,
@@ -208,8 +208,8 @@ class ExercisesServiceTests(
             duration = "00:10:00",
             exerciseType = ExerciseType.WarmUp,
             exerciseSteps = mutableListOf(
-                ExerciseStepDto("Step 1", createExampleMultipartFile()),
-                ExerciseStepDto("Step 2", createExampleMultipartFile())
+                ExerciseStepDto(1, "Step 1", createExampleMultipartFile()),
+                ExerciseStepDto(2, "Step 2", createExampleMultipartFile())
             )
         )
         val expectedExercise = Exercise(
@@ -281,22 +281,26 @@ class ExercisesServiceTests(
         therapeuticPurpose = "Снятие гипертонуса с мышц шеи",
         exerciseSteps = mutableListOf(
             ExerciseStepDto(
+                1,
                 "Встаньте ровно, прижмите пятки к полу, потянитесь макушкой к потолку, почувствуйте как вытягивается позвоночник.",
                 null
             ),
             ExerciseStepDto(
+                2,
                 "На выдохе поворот головы в сторону, на вдохе возврат головы в центр, на следующем выдохе - голова в другую сторону. Прислушивайтесь к ощущениям в мышцах, сравнивайте ощущения справа и слева. По 5 поворотов головы в каждую сторону.",
                 null
             ),
             ExerciseStepDto(
+                3,
                 "На выдохе наклон головы к плечу, на вдохе вытяжение макушки к потолку, на следующем выдохе- наклон к другому плечу. Прислушивайтесь к ощущениям в мышцах, сравнивайте ощущения справа и слева. По 5 наклонов головы в каждую сторону.",
                 null
             ),
             ExerciseStepDto(
+                4,
                 "Положите обе ладони под яремную ямку и выполняйте медленные осознанные вращения головой, после каждого круга меняйте направление вращения. По 3 круга в каждом направлении.",
                 null
             ),
-            ExerciseStepDto("Разомните массажным мячиком возле стены верхние трапеции и мышцы между лопаток.", null)
+            ExerciseStepDto(5, "Разомните массажным мячиком возле стены верхние трапеции и мышцы между лопаток.", null)
 
         ),
     )

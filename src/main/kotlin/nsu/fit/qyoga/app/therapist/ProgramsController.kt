@@ -53,6 +53,19 @@ class ProgramsController(
     }
 
     /**
+     * Получение программы по id с упражнениями
+     */
+    @GetMapping("/{id}")
+    fun getProgramWithExercises(
+        @PathVariable id: Long,
+        model: Model
+    ): String {
+        val program = programsService.getProgramById(id)
+        model.addAttribute("program", program)
+        return "programs/program-view"
+    }
+
+    /**
      * Создание программы
      */
     @PostMapping

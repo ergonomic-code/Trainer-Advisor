@@ -179,11 +179,15 @@
                                     </div>
 
                                     <div class="mb-3 mt-3">
-                                        <label class="form-label">Фото шага упражнения</label>
-                                        <img alt="" th:src="*{'data:image/png;base64,'+ step.photo}"/> <input
-                                            class="form-control"
-                                            enctype="multipart/form-data"
-                                            type="file">
+                                        <label class="form-label ">Фото шага упражнения</label>
+                                        <img class="answerImage"
+                                             style="margin-bottom: 20px; margin-left: 20px; margin-top: 10px"
+                                             th:src="@{'/exercises/image/'+*{exerciseSteps[__${iter.index}__]?.imageId}}"
+                                             width="250"/>
+                                        <input
+                                                class="form-control"
+                                                enctype="multipart/form-data"
+                                                type="file">
                                     </div>
                                 </div>
                             </div>

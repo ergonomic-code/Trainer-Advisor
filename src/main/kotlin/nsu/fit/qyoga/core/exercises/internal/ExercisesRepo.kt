@@ -72,4 +72,17 @@ interface ExercisesRepo : CrudRepository<Exercise, Long>, PagingAndSortingReposi
     """
     )
     fun getExerciseTypes(): List<ExerciseTypeDto>
+
+    @Query(
+        """
+        SELECT ex.id as id, title, description, indications, contradictions, duration::varchar, et.name as type, tp.purpose as purpose 
+        FROM exercises ex 
+            INNER JOIN exercise_programs epr on ex.id = epr.exercise_id
+            INNER JOIN exercise_purposes epur ON ex.id = epur.exercise_id
+            INNER JOIN therapeutic_purposes tp ON tp.id = epur.purpose_id
+            INNER JOIN exercise_types et on ex.exercise_type_id = et.id
+        WHERE epr.program_id = :id
+        """
+    )
+    fun getExercisesByProgram(id: Long): List<ExerciseDto>
 }
