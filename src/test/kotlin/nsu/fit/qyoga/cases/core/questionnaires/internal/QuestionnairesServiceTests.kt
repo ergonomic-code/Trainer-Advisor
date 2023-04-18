@@ -145,7 +145,7 @@ class QuestionnairesServiceTests(
         val inDBQuestionnaire = questionnaireService.loadQuestionnairesWithQuestions(savedQuestionnaire.id)
         savedQuestionnaire.title shouldBe inDBQuestionnaire.title
         inDBQuestionnaire.questions.size shouldBe 3
-        for (question in inDBQuestionnaire.questions){
+        for (question in inDBQuestionnaire.questions) {
             question.answers.size shouldBe 0
         }
     }

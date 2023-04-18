@@ -6,5 +6,4 @@ import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface QuestionRepo :  CrudRepository<Question, Long>, PagingAndSortingRepository<Question, Long> {
-}
+interface QuestionRepo : CrudRepository<Question, Long>, PagingAndSortingRepository<Question, Long>
