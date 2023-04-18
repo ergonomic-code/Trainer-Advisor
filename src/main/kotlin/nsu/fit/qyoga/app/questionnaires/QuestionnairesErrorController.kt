@@ -1,10 +1,10 @@
 package nsu.fit.qyoga.app.questionnaires
 
-import nsu.fit.platform.errors.ResourceNotFound
 import nsu.fit.qyoga.core.questionnaires.api.errors.AnswerException
 import nsu.fit.qyoga.core.questionnaires.api.errors.ImageException
 import nsu.fit.qyoga.core.questionnaires.api.errors.QuestionException
 import nsu.fit.qyoga.core.questionnaires.api.errors.QuestionnaireException
+import nsu.fit.platform.errors.ResourceNotFound
 import org.springframework.ui.Model
 import jakarta.servlet.http.HttpServletResponse
 

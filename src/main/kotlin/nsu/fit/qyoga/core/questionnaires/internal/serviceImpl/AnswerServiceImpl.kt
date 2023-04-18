@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service
 
 @Service
 class AnswerServiceImpl(
-     private val answerRepo: AnswerRepo,
-     private val answerJdbcTemplateRepo: AnswerJdbcTemplateRepo
-): AnswerService {
+    private val answerRepo: AnswerRepo,
+    private val answerJdbcTemplateRepo: AnswerJdbcTemplateRepo
+) : AnswerService {
     override fun createAnswer(id: Long): AnswerDto {
         val answer = answerRepo.save(
             Answer(
@@ -58,7 +58,7 @@ class AnswerServiceImpl(
             answerToAnswerDtoMapper(it)
         }
     }
-    override fun deleteAnswerById(id: Long){
+    override fun deleteAnswerById(id: Long) {
         answerRepo.deleteById(id)
     }
 

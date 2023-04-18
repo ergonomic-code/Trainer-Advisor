@@ -30,7 +30,7 @@ class QuestionnaireJdbcTemplateRepo(
         return question
     }
 
-    fun getQuestionnaireWithQuesById(id: Long): QuestionnaireWithQuestionDto? {
+    fun getQuestionnaireWithQById(id: Long): QuestionnaireWithQuestionDto? {
         val query = """
         SELECT 
            questionnaires.id AS questionnaireId,

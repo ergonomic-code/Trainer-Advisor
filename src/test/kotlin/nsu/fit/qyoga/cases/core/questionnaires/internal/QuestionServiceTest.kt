@@ -27,7 +27,7 @@ import org.springframework.test.context.ContextConfiguration
 @ActiveProfiles("test")
 class QuestionServiceTest(
     @Autowired private val questionService: QuestionService
-): QYogaModuleBaseTest() {
+) : QYogaModuleBaseTest() {
 
     @BeforeEach
     fun setupDb() {

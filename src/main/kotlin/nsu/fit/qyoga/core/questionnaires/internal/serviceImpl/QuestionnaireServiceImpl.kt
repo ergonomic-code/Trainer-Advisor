@@ -18,7 +18,7 @@ class QuestionnaireServiceImpl(
     private val questionnaireRepo: QuestionnaireRepo,
     private val questionnaireJdbcTemplateRepo: QuestionnaireJdbcTemplateRepo,
     private val questionService: QuestionService
-    ): QuestionnaireService {
+) : QuestionnaireService {
 
     override fun findQuestionnaires(
         questionnaireSearchDto: QuestionnaireSearchDto,
@@ -60,7 +60,7 @@ class QuestionnaireServiceImpl(
     }
 
     override fun findQuestionnaireWithQuestions(id: Long): QuestionnaireWithQuestionDto {
-        return questionnaireJdbcTemplateRepo.getQuestionnaireWithQuesById(id)
+        return questionnaireJdbcTemplateRepo.getQuestionnaireWithQById(id)
             ?: throw QuestionnaireException("Выбранный опросник не найден")
     }
 }
