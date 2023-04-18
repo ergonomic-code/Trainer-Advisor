@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile
 class ImageServiceImpl(
     private val imageTemplateRepo: ImageJdbcTemplateRepo,
     private val imageRepo: ImageRepo
-): ImageService {
+) : ImageService {
     override fun uploadImage(file: MultipartFile): Long {
         return imageTemplateRepo.save(
             Image(
