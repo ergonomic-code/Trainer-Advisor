@@ -1,7 +1,7 @@
 package nsu.fit.qyoga.core.questionnaires.internal.repository
 
 import nsu.fit.qyoga.core.questionnaires.api.dtos.*
-import nsu.fit.qyoga.core.questionnaires.api.enums.QuestionType
+import nsu.fit.qyoga.core.questionnaires.api.dtos.enums.QuestionType
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
@@ -25,12 +25,12 @@ class QuestionnaireJdbcTemplateRepo(
         if (question == null) {
             questionMap[id] = questionFromDB
             question = questionFromDB
-            questionnaire.questions.add(questionFromDB)
+            questionnaire.questions += questionFromDB
         }
         return question
     }
 
-    fun findQuestionnaireWithQuestionsById(id: Long): QuestionnaireWithQuestionDto? {
+    fun getQuestionnaireWithQById(id: Long): QuestionnaireWithQuestionDto? {
         val query = """
         SELECT 
            questionnaires.id AS questionnaireId,
@@ -53,6 +53,7 @@ class QuestionnaireJdbcTemplateRepo(
             LEFT JOIN answers ON answers.question_id = questions.id
             LEFT JOIN images answerImage ON answers.image_id = answerImage.id
         WHERE questionnaires.id = :id
+        ORDER BY questionId, answerId
         """.trimIndent()
         var value: QuestionnaireWithQuestionDto? = null
         val questionMap: MutableMap<Long, QuestionWithAnswersDto?> = mutableMapOf()
@@ -60,7 +61,7 @@ class QuestionnaireJdbcTemplateRepo(
             query,
             MapSqlParameterSource("id", id)
         ) { rs: ResultSet, _: Int ->
-            if (value  == null) {
+            if (value == null) {
                 value = QuestionnaireWithQuestionDto(
                     id = rs.getLong("questionnaireId"),
                     title = rs.getString("questionnaireTitle"),
@@ -72,8 +73,9 @@ class QuestionnaireJdbcTemplateRepo(
                 id = rs.getLong("questionId"),
                 title = rs.getString("questionTitle"),
                 questionType = QuestionType.valueOf(rs.getString("questionType") ?: return@query),
-                imageId = rs.getLong("questionImageId"),
-                answers = mutableListOf()
+                imageId = rs.getString("questionImageId")?.toLong(),
+                answers = mutableListOf(),
+                questionnaireId = rs.getLong("questionnaireId")
             )
             val answer = AnswerDto(
                 id = rs.getLong("answerId"),
@@ -83,11 +85,12 @@ class QuestionnaireJdbcTemplateRepo(
                 upperBound = rs.getInt("answerUpperBound"),
                 upperBoundText = rs.getString("answerUpperBoundText"),
                 score = rs.getInt("answerScore"),
-                imageId = rs.getLong("answerImageId"),
+                imageId = rs.getString("answerImageId")?.toLong(),
+                questionId = questionId
             )
             val question = getQuestion(questionMap, questionId, questionFromDB, value!!)
-            if(!(answer.title == null && answer.lowerBound == 0 && answer.upperBound == 0)) {
-                question.answers.add(answer)
+            if (rs.getString("answerId") != null) {
+                question.answers += answer
             }
         }
         return value

@@ -1,10 +1,13 @@
 package nsu.fit.qyoga.core.questionnaires.internal.serviceImpl
 
+import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionWithAnswersDto
-import nsu.fit.qyoga.core.questionnaires.api.enums.QuestionType
+import nsu.fit.qyoga.core.questionnaires.api.dtos.enums.QuestionType
+import nsu.fit.qyoga.core.questionnaires.api.errors.QuestionException
 import nsu.fit.qyoga.core.questionnaires.api.model.Question
 import nsu.fit.qyoga.core.questionnaires.api.services.AnswerService
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionService
+import nsu.fit.qyoga.core.questionnaires.internal.repository.QuestionJdbcTemplateRepo
 import nsu.fit.qyoga.core.questionnaires.internal.repository.QuestionRepo
 import org.springframework.stereotype.Service
 
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Service
 class QuestionServiceImpl(
     private val questionRepo: QuestionRepo,
     private val answerService: AnswerService,
+    private val questionJdbcTemplateRepo: QuestionJdbcTemplateRepo
 ) : QuestionService {
 
     override fun createQuestion(id: Long): QuestionWithAnswersDto {
@@ -28,25 +32,61 @@ class QuestionServiceImpl(
             title = createdQuestion.title,
             questionType = createdQuestion.questionType,
             imageId = createdQuestion.imageId,
-            answers = mutableListOf()
+            answers = mutableListOf(),
+            questionnaireId = id
         )
     }
 
+    override fun findQuestionWithAnswers(id: Long): QuestionWithAnswersDto {
+        return questionJdbcTemplateRepo.findQuestionWithAnswersById(id)
+            ?: throw QuestionException("Выбранный вопрос не найден")
+    }
+
+    override fun deleteQuestion(id: Long) {
+        questionRepo.deleteById(id)
+    }
+
+    override fun findQuestion(id: Long): QuestionDto {
+        val question = questionRepo.findById(id).orElse(null)
+            ?: throw QuestionException("Выбранный вопрос не найден")
+        return QuestionDto(
+            id = question.id,
+            title = question.title,
+            questionType = question.questionType,
+            questionnaireId = question.questionnaireId,
+            imageId = question.imageId
+        )
+    }
+
+    override fun updateQuestion(question: QuestionDto): Long {
+        findQuestion(question.id)
+        return questionRepo.save(
+            Question(
+                id = question.id,
+                title = question.title,
+                questionType = question.questionType,
+                questionnaireId = question.questionnaireId,
+                imageId = question.imageId
+            )
+        ).id
+    }
+
     override fun updateQuestion(
-        createQuestionDto: QuestionWithAnswersDto,
-        questionnaireId: Long,
-        questionImageId: Long?
-    ) {
+        question: QuestionWithAnswersDto,
+    ): Long {
         val savedQuestion = questionRepo.save(
             Question(
-                title = createQuestionDto.title,
-                questionType = createQuestionDto.questionType,
-                questionnaireId = questionnaireId,
-                imageId = questionImageId
+                id = question.id,
+                title = question.title,
+                questionType = question.questionType,
+                questionnaireId = question.questionnaireId,
+                imageId = question.imageId
             )
         )
-        createQuestionDto.answers.map {
-            answerService.updateAnswer(it, savedQuestion.id, it.imageId)
+        question.answers.map {
+            it.questionId = savedQuestion.id
+            answerService.updateAnswer(it)
         }
+        return savedQuestion.id
     }
 }

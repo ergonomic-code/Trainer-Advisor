@@ -1,99 +1,94 @@
 package nsu.fit.qyoga.app.questionnaires
 
-import jakarta.servlet.http.HttpSession
-import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionnaireDto
-import nsu.fit.qyoga.core.questionnaires.api.dtos.DecodingDto
-import nsu.fit.qyoga.core.questionnaires.api.errors.ElementNotFound
-import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
+import nsu.fit.qyoga.core.questionnaires.api.dtos.DecodingDtoList
+import nsu.fit.qyoga.core.questionnaires.api.services.*
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 
 @Controller
-@RequestMapping("/questionnaires")
+@RequestMapping("/questionnaires/")
 class QuestionnairesResultsController(
-    private val questionnaireService: QuestionnaireService,
-    private val httpSession: HttpSession
+    private val decodingService: DecodingService
 ) {
 
     /**
      * Получить страницу задания результатов опросников
      */
-    @GetMapping("/edit/setResult")
-    fun getSetResultPage(): String {
-        httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
-            ?: throw ElementNotFound("Невозможно добавить расшифровку результатов опросника")
+    @GetMapping("{questionnaireId}/setResult")
+    fun getSetResultPage(
+        model: Model,
+        @PathVariable questionnaireId: Long
+    ): String {
+        setResult(questionnaireId, model)
         return "questionnaire/questionnaire-decoding"
     }
 
     /**
      * Удалить результат опросника
      */
-    @DeleteMapping("/setResult/{resultId}")
+    @DeleteMapping("{questionnaireId}/setResult/{resultId}")
     fun deleteResultRow(
-        @PathVariable resultId: Long
+        model: Model,
+        @PathVariable resultId: Long,
+        @PathVariable questionnaireId: Long
     ): String {
-        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
-            ?: throw ElementNotFound("Невозможно сохранить расшифровку результатов опросника")
-        httpSession.setAttribute(
-            "questionnaire",
-            questionnaire.copy(decoding = questionnaire.decoding.filter { it.id != resultId }.toMutableList())
-        )
+        decodingService.deleteDecodingById(resultId)
+        setResult(questionnaireId, model)
         return "questionnaire/questionnaire-decoding::tableDecoding"
     }
 
     /**
      * Добавить результат опросника
      */
-    @GetMapping("/setResult/addResult")
-    fun addResultToQuestionnaire(): String {
-        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
-            ?: throw ElementNotFound("Невозможно сохранить расшифровку результатов опросника")
-        val lastId = if (questionnaire.decoding.isEmpty()) 0 else questionnaire.decoding.last().id + 1
-        httpSession.setAttribute(
-            "questionnaire",
-            questionnaire.copy(decoding = (questionnaire.decoding + DecodingDto(id = lastId)).toMutableList())
-        )
+    @GetMapping("{questionnaireId}/setResult/addResult")
+    fun addResultToQuestionnaire(
+        model: Model,
+        @PathVariable questionnaireId: Long
+    ): String {
+        println(questionnaireId)
+        decodingService.createNewDecoding(questionnaireId)
+        setResult(questionnaireId, model)
         return "questionnaire/questionnaire-decoding::tableDecoding"
     }
 
     /**
      * Сохранение изменений в результатах опросника
      */
-    @PostMapping("/setResult/{resultId}/update")
+    @PostMapping("setResult/{resultId}/update")
     @ResponseBody
     fun updateResultsTableRow(
         @PathVariable resultId: Long,
-        @ModelAttribute("questionnaire") questionnaireDto: CreateQuestionnaireDto,
+        @ModelAttribute("results") results: DecodingDtoList,
     ): HttpStatus {
-        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
-            ?: throw ElementNotFound("Невозможно сохранить расшифровку результатов опросника")
-        val changedDecoding =  getDecodingById(questionnaireDto, resultId)
-            ?: throw ElementNotFound("Выбранный расшифровка результатов не найдена")
-        val decodingList = questionnaire.decoding.mapIndexed { idx, value ->
-            if (value.id == resultId) changedDecoding else value
-        }.toMutableList()
-        httpSession.setAttribute(
-            "questionnaire",
-            questionnaire.copy(decoding = decodingList)
-        )
-        return HttpStatus.OK
+        results.decodingDtoList.forEach { result ->
+            if (result.id == resultId) {
+                decodingService.saveDecoding(result)
+                return HttpStatus.OK
+            }
+        }
+        return HttpStatus.BAD_REQUEST
     }
 
     /**
      * Задание результатов опросников
      */
-    @PostMapping("/edit/setResult")
+    @PostMapping("setResult")
     fun saveResultsTable(
-        @ModelAttribute("questionnaire") questionnaireDto: CreateQuestionnaireDto,
+        @ModelAttribute("results") results: DecodingDtoList,
     ): String {
-        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
-            ?: throw ElementNotFound("Невозможно сохранить расшифровку результатов опросника")
-        questionnaireService.saveQuestionnaire(questionnaire.copy(decoding = questionnaireDto.decoding))
-        return "redirect:/questionnaires"
+        decodingService.saveDecodingList(results.decodingDtoList)
+        return "redirect:/questionnaires/"
     }
 
-    fun getDecodingById(questionnaire: CreateQuestionnaireDto, decodingId: Long): DecodingDto? {
-        return questionnaire.decoding.filter { it.id == decodingId }.getOrNull(0)
+    fun setResult(
+        questionnaireId: Long,
+        model: Model
+    ) {
+        model.addAttribute(
+            "results",
+            DecodingDtoList(decodingService.findDecodingByQuestionnaireId(questionnaireId))
+        )
     }
 }
