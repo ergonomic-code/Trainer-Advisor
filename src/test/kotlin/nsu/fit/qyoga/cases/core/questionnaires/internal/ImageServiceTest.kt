@@ -29,7 +29,7 @@ import java.io.FileInputStream
 @ActiveProfiles("test")
 class ImageServiceTest(
     @Autowired private val imageService: ImageService
-): QYogaModuleBaseTest() {
+) : QYogaModuleBaseTest() {
 
     @BeforeEach
     fun setupDb() {

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 @Service
 class DecodingServiceImpl(
     private val decodingRepo: DecodingRepo
-): DecodingService {
+) : DecodingService {
     override fun createNewDecoding(questionnaireId: Long): DecodingDto {
         val savedDecoding = decodingRepo.save(
             Decoding(
