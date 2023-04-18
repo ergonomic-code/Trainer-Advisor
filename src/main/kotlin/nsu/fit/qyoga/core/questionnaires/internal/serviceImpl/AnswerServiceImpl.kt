@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 class AnswerServiceImpl(
      private val answerRepo: AnswerRepo,
      private val answerJdbcTemplateRepo: AnswerJdbcTemplateRepo
-) :AnswerService {
+): AnswerService {
     override fun createAnswer(id: Long): AnswerDto {
         val answer = answerRepo.save(
             Answer(
@@ -29,6 +29,8 @@ class AnswerServiceImpl(
         return answerToAnswerDtoMapper(answer)
     }
     override fun updateAnswer(createAnswerDto: AnswerDto): AnswerDto {
+        answerRepo.findById(createAnswerDto.id).orElse(null)
+            ?: throw AnswerException("Выбранный ответ не найден")
         val answer = answerRepo.save(
             Answer(
                 id = createAnswerDto.id,
@@ -52,7 +54,7 @@ class AnswerServiceImpl(
     override fun deleteAllByQuestionId(id: Long): List<AnswerDto> {
         val answersToDelete = answerRepo.findAllByQuestionId(id)
         answerJdbcTemplateRepo.deleteAnswerByQuestionId(id)
-        return answersToDelete.map{
+        return answersToDelete.map {
             answerToAnswerDtoMapper(it)
         }
     }

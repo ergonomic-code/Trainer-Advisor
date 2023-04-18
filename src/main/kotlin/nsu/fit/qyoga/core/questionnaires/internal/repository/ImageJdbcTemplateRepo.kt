@@ -7,12 +7,10 @@ import org.springframework.jdbc.support.GeneratedKeyHolder
 import org.springframework.stereotype.Repository
 import java.sql.ResultSet
 
-
 @Repository
 class ImageJdbcTemplateRepo(
     private val jdbcTemplate: NamedParameterJdbcOperations
 ) {
-
     fun save(image: Image): Long {
         val query = """
             INSERT INTO images (name, media_type, size, data) values (:name, :mediaType, :size, :data) RETURNING id

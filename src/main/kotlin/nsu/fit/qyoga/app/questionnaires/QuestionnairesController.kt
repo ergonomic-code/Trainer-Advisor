@@ -2,6 +2,7 @@ package nsu.fit.qyoga.app.questionnaires
 
 import nsu.fit.qyoga.core.questionnaires.api.dtos.*
 import nsu.fit.qyoga.core.questionnaires.api.errors.AnswerException
+import nsu.fit.qyoga.core.questionnaires.api.errors.QuestionException
 import nsu.fit.qyoga.core.questionnaires.api.services.*
 import org.springframework.core.io.InputStreamResource
 import org.springframework.data.domain.Page
@@ -69,7 +70,7 @@ class QuestionnairesController(
         val questionnaireId = questionnaireService.createQuestionnaire()
         val question = questionService.createQuestion(questionnaireId)
         answerService.createAnswer(question.id)
-        return "redirect:/questionnaires/${questionnaireId}/edit"
+        return "redirect:/questionnaires/$questionnaireId/edit"
     }
 
     /**
@@ -137,7 +138,7 @@ class QuestionnairesController(
         model: Model
     ): String {
         val question = questionService.findQuestion(id)
-        if( question.imageId != null) {
+        if (question.imageId != null) {
             imageService.deleteImage(question.imageId)
         }
         val questionDto = QuestionDto(
@@ -253,7 +254,7 @@ class QuestionnairesController(
     @ResponseBody
     fun changeQuestionnaireTitle(
         questionnaire: QuestionnaireDto
-    ): HttpStatus{
+    ): HttpStatus {
         questionnaireService.updateQuestionnaire(questionnaire)
         return HttpStatus.OK
     }
@@ -269,7 +270,7 @@ class QuestionnairesController(
         @PathVariable questionnaireId: Long
     ): String {
         questionnaire.questions.forEach { question ->
-            if (question.id == questionId){
+            if (question.id == questionId) {
                 questionService.updateQuestion(
                     QuestionDto(
                         id = question.id,
@@ -282,7 +283,7 @@ class QuestionnairesController(
             }
         }
         val deletedAnswers = answerService.deleteAllByQuestionId(questionId)
-        for(answer in deletedAnswers){
+        for (answer in deletedAnswers) {
             answer.imageId?.let {
                 imageService.deleteImage(it)
             }
@@ -304,9 +305,9 @@ class QuestionnairesController(
         @ModelAttribute("questionnaire") questionnaire: QuestionnaireWithQuestionDto,
         @PathVariable questionId: Long,
         @PathVariable questionnaireId: Long
-    ): HttpStatus{
+    ): HttpStatus {
         questionnaire.questions.forEach { question ->
-            if (question.id == questionId){
+            if (question.id == questionId) {
                 questionService.updateQuestion(
                     QuestionDto(
                         id = question.id,
@@ -319,7 +320,7 @@ class QuestionnairesController(
                 return HttpStatus.OK
             }
         }
-        return HttpStatus.BAD_REQUEST
+        throw QuestionException("Выбранный ответ не найден")
     }
 
     /**
@@ -331,18 +332,16 @@ class QuestionnairesController(
         @ModelAttribute("questionnaire") questionnaire: QuestionnaireWithQuestionDto,
         @PathVariable answerId: Long,
         @PathVariable questionId: Long
-    ): HttpStatus{
+    ): HttpStatus {
         questionnaire.questions.forEach { question ->
-            if (question.id == questionId){
-                question.answers.forEach { answer ->
-                    if (answer.id == answerId){
-                        answerService.updateAnswer(answer)
-                        return HttpStatus.OK
-                    }
+            question.answers.filter { question.id == questionId }.forEach { answer ->
+                if (answer.id == answerId) {
+                    answerService.updateAnswer(answer)
+                    return HttpStatus.OK
                 }
             }
         }
-        return HttpStatus.BAD_REQUEST
+        throw AnswerException("Выбранного ответа не существует")
     }
 
     /**
@@ -350,14 +349,14 @@ class QuestionnairesController(
      */
     @PostMapping("question/{id}/setScores")
     fun setQuestionScore(
-        model : Model,
+        model: Model,
         @PathVariable id: Long,
         @ModelAttribute("questionIndex") questionIndex: Int,
         @ModelAttribute("questionnaire") questionnaire: QuestionnaireWithQuestionDto
     ): String {
         questionnaire.questions.forEach { question ->
-            if (question.id == id){
-                for(answer in question.answers){
+            if (question.id == id) {
+                for (answer in question.answers) {
                     answerService.updateAnswer(answer)
                 }
                 return@forEach
@@ -374,14 +373,14 @@ class QuestionnairesController(
      */
     @PostMapping("question/{id}/setAnswers")
     fun setQuestionAnswers(
-        model : Model,
+        model: Model,
         @PathVariable id: Long,
         @ModelAttribute("questionIndex") questionIndex: Int,
         @ModelAttribute("questionnaire") questionnaire: QuestionnaireWithQuestionDto
     ): String {
         questionnaire.questions.forEach { question ->
-            if (question.id == id){
-                for(answer in question.answers){
+            if (question.id == id) {
+                for (answer in question.answers) {
                     answerService.updateAnswer(answer)
                 }
                 return@forEach
@@ -412,11 +411,12 @@ class QuestionnairesController(
         model: Model,
         @PathVariable resultId: Long,
         @PathVariable questionnaireId: Long
-    ): String{
+    ): String {
         decodingService.deleteDecodingById(resultId)
         model.addAttribute(
             "results",
-            DecodingDtoList(decodingService.findDecodingByQuestionnaireId(questionnaireId)))
+            DecodingDtoList(decodingService.findDecodingByQuestionnaireId(questionnaireId))
+        )
         return "questionnaire/questionnaire-decoding::tableDecoding"
     }
 
@@ -429,7 +429,8 @@ class QuestionnairesController(
         decodingService.createNewDecoding(questionnaireId)
         model.addAttribute(
             "results",
-            DecodingDtoList(decodingService.findDecodingByQuestionnaireId(questionnaireId)))
+            DecodingDtoList(decodingService.findDecodingByQuestionnaireId(questionnaireId))
+        )
         return "questionnaire/questionnaire-decoding::tableDecoding"
     }
 
@@ -438,9 +439,9 @@ class QuestionnairesController(
     fun updateResultsTableRow(
         @PathVariable resultId: Long,
         @ModelAttribute("results") results: DecodingDtoList,
-    ): HttpStatus{
+    ): HttpStatus {
         results.decodingDtoList.forEach { result ->
-            if (result.id == resultId){
+            if (result.id == resultId) {
                 decodingService.saveDecoding(result)
                 return HttpStatus.OK
             }
@@ -451,13 +452,13 @@ class QuestionnairesController(
     @PostMapping("setResult")
     fun saveResultsTable(
         @ModelAttribute("results") results: DecodingDtoList,
-    ): String{
+    ): String {
         decodingService.saveDecodingList(results.decodingDtoList)
         return "redirect:/questionnaires/"
     }
 
     @GetMapping("error")
-    fun testError(): String{
+    fun testError(): String {
         throw AnswerException("test")
     }
 

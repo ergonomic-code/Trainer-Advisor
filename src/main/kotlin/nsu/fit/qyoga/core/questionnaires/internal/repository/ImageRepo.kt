@@ -6,5 +6,4 @@ import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface ImageRepo :  CrudRepository<Image, Long>, PagingAndSortingRepository<Image, Long> {
-}
+interface ImageRepo : CrudRepository<Image, Long>, PagingAndSortingRepository<Image, Long>
