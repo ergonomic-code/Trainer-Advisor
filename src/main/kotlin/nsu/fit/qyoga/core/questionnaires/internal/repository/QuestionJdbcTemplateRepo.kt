@@ -12,7 +12,7 @@ import java.sql.ResultSet
 class QuestionJdbcTemplateRepo(
     private val jdbcTemplate: NamedParameterJdbcOperations
 ) {
-    fun findQuestionWithAnswersById(id: Long): QuestionWithAnswersDto?{
+    fun findQuestionWithAnswersById(id: Long): QuestionWithAnswersDto? {
         val query = """
         SELECT 
            questions.id AS questionId,
@@ -39,7 +39,7 @@ class QuestionJdbcTemplateRepo(
             query,
             MapSqlParameterSource("id", id)
         ) { rs: ResultSet, _: Int ->
-            if (value  == null) {
+            if (value == null) {
                 value = QuestionWithAnswersDto(
                     id = rs.getLong("questionId"),
                     title = rs.getString("questionTitle"),
@@ -63,29 +63,5 @@ class QuestionJdbcTemplateRepo(
             value!!.answers.add(answer)
         }
         return value
-    }
-
-    fun updateQuestionTitleById(id: Long, title: String){
-        val query = """
-            UPDATE questions
-            SET title = :title
-            WHERE id = :id
-        """.trimIndent()
-        val param = MapSqlParameterSource()
-        param.addValue("id", id)
-        param.addValue("title", title)
-        jdbcTemplate.update(query, param)
-    }
-
-    fun updateQuestionTypeById(id: Long, type: QuestionType){
-        val query = """
-            UPDATE questions
-            SET question_type = :type
-            WHERE id = :id
-        """.trimIndent()
-        val param = MapSqlParameterSource()
-        param.addValue("id", id)
-        param.addValue("type", type.name)
-        jdbcTemplate.update(query, param)
     }
 }

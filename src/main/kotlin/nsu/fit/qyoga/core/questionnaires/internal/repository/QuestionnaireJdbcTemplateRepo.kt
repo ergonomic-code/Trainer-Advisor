@@ -30,7 +30,7 @@ class QuestionnaireJdbcTemplateRepo(
         return question
     }
 
-    fun findQuestionnaireWithQuestionsById(id: Long): QuestionnaireWithQuestionDto? {
+    fun getQuestionnaireWithQuesById(id: Long): QuestionnaireWithQuestionDto? {
         val query = """
         SELECT 
            questionnaires.id AS questionnaireId,
@@ -61,7 +61,7 @@ class QuestionnaireJdbcTemplateRepo(
             query,
             MapSqlParameterSource("id", id)
         ) { rs: ResultSet, _: Int ->
-            if (value  == null) {
+            if (value == null) {
                 value = QuestionnaireWithQuestionDto(
                     id = rs.getLong("questionnaireId"),
                     title = rs.getString("questionnaireTitle"),
