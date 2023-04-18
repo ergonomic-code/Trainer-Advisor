@@ -46,20 +46,20 @@ class SetDecodingViewTest : QYogaAppTestBase() {
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("table"){
+                node("table") {
                     exists()
                     containsHtml("id=\"addDecodingBtn\"")
                     containsHtml("id=\"tableBody\"")
                 }
-                node("#addDecodingBtn"){
+                node("#addDecodingBtn") {
                     containsText("Нажмите для добавления строки")
                     attribute("hx-get") { hasText("/questionnaires/1/setResult/addResult") }
                 }
-                node("#saveBtn"){
+                node("#saveBtn") {
                     containsText("Сохранить")
-                    attribute("type"){ hasText("submit") }
+                    attribute("type") { hasText("submit") }
                 }
-                node("decodingRow"){
+                node("decodingRow") {
                     notExists()
                 }
             }
@@ -75,36 +75,36 @@ class SetDecodingViewTest : QYogaAppTestBase() {
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node(".decodingId"){
+                node(".decodingId") {
                     exists()
-                    attribute("type"){ hasText("hidden") }
-                    attribute("name"){ hasText("decodingDtoList[0].id") }
+                    attribute("type") { hasText("hidden") }
+                    attribute("name") { hasText("decodingDtoList[0].id") }
                 }
-                node(".decodingQuestionnaireId"){
+                node(".decodingQuestionnaireId") {
                     exists()
-                    attribute("type"){ hasText("hidden") }
-                    attribute("name"){ hasText("decodingDtoList[0].questionnaireId") }
+                    attribute("type") { hasText("hidden") }
+                    attribute("name") { hasText("decodingDtoList[0].questionnaireId") }
                 }
-                node("button"){
+                node("button") {
                     exists()
-                    attribute("class"){ hasText("field") }
-                    attribute("hx-delete"){ hasText("/questionnaires/1/setResult/1") }
+                    attribute("class") { hasText("field") }
+                    attribute("hx-delete") { hasText("/questionnaires/1/setResult/1") }
                     hasText("Удалить")
                 }
-                node(".decodingLowerBound"){
+                node(".decodingLowerBound") {
                     exists()
-                    attribute("type"){ hasText("number") }
-                    attribute("name"){ hasText("decodingDtoList[0].lowerBound") }
+                    attribute("type") { hasText("number") }
+                    attribute("name") { hasText("decodingDtoList[0].lowerBound") }
                 }
-                node(".decodingUpperBound"){
+                node(".decodingUpperBound") {
                     exists()
-                    attribute("type"){ hasText("number") }
-                    attribute("name"){ hasText("decodingDtoList[0].upperBound") }
+                    attribute("type") { hasText("number") }
+                    attribute("name") { hasText("decodingDtoList[0].upperBound") }
 
                 }
-                node(".decodingResult"){
+                node(".decodingResult") {
                     exists()
-                    attribute("name"){ hasText("decodingDtoList[0].result") }
+                    attribute("name") { hasText("decodingDtoList[0].result") }
                 }
             }
         }
@@ -121,36 +121,36 @@ class SetDecodingViewTest : QYogaAppTestBase() {
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node(".decodingId"){
+                node(".decodingId") {
                     exists()
-                    attribute("type"){ hasText("hidden") }
-                    attribute("name"){ hasText("decodingDtoList[0].id") }
+                    attribute("type") { hasText("hidden") }
+                    attribute("name") { hasText("decodingDtoList[0].id") }
                 }
-                node(".decodingQuestionnaireId"){
+                node(".decodingQuestionnaireId") {
                     exists()
-                    attribute("type"){ hasText("hidden") }
-                    attribute("name"){ hasText("decodingDtoList[0].questionnaireId") }
+                    attribute("type") { hasText("hidden") }
+                    attribute("name") { hasText("decodingDtoList[0].questionnaireId") }
                 }
-                node("button"){
+                node("button") {
                     exists()
-                    attribute("class"){ hasText("field") }
-                    attribute("hx-delete"){ hasText("/questionnaires/1/setResult/2") }
+                    attribute("class") { hasText("field") }
+                    attribute("hx-delete") { hasText("/questionnaires/1/setResult/2") }
                     hasText("Удалить")
                 }
-                node(".decodingLowerBound"){
+                node(".decodingLowerBound") {
                     exists()
-                    attribute("type"){ hasText("number") }
-                    attribute("name"){ hasText("decodingDtoList[0].lowerBound") }
+                    attribute("type") { hasText("number") }
+                    attribute("name") { hasText("decodingDtoList[0].lowerBound") }
                 }
-                node(".decodingUpperBound"){
+                node(".decodingUpperBound") {
                     exists()
-                    attribute("type"){ hasText("number") }
-                    attribute("name"){ hasText("decodingDtoList[0].upperBound") }
+                    attribute("type") { hasText("number") }
+                    attribute("name") { hasText("decodingDtoList[0].upperBound") }
 
                 }
-                node(".decodingResult"){
+                node(".decodingResult") {
                     exists()
-                    attribute("name"){ hasText("decodingDtoList[0].result") }
+                    attribute("name") { hasText("decodingDtoList[0].result") }
                 }
             }
         }

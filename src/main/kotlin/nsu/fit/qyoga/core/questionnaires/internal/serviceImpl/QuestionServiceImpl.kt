@@ -59,6 +59,8 @@ class QuestionServiceImpl(
     }
 
     override fun updateQuestion(question: QuestionDto): Long {
+        questionRepo.findById(question.id).orElse(null)
+            ?: throw QuestionException("Выбранный вопрос не найден")
         return questionRepo.save(
             Question(
                 id = question.id,
@@ -83,7 +85,7 @@ class QuestionServiceImpl(
             )
         )
         question.answers.map {
-            it.questionId=savedQuestion.id
+            it.questionId = savedQuestion.id
             answerService.updateAnswer(it)
         }
         return savedQuestion.id

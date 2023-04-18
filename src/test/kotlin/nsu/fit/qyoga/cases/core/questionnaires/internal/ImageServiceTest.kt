@@ -19,7 +19,6 @@ import org.testcontainers.shaded.org.apache.commons.io.IOUtils
 import java.io.File
 import java.io.FileInputStream
 
-
 @ContextConfiguration(
     classes = [QuestionnairesTestConfig::class],
     initializers = [TestContainerDbContextInitializer::class]
@@ -30,7 +29,7 @@ import java.io.FileInputStream
 @ActiveProfiles("test")
 class ImageServiceTest(
     @Autowired private val imageService: ImageService
-) : QYogaModuleBaseTest() {
+): QYogaModuleBaseTest() {
 
     @BeforeEach
     fun setupDb() {
@@ -64,7 +63,9 @@ class ImageServiceTest(
         val input = FileInputStream(file)
         val multipartFile: MultipartFile = MockMultipartFile(
             "file",
-            file.name, "text/plain", IOUtils.toByteArray(input)
+            file.name,
+            "text/plain",
+            IOUtils.toByteArray(input)
         )
         val imageId = imageService.uploadImage(multipartFile)
         imageService.deleteImage(imageId)

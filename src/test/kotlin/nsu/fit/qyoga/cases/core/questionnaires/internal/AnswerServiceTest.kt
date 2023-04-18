@@ -1,7 +1,7 @@
 package nsu.fit.qyoga.cases.core.questionnaires.internal
 
-import io.kotest.matchers.longs.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.longs.shouldBeGreaterThan
 import nsu.fit.qyoga.cases.core.questionnaires.QuestionnairesTestConfig
 import nsu.fit.qyoga.core.questionnaires.api.dtos.AnswerDto
 import nsu.fit.qyoga.core.questionnaires.api.errors.AnswerException
@@ -66,14 +66,14 @@ class AnswerServiceTest(
     @Test
     fun `QYoga can delete answers by question id`() {
         val listAnswers: MutableList<AnswerDto> = mutableListOf()
-        for (i in 1..3){
+        for (i in 1..3) {
             listAnswers.add(answerService.createAnswer(1))
         }
         listAnswers.size shouldBe 3
         val deletedAnswers = answerService.deleteAllByQuestionId(listAnswers[0].id)
         listAnswers.size shouldBe deletedAnswers.size
         var thrown: AnswerException
-        for (answer in deletedAnswers){
+        for (answer in deletedAnswers) {
             thrown = Assertions.assertThrows(
                 AnswerException::class.java
             ) { answerService.findAnswer(listAnswers[0].id) }
@@ -104,7 +104,7 @@ class AnswerServiceTest(
 
     @Test
     fun `QYoga can delete answers by id`() {
-        val answer  = answerService.createAnswer(1)
+        val answer = answerService.createAnswer(1)
         answerService.deleteAnswerById(answer.id)
         val thrown: AnswerException = Assertions.assertThrows(
             AnswerException::class.java
