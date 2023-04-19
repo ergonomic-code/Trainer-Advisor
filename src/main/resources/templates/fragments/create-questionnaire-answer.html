@@ -65,8 +65,8 @@
                            th:name="|questions[${questionIndex}].answers[${j.index}].title|" th:value="${answer.title}"
                            hx-trigger="keyup changed delay:300ms"
                            th:attr = "
-                                                           hx-post=|@{/questionnaires/question/{questionId}/answer/{answerId}/update
-                                                           (questionId=${question.id},answerId=${answer.id})}|">
+                           hx-post=|@{/questionnaires/question/{questionId}/answer/{answerId}/update
+                           (questionId=${question.id},answerId=${answer.id})}|">
                 </label>
 
                 <div style="width: 40px">
@@ -134,25 +134,27 @@
                 <div style="display: flex">
                     <select name="range"
                             hx-trigger="change"
-                            th:name="|questions[${questionIndex}].answers[${j.index}].lowerBound|"
+                            th:name="|questions[${questionIndex}].answers[${j.index}].bounds.lowerBound|"
                             hx-swap="none"
                             th:attr = "
                             hx-post=|@{/questionnaires/question/{questionId}/answer/{answerId}/update
                             (answerId=${answer.id}, questionId=${question.id})}|,
                             hx-target=|#questions|"
                             class="sortBtn" style="width: 50px; border-radius: 5px">
-                        <option value="" selected disabled hidden th:text="${answer.lowerBound}">lower bound</option>
-                        <option value="0">0</option>
-                        <option value="1">1</option>
+                        <option
+                                th:each="i: ${#numbers.sequence(0, 1)}"
+                                th:value="${i}" th:text="${i}"
+                                th:selected="${i==answer.bounds.lowerBound}"
+                        ></option>
                     </select>
                     <input style="border-radius: 5px; width: 100%; margin-left: 40px" type="text" class="answerText"
-                           th:value="${answer.lowerBoundText}"
+                           th:value="${answer.bounds.lowerBoundText}"
                            hx-trigger="keyup changed delay:300ms"
                            hx-swap="none"
                            th:attr = "
                            hx-post=|@{/questionnaires/question/{questionId}/answer/{answerId}/update
                            (answerId=${answer.id}, questionId=${question.id})}|"
-                           th:name="|questions[${questionIndex}].answers[${j.index}].lowerBoundText|">
+                           th:name="|questions[${questionIndex}].answers[${j.index}].bounds.lowerBoundText|">
                 </div>
                 <div style="display: flex; margin-top: 20px">
                     <select name="range"
@@ -163,26 +165,21 @@
                             (answerId=${answer.id}, questionId=${question.id})}|,
                             hx-target=|#questions|"
                             class="sortBtn" style="width: 50px; border-radius: 5px"
-                            th:name="|questions[${questionIndex}].answers[${j.index}].upperBound|">
-                        <option value="" selected disabled hidden th:text="${answer.upperBound}">upper bound</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
+                            th:name="|questions[${questionIndex}].answers[${j.index}].bounds.upperBound|">
+                        <option
+                                th:each="i: ${#numbers.sequence(2, 10)}"
+                                th:value="${i}" th:text="${i}"
+                                th:selected="${i==answer.bounds.upperBound}"
+                        ></option>
                     </select>
                     <input style="border-radius: 5px; width: 100%; margin-left: 40px" type="text" class="answerText"
-                           th:value="${answer.upperBoundText}"
+                           th:value="${answer.bounds.upperBoundText}"
                            hx-trigger="keyup changed delay:300ms"
                            hx-swap="none"
                            th:attr = "
                                hx-post=|@{/questionnaires/question/{questionId}/answer/{answerId}/update
                                (answerId=${answer.id}, questionId=${question.id})}|"
-                           th:name="|questions[${questionIndex}].answers[${j.index}].upperBoundText|">
+                           th:name="|questions[${questionIndex}].answers[${j.index}].bounds.upperBoundText|">
                 </div>
         </div>
 
