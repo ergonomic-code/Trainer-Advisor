@@ -149,7 +149,7 @@ class QuestionnairesQuestionController(
     fun returnQuestionsPage(
         questionnaireId: Long,
         model: Model
-    ) : String {
+    ): String {
         model.addAttribute(
             "questionnaire",
             questionnaireService.findQuestionnaireWithQuestions(questionnaireId)
