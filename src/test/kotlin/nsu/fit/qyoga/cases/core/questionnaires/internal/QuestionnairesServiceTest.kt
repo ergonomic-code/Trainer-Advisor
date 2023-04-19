@@ -1,5 +1,9 @@
 package nsu.fit.qyoga.cases.core.questionnaires.internal
 
+import io.kotest.matchers.ints.shouldBeLessThan
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+import io.kotest.matchers.string.shouldContain
 import nsu.fit.qyoga.cases.core.questionnaires.QuestionnairesTestConfig
 import nsu.fit.qyoga.core.questionnaires.api.dtos.*
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
@@ -14,10 +18,6 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
-import io.kotest.matchers.ints.shouldBeLessThan
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
-import io.kotest.matchers.string.shouldContain
 
 @ContextConfiguration(
     classes = [QuestionnairesTestConfig::class],
@@ -27,7 +27,7 @@ import io.kotest.matchers.string.shouldContain
     webEnvironment = SpringBootTest.WebEnvironment.NONE
 )
 @ActiveProfiles("test")
-class QuestionnairesServiceTests(
+class QuestionnairesServiceTest(
     @Autowired private val questionnaireService: QuestionnaireService
 ) : QYogaModuleBaseTest() {
 

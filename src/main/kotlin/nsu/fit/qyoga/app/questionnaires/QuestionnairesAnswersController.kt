@@ -63,11 +63,7 @@ class QuestionnairesAnswersController(
         model: Model
     ): String {
         answerService.createAnswer(questionId)
-        model.addAttribute(
-            "questionnaire",
-            questionnaireService.findQuestionnaireWithQuestions(questionnaireId)
-        )
-        return "questionnaire/create-questionnaire::questions"
+        return returnQuestionsPage(questionnaireId, model)
     }
 
     /**
@@ -80,11 +76,7 @@ class QuestionnairesAnswersController(
         model: Model
     ): String {
         answerService.deleteAnswerById(answerId)
-        model.addAttribute(
-            "questionnaire",
-            questionnaireService.findQuestionnaireWithQuestions(questionnaireId)
-        )
-        return "questionnaire/create-questionnaire::questions"
+        return returnQuestionsPage(questionnaireId, model)
     }
 
     /**
@@ -127,7 +119,7 @@ class QuestionnairesAnswersController(
             }
         }
         val question = questionService.findQuestionWithAnswers(id)
-        setQuestionWithId(question,questionIndex, model)
+        setQuestionWithId(question, questionIndex, model)
         return "fragments/create-questionnaire-answer-set-score::answersScore"
     }
 
@@ -150,19 +142,20 @@ class QuestionnairesAnswersController(
             }
         }
         val question = questionService.findQuestionWithAnswers(id)
-        setQuestionnaireInModel(questionnaire.id, model)
-        setQuestionWithId(question,questionIndex, model)
+        returnQuestionsPage(questionnaire.id, model)
+        setQuestionWithId(question, questionIndex, model)
         return "fragments/create-questionnaire-answer::question"
     }
 
-    fun setQuestionnaireInModel(
+    fun returnQuestionsPage(
         questionnaireId: Long,
         model: Model
-    ) {
+    ) : String {
         model.addAttribute(
             "questionnaire",
             questionnaireService.findQuestionnaireWithQuestions(questionnaireId)
         )
+        return "questionnaire/create-questionnaire::questions"
     }
 
     fun setQuestionWithId(
