@@ -1,5 +1,6 @@
 package nsu.fit.qyoga.core.questionnaires.internal.serviceImpl
 
+import nsu.fit.qyoga.core.questionnaires.api.dtos.AnswerBoundsDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.AnswerDto
 import nsu.fit.qyoga.core.questionnaires.api.errors.AnswerException
 import nsu.fit.qyoga.core.questionnaires.api.model.Answer
@@ -35,10 +36,10 @@ class AnswerServiceImpl(
             Answer(
                 id = createAnswerDto.id,
                 title = createAnswerDto.title,
-                lowerBound = createAnswerDto.lowerBound,
-                lowerBoundText = createAnswerDto.lowerBoundText,
-                upperBound = createAnswerDto.upperBound,
-                upperBoundText = createAnswerDto.upperBoundText,
+                lowerBound = createAnswerDto.bounds.lowerBound,
+                lowerBoundText = createAnswerDto.bounds.lowerBoundText,
+                upperBound = createAnswerDto.bounds.upperBound,
+                upperBoundText = createAnswerDto.bounds.upperBoundText,
                 score = createAnswerDto.score,
                 imageId = createAnswerDto.imageId,
                 questionId = createAnswerDto.questionId
@@ -66,10 +67,12 @@ class AnswerServiceImpl(
         return AnswerDto(
             id = answer.id,
             title = answer.title,
-            lowerBound = answer.lowerBound,
-            lowerBoundText = answer.lowerBoundText,
-            upperBound = answer.upperBound,
-            upperBoundText = answer.upperBoundText,
+            bounds = AnswerBoundsDto(
+                lowerBound = answer.lowerBound,
+                lowerBoundText = answer.lowerBoundText,
+                upperBound = answer.upperBound,
+                upperBoundText = answer.upperBoundText
+            ),
             score = answer.score,
             imageId = answer.imageId,
             questionId = answer.questionId

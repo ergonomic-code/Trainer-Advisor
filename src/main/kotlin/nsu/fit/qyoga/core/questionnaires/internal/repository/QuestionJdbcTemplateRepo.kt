@@ -1,5 +1,6 @@
 package nsu.fit.qyoga.core.questionnaires.internal.repository
 
+import nsu.fit.qyoga.core.questionnaires.api.dtos.AnswerBoundsDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.AnswerDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionWithAnswersDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.enums.QuestionType
@@ -52,10 +53,12 @@ class QuestionJdbcTemplateRepo(
             val answer = AnswerDto(
                 id = rs.getLong("answerId"),
                 title = rs.getString("answerTitle"),
-                lowerBound = rs.getInt("answerLowerBound"),
-                lowerBoundText = rs.getString("answerLowerBoundText"),
-                upperBound = rs.getInt("answerUpperBound"),
-                upperBoundText = rs.getString("answerUpperBoundText"),
+                bounds = AnswerBoundsDto(
+                    lowerBound = rs.getInt("answerLowerBound"),
+                    lowerBoundText = rs.getString("answerLowerBoundText"),
+                    upperBound = rs.getInt("answerUpperBound"),
+                    upperBoundText = rs.getString("answerUpperBoundText")
+                ),
                 score = rs.getInt("answerScore"),
                 imageId = rs.getString("answerImageId")?.toLong(),
                 questionId = rs.getLong("questionId")
