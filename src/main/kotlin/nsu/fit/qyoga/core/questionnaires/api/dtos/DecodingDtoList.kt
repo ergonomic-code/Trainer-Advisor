@@ -1,5 +1,5 @@
 package nsu.fit.qyoga.core.questionnaires.api.dtos
 
-data class DecodingDtoList(
+class DecodingDtoList(
     var decodingDtoList: List<DecodingDto> = mutableListOf()
 )

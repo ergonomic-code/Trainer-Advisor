@@ -1,5 +1,7 @@
 package nsu.fit.qyoga.cases.core.questionnaires.internal
 
+import io.kotest.matchers.longs.shouldBeGreaterThan
+import io.kotest.matchers.shouldBe
 import nsu.fit.qyoga.cases.core.questionnaires.QuestionnairesTestConfig
 import nsu.fit.qyoga.core.questionnaires.api.dtos.AnswerDto
 import nsu.fit.qyoga.core.questionnaires.api.errors.AnswerException
@@ -13,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.longs.shouldBeGreaterThan
 
 @ContextConfiguration(
     classes = [QuestionnairesTestConfig::class],

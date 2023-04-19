@@ -27,14 +27,14 @@ class ImageJdbcTemplateRepo(
 
     fun findById(id: Long): Image? {
         val query = """
-        SELECT 
+            SELECT 
             id AS imageId,
             name AS imageName, 
             media_type AS imageMediaType, 
             size AS imageSize, 
             data AS imageData
-        FROM images  
-       WHERE id = :id
+            FROM images
+            WHERE id = :id
         """.trimIndent()
         return jdbcTemplate.queryForObject<Image>(
             query,
