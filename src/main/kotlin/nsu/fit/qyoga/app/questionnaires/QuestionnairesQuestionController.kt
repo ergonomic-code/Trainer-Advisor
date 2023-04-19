@@ -33,8 +33,7 @@ class QuestionnairesQuestionController(
     ): String {
         val question = questionService.createQuestion(id)
         question.answers += answerService.createAnswer(question.id)
-        setQuestionnaireInModel(id, model)
-        return "questionnaire/create-questionnaire::questions"
+        return returnQuestionsPage(id, model)
     }
 
     /**
@@ -84,11 +83,7 @@ class QuestionnairesQuestionController(
         model: Model
     ): String {
         questionService.deleteQuestion(questionId)
-        model.addAttribute(
-            "questionnaire",
-            questionnaireService.findQuestionnaireWithQuestions(questionnaireId)
-        )
-        return "questionnaire/create-questionnaire::questions"
+        return returnQuestionsPage(questionnaireId, model)
     }
 
     /**
@@ -121,11 +116,7 @@ class QuestionnairesQuestionController(
             }
         }
         answerService.createAnswer(questionId)
-        model.addAttribute(
-            "questionnaire",
-            questionnaireService.findQuestionnaireWithQuestions(questionnaireId)
-        )
-        return "questionnaire/create-questionnaire::questions"
+        return returnQuestionsPage(questionnaireId, model)
     }
 
     /**
@@ -155,14 +146,15 @@ class QuestionnairesQuestionController(
         throw QuestionException("Выбранный вопрос не найден")
     }
 
-    fun setQuestionnaireInModel(
+    fun returnQuestionsPage(
         questionnaireId: Long,
         model: Model
-    ) {
+    ) : String {
         model.addAttribute(
             "questionnaire",
             questionnaireService.findQuestionnaireWithQuestions(questionnaireId)
         )
+        return "questionnaire/create-questionnaire::questions"
     }
 
     fun setQuestionWithId(

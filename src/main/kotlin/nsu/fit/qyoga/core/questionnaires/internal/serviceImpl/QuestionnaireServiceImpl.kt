@@ -60,7 +60,7 @@ class QuestionnaireServiceImpl(
     }
 
     override fun findQuestionnaireWithQuestions(id: Long): QuestionnaireWithQuestionDto {
-        return questionnaireJdbcTemplateRepo.getQuestionnaireWithQById(id)
+        return questionnaireJdbcTemplateRepo.getQreWithQById(id)
             ?: throw QuestionnaireException("Выбранный опросник не найден")
     }
 }
