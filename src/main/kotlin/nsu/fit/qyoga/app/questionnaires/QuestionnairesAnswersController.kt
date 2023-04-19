@@ -1,5 +1,6 @@
 package nsu.fit.qyoga.app.questionnaires
 
+import nsu.fit.qyoga.core.questionnaires.api.dtos.AnswerBoundsDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.AnswerDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionWithAnswersDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireWithQuestionDto
@@ -38,10 +39,12 @@ class QuestionnairesAnswersController(
         val answerDto = AnswerDto(
             id = answer.id,
             title = answer.title,
-            lowerBound = answer.lowerBound,
-            lowerBoundText = answer.lowerBoundText,
-            upperBound = answer.upperBound,
-            upperBoundText = answer.upperBoundText,
+            bounds = AnswerBoundsDto(
+                lowerBound = answer.bounds.lowerBound,
+                lowerBoundText = answer.bounds.lowerBoundText,
+                upperBound = answer.bounds.upperBound,
+                upperBoundText = answer.bounds.upperBoundText
+            ),
             score = answer.score,
             imageId = imageService.uploadImage(file),
             questionId = answer.questionId
@@ -150,7 +153,7 @@ class QuestionnairesAnswersController(
     fun returnQuestionsPage(
         questionnaireId: Long,
         model: Model
-    ) : String {
+    ): String {
         model.addAttribute(
             "questionnaire",
             questionnaireService.findQuestionnaireWithQuestions(questionnaireId)

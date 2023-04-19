@@ -7,7 +7,6 @@ import nsu.fit.qyoga.core.questionnaires.api.errors.ImageException
 import nsu.fit.qyoga.core.questionnaires.api.errors.QuestionException
 import nsu.fit.qyoga.core.questionnaires.api.errors.QuestionnaireException
 import org.springframework.ui.Model
-
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 
