@@ -1,12 +1,13 @@
 package nsu.fit.qyoga.cases.core.questionnaires.internal
 
+import io.kotest.matchers.ints.shouldBeLessThan
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
+import io.kotest.matchers.string.shouldContain
 import nsu.fit.qyoga.cases.core.questionnaires.QuestionnairesTestConfig
-import nsu.fit.qyoga.core.questionnaires.api.dtos.AnswerDto
-import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionWithAnswersDto
+import nsu.fit.qyoga.core.questionnaires.api.dtos.*
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
-import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireSearchDto
-import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireWithQuestionDto
-import nsu.fit.qyoga.core.questionnaires.api.enums.QuestionType
+import nsu.fit.qyoga.core.questionnaires.api.dtos.enums.QuestionType
 import nsu.fit.qyoga.infra.QYogaModuleBaseTest
 import nsu.fit.qyoga.infra.TestContainerDbContextInitializer
 import org.junit.jupiter.api.BeforeEach
@@ -17,10 +18,6 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
-import io.kotest.matchers.ints.shouldBeLessThan
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
-import io.kotest.matchers.string.shouldContain
 
 @ContextConfiguration(
     classes = [QuestionnairesTestConfig::class],
@@ -30,7 +27,7 @@ import io.kotest.matchers.string.shouldContain
     webEnvironment = SpringBootTest.WebEnvironment.NONE
 )
 @ActiveProfiles("test")
-class QuestionnairesServiceTests(
+class QuestionnairesServiceTest(
     @Autowired private val questionnaireService: QuestionnaireService
 ) : QYogaModuleBaseTest() {
 
@@ -129,25 +126,16 @@ class QuestionnairesServiceTests(
             title = "create questionnaire test",
             questions = mutableListOf(
                 QuestionWithAnswersDto(
-                    id = 0,
-                    title = null,
-                    questionType = QuestionType.TEXT,
-                    imageId = null,
-                    answers = mutableListOf()
+                    title = "",
+                    questionType = QuestionType.TEXT
                 ),
                 QuestionWithAnswersDto(
-                    id = 1,
-                    title = null,
-                    questionType = QuestionType.SEVERAL,
-                    imageId = null,
-                    answers = mutableListOf()
+                    title = "",
+                    questionType = QuestionType.SEVERAL
                 ),
                 QuestionWithAnswersDto(
-                    id = 2,
                     title = "qTest",
-                    questionType = QuestionType.TEXT,
-                    imageId = null,
-                    answers = mutableListOf()
+                    questionType = QuestionType.TEXT
                 )
             )
         )
@@ -156,7 +144,7 @@ class QuestionnairesServiceTests(
         inDBQuestionnaire shouldNotBe null
         savedQuestionnaire.title shouldBe inDBQuestionnaire.title
         inDBQuestionnaire.questions.size shouldBe 3
-        for (question in inDBQuestionnaire.questions){
+        for (question in inDBQuestionnaire.questions) {
             question.answers.size shouldBe 0
         }
     }
@@ -181,7 +169,8 @@ class QuestionnairesServiceTests(
                             upperBound = null,
                             upperBoundText = null,
                             score = null,
-                            imageId = null
+                            imageId = null,
+                            questionId = 0
                         )
                     )
                 )
@@ -194,4 +183,23 @@ class QuestionnairesServiceTests(
         inDBQuestionnaire.questions[0].answers.size shouldBe 1
     }
 
+    @Test
+    fun `QYoga can create empty questionnaire by default`() {
+        val questionnaireId = questionnaireService.createQuestionnaire()
+        val questionnaire = questionnaireService.findQuestionnaireWithQuestions(questionnaireId)
+        questionnaire.id shouldBe questionnaireId
+        questionnaire.title shouldBe ""
+        questionnaire.questions.size shouldBe 0
+    }
+
+    @Test
+    fun `QYoga can QuestionnaireDto`() {
+        val savedQuestionnaire = questionnaireService.updateQuestionnaire(
+            QuestionnaireDto(id = 0, title = "test")
+        )
+        val inDbQuestionnaire = questionnaireService.findQuestionnaireWithQuestions(savedQuestionnaire.id)
+        savedQuestionnaire.id shouldBe inDbQuestionnaire.id
+        savedQuestionnaire.title shouldBe inDbQuestionnaire.title
+        inDbQuestionnaire.questions.size shouldBe 0
+    }
 }

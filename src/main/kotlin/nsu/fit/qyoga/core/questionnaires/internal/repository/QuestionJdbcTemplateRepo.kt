@@ -14,25 +14,25 @@ class QuestionJdbcTemplateRepo(
 ) {
     fun findQuestionWithAnswersById(id: Long): QuestionWithAnswersDto? {
         val query = """
-        SELECT 
-           questions.id AS questionId,
-           questions.title AS questionTitle,
-           questions.question_type AS questionType,
-           questions.questionnaire_id AS questionnaireId,
-           questionImage.id AS questionImageId,
-           answers.id AS answerId,
-           answers.title AS answerTitle,
-           answers.lower_bound AS answerLowerBound,
-           answers.lower_bound_text AS answerLowerBoundText,
-           answers.upper_bound AS answerUpperBound,
-           answers.upper_bound_text AS answerUpperBoundText,
-           answers.score AS answerScore,
-           answerImage.id AS answerImageId
-        FROM questions
+            SELECT 
+            questions.id AS questionId,
+            questions.title AS questionTitle,
+            questions.question_type AS questionType,
+            questions.questionnaire_id AS questionnaireId,
+            questionImage.id AS questionImageId,
+            answers.id AS answerId,
+            answers.title AS answerTitle,
+            answers.lower_bound AS answerLowerBound,
+            answers.lower_bound_text AS answerLowerBoundText,
+            answers.upper_bound AS answerUpperBound,
+            answers.upper_bound_text AS answerUpperBoundText,
+            answers.score AS answerScore,
+            answerImage.id AS answerImageId
+            FROM questions
             LEFT JOIN images questionImage ON questions.image_id = questionImage.id
             LEFT JOIN answers ON answers.question_id = questions.id
             LEFT JOIN images answerImage ON answers.image_id = answerImage.id
-        WHERE questions.id = :id
+            WHERE questions.id = :id
         """.trimIndent()
         var value: QuestionWithAnswersDto? = null
         jdbcTemplate.query(
