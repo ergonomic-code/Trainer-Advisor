@@ -12,29 +12,29 @@ class QuestionnaireJdbcTemplateRepo(
     private val jdbcTemplate: NamedParameterJdbcOperations
 ) {
     val getQreWithQByIdQuery = """
-            SELECT
-            questionnaires.id AS questionnaireId,
-            questionnaires.title AS questionnaireTitle,
-            questions.id AS questionId,
-            questions.title AS questionTitle,
-            questions.question_type AS questionType,
-            questionImage.id AS questionImageId,
-            answers.id AS answerId,
-            answers.title AS answerTitle,
-            answers.lower_bound AS answerLowerBound,
-            answers.lower_bound_text AS answerLowerBoundText,
-            answers.upper_bound AS answerUpperBound,
-            answers.upper_bound_text AS answerUpperBoundText,
-            answers.score AS answerScore,
-            answerImage.id AS answerImageId
-            FROM questionnaires
-            LEFT JOIN questions ON questionnaires.id = questions.questionnaire_id
-            LEFT JOIN images questionImage ON questions.image_id = questionImage.id
-            LEFT JOIN answers ON answers.question_id = questions.id
-            LEFT JOIN images answerImage ON answers.image_id = answerImage.id
-            WHERE questionnaires.id = :id
-            ORDER BY questionId, answerId
-        """.trimIndent()
+        SELECT
+        questionnaires.id AS questionnaireId,
+        questionnaires.title AS questionnaireTitle,
+        questions.id AS questionId,
+        questions.title AS questionTitle,
+        questions.question_type AS questionType,
+        questionImage.id AS questionImageId,
+        answers.id AS answerId,
+        answers.title AS answerTitle,
+        answers.lower_bound AS answerLowerBound,
+        answers.lower_bound_text AS answerLowerBoundText,
+        answers.upper_bound AS answerUpperBound,
+        answers.upper_bound_text AS answerUpperBoundText,
+        answers.score AS answerScore,
+        answerImage.id AS answerImageId
+        FROM questionnaires
+        LEFT JOIN questions ON questionnaires.id = questions.questionnaire_id
+        LEFT JOIN images questionImage ON questions.image_id = questionImage.id
+        LEFT JOIN answers ON answers.question_id = questions.id
+        LEFT JOIN images answerImage ON answers.image_id = answerImage.id
+        WHERE questionnaires.id = :id
+        ORDER BY questionId, answerId
+    """.trimIndent()
 
     /*
     * вспомогательный метод для получения ответов
