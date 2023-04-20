@@ -6,5 +6,7 @@ import nsu.fit.qyoga.core.exercises.api.model.Image
 interface ImagesService {
     fun uploadImage(image: ImageDto): Long
 
-    fun getImage(id: Long): Image?
+    fun getImage(id: Long?): Image?
+
+    fun getImages(ids: List<Long>): List<Image?>
 }

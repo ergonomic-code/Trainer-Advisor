@@ -13,4 +13,6 @@ interface ProgramsService {
     ): Page<ProgramDto>
 
     fun getProgramById(id: Long): ProgramWithExercisesDto
+
+    fun downloadProgram(program: ProgramWithExercisesDto)
 }

@@ -5,6 +5,8 @@ import nsu.fit.qyoga.core.programs.api.dtos.ProgramDto
 import nsu.fit.qyoga.core.programs.api.dtos.ProgramSearchDto
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -14,7 +16,7 @@ import java.util.stream.IntStream
 @Controller
 @RequestMapping("/programs/")
 class ProgramsController(
-    private val programsService: ProgramsService
+    private val programsService: ProgramsService,
 ) {
     /**
      * Отображение страницы со списком программ
@@ -53,16 +55,29 @@ class ProgramsController(
     }
 
     /**
-     * Получение программы по id с упражнениями
+     * Получение программы по id с упражнениями для просмотра терапевтом
      */
-    @GetMapping("/{id}")
-    fun getProgramWithExercises(
+    @GetMapping("/{id}/view")
+    fun getProgramViewWithExercises(
         @PathVariable id: Long,
         model: Model
     ): String {
         val program = programsService.getProgramById(id)
         model.addAttribute("program", program)
         return "programs/program-view"
+    }
+
+    /**
+     * Получение программы по id с упражнениями для выполнения клиентом
+     */
+    @GetMapping("/{id}/exec")
+    fun getProgramExecutionWithExercises(
+        @PathVariable id: Long,
+        model: Model
+    ): String {
+        val program = programsService.getProgramById(id)
+        model.addAttribute("program", program)
+        return "programs/program-execution"
     }
 
     /**
@@ -74,6 +89,18 @@ class ProgramsController(
     ): String {
         // TODO: implement
         return "exercises/exercise-search"
+    }
+
+    /**
+     * Сохранение программы в формате docx
+     */
+    @PostMapping("/{id}/download")
+    fun downloadProgram(
+        @PathVariable id: Long,
+    ): ResponseEntity<HttpStatus> {
+        val program = programsService.getProgramById(id)
+        programsService.downloadProgram(program)
+        return ResponseEntity(HttpStatus.OK)
     }
 
     fun addProgramsPageAttributes(model: Model, programs: Page<ProgramDto>) {

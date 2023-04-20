@@ -48,7 +48,8 @@
                     <div class="card-body">
                         <div class="input-group-prepend w-100">
                             <h5 class="mt-2">Название программы</h5>
-                            <label class="input-group-text display-2" id="program" th:text="${program.title}"></label>
+                            <label class="input-group-text display-2" id="program"
+                                   th:text="${program.title}"></label>
                         </div>
 
 
@@ -59,40 +60,44 @@
                                 <h5 class="">Упражнение</h5>
                                 <div class="input-group">
                                     <span class="form-label h-100 mt-1">Название:</span>
-                                    <label class="input-group-text h-100 mx-2 " th:text="${ex.title}"></label>
+                                    <label class="input-group-text h-100 mx-2 " th:text="${ex?.title}"></label>
                                 </div>
                                 <div class="input-group mt-2">
                                     <span class="form-label h-100 mt-1">Задача:</span>
-                                    <label class="input-group-text h-100 mx-2 " th:text="${ex.purpose}"></label>
+                                    <label class="input-group-text h-100 mx-2 "
+                                           th:text="${ex?.therapeuticPurpose}"></label>
                                 </div>
                                 <div class="input-group mt-2">
                                     <span class="form-label h-100 mt-1">Описание:</span>
                                     <label class="input-group-text h-100 mx-2"
-                                           th:if="${ex.description != ''}"
-                                           th:text="${ex.description}"></label>
+                                           th:if="${ex?.description != ''}"
+                                           th:text="${ex?.description}"></label>
                                 </div>
                                 <div class="input-group mt-2">
                                     <span class="form-label h-100 mt-1">Тип:</span>
-                                    <label class="input-group-text h-100 mx-2 " th:text="${ex.type.title}"></label>
+                                    <label class="input-group-text h-100 mx-2 "
+                                           th:text="${ex?.exerciseType?.title}"></label>
                                 </div>
                             </div>
                         </div>
 
                         <div class="input-group-prepend w-100">
                             <h5 class="mt-2">Назначено</h5>
-                            <label class="input-group-text display-2" id="client" th:text=""></label>
+                            <label class="input-group-text display-2" id="client"></label>
                         </div>
 
                     </div>
 
                     <div class="col-12 w-100 mb-3 mt-3" id="buttons">
-                        <button class="btn btn-secondary float-end mx-2" id="btnDownload" type="submit">
-                            Скачать
+                        <button class="btn btn-secondary float-end mx-2" id="btnDownload">
+                            <a class="btn btn-secondary" hx-trigger="click"
+                               th:attr="hx-post=@{/programs/{id}/download(id=${program.id})}">Скачать</a>
                         </button>
                         <button class="btn btn-secondary float-end mx-2 "
                                 id="btnCancel" type="button">Редактировать
                         </button>
                     </div>
+
                 </div>
             </div>
         </main>

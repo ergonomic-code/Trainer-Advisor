@@ -42,7 +42,7 @@
 
                 <div class="card mb-4">
                     <div class="card-header">
-                        <i class="fas fa-table me-1"></i>
+                        <i class="fas fa-users me-1"></i>
                         Клиенты
                     </div>
                     <div class="card-body">
@@ -50,89 +50,73 @@
                         <form hx-get="/clients/search" hx-target="#tablePagination"
                               hx-trigger="submit"
                               th:object="${searchDto}">
-                            <div class="input-group mb-3 m-auto" id="searchExercisesFilterForm">
-                                <div class="mt-3 mb-3 w-25" id="titleFilter">
-                                    <input aria-describedby="basic-addon2"
-                                           class="form-control"
-                                           placeholder="ФИО"
-                                           style="border-color:inherit"
-                                           th:field="${searchDto.name}"
-                                           type="text">
-                                </div>
-
-                                <div class="input-group mb-3 mt-3" id="exerciseTypeFilter">
-                                    <div class="input-group-prepend">
-                                        <label class="input-group-text" for="inputGroupSelect01">Категории</label>
+                            <div class="d-inline-flex input-group w-100">
+                                <div class="input-group mb-3 w-100" id="searchExercisesFilterForm">
+                                    <div class="mt-3 mb-3 w-25" id="titleFilter">
+                                        <input aria-describedby="basic-addon2"
+                                               class="form-control"
+                                               placeholder="ФИО"
+                                               style="border-color:inherit"
+                                               th:field="${searchDto.name}"
+                                               type="text">
                                     </div>
-                                    <select class="custom-select w-25"
-                                            id="inputGroupSelect01"
-                                            th:field="${searchDto.sort}">
-                                        <option selected th:value="null">Сортировка</option>
-                                        <option th:each="type : ${types}" th:text="${type.title}"
-                                                th:value="${type.name}"></option>
-                                    </select>
-                                </div>
 
-                                <div class="input-group mt-2 mb-5">
-                                    <button class="btn btn-secondary" style="position: absolute" type="submit">Поиск
-                                    </button>
-                                </div>
+                                    <div class="input-group mb-3 mt-3 mx-2 w-50" id="exerciseTypeFilter">
+                                        <div class="input-group-prepend w-50">
+                                            <label class="input-group-text" for="inputGroupSelect01">Категории</label>
+                                        </div>
+                                        <select class="custom-select w-50"
+                                                id="inputGroupSelect01"
+                                                th:field="${searchDto.sort}">
+                                            <option selected th:value="null">Сортировка</option>
+                                            <option th:each="type : ${types}" th:text="${type.title}"
+                                                    th:value="${type.name}"></option>
+                                        </select>
+                                    </div>
 
+                                    <div class="input-group mt-2 mb-5">
+                                        <button class="btn btn-secondary" style="position: absolute" type="submit">Поиск
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
-
                         </form>
 
-                        <div class="row">
-                            <div class="table-responsive col-md-6">
-                                <table>...</table>
-                            </div>
-                            <div class="table-responsive col-md-6">
-                                <table>...</table>
-                            </div>
-                        </div>
+                        <div class="row w-100">
+                            <div class="table-responsive col">
+                                <table class="w-50">
+                                    <tr class="w-100">
+                                        <div class="w-100" th:each="client: ${clients}">
+                                            <div class="border bg-light p-3 w-100 mb-2"
+                                                 id="client_unselected" style="border-radius: 5px;">
+                                                <div class="d-flex">
+                                                    <h6 class="">Клиент</h6>
+                                                    <input class="form-check-input align-items-end mx-2" id="checkbox1"
+                                                           type="checkbox"
+                                                           value="">
+                                                </div>
+                                                <div class="d-inline-flex">
+                                                    <div class="input-group-prepend d-flex m-1">
+                                                        <label class="input-group-text ">Имя</label>
+                                                        <span class="input-group-text h-100 "
+                                                              th:text="${client.name}">aaaaaaaaaaaaaaaaaaaa</span>
+                                                    </div>
 
-                        <div class="w-50" th:each="client: ${clients}">
-                            <div class="border bg-light p-3 mb-2"
-                                 id="client_unselected" style="border-radius: 5px;">
-                                <h6 class="">Клиент</h6>
-                                <input class="form-check-input" id="checkbox1" type="checkbox" value="">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <label class="input-group-text">Имя</label>
-                                        <span class="input-group-text h-100" th:text="${client.name}"></span>
-                                    </div>
-                                </div>
 
-                                <div class="mb-3 mt-3">
-                                    <label class="input-group-text">Дата рождения</label>
-                                    <span class="input-group-text h-100" th:text="${client.date}"></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="w-50" th:each="client: ${clients}">
-                            <div class="border bg-light p-3 mb-2"
-                                 id="client_selected" style="border-radius: 5px;">
-                                <h6 class="">Клиент</h6>
-                                <input class="form-check-input" id="checkbox2" type="checkbox" value="">
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <label class="input-group-text">Имя</label>
-                                        <span class="input-group-text h-100" th:text="${client.name}"></span>
-                                    </div>
-                                </div>
-
-                                <div class="mb-3 mt-3">
-                                    <label class="input-group-text">Дата рождения</label>
-                                    <span class="input-group-text h-100" th:text="${client.date}"></span>
-                                </div>
+                                                    <div class="input-group-prepend m-1 d-flex">
+                                                        <label class="input-group-text">Дата рождения</label>
+                                                        <span class="input-group-text h-100 "
+                                                              th:text="${client.date}">sdfsfsfsgrg</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </tr>
+                                </table>
                             </div>
                         </div>
 
                         <div class="col-12 w-100 mb-3 mt-3" id="buttons">
-                            <button class="btn btn-secondary" id="btnNewStep" type="button">Добавить выбранных
-                                клиентов
-                            </button>
                             <button class="btn btn-secondary float-end " id="btnCreateExercise" type="submit">
                                 Выбрать упражнения
                             </button>

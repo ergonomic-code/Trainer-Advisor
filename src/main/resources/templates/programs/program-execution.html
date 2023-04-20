@@ -49,21 +49,22 @@
 
                         <h4 class="mt-1">Упражнения</h4>
 
-                        <div id="exercises" th:each="ex: ${program.exercises}">
+                        <div id="exercises" th:each="ex, st: ${program.exercises}">
                             <div class="border bg-light p-3 mb-2 " id="exercise" style="border-radius: 5px;">
                                 <div class="form-floating row g-4">
                                     <div class="col-11">
                                         <h6>Упражнение</h6>
                                     </div>
                                     <div class="col-1">
-                                        <label class="input-group-text align-content-center rounded-2">3/5</label>
+                                        <label class="input-group-text h-100 rounded-2"
+                                               th:text="${st.index}/${program.exercises.size}"></label>
                                     </div>
                                 </div>
 
                                 <div class="input-group">
                                     <span class="form-label h-100 mt-1">Название:</span>
                                     <label class="input-group-text h-100 mx-2 w-auto"
-                                           th:text="${ex.title}">asxas</label>
+                                           th:text="${ex.title}"></label>
                                 </div>
                                 <div class="input-group mt-2">
                                     <span class="form-label h-100 mt-1">Описание:</span>

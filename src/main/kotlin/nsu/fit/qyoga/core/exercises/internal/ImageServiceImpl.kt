@@ -20,7 +20,17 @@ class ImageServiceImpl(
         ).id
     }
 
-    override fun getImage(id: Long): Image? {
-        return imagesRepo.findById(id).map { it }.orElse(null)
+    override fun getImage(id: Long?): Image? {
+        return when {
+            id != null -> {
+                imagesRepo.findById(id).map { it }.orElse(null)
+            }
+
+            else -> null
+        }
+    }
+
+    override fun getImages(ids: List<Long>): List<Image?> {
+        return ids.map { getImage(it) }
     }
 }
