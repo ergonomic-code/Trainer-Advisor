@@ -7,6 +7,8 @@ import io.kotest.matchers.string.shouldContain
 import nsu.fit.qyoga.cases.core.questionnaires.QuestionnairesTestConfig
 import nsu.fit.qyoga.core.questionnaires.api.dtos.*
 import nsu.fit.qyoga.core.questionnaires.api.dtos.enums.QuestionType
+import nsu.fit.qyoga.core.questionnaires.api.services.AnswerService
+import nsu.fit.qyoga.core.questionnaires.api.services.QuestionService
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
 import nsu.fit.qyoga.infra.QYogaModuleBaseTest
 import nsu.fit.qyoga.infra.TestContainerDbContextInitializer
@@ -28,7 +30,9 @@ import org.springframework.test.context.ContextConfiguration
 )
 @ActiveProfiles("test")
 class QuestionnairesServiceTest(
-    @Autowired private val questionnaireService: QuestionnaireService
+    @Autowired private val questionnaireService: QuestionnaireService,
+    @Autowired private val answerService: AnswerService,
+    @Autowired private val questionService: QuestionService
 ) : QYogaModuleBaseTest() {
 
     @BeforeEach
@@ -153,30 +157,11 @@ class QuestionnairesServiceTest(
     fun `QYoga can save questionnaire with questions and answers without image`() {
         val questionnaireWithCreateQuestionDto = QuestionnaireWithQuestionDto(
             id = 0,
-            title = "create questionnaire test",
-            questions = mutableListOf(
-                QuestionWithAnswersDto(
-                    id = 0,
-                    title = null,
-                    questionType = QuestionType.TEXT,
-                    imageId = null,
-                    answers = mutableListOf(
-                        AnswerDto(
-                            id = 0,
-                            title = "test save",
-                            lowerBound = null,
-                            lowerBoundText = null,
-                            upperBound = null,
-                            upperBoundText = null,
-                            score = null,
-                            imageId = null,
-                            questionId = 0
-                        )
-                    )
-                )
-            )
+            title = "create questionnaire test"
         )
         val savedQuestionnaire = questionnaireService.updateQuestionnaire(questionnaireWithCreateQuestionDto)
+        val question = questionService.createQuestion(savedQuestionnaire.id)
+        answerService.createAnswer(question.id)
         val inDBQuestionnaire = questionnaireService.findQuestionnaireWithQuestions(savedQuestionnaire.id)
         savedQuestionnaire.title shouldBe inDBQuestionnaire.title
         inDBQuestionnaire.questions.size shouldBe 1

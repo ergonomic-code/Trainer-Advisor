@@ -50,7 +50,6 @@ class QuestionnairesQuestionController(
         if (question.imageId != null) {
             imageService.deleteImage(question.imageId)
         }
-
         val newQuestion = QuestionDto(
             id = question.id,
             title = question.title,

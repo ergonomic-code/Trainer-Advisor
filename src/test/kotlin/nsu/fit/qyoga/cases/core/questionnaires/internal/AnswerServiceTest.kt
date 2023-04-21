@@ -43,10 +43,10 @@ class AnswerServiceTest(
         answer.title shouldBe ""
         answer.score shouldBe null
         answer.questionId shouldBe 1
-        answer.lowerBound shouldBe null
-        answer.lowerBoundText shouldBe null
-        answer.upperBound shouldBe null
-        answer.upperBoundText shouldBe null
+        answer.bounds.lowerBound shouldBe null
+        answer.bounds.lowerBoundText shouldBe null
+        answer.bounds.upperBound shouldBe null
+        answer.bounds.upperBoundText shouldBe null
     }
 
     @Test
@@ -57,10 +57,10 @@ class AnswerServiceTest(
         answer.title shouldBe ""
         answer.score shouldBe null
         answer.questionId shouldBe 1
-        answer.lowerBound shouldBe null
-        answer.lowerBoundText shouldBe null
-        answer.upperBound shouldBe null
-        answer.upperBoundText shouldBe null
+        answer.bounds.lowerBound shouldBe null
+        answer.bounds.lowerBoundText shouldBe null
+        answer.bounds.upperBound shouldBe null
+        answer.bounds.upperBoundText shouldBe null
     }
 
     @Test
@@ -83,12 +83,7 @@ class AnswerServiceTest(
 
     @Test
     fun `QYoga can update or save answer`() {
-        val answer = answerService.updateAnswer(
-            AnswerDto(
-                title = "",
-                questionId = 1
-            )
-        )
+        val answer = answerService.createAnswer(id = 1)
         answer.title = "test1"
         answer.score = 0
         val changedAnswer = answerService.updateAnswer(answer)
@@ -96,10 +91,10 @@ class AnswerServiceTest(
         changedAnswer.title shouldBe "test1"
         changedAnswer.score shouldBe 0
         changedAnswer.questionId shouldBe 1
-        changedAnswer.lowerBound shouldBe null
-        changedAnswer.lowerBoundText shouldBe null
-        changedAnswer.upperBound shouldBe null
-        changedAnswer.upperBoundText shouldBe null
+        changedAnswer.bounds.lowerBound shouldBe null
+        changedAnswer.bounds.lowerBoundText shouldBe null
+        changedAnswer.bounds.upperBound shouldBe null
+        changedAnswer.bounds.upperBoundText shouldBe null
     }
 
     @Test

@@ -30,8 +30,7 @@ class AnswerServiceImpl(
         return answerToAnswerDtoMapper(answer)
     }
     override fun updateAnswer(createAnswerDto: AnswerDto): AnswerDto {
-        answerRepo.findById(createAnswerDto.id).orElse(null)
-            ?: throw AnswerException("Выбранный ответ не найден")
+        findAnswer(createAnswerDto.id)
         val answer = answerRepo.save(
             Answer(
                 id = createAnswerDto.id,
