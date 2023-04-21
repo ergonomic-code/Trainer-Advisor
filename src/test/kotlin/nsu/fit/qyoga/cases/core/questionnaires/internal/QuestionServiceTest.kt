@@ -2,7 +2,6 @@ package nsu.fit.qyoga.cases.core.questionnaires.internal
 
 import io.kotest.matchers.shouldBe
 import nsu.fit.qyoga.cases.core.questionnaires.QuestionnairesTestConfig
-import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionWithAnswersDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.enums.QuestionType
 import nsu.fit.qyoga.core.questionnaires.api.errors.QuestionException
@@ -67,33 +66,17 @@ class QuestionServiceTest(
 
     @Test
     fun `QYoga find question by id`() {
-        val questionId = questionService.updateQuestion(
-            QuestionDto(
-                id = 0,
-                title = "test",
-                questionType = QuestionType.SINGLE,
-                questionnaireId = 1,
-                imageId = null
-            )
-        )
+        val questionId = questionService.createQuestion(1).id
         val question = questionService.findQuestion(questionId)
         question.questionnaireId shouldBe 1
         question.questionType shouldBe QuestionType.SINGLE
-        question.title shouldBe "test"
+        question.title shouldBe ""
         question.imageId shouldBe null
     }
 
     @Test
     fun `QYoga can delete question by id`() {
-        val questionId = questionService.updateQuestion(
-            QuestionDto(
-                id = 0,
-                title = "test",
-                questionType = QuestionType.SINGLE,
-                questionnaireId = 1,
-                imageId = null
-            )
-        )
+        val questionId = questionService.createQuestion(1).id
         questionService.deleteQuestion(questionId)
         val thrown1: QuestionException = Assertions.assertThrows(
             QuestionException::class.java
