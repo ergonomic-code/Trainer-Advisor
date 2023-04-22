@@ -2,7 +2,7 @@ create table clients
 (
     id                  bigint generated always as identity primary key,
     first_name          varchar     not null,
-    last_name         varchar     not null,
+    last_name           varchar     not null,
     patronymic          varchar     not null,
     birth_date          date        not null,
     phone_number        varchar(18) not null unique,

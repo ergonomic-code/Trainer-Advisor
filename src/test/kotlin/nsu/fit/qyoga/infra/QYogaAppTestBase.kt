@@ -21,7 +21,7 @@ class QYogaAppTestBase {
         val cookie = Given {
             formParam("username", "therapist")
             formParam("password", "diem-Synergy5")
-        }.post("/users/login").thenReturn().detailedCookie("JSESSIONID")
+        }.post("/login").thenReturn().detailedCookie("JSESSIONID")
         return cookie
     }
 

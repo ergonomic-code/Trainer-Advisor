@@ -103,7 +103,7 @@ class ClientsServiceTests(
     }
 
     @Test
-    fun `QYoga should delete clients with delete-button`() {
+    fun `QYoga should delete clients by id`() {
         // Given
         val searchDto = ClientSearchDto()
 
@@ -119,7 +119,7 @@ class ClientsServiceTests(
     }
 
     @Test
-    fun `QYoga should redirect to clients-list when delete can't client`() {
+    fun `QYoga should do nothing when delete not existing client`() {
         // Given
         val searchDto = ClientSearchDto()
         clientService.deleteClient(100)

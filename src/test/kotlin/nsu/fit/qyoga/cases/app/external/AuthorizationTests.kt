@@ -51,7 +51,7 @@ class AuthorizationTests : QYogaAppTestBase() {
             formParam(USERNAME_FORM_PARAM, "admin")
             formParam(PASSWORD_FORM_PARAM, "diem-Synergy5")
         } When {
-            post("/users/login")
+            post("/login")
         } Then {
             statusCode(302)
             header("Location", endsWith("clients"))
@@ -64,7 +64,7 @@ class AuthorizationTests : QYogaAppTestBase() {
             formParam(USERNAME_FORM_PARAM, "admin")
             formParam(PASSWORD_FORM_PARAM, "fail-password")
         } When {
-            post("/users/login")
+            post("/login")
         } Then {
             statusCode(200)
             val body = Jsoup.parse(extract().body().asString())
@@ -80,7 +80,7 @@ class AuthorizationTests : QYogaAppTestBase() {
             formParam(USERNAME_FORM_PARAM, "")
             formParam(PASSWORD_FORM_PARAM, "")
         } When {
-            post("/users/login")
+            post("/login")
         } Then {
             statusCode(200)
             val body = Jsoup.parse(extract().body().asString())
@@ -96,7 +96,7 @@ class AuthorizationTests : QYogaAppTestBase() {
             formParam(USERNAME_FORM_PARAM, "admin1")
             formParam(PASSWORD_FORM_PARAM, "diem-Synergy5")
         } When {
-            post("/users/login")
+            post("/login")
         } Then {
             statusCode(200)
             val body = Jsoup.parse(extract().body().asString())
@@ -112,7 +112,7 @@ class AuthorizationTests : QYogaAppTestBase() {
             formParam(USERNAME_FORM_PARAM, "admin1")
             formParam(PASSWORD_FORM_PARAM, "fail-password")
         } When {
-            post("/users/login")
+            post("/login")
         } Then {
             statusCode(200)
             val body = Jsoup.parse(extract().body().asString())

@@ -35,7 +35,7 @@ class WebSecurityConfig(
                     .anyRequest().authenticated()
             }
             .formLogin()
-            .loginPage("/users/login")
+            .loginPage("/login")
             .defaultSuccessUrl("/clients")
             .failureForwardUrl("/error-p")
             .permitAll()

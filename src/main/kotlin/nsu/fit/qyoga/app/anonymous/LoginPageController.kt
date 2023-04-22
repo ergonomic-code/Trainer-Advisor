@@ -17,7 +17,7 @@ class LoginPageController(
     private val userService: UserService
 ) {
 
-    @GetMapping("/users/login")
+    @GetMapping("/login")
     fun getLoginPage(): String {
         return AUTH
     }
