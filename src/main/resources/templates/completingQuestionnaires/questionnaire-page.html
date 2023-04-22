@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
+    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
+    <meta content="" name="description"/>
+    <meta content="" name="author"/>
+    <link href="/img/caret-down-square-fill.svg" rel="icon" type="image/x-icon">
+    <title>Список упражнений</title>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet"/>
+    <link href="/styles/styles.css" rel="stylesheet"/>
+    <link href="/styles/upload-file-style.css" rel="stylesheet">
+    <link href="/styles/input-number-style.css" rel="stylesheet">
+    <script crossorigin="anonymous" src="https://use.fontawesome.com/releases/v6.1.0/js/all.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', _ => {
+            // Toggle the side navigation
+            const sidebarToggle = document.body.querySelector('#sidebarToggle');
+            if (sidebarToggle) {
+                sidebarToggle.addEventListener('click', event => {
+                    event.preventDefault();
+                    document.body.classList.toggle('sb-sidenav-toggled');
+                    localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
+                });
+            }
+
+        });
+    </script>
+    <script crossorigin="anonymous"
+            integrity="sha384-Bj8qm/6B+71E6FQSySofJOUjA/gq330vEqjFx9LakWybUySyI1IQHwPtbTU7bNwx"
+            src="https://unpkg.com/htmx.org@1.8.6"></script>
+</head>
+
+<body class="sb-nav-fixed sb-sidenav-toggled">
+
+<div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
+
+<div id="layoutSidenav">
+
+    <div th:replace="~{/fragments/leftNavPanel.html :: leftNavPanel}"></div>
+
+    <div id="layoutSidenav_content">
+
+        <main style="height: calc(100% - 75px);">
+            <div class="container-fluid px-4" style="height: 100%">
+
+                <div style="display: flex; justify-content:space-between; flex-direction: row;">
+                    <h1 class="mt-4" th:text="${results.questionnaireTitle}">Название опросника</h1>
+                    <button id="button"
+                            th:attr = "hx-get=|/questionnaires/results/generateLinkModal/${questionnaire.id}|"
+                            hx-target="body"
+                            hx-swap="beforeend"
+                    >Сгенерировать ссылку для отправки</button>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-table me-1"></i>
+                        Результаты прохождения
+                    </div>
+                    <div class="card-body" id="card-body" style="overflow: auto">
+                        <div th:fragment="page-content">
+                            <table style="width: 100%; border-spacing: 0 10px" >
+                                <caption style="padding-bottom: 5px; font-size: 22px"></caption>
+                                <thead>
+                                    <tr>
+                                        <th>Клиент</th>
+                                        <th>Дата прохождения</th>
+                                        <th>Набранные баллы</th>
+                                        <th>Результат</th>
+                                        <th>Просмотр</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-body" style="gap: 10px">
+                                    <tr th:each="result : ${results}" th:fragment="table-completing" class="table-completing-row">
+                                        <td class="col"><a th:href="@{/customerСard/{clientId}(clientId=${result.getClientId()})}" th:text="${result.client}">посмотреть</a></td>
+                                        <td class="col" th:text="${#dates.format(result.date, 'dd-MM-yyyy,HH:mm')}">01-01-2001,11:11</td>
+                                        <td class="col" th:text="${result.numericResult}">42</td>
+                                        <td class="col" th:text="${result.textResult}"> Дa </td>
+                                        <td class="col"> <a th:href="@{/questionnaire/results/{clientId}/{questionnaireId}(clientId=${result.getClientId()}, questionnaireId=${questionnaire.id})}">просмотр</a></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </main>
+        <footer class="py-4 bg-light mt-auto" th:insert="~{/fragments/footer.html :: footer}"></footer>
+</div>
+</div>
+<script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+<script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>
+
+</body>
+</html>
