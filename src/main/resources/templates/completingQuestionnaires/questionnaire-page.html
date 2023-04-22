@@ -48,7 +48,8 @@
                 <div style="display: flex; justify-content:space-between; flex-direction: row;">
                     <h1 class="mt-4" th:text="${results.questionnaireTitle}">Название опросника</h1>
                     <button id="button"
-                            th:attr = "hx-get=|/questionnaires/results/generateLinkModal/${questionnaire.id}|"
+                            th:attr = "hx-get=|@{/questionnaires/{id}/generateLinkModal/}
+                            (id=${results.questionnaireId})|"
                             hx-target="body"
                             hx-swap="beforeend"
                     >Сгенерировать ссылку для отправки</button>
@@ -73,12 +74,12 @@
                                     </tr>
                                 </thead>
                                 <tbody id="table-body" style="gap: 10px">
-                                    <tr th:each="result : ${results}" th:fragment="table-completing" class="table-completing-row">
-                                        <td class="col"><a th:href="@{/customerСard/{clientId}(clientId=${result.getClientId()})}" th:text="${result.client}">посмотреть</a></td>
-                                        <td class="col" th:text="${#dates.format(result.date, 'dd-MM-yyyy,HH:mm')}">01-01-2001,11:11</td>
+                                    <tr th:each="result : ${results.resultList}" th:fragment="table-completing" class="table-completing-row">
+                                        <td class="col"><a th:href="@{/customerСard/{clientId}(clientId=${result.client.userId})}" th:text="|${result.client.firstName} ${result.client.lastName}|">посмотреть</a></td>
+                                        <td class="col" th:text="${#dates.format(result.completingDate, 'dd-MM-yyyy,HH:mm')}">01-01-2001,11:11</td>
                                         <td class="col" th:text="${result.numericResult}">42</td>
                                         <td class="col" th:text="${result.textResult}"> Дa </td>
-                                        <td class="col"> <a th:href="@{/questionnaire/results/{clientId}/{questionnaireId}(clientId=${result.getClientId()}, questionnaireId=${questionnaire.id})}">просмотр</a></td>
+                                        <td class="col"> <a th:href="@{/questionnaire/results/{clientId}(clientId=${result.client.userId})}">просмотр</a></td>
                                     </tr>
                                 </tbody>
                             </table>
