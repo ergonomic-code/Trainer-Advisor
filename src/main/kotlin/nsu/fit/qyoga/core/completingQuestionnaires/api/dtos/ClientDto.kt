@@ -1,7 +1,7 @@
 package nsu.fit.qyoga.core.completingQuestionnaires.api.dtos
 
 data class ClientDto(
-    val userId: Long,
-    val firstName: String,
-    val lastName: String
+    var userId: Long,
+    var firstName: String,
+    var lastName: String
 )

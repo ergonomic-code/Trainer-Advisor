@@ -1,0 +1,32 @@
+<div id="modal" _="on closeModal add .closing then wait for animationend then remove me" th:fragment="generate-link-modal-window">
+    <div class="modal-underlay" _="on click trigger closeModal"></div>
+    <div class="main-container">
+        <div id="clients">
+            <div class="client-panel" th:each="client : ${clients.clientList}">
+                <div>
+                    <a class="client-link">
+                        <span> Иванов Иван Иванович</span>
+                        <br>
+                        <span>11.06.2002</span>
+                    </a>
+                </div>
+                <div style="margin-left: auto; margin-right: 10px; margin-top: 5px">
+                    <input type="button" value="Сгенерировать ссылку" class="button"
+                           hx-trigger="click"
+                           th:attr = "hx-get=|@{/generateLink/{id}/{clientId}(id = ${questionnaireId}, clientId = ${client.userId})}|"
+                           hx-target="questionnaire-url">
+                </div>
+            </div>
+        </div>
+
+        <div style="display: flex;
+                flex-direction: row;">
+            <div id="questionnaire-url" >
+                <input id="questionnaire-url-text" type="text" onfocus="this.select()" th:value="${generatedLink}" value="http/completeQuestionnaire" th:fragment="generateLink">
+            </div>
+            <div id="close-mw">
+                <button _="on click trigger closeModal" id="close-mw-button">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>

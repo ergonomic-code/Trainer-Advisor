@@ -1,0 +1,1 @@
+INSERT INTO clients (first_name, last_name) VALUES ('TestFirstName', 'TestLastName')

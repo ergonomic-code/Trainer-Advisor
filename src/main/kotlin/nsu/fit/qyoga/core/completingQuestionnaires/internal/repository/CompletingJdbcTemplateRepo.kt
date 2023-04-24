@@ -2,7 +2,10 @@ package nsu.fit.qyoga.core.completingQuestionnaires.internal.repository
 
 import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.ClientDto
 import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.CompletingDto
-import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.CompletingListDto
+import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.CompletingFindDto
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.Pageable
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
@@ -12,38 +15,18 @@ import java.sql.ResultSet
 class CompletingJdbcTemplateRepo(
     private val jdbcTemplate: NamedParameterJdbcOperations
 ) {
-    private final val getQuestionnaireTitleQuery = """
-        SELECT title AS title
-        FROM questionnaires
-        WHERE questionnaires.id = :questionnaireId
-    """.trimIndent()
-
-    private final val getCompletingByQId = """
-        SELECT
-        clients.id AS clientId,
-        clients.first_name AS clientFirstName,
-        clients.last_name AS clientLastName,
-        completing.id AS completingId,
-        completing.completing_date AS completingDate,
-        completing.numeric_result AS numericResult,
-        completing.text_result AS textResult
-        FROM completing
-        LEFT JOIN clients ON clients.id = completing.client_id
-        WHERE completing.questionnaire_id = :questionnaireId
-        ORDER BY completingDate DESC
-    """.trimIndent()
-
-    fun findQuestionnaireCompletingById(questionnaireId: Long): CompletingListDto? {
-        val completingListDto = jdbcTemplate.queryForObject<CompletingListDto>(
-            getQuestionnaireTitleQuery,
-            MapSqlParameterSource("questionnaireId", questionnaireId)
-        ) { rs: ResultSet, _: Int ->
-            CompletingListDto(questionnaireId, rs.getString("title"))
-        }
-        completingListDto ?: return null
+    fun findQuestionnaireCompletingById(questionnaireId: Long, therapistId: Long, completingFindDto: CompletingFindDto, pageable: Pageable): Page<CompletingDto> {
+        val completingList: MutableList<CompletingDto> = mutableListOf()
+        val params = MapSqlParameterSource()
+        params.addValue("questionnaireId", questionnaireId)
+        params.addValue("therapistId", therapistId)
+        params.addValue("pageSize", pageable.pageSize)
+        params.addValue("offset", pageable.pageSize*pageable.pageNumber)
+        params.addValue("first", completingFindDto.clientName.substringBefore(" "))
+        params.addValue("last", completingFindDto.clientName.substringAfter(" "))
         jdbcTemplate.query(
-            getCompletingByQId,
-            MapSqlParameterSource("questionnaireId", questionnaireId)
+            getQueryBySortType(pageable.sort.toString().substringAfter(": ")),
+            params
         ) { rs: ResultSet, _: Int ->
             val completingId = rs.getLong("completingId")
             if (completingId == 0L) {
@@ -61,8 +44,29 @@ class CompletingJdbcTemplateRepo(
                 rs.getString("textResult")
             )
 
-            completingListDto.resultList += completing
+            completingList.add(completing)
         }
-        return completingListDto
+        return PageImpl(completingList, pageable, completingList.size.toLong())
     }
+
+    fun getQueryBySortType(type: String): String {
+        return """
+            SELECT
+            clients.id AS clientId,
+            clients.first_name AS clientFirstName,
+            clients.last_name AS clientLastName,
+            completing.id AS completingId,
+            completing.completing_date AS completingDate,
+            completing.numeric_result AS numericResult,
+            completing.text_result AS textResult
+            FROM completing
+            LEFT JOIN clients ON clients.id = completing.client_id
+            WHERE completing.questionnaire_id = :questionnaireId AND completing.questionnaire_id = :therapistId
+            AND ( clients.first_name LIKE '%' || :first || '%' OR clients.first_name LIKE '%' || :last || '%' )
+            AND ( clients.last_name LIKE '%' || :first || '%' OR clients.last_name LIKE '%' || :last || '%' )
+            ORDER BY completingDate $type
+            LIMIT :pageSize OFFSET :offset
+        """.trimIndent()
+    }
+
 }

@@ -9,5 +9,5 @@ interface QuestionService {
     fun deleteQuestion(id: Long)
     fun findQuestion(id: Long): QuestionDto
     fun updateQuestion(question: QuestionDto): Long
-    fun updateQuestion(question: QuestionWithAnswersDto,): Long
+    fun updateQuestion(question: QuestionWithAnswersDto): Long
 }
