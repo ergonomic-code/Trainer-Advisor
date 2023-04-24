@@ -61,7 +61,7 @@ class CompletingJdbcTemplateRepo(
             completing.text_result AS textResult
             FROM completing
             LEFT JOIN clients ON clients.id = completing.client_id
-            WHERE completing.questionnaire_id = :questionnaireId AND completing.questionnaire_id = :therapistId
+            WHERE completing.questionnaire_id = :questionnaireId AND completing.therapist_id = :therapistId
             AND ( clients.first_name LIKE '%' || :first || '%' OR clients.first_name LIKE '%' || :last || '%' )
             AND ( clients.last_name LIKE '%' || :first || '%' OR clients.last_name LIKE '%' || :last || '%' )
             ORDER BY completingDate $type
