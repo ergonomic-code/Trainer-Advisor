@@ -77,11 +77,6 @@ class ExercisesController(
             searchDto,
             PageRequest.of(pageNumber - 1, pageSize)
         )
-        println("======================================")
-        println(pageNumber)
-        println(exercises)
-        println(exercises.size)
-        println(exercises.content)
         addExercisePageAttributes(model, exercises, exercisesService)
         return "wizards/manual-wizard :: exercises-list"
     }
