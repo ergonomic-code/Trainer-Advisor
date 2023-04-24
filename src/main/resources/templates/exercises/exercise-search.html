@@ -109,7 +109,7 @@
                                     <th>Терапевтическая задача</th>
                                 </tr>
                                 </thead>
-                                <tbody id="exercises-list">
+                                <tbody id="exercises-list" th:fragment="exercises-list">
                                 <tr th:each="exercise : ${exercises.content}">
                                     <td th:text="${exercise.title}"></td>
                                     <td th:text="${exercise.contradictions}"></td>

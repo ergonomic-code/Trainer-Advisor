@@ -27,7 +27,7 @@
             integrity="sha384-Bj8qm/6B+71E6FQSySofJOUjA/gq330vEqjFx9LakWybUySyI1IQHwPtbTU7bNwx"
             src="https://unpkg.com/htmx.org@1.8.6"></script>
 </head>
-<body class="sb-nav-fixed">
+<body class="sb-nav-fixed" id="body">
 
 <div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
 
@@ -83,15 +83,17 @@
 
                         <div class="input-group-prepend w-100">
                             <h5 class="mt-2">Назначено</h5>
-                            <label class="input-group-text display-2" id="client"></label>
+                            <label class="input-group-text display-2" id="client">Имя и Фамилия Клиента</label>
                         </div>
 
                     </div>
 
                     <div class="col-12 w-100 mb-3 mt-3" id="buttons">
-                        <button class="btn btn-secondary float-end mx-2" id="btnDownload">
-                            <a class="btn btn-secondary" hx-trigger="click"
-                               th:attr="hx-post=@{/programs/{id}/download(id=${program.id})}">Скачать</a>
+                        <button class="btn btn-secondary float-end mx-2" hx-target="#body"
+                                hx-trigger="click"
+                                id="btnDownload"
+                                th:attr="hx-post=@{/programs/{id}/download(id=${program.id})}">
+                            Скачать
                         </button>
                         <button class="btn btn-secondary float-end mx-2 "
                                 id="btnCancel" type="button">Редактировать

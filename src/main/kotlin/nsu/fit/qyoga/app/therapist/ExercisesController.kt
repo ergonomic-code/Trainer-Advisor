@@ -64,6 +64,29 @@ class ExercisesController(
     }
 
     /**
+     * Фильтрация упражнений без пагинации
+     */
+    @GetMapping("/plainsearch")
+    fun getExercisesFilteredWithoutPagination(
+        @ModelAttribute("searchDto") searchDto: ExerciseSearchDto,
+        @RequestParam(value = "pageSize", required = false, defaultValue = "2") pageSize: Int,
+        @RequestParam(value = "pageNumber", required = false, defaultValue = "1") pageNumber: Int,
+        model: Model
+    ): String {
+        val exercises = exercisesService.getExercises(
+            searchDto,
+            PageRequest.of(pageNumber - 1, pageSize)
+        )
+        println("======================================")
+        println(pageNumber)
+        println(exercises)
+        println(exercises.size)
+        println(exercises.content)
+        addExercisePageAttributes(model, exercises, exercisesService)
+        return "wizards/manual-wizard :: exercises-list"
+    }
+
+    /**
      * Получение страницы создания упражнения
      */
     @GetMapping("/create")
@@ -129,14 +152,14 @@ class ExercisesController(
             .contentType(MediaType.parseMediaType(image.mediaType))
             .body(InputStreamResource(image.data.inputStream()))
     }
+}
 
-    fun addExercisePageAttributes(model: Model, exercises: Page<ExerciseDto>, exercisesService: ExercisesService) {
-        model.addAttribute("searchDto", ExerciseSearchDto())
-        model.addAttribute("types", exercisesService.getExerciseTypes())
-        model.addAttribute("exercises", exercises)
-        model.addAttribute(
-            "pageNumbers",
-            IntStream.rangeClosed(1, exercises.totalPages).boxed().collect(Collectors.toList())
-        )
-    }
+fun addExercisePageAttributes(model: Model, exercises: Page<ExerciseDto>, exercisesService: ExercisesService) {
+    model.addAttribute("searchDto", ExerciseSearchDto())
+    model.addAttribute("types", exercisesService.getExerciseTypes())
+    model.addAttribute("exercises", exercises)
+    model.addAttribute(
+        "pageNumbers",
+        IntStream.rangeClosed(1, exercises.totalPages).boxed().collect(Collectors.toList())
+    )
 }
