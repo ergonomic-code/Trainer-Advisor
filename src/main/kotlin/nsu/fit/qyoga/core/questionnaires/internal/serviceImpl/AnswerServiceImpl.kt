@@ -15,18 +15,9 @@ class AnswerServiceImpl(
     private val answerJdbcTemplateRepo: AnswerJdbcTemplateRepo
 ) : AnswerService {
     override fun createAnswer(id: Long): AnswerDto {
-        val answer = answerRepo.save(
-            Answer(
-                title = "",
-                lowerBound = null,
-                lowerBoundText = null,
-                upperBound = null,
-                upperBoundText = null,
-                score = null,
-                imageId = null,
-                questionId = id
-            )
-        )
+        val answerId = answerJdbcTemplateRepo.createAnswerByQuestionId(id)
+        val answer = answerRepo.findById(answerId).orElse(null)
+            ?: throw AnswerException("Ошибка при добавлении нового ответа")
         return answerToAnswerDtoMapper(answer)
     }
     override fun updateAnswer(createAnswerDto: AnswerDto): AnswerDto {
@@ -40,8 +31,7 @@ class AnswerServiceImpl(
                 upperBound = createAnswerDto.bounds.upperBound,
                 upperBoundText = createAnswerDto.bounds.upperBoundText,
                 score = createAnswerDto.score,
-                imageId = createAnswerDto.imageId,
-                questionId = createAnswerDto.questionId
+                imageId = createAnswerDto.imageId
             )
         )
         return answerToAnswerDtoMapper(answer)
@@ -66,8 +56,7 @@ class AnswerServiceImpl(
                 upperBoundText = answer.upperBoundText
             ),
             score = answer.score,
-            imageId = answer.imageId,
-            questionId = answer.questionId
+            imageId = answer.imageId
         )
     }
 }

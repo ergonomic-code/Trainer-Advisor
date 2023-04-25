@@ -74,7 +74,7 @@ class QuestionnaireJdbcTemplateRepo(
             val questionFromDB = getQuestionWithAnswersDto(rs)
             questionFromDB ?: return@query
             val questionId = rs.getLong("questionId")
-            val answer = getAnswerDto(rs, questionId)
+            val answer = getAnswerDto(rs)
             val question = getQuestion(questionMap, questionId, questionFromDB, value!!)
             if (rs.getString("answerId") != null) {
                 question.answers += answer
@@ -94,10 +94,10 @@ class QuestionnaireJdbcTemplateRepo(
         )
     }
 
-    fun getAnswerDto(rs: ResultSet, questionId: Long): AnswerDto {
+    fun getAnswerDto(rs: ResultSet): AnswerDto {
         return AnswerDto(
             id = rs.getLong("answerId"),
-            title = rs.getString("answerTitle"),
+            title = rs.getString("answerTitle") ?: "",
             bounds = AnswerBoundsDto(
                 lowerBound = rs.getInt("answerLowerBound"),
                 lowerBoundText = rs.getString("answerLowerBoundText"),
@@ -105,8 +105,7 @@ class QuestionnaireJdbcTemplateRepo(
                 upperBoundText = rs.getString("answerUpperBoundText")
             ),
             score = rs.getInt("answerScore"),
-            imageId = rs.getString("answerImageId")?.toLong(),
-            questionId = questionId
+            imageId = rs.getString("answerImageId")?.toLong()
         )
     }
 }

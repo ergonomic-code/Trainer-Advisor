@@ -30,8 +30,7 @@ class QuestionnairesQuestionController(
         @PathVariable id: Long,
         model: Model
     ): String {
-        val question = questionService.createQuestion(id)
-        question.answers += answerService.createAnswer(question.id)
+        questionService.createQuestion(id)
         return returnQuestionsPage(id, model)
     }
 

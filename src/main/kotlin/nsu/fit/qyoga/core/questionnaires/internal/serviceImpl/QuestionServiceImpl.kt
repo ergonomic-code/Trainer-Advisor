@@ -8,12 +8,14 @@ import nsu.fit.qyoga.core.questionnaires.api.errors.QuestionException
 import nsu.fit.qyoga.core.questionnaires.api.model.Answer
 import nsu.fit.qyoga.core.questionnaires.api.model.Question
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionService
+import nsu.fit.qyoga.core.questionnaires.internal.repository.QuestionJdbcTemplateRepo
 import nsu.fit.qyoga.core.questionnaires.internal.repository.QuestionRepo
 import org.springframework.stereotype.Service
 
 @Service
 class QuestionServiceImpl(
-    private val questionRepo: QuestionRepo
+    private val questionRepo: QuestionRepo,
+    private val questionJdbcTemplateRepo: QuestionJdbcTemplateRepo
 ) : QuestionService {
 
     override fun createQuestion(id: Long): QuestionWithAnswersDto {
@@ -23,7 +25,17 @@ class QuestionServiceImpl(
                 questionType = QuestionType.SINGLE,
                 questionnaireId = id,
                 imageId = null,
-                answers = mutableListOf()
+                answers = setOf(
+                    Answer(
+                        title = "",
+                        lowerBound = null,
+                        lowerBoundText = null,
+                        upperBound = null,
+                        upperBoundText = null,
+                        score = null,
+                        imageId = null
+                    )
+                )
             )
         )
         return QuestionWithAnswersDto(
@@ -31,7 +43,7 @@ class QuestionServiceImpl(
             title = createdQuestion.title,
             questionType = createdQuestion.questionType,
             imageId = createdQuestion.imageId,
-            answers = mutableListOf(),
+            answers = createdQuestion.answers.map { answerToAnswerDto(it) },
             questionnaireId = id
         )
     }
@@ -49,42 +61,49 @@ class QuestionServiceImpl(
             questionType = question.questionType,
             questionnaireId = question.questionnaireId,
             imageId = question.imageId,
-            answers = question.answers.map { answerToAnswerDto(it) }.toMutableList()
+            answers = question.answers.map { answerToAnswerDto(it) }
         )
     }
 
     override fun updateQuestion(
         question: QuestionWithAnswersDto,
     ): Long {
+        return questionJdbcTemplateRepo.updateQuestion(
+            Question(
+                id = question.id,
+                title = question.title,
+                questionType = question.questionType,
+                questionnaireId = question.questionnaireId,
+                imageId = question.imageId,
+                answers = emptySet()
+            )
+        )
+    }
+
+    override fun saveQuestion(question: QuestionWithAnswersDto): Long {
         val questionToSave = Question(
             id = question.id,
             title = question.title,
             questionType = question.questionType,
             questionnaireId = question.questionnaireId,
             imageId = question.imageId,
-            answers = question.answers.map { answerDtoToAnswer(it) }.toMutableList()
+            answers = question.answers.map { answerDtoToAnswer(it) }.toSet()
         )
         val savedQuestion = questionRepo.save(
             questionToSave
         )
-        /*question.answers.map {
-            it.questionId = savedQuestion.id
-            answerService.updateAnswer(it)
-        }*/
         return savedQuestion.id
     }
 
     fun answerDtoToAnswer(answerDto: AnswerDto): Answer {
         return Answer(
-            id = answerDto.id,
             title = answerDto.title,
             lowerBound = answerDto.bounds.lowerBound,
             lowerBoundText = answerDto.bounds.lowerBoundText,
             upperBound = answerDto.bounds.upperBound,
             upperBoundText = answerDto.bounds.upperBoundText,
             score = answerDto.score,
-            imageId = answerDto.imageId,
-            questionId = answerDto.questionId
+            imageId = answerDto.imageId
         )
     }
 
@@ -99,8 +118,7 @@ class QuestionServiceImpl(
                 answer.upperBoundText
             ),
             answer.score,
-            answer.imageId,
-            answer.questionId
+            answer.imageId
         )
     }
 }

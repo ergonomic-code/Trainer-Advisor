@@ -12,7 +12,6 @@ import nsu.fit.qyoga.core.questionnaires.internal.repository.QuestionnaireRepo
 import nsu.fit.qyoga.core.questionnaires.internal.repository.findPageByTitle
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-
 import org.springframework.stereotype.Service
 
 @Service
@@ -45,8 +44,7 @@ class QuestionnaireServiceImpl(
             )
         )
         createQuestionnaireDto.questions.map {
-            it.questionnaireId = savedQuestionnaire.id
-            questionService.updateQuestion(it)
+            questionService.saveQuestion(it.copy(questionnaireId = savedQuestionnaire.id))
         }
         return QuestionnaireDto(savedQuestionnaire.id, savedQuestionnaire.title)
     }
