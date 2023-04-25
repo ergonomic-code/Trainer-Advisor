@@ -26,23 +26,30 @@
                                 <div class="card shadow-lg border-0 rounded-lg mt-5">
                                     <div class="card-header"><h3 class="text-center font-weight-light my-4">Login</h3></div>
                                     <div class="card-body">
-                                        <form action="/users/login" id="loginForm" method="post">
+                                        <form action="/login" id="loginForm" method="post">
                                             <div class="form-floating mb-3">
                                                 <input class="form-control" id="inputUsername" name="username"
-                                                       placeholder="username" type="text"/>
+                                                       placeholder="username" type="text" required
+                                                       th:classappend="${loginError} ? 'is-invalid' : ''"
+                                               />
                                                 <label for="inputUsername" id="usernameLabel">Email</label>
+                                                <div class="invalid-feedback">
+                                                    Неверный логин
+                                                </div>
                                             </div>
                                             <div class="form-floating mb-3">
                                                 <input class="form-control" id="inputPassword" name="password"
-                                                       placeholder="password" type="password"/>
+                                                       placeholder="password" type="password" required
+                                                       th:classappend="${passwordError} ? 'is-invalid' : ''"
+                                                />
                                                 <label for="inputPassword">Password</label>
+                                                <div class="invalid-feedback">
+                                                    <span class="help-inline">Неверный пароль</span>
+                                                </div>
                                             </div>
                                             <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
                                                 <input class="btn btn-primary" type="submit"/>
                                             </div>
-                                            <output id="errorText"
-                                                    th:if="${loginError!=null}" th:text="${loginError}"  style="color: red">
-                                            </output>
                                         </form>
                                     </div>
                                 </div>

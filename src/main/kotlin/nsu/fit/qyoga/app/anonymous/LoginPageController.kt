@@ -29,7 +29,7 @@ class LoginPageController(
     ): String? {
         val user: User? = userService.findByUsername(username)
         if (user != null) {
-            model.addAttribute("loginError", "Неверный пароль")
+            model.addAttribute("passwordError", "Неверный пароль")
         } else {
             model.addAttribute("loginError", "Неверный логин")
         }

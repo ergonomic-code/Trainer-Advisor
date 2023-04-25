@@ -69,7 +69,7 @@ class AuthorizationTests : QYogaAppTestBase() {
             statusCode(200)
             val body = Jsoup.parse(extract().body().asString())
             Assertions.assertThatSpec(body) {
-                node("#errorText") { hasText("Неверный пароль") }
+                node("span.help-inline") { hasText("Неверный пароль") }
             }
         }
     }
@@ -85,7 +85,7 @@ class AuthorizationTests : QYogaAppTestBase() {
             statusCode(200)
             val body = Jsoup.parse(extract().body().asString())
             Assertions.assertThatSpec(body) {
-                node("#errorText") { hasText("Неверный логин") }
+                node("div.invalid-feedback") { hasText("Неверный логин") }
             }
         }
     }
@@ -101,7 +101,7 @@ class AuthorizationTests : QYogaAppTestBase() {
             statusCode(200)
             val body = Jsoup.parse(extract().body().asString())
             Assertions.assertThatSpec(body) {
-                node("#errorText") { hasText("Неверный логин") }
+                node("div.invalid-feedback") { hasText("Неверный логин") }
             }
         }
     }
@@ -117,7 +117,7 @@ class AuthorizationTests : QYogaAppTestBase() {
             statusCode(200)
             val body = Jsoup.parse(extract().body().asString())
             Assertions.assertThatSpec(body) {
-                node("#errorText") { hasText("Неверный логин") }
+                node("div.invalid-feedback") { hasText("Неверный логин") }
             }
         }
     }
