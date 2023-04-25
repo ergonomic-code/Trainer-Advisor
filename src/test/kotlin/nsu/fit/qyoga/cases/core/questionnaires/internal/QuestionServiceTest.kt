@@ -56,7 +56,7 @@ class QuestionServiceTest(
                 questionnaireId = 1
             )
         )
-        val question = questionService.findQuestionWithAnswers(questionId)
+        val question = questionService.findQuestion(questionId)
         question.questionnaireId shouldBe 1
         question.questionType shouldBe QuestionType.RANGE
         question.imageId shouldBe null

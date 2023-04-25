@@ -8,5 +8,5 @@ class AnswerDto(
     var imageId: Long?,
     var questionId: Long
 ) {
-    constructor() : this(0,null, AnswerBoundsDto(), null, null, 0)
+    constructor() : this(0, null, AnswerBoundsDto(), null, null, 0)
 }
