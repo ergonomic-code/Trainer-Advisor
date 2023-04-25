@@ -35,9 +35,9 @@ class DecodingServiceImpl(
         return decodingRepo.saveAll(decodingList.map { decodingDtoToDecoding(it) }).map { decodingToDecodingDto(it) }
     }
 
-    override fun findDecodingByQuestionnaireId(questionnaireId: Long): List<DecodingDto> {
+    override fun findDecodingByQuestionnaireId(questionnaireId: Long): MutableList<DecodingDto> {
         val decodingList = decodingRepo.findAllByQuestionnaireIdOrderById(questionnaireId)
-        return decodingList.map { decodingToDecodingDto(it) }
+        return decodingList.map { decodingToDecodingDto(it) }.toMutableList()
     }
 
     fun decodingToDecodingDto(decoding: Decoding): DecodingDto {

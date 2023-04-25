@@ -5,7 +5,10 @@ import nsu.fit.qyoga.core.questionnaires.api.dtos.AnswerDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionWithAnswersDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireWithQuestionDto
 import nsu.fit.qyoga.core.questionnaires.api.errors.AnswerException
-import nsu.fit.qyoga.core.questionnaires.api.services.*
+import nsu.fit.qyoga.core.questionnaires.api.services.AnswerService
+import nsu.fit.qyoga.core.questionnaires.api.services.ImageService
+import nsu.fit.qyoga.core.questionnaires.api.services.QuestionService
+import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
