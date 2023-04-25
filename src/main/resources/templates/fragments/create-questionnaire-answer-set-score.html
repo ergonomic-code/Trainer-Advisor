@@ -4,7 +4,7 @@
          th:each="answer,j : ${question.answers}"
          th:switch="${question.questionType.name}">
         <input hidden th:name="|questions[${questionIndex}].answers[${j.index}].id|" th:value="${answer.id}">
-        <input hidden th:name="|questions[${questionIndex}].answers[${j.index}].questionId|" th:value="${answer.questionId}">
+        <input hidden th:name="|questions[${questionIndex}].answers[${j.index}].questionId|" th:value="${question.id}">
 
         <div th:case="SINGLE">
             <div class="d-flex flex-row">

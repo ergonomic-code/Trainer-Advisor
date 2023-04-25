@@ -1,6 +1,5 @@
 package nsu.fit.qyoga.app.questionnaires
 
-import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionWithAnswersDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireWithQuestionDto
 import nsu.fit.qyoga.core.questionnaires.api.errors.QuestionException
@@ -47,16 +46,16 @@ class QuestionnairesQuestionController(
         model: Model
     ): String {
         val question = questionService.findQuestion(id)
-        if (question.imageId != null) {
-            imageService.deleteImage(question.imageId)
+        question.imageId?.let {
+            imageService.deleteImage(it)
         }
-
-        val newQuestion = QuestionDto(
+        val newQuestion = QuestionWithAnswersDto(
             id = question.id,
             title = question.title,
             questionType = question.questionType,
             questionnaireId = question.questionnaireId,
-            imageId = imageService.uploadImage(file)
+            imageId = imageService.uploadImage(file),
+            answers = question.answers
         )
         val questionDto = questionService.findQuestion(questionService.updateQuestion(newQuestion))
         setQuestionWithId(
@@ -99,20 +98,21 @@ class QuestionnairesQuestionController(
         questionnaire.questions.forEach { question ->
             if (question.id == questionId) {
                 questionService.updateQuestion(
-                    QuestionDto(
+                    QuestionWithAnswersDto(
                         id = question.id,
                         title = question.title,
                         questionType = question.questionType,
                         questionnaireId = question.questionnaireId,
-                        imageId = question.imageId
+                        imageId = question.imageId,
+                        answers = question.answers
                     )
                 )
-            }
-        }
-        val deletedAnswers = answerService.deleteAllByQuestionId(questionId)
-        for (answer in deletedAnswers) {
-            answer.imageId?.let {
-                imageService.deleteImage(it)
+                for (answer in question.answers) {
+                    answerService.deleteAnswerById(answer.id)
+                    answer.imageId?.let {
+                        imageService.deleteImage(it)
+                    }
+                }
             }
         }
         answerService.createAnswer(questionId)
@@ -132,12 +132,13 @@ class QuestionnairesQuestionController(
         questionnaire.questions.forEach { question ->
             if (question.id == questionId) {
                 questionService.updateQuestion(
-                    QuestionDto(
+                    QuestionWithAnswersDto(
                         id = question.id,
                         title = question.title,
                         questionType = question.questionType,
                         questionnaireId = question.questionnaireId,
-                        imageId = question.imageId
+                        imageId = question.imageId,
+                        answers = question.answers
                     )
                 )
                 return HttpStatus.OK

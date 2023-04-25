@@ -1,6 +1,9 @@
 package nsu.fit.qyoga.core.questionnaires.internal.repository
 
-import nsu.fit.qyoga.core.questionnaires.api.dtos.*
+import nsu.fit.qyoga.core.questionnaires.api.dtos.AnswerBoundsDto
+import nsu.fit.qyoga.core.questionnaires.api.dtos.AnswerDto
+import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionWithAnswersDto
+import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireWithQuestionDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.enums.QuestionType
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations

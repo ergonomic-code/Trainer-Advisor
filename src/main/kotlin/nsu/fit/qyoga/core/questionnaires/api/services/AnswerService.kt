@@ -5,7 +5,6 @@ import nsu.fit.qyoga.core.questionnaires.api.dtos.AnswerDto
 interface AnswerService {
     fun createAnswer(id: Long): AnswerDto
     fun findAnswer(id: Long): AnswerDto
-    fun deleteAllByQuestionId(id: Long): List<AnswerDto>
     fun updateAnswer(createAnswerDto: AnswerDto): AnswerDto
     fun deleteAnswerById(id: Long)
 }

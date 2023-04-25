@@ -52,13 +52,6 @@ class AnswerServiceImpl(
             ?: throw AnswerException("Выбранный ответ не найден")
         return answerToAnswerDtoMapper(answer)
     }
-    override fun deleteAllByQuestionId(id: Long): List<AnswerDto> {
-        val answersToDelete = answerRepo.findAllByQuestionId(id)
-        answerJdbcTemplateRepo.deleteAnswerByQuestionId(id)
-        return answersToDelete.map {
-            answerToAnswerDtoMapper(it)
-        }
-    }
     override fun deleteAnswerById(id: Long) {
         answerRepo.deleteById(id)
     }
