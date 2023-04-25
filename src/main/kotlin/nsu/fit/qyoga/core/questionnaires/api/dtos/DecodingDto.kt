@@ -1,6 +1,6 @@
 package nsu.fit.qyoga.core.questionnaires.api.dtos
 
-class DecodingDto(
+data class DecodingDto(
     var id: Long,
     var lowerBound: Int,
     var upperBound: Int,

@@ -49,8 +49,7 @@ class QuestionnairesAnswersController(
                 upperBoundText = answer.bounds.upperBoundText
             ),
             score = answer.score,
-            imageId = imageService.uploadImage(file),
-            questionId = answer.questionId
+            imageId = imageService.uploadImage(file)
         )
         answerService.updateAnswer(answerDto)
         model.addAttribute("answer", answerDto)

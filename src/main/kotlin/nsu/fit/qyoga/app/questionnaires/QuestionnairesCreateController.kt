@@ -2,7 +2,6 @@ package nsu.fit.qyoga.app.questionnaires
 
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireWithQuestionDto
-import nsu.fit.qyoga.core.questionnaires.api.services.AnswerService
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionService
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
 import org.springframework.http.HttpStatus
@@ -14,8 +13,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/questionnaires/")
 class QuestionnairesCreateController(
     private val questionnaireService: QuestionnaireService,
-    private val questionService: QuestionService,
-    private val answerService: AnswerService
+    private val questionService: QuestionService
 ) {
 
     /**
@@ -24,8 +22,7 @@ class QuestionnairesCreateController(
     @GetMapping("new")
     fun getCreateQuestionnairePage(): String {
         val questionnaireId = questionnaireService.createQuestionnaire()
-        val question = questionService.createQuestion(questionnaireId)
-        answerService.createAnswer(question.id)
+        questionService.createQuestion(questionnaireId)
         return "redirect:/questionnaires/$questionnaireId/edit"
     }
 
@@ -50,7 +47,6 @@ class QuestionnairesCreateController(
         @PathVariable id: Long
     ): String {
         questionnaireService.updateQuestionnaire(questionnaire)
-        println("Hi")
         return "redirect:/questionnaires/$id/setResult"
     }
 

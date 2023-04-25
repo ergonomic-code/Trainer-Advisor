@@ -41,7 +41,6 @@ class AnswerServiceTest(
         answer.id shouldBeGreaterThan -1
         answer.title shouldBe ""
         answer.score shouldBe null
-        answer.questionId shouldBe 1
         answer.bounds.lowerBound shouldBe null
         answer.bounds.lowerBoundText shouldBe null
         answer.bounds.upperBound shouldBe null
@@ -55,7 +54,6 @@ class AnswerServiceTest(
         answer.id shouldBe createdAnswer.id
         answer.title shouldBe ""
         answer.score shouldBe null
-        answer.questionId shouldBe 1
         answer.bounds.lowerBound shouldBe null
         answer.bounds.lowerBoundText shouldBe null
         answer.bounds.upperBound shouldBe null
@@ -71,7 +69,6 @@ class AnswerServiceTest(
         changedAnswer.id shouldBe answer.id
         changedAnswer.title shouldBe "test1"
         changedAnswer.score shouldBe 0
-        changedAnswer.questionId shouldBe 1
         changedAnswer.bounds.lowerBound shouldBe null
         changedAnswer.bounds.lowerBoundText shouldBe null
         changedAnswer.bounds.upperBound shouldBe null

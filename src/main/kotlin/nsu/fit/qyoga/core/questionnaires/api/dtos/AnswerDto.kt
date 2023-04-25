@@ -5,8 +5,7 @@ class AnswerDto(
     var title: String?,
     var bounds: AnswerBoundsDto,
     var score: Int?,
-    var imageId: Long?,
-    var questionId: Long
+    var imageId: Long?
 ) {
-    constructor() : this(0, null, AnswerBoundsDto(), null, null, 0)
+    constructor() : this(0, null, AnswerBoundsDto(), null, null)
 }

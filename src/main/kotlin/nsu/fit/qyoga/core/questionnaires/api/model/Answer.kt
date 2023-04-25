@@ -13,6 +13,5 @@ data class Answer(
     val upperBound: Int?,
     val upperBoundText: String?,
     val score: Int?,
-    val imageId: Long?,
-    val questionId: Long
+    val imageId: Long?
 )

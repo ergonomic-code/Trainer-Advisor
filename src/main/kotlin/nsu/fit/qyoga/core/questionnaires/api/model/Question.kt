@@ -13,6 +13,6 @@ data class Question(
     val questionType: QuestionType,
     val questionnaireId: Long,
     val imageId: Long?,
-    @MappedCollection(idColumn = "question_id", keyColumn = "id")
-    val answers: MutableList<Answer>
+    @MappedCollection(idColumn = "question_id")
+    val answers: Set<Answer>
 )
