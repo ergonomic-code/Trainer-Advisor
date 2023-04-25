@@ -44,10 +44,10 @@ class QuestionnaireServiceImpl(
                 title = createQuestionnaireDto.title
             )
         )
-        /*createQuestionnaireDto.questions.map {
+        createQuestionnaireDto.questions.map {
             it.questionnaireId = savedQuestionnaire.id
             questionService.updateQuestion(it)
-        }*/
+        }
         return QuestionnaireDto(savedQuestionnaire.id, savedQuestionnaire.title)
     }
 

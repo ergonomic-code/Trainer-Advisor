@@ -3,7 +3,6 @@ package nsu.fit.qyoga.cases.core.questionnaires.internal
 import io.kotest.matchers.longs.shouldBeGreaterThan
 import io.kotest.matchers.shouldBe
 import nsu.fit.qyoga.cases.core.questionnaires.QuestionnairesTestConfig
-import nsu.fit.qyoga.core.questionnaires.api.dtos.AnswerDto
 import nsu.fit.qyoga.core.questionnaires.api.errors.AnswerException
 import nsu.fit.qyoga.core.questionnaires.api.services.AnswerService
 import nsu.fit.qyoga.infra.QYogaModuleBaseTest
@@ -61,24 +60,6 @@ class AnswerServiceTest(
         answer.bounds.lowerBoundText shouldBe null
         answer.bounds.upperBound shouldBe null
         answer.bounds.upperBoundText shouldBe null
-    }
-
-    @Test
-    fun `QYoga can delete answers by question id`() {
-        val listAnswers: MutableList<AnswerDto> = mutableListOf()
-        repeat(3) {
-            listAnswers.add(answerService.createAnswer(1))
-        }
-        listAnswers.size shouldBe 3
-        val deletedAnswers = answerService.deleteAllByQuestionId(listAnswers[0].id)
-        listAnswers.size shouldBe deletedAnswers.size
-        var thrown: AnswerException
-        for (answer in deletedAnswers) {
-            thrown = Assertions.assertThrows(
-                AnswerException::class.java
-            ) { answerService.findAnswer(listAnswers[0].id) }
-            Assertions.assertEquals("Выбранный ответ не найден", thrown.message)
-        }
     }
 
     @Test

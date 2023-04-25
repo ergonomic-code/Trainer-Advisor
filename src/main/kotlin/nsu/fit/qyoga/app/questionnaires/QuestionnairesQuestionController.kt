@@ -107,12 +107,12 @@ class QuestionnairesQuestionController(
                         answers = question.answers
                     )
                 )
-                for (answer in question.answers) {
-                    answerService.deleteAnswerById(answer.id)
-                    answer.imageId?.let {
-                        imageService.deleteImage(it)
-                    }
-                }
+            }
+        }
+        for (answer in questionService.findQuestion(questionId).answers) {
+            answerService.deleteAnswerById(answer.id)
+            answer.imageId?.let {
+                imageService.deleteImage(it)
             }
         }
         answerService.createAnswer(questionId)

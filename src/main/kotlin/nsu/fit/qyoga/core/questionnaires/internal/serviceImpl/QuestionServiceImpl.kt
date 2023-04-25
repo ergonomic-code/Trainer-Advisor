@@ -7,17 +7,13 @@ import nsu.fit.qyoga.core.questionnaires.api.dtos.enums.QuestionType
 import nsu.fit.qyoga.core.questionnaires.api.errors.QuestionException
 import nsu.fit.qyoga.core.questionnaires.api.model.Answer
 import nsu.fit.qyoga.core.questionnaires.api.model.Question
-import nsu.fit.qyoga.core.questionnaires.api.services.AnswerService
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionService
-import nsu.fit.qyoga.core.questionnaires.internal.repository.QuestionJdbcTemplateRepo
 import nsu.fit.qyoga.core.questionnaires.internal.repository.QuestionRepo
 import org.springframework.stereotype.Service
 
 @Service
 class QuestionServiceImpl(
-    private val questionRepo: QuestionRepo,
-    private val answerService: AnswerService,
-    private val questionJdbcTemplateRepo: QuestionJdbcTemplateRepo
+    private val questionRepo: QuestionRepo
 ) : QuestionService {
 
     override fun createQuestion(id: Long): QuestionWithAnswersDto {
@@ -38,11 +34,6 @@ class QuestionServiceImpl(
             answers = mutableListOf(),
             questionnaireId = id
         )
-    }
-
-    override fun findQuestionWithAnswers(id: Long): QuestionWithAnswersDto {
-        return questionJdbcTemplateRepo.findQuestionWithAnswersById(id)
-            ?: throw QuestionException("Выбранный вопрос не найден")
     }
 
     override fun deleteQuestion(id: Long) {

@@ -124,7 +124,7 @@ class QuestionnairesAnswersController(
                 return@forEach
             }
         }
-        val question = questionService.findQuestionWithAnswers(id)
+        val question = questionService.findQuestion(id)
         setQuestionWithId(question, questionIndex, model)
         return "fragments/create-questionnaire-answer-set-score::answersScore"
     }
@@ -147,7 +147,7 @@ class QuestionnairesAnswersController(
                 return@forEach
             }
         }
-        val question = questionService.findQuestionWithAnswers(id)
+        val question = questionService.findQuestion(id)
         returnQuestionsPage(questionnaire.id, model)
         setQuestionWithId(question, questionIndex, model)
         return "fragments/create-questionnaire-answer::question"

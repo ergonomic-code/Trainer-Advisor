@@ -125,22 +125,22 @@ class QuestionnairesServiceTest(
 
     @Test
     fun `QYoga can save questionnaire with questions without image and answers`() {
+        val question1 = QuestionWithAnswersDto()
+        question1.title = ""
+        question1.questionType = QuestionType.TEXT
+        val question2 = QuestionWithAnswersDto()
+        question2.title = ""
+        question2.questionType = QuestionType.SEVERAL
+        val question3 = QuestionWithAnswersDto()
+        question3.title = ""
+        question3.questionType = QuestionType.TEXT
         val questionnaireWithCreateQuestionDto = QuestionnaireWithQuestionDto(
             id = 0,
             title = "create questionnaire test",
             questions = mutableListOf(
-                QuestionWithAnswersDto(
-                    title = "",
-                    questionType = QuestionType.TEXT
-                ),
-                QuestionWithAnswersDto(
-                    title = "",
-                    questionType = QuestionType.SEVERAL
-                ),
-                QuestionWithAnswersDto(
-                    title = "qTest",
-                    questionType = QuestionType.TEXT
-                )
+                question1,
+                question2,
+                question3
             )
         )
         val savedQuestionnaire = questionnaireService.updateQuestionnaire(questionnaireWithCreateQuestionDto)

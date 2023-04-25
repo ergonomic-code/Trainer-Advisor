@@ -65,7 +65,9 @@ class DecodingServiceTest(
 
     @Test
     fun `QYoga can save or update decoding`() {
-        val decoding = decodingService.saveDecoding(DecodingDto(questionnaireId = 1))
+        val decodingDto = DecodingDto()
+        decodingDto.questionnaireId = 1
+        val decoding = decodingService.saveDecoding(decodingDto)
         decoding.id shouldBe 1
         decoding.lowerBound shouldBe 0
         decoding.upperBound shouldBe 0
@@ -82,10 +84,14 @@ class DecodingServiceTest(
 
     @Test
     fun `QYoga can save several decoding`() {
+        val decoding1 = DecodingDto()
+        decoding1.questionnaireId = 1
+        val decoding2 = DecodingDto()
+        decoding2.questionnaireId = 1
         val decoding = decodingService.saveDecodingList(
             listOf(
-                DecodingDto(questionnaireId = 1),
-                DecodingDto(questionnaireId = 1)
+                decoding1,
+                decoding2
             )
         )
         val inDbDecoding = decodingService.findDecodingByQuestionnaireId(1)
