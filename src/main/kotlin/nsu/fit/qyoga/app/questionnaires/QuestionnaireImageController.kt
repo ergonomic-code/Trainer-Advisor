@@ -1,6 +1,6 @@
 package nsu.fit.qyoga.app.questionnaires
 
-import nsu.fit.qyoga.core.questionnaires.api.services.*
+import nsu.fit.qyoga.core.questionnaires.api.services.ImageService
 import org.springframework.core.io.InputStreamResource
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity

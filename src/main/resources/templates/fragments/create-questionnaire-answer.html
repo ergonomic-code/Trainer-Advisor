@@ -54,7 +54,7 @@
          th:id="|answer${answer.id}|"
          th:switch="${question.questionType.name}">
         <input th:class="|answer${j.index}Id|" hidden th:name="|questions[${questionIndex}].answers[${j.index}].id|" th:value="${answer.id}">
-        <input th:class="|answer${j.index}QuestionId|" hidden th:name="|questions[${questionIndex}].answers[${j.index}].questionId|" th:value="${answer.questionId}">
+        <input th:class="|answer${j.index}QuestionId|" hidden th:name="|questions[${questionIndex}].answers[${j.index}].questionId|" th:value="${question.id}">
         <input th:class="|answer${j.index}Score|" hidden th:name="|questions[${questionIndex}].answers[${j.index}].score|" th:value="${answer.score}">
 
         <div th:case="SINGLE">
@@ -71,7 +71,7 @@
 
                 <div style="width: 40px">
                     <img class="add-img-to-question-btn" src="/img/add-file.png" alt="Добавить изображение">
-                    <input name="file" type="file" class="input-file" aria-hidden="true" style="margin-top: 3px;" accept=".image/*" size="1048576"
+                    <input name="file" type="file" class="input-file" aria-hidden="true" style="margin-top: 3px;" size="1048576"
                            hx-trigger="change"
                            hx-encoding="multipart/form-data"
                            th:attr = "
@@ -104,7 +104,7 @@
                 </label>
                 <div style="width: 40px">
                     <img class="add-img-to-question-btn" src="/img/add-file.png" alt="Добавить изображение">
-                    <input name="file" type="file" class="input-file" aria-hidden="true" style="margin-top: 3px;" accept=".image/*" size="1048576"
+                    <input name="file" type="file" class="input-file" aria-hidden="true" style="margin-top: 3px;" size="1048576"
                            hx-trigger="change"
                            hx-encoding="multipart/form-data"
                            th:attr = "

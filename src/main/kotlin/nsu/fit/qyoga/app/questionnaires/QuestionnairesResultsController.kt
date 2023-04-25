@@ -1,7 +1,7 @@
 package nsu.fit.qyoga.app.questionnaires
 
 import nsu.fit.qyoga.core.questionnaires.api.dtos.DecodingDtoList
-import nsu.fit.qyoga.core.questionnaires.api.services.*
+import nsu.fit.qyoga.core.questionnaires.api.services.DecodingService
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
