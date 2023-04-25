@@ -4,7 +4,8 @@ import nsu.fit.qyoga.core.clients.api.ClientService
 import nsu.fit.qyoga.core.clients.api.Dto.ClientDto
 import nsu.fit.qyoga.core.clients.api.Dto.ClientSearchDto
 import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -21,30 +22,28 @@ class ClientListPageController(
     @GetMapping
     fun getClients(
         @ModelAttribute("searchDto") searchDto: ClientSearchDto,
-        @RequestParam(value = "pageSize", required = false, defaultValue = "10") pageSize: Int,
-        @RequestParam(value = "pageNumber", required = false, defaultValue = "1") pageNumber: Int,
+        @PageableDefault(value = 10, page = 0) pageable: Pageable,
         model: Model
     ): String {
         val clients = clientService.getClients(
             searchDto,
-            PageRequest.of(pageNumber - 1, pageSize)
+            pageable
         )
-        addClientsPageAttributes(model, clients)
+        model.addAllAttributes(toModelAttributes(clients, searchDto))
         return CLIENT_PAGE
     }
 
     @GetMapping("/search-cl")
     fun getClientsFiltered(
         @ModelAttribute("searchDto") searchDto: ClientSearchDto,
-        @RequestParam(value = "pageSize", required = false, defaultValue = "10") pageSize: Int,
-        @RequestParam(value = "pageNumber", required = false, defaultValue = "1") pageNumber: Int,
+        @PageableDefault(value = 10, page = 0) pageable: Pageable,
         model: Model
     ): String {
         val clients = clientService.getClients(
             searchDto,
-            PageRequest.of(pageNumber - 1, pageSize)
+            pageable
         )
-        addClientsPageAttributes(model, clients)
+        model.addAllAttributes(toModelAttributes(clients, searchDto))
         return "clients-list :: clients"
     }
 
@@ -56,12 +55,9 @@ class ClientListPageController(
         clientService.deleteClient(id)
     }
 
-    fun addClientsPageAttributes(model: Model, clients: Page<ClientDto>) {
-        model.addAttribute("searchDto", ClientSearchDto())
-        model.addAttribute("clients", clients)
-        model.addAttribute(
-            "pageNumbers",
-            IntStream.rangeClosed(1, clients.totalPages).boxed().collect(Collectors.toList())
-        )
-    }
+    fun toModelAttributes(clients: Page<ClientDto>, searchDto: ClientSearchDto): Map<String, *> = mapOf(
+        "searchDto" to searchDto,
+        "clients" to clients,
+        "pageNumbers" to IntStream.rangeClosed(1, clients.totalPages).boxed().collect(Collectors.toList())
+    )
 }

@@ -28,5 +28,9 @@ fun <T : Any> NamedParameterJdbcOperations.queryForPage(
         filterParams,
         Long::class.java
     )!!
+    if (count == 0L) {
+        val emptyPage: List<T> = emptyList()
+        return PageImpl(emptyPage, pageRequest, count)
+    }
     return PageImpl(data, pageRequest, count)
 }
