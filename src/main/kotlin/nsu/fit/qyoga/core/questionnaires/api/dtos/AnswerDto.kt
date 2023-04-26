@@ -1,6 +1,6 @@
 package nsu.fit.qyoga.core.questionnaires.api.dtos
 
-class AnswerDto(
+data class AnswerDto(
     var id: Long,
     var title: String?,
     var bounds: AnswerBoundsDto,
