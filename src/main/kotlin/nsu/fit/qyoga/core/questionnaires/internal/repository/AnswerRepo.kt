@@ -6,6 +6,4 @@ import org.springframework.data.repository.PagingAndSortingRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface AnswerRepo : CrudRepository<Answer, Long>, PagingAndSortingRepository<Answer, Long> {
-    //fun findAllByQuestionId(id: Long): List<Answer>
-}
+interface AnswerRepo : CrudRepository<Answer, Long>, PagingAndSortingRepository<Answer, Long>
