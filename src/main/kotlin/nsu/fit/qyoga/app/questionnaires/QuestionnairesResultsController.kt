@@ -60,7 +60,7 @@ class QuestionnairesResultsController(
     @ResponseBody
     fun updateResultsTableRow(
         @PathVariable resultId: Long,
-        @ModelAttribute("results") results: DecodingDtoList,
+        results: DecodingDtoList,
     ): HttpStatus {
         results.decodingDtoList.forEach { result ->
             if (result.id == resultId) {
