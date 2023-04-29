@@ -7,5 +7,5 @@ data class DecodingDto(
     var result: String,
     var questionnaireId: Long
 ) {
-    constructor() : this(0,0,0,"",0)
+    constructor() : this(0, 0, 0, "", 0)
 }

@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired
 private const val USERNAME_FORM_PARAM = "username"
 private const val PASSWORD_FORM_PARAM = "password"
 
-class ErrorTest : QYogaAppTestBase(){
+class ErrorTest : QYogaAppTestBase() {
     @Autowired
     lateinit var dbInitializer: DbInitializer
     lateinit var cookie: Cookie
