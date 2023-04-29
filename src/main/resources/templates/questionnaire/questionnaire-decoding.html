@@ -103,11 +103,9 @@
                                                        th:name="|decodingDtoList[${i.index}].result|"
                                                        hx-trigger="keyup changed delay:500ms, search"
                                                        hx-swap="none"
-                                                       hx-ext='json-enc'
                                                        th:attr = "
                                                        hx-post=|@{/questionnaires/setResult/{resultId}/update
-                                                       (resultId=${result.id})}|"
-                                                       />
+                                                       (resultId=${result.id})}|"/>
                                             </td>
                                             <td>
                                                 <button class="field" style="cursor: pointer; width: 100%; border-radius: 5px"
@@ -142,7 +140,7 @@
 
             <div class="position-fixed bottom-0 start-0 w-100 text-end bg-white"
                  style="height: 75px; box-sizing: border-box; padding-top: 10px; padding-right: 1.5rem;">
-                <button class="btn btn-secondary" onclick="sendJson()" id="saveBtn" type="submit" style="height: 50px">Сохранить</button>
+                <button class="btn btn-secondary" id="saveBtn" type="submit" style="height: 50px">Сохранить</button>
             </div>
 
         </form>
@@ -153,36 +151,7 @@
 <script crossorigin="anonymous"
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js">
 </script>
-<script type="text/javascript">
-    function sendJson(){
-        let id = document.getElementsByClassName("decodingId")
-        let questionnaireId = document.getElementsByClassName("decodingQuestionnaireId")
-        let lowerBound = document.getElementsByClassName("decodingLowerBound");
-        let upperBound = document.getElementsByClassName("decodingUpperBound")
-        let result = document.getElementsByClassName("decodingResult")
-        event.preventDefault()
 
-        let data = {
-            "results": []
-        };
-        for (let index = 0; index < id.length; ++index) {
-            data.results.push(
-                {
-                    "id": parseInt(id.item(index).value.toString()),
-                    "questionnaireId": parseInt(questionnaireId.item(index).value.toString()),
-                    "lowerBound": parseInt(lowerBound.item(index).value.toString()),
-                    "upperBound": parseInt(upperBound.item(index).value.toString()),
-                    "result": result.item(index).value.toString()
-                }
-            )
-        }
-        console.log(JSON.stringify(data))
-        let xhr = new XMLHttpRequest();
-        xhr.open("POST", "http://localhost:8080/questionnaires/setResult/1/update");
-        xhr.setRequestHeader('Content-Type', 'application/json; charset=UTF-8');
-        xhr.send(JSON.stringify(data));
-    }
-</script>
 <script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
 <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>
 </body>

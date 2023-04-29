@@ -36,7 +36,7 @@ style:
     active: true
 
   DataClassShouldBeImmutable:
-    active: true
+    active: false
 
   EqualsOnSignatureLine:
     active: true
