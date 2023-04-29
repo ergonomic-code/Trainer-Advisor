@@ -17,12 +17,6 @@ fun <T : Any> NamedParameterJdbcOperations.queryForPage(
         OFFSET :offset
     """.trimIndent()
 
-    val data = this.query(
-        dataQuery,
-        filterParams + mapOf("pageSize" to pageRequest.pageSize, "offset" to pageRequest.offset),
-        rowMapper
-    )
-
     val count = this.queryForObject(
         "SELECT count(*) FROM ($baseSql) data",
         filterParams,
@@ -32,5 +26,10 @@ fun <T : Any> NamedParameterJdbcOperations.queryForPage(
         val emptyPage: List<T> = emptyList()
         return PageImpl(emptyPage, pageRequest, count)
     }
+    val data = this.query(
+        dataQuery,
+        filterParams + mapOf("pageSize" to pageRequest.pageSize, "offset" to pageRequest.offset),
+        rowMapper
+    )
     return PageImpl(data, pageRequest, count)
 }

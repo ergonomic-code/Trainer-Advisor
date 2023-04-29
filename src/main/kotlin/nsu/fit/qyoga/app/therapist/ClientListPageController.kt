@@ -9,8 +9,6 @@ import org.springframework.data.web.PageableDefault
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
-import java.util.stream.Collectors
-import java.util.stream.IntStream
 
 const val CLIENT_PAGE = "clients-list"
 
@@ -58,6 +56,6 @@ class ClientListPageController(
     fun toModelAttributes(clients: Page<ClientDto>, searchDto: ClientSearchDto): Map<String, *> = mapOf(
         "searchDto" to searchDto,
         "clients" to clients,
-        "pageNumbers" to IntStream.rangeClosed(1, clients.totalPages).boxed().collect(Collectors.toList())
+        "pageNumbers" to 1..clients.totalPages
     )
 }
