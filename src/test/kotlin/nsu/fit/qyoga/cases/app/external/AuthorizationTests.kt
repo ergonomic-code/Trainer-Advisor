@@ -19,7 +19,7 @@ class AuthorizationTests : QYogaAppTestBase() {
         Given {
             this
         } When {
-            get("/main")
+            get("/clients")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             Assertions.assertThatSpec(body) {
@@ -33,19 +33,14 @@ class AuthorizationTests : QYogaAppTestBase() {
 
     @Test
     fun `authorized access to therapist's page should be allowed`() {
-        val cookie = Given {
-            formParam(USERNAME_FORM_PARAM, "therapist")
-            formParam(PASSWORD_FORM_PARAM, "diem-Synergy5")
-        }.post("/users/login").thenReturn().detailedCookie("JSESSIONID")
-
         Given {
-            this.cookie(cookie)
+            this.cookie(getAuthCookie())
         } When {
-            get("/therapist/main")
+            get("/clients")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             Assertions.assertThatSpec(body) {
-                node("title") { hasText("QYoga") }
+                node("title") { hasText("Список клиентов") }
             }
         }
     }
@@ -56,10 +51,10 @@ class AuthorizationTests : QYogaAppTestBase() {
             formParam(USERNAME_FORM_PARAM, "admin")
             formParam(PASSWORD_FORM_PARAM, "diem-Synergy5")
         } When {
-            post("/users/login")
+            post("/login")
         } Then {
             statusCode(302)
-            header("Location", endsWith("main"))
+            header("Location", endsWith("clients"))
         }
     }
 
@@ -69,10 +64,13 @@ class AuthorizationTests : QYogaAppTestBase() {
             formParam(USERNAME_FORM_PARAM, "admin")
             formParam(PASSWORD_FORM_PARAM, "fail-password")
         } When {
-            post("/users/login")
+            post("/login")
         } Then {
-            statusCode(302)
-            header("Location", endsWith("error"))
+            statusCode(200)
+            val body = Jsoup.parse(extract().body().asString())
+            Assertions.assertThatSpec(body) {
+                node("span.help-inline") { hasText("Неверный пароль") }
+            }
         }
     }
 
@@ -82,10 +80,13 @@ class AuthorizationTests : QYogaAppTestBase() {
             formParam(USERNAME_FORM_PARAM, "")
             formParam(PASSWORD_FORM_PARAM, "")
         } When {
-            post("/users/login")
+            post("/login")
         } Then {
-            statusCode(302)
-            header("Location", endsWith("error"))
+            statusCode(200)
+            val body = Jsoup.parse(extract().body().asString())
+            Assertions.assertThatSpec(body) {
+                node("div.invalid-feedback") { hasText("Неверный логин") }
+            }
         }
     }
 
@@ -95,10 +96,13 @@ class AuthorizationTests : QYogaAppTestBase() {
             formParam(USERNAME_FORM_PARAM, "admin1")
             formParam(PASSWORD_FORM_PARAM, "diem-Synergy5")
         } When {
-            post("/users/login")
+            post("/login")
         } Then {
-            statusCode(302)
-            header("Location", endsWith("error"))
+            statusCode(200)
+            val body = Jsoup.parse(extract().body().asString())
+            Assertions.assertThatSpec(body) {
+                node("div.invalid-feedback") { hasText("Неверный логин") }
+            }
         }
     }
 
@@ -108,10 +112,13 @@ class AuthorizationTests : QYogaAppTestBase() {
             formParam(USERNAME_FORM_PARAM, "admin1")
             formParam(PASSWORD_FORM_PARAM, "fail-password")
         } When {
-            post("/users/login")
+            post("/login")
         } Then {
-            statusCode(302)
-            header("Location", endsWith("error"))
+            statusCode(200)
+            val body = Jsoup.parse(extract().body().asString())
+            Assertions.assertThatSpec(body) {
+                node("div.invalid-feedback") { hasText("Неверный логин") }
+            }
         }
     }
 }

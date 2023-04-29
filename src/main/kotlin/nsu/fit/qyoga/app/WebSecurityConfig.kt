@@ -25,14 +25,19 @@ class WebSecurityConfig(
             .authorizeHttpRequests { authz ->
                 authz
                     .requestMatchers("/therapist/**").hasAuthority(Role.ROLE_THERAPIST.toString())
-                    .requestMatchers("/users/login", "/error").permitAll()
+                    .requestMatchers("/users/login", "/error-p").permitAll()
                     .requestMatchers("/exercises/**").permitAll()
+                    .requestMatchers("/clients/**").hasAnyAuthority(
+                        Role.ROLE_THERAPIST.toString(),
+                        Role.ROLE_ADMIN.toString()
+                    )
                     .requestMatchers(HttpMethod.GET, "/styles/**", "/img/**").permitAll()
                     .anyRequest().authenticated()
             }
             .formLogin()
-            .loginPage("/users/login")
-            .defaultSuccessUrl("/therapist/main")
+            .loginPage("/login")
+            .defaultSuccessUrl("/clients")
+            .failureForwardUrl("/error-p")
             .permitAll()
         http.authenticationProvider(authenticationProvider())
         // @formatter:on
