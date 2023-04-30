@@ -41,6 +41,9 @@ style:
   EqualsOnSignatureLine:
     active: true
 
+  FunctionOnlyReturningConstant:
+    active: false
+
   MandatoryBracesIfStatements:
     active: true
 

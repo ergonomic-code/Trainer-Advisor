@@ -10,7 +10,7 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 
 @Controller
-@RequestMapping("/questionnaires/")
+@RequestMapping("/questionnaires")
 class QuestionnairesController(
     private val questionnaireService: QuestionnaireService
 ) {

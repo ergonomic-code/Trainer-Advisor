@@ -27,7 +27,7 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
         Given {
             this.cookie(getAuthCookie())
         } When {
-            get("/questionnaires/")
+            get("/questionnaires")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
