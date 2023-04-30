@@ -31,7 +31,6 @@ import org.springframework.test.context.ContextConfiguration
 @ActiveProfiles("test")
 class QuestionnairesServiceTest(
     @Autowired private val questionnaireService: QuestionnaireService,
-    @Autowired private val answerService: AnswerService,
     @Autowired private val questionService: QuestionService
 ) : QYogaModuleBaseTest() {
 
@@ -160,8 +159,7 @@ class QuestionnairesServiceTest(
             title = "create questionnaire test"
         )
         val savedQuestionnaire = questionnaireService.updateQuestionnaire(questionnaireWithCreateQuestionDto)
-        val question = questionService.createQuestion(savedQuestionnaire.id)
-        answerService.createAnswer(question.id)
+        questionService.createQuestion(savedQuestionnaire.id)
         val inDBQuestionnaire = questionnaireService.findQuestionnaireWithQuestions(savedQuestionnaire.id)
         savedQuestionnaire.title shouldBe inDBQuestionnaire.title
         inDBQuestionnaire.questions.size shouldBe 1
