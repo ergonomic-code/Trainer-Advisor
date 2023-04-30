@@ -82,6 +82,27 @@ class CreateNewQuestionnaireViewTest : QYogaAppTestBase() {
     }
 
     @Test
+    fun `QYoga can change question image`() {
+        Given {
+            this.cookie(getAuthCookie())
+        } When {
+            get("/questionnaires/new")
+            contentType(ContentType.MULTIPART)
+            multiPart(File("src/test/resources/db/questionnaires/testLargeImage.jpg"))
+            param("questionIndex", 0)
+            post("/questionnaires/question/1/image")
+            post("/questionnaires/question/1/image")
+        } Then {
+            val body = Jsoup.parse(extract().body().asString())
+            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
+                node(".questionImageId") { exists() }
+                node(".questionImage") { exists() }
+                node(".questionDeleteImage") { exists() }
+            }
+        }
+    }
+
+    @Test
     fun `QYoga can save answer image`() {
         Given {
             this.cookie(getAuthCookie())
@@ -91,6 +112,28 @@ class CreateNewQuestionnaireViewTest : QYogaAppTestBase() {
             multiPart(File("src/test/resources/db/questionnaires/testLargeImage.jpg"))
             param("questionIndex", 0)
             param("answerIndex", 0)
+            post("/questionnaires/answer/1/image")
+        } Then {
+            val body = Jsoup.parse(extract().body().asString())
+            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
+                node(".answerImageId") { exists() }
+                node(".answerImage") { exists() }
+                node(".answerDeleteImage") { exists() }
+            }
+        }
+    }
+
+    @Test
+    fun `QYoga can change answer image`() {
+        Given {
+            this.cookie(getAuthCookie())
+        } When {
+            get("/questionnaires/new")
+            contentType(ContentType.MULTIPART)
+            multiPart(File("src/test/resources/db/questionnaires/testLargeImage.jpg"))
+            param("questionIndex", 0)
+            param("answerIndex", 0)
+            post("/questionnaires/answer/1/image")
             post("/questionnaires/answer/1/image")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
