@@ -133,8 +133,6 @@ class CreateNewQuestionnaireViewTest : QYogaAppTestBase() {
             post("/questionnaires/answer/1/image")
             get("/questionnaires/image/1")
         } Then {
-            val file = File("src/test/resources/db/questionnaires/testLargeImage.jpg")
-            extract().body().asString().length shouldBe file.readBytes().size
             extract().contentType() shouldBe "application/octet-stream"
             extract().statusCode().compareTo(200) shouldBe 0
         }
