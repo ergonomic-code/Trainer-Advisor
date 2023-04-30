@@ -147,7 +147,10 @@ class QuestionnairesAnswersController(
             }
         }
         val question = questionService.findQuestion(id)
-        returnQuestionsPage(questionnaire.id, model)
+        model.addAttribute(
+            "questionnaire",
+            questionnaireService.findQuestionnaireWithQuestions(questionnaire.id)
+        )
         setQuestionWithId(question, questionIndex, model)
         return "fragments/create-questionnaire-answer::question"
     }

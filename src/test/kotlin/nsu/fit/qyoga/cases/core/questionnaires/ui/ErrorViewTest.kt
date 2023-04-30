@@ -35,17 +35,7 @@ class ErrorViewTest : QYogaAppTestBase() {
             param("questionIndex", 0)
             post("/questionnaires/question/1/image")
         } Then {
-            val body = Jsoup.parse(extract().body().asString())
-            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#reload-page-btn") {
-                    exists()
-                    hasText("Перезагрузить")
-                }
-                node(".error-text") {
-                    exists()
-                    hasText("Выбранный вопрос не найден Перезагрузить")
-                }
-            }
+            notFoundQuestion(extract().body().asString())
         }
     }
 
@@ -102,14 +92,7 @@ class ErrorViewTest : QYogaAppTestBase() {
         } When {
             get("/questionnaires/-1/edit")
         } Then {
-            val body = Jsoup.parse(extract().body().asString())
-            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#layoutSidenav_content") { exists() }
-                node("#error-text") {
-                    exists()
-                    hasText("Выбранный опросник не найден")
-                }
-            }
+            notFoundQuestionnaire(extract().body().asString())
         }
     }
 
@@ -163,18 +146,7 @@ class ErrorViewTest : QYogaAppTestBase() {
             param("questions[0].answers[0].title", "answer title")
             post("/questionnaires/1/edit/question/4/update")
         } Then {
-            extract().statusCode().compareTo(200) shouldBe 0
-            val body = Jsoup.parse(extract().body().asString())
-            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#reload-page-btn") {
-                    exists()
-                    hasText("Перезагрузить")
-                }
-                node(".error-text") {
-                    exists()
-                    hasText("Выбранный вопрос не найден Перезагрузить")
-                }
-            }
+            notFoundQuestion(extract().body().asString())
         }
     }
 
@@ -185,14 +157,7 @@ class ErrorViewTest : QYogaAppTestBase() {
         } When {
             get("/questionnaires/10/setResult")
         } Then {
-            val body = Jsoup.parse(extract().body().asString())
-            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#layoutSidenav_content") { exists() }
-                node("#error-text") {
-                    exists()
-                    hasText("Выбранный опросник не найден")
-                }
-            }
+            notFoundQuestionnaire(extract().body().asString())
         }
     }
 
@@ -219,6 +184,61 @@ class ErrorViewTest : QYogaAppTestBase() {
                     exists()
                     hasText("Выбранный результат не найдено Перезагрузить")
                 }
+            }
+        }
+    }
+
+    @Test
+    fun `QYoga can change answer fragment to change answer fields after set scores`() {
+        Given {
+            this.cookie(getAuthCookie())
+        } When {
+            get("/questionnaires/new")
+            param("questionIndex", 0)
+            param("id", "1")
+            param("title", "test")
+            post("/questionnaires/question/-1/setAnswers")
+        } Then {
+            notFoundQuestion(extract().body().asString())
+        }
+    }
+
+    @Test
+    fun `QYoga can change answer fragment to set answer score`() {
+        Given {
+            this.cookie(getAuthCookie())
+        } When {
+            get("/questionnaires/new")
+            param("questionIndex", 0)
+            param("id", "1")
+            param("title", "test")
+            post("/questionnaires/question/-1/setScores")
+        } Then {
+            notFoundQuestion(extract().body().asString())
+        }
+    }
+
+    fun notFoundQuestion(bodyText: String) {
+        val body = Jsoup.parse(bodyText)
+        io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
+            node("#reload-page-btn") {
+                exists()
+                hasText("Перезагрузить")
+            }
+            node(".error-text") {
+                exists()
+                hasText("Выбранный вопрос не найден Перезагрузить")
+            }
+        }
+    }
+
+    fun notFoundQuestionnaire(bodyText: String) {
+        val body = Jsoup.parse(bodyText)
+        io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
+            node("#layoutSidenav_content") { exists() }
+            node("#error-text") {
+                exists()
+                hasText("Выбранный опросник не найден")
             }
         }
     }

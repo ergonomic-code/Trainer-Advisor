@@ -273,6 +273,11 @@ class CreateNewQuestionnaireViewTest : QYogaAppTestBase() {
             this.cookie(getAuthCookie())
         } When {
             get("/questionnaires/new")
+            contentType(ContentType.MULTIPART)
+            multiPart(File("src/test/resources/db/questionnaires/testLargeImage.jpg"))
+            param("questionIndex", 0)
+            param("answerIndex", 0)
+            post("/questionnaires/answer/1/image")
             param("id", "1")
             param("title", "test")
             param("questions[0].id", "1")
