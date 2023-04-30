@@ -1,6 +1,5 @@
 package nsu.fit.qyoga.cases.core.questionnaires.ui
 
-import io.restassured.http.Cookie
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
@@ -11,13 +10,9 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
-private const val USERNAME_FORM_PARAM = "username"
-private const val PASSWORD_FORM_PARAM = "password"
-
 class ErrorTest : QYogaAppTestBase() {
     @Autowired
     lateinit var dbInitializer: DbInitializer
-    lateinit var cookie: Cookie
 
     @BeforeEach
     fun setupDb() {
@@ -27,18 +22,10 @@ class ErrorTest : QYogaAppTestBase() {
         )
     }
 
-    @BeforeEach
-    fun setupCookie() {
-        cookie = Given {
-            formParam(USERNAME_FORM_PARAM, "therapist")
-            formParam(PASSWORD_FORM_PARAM, "diem-Synergy5")
-        }.post("/users/login").thenReturn().detailedCookie("JSESSIONID")
-    }
-
     @Test
     fun `QYoga can not parse an object with a nested list of other objects`() {
         Given {
-            cookie(cookie)
+            this.cookie(getAuthCookie())
         } When {
             get("/questionnaires/1/setResult/addResult")
             param("decodingDtoList[0].id", "1")

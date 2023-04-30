@@ -1,7 +1,6 @@
 package nsu.fit.qyoga.cases.core.questionnaires.ui
 
 import io.restassured.http.ContentType
-import io.restassured.http.Cookie
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
@@ -13,13 +12,9 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import java.io.File
 
-private const val USERNAME_FORM_PARAM = "username"
-private const val PASSWORD_FORM_PARAM = "password"
-
 class ErrorViewTest : QYogaAppTestBase() {
     @Autowired
     lateinit var dbInitializer: DbInitializer
-    lateinit var cookie: Cookie
 
     @BeforeEach
     fun setupDb() {
@@ -29,18 +24,10 @@ class ErrorViewTest : QYogaAppTestBase() {
         )
     }
 
-    @BeforeEach
-    fun setupCookie() {
-        cookie = Given {
-            formParam(USERNAME_FORM_PARAM, "therapist")
-            formParam(PASSWORD_FORM_PARAM, "diem-Synergy5")
-        }.post("/users/login").thenReturn().detailedCookie("JSESSIONID")
-    }
-
     @Test
     fun `QYoga can return a error-fragment when trying to add an image to a non-existent question`() {
         Given {
-            cookie(cookie)
+            this.cookie(getAuthCookie())
         } When {
             contentType(ContentType.MULTIPART)
             multiPart(File("src/test/resources/db/questionnaires/testLargeImage.jpg"))
@@ -64,7 +51,7 @@ class ErrorViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga can return a error-fragment when trying to add an image to a non-existent answer`() {
         Given {
-            cookie(cookie)
+            this.cookie(getAuthCookie())
         } When {
             contentType(ContentType.MULTIPART)
             multiPart(File("src/test/resources/db/questionnaires/testLargeImage.jpg"))
@@ -89,7 +76,7 @@ class ErrorViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga can return a error-fragment when trying to get non-existent image`() {
         Given {
-            cookie(cookie)
+            this.cookie(getAuthCookie())
         } When {
             get("/questionnaires/image/1")
         } Then {
@@ -110,7 +97,7 @@ class ErrorViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga can return a error-page when trying to add an image to a non-existent questionnaire`() {
         Given {
-            cookie(cookie)
+            this.cookie(getAuthCookie())
         } When {
             get("/questionnaires/2/edit")
         } Then {

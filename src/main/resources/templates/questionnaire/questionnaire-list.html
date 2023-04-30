@@ -12,15 +12,11 @@
     <link href="/styles/styles.css" rel="stylesheet"/>
     <script crossorigin="anonymous" src="https://use.fontawesome.com/releases/v6.1.0/js/all.js"></script>
     <script>
-        window.addEventListener('DOMContentLoaded', event => {
+        window.addEventListener('DOMContentLoaded', _ => {
 
             // Toggle the side navigation
             const sidebarToggle = document.body.querySelector('#sidebarToggle');
             if (sidebarToggle) {
-                // Uncomment Below to persist sidebar toggle between refreshes
-                // if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
-                //     document.body.classList.toggle('sb-sidenav-toggled');
-                // }
                 sidebarToggle.addEventListener('click', event => {
                     event.preventDefault();
                     document.body.classList.toggle('sb-sidenav-toggled');
@@ -49,7 +45,7 @@
                 <div style="display: flex; justify-content:space-between; flex-direction: row;">
                     <h1 class="mt-4">Опросники</h1>
                     <form class="input-group" th:action="@{/questionnaires/new}" th:method="GET"
-                    style="height: 40px; margin-top: 26px; width: auto;">
+                          style="height: 40px; margin-top: 26px; width: auto;">
                         <button class="btn btn-secondary" type="submit">Новый опросник</button>
                     </form>
                 </div>
