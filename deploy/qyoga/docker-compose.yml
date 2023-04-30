@@ -22,6 +22,8 @@ services:
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/qyoga
 
+    restart: always
+
     depends_on:
       - postgres
     ports:

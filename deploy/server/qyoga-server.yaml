@@ -10,7 +10,7 @@
     letsencrypt_csrs_dir: /etc/letsencrypt/csrs
     letsencrypt_certs_dir: /etc/letsencrypt/certs
     letsencrypt_account_key: /etc/letsencrypt/account/account.key
-    domain_name: qyoga.azhidkov.pro
+    domain_name: qyoga.pro
 
   become: true
 
@@ -106,6 +106,10 @@
         fullchain_dest: "{{ letsencrypt_certs_dir }}/fullchain_{{ domain_name }}.crt"
         remaining_days: 91
       register: acme_challenge_your_domain
+
+    - name: debug
+      debug:
+        var: acme_challenge_your_domain
 
     - name: "Create .well-known/acme-challenge directory"
       file:
