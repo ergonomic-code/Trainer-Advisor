@@ -15,7 +15,7 @@ import java.util.stream.Collectors
 import java.util.stream.IntStream
 
 @Controller
-@RequestMapping("/exercises/")
+@RequestMapping("/exercises")
 class ExercisesController(
     private val exercisesService: ExercisesService
 ) {

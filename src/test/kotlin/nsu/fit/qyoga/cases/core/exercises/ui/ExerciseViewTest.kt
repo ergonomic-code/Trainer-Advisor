@@ -26,7 +26,7 @@ class ExerciseViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga returns exercise-search page with exercise table`() {
         When {
-            get("/exercises/")
+            get("/exercises")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             Assertions.assertThatSpec(body) {
@@ -40,7 +40,7 @@ class ExerciseViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga returns exercise-search page with input fields`() {
         When {
-            get("/exercises/")
+            get("/exercises")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             Assertions.assertThatSpec(body) {
