@@ -2,10 +2,7 @@ package nsu.fit.qyoga.app.questionnaires
 
 import jakarta.servlet.http.HttpServletResponse
 import nsu.fit.platform.errors.ResourceNotFound
-import nsu.fit.qyoga.core.questionnaires.api.errors.AnswerException
-import nsu.fit.qyoga.core.questionnaires.api.errors.ImageException
-import nsu.fit.qyoga.core.questionnaires.api.errors.QuestionException
-import nsu.fit.qyoga.core.questionnaires.api.errors.QuestionnaireException
+import nsu.fit.qyoga.core.questionnaires.api.errors.*
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -22,7 +19,12 @@ class QuestionnairesErrorController {
         return "error-page"
     }
 
-    @ExceptionHandler(QuestionException::class, ImageException::class, AnswerException::class)
+    @ExceptionHandler(
+        QuestionException::class,
+        ImageException::class,
+        AnswerException::class,
+        DecodingException::class
+    )
     fun handleQuestionException(
         exception: ResourceNotFound,
         httpServletResponse: HttpServletResponse,

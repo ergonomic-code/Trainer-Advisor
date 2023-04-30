@@ -1,7 +1,9 @@
 package nsu.fit.qyoga.app.questionnaires
 
 import nsu.fit.qyoga.core.questionnaires.api.dtos.DecodingDtoList
+import nsu.fit.qyoga.core.questionnaires.api.errors.DecodingException
 import nsu.fit.qyoga.core.questionnaires.api.services.DecodingService
+import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -10,7 +12,8 @@ import org.springframework.web.bind.annotation.*
 @Controller
 @RequestMapping("/questionnaires/")
 class QuestionnairesResultsController(
-    private val decodingService: DecodingService
+    private val decodingService: DecodingService,
+    private val questionnaireService: QuestionnaireService
 ) {
 
     /**
@@ -21,6 +24,7 @@ class QuestionnairesResultsController(
         model: Model,
         @PathVariable questionnaireId: Long
     ): String {
+        questionnaireService.findQuestionnaire(questionnaireId)
         setResult(questionnaireId, model)
         return "questionnaire/questionnaire-decoding"
     }
@@ -47,7 +51,7 @@ class QuestionnairesResultsController(
         model: Model,
         @PathVariable questionnaireId: Long
     ): String {
-        println(questionnaireId)
+        questionnaireService.findQuestionnaire(questionnaireId)
         decodingService.createNewDecoding(questionnaireId)
         setResult(questionnaireId, model)
         return "questionnaire/questionnaire-decoding::tableDecoding"
@@ -68,7 +72,7 @@ class QuestionnairesResultsController(
                 return HttpStatus.OK
             }
         }
-        return HttpStatus.BAD_REQUEST
+        throw DecodingException("Выбранный результат не найдено")
     }
 
     /**
