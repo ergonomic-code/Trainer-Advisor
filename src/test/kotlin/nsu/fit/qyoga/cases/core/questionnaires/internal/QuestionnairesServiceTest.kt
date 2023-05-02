@@ -7,7 +7,6 @@ import io.kotest.matchers.string.shouldContain
 import nsu.fit.qyoga.cases.core.questionnaires.QuestionnairesTestConfig
 import nsu.fit.qyoga.core.questionnaires.api.dtos.*
 import nsu.fit.qyoga.core.questionnaires.api.dtos.enums.QuestionType
-import nsu.fit.qyoga.core.questionnaires.api.services.QuestionService
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
 import nsu.fit.qyoga.infra.QYogaModuleBaseTest
 import nsu.fit.qyoga.infra.TestContainerDbContextInitializer
@@ -108,7 +107,7 @@ class QuestionnairesServiceTest(
 
     @Test
     fun `QYoga can save empty questionnaire`() {
-        val createQuestionnaireDto = QuestionnaireWithQuestionDto(
+        val createQuestionnaireDto = CreateQuestionnaireDto(
             id = 0,
             title = "create questionnaire test",
             questions = mutableListOf()
@@ -123,16 +122,16 @@ class QuestionnairesServiceTest(
 
     @Test
     fun `QYoga can save questionnaire with questions without image and answers`() {
-        val question1 = QuestionWithAnswersDto()
+        val question1 = CreateQuestionDto()
         question1.title = ""
         question1.questionType = QuestionType.TEXT
-        val question2 = QuestionWithAnswersDto()
+        val question2 = CreateQuestionDto()
         question2.title = ""
         question2.questionType = QuestionType.SEVERAL
-        val question3 = QuestionWithAnswersDto()
+        val question3 = CreateQuestionDto()
         question3.title = ""
         question3.questionType = QuestionType.TEXT
-        val questionnaireWithCreateQuestionDto = QuestionnaireWithQuestionDto(
+        val questionnaireWithCreateQuestionDto = CreateQuestionnaireDto(
             id = 0,
             title = "create questionnaire test",
             questions = mutableListOf(
@@ -153,7 +152,7 @@ class QuestionnairesServiceTest(
 
     @Test
     fun `QYoga can save questionnaire with questions and answers without image`() {
-        val questionnaireWithCreateQuestionDto = QuestionnaireWithQuestionDto(
+        val questionnaireWithCreateQuestionDto = CreateQuestionnaireDto(
             id = 0,
             title = "create questionnaire test"
         )

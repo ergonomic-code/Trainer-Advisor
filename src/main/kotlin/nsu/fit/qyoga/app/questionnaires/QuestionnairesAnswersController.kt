@@ -1,13 +1,12 @@
+/*
 package nsu.fit.qyoga.app.questionnaires
 
 import nsu.fit.qyoga.core.questionnaires.api.dtos.AnswerBoundsDto
-import nsu.fit.qyoga.core.questionnaires.api.dtos.AnswerDto
-import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionWithAnswersDto
-import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireWithQuestionDto
+import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateAnswerDto
+import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionDto
+import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionnaireDto
 import nsu.fit.qyoga.core.questionnaires.api.errors.AnswerException
-import nsu.fit.qyoga.core.questionnaires.api.services.AnswerService
 import nsu.fit.qyoga.core.questionnaires.api.services.ImageService
-import nsu.fit.qyoga.core.questionnaires.api.services.QuestionService
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
@@ -24,9 +23,11 @@ class QuestionnairesAnswersController(
     private val imageService: ImageService
 ) {
 
-    /**
+    */
+/**
      * Добавление изображение ответу
-     */
+     *//*
+
     @PostMapping("answer/{id}/image")
     fun addImageToAnswer(
         @RequestParam("file") file: MultipartFile,
@@ -39,7 +40,7 @@ class QuestionnairesAnswersController(
         answer.imageId?.let {
             imageService.deleteImage(it)
         }
-        val answerDto = AnswerDto(
+        val createAnswerDto = CreateAnswerDto(
             id = answer.id,
             title = answer.title,
             bounds = AnswerBoundsDto(
@@ -51,16 +52,18 @@ class QuestionnairesAnswersController(
             score = answer.score,
             imageId = imageService.uploadImage(file)
         )
-        answerService.updateAnswer(answerDto)
-        model.addAttribute("answer", answerDto)
+        answerService.updateAnswer(createAnswerDto)
+        model.addAttribute("answer", createAnswerDto)
         model.addAttribute("questionIndex", questionIndex)
         model.addAttribute("answerIndex", answerIndex)
         return "fragments/create-questionnaire-image::answerImage"
     }
 
-    /**
+    */
+/**
      * Добавление ответа в вопрос
-     */
+     *//*
+
     @GetMapping("{questionnaireId}/edit/question/{questionId}/addAnswer")
     fun addAnswerToQuestion(
         @PathVariable questionId: Long,
@@ -71,9 +74,11 @@ class QuestionnairesAnswersController(
         return returnQuestionsPage(questionnaireId, model)
     }
 
-    /**
+    */
+/**
      * Удаление ответа из вопроса
-     */
+     *//*
+
     @DeleteMapping("{questionnaireId}/edit/answer/{answerId}")
     fun deleteAnswerFromQuestion(
         @PathVariable answerId: Long,
@@ -84,13 +89,15 @@ class QuestionnairesAnswersController(
         return returnQuestionsPage(questionnaireId, model)
     }
 
-    /**
+    */
+/**
      * Обновление ответа
-     */
+     *//*
+
     @PostMapping("question/{questionId}/answer/{answerId}/update")
     @ResponseBody
     fun changeAnswerTitle(
-        @ModelAttribute("questionnaire") questionnaire: QuestionnaireWithQuestionDto,
+        @ModelAttribute("questionnaire") questionnaire: CreateQuestionnaireDto,
         @PathVariable answerId: Long,
         @PathVariable questionId: Long
     ): HttpStatus {
@@ -105,15 +112,17 @@ class QuestionnairesAnswersController(
         throw AnswerException("Выбранного ответа не существует")
     }
 
-    /**
+    */
+/**
      * Получить фрагмент страницы задания баллов для ответов
-     */
+     *//*
+
     @PostMapping("question/{id}/setScores")
     fun setQuestionScore(
         model: Model,
         @PathVariable id: Long,
         @ModelAttribute("questionIndex") questionIndex: Int,
-        @ModelAttribute("questionnaire") questionnaire: QuestionnaireWithQuestionDto
+        @ModelAttribute("questionnaire") questionnaire: CreateQuestionnaireDto
     ): String {
         questionnaire.questions.forEach { question ->
             if (question.id == id) {
@@ -128,15 +137,17 @@ class QuestionnairesAnswersController(
         return "fragments/create-questionnaire-answer-set-score::answersScore"
     }
 
-    /**
+    */
+/**
      * Получить фрагмент страницы редактирования ответа
-     */
+     *//*
+
     @PostMapping("question/{id}/setAnswers")
     fun setQuestionAnswers(
         model: Model,
         @PathVariable id: Long,
         @ModelAttribute("questionIndex") questionIndex: Int,
-        @ModelAttribute("questionnaire") questionnaire: QuestionnaireWithQuestionDto
+        @ModelAttribute("questionnaire") questionnaire: CreateQuestionnaireDto
     ): String {
         questionnaire.questions.forEach { question ->
             if (question.id == id) {
@@ -167,7 +178,7 @@ class QuestionnairesAnswersController(
     }
 
     fun setQuestionWithId(
-        question: QuestionWithAnswersDto,
+        question: CreateQuestionDto,
         questionIndex: Int,
         model: Model
     ) {
@@ -175,3 +186,4 @@ class QuestionnairesAnswersController(
         model.addAttribute("questionIndex", questionIndex)
     }
 }
+*/

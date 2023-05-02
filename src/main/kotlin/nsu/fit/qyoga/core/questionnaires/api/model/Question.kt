@@ -11,7 +11,6 @@ data class Question(
     val id: Long = 0,
     val title: String?,
     val questionType: QuestionType,
-    val questionnaireId: Long,
     val imageId: Long?,
     @MappedCollection(idColumn = "question_id")
     val answers: Set<Answer>

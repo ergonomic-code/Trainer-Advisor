@@ -35,7 +35,7 @@ class QuestionnairesController(
     /**
      * Фильтрация опросников
      */
-    @GetMapping("action")
+    @GetMapping("/action")
     fun sortQuestionnaires(
         @ModelAttribute("questionnaireSearchDto") questionnaireSearchDto: QuestionnaireSearchDto,
         @PageableDefault(value = 10, page = 0, sort = ["title"]) pageable: Pageable,

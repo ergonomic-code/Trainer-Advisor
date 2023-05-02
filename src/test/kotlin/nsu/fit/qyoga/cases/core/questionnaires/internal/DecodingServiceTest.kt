@@ -3,7 +3,6 @@ package nsu.fit.qyoga.cases.core.questionnaires.internal
 import io.kotest.matchers.shouldBe
 import nsu.fit.qyoga.cases.core.questionnaires.QuestionnairesTestConfig
 import nsu.fit.qyoga.core.questionnaires.api.dtos.DecodingDto
-import nsu.fit.qyoga.core.questionnaires.api.services.DecodingService
 import nsu.fit.qyoga.infra.QYogaModuleBaseTest
 import nsu.fit.qyoga.infra.TestContainerDbContextInitializer
 import org.junit.jupiter.api.BeforeEach

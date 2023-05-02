@@ -2,10 +2,9 @@ package nsu.fit.qyoga.cases.core.questionnaires.internal
 
 import io.kotest.matchers.shouldBe
 import nsu.fit.qyoga.cases.core.questionnaires.QuestionnairesTestConfig
-import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionWithAnswersDto
+import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.enums.QuestionType
 import nsu.fit.qyoga.core.questionnaires.api.errors.QuestionException
-import nsu.fit.qyoga.core.questionnaires.api.services.QuestionService
 import nsu.fit.qyoga.infra.QYogaModuleBaseTest
 import nsu.fit.qyoga.infra.TestContainerDbContextInitializer
 import org.junit.jupiter.api.Assertions
@@ -48,7 +47,7 @@ class QuestionServiceTest(
     @Test
     fun `QYoga can create question from QuestionWithAnswersDto and find them`() {
         val questionId = questionService.saveQuestion(
-            QuestionWithAnswersDto(
+            CreateQuestionDto(
                 id = 0,
                 title = "test",
                 questionType = QuestionType.RANGE,

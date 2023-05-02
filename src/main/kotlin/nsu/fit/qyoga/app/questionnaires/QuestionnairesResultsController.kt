@@ -1,8 +1,7 @@
+/*
 package nsu.fit.qyoga.app.questionnaires
 
-import nsu.fit.qyoga.core.questionnaires.api.dtos.DecodingDtoList
 import nsu.fit.qyoga.core.questionnaires.api.errors.DecodingException
-import nsu.fit.qyoga.core.questionnaires.api.services.DecodingService
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
@@ -16,9 +15,11 @@ class QuestionnairesResultsController(
     private val questionnaireService: QuestionnaireService
 ) {
 
-    /**
+    */
+/**
      * Получить страницу задания результатов опросников
-     */
+     *//*
+
     @GetMapping("{questionnaireId}/setResult")
     fun getSetResultPage(
         model: Model,
@@ -29,9 +30,11 @@ class QuestionnairesResultsController(
         return "questionnaire/questionnaire-decoding"
     }
 
-    /**
+    */
+/**
      * Удалить результат опросника
-     */
+     *//*
+
     @DeleteMapping("{questionnaireId}/setResult/{resultId}")
     fun deleteResultRow(
         model: Model,
@@ -43,9 +46,11 @@ class QuestionnairesResultsController(
         return "questionnaire/questionnaire-decoding::tableDecoding"
     }
 
-    /**
+    */
+/**
      * Добавить результат опросника
-     */
+     *//*
+
     @GetMapping("{questionnaireId}/setResult/addResult")
     fun addResultToQuestionnaire(
         model: Model,
@@ -57,9 +62,11 @@ class QuestionnairesResultsController(
         return "questionnaire/questionnaire-decoding::tableDecoding"
     }
 
-    /**
+    */
+/**
      * Сохранение изменений в результатах опросника
-     */
+     *//*
+
     @PostMapping("setResult/{resultId}/update")
     @ResponseBody
     fun updateResultsTableRow(
@@ -75,9 +82,11 @@ class QuestionnairesResultsController(
         throw DecodingException("Выбранный результат не найдено")
     }
 
-    /**
+    */
+/**
      * Задание результатов опросников
-     */
+     *//*
+
     @PostMapping("setResult")
     fun saveResultsTable(
         @ModelAttribute("results") results: DecodingDtoList,
@@ -96,3 +105,4 @@ class QuestionnairesResultsController(
         )
     }
 }
+*/

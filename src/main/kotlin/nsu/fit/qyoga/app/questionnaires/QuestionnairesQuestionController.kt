@@ -1,11 +1,10 @@
+/*
 package nsu.fit.qyoga.app.questionnaires
 
-import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionWithAnswersDto
-import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireWithQuestionDto
+import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionDto
+import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionnaireDto
 import nsu.fit.qyoga.core.questionnaires.api.errors.QuestionException
-import nsu.fit.qyoga.core.questionnaires.api.services.AnswerService
 import nsu.fit.qyoga.core.questionnaires.api.services.ImageService
-import nsu.fit.qyoga.core.questionnaires.api.services.QuestionService
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
@@ -22,9 +21,11 @@ class QuestionnairesQuestionController(
     private val imageService: ImageService
 ) {
 
-    /**
+    */
+/**
      * Добавление нового вопроса
-     */
+     *//*
+
     @GetMapping("{id}/edit/add-question")
     fun addNewQuestionToQuestionnaire(
         @PathVariable id: Long,
@@ -34,9 +35,11 @@ class QuestionnairesQuestionController(
         return returnQuestionsPage(id, model)
     }
 
-    /**
+    */
+/**
      * Добавление изображение вопросу
-     */
+     *//*
+
     @PostMapping("question/{id}/image")
     fun addImageToQuestion(
         @RequestParam("file") file: MultipartFile,
@@ -48,7 +51,7 @@ class QuestionnairesQuestionController(
         question.imageId?.let {
             imageService.deleteImage(it)
         }
-        val newQuestion = QuestionWithAnswersDto(
+        val newQuestion = CreateQuestionDto(
             id = question.id,
             title = question.title,
             questionType = question.questionType,
@@ -58,7 +61,7 @@ class QuestionnairesQuestionController(
         )
         val questionDto = questionService.findQuestion(questionService.updateQuestion(newQuestion))
         setQuestionWithId(
-            QuestionWithAnswersDto(
+            CreateQuestionDto(
                 questionDto.id,
                 questionDto.title,
                 questionDto.questionType,
@@ -71,9 +74,11 @@ class QuestionnairesQuestionController(
         return "fragments/create-questionnaire-image::questionImage"
     }
 
-    /**
+    */
+/**
      * Удаление вопроса из опросника
-     */
+     *//*
+
     @DeleteMapping("{questionnaireId}/edit/question/{questionId}")
     fun deleteQuestionFromQuestionnaire(
         @PathVariable questionId: Long,
@@ -84,12 +89,14 @@ class QuestionnairesQuestionController(
         return returnQuestionsPage(questionnaireId, model)
     }
 
-    /**
+    */
+/**
      * Изменить тип вопроса
-     */
+     *//*
+
     @PostMapping("{questionnaireId}/edit/question/{questionId}/change-type")
     fun changeAnswersType(
-        @ModelAttribute("questionnaire") questionnaire: QuestionnaireWithQuestionDto,
+        @ModelAttribute("questionnaire") questionnaire: CreateQuestionnaireDto,
         model: Model,
         @PathVariable questionId: Long,
         @PathVariable questionnaireId: Long
@@ -97,7 +104,7 @@ class QuestionnairesQuestionController(
         questionnaire.questions.forEach { question ->
             if (question.id == questionId) {
                 questionService.updateQuestion(
-                    QuestionWithAnswersDto(
+                    CreateQuestionDto(
                         id = question.id,
                         title = question.title,
                         questionType = question.questionType,
@@ -118,20 +125,22 @@ class QuestionnairesQuestionController(
         return returnQuestionsPage(questionnaireId, model)
     }
 
-    /**
+    */
+/**
      * Обновить вопрос
-     */
+     *//*
+
     @PostMapping("{questionnaireId}/edit/question/{questionId}/update")
     @ResponseBody
     fun changeQuestionTitle(
-        @ModelAttribute("questionnaire") questionnaire: QuestionnaireWithQuestionDto,
+        @ModelAttribute("questionnaire") questionnaire: CreateQuestionnaireDto,
         @PathVariable questionId: Long,
         @PathVariable questionnaireId: Long
     ): HttpStatus {
         questionnaire.questions.forEach { question ->
             if (question.id == questionId) {
                 questionService.updateQuestion(
-                    QuestionWithAnswersDto(
+                    CreateQuestionDto(
                         id = question.id,
                         title = question.title,
                         questionType = question.questionType,
@@ -158,7 +167,7 @@ class QuestionnairesQuestionController(
     }
 
     fun setQuestionWithId(
-        question: QuestionWithAnswersDto,
+        question: CreateQuestionDto,
         questionIndex: Int,
         model: Model
     ) {
@@ -166,3 +175,4 @@ class QuestionnairesQuestionController(
         model.addAttribute("questionIndex", questionIndex)
     }
 }
+*/
