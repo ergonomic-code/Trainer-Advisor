@@ -1,8 +1,9 @@
 package nsu.fit.qyoga.core.images.internal
 
-import nsu.fit.qyoga.core.images.api.error.ImageException
 import nsu.fit.qyoga.core.images.api.model.Image
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
+import org.springframework.jdbc.support.GeneratedKeyHolder
 import org.springframework.stereotype.Repository
 import java.sql.ResultSet
 
@@ -12,41 +13,76 @@ class ImageJdbcTemplateRepo(
 ) {
 
     fun findImageList(idList: List<Long>): List<Image> {
-        val imageList = mutableListOf<Image>()
         val query = """
             select 
-            t.id as imageId,
+            images.id as imageId,
             images.name AS imageName, 
             images.media_type AS imageMediaType, 
             images.size AS imageSize, 
             images.data AS imageData
-            from (
-              values ${idListToValues(idList)}
-            ) as t(id)
-            left join images on images.id = t.id
+            from images
+            where images.id IN (:fields)
         """.trimIndent()
-        jdbcTemplate.query(
-            query
+        return jdbcTemplate.query(
+            query,
+            MapSqlParameterSource("fields", idList)
         ) { rs: ResultSet, _: Int ->
-            imageList.add(
-                Image(
-                    id = rs.getLong("imageId"),
-                    name = rs.getString("imageName")
-                        ?: throw ImageException("No existing image with id = ${rs.getLong("imageId")}"),
-                    mediaType = rs.getString("imageMediaType"),
-                    size = rs.getLong("imageSize"),
-                    data = rs.getBytes("imageData")
-                )
+            Image(
+                id = rs.getLong("imageId"),
+                name = rs.getString("imageName"),
+                mediaType = rs.getString("imageMediaType"),
+                size = rs.getLong("imageSize"),
+                data = rs.getBytes("imageData")
             )
         }
-        return imageList
     }
 
-    fun idListToValues(idList: List<Long>): String {
-        return buildString {
-            for (id in idList) {
-                append("($id),")
-            }
-        }.dropLast(1)
+    fun delete(id: Long) {
+        val query = """
+            delete 
+            from images
+            where images.id = :id
+        """.trimIndent()
+        jdbcTemplate.update(query, MapSqlParameterSource("id", id))
+    }
+
+    fun save(image: Image): Long {
+        val query = """
+            INSERT INTO images (name, media_type, size, data) values (:name, :mediaType, :size, :data) RETURNING id
+        """.trimIndent()
+        val params = MapSqlParameterSource()
+        params.addValue("name", image.name)
+        params.addValue("mediaType", image.mediaType)
+        params.addValue("size", image.size)
+        params.addValue("data", image.data)
+        val keyHolder = GeneratedKeyHolder()
+        jdbcTemplate.update(query, params, keyHolder)
+        return keyHolder.key!!.toLong()
+    }
+
+    fun findById(id: Long): Image? {
+        val query = """
+            SELECT 
+            id AS imageId,
+            name AS imageName, 
+            media_type AS imageMediaType, 
+            size AS imageSize, 
+            data AS imageData
+            FROM images
+            WHERE id = :id
+        """.trimIndent()
+        val imageList: List<Image> =  jdbcTemplate.query(
+            query,
+            MapSqlParameterSource("id", id)
+        ) { rs: ResultSet, _: Int ->
+            Image(
+                id = rs.getLong("imageId"),
+                name = rs.getString("imageName"),
+                mediaType = rs.getString("imageMediaType"),
+                size = rs.getLong("imageSize"),
+                data = rs.getBytes("imageData")
+            )
+        }
+        return if (imageList.isEmpty()) null else imageList[0]
     }
 }

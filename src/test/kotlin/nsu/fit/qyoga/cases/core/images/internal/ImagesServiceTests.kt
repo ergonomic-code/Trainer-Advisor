@@ -4,6 +4,7 @@ import io.kotest.matchers.shouldBe
 import nsu.fit.qyoga.cases.core.images.ImagesTestConfig
 import nsu.fit.qyoga.core.images.api.ImageService
 import nsu.fit.qyoga.core.images.api.error.ImageException
+import nsu.fit.qyoga.core.images.api.model.Image
 import nsu.fit.qyoga.infra.QYogaModuleBaseTest
 import nsu.fit.qyoga.infra.TestContainerDbContextInitializer
 import org.junit.jupiter.api.Assertions
@@ -43,7 +44,7 @@ class ImagesServiceTests(
     @Test
     fun `QYoga can save image and find them`() {
         val multipartFile = getMultipartFileFromInputStream(FileInputStream(file))
-        val imageId = imageService.uploadImage(multipartFile)
+        val imageId = imageService.uploadImage(multipartFileToImage(multipartFile))
         val savedImage = imageService.getImage(imageId)
         savedImage.id shouldBe imageId
         savedImage.name shouldBe multipartFile.originalFilename
@@ -55,7 +56,7 @@ class ImagesServiceTests(
     @Test
     fun `QYoga can delete image`() {
         val multipartFile = getMultipartFileFromInputStream(FileInputStream(file))
-        val imageId = imageService.uploadImage(multipartFile)
+        val imageId = imageService.uploadImage(multipartFileToImage(multipartFile))
         imageService.deleteImage(imageId)
         val thrown1: ImageException = Assertions.assertThrows(
             ImageException::class.java
@@ -67,10 +68,10 @@ class ImagesServiceTests(
     fun `QYoga can find image list`() {
         val multipartFile = getMultipartFileFromInputStream(FileInputStream(file))
         val fileByteArr = multipartFile.bytes
-        imageService.uploadImage(multipartFile)
-        imageService.uploadImage(multipartFile)
+        imageService.uploadImage(multipartFileToImage(multipartFile))
+        imageService.uploadImage(multipartFileToImage(multipartFile))
         val imageList = imageService.getImageList(listOf(1, 1, 2))
-        imageList.size shouldBe 3
+        imageList.size shouldBe 2
         for (image in imageList) {
             image.data shouldBe fileByteArr
             image.mediaType shouldBe "text/plain"
@@ -80,12 +81,11 @@ class ImagesServiceTests(
     @Test
     fun `QYoga can't find non-existing image`() {
         val multipartFile = getMultipartFileFromInputStream(FileInputStream(file))
-        val id1 = imageService.uploadImage(multipartFile)
-        val id2 = imageService.uploadImage(multipartFile)
-        val thrown1: ImageException = Assertions.assertThrows(
-            ImageException::class.java
-        ) { imageService.getImageList(listOf(id1, id2, -1)) }
-        Assertions.assertEquals("No existing image with id = -1", thrown1.message)
+        val id1 = imageService.uploadImage(multipartFileToImage(multipartFile))
+        imageService.uploadImage(multipartFileToImage(multipartFile))
+        val imageList = imageService.getImageList(listOf(id1, -1))
+        imageList.size shouldBe 1
+        imageList[0].id shouldBe id1
     }
 
     fun getMultipartFileFromInputStream(inputStream: FileInputStream): MultipartFile {
@@ -94,6 +94,15 @@ class ImagesServiceTests(
             file.name,
             "text/plain",
             IOUtils.toByteArray(inputStream)
+        )
+    }
+
+    fun multipartFileToImage(multipartFile: MultipartFile): Image {
+        return Image(
+            name = multipartFile.originalFilename ?: "",
+            mediaType = multipartFile.contentType ?: "application/octet-stream",
+            size = multipartFile.size,
+            data = multipartFile.bytes
         )
     }
 }
