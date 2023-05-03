@@ -44,8 +44,9 @@ class ImageJdbcTemplateRepo(
 
     fun idListToValues(idList: List<Long>): String {
         return buildString {
-            for (id in idList)
+            for (id in idList) {
                 append("($id),")
+            }
         }.dropLast(1)
     }
 }
