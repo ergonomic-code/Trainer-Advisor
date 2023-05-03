@@ -1,7 +1,7 @@
 package nsu.fit.qyoga.core.images.internal
 
-import nsu.fit.platform.errors.ResourceNotFound
 import nsu.fit.qyoga.core.images.api.ImageService
+import nsu.fit.qyoga.core.images.api.error.ImageException
 import nsu.fit.qyoga.core.images.api.model.Image
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -28,7 +28,7 @@ class ImageServiceImpl(
     }
 
     override fun getImage(id: Long): Image {
-        return imageRepo.findByIdOrNull(id) ?: throw ResourceNotFound("No existing image with id = $id")
+        return imageRepo.findByIdOrNull(id) ?: throw ImageException("No existing image with id = $id")
     }
 
     override fun getImageList(idList: List<Long>): List<Image> {
