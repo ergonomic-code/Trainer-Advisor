@@ -71,7 +71,7 @@ class ImageJdbcTemplateRepo(
             FROM images
             WHERE id = :id
         """.trimIndent()
-        val imageList: List<Image> =  jdbcTemplate.query(
+        val imageList: List<Image> = jdbcTemplate.query(
             query,
             MapSqlParameterSource("id", id)
         ) { rs: ResultSet, _: Int ->
