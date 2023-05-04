@@ -44,7 +44,9 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push
+        uses: docker/build-push-action@v4
         with:
+          context: '.'
+          file: ${{ context }}/deploy/Dockerfile
           push: true
           tags: ghcr.io/d-r-q/qyoga:latest
-        uses: docker/build-push-action@v4
