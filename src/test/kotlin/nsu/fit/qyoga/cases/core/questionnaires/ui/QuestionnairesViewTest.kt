@@ -29,14 +29,6 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
         )
     }
 
-    @BeforeEach
-    fun setupCookie() {
-        cookie = Given {
-            formParam(USERNAME_FORM_PARAM, "therapist")
-            formParam(PASSWORD_FORM_PARAM, "diem-Synergy5")
-        }.post("/login").thenReturn().detailedCookie("JSESSIONID")
-    }
-
     @Test
     fun `QYoga returns questionnaire-list page with questionnaires`() {
         Given {

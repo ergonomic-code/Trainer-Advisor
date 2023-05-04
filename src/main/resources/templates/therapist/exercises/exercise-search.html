@@ -1,38 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
-    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
-    <meta content="" name="description"/>
-    <meta content="" name="author"/>
-    <link href="/img/caret-down-square-fill.svg" rel="icon" type="image/x-icon">
-    <title>Список упражнений</title>
-    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet"/>
-    <link href="/styles/styles.css" rel="stylesheet"/>
-    <script crossorigin="anonymous" src="https://use.fontawesome.com/releases/v6.1.0/js/all.js"></script>
-    <script>
-        window.addEventListener('DOMContentLoaded', event => {
-
-            // Toggle the side navigation
-            const sidebarToggle = document.body.querySelector('#sidebarToggle');
-            if (sidebarToggle) {
-                // Uncomment Below to persist sidebar toggle between refreshes
-                // if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
-                //     document.body.classList.toggle('sb-sidenav-toggled');
-                // }
-                sidebarToggle.addEventListener('click', event => {
-                    event.preventDefault();
-                    document.body.classList.toggle('sb-sidenav-toggled');
-                    localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
-                });
-            }
-
-        });
-    </script>
-    <script crossorigin="anonymous"
-            integrity="sha384-Bj8qm/6B+71E6FQSySofJOUjA/gq330vEqjFx9LakWybUySyI1IQHwPtbTU7bNwx"
-            src="https://unpkg.com/htmx.org@1.8.6"></script>
+    <div th:replace="~{fragments/header::header (titleName=${'Список упражнений'})}"></div>
 </head>
 <body class="sb-nav-fixed">
 

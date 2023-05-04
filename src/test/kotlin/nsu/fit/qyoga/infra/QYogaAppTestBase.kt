@@ -8,7 +8,9 @@ import io.restassured.filter.log.LogDetail
 import io.restassured.filter.log.RequestLoggingFilter
 import io.restassured.filter.log.ResponseLoggingFilter
 import io.restassured.http.Cookie
+import io.restassured.module.kotlin.extensions.Extract
 import io.restassured.module.kotlin.extensions.Given
+import io.restassured.module.kotlin.extensions.When
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.boot.test.web.server.LocalServerPort
 
@@ -21,7 +23,12 @@ class QYogaAppTestBase {
         val cookie = Given {
             formParam("username", "therapist")
             formParam("password", "diem-Synergy5")
-        }.post("/login").thenReturn().detailedCookie("JSESSIONID")
+        } When {
+            post("/login")
+        } Extract {
+            detailedCookie("JSESSIONID")
+        }
+
         return cookie
     }
 

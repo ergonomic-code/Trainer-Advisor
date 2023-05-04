@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div th:replace="~{fragments/header::header (titleName=${'Список упражнений'})}"></div>
+</head>
+<body class="sb-nav-fixed">
+
+<div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
+
+<div id="layoutSidenav">
+
+    <div th:replace="~{fragments/leftNavPanel.html :: leftNavPanel}"></div>
+
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container">
+                <h1 class="mt-4">Упражнения</h1>
+
+                <form class="mt-4" id="createExerciseForm">
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label" for="inputName">Название упражнения</label>
+                        <div class="col-sm-5">
+                            <input class="form-control" id="inputName" placeholder="Собака мордой вниз" type="text">
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label" for="inputContradictions">Противопоказания</label>
+                        <div class="col-sm-5">
+                            <input class="form-control" id="inputContradictions" placeholder="Грыжа" type="text">
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label" for="inputIndications">Показания</label>
+                        <div class="col-sm-5">
+                            <input class="form-control" id="inputIndications" placeholder="Гиперлордоз" type="text">
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label" for="inputDuration">Длительность (минуты)</label>
+                        <div class="col-sm-5">
+                            <input class="form-control" id="inputDuration" placeholder="2" type="number">
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label" for="inputType">Тип упражнения</label>
+                        <div class="col-sm-5">
+                            <select class="form-select col-sm-5" id="inputType>">
+                                <option>Разминка</option>
+                                <option>Мобилизация</option>
+                                <option>Укрепление</option>
+                                <option>Вытяжение</option>
+                                <option>Расслабление</option>
+                                <option>Тракция</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3 col-sm-7">
+                        <label for="inputDescription">Описание:</label>
+                        <textarea class="form-control" id="inputDescription" rows="10"></textarea>
+                    </div>
+
+                </form>
+            </div>
+
+        </main>
+        <footer class="py-4 bg-light mt-auto" th:insert="~{/fragments/footer.html :: footer}"></footer>
+
+    </div>
+</div>
+
+</body>
+</html>
