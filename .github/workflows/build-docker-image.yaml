@@ -1,6 +1,7 @@
 name: build-docker-image
 
 on:
+  manual: true
   push:
     branches:
       - 'master'
