@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - 'master'
-      - 'qg-32/server-provisioning'
+      - 'server-provisioning'
 
 jobs:
   build-docker-image:
