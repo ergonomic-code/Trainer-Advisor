@@ -83,6 +83,6 @@ class ImageJdbcTemplateRepo(
                 data = rs.getBytes("imageData")
             )
         }
-        return if (imageList.isEmpty()) null else imageList[0]
+        return imageList.firstOrNull()
     }
 }

@@ -1,13 +1,12 @@
 package nsu.fit.qyoga.cases.core.images.internal
 
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 import nsu.fit.qyoga.cases.core.images.ImagesTestConfig
 import nsu.fit.qyoga.core.images.api.ImageService
-import nsu.fit.qyoga.core.images.api.error.ImageException
 import nsu.fit.qyoga.core.images.api.model.Image
 import nsu.fit.qyoga.infra.QYogaModuleBaseTest
 import nsu.fit.qyoga.infra.TestContainerDbContextInitializer
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -46,11 +45,12 @@ class ImagesServiceTests(
         val multipartFile = getMultipartFileFromInputStream(FileInputStream(file))
         val imageId = imageService.uploadImage(multipartFileToImage(multipartFile))
         val savedImage = imageService.getImage(imageId)
-        savedImage.id shouldBe imageId
-        savedImage.name shouldBe multipartFile.originalFilename
-        savedImage.size shouldBe multipartFile.size
-        savedImage.mediaType shouldBe "text/plain"
-        savedImage.data shouldBe multipartFile.bytes
+        savedImage shouldNotBe null
+        savedImage?.id shouldBe imageId
+        savedImage?.name shouldBe multipartFile.originalFilename
+        savedImage?.size shouldBe multipartFile.size
+        savedImage?.mediaType shouldBe "text/plain"
+        savedImage?.data shouldBe multipartFile.bytes
     }
 
     @Test
@@ -58,10 +58,7 @@ class ImagesServiceTests(
         val multipartFile = getMultipartFileFromInputStream(FileInputStream(file))
         val imageId = imageService.uploadImage(multipartFileToImage(multipartFile))
         imageService.deleteImage(imageId)
-        val thrown1: ImageException = Assertions.assertThrows(
-            ImageException::class.java
-        ) { imageService.getImage(imageId) }
-        Assertions.assertEquals("No existing image with id = $imageId", thrown1.message)
+        imageService.getImage(imageId) shouldBe null
     }
 
     @Test

@@ -1,7 +1,6 @@
 package nsu.fit.qyoga.core.images.internal
 
 import nsu.fit.qyoga.core.images.api.ImageService
-import nsu.fit.qyoga.core.images.api.error.ImageException
 import nsu.fit.qyoga.core.images.api.model.Image
 import org.springframework.stereotype.Service
 
@@ -21,9 +20,8 @@ class ImageServiceImpl(
         return image
     }
 
-    override fun getImage(id: Long): Image {
+    override fun getImage(id: Long): Image? {
         return imageJdbcTemplateRepo.findById(id)
-            ?: throw ImageException("No existing image with id = $id")
     }
 
     override fun getImageList(idList: List<Long>): List<Image> {
