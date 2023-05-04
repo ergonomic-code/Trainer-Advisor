@@ -47,6 +47,6 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           context: '.'
-          file: ${{ context }}/deploy/Dockerfile
+          file: deploy/Dockerfile
           push: true
           tags: ghcr.io/d-r-q/qyoga:latest
