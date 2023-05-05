@@ -1,4 +1,4 @@
-package nsu.fit.qyoga.core.questionnaires.api.model
+package nsu.fit.qyoga.core.images.api.model
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.Table
