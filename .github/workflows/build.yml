@@ -24,7 +24,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Run build with Gradle Wrapper
-        run: ./gradlew clean build
+        run: ./gradlew build
 
       - name: Publish test results
         uses: EnricoMi/publish-unit-test-result-action@v1
@@ -40,4 +40,6 @@ jobs:
         with:
           name: Test Reports
           path: |
-            ./
+            ./**/test-results/**/*.xml
+            ./**/reports
+            ./**/libs
