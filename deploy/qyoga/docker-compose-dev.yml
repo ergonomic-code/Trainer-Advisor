@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+
+  API:
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/qyoga
+
+    build:
+      context: ../../
+      dockerfile: deploy/qyoga/Dockerfile
+
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    links:
+      - "postgres:database"
