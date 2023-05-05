@@ -40,5 +40,4 @@ jobs:
         with:
           name: Test Reports
           path: |
-            ./**/test-results/**/*.xml
-            ./**/reports
+            ./
