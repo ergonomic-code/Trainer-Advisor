@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+
+  postgres:
+    logging:
+      driver: journald
+    image: postgres:15.2
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: P@ssw0rd
+      POSTGRES_DB: qyoga
+      PGDATA: var/lib/postgresql/data/pgdata
+    volumes:
+      - /var/pgdata/qyoga:/var/lib/postgresql/data/pgdata
+
+  API:
+    logging:
+      driver: journald
+    image: ghcr.io/d-r-q/qyoga:latest
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/qyoga
+
+    restart: always
+
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    links:
+      - "postgres:database"

@@ -1,4 +1,4 @@
-name: build-docker-image
+name: Build and publish docker image
 
 on:
   push:
@@ -45,6 +45,7 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
-          context: .
+          context: '.'
+          file: deploy/qyoga/Dockerfile
           push: true
           tags: ghcr.io/d-r-q/qyoga:latest
