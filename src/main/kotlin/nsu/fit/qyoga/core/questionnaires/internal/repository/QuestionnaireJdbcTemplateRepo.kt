@@ -18,12 +18,11 @@ class QuestionnaireJdbcTemplateRepo(
     fun findQuestionnaireOnPage(title: String, pageable: Pageable): Page<QuestionnaireDto> {
         val questionnaireDtoList: MutableList<QuestionnaireDto> = mutableListOf()
         val params = MapSqlParameterSource()
-        var count = -1L
         params.addValue("pageSize", pageable.pageSize)
         params.addValue("title", title)
         params.addValue("offset", pageable.pageSize*pageable.pageNumber)
         jdbcTemplate.query(
-            getQueryBySortType(title, pageable.sort.toString().substringAfter(": ")),
+            getQueryBySortType(pageable.sort.toString().substringAfter(": ")),
             params
         ) { rs: ResultSet, _: Int ->
             val questionnaireId = rs.getLong("questionnaireId")
@@ -37,28 +36,33 @@ class QuestionnaireJdbcTemplateRepo(
                 )
             )
         }
-        return PageImpl(questionnaireDtoList, pageable, count)
+        return PageImpl(questionnaireDtoList, pageable, getCount(title))
     }
 
-    fun getCount(title: String) {
+    fun getCount(title: String): Long {
         val query = """
             SELECT
-            questionnaires.id AS questionnaireId,
-            questionnaires.title AS questionnaireTitle
+            count(*) as questionnaireCount
             FROM questionnaires
             WHERE questionnaires.title LIKE '%' || :title || '%'
         """.trimIndent()
+        return jdbcTemplate.queryForObject(
+            query,
+            MapSqlParameterSource("title", title)
+        ) {rs: ResultSet, _: Int ->
+            rs.getLong("questionnaireCount")
+        } ?: 0
     }
 
 
-    fun getQueryBySortType(title: String, type: String): String {
+    fun getQueryBySortType(type: String): String {
         return """
             SELECT
             questionnaires.id AS questionnaireId,
             questionnaires.title AS questionnaireTitle
             FROM questionnaires
             WHERE questionnaires.title LIKE '%' || :title || '%'
-            ORDER BY questionnaires.title, questionnaires.id $type
+            ORDER BY questionnaires.title $type
             LIMIT :pageSize OFFSET :offset
         """.trimIndent()
     }

@@ -21,7 +21,7 @@ class QuestionnairesController(
     @GetMapping()
     fun getQuestionnairesList(
         @ModelAttribute("questionnaireSearchDto") questionnaireSearchDto: QuestionnaireSearchDto,
-        @PageableDefault(value = 10, page = 0, sort = ["title"]) pageable: Pageable,
+        @PageableDefault(value = 7, page = 0, sort = ["title"]) pageable: Pageable,
         model: Model
     ): String {
         val questionnaires = questionnaireService.findQuestionnaires(
@@ -38,7 +38,7 @@ class QuestionnairesController(
     @GetMapping("/action")
     fun sortQuestionnaires(
         @ModelAttribute("questionnaireSearchDto") questionnaireSearchDto: QuestionnaireSearchDto,
-        @PageableDefault(value = 10, page = 0, sort = ["title"]) pageable: Pageable,
+        @PageableDefault(value = 7, page = 0, sort = ["title"]) pageable: Pageable,
         model: Model
     ): String {
         val questionnaires = questionnaireService.findQuestionnaires(

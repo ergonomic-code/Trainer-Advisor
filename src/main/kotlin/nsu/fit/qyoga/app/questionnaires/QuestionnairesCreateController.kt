@@ -1,8 +1,10 @@
-/*
 package nsu.fit.qyoga.app.questionnaires
 
+import jakarta.servlet.http.HttpSession
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionnaireDto
+import nsu.fit.qyoga.core.questionnaires.api.dtos.testDto
+import nsu.fit.qyoga.core.questionnaires.api.model.Questionnaire
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
@@ -11,64 +13,64 @@ import org.springframework.web.bind.annotation.*
 
 @Controller
 @RequestMapping("/questionnaires")
+@SessionAttributes("questionnaire")
 class QuestionnairesCreateController(
-    private val questionnaireService: QuestionnaireService
+    private val questionnaireService: QuestionnaireService,
+    private val httpSession: HttpSession
 ) {
 
-    */
-/**
+    /**
      * Создание нового опросника
-     *//*
-
+     */
     @GetMapping("/new")
     fun getCreateQuestionnairePage(): String {
+        httpSession.setAttribute(
+            "test",
+            "asd"
+        )
+        val test = httpSession.getAttribute("test") as String
 
-        return "redirect:/questionnaires/$questionnaireId/edit"
+        return "questionnaire/create-questionnaire"
     }
 
-    */
-/**
+    /**
      * Редактирование опросника
-     *//*
-
-    @GetMapping("/{id}/edit")
+      */
+    /*@GetMapping("/{id}/edit")
     fun editQuestionnaire(
         model: Model,
         @PathVariable id: Long
     ): String {
 
         return "questionnaire/create-questionnaire"
-    }
+    }*/
 
-    */
-/**
+    /**
      * Создание опросника
-     *//*
-
-    @PostMapping("/{id}/edit")
+     */
+    /*@PostMapping("/{id}/edit")
     fun createQuestionnaire(
         @ModelAttribute("questionnaire") questionnaire: CreateQuestionnaireDto,
         @PathVariable id: Long
     ): String {
 
         return "redirect:/questionnaires/$id/setResult"
-    }
+    }*/
 
-    */
-/**
+
+    /**
      * Задание заголовка опросника
-     *//*
-
-    @PostMapping("/{id}/edit/title")
+     */
+    /*@PostMapping("/{id}/edit/title")
     @ResponseBody
     fun changeQuestionnaireTitle(
         questionnaire: QuestionnaireDto
     ): HttpStatus {
 
         return HttpStatus.OK
-    }
+    }*/
 
-    fun setQuestionnaireInModel(
+    /*fun setQuestionnaireInModel(
         questionnaireId: Long,
         model: Model
     ) {
@@ -76,6 +78,5 @@ class QuestionnairesCreateController(
             "questionnaire",
             questionnaireService.findQuestionnaireWithQuestions(questionnaireId)
         )
-    }
+    }*/
 }
-*/

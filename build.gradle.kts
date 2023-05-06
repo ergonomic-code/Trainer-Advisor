@@ -33,7 +33,8 @@ dependencies {
 	implementation("org.flywaydb:flyway-core")
 	implementation("jakarta.validation:jakarta.validation-api:3.0.2")
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-
+	testImplementation("com.h2database:h2:2.1.214")
+	implementation("org.springframework.session:spring-session-jdbc:3.0.1")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.testcontainers:junit-jupiter")

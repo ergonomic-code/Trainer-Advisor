@@ -12,4 +12,7 @@ spring:
     multipart:
       max-file-size: 1MB
       max-request-size: 1MB
+  session:
+    jdbc:
+      initialize-schema: always
 #54501
