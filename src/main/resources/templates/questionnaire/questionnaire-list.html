@@ -149,7 +149,7 @@
                                                    hx-target="#card-body"
                                                    hx-trigger="click"
                                                    style="cursor: pointer"
-                                                   th:attr="hx-get=@{/questionnaires/action(page=${pageNumber}, sort=${'title,'+sortType}, title=${questionnaireSearchDto.title})}"
+                                                   th:attr="hx-get=@{/questionnaires/action(page=${pageNumber - 1}, sort=${'title,'+sortType}, title=${questionnaireSearchDto.title})}"
                                                    th:text="${pageNumber}"></a>
                                             </li>
                                         </div>

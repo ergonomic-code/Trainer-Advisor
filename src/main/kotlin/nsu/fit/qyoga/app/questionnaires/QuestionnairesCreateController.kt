@@ -23,64 +23,56 @@ class QuestionnairesCreateController(
      */
     @GetMapping("/new")
     fun getCreateQuestionnairePage(): String {
-
-        httpSession.setAttribute(
-            "questionnaire",
-            CreateQuestionnaireDto(
-                id = 0,
-                title = ""
+        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
+        if(questionnaire == null || questionnaire.id != 0L) {
+            httpSession.setAttribute(
+                "questionnaire",
+                CreateQuestionnaireDto(
+                    id = 0,
+                    title = ""
+                )
             )
-        )
-        val param = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto
-        println("created object with params: id = ${param.id}, title = ${param.title}")
-
+        }
         return "questionnaire/create-questionnaire"
     }
 
     /**
      * Редактирование опросника
       */
-    /*@GetMapping("/{id}/edit")
+    @GetMapping("/{id}/edit")
     fun editQuestionnaire(
-        model: Model,
         @PathVariable id: Long
     ): String {
-
+        httpSession.setAttribute(
+            "questionnaire",
+            questionnaireService.findQuestionnaireWithQuestions(id)
+        )
         return "questionnaire/create-questionnaire"
-    }*/
+    }
 
     /**
      * Создание опросника
      */
-    /*@PostMapping("/{id}/edit")
+    @PostMapping("/edit")
     fun createQuestionnaire(
         @ModelAttribute("questionnaire") questionnaire: CreateQuestionnaireDto,
-        @PathVariable id: Long
     ): String {
-
-        return "redirect:/questionnaires/$id/setResult"
-    }*/
+        httpSession.removeAttribute("questionnaire")
+        questionnaireService.saveQuestionnaire(questionnaire)
+        return "redirect:/questionnaires/setResult"
+    }
 
 
     /**
      * Задание заголовка опросника
      */
-    /*@PostMapping("/{id}/edit/title")
+    @PostMapping("/edit/title")
     @ResponseBody
     fun changeQuestionnaireTitle(
-        questionnaire: QuestionnaireDto
+        @RequestParam title: String
     ): HttpStatus {
-
+        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto
+        httpSession.setAttribute("questionnaire", questionnaire.copy(title = title))
         return HttpStatus.OK
-    }*/
-
-    /*fun setQuestionnaireInModel(
-        questionnaireId: Long,
-        model: Model
-    ) {
-        model.addAttribute(
-            "questionnaire",
-            questionnaireService.findQuestionnaireWithQuestions(questionnaireId)
-        )
-    }*/
+    }
 }
