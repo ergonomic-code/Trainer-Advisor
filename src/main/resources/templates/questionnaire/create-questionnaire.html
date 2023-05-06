@@ -43,9 +43,8 @@
 
     <div id="layoutSidenav_content">
 
-        <h1 th:value="${session.test}"></h1>
 
-        <!--<form id="questionnaire" style="padding-left: 15%; padding-right: 15%; margin-bottom: 100px"
+        <form id="questionnaire" style="padding-left: 15%; padding-right: 15%; margin-bottom: 100px"
               th:method="POST"
               th:action="@{/questionnaires/{id}/edit(id = ${session.questionnaire.id})}"
               th:object="${session.questionnaire}">
@@ -65,12 +64,12 @@
                 </label>
             </div>
 
-            &lt;!&ndash;<div id="questions" >
+            <!--<div id="questions" >
                   <div th:each="question, i : ${questionnaire.questions}"
                        th:fragment="questions" th:id="|question${question.id}|">
                       <div th:replace="~{/fragments/create-questionnaire-answer::question(${question}, ${questionnaire}, ${i.index}) }"></div>
                   </div>
-            </div>&ndash;&gt;
+            </div>-->
 
             <div class="position-fixed bottom-0 start-0 w-100 text-end bg-white"
                  style="height: 75px; box-sizing: border-box; padding-top: 10px; padding-right: 5%;">
@@ -85,7 +84,7 @@
                    hx-trigger="click"
                    th:attr="hx-get=|@{/questionnaires/{id}/edit/add-question(id=${session.questionnaire.id})}|"
                    hx-target="#questions">
-        </div>-->
+        </div>
 
         <div id="errors" style="position:fixed; width:100%; bottom:80px;"></div>
     </div>

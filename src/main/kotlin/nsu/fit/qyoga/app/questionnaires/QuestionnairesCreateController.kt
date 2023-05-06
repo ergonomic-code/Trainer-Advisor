@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*
 
 @Controller
 @RequestMapping("/questionnaires")
-@SessionAttributes("questionnaire")
 class QuestionnairesCreateController(
     private val questionnaireService: QuestionnaireService,
     private val httpSession: HttpSession
@@ -24,11 +23,16 @@ class QuestionnairesCreateController(
      */
     @GetMapping("/new")
     fun getCreateQuestionnairePage(): String {
+
         httpSession.setAttribute(
-            "test",
-            "asd"
+            "questionnaire",
+            CreateQuestionnaireDto(
+                id = 0,
+                title = ""
+            )
         )
-        val test = httpSession.getAttribute("test") as String
+        val param = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto
+        println("created object with params: id = ${param.id}, title = ${param.title}")
 
         return "questionnaire/create-questionnaire"
     }
