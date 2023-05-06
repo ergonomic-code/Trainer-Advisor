@@ -39,36 +39,38 @@
 
 <div id="layoutSidenav">
 
-    <div th:replace="~{/fragments/leftNavPanel.html :: leftNavPanel}"></div>
+    <div th:replace="~{fragments/leftNavPanel.html :: leftNavPanel}"></div>
 
     <div id="layoutSidenav_content">
 
-        <form id="questionnaire" style="padding-left: 15%; padding-right: 15%; margin-bottom: 100px"
+        <h1 th:value="${session.test}"></h1>
+
+        <!--<form id="questionnaire" style="padding-left: 15%; padding-right: 15%; margin-bottom: 100px"
               th:method="POST"
-              th:action="@{/questionnaires/{id}/edit(id = ${questionnaire.id})}"
-              th:object="${questionnaire}">
+              th:action="@{/questionnaires/{id}/edit(id = ${session.questionnaire.id})}"
+              th:object="${session.questionnaire}">
 
             <div id="questionnaire-title" class="bg-dark form-control-lg mt-4"
             style="text-align: center; padding-bottom: 20px; border-radius: 10px">
                 <span style="font-size: 28px; color: white; margin-top: 10px">Название опросника</span>
                 <br>
-                <input hidden th:name="id" th:value="${questionnaire.id}">
+                <input hidden th:name="id" th:value="${session.questionnaire.id}">
                 <label style="width: 100%">
                     <input type="text" style="width: 70%; margin-top: 15px; border-radius: 5px; min-width: 100px"
-                           th:value="${questionnaire.title}"
+                           th:value="${session.questionnaire.title}"
                            required th:name="title"
                            hx-trigger="keyup changed delay:100ms"
                            hx-swap="none" th:attr = "
-                           hx-post=|@{/questionnaires/{id}/edit/title(id=${questionnaire.id})}|">
+                           hx-post=|@{/questionnaires/{id}/edit/title(id=${session.questionnaire.id})}|">
                 </label>
             </div>
 
-            <div id="questions" >
+            &lt;!&ndash;<div id="questions" >
                   <div th:each="question, i : ${questionnaire.questions}"
                        th:fragment="questions" th:id="|question${question.id}|">
                       <div th:replace="~{/fragments/create-questionnaire-answer::question(${question}, ${questionnaire}, ${i.index}) }"></div>
                   </div>
-            </div>
+            </div>&ndash;&gt;
 
             <div class="position-fixed bottom-0 start-0 w-100 text-end bg-white"
                  style="height: 75px; box-sizing: border-box; padding-top: 10px; padding-right: 5%;">
@@ -81,12 +83,11 @@
         <div class="position-fixed bottom-0" style="margin-bottom: 5rem; margin-left: 3%">
             <input type="image" width="60px" src="/img/plus-in-circle.png" alt="Добавить новый вопрос"
                    hx-trigger="click"
-                   th:attr="hx-get=|@{/questionnaires/{id}/edit/add-question(id=${questionnaire.id})}|"
+                   th:attr="hx-get=|@{/questionnaires/{id}/edit/add-question(id=${session.questionnaire.id})}|"
                    hx-target="#questions">
-        </div>
+        </div>-->
 
-        <div id="errors" style="position:fixed; width:100%; bottom:80px;">
-        <div>
+        <div id="errors" style="position:fixed; width:100%; bottom:80px;"></div>
     </div>
 </div>
 

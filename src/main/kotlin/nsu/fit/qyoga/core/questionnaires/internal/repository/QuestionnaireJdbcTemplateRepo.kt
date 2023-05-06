@@ -1,10 +1,11 @@
 package nsu.fit.qyoga.core.questionnaires.internal.repository
 
-import nsu.fit.qyoga.core.questionnaires.api.dtos.AnswerBoundsDto
-import nsu.fit.qyoga.core.questionnaires.api.dtos.AnswerDto
-import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionWithAnswersDto
-import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireWithQuestionDto
+import nsu.fit.qyoga.core.questionnaires.api.dtos.*
 import nsu.fit.qyoga.core.questionnaires.api.dtos.enums.QuestionType
+import nsu.fit.qyoga.core.questionnaires.api.model.Questionnaire
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
+import org.springframework.data.domain.Pageable
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
@@ -14,97 +15,55 @@ import java.sql.ResultSet
 class QuestionnaireJdbcTemplateRepo(
     private val jdbcTemplate: NamedParameterJdbcOperations
 ) {
-    val getQreWithQByIdQuery = """
+    fun findQuestionnaireOnPage(title: String, pageable: Pageable): Page<QuestionnaireDto> {
+        val questionnaireDtoList: MutableList<QuestionnaireDto> = mutableListOf()
+        val params = MapSqlParameterSource()
+        params.addValue("pageSize", pageable.pageSize)
+        params.addValue("title", title)
+        params.addValue("offset", pageable.pageSize*pageable.pageNumber)
+        jdbcTemplate.query(
+            getQueryBySortType(pageable.sort.toString().substringAfter(": ")),
+            params
+        ) { rs: ResultSet, _: Int ->
+            val questionnaireId = rs.getLong("questionnaireId")
+            if (questionnaireId == 0L) {
+                return@query
+            }
+            questionnaireDtoList.add(
+                QuestionnaireDto(
+                    id = questionnaireId,
+                    title = rs.getString("questionnaireTitle")
+                )
+            )
+        }
+        return PageImpl(questionnaireDtoList, pageable, getCount(title))
+    }
+
+    fun getCount(title: String): Long {
+        val query = """
+            SELECT
+            count(*) as questionnaireCount
+            FROM questionnaires
+            WHERE questionnaires.title LIKE '%' || :title || '%'
+        """.trimIndent()
+        return jdbcTemplate.queryForObject(
+            query,
+            MapSqlParameterSource("title", title)
+        ) {rs: ResultSet, _: Int ->
+            rs.getLong("questionnaireCount")
+        } ?: 0
+    }
+
+
+    fun getQueryBySortType(type: String): String {
+        return """
             SELECT
             questionnaires.id AS questionnaireId,
-            questionnaires.title AS questionnaireTitle,
-            questions.id AS questionId,
-            questions.title AS questionTitle,
-            questions.question_type AS questionType,
-            questionImage.id AS questionImageId,
-            answers.id AS answerId,
-            answers.title AS answerTitle,
-            answers.lower_bound AS answerLowerBound,
-            answers.lower_bound_text AS answerLowerBoundText,
-            answers.upper_bound AS answerUpperBound,
-            answers.upper_bound_text AS answerUpperBoundText,
-            answers.score AS answerScore,
-            answerImage.id AS answerImageId
+            questionnaires.title AS questionnaireTitle
             FROM questionnaires
-            LEFT JOIN questions ON questionnaires.id = questions.questionnaire_id
-            LEFT JOIN images questionImage ON questions.image_id = questionImage.id
-            LEFT JOIN answers ON answers.question_id = questions.id
-            LEFT JOIN images answerImage ON answers.image_id = answerImage.id
-            WHERE questionnaires.id = :id
-            ORDER BY questionId, answerId
+            WHERE questionnaires.title LIKE '%' || :title || '%'
+            ORDER BY questionnaires.title $type
+            LIMIT :pageSize OFFSET :offset
         """.trimIndent()
-
-    /*
-    * вспомогательный метод для получения ответов
-    */
-    private fun getQuestion(
-        questionMap: MutableMap<Long, QuestionWithAnswersDto?>,
-        id: Long,
-        questionFromDB: QuestionWithAnswersDto,
-        questionnaire: QuestionnaireWithQuestionDto
-    ): QuestionWithAnswersDto {
-        var question: QuestionWithAnswersDto? = questionMap[id]
-        if (question == null) {
-            questionMap[id] = questionFromDB
-            question = questionFromDB
-            questionnaire.questions += questionFromDB
-        }
-        return question
-    }
-
-    fun getQreWithQById(id: Long): QuestionnaireWithQuestionDto? {
-        var value: QuestionnaireWithQuestionDto? = null
-        val questionMap: MutableMap<Long, QuestionWithAnswersDto?> = mutableMapOf()
-        jdbcTemplate.query(
-            getQreWithQByIdQuery,
-            MapSqlParameterSource("id", id)
-        ) { rs: ResultSet, _: Int ->
-            if (value == null) {
-                value = QuestionnaireWithQuestionDto(
-                    id = rs.getLong("questionnaireId"),
-                    title = rs.getString("questionnaireTitle"),
-                    questions = mutableListOf()
-                )
-            }
-            val questionFromDB = getQuestionWithAnswersDto(rs)
-            questionFromDB ?: return@query
-            val questionId = rs.getLong("questionId")
-            val answer = getAnswerDto(rs, questionId)
-            val question = getQuestion(questionMap, questionId, questionFromDB, value!!)
-            question.answers += answer
-        }
-        return value
-    }
-
-    fun getQuestionWithAnswersDto(rs: ResultSet): QuestionWithAnswersDto? {
-        return QuestionWithAnswersDto(
-            id = rs.getLong("questionId"),
-            title = rs.getString("questionTitle"),
-            questionType = QuestionType.valueOf(rs.getString("questionType") ?: return null),
-            imageId = rs.getString("questionImageId")?.toLong(),
-            answers = mutableListOf(),
-            questionnaireId = rs.getLong("questionnaireId")
-        )
-    }
-
-    fun getAnswerDto(rs: ResultSet, questionId: Long): AnswerDto {
-        return AnswerDto(
-            id = rs.getLong("answerId"),
-            title = rs.getString("answerTitle"),
-            bounds = AnswerBoundsDto(
-                lowerBound = rs.getInt("answerLowerBound"),
-                lowerBoundText = rs.getString("answerLowerBoundText"),
-                upperBound = rs.getInt("answerUpperBound"),
-                upperBoundText = rs.getString("answerUpperBoundText")
-            ),
-            score = rs.getInt("answerScore"),
-            imageId = rs.getString("answerImageId")?.toLong(),
-            questionId = questionId
-        )
     }
 }
