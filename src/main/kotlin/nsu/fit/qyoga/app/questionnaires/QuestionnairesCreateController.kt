@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*
 
 @Controller
 @RequestMapping("/questionnaires")
-@SessionAttributes("questionnaire")
 class QuestionnairesCreateController(
     private val questionnaireService: QuestionnaireService,
     private val httpSession: HttpSession
@@ -24,59 +23,56 @@ class QuestionnairesCreateController(
      */
     @GetMapping("/new")
     fun getCreateQuestionnairePage(): String {
-        httpSession.setAttribute(
-            "test",
-            "asd"
-        )
-        val test = httpSession.getAttribute("test") as String
-
+        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
+        if(questionnaire == null || questionnaire.id != 0L) {
+            httpSession.setAttribute(
+                "questionnaire",
+                CreateQuestionnaireDto(
+                    id = 0,
+                    title = ""
+                )
+            )
+        }
         return "questionnaire/create-questionnaire"
     }
 
     /**
      * Редактирование опросника
       */
-    /*@GetMapping("/{id}/edit")
+    @GetMapping("/{id}/edit")
     fun editQuestionnaire(
-        model: Model,
         @PathVariable id: Long
     ): String {
-
+        httpSession.setAttribute(
+            "questionnaire",
+            questionnaireService.findQuestionnaireWithQuestions(id)
+        )
         return "questionnaire/create-questionnaire"
-    }*/
+    }
 
     /**
      * Создание опросника
      */
-    /*@PostMapping("/{id}/edit")
+    @PostMapping("/edit")
     fun createQuestionnaire(
         @ModelAttribute("questionnaire") questionnaire: CreateQuestionnaireDto,
-        @PathVariable id: Long
     ): String {
-
-        return "redirect:/questionnaires/$id/setResult"
-    }*/
+        println(questionnaireService.saveQuestionnaire(questionnaire))
+        return "redirect:/questionnaires/setResult"
+    }
 
 
     /**
      * Задание заголовка опросника
      */
-    /*@PostMapping("/{id}/edit/title")
+    @PostMapping("/edit/title")
     @ResponseBody
     fun changeQuestionnaireTitle(
-        questionnaire: QuestionnaireDto
+        @RequestParam title: String
     ): HttpStatus {
-
+        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
+            ?: return HttpStatus.NOT_FOUND
+        httpSession.setAttribute("questionnaire", questionnaire.copy(title = title))
         return HttpStatus.OK
-    }*/
-
-    /*fun setQuestionnaireInModel(
-        questionnaireId: Long,
-        model: Model
-    ) {
-        model.addAttribute(
-            "questionnaire",
-            questionnaireService.findQuestionnaireWithQuestions(questionnaireId)
-        )
-    }*/
+    }
 }

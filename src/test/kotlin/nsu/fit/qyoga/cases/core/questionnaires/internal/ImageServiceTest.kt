@@ -2,8 +2,6 @@ package nsu.fit.qyoga.cases.core.questionnaires.internal
 
 import io.kotest.matchers.shouldBe
 import nsu.fit.qyoga.cases.core.questionnaires.QuestionnairesTestConfig
-import nsu.fit.qyoga.core.questionnaires.api.errors.ImageException
-import nsu.fit.qyoga.core.questionnaires.api.services.ImageService
 import nsu.fit.qyoga.infra.QYogaModuleBaseTest
 import nsu.fit.qyoga.infra.TestContainerDbContextInitializer
 import org.junit.jupiter.api.Assertions
