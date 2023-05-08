@@ -2,16 +2,14 @@
      th:fragment="question (question, questionnaire, questionIndex)"
      style="margin-top: 20px; background-color: #dcdcdc; border-radius: 8px;" >
 <div th:id="|question${question.id}Header|" th:fragment="questionHeader">
-    <input hidden th:name="|questions[${questionIndex}].id|" th:value="${question.id}">
-    <input hidden th:name="|questions[${questionIndex}].questionnaireId|"
-           th:value="${question.questionnaireId}">
+    <input hidden th:name="|question[${questionIndex}].id|" th:value="${question.id}">
 
     <div class="flex-row justify-content-start d-flex" style="flex-wrap: wrap">
         <input class="question-text" type="text"
                style="width: calc(80% - 40px); border-radius: 5px; min-width: 60px"
                hx-trigger="keyup changed delay:300ms"
                th:value="${question.title}" required
-               th:name="|questions[${questionIndex}].title|"
+               th:name="|question[${questionIndex}].title|"
                hx-swap="none" th:attr = "
                                            hx-post=|@{/questionnaires/{questionnaireId}/edit/question/{questionId}/update
                                            (questionnaireId=${questionnaire.id}, questionId=${question.id})}|">
@@ -30,7 +28,7 @@
         <select name="question-type"
                 hx-trigger="change"
                 style="width: 20%; border-radius: 5px; max-width: 200px"
-                th:name="|questions[${questionIndex}].questionType|"
+                th:name="|question[${questionIndex}].questionType|"
                 th:attr = "
                                              hx-post=|@{/questionnaires/{questionnaireId}/edit/question/{questionId}/change-type
                                              (questionnaireId=${questionnaire.id}, questionId=${question.id})}|"
@@ -53,16 +51,16 @@
          th:each="answer,j : ${question.answers}"
          th:id="|answer${answer.id}|"
          th:switch="${question.questionType.name}">
-        <input th:class="|answer${j.index}Id|" hidden th:name="|questions[${questionIndex}].answers[${j.index}].id|" th:value="${answer.id}">
-        <input th:class="|answer${j.index}QuestionId|" hidden th:name="|questions[${questionIndex}].answers[${j.index}].questionId|" th:value="${question.id}">
-        <input th:class="|answer${j.index}Score|" hidden th:name="|questions[${questionIndex}].answers[${j.index}].score|" th:value="${answer.score}">
+        <input th:class="|answer${j.index}Id|" hidden th:name="|question[${questionIndex}].answers[${j.index}].id|" th:value="${answer.id}">
+        <input th:class="|answer${j.index}QuestionId|" hidden th:name="|question[${questionIndex}].answers[${j.index}].questionId|" th:value="${question.id}">
+        <input th:class="|answer${j.index}Score|" hidden th:name="|question[${questionIndex}].answers[${j.index}].score|" th:value="${answer.score}">
 
         <div th:case="SINGLE">
             <div class="d-flex flex-row">
                 <img src="/img/circle.png" alt="answer type" style="width: 25px; height: 25px">
                 <label style="width: calc(100% - 100px); margin-left: 10px">
                     <input style="border-radius: 5px;" class="answerText w-100" type="text" name="answer" placeholder="ответ"
-                           th:name="|questions[${questionIndex}].answers[${j.index}].title|" th:value="${answer.title}"
+                           th:name="|question[${questionIndex}].answers[${j.index}].title|" th:value="${answer.title}"
                            hx-trigger="keyup changed delay:300ms"
                            th:attr = "
                            hx-post=|@{/questionnaires/question/{questionId}/answer/{answerId}/update
@@ -96,7 +94,7 @@
                 <img src="/img/square.png" alt="answer type" style="width: 25px; height: 25px">
                 <label style="width: calc(100% - 100px); margin-left: 10px">
                     <input style="border-radius: 5px;" class="answerText w-100" type="text" name="answer" placeholder="ответ"
-                           th:name="|questions[${questionIndex}].answers[${j.index}].title|" th:value="${answer.title}"
+                           th:name="|question[${questionIndex}].answers[${j.index}].title|" th:value="${answer.title}"
                            hx-trigger="keyup changed delay:300ms"
                            th:attr = "
                            hx-post=|@{/questionnaires/question/{questionId}/answer/{answerId}/update
@@ -134,7 +132,7 @@
                 <div style="display: flex">
                     <select name="range"
                             hx-trigger="change"
-                            th:name="|questions[${questionIndex}].answers[${j.index}].bounds.lowerBound|"
+                            th:name="|question[${questionIndex}].answers[${j.index}].bounds.lowerBound|"
                             hx-swap="none"
                             th:attr = "
                             hx-post=|@{/questionnaires/question/{questionId}/answer/{answerId}/update
@@ -154,7 +152,7 @@
                            th:attr = "
                            hx-post=|@{/questionnaires/question/{questionId}/answer/{answerId}/update
                            (answerId=${answer.id}, questionId=${question.id})}|"
-                           th:name="|questions[${questionIndex}].answers[${j.index}].bounds.lowerBoundText|">
+                           th:name="|question[${questionIndex}].answers[${j.index}].bounds.lowerBoundText|">
                 </div>
                 <div style="display: flex; margin-top: 20px">
                     <select name="range"
@@ -165,7 +163,7 @@
                             (answerId=${answer.id}, questionId=${question.id})}|,
                             hx-target=|#questions|"
                             class="sortBtn" style="width: 50px; border-radius: 5px"
-                            th:name="|questions[${questionIndex}].answers[${j.index}].bounds.upperBound|">
+                            th:name="|question[${questionIndex}].answers[${j.index}].bounds.upperBound|">
                         <option
                                 th:each="i: ${#numbers.sequence(2, 10)}"
                                 th:value="${i}" th:text="${i}"
@@ -179,7 +177,7 @@
                            th:attr = "
                                hx-post=|@{/questionnaires/question/{questionId}/answer/{answerId}/update
                                (answerId=${answer.id}, questionId=${question.id})}|"
-                           th:name="|questions[${questionIndex}].answers[${j.index}].bounds.upperBoundText|">
+                           th:name="|question[${questionIndex}].answers[${j.index}].bounds.upperBoundText|">
                 </div>
         </div>
 

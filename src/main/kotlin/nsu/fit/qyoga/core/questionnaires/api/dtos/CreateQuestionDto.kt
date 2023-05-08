@@ -8,4 +8,4 @@ data class CreateQuestionDto(
     var questionType: QuestionType = QuestionType.SINGLE,
     var imageId: Long? = null,
     var answers: List<CreateAnswerDto> = mutableListOf()
-)
+) : java.io.Serializable

@@ -55,10 +55,10 @@ class QuestionnaireServiceImpl(
             decoding = mutableListOf()
         )
         questionnaireDto.question.addAll(
-            questionnaire.question.map { question -> questionToQuestionDto(question) }
+            questionnaire.question.mapIndexed { index, question -> questionToQuestionDto(question, index.toLong()) }
         )
         questionnaireDto.decoding.addAll(
-            questionnaire.decoding.map { decoding -> decodingToDecodingDto(decoding) }
+            questionnaire.decoding.mapIndexed { index, decoding -> decodingToDecodingDto(decoding, index.toLong()) }
         )
         return questionnaireDto
     }
@@ -82,15 +82,15 @@ class QuestionnaireServiceImpl(
         )
     }
 
-    fun questionToQuestionDto(question: Question): CreateQuestionDto {
+    fun questionToQuestionDto(question: Question, questionIndex: Long): CreateQuestionDto {
         return CreateQuestionDto(
-            question.id,
+            questionIndex,
             question.title,
             question.questionType,
             question.imageId,
-            question.answers.map { answer ->
+            question.answers.mapIndexed { answerIndex, answer ->
                 CreateAnswerDto(
-                    answer.id,
+                    answerIndex.toLong(),
                     answer.title,
                     AnswerBoundsDto(
                         lowerBound = answer.lowerBound,
@@ -113,9 +113,9 @@ class QuestionnaireServiceImpl(
         )
     }
 
-    fun decodingToDecodingDto(decoding: Decoding): DecodingDto {
+    fun decodingToDecodingDto(decoding: Decoding, index: Long): DecodingDto {
         return DecodingDto(
-            decoding.id,
+            index,
             decoding.lowerBound,
             decoding.upperBound,
             decoding.result

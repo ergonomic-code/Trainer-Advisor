@@ -21,7 +21,6 @@ class QuestionnairesErrorController {
 
     @ExceptionHandler(
         QuestionException::class,
-        ImageException::class,
         AnswerException::class,
         DecodingException::class
     )

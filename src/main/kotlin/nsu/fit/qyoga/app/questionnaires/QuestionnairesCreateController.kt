@@ -57,8 +57,7 @@ class QuestionnairesCreateController(
     fun createQuestionnaire(
         @ModelAttribute("questionnaire") questionnaire: CreateQuestionnaireDto,
     ): String {
-        httpSession.removeAttribute("questionnaire")
-        questionnaireService.saveQuestionnaire(questionnaire)
+        println(questionnaireService.saveQuestionnaire(questionnaire))
         return "redirect:/questionnaires/setResult"
     }
 
@@ -71,7 +70,8 @@ class QuestionnairesCreateController(
     fun changeQuestionnaireTitle(
         @RequestParam title: String
     ): HttpStatus {
-        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto
+        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
+            ?: return HttpStatus.NOT_FOUND
         httpSession.setAttribute("questionnaire", questionnaire.copy(title = title))
         return HttpStatus.OK
     }
