@@ -1,14 +1,10 @@
 package nsu.fit.qyoga.app.questionnaires
 
 import jakarta.servlet.http.HttpSession
-import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireDto
-import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionnaireDto
-import nsu.fit.qyoga.core.questionnaires.api.dtos.testDto
-import nsu.fit.qyoga.core.questionnaires.api.model.Questionnaire
+import nsu.fit.qyoga.core.questionnaires.api.dtos.*
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
-import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 
 @Controller
@@ -29,7 +25,9 @@ class QuestionnairesCreateController(
                 "questionnaire",
                 CreateQuestionnaireDto(
                     id = 0,
-                    title = ""
+                    title = "",
+                    question = mutableListOf(CreateQuestionDto(answers = listOf(CreateAnswerDto()))),
+                    decoding = mutableListOf(DecodingDto())
                 )
             )
         }

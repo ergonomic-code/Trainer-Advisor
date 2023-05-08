@@ -11,8 +11,8 @@
                th:value="${question.title}" required
                th:name="|question[${questionIndex}].title|"
                hx-swap="none" th:attr = "
-                                           hx-post=|@{/questionnaires/{questionnaireId}/edit/question/{questionId}/update
-                                           (questionnaireId=${questionnaire.id}, questionId=${question.id})}|">
+               hx-post=|@{/questionnaires/edit/question/{questionId}/update
+               (questionId=${question.id})}|">
 
         <div style="width: 40px">
             <img class="add-img-to-question-btn" src="/img/add-file.png" alt="Добавить изображение">
@@ -30,8 +30,8 @@
                 style="width: 20%; border-radius: 5px; max-width: 200px"
                 th:name="|question[${questionIndex}].questionType|"
                 th:attr = "
-                                             hx-post=|@{/questionnaires/{questionnaireId}/edit/question/{questionId}/change-type
-                                             (questionnaireId=${questionnaire.id}, questionId=${question.id})}|"
+                hx-post=|@{/questionnaires/edit/question/{questionId}/change-type
+                (questionId=${question.id})}|"
                 hx-target="#questions"
                 class="sort-btn">
             <option th:each="types : ${T(nsu.fit.qyoga.core.questionnaires.api.dtos.enums.QuestionType).values()}"
@@ -63,8 +63,8 @@
                            th:name="|question[${questionIndex}].answers[${j.index}].title|" th:value="${answer.title}"
                            hx-trigger="keyup changed delay:300ms"
                            th:attr = "
-                           hx-post=|@{/questionnaires/question/{questionId}/answer/{answerId}/update
-                           (questionId=${question.id},answerId=${answer.id})}|">
+                           hx-post=|@{/questionnaires/question/answer/{answerId}/update
+                           (answerId=${answer.id})}|">
                 </label>
 
                 <div style="width: 40px">
@@ -205,8 +205,9 @@
                  class="delete-question"
                  style="margin-left: 5px; cursor: pointer; width: 25px;"
                  hx-trigger="click"
-                 th:attr = "hx-delete=|@{/questionnaires/{questionnaireId}/edit/question/{questionId}
-                                           (questionId=${question.id}, questionnaireId=${questionnaire.id})}|"
+                 th:attr = "
+                 hx-delete=|@{/questionnaires/edit/question/{questionId}
+                 (questionId=${question.id})}|"
                  hx-target="#questions">
         </div>
         <div class="d-flex"

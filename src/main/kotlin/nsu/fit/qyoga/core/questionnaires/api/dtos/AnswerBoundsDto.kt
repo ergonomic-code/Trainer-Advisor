@@ -5,4 +5,4 @@ data class AnswerBoundsDto(
     var lowerBoundText: String? = null,
     var upperBound: Int? = null,
     var upperBoundText: String? = null
-)
+) : java.io.Serializable

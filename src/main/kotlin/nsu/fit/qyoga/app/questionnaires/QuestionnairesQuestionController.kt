@@ -1,22 +1,19 @@
 package nsu.fit.qyoga.app.questionnaires
 
 import jakarta.servlet.http.HttpSession
+import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateAnswerDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionnaireDto
 import nsu.fit.qyoga.core.questionnaires.api.errors.QuestionException
-import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
-import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.multipart.MultipartFile
 
 @Controller
 @RequestMapping("/questionnaires")
 class QuestionnairesQuestionController(
     private val httpSession: HttpSession
 ) {
-
 
     /***
      * Добавление нового вопроса
@@ -27,7 +24,8 @@ class QuestionnairesQuestionController(
             ?: throw QuestionException("Невозможно добавить новый вопрос")
         questionnaire.question.add(
             CreateQuestionDto(
-                id = getLastQuestionIndex(questionnaire.question) + 1
+                id = getLastQuestionIndex(questionnaire.question) + 1,
+                answers = listOf(CreateAnswerDto())
             )
         )
         httpSession.setAttribute(
@@ -72,43 +70,44 @@ class QuestionnairesQuestionController(
      */
     @PostMapping("/edit/question/{questionId}/change-type")
     fun changeAnswersType(
-        @PathVariable questionId: Long
+        @PathVariable questionId: Long,
+        @ModelAttribute("questionnaire") questionnaireDto: CreateQuestionnaireDto
     ): String {
-        return "questionnaire/create-questionnaire::questions"
+        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
+            ?: throw QuestionException("Невозможно изменить тип вопроса")
+        questionnaire.question.forEachIndexed { index, question ->
+            if (question.id == questionId) {
+                questionnaire.question[index] = question.copy(
+                    questionType = questionnaireDto.question[index].questionType,
+                    answers = listOf(CreateAnswerDto())
+                )
+                httpSession.setAttribute("questionnaire", questionnaire)
+                return "questionnaire/create-questionnaire::questions"
+            }
+        }
+        throw QuestionException("Выбранный вопрос не найден")
     }
 
     /**
      * Обновить вопрос
      */
-    /*@PostMapping("{questionnaireId}/edit/question/{questionId}/update")
+    @PostMapping("/edit/question/{questionId}/update")
     @ResponseBody
     fun changeQuestionTitle(
-        @ModelAttribute("questionnaire") questionnaire: CreateQuestionnaireDto,
-        @PathVariable questionId: Long,
-        @PathVariable questionnaireId: Long
+        @ModelAttribute("questionnaire") questionnaireDto: CreateQuestionnaireDto,
+        @PathVariable questionId: Long
     ): HttpStatus {
+        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
+            ?: throw QuestionException("Невозможно изменить вопрос")
+        questionnaire.question.forEachIndexed { index, question ->
+            if (question.id == questionId) {
+                questionnaire.question[index] = questionnaireDto.question[index]
+                httpSession.setAttribute("questionnaire", questionnaire)
+                return HttpStatus.OK
+            }
+        }
         throw QuestionException("Выбранный вопрос не найден")
-    }*/
-
-    /*fun returnQuestionsPage(
-        questionnaireId: Long,
-        model: Model
-    ): String {
-        model.addAttribute(
-            "questionnaire",
-            questionnaireService.findQuestionnaireWithQuestions(questionnaireId)
-        )
-        return "questionnaire/create-questionnaire::questions"
     }
-
-    fun setQuestionWithId(
-        question: CreateQuestionDto,
-        questionIndex: Int,
-        model: Model
-    ) {
-        model.addAttribute("question", question)
-        model.addAttribute("questionIndex", questionIndex)
-    }*/
 
     fun getLastQuestionIndex (questions: List<CreateQuestionDto>): Long {
         var index = 0L
