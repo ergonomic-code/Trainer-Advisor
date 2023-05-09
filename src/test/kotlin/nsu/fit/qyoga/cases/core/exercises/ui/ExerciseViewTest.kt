@@ -19,7 +19,7 @@ class ExerciseViewTest : QYogaAppTestBase() {
     fun setupDb() {
         dbInitializer.executeScripts(
             "/db/exercises-init-script.sql" to "dataSource",
-            "/db/exercises-insert-data-script.sql" to "dataSource"
+            "/db/migration/demo/V23050903__insert_exercises_data.sql" to "dataSource",
         )
     }
 

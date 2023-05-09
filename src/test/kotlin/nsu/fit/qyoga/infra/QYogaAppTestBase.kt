@@ -19,6 +19,7 @@ class QYogaAppTestBase {
 
     @LocalServerPort
     var port: Int = 0
+
     fun getAuthCookie(): Cookie {
         val cookie = Given {
             formParam("username", "therapist")
@@ -40,7 +41,7 @@ class QYogaAppTestBase {
 
         RestAssured.requestSpecification = RequestSpecBuilder()
             .setBaseUri("http://localhost:$port")
-            .setContentType("application/x-www-form-urlencoded")
+            .setContentType("application/x-www-form-urlencoded; charset=UTF-8")
             .setRelaxedHTTPSValidation()
             .addFilter(ResponseLoggingFilter())
             .addFilter(RequestLoggingFilter())

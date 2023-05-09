@@ -58,9 +58,9 @@
                                     </div>
                                     <select class="custom-select w-25"
                                             id="inputGroupSelect01"
-                                            th:field="${searchDto.exerciseType}">
+                                            th:field="${searchDto.exerciseTypeId}">
                                         <option selected th:value="null">Тип упражнения</option>
-                                        <option th:each="type : ${types}" th:text="${type.title}"
+                                        <option th:each="type : ${types}" th:text="${type.name}"
                                                 th:value="${type.name}"></option>
                                     </select>
                                 </div>
@@ -89,8 +89,8 @@
                                 <tr th:each="exercise : ${exercises.content}">
                                     <td th:text="${exercise.title}"></td>
                                     <td th:text="${exercise.contradictions}"></td>
-                                    <td th:text="${exercise.duration}"></td>
-                                    <td th:text="${exercise.type.title}"></td>
+                                    <td th:text="${T(nsu.fit.platform.lang.DurationExt).toDecimalMinutes(exercise.duration) + ' мин.'}"></td>
+                                    <td th:text="${exercise.type.name}"></td>
                                     <td th:text="${exercise.purpose}"></td>
                                 </tr>
                                 </tbody>

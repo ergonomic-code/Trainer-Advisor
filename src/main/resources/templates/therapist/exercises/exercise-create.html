@@ -16,49 +16,66 @@
             <div class="container">
                 <h1 class="mt-4">Упражнения</h1>
 
-                <form class="mt-4" id="createExerciseForm">
+                <form class="mt-4" hx-post="/exercises/create" id="createExerciseForm">
                     <div class="form-group row mb-3">
-                        <label class="col-sm-2 col-form-label" for="inputName">Название упражнения</label>
-                        <div class="col-sm-5">
-                            <input class="form-control" id="inputName" placeholder="Собака мордой вниз" type="text">
+                        <label class="col-sm-2 col-form-label" for="title">Название упражнения</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" id="title" name="title" placeholder="Собака мордой вниз"
+                                   required type="text">
                         </div>
                     </div>
                     <div class="form-group row mb-3">
-                        <label class="col-sm-2 col-form-label" for="inputContradictions">Противопоказания</label>
-                        <div class="col-sm-5">
-                            <input class="form-control" id="inputContradictions" placeholder="Грыжа" type="text">
+                        <label class="col-sm-2 col-form-label" for="contradictions">Противопоказания</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" id="contradictions" name="contradictions"
+                                   placeholder="Травма сухожилия бицепса бедра. Травма запястья"
+                                   type="text">
                         </div>
                     </div>
                     <div class="form-group row mb-3">
-                        <label class="col-sm-2 col-form-label" for="inputIndications">Показания</label>
-                        <div class="col-sm-5">
-                            <input class="form-control" id="inputIndications" placeholder="Гиперлордоз" type="text">
+                        <label class="col-sm-2 col-form-label" for="indications">Показания</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" id="indications" name="indications"
+                                   placeholder="Вытяжение позвоночника."
+                                   type="text">
                         </div>
                     </div>
                     <div class="form-group row mb-3">
-                        <label class="col-sm-2 col-form-label" for="inputDuration">Длительность (минуты)</label>
-                        <div class="col-sm-5">
-                            <input class="form-control" id="inputDuration" placeholder="2" type="number">
+                        <label class="col-sm-2 col-form-label" for="purposes">Терапевтические задачи</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" hi id="purposes" name="purposes"
+                                   placeholder="Улучшение мобильности плечевых суставов, Вытяжение задней поверхности ног"
+                                   type="text">
+                            <div class="form-text">Список терапевтических задач через запятую</div>
                         </div>
                     </div>
                     <div class="form-group row mb-3">
-                        <label class="col-sm-2 col-form-label" for="inputType">Тип упражнения</label>
-                        <div class="col-sm-5">
-                            <select class="form-select col-sm-5" id="inputType>">
-                                <option>Разминка</option>
-                                <option>Мобилизация</option>
-                                <option>Укрепление</option>
-                                <option>Вытяжение</option>
-                                <option>Расслабление</option>
-                                <option>Тракция</option>
+                        <label class="col-sm-2 col-form-label" for="duration">Длительность (минуты)</label>
+                        <div class="col-sm-7">
+                            <input class="form-control" id="duration" max="180" min="0" name="duration"
+                                   step="0.5" type="number" value="1">
+                        </div>
+                    </div>
+                    <div class="form-group row mb-3">
+                        <label class="col-sm-2 col-form-label" for="type">Тип упражнения</label>
+                        <div class="col-sm-7">
+                            <select class="form-select col-sm-7" id="type" name="exerciseTypeId">
+                                <option value="1">Разминка</option>
+                                <option selected value="2">Мобилизация</option>
+                                <option value="3">Укрепление</option>
+                                <option value="4">Вытяжение</option>
+                                <option value="5">Расслабление</option>
+                                <option value="6">Тракция</option>
                             </select>
                         </div>
                     </div>
-                    <div class="form-group row mb-3 col-sm-7">
-                        <label for="inputDescription">Описание:</label>
-                        <textarea class="form-control" id="inputDescription" rows="10"></textarea>
+                    <div class="form-group row mb-3 col-sm-9">
+                        <label for="description">Описание:</label>
+                        <textarea class="form-control" id="description" name="description" placeholder="Глубоко вдохните..."
+                                  rows="10"></textarea>
                     </div>
 
+                    <input class="btn btn-primary" type="submit" value="Сохранить">
                 </form>
             </div>
 
