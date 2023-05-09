@@ -28,7 +28,6 @@ class TherapeuticPurposesServiceTest {
 
     @Test
     fun `TherapeuticPurposesService should return object with updated id after saving`() {
-
         // When
         val existing = therapeuticPurposesService.save(TherapeuticPurpose("Irrelevant"))
 
