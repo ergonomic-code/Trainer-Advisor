@@ -5,7 +5,6 @@ import nsu.fit.qyoga.cases.core.exercises.ExercisesTestConfig
 import nsu.fit.qyoga.core.exercises.api.ExercisesService
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseSearchDto
 import nsu.fit.qyoga.core.exercises.api.model.Exercise
-import nsu.fit.qyoga.core.exercises.api.model.ExerciseType
 import nsu.fit.qyoga.infra.QYogaModuleBaseTest
 import nsu.fit.qyoga.infra.TestContainerDbContextInitializer
 import org.junit.jupiter.api.BeforeEach
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.domain.PageRequest
-import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 import java.time.Duration
 
@@ -24,7 +22,6 @@ import java.time.Duration
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.NONE
 )
-@ActiveProfiles("test")
 class ExercisesServiceTests(
     @Autowired private val exercisesService: ExercisesService
 ) : QYogaModuleBaseTest() {
@@ -33,7 +30,7 @@ class ExercisesServiceTests(
     fun setupDb() {
         dbInitializer.executeScripts(
             "/db/exercises-init-script.sql" to "dataSource",
-            "/db/exercises-insert-data-script.sql" to "dataSource"
+            "/db/migration/demo/V23050903__insert_exercises_data.sql" to "dataSource",
         )
     }
 
@@ -91,16 +88,17 @@ class ExercisesServiceTests(
     @Test
     fun `QYoga can retrieve exercises with type filter`() {
         // Given
-        val searchDto = ExerciseSearchDto(exerciseType = ExerciseType.WarmUp)
+        val searchDto = ExerciseSearchDto(exerciseTypeId = 1)
         val expectedExercise = Exercise(
-            id = 1,
             title = "Разминка для шеи",
             description = "",
             indications = "",
             contradictions = "",
             duration = Duration.ofMinutes(10),
             exerciseTypeId = 1,
-            therapistId = 1
+            therapistId = 1,
+            setOf(),
+            id = 1
         )
 
         // When
@@ -112,7 +110,7 @@ class ExercisesServiceTests(
         // Then
         exercises.totalElements shouldBe 1
         exercises.content[0].title shouldBe expectedExercise.title
-        exercises.content[0].duration.substring(3, 5).toLong() shouldBe expectedExercise.duration.toMinutes()
+        exercises.content[0].duration shouldBe expectedExercise.duration
         exercises.content[0].type.id shouldBe expectedExercise.exerciseTypeId
     }
 }

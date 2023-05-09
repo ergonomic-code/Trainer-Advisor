@@ -7,7 +7,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import java.util.stream.Collectors
 
-class UserDetailsImpl(
+data class QyogaUserDetails(
+    val id: Long,
     private val username: String,
     private val password: String,
     private val roles: Collection<GrantedAuthority>
@@ -36,13 +37,14 @@ class UserDetailsImpl(
         return true
     }
     companion object {
-        fun build(user: User): UserDetailsImpl {
+        fun build(user: User): QyogaUserDetails {
             val authorities: List<GrantedAuthority> = user.roles.stream()
                 .map { role: Role ->
                     SimpleGrantedAuthority(role.toString())
                 }
                 .collect(Collectors.toList())
-            return UserDetailsImpl(
+            return QyogaUserDetails(
+                user.id,
                 user.username,
                 user.passwordHash,
                 authorities
