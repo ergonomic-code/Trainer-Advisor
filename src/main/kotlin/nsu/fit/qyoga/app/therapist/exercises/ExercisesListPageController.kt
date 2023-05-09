@@ -1,4 +1,4 @@
-package nsu.fit.qyoga.app.therapist
+package nsu.fit.qyoga.app.therapist.exercises
 
 import nsu.fit.qyoga.core.exercises.api.ExercisesService
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseDto
@@ -16,7 +16,7 @@ import java.util.stream.IntStream
 
 @Controller
 @RequestMapping("/exercises")
-class ExercisesController(
+class ExercisesListPageController(
     private val exercisesService: ExercisesService
 ) {
     /**
@@ -34,7 +34,7 @@ class ExercisesController(
             PageRequest.of(pageNumber - 1, pageSize)
         )
         addExercisePageAttributes(model, exercises, exercisesService)
-        return "exercise-search"
+        return "therapist/exercises/exercise-search"
     }
 
     /**
@@ -52,7 +52,7 @@ class ExercisesController(
             PageRequest.of(pageNumber - 1, pageSize)
         )
         addExercisePageAttributes(model, exercises, exercisesService)
-        return "exercise-search :: exercises"
+        return "therapist/exercises/exercise-search :: exercises"
     }
 
     fun addExercisePageAttributes(model: Model, exercises: Page<ExerciseDto>, exercisesService: ExercisesService) {

@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "3.0.2"
+	id("org.springframework.boot") version "3.0.6"
 	id("io.spring.dependency-management") version "1.1.0"
 	kotlin("jvm") version "1.8.10"
 	kotlin("plugin.spring") version "1.8.10"
@@ -33,8 +33,8 @@ dependencies {
 	implementation("org.flywaydb:flyway-core")
 	implementation("jakarta.validation:jakarta.validation-api:3.0.2")
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-	testImplementation("com.h2database:h2:2.1.214")
-	implementation("org.springframework.session:spring-session-jdbc:3.0.1")
+	implementation("org.postgresql:postgresql:42.5.1")
+
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.testcontainers:junit-jupiter")
@@ -47,7 +47,6 @@ dependencies {
 	testImplementation("org.jsoup:jsoup:1.15.3")
 	testImplementation("io.github.ulfs:assertj-jsoup:0.1.4")
 
-	runtimeOnly("org.postgresql:postgresql:42.5.1")
 
 	detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.22.0")
 
@@ -69,7 +68,7 @@ dependencyManagement {
 
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
-		freeCompilerArgs = listOf("-Xjsr305=strict")
+		freeCompilerArgs = listOf("-Xjsr305=strict", "-Xjvm-default=all")
 		jvmTarget = "17"
 	}
 }

@@ -1,3 +1,5 @@
+package nsu.fit.qyoga.cases.core.questionnaires.ui
+
 import io.restassured.http.ContentType
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
@@ -25,7 +27,7 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga returns questionnaire-list page with questionnaires`() {
         Given {
-            this.cookie(getAuthCookie())
+            cookie(getAuthCookie())
         } When {
             get("/questionnaires")
         } Then {
@@ -44,7 +46,7 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga returns part of page questionnaire-list then user change sort type`() {
         Given {
-            this.cookie(getAuthCookie())
+            cookie(getAuthCookie())
             contentType(ContentType.JSON)
             param("title", "test")
             param("sort", "title,desc")
@@ -66,7 +68,7 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga returns part of page questionnaire-list then user change title`() {
         Given {
-            this.cookie(getAuthCookie())
+            cookie(getAuthCookie())
             contentType(ContentType.JSON)
             param("title", "test")
         } When {
@@ -87,7 +89,7 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga returns part of page questionnaire-list then user change page`() {
         Given {
-            this.cookie(getAuthCookie())
+            cookie(getAuthCookie())
             contentType(ContentType.JSON)
             param("title", "test")
             param("sort", "title,desc")

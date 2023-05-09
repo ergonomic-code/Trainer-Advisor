@@ -18,7 +18,7 @@ class ClientListExtTest : QYogaAppTestBase() {
     fun setupDb() {
         dbInitializer.executeScripts(
             "/db/clients-init-script.sql" to "dataSource",
-            "/db/insert-clients.sql" to "dataSource",
+            "/db/migration/demo/V23050904__insert_clients.sql" to "dataSource",
         )
     }
 

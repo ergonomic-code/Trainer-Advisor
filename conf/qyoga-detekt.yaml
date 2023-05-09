@@ -53,6 +53,9 @@ style:
   MultilineRawStringIndentation:
     active: true
 
+  NewLineAtEndOfFile:
+    active: false
+
   NoTabs:
     active: true
 
@@ -113,6 +116,12 @@ formatting:
   MaximumLineLength:
     active: false
 
+  FinalNewline:
+    active: false
+
+  NoConsecutiveBlankLines:
+    active: false
+
   NoWildcardImports:
     active: false
 
@@ -122,3 +131,8 @@ formatting:
   NoUnusedImports:
     active: false
 
+  PackageName:
+    active: false
+
+  Wrapping:
+    active: false
