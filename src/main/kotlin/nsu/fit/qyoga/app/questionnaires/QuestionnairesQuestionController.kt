@@ -4,7 +4,7 @@ import jakarta.servlet.http.HttpSession
 import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateAnswerDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionnaireDto
-import nsu.fit.qyoga.core.questionnaires.api.errors.QuestionException
+import nsu.fit.qyoga.core.questionnaires.api.errors.ElementNotFound
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
@@ -21,7 +21,7 @@ class QuestionnairesQuestionController(
     @GetMapping("/edit/add-question")
     fun addNewQuestionToQuestionnaire(): String {
         val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
-            ?: throw QuestionException("Невозможно добавить новый вопрос")
+            ?: throw ElementNotFound("Невозможно добавить новый вопрос")
         questionnaire.question.add(
             CreateQuestionDto(
                 id = getLastQuestionIndex(questionnaire.question) + 1,
@@ -56,11 +56,10 @@ class QuestionnairesQuestionController(
         @PathVariable questionId: Long
     ): String {
         val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
-            ?: throw QuestionException("Невозможно удалить вопрос")
-        questionnaire.question.removeIf { it.id == questionId}
+            ?: throw ElementNotFound("Невозможно удалить вопрос")
         httpSession.setAttribute(
             "questionnaire",
-            questionnaire
+            questionnaire.copy(question = questionnaire.question.filter { it.id != questionId }.toMutableList())
         )
         return "questionnaire/create-questionnaire::questions"
     }
@@ -74,18 +73,19 @@ class QuestionnairesQuestionController(
         @ModelAttribute("questionnaire") questionnaireDto: CreateQuestionnaireDto
     ): String {
         val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
-            ?: throw QuestionException("Невозможно изменить тип вопроса")
-        questionnaire.question.forEachIndexed { index, question ->
-            if (question.id == questionId) {
-                questionnaire.question[index] = question.copy(
-                    questionType = questionnaireDto.question[index].questionType,
-                    answers = listOf(CreateAnswerDto())
-                )
-                httpSession.setAttribute("questionnaire", questionnaire)
-                return "questionnaire/create-questionnaire::questions"
-            }
-        }
-        throw QuestionException("Выбранный вопрос не найден")
+            ?: throw ElementNotFound("Невозможно изменить тип вопроса")
+        val question = getQuestionById(questionnaireDto, questionId)
+            ?: throw ElementNotFound("Выбранный вопрос не найден")
+        val changedQuestion = question.copy(answers = listOf(CreateAnswerDto()))
+        val questionList = (questionnaire.question.filter { it.id != questionId } + changedQuestion).toMutableList()
+        questionList.sortBy { it.id }
+        httpSession.setAttribute(
+            "questionnaire",
+            questionnaire.copy(
+                question = questionList
+            )
+        )
+        return "questionnaire/create-questionnaire::questions"
     }
 
     /**
@@ -98,15 +98,22 @@ class QuestionnairesQuestionController(
         @PathVariable questionId: Long
     ): HttpStatus {
         val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
-            ?: throw QuestionException("Невозможно изменить вопрос")
-        questionnaire.question.forEachIndexed { index, question ->
-            if (question.id == questionId) {
-                questionnaire.question[index] = questionnaireDto.question[index]
-                httpSession.setAttribute("questionnaire", questionnaire)
-                return HttpStatus.OK
-            }
-        }
-        throw QuestionException("Выбранный вопрос не найден")
+            ?: throw ElementNotFound("Невозможно изменить вопрос")
+        val changedQuestion = getQuestionById(questionnaireDto, questionId)
+            ?: throw ElementNotFound("Выбранный вопрос не найден")
+        val questionList = (questionnaire.question.filter { it.id != questionId } + changedQuestion).toMutableList()
+        questionList.sortBy { it.id }
+        httpSession.setAttribute(
+            "questionnaire",
+            questionnaire.copy(
+                question = questionList
+            )
+        )
+        return HttpStatus.OK
+    }
+
+    fun getQuestionById( questionnaire: CreateQuestionnaireDto, questionId: Long): CreateQuestionDto? {
+        return questionnaire.question.filter { it.id == questionId }.getOrNull(0)
     }
 
     fun getLastQuestionIndex (questions: List<CreateQuestionDto>): Long {

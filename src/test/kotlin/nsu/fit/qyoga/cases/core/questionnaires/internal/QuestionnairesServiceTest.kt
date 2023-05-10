@@ -28,8 +28,7 @@ import org.springframework.test.context.ContextConfiguration
 )
 @ActiveProfiles("test")
 class QuestionnairesServiceTest(
-    @Autowired private val questionnaireService: QuestionnaireService,
-    @Autowired private val questionService: QuestionService
+    @Autowired private val questionnaireService: QuestionnaireService
 ) : QYogaModuleBaseTest() {
 
     @BeforeEach

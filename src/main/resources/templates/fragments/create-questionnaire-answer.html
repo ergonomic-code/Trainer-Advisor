@@ -63,8 +63,8 @@
                            th:name="|question[${questionIndex}].answers[${j.index}].title|" th:value="${answer.title}"
                            hx-trigger="keyup changed delay:300ms"
                            th:attr = "
-                           hx-post=|@{/questionnaires/question/answer/{answerId}/update
-                           (answerId=${answer.id})}|">
+                           hx-post=|@{/questionnaires/edit/question/{questionId}/answer/{answerId}/update
+                           (answerId=${answer.id}, questionId=${question.id})}|">
                 </label>
 
                 <div style="width: 40px">
@@ -79,8 +79,8 @@
                 </div>
                 <img class="delete-answer" src="/img/cross.png" alt="delete answer" style="width: 30px; height: 30px"
                      th:attr="
-                     hx-delete=|@{/questionnaires/{questionnaireId}/edit/answer/{answerId}
-                     (questionnaireId=${questionnaire.id}, answerId=${answer.id})}|"
+                     hx-delete=|@{/questionnaires/edit/question/{questionId}/answer/{answerId}
+                     (answerId=${answer.id}, questionId=${question.id})}|"
                      hx-target="#questions">
             </div>
 
@@ -97,7 +97,7 @@
                            th:name="|question[${questionIndex}].answers[${j.index}].title|" th:value="${answer.title}"
                            hx-trigger="keyup changed delay:300ms"
                            th:attr = "
-                           hx-post=|@{/questionnaires/question/{questionId}/answer/{answerId}/update
+                           hx-post=|@{/questionnaires/edit/question/{questionId}/answer/{answerId}/update
                            (questionId=${question.id},answerId=${answer.id})}|">
                 </label>
                 <div style="width: 40px">
@@ -106,14 +106,14 @@
                            hx-trigger="change"
                            hx-encoding="multipart/form-data"
                            th:attr = "
-                           hx-post=|@{/questionnaires/answer/{id}/image(id=${answer.id},
+                           hx-post=|@{/questionnaires/edit/answer/{id}/image(id=${answer.id},
                            questionIndex=${questionIndex}, answerIndex=${j.index})}|,
                            hx-target=|#answer${answer.id}Img|">
                 </div>
                 <img class="delete-answer" src="/img/cross.png" alt="delete answer" style="width: 30px; height: 30px"
                      th:attr="
-                     hx-delete=|@{/questionnaires/{questionnaireId}/edit/answer/{answerId}
-                     (questionnaireId=${questionnaire.id}, answerId=${answer.id})}|"
+                     hx-delete=|@{/questionnaires/edit/question/{questionId}/answer/{answerId}
+                     (questionId=${question.id},answerId=${answer.id})}|"
                      hx-target="#questions">
             </div>
 
@@ -135,7 +135,7 @@
                             th:name="|question[${questionIndex}].answers[${j.index}].bounds.lowerBound|"
                             hx-swap="none"
                             th:attr = "
-                            hx-post=|@{/questionnaires/question/{questionId}/answer/{answerId}/update
+                            hx-post=|@{/questionnaires/edit/question/{questionId}/answer/{answerId}/update
                             (answerId=${answer.id}, questionId=${question.id})}|,
                             hx-target=|#questions|"
                             class="sortBtn" style="width: 50px; border-radius: 5px">
@@ -191,8 +191,8 @@
                    placeholder="нажмите, чтобы добавить новый ответ"
                    hx-trigger="click"
                    th:attr = "
-                   hx-get=|@{/questionnaires/{questionnaireId}/edit/question/{questionId}/addAnswer
-                   (questionId=${question.id}, questionnaireId=${questionnaire.id})}|"
+                   hx-get=|@{/questionnaires/edit/question/{questionId}/addAnswer
+                   (questionId=${question.id})}|"
                    hx-target="#questions"
             >
         </label>
