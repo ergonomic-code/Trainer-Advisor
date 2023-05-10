@@ -16,6 +16,8 @@ data class Exercise(
     val therapistId: Long,
     @MappedCollection(idColumn = "exercise_id")
     val purposes: Set<ExercisePurpose>,
+    @MappedCollection(idColumn = "exercise_id", keyColumn = "step_index")
+    val steps: List<ExerciseStep>,
     @Id
     val id: Long = 0
 )

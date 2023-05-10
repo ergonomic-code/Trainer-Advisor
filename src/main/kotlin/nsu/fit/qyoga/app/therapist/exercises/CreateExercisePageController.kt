@@ -5,6 +5,7 @@ import nsu.fit.platform.spring.hxRedirect
 import nsu.fit.qyoga.core.exercises.api.ExercisesService
 import nsu.fit.qyoga.core.exercises.api.model.Exercise
 import nsu.fit.qyoga.core.exercises.api.model.ExercisePurpose
+import nsu.fit.qyoga.core.exercises.api.model.ExerciseStep
 import nsu.fit.qyoga.core.therapeutic_purposes.api.TherapeuticPurpose
 import nsu.fit.qyoga.core.therapeutic_purposes.api.TherapeuticPurposesService
 import nsu.fit.qyoga.core.users.internal.QyogaUserDetails
@@ -24,7 +25,8 @@ data class CreateExerciseRequest(
     val contradictions: String,
     val purposes: String,
     val duration: Double,
-    val exerciseTypeId: Long
+    val exerciseTypeId: Long,
+    val steps: List<ExerciseStepDto> = mutableListOf()
 )
 
 @Controller
@@ -50,6 +52,9 @@ class CreateExercisePageController(
         val exercisePurposes = persistedPurposes.map { ExercisePurpose(AggregateReference.to(it.id)) }
             .toSet()
 
+        val exerciseSteps =
+            createExerciseRequest.steps.mapIndexed { idx, dto -> ExerciseStep(dto.description, null, idx) }
+
         exercisesService.addExercise(
             Exercise(
                 createExerciseRequest.title,
@@ -59,7 +64,8 @@ class CreateExercisePageController(
                 createExerciseRequest.duration.toDurationMinutes(),
                 createExerciseRequest.exerciseTypeId,
                 principal.id,
-                exercisePurposes
+                exercisePurposes,
+                exerciseSteps
             )
         )
 
