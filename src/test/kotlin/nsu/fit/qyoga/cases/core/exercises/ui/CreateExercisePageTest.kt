@@ -6,6 +6,7 @@ import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
 import nsu.fit.platform.lang.toDecimalMinutes
 import nsu.fit.qyoga.core.exercises.api.model.Exercise
+import nsu.fit.qyoga.core.exercises.api.model.ExerciseStep
 import nsu.fit.qyoga.infra.QYogaAppTestBase
 import org.junit.jupiter.api.Test
 import java.time.Duration
@@ -16,7 +17,9 @@ const val CONTRADICTIONS = "contradictions"
 const val PURPOSES = "purposes"
 const val DURATION = "duration"
 const val DESCRIPTION = "description"
-const val EXERCISETYPEID = "exerciseTypeId"
+const val EXERCISE_TYPE_ID = "exerciseTypeId"
+
+fun stepsDescription(idx: Int) = "steps[$idx].description"
 
 class CreateExercisePageTest : QYogaAppTestBase() {
 
@@ -34,7 +37,7 @@ class CreateExercisePageTest : QYogaAppTestBase() {
                 node("input[name=$CONTRADICTIONS]") { exists() }
                 node("input[name=$PURPOSES]") { exists() }
                 node("input[name=$DURATION]") { exists() }
-                node("select[name=$EXERCISETYPEID]") { exists() }
+                node("select[name=$EXERCISE_TYPE_ID]") { exists() }
                 node("textarea[name=$DESCRIPTION]") { exists() }
             }
         }
@@ -43,6 +46,8 @@ class CreateExercisePageTest : QYogaAppTestBase() {
     @Test
     fun `When new exercise is added it should be present in exercises list`() {
         val purpose = "Вылечить пальчик"
+        val step1 = ExerciseStep("Глубоко вдохните", null, 1)
+        val step2 = ExerciseStep("И выдохните", null, 2)
         val exercise = Exercise(
             "Just added exercise",
             "Description",
@@ -52,7 +57,7 @@ class CreateExercisePageTest : QYogaAppTestBase() {
             1,
             2,
             setOf(),
-            0
+            listOf(step1, step2)
         )
         Given {
             cookie(getAuthCookie())
@@ -62,8 +67,10 @@ class CreateExercisePageTest : QYogaAppTestBase() {
             formParam(CONTRADICTIONS, exercise.contradictions)
             formParam(PURPOSES, purpose)
             formParam(DURATION, exercise.duration.toDecimalMinutes())
-            formParam(EXERCISETYPEID, exercise.exerciseTypeId)
+            formParam(EXERCISE_TYPE_ID, exercise.exerciseTypeId)
             formParam(DESCRIPTION, exercise.description)
+            formParam(stepsDescription(0), step1.description)
+            formParam(stepsDescription(1), step2.description)
         } When {
             post("/exercises/create")
         } Then {
