@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <div th:replace="~{fragments/header::header (titleName=${'Список упражнений'})}"></div>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body class="sb-nav-fixed">
 
@@ -16,7 +17,10 @@
             <div class="container">
                 <h1 class="mt-4">Упражнения</h1>
 
-                <form class="mt-4" hx-post="/exercises/create" id="createExerciseForm">
+                <form class="mt-4"
+                      hx-post="/exercises/create" id="createExerciseForm" x-data="{
+                                  title: ''
+                              }">
                     <div class="form-group row mb-3">
                         <label class="col-sm-2 col-form-label" for="title">Название упражнения</label>
                         <div class="col-sm-7">
@@ -29,7 +33,7 @@
                         <div class="col-sm-7">
                             <input class="form-control" id="contradictions" name="contradictions"
                                    placeholder="Травма сухожилия бицепса бедра. Травма запястья"
-                                   type="text">
+                                   required type="text">
                         </div>
                     </div>
                     <div class="form-group row mb-3">
@@ -37,7 +41,7 @@
                         <div class="col-sm-7">
                             <input class="form-control" id="indications" name="indications"
                                    placeholder="Вытяжение позвоночника."
-                                   type="text">
+                                   required type="text">
                         </div>
                     </div>
                     <div class="form-group row mb-3">
@@ -45,7 +49,7 @@
                         <div class="col-sm-7">
                             <input class="form-control" hi id="purposes" name="purposes"
                                    placeholder="Улучшение мобильности плечевых суставов, Вытяжение задней поверхности ног"
-                                   type="text">
+                                   required type="text">
                             <div class="form-text">Список терапевтических задач через запятую</div>
                         </div>
                     </div>
@@ -53,7 +57,7 @@
                         <label class="col-sm-2 col-form-label" for="duration">Длительность (минуты)</label>
                         <div class="col-sm-7">
                             <input class="form-control" id="duration" max="180" min="0" name="duration"
-                                   step="0.5" type="number" value="1">
+                                   required step="0.5" type="number" value="1">
                         </div>
                     </div>
                     <div class="form-group row mb-3">
@@ -71,9 +75,28 @@
                     </div>
                     <div class="form-group row mb-3 col-sm-9">
                         <label for="description">Описание:</label>
-                        <textarea class="form-control" id="description" name="description" placeholder="Глубоко вдохните..."
+                        <textarea class="form-control" id="description" name="description"
+                                  placeholder="Глубоко вдохните..."
+                                  required
                                   rows="10"></textarea>
                     </div>
+
+                    <fieldset class="mb-3 row col-sm-9 justify-content-center" id="steps" x-data="{steps: ['']}">
+                        <legend>Шаги:</legend>
+                        <template x-for="(step, idx) in steps">
+                            <div class="form-group mb-3 g-0">
+                                <input :name="`steps[${idx}].id`" type="hidden">
+                                <input :name="`steps[${idx}].imageId`" type="hidden">
+                                <textarea :name="`steps[${idx}].description`" class="form-control"
+                                          placeholder="Глубоко вдохните..."
+                                          rows="10"
+                                          x-model="steps[idx]">
+                            </textarea>
+                            </div>
+                        </template>
+                        <input @click="steps.push('')" class="btn btn-secondary mt-3 mb-4 col-sm-8 text-center" type="button"
+                               value="+">
+                    </fieldset>
 
                     <input class="btn btn-primary" type="submit" value="Сохранить">
                 </form>

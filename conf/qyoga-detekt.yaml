@@ -16,6 +16,7 @@ naming:
     active: false
 
 style:
+
   MaxLineLength:
     maxLineLength: 150
     excludeRawStrings: true
@@ -36,7 +37,8 @@ style:
     active: true
 
   DataClassShouldBeImmutable:
-    active: false
+    active: true
+    excludes: [ '**/*Dto.kt' ]
 
   EqualsOnSignatureLine:
     active: true
