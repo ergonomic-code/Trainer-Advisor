@@ -29,7 +29,7 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
         Given {
             cookie(getAuthCookie())
         } When {
-            get("/questionnaires")
+            get("/therapist/questionnaires")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
@@ -51,7 +51,7 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
             param("title", "test")
             param("sort", "title,desc")
         } When {
-            get("/questionnaires/action")
+            get("/therapist/questionnaires/action")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
@@ -72,7 +72,7 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
             contentType(ContentType.JSON)
             param("title", "test")
         } When {
-            get("/questionnaires/action")
+            get("/therapist/questionnaires/action")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
@@ -95,7 +95,7 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
             param("sort", "title,desc")
             param("page", 1)
         } When {
-            get("/questionnaires/action")
+            get("/therapist/questionnaires/action")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {

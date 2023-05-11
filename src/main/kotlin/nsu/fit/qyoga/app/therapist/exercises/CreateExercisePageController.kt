@@ -30,7 +30,7 @@ data class CreateExerciseRequest(
 )
 
 @Controller
-@RequestMapping("/exercises/create")
+@RequestMapping("/therapist/exercises/create")
 class CreateExercisePageController(
     private val exercisesService: ExercisesService,
     private val therapeuticPurposesService: TherapeuticPurposesService
@@ -69,7 +69,7 @@ class CreateExercisePageController(
             )
         )
 
-        return hxRedirect("/exercises")
+        return hxRedirect("/therapist/exercises")
     }
 
 }

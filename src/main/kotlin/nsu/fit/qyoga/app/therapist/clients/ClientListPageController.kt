@@ -1,4 +1,4 @@
-package nsu.fit.qyoga.app.therapist
+package nsu.fit.qyoga.app.therapist.clients
 
 import nsu.fit.qyoga.core.clients.api.ClientService
 import nsu.fit.qyoga.core.clients.api.Dto.ClientDto
@@ -10,10 +10,8 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 
-const val CLIENT_PAGE = "clients-list"
-
 @Controller
-@RequestMapping("/clients")
+@RequestMapping("/therapist/clients")
 class ClientListPageController(
     private val clientService: ClientService
 ) {
@@ -28,7 +26,7 @@ class ClientListPageController(
             pageable
         )
         model.addAllAttributes(toModelAttributes(clients, searchDto))
-        return CLIENT_PAGE
+        return "therapist/clients/clients-list"
     }
 
     @GetMapping("/search-cl")
@@ -42,7 +40,7 @@ class ClientListPageController(
             pageable
         )
         model.addAllAttributes(toModelAttributes(clients, searchDto))
-        return "clients-list :: clients"
+        return "therapist/clients/clients-list :: clients"
     }
 
     @DeleteMapping("/delete/{id}")

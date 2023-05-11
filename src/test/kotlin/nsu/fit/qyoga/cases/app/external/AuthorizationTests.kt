@@ -19,7 +19,7 @@ class AuthorizationTests : QYogaAppTestBase() {
         Given {
             this
         } When {
-            get("/clients")
+            get("/therapist/clients")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             Assertions.assertThatSpec(body) {
@@ -36,7 +36,7 @@ class AuthorizationTests : QYogaAppTestBase() {
         Given {
             this.cookie(getAuthCookie())
         } When {
-            get("/clients")
+            get("/therapist/clients")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             Assertions.assertThatSpec(body) {

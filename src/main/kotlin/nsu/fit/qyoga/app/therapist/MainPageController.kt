@@ -8,6 +8,6 @@ class MainPageController {
 
     @GetMapping("/")
     fun getMainPage(): String {
-        return "redirect:/clients"
+        return "redirect:/therapist/clients"
     }
 }

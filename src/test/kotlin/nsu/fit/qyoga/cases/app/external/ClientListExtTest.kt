@@ -27,7 +27,7 @@ class ClientListExtTest : QYogaAppTestBase() {
         Given {
             this.cookie(getAuthCookie())
         } When {
-            delete("/clients/delete/1")
+            delete("/therapist/clients/delete/1")
         } Then {
             statusCode(200)
         }
@@ -38,7 +38,7 @@ class ClientListExtTest : QYogaAppTestBase() {
         Given {
             this.cookie(getAuthCookie())
         } When {
-            delete("/clients/delete/1111")
+            delete("/therapist/clients/delete/1111")
         } Then {
             statusCode(200)
         }

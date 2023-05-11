@@ -1,6 +1,7 @@
 package nsu.fit.qyoga.cases.core.exercises.ui
 
 import io.github.ulfs.assertj.jsoup.Assertions
+import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
 import nsu.fit.qyoga.infra.QYogaAppTestBase
@@ -25,8 +26,10 @@ class ExerciseViewTest : QYogaAppTestBase() {
 
     @Test
     fun `QYoga returns exercise-search page with exercise table`() {
-        When {
-            get("/exercises")
+        Given {
+            cookie(getAuthCookie())
+        } When {
+            get("/therapist/exercises")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             Assertions.assertThatSpec(body) {
@@ -39,8 +42,10 @@ class ExerciseViewTest : QYogaAppTestBase() {
 
     @Test
     fun `QYoga returns exercise-search page with input fields`() {
-        When {
-            get("/exercises")
+        Given {
+            cookie(getAuthCookie())
+        } When {
+            get("/therapist/exercises")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             Assertions.assertThatSpec(body) {
@@ -54,8 +59,10 @@ class ExerciseViewTest : QYogaAppTestBase() {
 
     @Test
     fun `QYoga returns exercises table with pagination`() {
-        When {
-            get("/exercises/search")
+        Given {
+            cookie(getAuthCookie())
+        } When {
+            get("/therapist/exercises/search")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             Assertions.assertThatSpec(body) {
