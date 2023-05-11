@@ -31,7 +31,7 @@ class WebSecurityConfig(
                         Role.ROLE_THERAPIST.toString(),
                         Role.ROLE_ADMIN.toString()
                     )
-                    .requestMatchers(HttpMethod.GET, "/styles/**", "/img/**").permitAll()
+                    .requestMatchers(HttpMethod.GET, "/styles/**", "/img/**", "/js/**").permitAll()
                     .anyRequest().authenticated()
             }
             .formLogin()
