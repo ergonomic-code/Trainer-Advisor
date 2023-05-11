@@ -28,7 +28,7 @@ class CreateExercisePageTest : QYogaAppTestBase() {
         Given {
             cookie(getAuthCookie())
         } When {
-            get("/exercises/create")
+            get("/therapist/exercises/create")
         } Then {
             assertThatBody {
                 node("#createExerciseForm") { exists() }
@@ -72,15 +72,15 @@ class CreateExercisePageTest : QYogaAppTestBase() {
             formParam(stepsDescription(0), step1.description)
             formParam(stepsDescription(1), step2.description)
         } When {
-            post("/exercises/create")
+            post("/therapist/exercises/create")
         } Then {
-            header("HX-Redirect", "/exercises")
+            header("HX-Redirect", "/therapist/exercises")
         }
 
         Given {
-            this
+            cookie(getAuthCookie())
         } When {
-            get("/exercises")
+            get("/therapist/exercises")
         } Then {
             assertThatBody {
                 hasExercisesTableWithExercise(exercise, "Разминка", "Вылечить пальчик")
