@@ -15,7 +15,7 @@ class FragmentsTests : QYogaAppTestBase() {
     @Test
     fun `header fragment should be placed inside head tag`() {
         Given {
-            this.cookie(getAuthCookie())
+            authorized()
         } When {
             get("/")
         } Then {

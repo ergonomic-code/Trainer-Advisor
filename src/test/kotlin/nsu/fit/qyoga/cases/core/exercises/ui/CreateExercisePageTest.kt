@@ -26,7 +26,7 @@ class CreateExercisePageTest : QYogaAppTestBase() {
     @Test
     fun `GET _exercises_create should return exercise creation from`() {
         Given {
-            cookie(getAuthCookie())
+            authorized()
         } When {
             get("/therapist/exercises/create")
         } Then {
@@ -60,7 +60,7 @@ class CreateExercisePageTest : QYogaAppTestBase() {
             listOf(step1, step2)
         )
         Given {
-            cookie(getAuthCookie())
+            authorized()
             filter(RequestLoggingFilter())
             formParam(TITLE, exercise.title)
             formParam(INDICATIONS, exercise.indications)
@@ -78,7 +78,7 @@ class CreateExercisePageTest : QYogaAppTestBase() {
         }
 
         Given {
-            cookie(getAuthCookie())
+            authorized()
         } When {
             get("/therapist/exercises")
         } Then {

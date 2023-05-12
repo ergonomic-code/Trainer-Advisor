@@ -34,7 +34,7 @@ class AuthorizationTests : QYogaAppTestBase() {
     @Test
     fun `authorized access to therapist's page should be allowed`() {
         Given {
-            this.cookie(getAuthCookie())
+            authorized()
         } When {
             get("/therapist/clients")
         } Then {

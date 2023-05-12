@@ -1,4 +1,4 @@
-package nsu.fit.qyoga.cases.app.external
+package nsu.fit.qyoga.cases.core.clients.ui
 
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
-class ClientListExtTest : QYogaAppTestBase() {
+class ClientListDeleteClientTest : QYogaAppTestBase() {
 
     @Autowired
     lateinit var dbInitializer: DbInitializer
@@ -25,9 +25,9 @@ class ClientListExtTest : QYogaAppTestBase() {
     @Test
     fun `When user delete valid client he should be redirected to client page`() {
         Given {
-            this.cookie(getAuthCookie())
+            authorized()
         } When {
-            delete("/therapist/clients/delete/1")
+            delete("${DELETE_CLIENT_ENDPOINT_BASE}1")
         } Then {
             statusCode(200)
         }
@@ -36,7 +36,7 @@ class ClientListExtTest : QYogaAppTestBase() {
     @Test
     fun `When user delete not valid client he should be redirected to client page`() {
         Given {
-            this.cookie(getAuthCookie())
+            authorized()
         } When {
             delete("/therapist/clients/delete/1111")
         } Then {
