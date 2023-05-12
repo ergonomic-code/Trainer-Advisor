@@ -14,7 +14,7 @@ class MainPageTests : QYogaAppTestBase() {
     @Test
     fun `Authenticated request to root url should redirect to main page`() {
         Given {
-            this.cookie(getAuthCookie())
+            authorized()
         } When {
             get("/")
         } Then {

@@ -23,7 +23,7 @@
                     </div>
                     <div class="card-body">
 
-                        <form hx-get="/clients/search-cl" hx-target="#tablePagination"
+                        <form hx-get="/therapist/clients/search-cl" hx-target="#tablePagination"
                               hx-trigger="submit"
                               th:object="${searchDto}">
                             <div class="input-group mb-3 m-auto" id="searchClientsFilterForm">
@@ -101,9 +101,10 @@
                                     <td th:text="${client.firstName}"></td>
                                     <td th:text="${client.patronymic}"></td>
                                     <td>
-                                        <button class="btn btn-danger" hx-swap="outerHTML swap:1s" hx-target="closest tr"
+                                        <button class="btn btn-danger" hx-swap="outerHTML swap:1s"
+                                                hx-target="closest tr"
                                                 id="btnDeleteClient"
-                                                th:attr="hx-delete=@{/clients/delete/{id} (id=${client.id})}">
+                                                th:attr="hx-delete=@{/therapist/clients/delete/{id} (id=${client.id})}">
                                             Удалить
                                         </button>
                                     </td>
@@ -121,7 +122,7 @@
                                                hx-target="#tablePagination"
                                                hx-trigger="click"
                                                style="cursor: pointer"
-                                               th:attr="hx-get=@{/clients/search-cl(pageNumber=${clients.getPageable().pageNumber}, searchDto=${searchDto})}"
+                                               th:attr="hx-get=@{/therapist/clients/search-cl(pageNumber=${clients.getPageable().pageNumber}, searchDto=${searchDto})}"
                                                th:if="${clients.getPageable().pageNumber >= 1}"
                                             >Назад</a>
                                         </li>
@@ -136,7 +137,7 @@
                                                hx-target="#tablePagination"
                                                hx-trigger="click"
                                                style="cursor: pointer"
-                                               th:attr="hx-get=@{/clients/search-cl(pageNumber=${pageNumber}, searchDto=${searchDto})}"
+                                               th:attr="hx-get=@{/therapist/clients/search-cl(pageNumber=${pageNumber}, searchDto=${searchDto})}"
                                                th:text="${pageNumber}"></a>
                                         </li>
                                     </div>
@@ -148,7 +149,7 @@
                                                hx-target="#tablePagination"
                                                hx-trigger="click"
                                                style="cursor: pointer"
-                                               th:attr="hx-get=@{/clients/search-cl(pageNumber=${clients.getPageable().pageNumber + 2}, searchDto=${searchDto})}"
+                                               th:attr="hx-get=@{/therapist/clients/search-cl(pageNumber=${clients.getPageable().pageNumber + 2}, searchDto=${searchDto})}"
                                                th:if="${clients.getPageable().pageNumber < clients.totalPages - 1}"
                                             >Вперед</a>
                                         </li>
@@ -160,13 +161,6 @@
                     </div>
                 </div>
 
-                <div class="input-group">
-                    <a href="/clients/new-client">
-                        <button class="btn btn-secondary" id="btnNewClient" type="button">
-                            Добавить клиента
-                        </button>
-                    </a>
-                </div>
             </div>
         </main>
         <footer class="py-4 bg-light mt-auto" th:insert="~{fragments/footer.html :: footer}"></footer>

@@ -1,15 +1,19 @@
 package nsu.fit.qyoga.cases.core.exercises.ui
 
 import io.github.ulfs.assertj.jsoup.Assertions
+import io.restassured.module.kotlin.extensions.Extract
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
 import nsu.fit.qyoga.infra.QYogaAppTestBase
 import nsu.fit.qyoga.infra.db.DbInitializer
+import nsu.fit.qyoga.platform.assertLinkValid
 import org.jsoup.Jsoup
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
+
+private const val EXERCISE_SEARCH_ENDPOINT = "/therapist/exercises/search"
 
 class ExerciseViewTest : QYogaAppTestBase() {
 
@@ -26,43 +30,37 @@ class ExerciseViewTest : QYogaAppTestBase() {
 
     @Test
     fun `QYoga returns exercise-search page with exercise table`() {
-        Given {
-            cookie(getAuthCookie())
+        val body = Given {
+            authorized()
         } When {
             get("/therapist/exercises")
-        } Then {
-            val body = Jsoup.parse(extract().body().asString())
-            Assertions.assertThatSpec(body) {
-                node("#exercisesTable") { exists() }
-                node("#exercises-list") { exists() }
-                node("td") { exists() }
-            }
+        } Extract {
+            Jsoup.parse(this.body().asString())
         }
-    }
 
-    @Test
-    fun `QYoga returns exercise-search page with input fields`() {
-        Given {
-            cookie(getAuthCookie())
-        } When {
-            get("/therapist/exercises")
-        } Then {
-            val body = Jsoup.parse(extract().body().asString())
-            Assertions.assertThatSpec(body) {
-                node("#titleFilter") { exists() }
-                node("#contradictionFilter") { exists() }
-                node("#therapeuticPurposeFilter") { exists() }
-                node("#exerciseTypeFilter") { exists() }
+        Assertions.assertThatSpec(body) {
+            node("#titleFilter") { exists() }
+            node("#contradictionFilter") { exists() }
+            node("#therapeuticPurposeFilter") { exists() }
+            node("#exerciseTypeFilter") { exists() }
+            node("form") {
+                attribute("hx-get") { hasText(EXERCISE_SEARCH_ENDPOINT) }
             }
+
+            node("#exercisesTable") { exists() }
+            node("#exercises-list") { exists() }
+            node("td") { exists() }
         }
+
+        assertLinkValid(body, "Новое упражнение")
     }
 
     @Test
     fun `QYoga returns exercises table with pagination`() {
         Given {
-            cookie(getAuthCookie())
+            authorized()
         } When {
-            get("/therapist/exercises/search")
+            get(EXERCISE_SEARCH_ENDPOINT)
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             Assertions.assertThatSpec(body) {

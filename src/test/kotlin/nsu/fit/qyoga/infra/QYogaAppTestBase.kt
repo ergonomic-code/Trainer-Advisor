@@ -11,6 +11,7 @@ import io.restassured.http.Cookie
 import io.restassured.module.kotlin.extensions.Extract
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.When
+import io.restassured.specification.RequestSpecification
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.boot.test.web.server.LocalServerPort
 
@@ -20,7 +21,9 @@ class QYogaAppTestBase {
     @LocalServerPort
     var port: Int = 0
 
-    fun getAuthCookie(): Cookie {
+    val authCookie by lazy { authorize() }
+
+    fun authorize(): Cookie {
         val cookie = Given {
             formParam("username", "therapist")
             formParam("password", "diem-Synergy5")
@@ -31,6 +34,10 @@ class QYogaAppTestBase {
         }
 
         return cookie
+    }
+
+    fun RequestSpecification.authorized(): RequestSpecification {
+        return this.cookie(authCookie)
     }
 
     @BeforeEach

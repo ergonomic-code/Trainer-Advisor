@@ -27,7 +27,7 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga returns questionnaire-list page with questionnaires`() {
         Given {
-            cookie(getAuthCookie())
+            authorized()
         } When {
             get("/therapist/questionnaires")
         } Then {
@@ -46,7 +46,7 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga returns part of page questionnaire-list then user change sort type`() {
         Given {
-            cookie(getAuthCookie())
+            authorized()
             contentType(ContentType.JSON)
             param("title", "test")
             param("sort", "title,desc")
@@ -68,7 +68,7 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga returns part of page questionnaire-list then user change title`() {
         Given {
-            cookie(getAuthCookie())
+            authorized()
             contentType(ContentType.JSON)
             param("title", "test")
         } When {
@@ -89,7 +89,7 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga returns part of page questionnaire-list then user change page`() {
         Given {
-            cookie(getAuthCookie())
+            authorized()
             contentType(ContentType.JSON)
             param("title", "test")
             param("sort", "title,desc")

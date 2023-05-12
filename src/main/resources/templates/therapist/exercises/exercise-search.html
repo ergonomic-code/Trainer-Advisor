@@ -22,7 +22,7 @@
                     </div>
                     <div class="card-body">
 
-                        <form hx-get="/exercises/search" hx-target="#tablePagination"
+                        <form hx-get="/therapist/exercises/search" hx-target="#tablePagination"
                               hx-trigger="submit"
                               th:object="${searchDto}">
                             <div class="input-group mb-3 m-auto" id="searchExercisesFilterForm">
@@ -105,7 +105,7 @@
                                                hx-target="#tablePagination"
                                                hx-trigger="click"
                                                style="cursor: pointer"
-                                               th:attr="hx-get=@{/exercises/search(pageNumber=${exercises.getPageable().pageNumber}, searchDto=${searchDto})}"
+                                               th:attr="hx-get=@{/therapist/exercises/search(pageNumber=${exercises.getPageable().pageNumber}, searchDto=${searchDto})}"
                                                th:if="${exercises.getPageable().pageNumber >= 1}"
                                             >Назад</a>
                                         </li>
@@ -120,7 +120,7 @@
                                                hx-target="#tablePagination"
                                                hx-trigger="click"
                                                style="cursor: pointer"
-                                               th:attr="hx-get=@{/exercises/search(pageNumber=${pageNumber}, searchDto=${searchDto})}"
+                                               th:attr="hx-get=@{/therapist/exercises/search(pageNumber=${pageNumber}, searchDto=${searchDto})}"
                                                th:text="${pageNumber}"></a>
                                         </li>
                                     </div>
@@ -132,7 +132,7 @@
                                                hx-target="#tablePagination"
                                                hx-trigger="click"
                                                style="cursor: pointer"
-                                               th:attr="hx-get=@{/exercises/search(pageNumber=${exercises.getPageable().pageNumber + 2}, searchDto=${searchDto})}"
+                                               th:attr="hx-get=@{/therapist/exercises/search(pageNumber=${exercises.getPageable().pageNumber + 2}, searchDto=${searchDto})}"
                                                th:if="${exercises.getPageable().pageNumber < exercises.totalPages - 1}"
                                             >Вперед</a>
                                         </li>
@@ -145,7 +145,7 @@
                 </div>
 
                 <div class="input-group">
-                    <a href="/exercises/create">
+                    <a href="/therapist/exercises/create" id="newExerciseLink">
                         <button class="btn btn-secondary" id="btnNewExercise" type="button">
                             Новое упражнение
                         </button>
