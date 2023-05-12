@@ -11,6 +11,9 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 
+const val CLIENTS_SEARCH_ENDPOINT = "/therapist/clients/search-cl"
+const val DELETE_CLIENT_ENDPOINT_BASE = "/therapist/clients/delete/"
+
 class ClientListViewTest : QYogaAppTestBase() {
 
     @Autowired
@@ -27,7 +30,7 @@ class ClientListViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga returns client-search page with clients table`() {
         Given {
-            this.cookie(getAuthCookie())
+            authorized()
         } When {
             get("/therapist/clients")
         } Then {
@@ -44,6 +47,13 @@ class ClientListViewTest : QYogaAppTestBase() {
                     )
                 }
                 node("td") { hasText("Петров") }
+                node("tr>td>button") {
+                    attribute("hx-delete") { matchesText("$DELETE_CLIENT_ENDPOINT_BASE\\d+") }
+                }
+
+                node("form") {
+                    attribute("hx-get") { hasText(CLIENTS_SEARCH_ENDPOINT) }
+                }
             }
         }
     }
@@ -51,7 +61,7 @@ class ClientListViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga returns clients-search page with input fields`() {
         Given {
-            this.cookie(getAuthCookie())
+            authorized()
         } When {
             get("/therapist/clients")
         } Then {
@@ -67,9 +77,9 @@ class ClientListViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga returns clients table with pagination`() {
         Given {
-            this.cookie(getAuthCookie())
+            authorized()
         } When {
-            get("/therapist/clients/search-cl")
+            get(CLIENTS_SEARCH_ENDPOINT)
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             Assertions.assertThatSpec(body) {

@@ -39,14 +39,16 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.testcontainers:junit-jupiter")
 	testImplementation("org.testcontainers:postgresql")
-	testImplementation("io.rest-assured:rest-assured:5.2.0")
-	testImplementation("io.rest-assured:kotlin-extensions:5.2.0")
-	testImplementation("io.kotest:kotest-runner-junit5:5.5.0")
-	testImplementation("io.kotest:kotest-assertions-core:5.5.0")
+	testImplementation("io.rest-assured:rest-assured:5.3.0")
+	testImplementation("io.rest-assured:kotlin-extensions:5.3.0")
+	testImplementation("io.kotest:kotest-runner-junit5:5.5.5")
+	testImplementation("io.kotest:kotest-assertions-core:5.5.5")
 	testImplementation("com.tngtech.archunit:archunit:1.0.1")
-	testImplementation("org.jsoup:jsoup:1.15.3")
+	testImplementation("org.jsoup:jsoup:1.15.4")
 	testImplementation("io.github.ulfs:assertj-jsoup:0.1.4")
-
+	testImplementation("org.testcontainers:selenium:1.18.1")
+	testImplementation("org.apache.httpcomponents.client5:httpclient5:5.2.1")
+	testImplementation("com.codeborne:selenide:6.14.0")
 
 	detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.22.0")
 
