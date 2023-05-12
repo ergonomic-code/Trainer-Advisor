@@ -55,8 +55,8 @@ class QuestionnairesCreateController(
     fun createQuestionnaire(
         @ModelAttribute("questionnaire") questionnaire: CreateQuestionnaireDto,
     ): String {
-        println(questionnaireService.saveQuestionnaire(questionnaire))
-        return "redirect:/questionnaires/setResult"
+        questionnaireService.saveQuestionnaire(questionnaire)
+        return "redirect:/questionnaires/edit/setResult"
     }
 
 

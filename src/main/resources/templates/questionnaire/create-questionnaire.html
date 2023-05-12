@@ -67,7 +67,7 @@
             <div id="questions" >
                   <div th:each="question, i : ${session.questionnaire.question}"
                        th:fragment="questions" th:id="|question${question.id}|">
-                      <div th:replace="~{fragments/create-questionnaire-answer::question(${question}, ${session.questionnaire}, ${i.index}) }"></div>
+                      <div th:replace="~{fragments/create-questionnaire-answer::question(${question}, ${i.index}) }"></div>
                   </div>
             </div>
 

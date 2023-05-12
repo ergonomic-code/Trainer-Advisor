@@ -7,6 +7,7 @@ import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionnaireDto
 import nsu.fit.qyoga.core.questionnaires.api.errors.ElementNotFound
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 
 @Controller
@@ -54,24 +55,33 @@ class QuestionnairesAnswersController(
      */
     @GetMapping("/edit/question/{questionId}/addAnswer")
     fun addAnswerToQuestion(
-        @PathVariable questionId: Long
+        @PathVariable questionId: Long,
+        model: Model
     ): String {
         val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
             ?: throw ElementNotFound("Невозможно добавить новый ответ")
         val changedQuestion = getQuestionById(questionnaire, questionId)
             ?: throw ElementNotFound("Выбранный вопрос не найден")
         val lastId = if (changedQuestion.answers.isEmpty()) 0 else changedQuestion.answers.last().id + 1
-        val questionList = (questionnaire.question.filter { it.id != questionId }
-                + changedQuestion.copy(answers = changedQuestion.answers
-                + CreateAnswerDto(id = lastId))).toMutableList()
-        questionList.sortBy { it.id }
+        val questionList = questionnaire.question.mapIndexed { idx, value ->
+            if (value.id == questionId) {
+                model.addAttribute("questionIndex", idx)
+                val copiedQuestion = changedQuestion.copy(
+                    answers = changedQuestion.answers + CreateAnswerDto(id = lastId)
+                )
+                model.addAttribute("question", copiedQuestion)
+                copiedQuestion
+            } else {
+                value
+            }
+        }.toMutableList()
         httpSession.setAttribute(
             "questionnaire",
             questionnaire.copy(
                 question = questionList
             )
         )
-        return "questionnaire/create-questionnaire::questions"
+        return "fragments/create-questionnaire-answer::question"
     }
 
     /**
@@ -80,22 +90,32 @@ class QuestionnairesAnswersController(
     @DeleteMapping("/edit/question/{questionId}/answer/{answerId}")
     fun deleteAnswerFromQuestion(
         @PathVariable answerId: Long,
-        @PathVariable questionId: Long
+        @PathVariable questionId: Long,
+        model: Model
     ): String {
         val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
             ?: throw ElementNotFound("Невозможно удалить ответ")
         val changedQuestion = getQuestionById(questionnaire, questionId)
             ?: throw ElementNotFound("Выбранный вопрос не найден")
-        val questionList = (questionnaire.question.filter { it.id != questionId }
-                + changedQuestion.copy(answers = changedQuestion.answers.filter { it.id != answerId })).toMutableList()
-        questionList.sortBy { it.id }
+        val questionList = questionnaire.question.mapIndexed { idx, value ->
+            if (value.id == questionId) {
+                model.addAttribute("questionIndex", idx)
+                val copiedQuestion = changedQuestion.copy(
+                    answers = changedQuestion.answers.filter { it.id != answerId }
+                )
+                model.addAttribute("question", copiedQuestion)
+                copiedQuestion
+            } else {
+                value
+            }
+        }.toMutableList()
         httpSession.setAttribute(
             "questionnaire",
             questionnaire.copy(
                 question = questionList
             )
         )
-        return "questionnaire/create-questionnaire::questions"
+        return "fragments/create-questionnaire-answer::question"
     }
 
     /**
@@ -123,13 +143,14 @@ class QuestionnairesAnswersController(
     @PostMapping("/edit/question/{questionId}/answer/setScores")
     fun setQuestionScore(
         @PathVariable("questionId") questionId: Long,
-        @ModelAttribute("questionnaire") questionnaireDto: CreateQuestionnaireDto
+        @ModelAttribute("questionnaire") questionnaireDto: CreateQuestionnaireDto,
+        model: Model
     ): String {
         val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
             ?: throw ElementNotFound("Невозможно сохранить ответ")
         httpSession.setAttribute(
             "questionnaire",
-            updateQuestion(questionnaire, questionnaireDto, questionId)
+            updateQuestion(questionnaire, questionnaireDto, questionId, model)
         )
         return "fragments/create-questionnaire-answer-set-score::answersScore"
     }
@@ -140,13 +161,14 @@ class QuestionnairesAnswersController(
     @PostMapping("/edit/question/{questionId}/answer/setAnswers")
     fun setQuestionAnswers(
         @PathVariable("questionId") questionId: Long,
-        @ModelAttribute("questionnaire") questionnaireDto: CreateQuestionnaireDto
+        @ModelAttribute("questionnaire") questionnaireDto: CreateQuestionnaireDto,
+        model: Model
     ): String {
         val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
             ?: throw ElementNotFound("Невозможно сохранить ответ")
         httpSession.setAttribute(
             "questionnaire",
-            updateQuestion(questionnaire, questionnaireDto, questionId)
+            updateQuestion(questionnaire, questionnaireDto, questionId, model)
         )
         return "fragments/create-questionnaire-answer::question"
     }
@@ -161,11 +183,18 @@ class QuestionnairesAnswersController(
             ?: throw ElementNotFound("Выбранный вопрос не найден")
         val changedAnswer = getAnswerById(changedQuestion, answerId)
             ?: throw ElementNotFound("Выбранный ответ не найден")
-        val answerList = changedQuestion.answers.filter { it.id != answerId } + changedAnswer
-        answerList.sortedBy { it.id }
-        val questionList = (questionnaire.question.filter { it.id != questionId }
-                + changedQuestion.copy(answers = answerList)).toMutableList()
-        questionList.sortBy { it.id }
+        val questionList = questionnaire.question.mapIndexed { idx, value ->
+            if (value.id == questionId) {
+                val copiedQuestion = changedQuestion.copy(
+                    answers = changedQuestion.answers.map {
+                        if (it.id == answerId) changedAnswer else it
+                    }
+                )
+                copiedQuestion
+            } else {
+                value
+            }
+        }.toMutableList()
         return questionnaire.copy(
             question = questionList
         )
@@ -174,13 +203,21 @@ class QuestionnairesAnswersController(
     fun updateQuestion(
         questionnaire: CreateQuestionnaireDto,
         questionnaireDto: CreateQuestionnaireDto,
-        questionId: Long
+        questionId: Long,
+        model: Model
     ): CreateQuestionnaireDto {
         val changedQuestion = getQuestionById(questionnaireDto, questionId)
             ?: throw ElementNotFound("Выбранный вопрос не найден")
-        val questionList = (questionnaire.question.filter { it.id != questionId }
-                + changedQuestion.copy(answers = changedQuestion.answers)).toMutableList()
-        questionList.sortBy { it.id }
+        val questionList = questionnaire.question.mapIndexed { idx, value ->
+            if (value.id == questionId) {
+                model.addAttribute("questionIndex", idx)
+                val copiedQuestion = changedQuestion.copy(answers = changedQuestion.answers)
+                model.addAttribute("question", copiedQuestion)
+                copiedQuestion
+            } else {
+                value
+            }
+        }.toMutableList()
         return questionnaire.copy(
             question = questionList
         )
