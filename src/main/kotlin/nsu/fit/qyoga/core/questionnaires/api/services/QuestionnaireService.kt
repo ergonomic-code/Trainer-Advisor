@@ -1,8 +1,8 @@
 package nsu.fit.qyoga.core.questionnaires.api.services
 
+import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionnaireDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireSearchDto
-import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireWithQuestionDto
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 
@@ -12,11 +12,8 @@ interface QuestionnaireService {
         pageable: Pageable
     ): Page<QuestionnaireDto>
 
-    fun createQuestionnaire(): Long
+    fun saveQuestionnaire(createQuestionnaireDto: CreateQuestionnaireDto): Long
+    fun findQuestionnaire(id: Long): QuestionnaireDto
+    fun findQuestionnaireWithQuestions(id: Long): CreateQuestionnaireDto
 
-    fun updateQuestionnaire(createQuestionnaireDto: QuestionnaireWithQuestionDto): QuestionnaireDto
-
-    fun updateQuestionnaire(questionnaire: QuestionnaireDto): QuestionnaireDto
-
-    fun findQuestionnaireWithQuestions(id: Long): QuestionnaireWithQuestionDto
 }
