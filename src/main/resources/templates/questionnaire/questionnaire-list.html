@@ -12,15 +12,11 @@
     <link href="/styles/styles.css" rel="stylesheet"/>
     <script crossorigin="anonymous" src="https://use.fontawesome.com/releases/v6.1.0/js/all.js"></script>
     <script>
-        window.addEventListener('DOMContentLoaded', event => {
+        window.addEventListener('DOMContentLoaded', _ => {
 
             // Toggle the side navigation
             const sidebarToggle = document.body.querySelector('#sidebarToggle');
             if (sidebarToggle) {
-                // Uncomment Below to persist sidebar toggle between refreshes
-                // if (localStorage.getItem('sb|sidebar-toggle') === 'true') {
-                //     document.body.classList.toggle('sb-sidenav-toggled');
-                // }
                 sidebarToggle.addEventListener('click', event => {
                     event.preventDefault();
                     document.body.classList.toggle('sb-sidenav-toggled');
@@ -48,8 +44,8 @@
             <div class="container-fluid px-4" style="height: 100%">
                 <div style="display: flex; justify-content:space-between; flex-direction: row;">
                     <h1 class="mt-4">Опросники</h1>
-                    <form class="input-group" th:action="@{/questionnaires/new}" th:method="GET"
-                    style="height: 40px; margin-top: 26px; width: auto;">
+                    <form class="input-group" th:action="@{/therapist/questionnaires/new}" th:method="GET"
+                          style="height: 40px; margin-top: 26px; width: auto;">
                         <button class="btn btn-secondary" type="submit">Новый опросник</button>
                     </form>
                 </div>
@@ -70,7 +66,7 @@
                                            placeholder="Название опросника"
                                            class="form-control"
                                            style="border-color:inherit; height: 40px"
-                                           th:attr="hx-get=@{/questionnaires/action(sort=${'title,'+sortType})}"
+                                           th:attr="hx-get=@{/therapist/questionnaires/action(sort=${'title,'+sortType})}"
                                            th:field="*{questionnaireSearchDto.title}"
                                            hx-trigger="keyup changed delay:500ms, search"
                                            th:value="${questionnaireSearchDto.title}"
@@ -87,7 +83,7 @@
                                             style="height: 40px; border-radius: 5px"
                                             id="sort-type-select"
                                             hx-trigger="change"
-                                            th:attr="hx-get=@{/questionnaires/action(title=${questionnaireSearchDto.title}, page=${0})}"
+                                            th:attr="hx-get=@{/therapist/questionnaires/action(title=${questionnaireSearchDto.title}, page=${0})}"
                                             th:name="sort">
                                         <option th:if="${sortType} == 'ASC'" selected disabled hidden>От А до Я</option>
                                         <option th:if="${sortType} == 'DESC'" selected disabled hidden>От Я до А</option>
@@ -109,7 +105,7 @@
                                             th:fragment="questionnaires">
                                             <td>
                                                 <a class="field"
-                                                   th:href="@{/questionnaires/{id}(id=${questionnaire.id})}" th:text="${questionnaire.title}">
+                                                   th:href="@{/therapist/questionnaires/{id}(id=${questionnaire.id})}" th:text="${questionnaire.title}">
                                                     questionnaire
                                                 </a>
                                             </td>
@@ -127,7 +123,7 @@
                                                    hx-target="#card-body"
                                                    hx-trigger="click"
                                                    style="cursor: pointer"
-                                                   th:attr="hx-get=@{/questionnaires/action(sort=${'title,'+sortType}, title=${questionnaireSearchDto.title}, page=${0})}"
+                                                   th:attr="hx-get=@{/therapist/questionnaires/action(sort=${'title,'+sortType}, title=${questionnaireSearchDto.title}, page=${0})}"
                                                 >Первая</a>
                                             </li>
                                         </div>
@@ -139,7 +135,7 @@
                                                    hx-target="#card-body"
                                                    hx-trigger="click"
                                                    style="cursor: pointer"
-                                                   th:attr="hx-get=@{/questionnaires/action(sort=${'title,'+sortType}, title=${questionnaireSearchDto.title}, page=${questionnaires.getPageable().pageNumber - 1})}"
+                                                   th:attr="hx-get=@{/therapist/questionnaires/action(sort=${'title,'+sortType}, title=${questionnaireSearchDto.title}, page=${questionnaires.getPageable().pageNumber - 1})}"
                                                 >Назад</a>
                                             </li>
                                         </div>
@@ -153,7 +149,7 @@
                                                    hx-target="#card-body"
                                                    hx-trigger="click"
                                                    style="cursor: pointer"
-                                                   th:attr="hx-get=@{/questionnaires/action(page=${pageNumber}, sort=${'title,'+sortType}, title=${questionnaireSearchDto.title})}"
+                                                   th:attr="hx-get=@{/therapist/questionnaires/action(page=${pageNumber - 1}, sort=${'title,'+sortType}, title=${questionnaireSearchDto.title})}"
                                                    th:text="${pageNumber}"></a>
                                             </li>
                                         </div>
@@ -165,7 +161,7 @@
                                                    hx-target="#card-body"
                                                    hx-trigger="click"
                                                    style="cursor: pointer"
-                                                   th:attr="hx-get=@{/questionnaires/action(sort=${'title,'+sortType}, title=${questionnaireSearchDto.title}, page=${questionnaires.getPageable().pageNumber + 1})}"
+                                                   th:attr="hx-get=@{/therapist/questionnaires/action(sort=${'title,'+sortType}, title=${questionnaireSearchDto.title}, page=${questionnaires.getPageable().pageNumber + 1})}"
                                                 >Вперед</a>
                                             </li>
                                         </div>
@@ -177,7 +173,7 @@
                                                    hx-target="#card-body"
                                                    hx-trigger="click"
                                                    style="cursor: pointer"
-                                                   th:attr="hx-get=@{/questionnaires/action(sort=${'title,'+sortType}, title=${questionnaireSearchDto.title}, page=${questionnaires.totalPages - 1})}"
+                                                   th:attr="hx-get=@{/therapist/questionnaires/action(sort=${'title,'+sortType}, title=${questionnaireSearchDto.title}, page=${questionnaires.totalPages - 1})}"
                                                 >Последняя</a>
                                             </li>
                                         </div>

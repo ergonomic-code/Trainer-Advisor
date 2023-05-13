@@ -12,7 +12,7 @@
     <link href="/styles/styles.css" rel="stylesheet"/>
     <script crossorigin="anonymous" src="https://use.fontawesome.com/releases/v6.1.0/js/all.js"></script>
     <script>
-        window.addEventListener('DOMContentLoaded', event => {
+        window.addEventListener('DOMContentLoaded', _ => {
 
             // Toggle the side navigation
             const sidebarToggle = document.body.querySelector('#sidebarToggle');
@@ -41,7 +41,7 @@
 
 <div id="layoutSidenav">
 
-    <div th:replace="~{/fragments/leftNavPanel.html :: leftNavPanel}"></div>
+    <div th:replace="~{fragments/leftNavPanel.html :: leftNavPanel}"></div>
 
     <div id="layoutSidenav_content" style="text-align: center">
         <h1 th:text="${errorText}"></h1>

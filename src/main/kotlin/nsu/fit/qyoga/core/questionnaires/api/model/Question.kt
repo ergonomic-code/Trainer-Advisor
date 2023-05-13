@@ -1,5 +1,6 @@
 package nsu.fit.qyoga.core.questionnaires.api.model
 
+import nsu.fit.qyoga.core.images.api.model.Image
 import nsu.fit.qyoga.core.questionnaires.api.dtos.enums.QuestionType
 import org.springframework.data.annotation.Id
 import org.springframework.data.relational.core.mapping.MappedCollection
@@ -11,8 +12,8 @@ data class Question(
     val id: Long = 0,
     val title: String?,
     val questionType: QuestionType,
-    val questionnaireId: Long,
-    val imageId: Long?,
-    @MappedCollection(idColumn = "question_id", keyColumn = "id")
-    val answers: MutableList<Answer>
+    @MappedCollection(idColumn = "id")
+    val image: Image?,
+    @MappedCollection(idColumn = "question_id")
+    val answers: Set<Answer>
 )

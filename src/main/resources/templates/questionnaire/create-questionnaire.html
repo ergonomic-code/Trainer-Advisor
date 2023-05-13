@@ -14,7 +14,7 @@
     <link href="/styles/input-number-style.css" rel="stylesheet">
     <script crossorigin="anonymous" src="https://use.fontawesome.com/releases/v6.1.0/js/all.js"></script>
     <script>
-        window.addEventListener('DOMContentLoaded', event => {
+        window.addEventListener('DOMContentLoaded', _ => {
 
             // Toggle the side navigation
             const sidebarToggle = document.body.querySelector('#sidebarToggle');
@@ -43,11 +43,10 @@
 
     <div id="layoutSidenav_content">
 
-        <h1 th:value="${session.test}"></h1>
 
-        <!--<form id="questionnaire" style="padding-left: 15%; padding-right: 15%; margin-bottom: 100px"
+        <form id="questionnaire" style="padding-left: 15%; padding-right: 15%; margin-bottom: 100px"
               th:method="POST"
-              th:action="@{/questionnaires/{id}/edit(id = ${session.questionnaire.id})}"
+              th:action="@{/therapist/questionnaires/edit(id = ${session.questionnaire.id})}"
               th:object="${session.questionnaire}">
 
             <div id="questionnaire-title" class="bg-dark form-control-lg mt-4"
@@ -59,33 +58,32 @@
                     <input type="text" style="width: 70%; margin-top: 15px; border-radius: 5px; min-width: 100px"
                            th:value="${session.questionnaire.title}"
                            required th:name="title"
-                           hx-trigger="keyup changed delay:100ms"
-                           hx-swap="none" th:attr = "
-                           hx-post=|@{/questionnaires/{id}/edit/title(id=${session.questionnaire.id})}|">
+                           hx-trigger="keyup changed delay:500ms"
+                           hx-swap="none"
+                           hx-post= "/therapist/questionnaires/edit/title">
                 </label>
             </div>
 
-            &lt;!&ndash;<div id="questions" >
-                  <div th:each="question, i : ${questionnaire.questions}"
+            <div id="questions" >
+                  <div th:each="question, i : ${session.questionnaire.question}"
                        th:fragment="questions" th:id="|question${question.id}|">
-                      <div th:replace="~{/fragments/create-questionnaire-answer::question(${question}, ${questionnaire}, ${i.index}) }"></div>
+                      <div th:replace="~{fragments/create-questionnaire-answer::question(${question}, ${i.index}) }"></div>
                   </div>
-            </div>&ndash;&gt;
+            </div>
 
             <div class="position-fixed bottom-0 start-0 w-100 text-end bg-white"
                  style="height: 75px; box-sizing: border-box; padding-top: 10px; padding-right: 5%;">
                 <button class="btn btn-secondary" type="submit" style="height: 50px">Задать ключи</button>
             </div>
 
-
         </form>
 
         <div class="position-fixed bottom-0" style="margin-bottom: 5rem; margin-left: 3%">
             <input type="image" width="60px" src="/img/plus-in-circle.png" alt="Добавить новый вопрос"
                    hx-trigger="click"
-                   th:attr="hx-get=|@{/questionnaires/{id}/edit/add-question(id=${session.questionnaire.id})}|"
+                   hx-get="/therapist/questionnaires/edit/add-question"
                    hx-target="#questions">
-        </div>-->
+        </div>
 
         <div id="errors" style="position:fixed; width:100%; bottom:80px;"></div>
     </div>

@@ -1,7 +1,11 @@
 package nsu.fit.qyoga.core.questionnaires.api.model
 
+import nsu.fit.qyoga.core.images.api.model.Image
 import org.springframework.data.annotation.Id
+import org.springframework.data.relational.core.mapping.MappedCollection
+import org.springframework.data.relational.core.mapping.Table
 
+@Table("answers")
 data class Answer(
     @Id
     val id: Long = 0,
@@ -11,6 +15,6 @@ data class Answer(
     val upperBound: Int?,
     val upperBoundText: String?,
     val score: Int?,
-    val imageId: Long?,
-    val questionId: Long
+    @MappedCollection(idColumn = "id")
+    val image: Image?
 )

@@ -6,6 +6,6 @@ data class CreateQuestionDto(
     var id: Long = 0,
     var title: String? = null,
     var questionType: QuestionType = QuestionType.SINGLE,
-    var imageId: Long? = null,
+    var image: ImageDto? = null,
     var answers: List<CreateAnswerDto> = mutableListOf()
 ) : java.io.Serializable

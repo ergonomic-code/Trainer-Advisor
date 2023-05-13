@@ -1,5 +1,6 @@
 package nsu.fit.qyoga.core.questionnaires.internal.serviceImpl
 
+import nsu.fit.qyoga.core.images.api.model.Image
 import nsu.fit.qyoga.core.questionnaires.api.dtos.*
 import nsu.fit.qyoga.core.questionnaires.api.errors.QuestionnaireException
 import nsu.fit.qyoga.core.questionnaires.api.model.Answer
@@ -67,7 +68,7 @@ class QuestionnaireServiceImpl(
         return Question(
             title = questionDto.title,
             questionType = questionDto.questionType,
-            imageId = questionDto.imageId,
+            image = imageDtoToImage(questionDto.image),
             answers = questionDto.answers.map { answer ->
                 Answer(
                     title = answer.title,
@@ -76,7 +77,7 @@ class QuestionnaireServiceImpl(
                     upperBound = answer.bounds.upperBound,
                     upperBoundText = answer.bounds.upperBoundText,
                     score = answer.score,
-                    imageId = answer.imageId
+                    image = imageDtoToImage(answer.image)
                 )
             }.toMutableSet()
         )
@@ -87,7 +88,7 @@ class QuestionnaireServiceImpl(
             questionIndex,
             question.title,
             question.questionType,
-            question.imageId,
+            imageToImageDto(question.image),
             question.answers.mapIndexed { answerIndex, answer ->
                 CreateAnswerDto(
                     answerIndex.toLong(),
@@ -99,9 +100,31 @@ class QuestionnaireServiceImpl(
                         upperBoundText = answer.upperBoundText,
                     ),
                     answer.score,
-                    answer.imageId
+                    imageToImageDto(answer.image)
                 )
             }.toMutableList()
+        )
+    }
+
+    fun imageToImageDto(image: Image?): ImageDto? {
+        image ?: return null
+        return ImageDto(
+            id = image.id,
+            name = image.name,
+            mediaType = image.mediaType,
+            size = image.size,
+            data = image.data
+        )
+    }
+
+    fun imageDtoToImage(imageDto: ImageDto?): Image? {
+        imageDto ?: return null
+        return Image(
+            id = imageDto.id,
+            name = imageDto.name,
+            mediaType = imageDto.mediaType,
+            size = imageDto.size,
+            data = imageDto.data
         )
     }
 
