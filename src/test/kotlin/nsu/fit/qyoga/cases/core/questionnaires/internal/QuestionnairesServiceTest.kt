@@ -5,6 +5,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldContain
 import nsu.fit.qyoga.cases.core.questionnaires.QuestionnairesTestConfig
+import nsu.fit.qyoga.core.images.api.model.Image
 import nsu.fit.qyoga.core.questionnaires.api.dtos.*
 import nsu.fit.qyoga.core.questionnaires.api.dtos.enums.QuestionType
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
@@ -16,8 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
+import org.springframework.mock.web.MockMultipartFile
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
+import org.springframework.web.multipart.MultipartFile
+import org.testcontainers.shaded.org.apache.commons.io.IOUtils
+import java.io.File
+import java.io.FileInputStream
 
 @ContextConfiguration(
     classes = [QuestionnairesTestConfig::class],
@@ -30,6 +36,7 @@ import org.springframework.test.context.ContextConfiguration
 class QuestionnairesServiceTest(
     @Autowired private val questionnaireService: QuestionnaireService
 ) : QYogaModuleBaseTest() {
+    val file = File("src/test/resources/images/testImage.png")
 
     @BeforeEach
     fun setupDb() {
@@ -106,100 +113,141 @@ class QuestionnairesServiceTest(
 
     @Test
     fun `QYoga can save empty questionnaire`() {
-        val createQuestionnaireDto = QuestionnaireWithQuestionDto(
+        val questionnaireToSave = CreateQuestionnaireDto(
             id = 0,
-            title = "create questionnaire test",
-            questions = mutableListOf()
+            title = "create questionnaire test"
         )
-        val savedQuestionnaire = questionnaireService.updateQuestionnaire(createQuestionnaireDto)
-        val inDBQuestionnaire = questionnaireService.findQuestionnaireWithQuestions(savedQuestionnaire.id)
-        inDBQuestionnaire shouldNotBe null
-        savedQuestionnaire.title shouldBe createQuestionnaireDto.title
-        createQuestionnaireDto.title shouldBe inDBQuestionnaire.title
-        inDBQuestionnaire.questions.size shouldBe 0
+        val savedQuestionnaireId = questionnaireService.saveQuestionnaire(questionnaireToSave)
+        val savedQuestionnaire = questionnaireService.findQuestionnaireWithQuestions(savedQuestionnaireId)
+        savedQuestionnaire shouldNotBe null
+        savedQuestionnaire.title shouldBe questionnaireToSave.title
+        savedQuestionnaire.question.size shouldBe 0
+        savedQuestionnaire.decoding.size shouldBe 0
     }
 
     @Test
     fun `QYoga can save questionnaire with questions without image and answers`() {
-        val questionnaireWithCreateQuestionDto = QuestionnaireWithQuestionDto(
+        val questionnaireToSave = CreateQuestionnaireDto(
             id = 0,
             title = "create questionnaire test",
-            questions = mutableListOf(
-                QuestionWithAnswersDto(
-                    title = "",
+            question = mutableListOf(
+                CreateQuestionDto(
+                    title = "title1",
                     questionType = QuestionType.TEXT
                 ),
-                QuestionWithAnswersDto(
-                    title = "",
+                CreateQuestionDto(
+                    title = "title2",
                     questionType = QuestionType.SEVERAL
                 ),
-                QuestionWithAnswersDto(
-                    title = "qTest",
+                CreateQuestionDto(
+                    title = "title3",
                     questionType = QuestionType.TEXT
                 )
             )
         )
-        val savedQuestionnaire = questionnaireService.updateQuestionnaire(questionnaireWithCreateQuestionDto)
-        val inDBQuestionnaire = questionnaireService.findQuestionnaireWithQuestions(savedQuestionnaire.id)
-        inDBQuestionnaire shouldNotBe null
-        savedQuestionnaire.title shouldBe inDBQuestionnaire.title
-        inDBQuestionnaire.questions.size shouldBe 3
-        for (question in inDBQuestionnaire.questions) {
-            question.answers.size shouldBe 0
+        val savedQuestionnaireId = questionnaireService.saveQuestionnaire(questionnaireToSave)
+        val savedQuestionnaire = questionnaireService.findQuestionnaireWithQuestions(savedQuestionnaireId)
+        savedQuestionnaire shouldNotBe null
+        savedQuestionnaire.title shouldBe questionnaireToSave.title
+        savedQuestionnaire.question.size shouldBe 3
+        for (question in questionnaireToSave.question) {
+            savedQuestionnaire.question.filter {
+                it.title == question.title && it.questionType == question.questionType
+            }.size shouldBe 1
         }
     }
 
     @Test
     fun `QYoga can save questionnaire with questions and answers without image`() {
-        val questionnaireWithCreateQuestionDto = QuestionnaireWithQuestionDto(
+        val questionnaireToSave = CreateQuestionnaireDto(
             id = 0,
             title = "create questionnaire test",
-            questions = mutableListOf(
-                QuestionWithAnswersDto(
+            question = mutableListOf(
+                CreateQuestionDto(
                     id = 0,
                     title = null,
                     questionType = QuestionType.TEXT,
-                    imageId = null,
+                    image = null,
                     answers = mutableListOf(
-                        AnswerDto(
+                        CreateAnswerDto(
                             id = 0,
                             title = "test save",
-                            lowerBound = null,
-                            lowerBoundText = null,
-                            upperBound = null,
-                            upperBoundText = null,
+                            AnswerBoundsDto(
+                                lowerBound = null,
+                                lowerBoundText = null,
+                                upperBound = null,
+                                upperBoundText = null
+                            ),
                             score = null,
-                            imageId = null,
-                            questionId = 0
+                            image = null
                         )
                     )
                 )
             )
         )
-        val savedQuestionnaire = questionnaireService.updateQuestionnaire(questionnaireWithCreateQuestionDto)
-        val inDBQuestionnaire = questionnaireService.findQuestionnaireWithQuestions(savedQuestionnaire.id)
-        savedQuestionnaire.title shouldBe inDBQuestionnaire.title
-        inDBQuestionnaire.questions.size shouldBe 1
-        inDBQuestionnaire.questions[0].answers.size shouldBe 1
+        val savedQuestionnaireId = questionnaireService.saveQuestionnaire(questionnaireToSave)
+        val savedQuestionnaire = questionnaireService.findQuestionnaireWithQuestions(savedQuestionnaireId)
+        savedQuestionnaire shouldNotBe null
+        savedQuestionnaire.title shouldBe questionnaireToSave.title
+        savedQuestionnaire.question.size shouldBe 1
+        savedQuestionnaire.question[0].answers.size shouldBe 1
+        savedQuestionnaire.question[0].answers[0].title shouldBe questionnaireToSave.question[0].answers[0].title
     }
 
     @Test
-    fun `QYoga can create empty questionnaire by default`() {
-        val questionnaireId = questionnaireService.createQuestionnaire()
-        val questionnaire = questionnaireService.findQuestionnaireWithQuestions(questionnaireId)
-        questionnaire.id shouldBe questionnaireId
-        questionnaire.title shouldBe ""
-        questionnaire.questions.size shouldBe 0
-    }
-
-    @Test
-    fun `QYoga can QuestionnaireDto`() {
-        val savedQuestionnaire = questionnaireService.updateQuestionnaire(
-            QuestionnaireDto(id = 0, title = "test")
+    fun `QYoga can save questionnaire with questions, answers and image`() {
+        val multipartFile = getMultipartFileFromInputStream(FileInputStream(file))
+        val image = multipartFileToImage(multipartFile)
+        val questionnaireToSave = CreateQuestionnaireDto(
+            id = 0,
+            title = "create questionnaire test",
+            question = mutableListOf(
+                CreateQuestionDto(
+                    id = 0,
+                    title = null,
+                    questionType = QuestionType.TEXT,
+                    image = image.copy(),
+                    answers = mutableListOf(
+                        CreateAnswerDto(
+                            id = 0,
+                            title = "test save",
+                            AnswerBoundsDto(
+                                lowerBound = null,
+                                lowerBoundText = null,
+                                upperBound = null,
+                                upperBoundText = null
+                            ),
+                            score = null,
+                            image = image.copy()
+                        )
+                    )
+                )
+            )
         )
-        val inDbQuestionnaire = questionnaireService.findQuestionnaireWithQuestions(savedQuestionnaire.id)
-        savedQuestionnaire.id shouldBe inDbQuestionnaire.id
-        savedQuestionnaire.title shouldBe inDbQuestionnaire.title
-        inDbQuestionnaire.questions.size shouldBe 0
+        val savedQuestionnaireId = questionnaireService.saveQuestionnaire(questionnaireToSave)
+        val savedQuestionnaire = questionnaireService.findQuestionnaireWithQuestions(savedQuestionnaireId)
+        savedQuestionnaire shouldNotBe null
+        savedQuestionnaire.question[0].image?.name shouldBe image.name
+        savedQuestionnaire.question[0].image?.data shouldBe image.data
+        savedQuestionnaire.question[0].answers[0].image?.name shouldBe image.name
+        savedQuestionnaire.question[0].answers[0].image?.data shouldBe image.data
+    }
+
+    fun getMultipartFileFromInputStream(inputStream: FileInputStream): MultipartFile {
+        return MockMultipartFile(
+            "file",
+            file.name,
+            "text/plain",
+            IOUtils.toByteArray(inputStream)
+        )
+    }
+
+    fun multipartFileToImage(multipartFile: MultipartFile): ImageDto {
+        return ImageDto(
+            name = multipartFile.originalFilename ?: "",
+            mediaType = multipartFile.contentType ?: "application/octet-stream",
+            size = multipartFile.size,
+            data = multipartFile.bytes
+        )
     }
 }

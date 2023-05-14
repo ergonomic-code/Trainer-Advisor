@@ -62,7 +62,7 @@ class QuestionnaireJdbcTemplateRepo(
             questionnaires.title AS questionnaireTitle
             FROM questionnaires
             WHERE questionnaires.title LIKE '%' || :title || '%'
-            ORDER BY questionnaires.title $type
+            ORDER BY questionnaires.title ${if (type == "UNSORTED") "ASC" else type}
             LIMIT :pageSize OFFSET :offset
         """.trimIndent()
     }

@@ -1,4 +1,5 @@
-<div th:fragment="questionImage (questionDto, questionIndex)" th:if="${questionDto.imageId} != null">
+<div th:fragment="questionImage (questionDto, questionIndex)"
+     th:if="${questionDto.image} != null">
     <input hidden class="questionImageId" th:name="'questions['+${questionIndex}+'].imageId'" th:value="${questionDto.imageId}">
     <img class="questionImage" th:src="@{'/questionnaires/image/'+${questionDto.imageId}}" width="250">
     <img class="questionDeleteImage" src="/img/cross-in-circle.png" alt="delete image"
@@ -8,7 +9,8 @@
          hx-target=|#question${questionDto.id}Img|">
 </div>
 
-<div th:fragment="answerImage (answer, questionIndex, answerIndex)" th:if="${answer.imageId} != null">
+<div th:fragment="answerImage (answer, questionIndex, answerIndex)"
+     th:if="${answer.image} != null">
     <input hidden class="answerImageId" th:name="'questions['+${questionIndex}+'].answers['+${answerIndex}+'].imageId'" th:value="${answer.imageId}">
     <img class="answerImage" th:src="@{'/questionnaires/image/'+${answer.imageId}}" width="250">
     <img class="answerDeleteImage" src="/img/cross-in-circle.png" alt="delete image"

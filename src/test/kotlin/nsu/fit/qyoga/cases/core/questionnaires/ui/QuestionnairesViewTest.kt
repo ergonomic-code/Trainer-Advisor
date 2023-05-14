@@ -28,10 +28,11 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
 
     @Test
     fun `QYoga returns part of page questionnaire-list then user change sort type`() {
-        val request = QuestionnaireSearchDto(orderType = "DESK")
         Given {
+            authorized()
             contentType(ContentType.JSON)
-            body(request)
+            param("title", "test")
+            param("sort", "title,desc")
         } When {
             get("/questionnaires/action")
         } Then {
@@ -47,10 +48,10 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
 
     @Test
     fun `QYoga returns part of page questionnaire-list then user change title`() {
-        val request = QuestionnaireSearchDto(title = "test", orderType = "DESK")
         Given {
+            authorized()
             contentType(ContentType.JSON)
-            body(request)
+            param("title", "test")
         } When {
             get("/questionnaires/action")
         } Then {
@@ -66,10 +67,12 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
 
     @Test
     fun `QYoga returns part of page questionnaire-list then user change page`() {
-        val request = QuestionnaireSearchDto(title = "test", orderType = "DESK")
         Given {
+            authorized()
             contentType(ContentType.JSON)
-            body(request)
+            param("title", "test")
+            param("sort", "title,desc")
+            param("page", 1)
         } When {
             get("/questionnaires/action")
         } Then {

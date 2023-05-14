@@ -13,6 +13,8 @@ import nsu.fit.qyoga.core.questionnaires.internal.repository.QuestionnaireRepo
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
+import org.springframework.web.multipart.MultipartFile
+import java.io.FileInputStream
 
 @Service
 class QuestionnaireServiceImpl(
@@ -40,26 +42,18 @@ class QuestionnaireServiceImpl(
         ).id
     }
 
-    override fun findQuestionnaire(id: Long): QuestionnaireDto {
-        val questionnaire = questionnaireRepo.findById(id).orElse(null)
-            ?: throw QuestionnaireException("Выбранный опросник не найден")
-        return QuestionnaireDto(questionnaire.id, questionnaire.title)
-    }
-
     override fun findQuestionnaireWithQuestions(id: Long): CreateQuestionnaireDto {
         val questionnaire = questionnaireRepo.findById(id).orElse(null)
             ?: throw QuestionnaireException("Выбранный опросник не найден")
         val questionnaireDto = CreateQuestionnaireDto(
             id = questionnaire.id,
             title = questionnaire.title,
-            question = mutableListOf(),
-            decoding = mutableListOf()
-        )
-        questionnaireDto.question.addAll(
-            questionnaire.question.mapIndexed { index, question -> questionToQuestionDto(question, index.toLong()) }
-        )
-        questionnaireDto.decoding.addAll(
-            questionnaire.decoding.mapIndexed { index, decoding -> decodingToDecodingDto(decoding, index.toLong()) }
+            question = questionnaire.question.mapIndexed { index, question ->
+                questionToQuestionDto(question, index.toLong())
+            }.toMutableList(),
+            decoding = questionnaire.decoding.mapIndexed { index, decoding ->
+                decodingToDecodingDto(decoding, index.toLong())
+            }.toMutableList()
         )
         return questionnaireDto
     }

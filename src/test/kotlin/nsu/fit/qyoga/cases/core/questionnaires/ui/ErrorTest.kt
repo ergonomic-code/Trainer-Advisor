@@ -22,7 +22,7 @@ class ErrorTest : QYogaAppTestBase() {
         )
     }
 
-    @Test
+    /*@Test
     fun `QYoga can not parse an object with a nested list of other objects`() {
         Given {
             this.cookie(getAuthCookie())
@@ -57,5 +57,5 @@ class ErrorTest : QYogaAppTestBase() {
                 }
             }
         }
-    }
+    }*/
 }

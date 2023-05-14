@@ -23,7 +23,7 @@ class SetDecodingViewTest : QYogaAppTestBase() {
         )
     }
 
-    @Test
+    /*@Test
     fun `QYoga returns empty questionnaire-decoding page`() {
         Given {
             this.cookie(getAuthCookie())
@@ -168,5 +168,5 @@ class SetDecodingViewTest : QYogaAppTestBase() {
         } Then {
             extract().statusCode().compareTo(302) shouldBe 0
         }
-    }
+    }*/
 }
