@@ -2,7 +2,6 @@ package nsu.fit.qyoga.cases.core.questionnaires.ui
 
 import io.kotest.matchers.shouldBe
 import io.restassured.http.ContentType
-import io.restassured.http.Cookie
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
@@ -47,7 +46,7 @@ class CreateNewQuestionnaireViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga can add question to questionnaire`() {
         Given {
-            this.cookie(authorize())
+            authorized()
         } When {
             get("/questionnaires/new")
             get("/questionnaires/1/edit/add-question")
@@ -65,7 +64,7 @@ class CreateNewQuestionnaireViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga can save question image`() {
         Given {
-            this.cookie(authorize())
+            authorized()
         } When {
             get("/questionnaires/new")
             contentType(ContentType.MULTIPART)
@@ -85,7 +84,7 @@ class CreateNewQuestionnaireViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga can save answer image`() {
         Given {
-            this.cookie(authorize())
+            authorized()
         } When {
             get("/questionnaires/new")
             contentType(ContentType.MULTIPART)
@@ -106,7 +105,7 @@ class CreateNewQuestionnaireViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga can delete image`() {
         Given {
-            this.cookie(authorize())
+            authorized()
         } When {
             get("/questionnaires/new")
             contentType(ContentType.MULTIPART)
@@ -124,7 +123,7 @@ class CreateNewQuestionnaireViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga can delete answer from question`() {
         Given {
-            this.cookie(authorize())
+            authorized()
         } When {
             get("/questionnaires/new")
             get("/questionnaires/1/edit/add-question")
@@ -148,7 +147,7 @@ class CreateNewQuestionnaireViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga can add answer to question`() {
         Given {
-            this.cookie(authorize())
+            authorized()
         } When {
             get("/questionnaires/new")
             get("/questionnaires/2/edit/question/1/addAnswer")
@@ -174,7 +173,7 @@ class CreateNewQuestionnaireViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga can delete answer to question`() {
         Given {
-            this.cookie(authorize())
+            authorized()
         } When {
             get("/questionnaires/new")
             delete("/questionnaires/2/edit/answer/1")
@@ -196,7 +195,7 @@ class CreateNewQuestionnaireViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga can update questionnaire title`() {
         Given {
-            this.cookie(authorize())
+            authorized()
         } When {
             get("/questionnaires/new")
             param("id", 1)
@@ -210,7 +209,7 @@ class CreateNewQuestionnaireViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga can change question type`() {
         Given {
-            this.cookie(authorize())
+            authorized()
         } When {
             get("/questionnaires/new")
             param("id", "1")
@@ -238,7 +237,7 @@ class CreateNewQuestionnaireViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga can update question`() {
         Given {
-            this.cookie(authorize())
+            authorized()
         } When {
             get("/questionnaires/new")
             param("id", "1")
@@ -260,7 +259,7 @@ class CreateNewQuestionnaireViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga can update answer`() {
         Given {
-            this.cookie(authorize())
+            authorized()
         } When {
             get("/questionnaires/new")
             param("id", "1")
@@ -282,7 +281,7 @@ class CreateNewQuestionnaireViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga can change answer fragment to set answer score`() {
         Given {
-            this.cookie(authorize())
+            authorized()
         } When {
             get("/questionnaires/new")
             param("questionIndex", 0)
@@ -309,7 +308,7 @@ class CreateNewQuestionnaireViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga can change answer fragment to change answer fields after set scores`() {
         Given {
-            this.cookie(authorize())
+            authorized()
         } When {
             get("/questionnaires/new")
             param("questionIndex", 0)
@@ -336,7 +335,7 @@ class CreateNewQuestionnaireViewTest : QYogaAppTestBase() {
     @Test
     fun `QYoga can save question`() {
         Given {
-            this.cookie(authorize())
+            authorized()
         } When {
             get("/questionnaires/new")
             param("id", "1")

@@ -5,6 +5,7 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.string.shouldContain
 import nsu.fit.qyoga.cases.core.questionnaires.QuestionnairesTestConfig
+import nsu.fit.qyoga.core.images.api.ImageService
 import nsu.fit.qyoga.core.images.api.model.Image
 import nsu.fit.qyoga.core.questionnaires.api.dtos.*
 import nsu.fit.qyoga.core.questionnaires.api.dtos.enums.QuestionType
@@ -34,7 +35,8 @@ import java.io.FileInputStream
 )
 @ActiveProfiles("test")
 class QuestionnairesServiceTest(
-    @Autowired private val questionnaireService: QuestionnaireService
+    @Autowired private val questionnaireService: QuestionnaireService,
+    @Autowired private val imageService: ImageService
 ) : QYogaModuleBaseTest() {
     val file = File("src/test/resources/images/testImage.png")
 
@@ -167,7 +169,7 @@ class QuestionnairesServiceTest(
                     id = 0,
                     title = null,
                     questionType = QuestionType.TEXT,
-                    image = null,
+                    imageId = null,
                     answers = mutableListOf(
                         CreateAnswerDto(
                             id = 0,
@@ -179,7 +181,7 @@ class QuestionnairesServiceTest(
                                 upperBoundText = null
                             ),
                             score = null,
-                            image = null
+                            imageId = null
                         )
                     )
                 )
@@ -198,6 +200,7 @@ class QuestionnairesServiceTest(
     fun `QYoga can save questionnaire with questions, answers and image`() {
         val multipartFile = getMultipartFileFromInputStream(FileInputStream(file))
         val image = multipartFileToImage(multipartFile)
+        val imageId = imageService.uploadImage(image)
         val questionnaireToSave = CreateQuestionnaireDto(
             id = 0,
             title = "create questionnaire test",
@@ -206,7 +209,7 @@ class QuestionnairesServiceTest(
                     id = 0,
                     title = null,
                     questionType = QuestionType.TEXT,
-                    image = image.copy(),
+                    imageId = imageId,
                     answers = mutableListOf(
                         CreateAnswerDto(
                             id = 0,
@@ -218,7 +221,7 @@ class QuestionnairesServiceTest(
                                 upperBoundText = null
                             ),
                             score = null,
-                            image = image.copy()
+                            imageId = imageId
                         )
                     )
                 )
@@ -227,10 +230,7 @@ class QuestionnairesServiceTest(
         val savedQuestionnaireId = questionnaireService.saveQuestionnaire(questionnaireToSave)
         val savedQuestionnaire = questionnaireService.findQuestionnaireWithQuestions(savedQuestionnaireId)
         savedQuestionnaire shouldNotBe null
-        savedQuestionnaire.question[0].image?.name shouldBe image.name
-        savedQuestionnaire.question[0].image?.data shouldBe image.data
-        savedQuestionnaire.question[0].answers[0].image?.name shouldBe image.name
-        savedQuestionnaire.question[0].answers[0].image?.data shouldBe image.data
+        savedQuestionnaire.question[0].imageId shouldBe imageId
     }
 
     fun getMultipartFileFromInputStream(inputStream: FileInputStream): MultipartFile {
@@ -242,8 +242,8 @@ class QuestionnairesServiceTest(
         )
     }
 
-    fun multipartFileToImage(multipartFile: MultipartFile): ImageDto {
-        return ImageDto(
+    fun multipartFileToImage(multipartFile: MultipartFile): Image {
+        return Image(
             name = multipartFile.originalFilename ?: "",
             mediaType = multipartFile.contentType ?: "application/octet-stream",
             size = multipartFile.size,
