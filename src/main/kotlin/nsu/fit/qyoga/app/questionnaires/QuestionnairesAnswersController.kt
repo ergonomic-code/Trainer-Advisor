@@ -1,54 +1,110 @@
 package nsu.fit.qyoga.app.questionnaires
 
 import jakarta.servlet.http.HttpSession
+import nsu.fit.qyoga.core.images.api.ImageService
+import nsu.fit.qyoga.core.images.api.model.Image
 import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateAnswerDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionnaireDto
 import nsu.fit.qyoga.core.questionnaires.api.errors.ElementNotFound
 import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
 
 @Controller
 @RequestMapping("/therapist/questionnaires")
 class QuestionnairesAnswersController(
-    private val httpSession: HttpSession
+    private val httpSession: HttpSession,
+    private val imageService: ImageService
 ) {
 
     /**
      * Добавление изображение ответу
      */
-    /*@PostMapping("answer/{id}/image")
+    @PostMapping("/edit/question/{questionId}/answer/{answerId}/add-image")
     fun addImageToAnswer(
         @RequestParam("file") file: MultipartFile,
-        @RequestParam("questionIndex") questionIndex: Int,
-        @RequestParam("answerIndex") answerIndex: Int,
-        @PathVariable id: Long,
+        @PathVariable questionId: Long,
+        @PathVariable answerId: Long,
         model: Model
     ): String {
-        val answer = answerService.findAnswer(id)
-        answer.imageId?.let {
-            imageService.deleteImage(it)
-        }
-        val createAnswerDto = CreateAnswerDto(
-            id = answer.id,
-            title = answer.title,
-            bounds = AnswerBoundsDto(
-                lowerBound = answer.bounds.lowerBound,
-                lowerBoundText = answer.bounds.lowerBoundText,
-                upperBound = answer.bounds.upperBound,
-                upperBoundText = answer.bounds.upperBoundText
-            ),
-            score = answer.score,
-            imageId = imageService.uploadImage(file)
+        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
+            ?: throw ElementNotFound("Невозможно добавить изображение ответу")
+        val questionList = questionnaire.question.mapIndexed { qIdx, question ->
+            if (question.id == questionId) {
+                model.addAttribute("questionIndex", qIdx)
+                question.copy(
+                    answers = question.answers.mapIndexed { aIdx, answer ->
+                        if (answer.id == answerId) {
+                            model.addAttribute("answerIndex", aIdx)
+                            val copiedAnswer = answer.copy(
+                                imageId = imageService.uploadImage(
+                                    Image(
+                                        name = file.name,
+                                        mediaType = file.contentType.toString(),
+                                        size = file.size,
+                                        data = file.bytes
+                                    )
+                                )
+                            )
+                            model.addAttribute("answer", copiedAnswer)
+                            model.addAttribute("questionId", question.id)
+                            copiedAnswer
+                        } else {
+                            answer
+                        }
+                    }
+                )
+            } else {
+                question
+            }
+        }.toMutableList()
+        httpSession.setAttribute(
+            "questionnaire",
+            questionnaire.copy(
+                question = questionList
+            )
         )
-        answerService.updateAnswer(createAnswerDto)
-        model.addAttribute("answer", createAnswerDto)
-        model.addAttribute("questionIndex", questionIndex)
-        model.addAttribute("answerIndex", answerIndex)
         return "fragments/create-questionnaire-image::answerImage"
-    }*/
+    }
+
+    /**
+     * Удаление изображение из ответа
+     */
+    @DeleteMapping("/edit/question/{questionId}/answer/{answerId}/image")
+    fun deleteImageFromAnswer(
+        @PathVariable questionId: Long,
+        @PathVariable answerId: Long
+    ): ResponseEntity<String> {
+        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
+            ?: throw ElementNotFound("Невозможно удалить изображение из ответа")
+        val questionList = questionnaire.question.map { question ->
+            if (question.id == questionId) {
+                question.copy(
+                    answers = question.answers.map { answer ->
+                        if (answer.id == answerId) {
+                            imageService.deleteImage(answer.imageId!!)
+                            answer.copy(imageId = null)
+                        } else {
+                            answer
+                        }
+                    }
+                )
+            } else {
+                question
+            }
+        }.toMutableList()
+        httpSession.setAttribute(
+            "questionnaire",
+            questionnaire.copy(
+                question = questionList
+            )
+        )
+        return ResponseEntity.ok().body("")
+    }
 
     /**
      * Добавление ответа в вопрос
@@ -61,7 +117,6 @@ class QuestionnairesAnswersController(
         val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
             ?: throw ElementNotFound("Невозможно добавить новый ответ")
         val changedQuestion = getQuestionById(questionnaire, questionId)
-            ?: throw ElementNotFound("Выбранный вопрос не найден")
         val lastId = if (changedQuestion.answers.isEmpty()) 0 else changedQuestion.answers.last().id + 1
         val questionList = questionnaire.question.mapIndexed { idx, value ->
             if (value.id == questionId) {
@@ -96,7 +151,6 @@ class QuestionnairesAnswersController(
         val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
             ?: throw ElementNotFound("Невозможно удалить ответ")
         val changedQuestion = getQuestionById(questionnaire, questionId)
-            ?: throw ElementNotFound("Выбранный вопрос не найден")
         val questionList = questionnaire.question.mapIndexed { idx, value ->
             if (value.id == questionId) {
                 model.addAttribute("questionIndex", idx)
@@ -130,9 +184,25 @@ class QuestionnairesAnswersController(
     ): HttpStatus {
         val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
             ?: throw ElementNotFound("Невозможно сохранить ответ")
+        val changedQuestion = getQuestionById(questionnaireDto, questionId)
+        val changedAnswer = changedQuestion.answers.filter { it.id == answerId }.getOrNull(0)
+            ?: throw ElementNotFound("Выбранный ответ не найден")
+
+        val questionList = questionnaire.question.map { value ->
+            if (value.id == questionId) {
+                val copiedQuestion = changedQuestion.copy(
+                    answers = changedQuestion.answers.map {
+                        if (it.id == answerId) changedAnswer else it
+                    }
+                )
+                copiedQuestion
+            } else {
+                value
+            }
+        }.toMutableList()
         httpSession.setAttribute(
             "questionnaire",
-            updateAnswer(questionnaire, questionnaireDto, answerId, questionId)
+            questionnaire.copy(question = questionList)
         )
         return HttpStatus.OK
     }
@@ -148,6 +218,7 @@ class QuestionnairesAnswersController(
     ): String {
         val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
             ?: throw ElementNotFound("Невозможно сохранить ответ")
+
         httpSession.setAttribute(
             "questionnaire",
             updateQuestion(questionnaire, questionnaireDto, questionId, model)
@@ -173,33 +244,6 @@ class QuestionnairesAnswersController(
         return "fragments/create-questionnaire-answer::question"
     }
 
-    fun updateAnswer(
-        questionnaire: CreateQuestionnaireDto,
-        questionnaireDto: CreateQuestionnaireDto,
-        answerId: Long,
-        questionId: Long
-    ): CreateQuestionnaireDto {
-        val changedQuestion = getQuestionById(questionnaireDto, questionId)
-            ?: throw ElementNotFound("Выбранный вопрос не найден")
-        val changedAnswer = getAnswerById(changedQuestion, answerId)
-            ?: throw ElementNotFound("Выбранный ответ не найден")
-        val questionList = questionnaire.question.mapIndexed { idx, value ->
-            if (value.id == questionId) {
-                val copiedQuestion = changedQuestion.copy(
-                    answers = changedQuestion.answers.map {
-                        if (it.id == answerId) changedAnswer else it
-                    }
-                )
-                copiedQuestion
-            } else {
-                value
-            }
-        }.toMutableList()
-        return questionnaire.copy(
-            question = questionList
-        )
-    }
-
     fun updateQuestion(
         questionnaire: CreateQuestionnaireDto,
         questionnaireDto: CreateQuestionnaireDto,
@@ -207,7 +251,6 @@ class QuestionnairesAnswersController(
         model: Model
     ): CreateQuestionnaireDto {
         val changedQuestion = getQuestionById(questionnaireDto, questionId)
-            ?: throw ElementNotFound("Выбранный вопрос не найден")
         val questionList = questionnaire.question.mapIndexed { idx, value ->
             if (value.id == questionId) {
                 model.addAttribute("questionIndex", idx)
@@ -223,11 +266,8 @@ class QuestionnairesAnswersController(
         )
     }
 
-    fun getAnswerById(changedQuestion: CreateQuestionDto, answerId: Long): CreateAnswerDto? {
-        return changedQuestion.answers.filter { it.id == answerId }.getOrNull(0)
-    }
-
-    fun getQuestionById( questionnaire: CreateQuestionnaireDto, questionId: Long): CreateQuestionDto? {
+    fun getQuestionById( questionnaire: CreateQuestionnaireDto, questionId: Long): CreateQuestionDto {
         return questionnaire.question.filter { it.id == questionId }.getOrNull(0)
+            ?: throw ElementNotFound("Выбранный вопрос не найден")
     }
 }

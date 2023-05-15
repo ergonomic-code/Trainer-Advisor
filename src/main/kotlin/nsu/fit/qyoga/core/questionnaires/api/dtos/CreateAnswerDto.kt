@@ -5,5 +5,5 @@ data class CreateAnswerDto(
     var title: String? = null,
     var bounds: AnswerBoundsDto = AnswerBoundsDto(),
     var score: Int? = null,
-    var image: ImageDto? = null
+    var imageId: Long? = null
 ) : java.io.Serializable

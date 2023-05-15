@@ -21,8 +21,9 @@
                    hx-encoding="multipart/form-data"
                    th:name="file"
                    th:attr = "
-                                            hx-post=|@{/therapist/questionnaires/question/{id}/image(id=${question.id}, questionIndex=${questionIndex})}|,
-                                            hx-target=|#question${question.id}Img|">
+                   hx-post=|@{/therapist/questionnaires/edit/question/{questionId}/add-image
+                   (questionId=${question.id})}|,
+                   hx-target=|#question${question.id}Img|">
         </div>
 
         <select name="question-type"
@@ -73,9 +74,9 @@
                            hx-trigger="change"
                            hx-encoding="multipart/form-data"
                            th:attr = "
-                           hx-post=|@{/therapist/questionnaires/answer/{id}/image
-                           (id=${answer.id},questionIndex=${questionIndex}, answerIndex=${j.index})}|,
-                           hx-target=|#answer${answer.id}Img|">
+                           hx-post=|@{/therapist/questionnaires/edit/question/{questionId}/answer/{answerId}/add-image
+                           (answerId=${answer.id},questionId=${question.id})}|,
+                           hx-target=|#question${question.id}answer${answer.id}Img|">
                 </div>
                 <img class="delete-answer" src="/img/cross.png" alt="delete answer" style="width: 30px; height: 30px"
                      th:attr="
@@ -84,8 +85,8 @@
                      hx-target=|#question${question.id}|">
             </div>
 
-            <div th:id="|answer${answer.id}Img|" style="margin-top: 20px">
-                <div th:replace="~{/fragments/create-questionnaire-image.html :: answerImage(${answer}, ${questionIndex}, ${j.index}) }"></div>
+            <div th:id="|question${question.id}answer${answer.id}Img|" style="margin-top: 20px">
+                <div th:replace="~{/fragments/create-questionnaire-image.html :: answerImage(${answer}, ${questionIndex}, ${j.index}, ${question.id}) }"></div>
             </div>
         </div>
 
@@ -106,19 +107,19 @@
                            hx-trigger="change"
                            hx-encoding="multipart/form-data"
                            th:attr = "
-                           hx-post=|@{/therapist/questionnaires/edit/answer/{id}/image(id=${answer.id},
-                           questionIndex=${questionIndex}, answerIndex=${j.index})}|,
-                           hx-target=|#answer${answer.id}Img|">
+                           hx-post=|@{/therapist/questionnaires/edit/question/{questionId}/answer/{answerId}/add-image
+                           (answerId=${answer.id},questionId=${question.id})}|,
+                           hx-target=|#question${question.id}answer${answer.id}Img|">
                 </div>
                 <img class="delete-answer" src="/img/cross.png" alt="delete answer" style="width: 30px; height: 30px"
                      th:attr="
                      hx-delete=|@{/therapist/questionnaires/edit/question/{questionId}/answer/{answerId}
-                     (questionId=${question.id},answerId=${answer.id})}|,
+                     (answerId=${answer.id}, questionId=${question.id})}|,
                      hx-target=|#question${question.id}|">
             </div>
 
-            <div th:id="|answer${answer.id}Img|" style="margin-top: 20px">
-                <div th:replace="~{/fragments/create-questionnaire-image.html :: answerImage(${answer}, ${questionIndex}, ${j.index}) }"></div>
+            <div th:id="|question${question.id}answer${answer.id}Img|" style="margin-top: 20px">
+                <div th:replace="~{/fragments/create-questionnaire-image.html :: answerImage(${answer}, ${questionIndex}, ${j.index}, ${question.id}) }"></div>
             </div>
         </div>
 

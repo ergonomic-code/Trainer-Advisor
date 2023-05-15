@@ -1,6 +1,8 @@
 package nsu.fit.qyoga.app.questionnaires
 
 import jakarta.servlet.http.HttpSession
+import nsu.fit.qyoga.core.images.api.ImageService
+import nsu.fit.qyoga.core.images.api.model.Image
 import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateAnswerDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionnaireDto
@@ -15,7 +17,8 @@ import org.springframework.web.multipart.MultipartFile
 @Controller
 @RequestMapping("/therapist/questionnaires")
 class QuestionnairesQuestionController(
-    private val httpSession: HttpSession
+    private val httpSession: HttpSession,
+    private val imageService: ImageService
 ) {
 
     /***
@@ -40,9 +43,60 @@ class QuestionnairesQuestionController(
     @PostMapping("/edit/question/{questionId}/add-image")
     fun addImageToQuestion(
         @RequestParam("file") file: MultipartFile,
-        @RequestParam("questionId") questionIndex: Int,
+        @PathVariable questionId: Long,
+        model: Model
     ): String {
+        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
+            ?: throw ElementNotFound("Невозможно добавить изображение")
+        val questionList = questionnaire.question.mapIndexed { qIdx, question ->
+            if (question.id == questionId) {
+                model.addAttribute("questionIndex", qIdx)
+                val copiedQuestion = question.copy(
+                    imageId = imageService.uploadImage(
+                        Image(
+                            name = file.name,
+                            mediaType = file.contentType.toString(),
+                            size = file.size,
+                            data = file.bytes
+                        )
+                    )
+                )
+                model.addAttribute("question", copiedQuestion)
+                copiedQuestion
+            } else {
+                question
+            }
+        }.toMutableList()
+        httpSession.setAttribute(
+            "questionnaire",
+            questionnaire.copy(question = questionList)
+        )
         return "fragments/create-questionnaire-image::questionImage"
+    }
+
+    /**
+     * Удаление изображение из вопроса
+     */
+    @DeleteMapping("/edit/question/{questionId}/image")
+    fun deleteImageFromQuestion(
+        @PathVariable questionId: Long
+    ): ResponseEntity<String>  {
+        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
+            ?: throw ElementNotFound("Невозможно удалить изображение")
+        val questionList = questionnaire.question.mapIndexed { qIdx, question ->
+            if (question.id == questionId) {
+                imageService.deleteImage(question.imageId!!)
+                val copiedQuestion = question.copy(imageId = null)
+                copiedQuestion
+            } else {
+                question
+            }
+        }.toMutableList()
+        httpSession.setAttribute(
+            "questionnaire",
+            questionnaire.copy(question = questionList)
+        )
+        return ResponseEntity.ok().body("")
     }
 
     /**

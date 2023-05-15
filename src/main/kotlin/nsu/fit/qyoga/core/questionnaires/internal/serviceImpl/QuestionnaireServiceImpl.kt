@@ -1,6 +1,5 @@
 package nsu.fit.qyoga.core.questionnaires.internal.serviceImpl
 
-import nsu.fit.qyoga.core.images.api.model.Image
 import nsu.fit.qyoga.core.questionnaires.api.dtos.*
 import nsu.fit.qyoga.core.questionnaires.api.errors.QuestionnaireException
 import nsu.fit.qyoga.core.questionnaires.api.model.Answer
@@ -13,8 +12,6 @@ import nsu.fit.qyoga.core.questionnaires.internal.repository.QuestionnaireRepo
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
-import org.springframework.web.multipart.MultipartFile
-import java.io.FileInputStream
 
 @Service
 class QuestionnaireServiceImpl(
@@ -62,7 +59,7 @@ class QuestionnaireServiceImpl(
         return Question(
             title = questionDto.title,
             questionType = questionDto.questionType,
-            image = imageDtoToImage(questionDto.image),
+            imageId = questionDto.imageId,
             answers = questionDto.answers.map { answer ->
                 Answer(
                     title = answer.title,
@@ -71,7 +68,7 @@ class QuestionnaireServiceImpl(
                     upperBound = answer.bounds.upperBound,
                     upperBoundText = answer.bounds.upperBoundText,
                     score = answer.score,
-                    image = imageDtoToImage(answer.image)
+                    imageId = answer.imageId
                 )
             }.toMutableSet()
         )
@@ -82,7 +79,7 @@ class QuestionnaireServiceImpl(
             questionIndex,
             question.title,
             question.questionType,
-            imageToImageDto(question.image),
+            question.imageId,
             question.answers.mapIndexed { answerIndex, answer ->
                 CreateAnswerDto(
                     answerIndex.toLong(),
@@ -94,31 +91,9 @@ class QuestionnaireServiceImpl(
                         upperBoundText = answer.upperBoundText,
                     ),
                     answer.score,
-                    imageToImageDto(answer.image)
+                    answer.imageId
                 )
             }.toMutableList()
-        )
-    }
-
-    fun imageToImageDto(image: Image?): ImageDto? {
-        image ?: return null
-        return ImageDto(
-            id = image.id,
-            name = image.name,
-            mediaType = image.mediaType,
-            size = image.size,
-            data = image.data
-        )
-    }
-
-    fun imageDtoToImage(imageDto: ImageDto?): Image? {
-        imageDto ?: return null
-        return Image(
-            id = imageDto.id,
-            name = imageDto.name,
-            mediaType = imageDto.mediaType,
-            size = imageDto.size,
-            data = imageDto.data
         )
     }
 
