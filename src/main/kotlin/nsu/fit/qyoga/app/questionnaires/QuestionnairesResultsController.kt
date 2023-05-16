@@ -22,8 +22,7 @@ class QuestionnairesResultsController(
      */
     @GetMapping("/edit/setResult")
     fun getSetResultPage(): String {
-        httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
-            ?: throw QuestionnaireException("Невозможно добавить расшифровку результатов опросника")
+        getQuestionnaireFromSession()
         return "questionnaire/questionnaire-decoding"
     }
 
@@ -34,8 +33,7 @@ class QuestionnairesResultsController(
     fun deleteResultRow(
         @PathVariable resultId: Long
     ): String {
-        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
-            ?: throw ElementNotFound("Невозможно сохранить расшифровку результатов опросника")
+        val questionnaire = getQuestionnaireFromSession()
         httpSession.setAttribute(
             "questionnaire",
             questionnaire.copy(decoding = questionnaire.decoding.filter { it.id != resultId }.toMutableList())
@@ -48,8 +46,7 @@ class QuestionnairesResultsController(
      */
     @GetMapping("/setResult/addResult")
     fun addResultToQuestionnaire(): String {
-        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
-            ?: throw ElementNotFound("Невозможно сохранить расшифровку результатов опросника")
+        val questionnaire = getQuestionnaireFromSession()
         val lastId = if (questionnaire.decoding.isEmpty()) 0 else questionnaire.decoding.last().id + 1
         httpSession.setAttribute(
             "questionnaire",
@@ -67,10 +64,9 @@ class QuestionnairesResultsController(
         @PathVariable resultId: Long,
         @ModelAttribute("questionnaire") questionnaireDto: CreateQuestionnaireDto,
     ): HttpStatus {
-        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
-            ?: throw ElementNotFound("Невозможно сохранить расшифровку результатов опросника")
+        val questionnaire = getQuestionnaireFromSession()
         val changedDecoding =  getDecodingById(questionnaireDto, resultId)
-            ?: throw ElementNotFound("Выбранный расшифровка результатов не найдена")
+            ?: throw ElementNotFound("Выбранная расшифровка результатов не найдена")
         val decodingList = questionnaire.decoding.mapIndexed { idx, value ->
             if (value.id == resultId) changedDecoding else value
         }.toMutableList()
@@ -88,11 +84,15 @@ class QuestionnairesResultsController(
     fun saveResultsTable(
         @ModelAttribute("questionnaire") questionnaireDto: CreateQuestionnaireDto,
     ): String {
-        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
-            ?: throw ElementNotFound("Невозможно сохранить расшифровку результатов опросника")
+        val questionnaire = getQuestionnaireFromSession()
         questionnaireService.saveQuestionnaire(questionnaire.copy(decoding = questionnaireDto.decoding))
         httpSession.removeAttribute("questionnaire")
         return "redirect:/questionnaires"
+    }
+
+    fun getQuestionnaireFromSession(): CreateQuestionnaireDto {
+        return httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
+            ?: throw QuestionnaireException("Ошибка извлечения опросника из сессии")
     }
 
     fun getDecodingById(questionnaire: CreateQuestionnaireDto, decodingId: Long): DecodingDto? {

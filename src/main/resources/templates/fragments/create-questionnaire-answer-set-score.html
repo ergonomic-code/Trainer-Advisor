@@ -50,7 +50,7 @@
             </div>
 
             <div th:id="|answer${answer.id}Img|" style="margin-top: 20px">
-                <div th:replace="~{/fragments/create-questionnaire-image.html :: answerImage(${answer}, ${questionIndex}, ${j.index}) }"></div>
+                <div th:replace="~{/fragments/create-questionnaire-image.html :: answerImage(${answer}, ${questionIndex}, ${j.index}, ${question.id}) }"></div>
             </div>
         </div>
 

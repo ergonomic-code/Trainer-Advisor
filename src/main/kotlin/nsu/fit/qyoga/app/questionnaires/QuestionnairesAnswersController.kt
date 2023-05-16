@@ -183,7 +183,6 @@ class QuestionnairesAnswersController(
         val changedQuestion = getQuestionById(questionnaireDto, questionId)
         val changedAnswer = changedQuestion.answers.filter { it.id == answerId }.getOrNull(0)
             ?: throw ElementNotFound("Выбранный ответ не найден")
-
         val questionList = questionnaire.question.map { value ->
             if (value.id == questionId) {
                 val copiedQuestion = changedQuestion.copy(
@@ -213,7 +212,6 @@ class QuestionnairesAnswersController(
         model: Model
     ): String {
         val questionnaire = getQuestionnaireFromSession()
-
         httpSession.setAttribute(
             "questionnaire",
             updateQuestion(questionnaire, questionnaireDto, questionId, model)
