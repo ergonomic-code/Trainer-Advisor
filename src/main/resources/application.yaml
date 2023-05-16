@@ -12,4 +12,9 @@ spring:
   session:
     jdbc:
       initialize-schema: always
+server:
+  servlet:
+    session:
+      cookie:
+        name: JSESSIONID
 #54501

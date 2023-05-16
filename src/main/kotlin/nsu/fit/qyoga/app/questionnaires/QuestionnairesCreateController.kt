@@ -15,12 +15,12 @@ class QuestionnairesCreateController(
 ) {
 
     /**
-     * Создание нового опросника
+     * Получение страницы редактирования
      */
-    @GetMapping("/new")
+    @GetMapping("/edit")
     fun getCreateQuestionnairePage(): String {
         val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
-        if(questionnaire == null || questionnaire.id != 0L) {
+        if (questionnaire == null) {
             httpSession.setAttribute(
                 "questionnaire",
                 CreateQuestionnaireDto(
@@ -35,8 +35,25 @@ class QuestionnairesCreateController(
     }
 
     /**
+     * Создание нового опросника
+     */
+    @GetMapping("/new")
+    fun createQuestionnaire(): String {
+        httpSession.setAttribute(
+            "questionnaire",
+            CreateQuestionnaireDto(
+                id = 0,
+                title = "",
+                question = mutableListOf(CreateQuestionDto(answers = listOf(CreateAnswerDto()))),
+                decoding = mutableListOf(DecodingDto())
+            )
+        )
+        return "redirect:/therapist/questionnaires/edit"
+    }
+
+    /**
      * Редактирование опросника
-      */
+     */
     @GetMapping("/{id}/edit")
     fun editQuestionnaire(
         @PathVariable id: Long
@@ -45,7 +62,7 @@ class QuestionnairesCreateController(
             "questionnaire",
             questionnaireService.findQuestionnaireWithQuestions(id)
         )
-        return "questionnaire/create-questionnaire"
+        return "redirect:/therapist/questionnaires/edit"
     }
 
     /**

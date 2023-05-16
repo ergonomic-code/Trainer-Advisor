@@ -59,7 +59,7 @@
                            th:value="${session.questionnaire.title}"
                            required th:name="title"
                            hx-trigger="keyup changed delay:500ms"
-                           hx-swap="none"
+                           hx-swap="none" id="questionnaireTitle"
                            hx-post= "/therapist/questionnaires/edit/title">
                 </label>
             </div>

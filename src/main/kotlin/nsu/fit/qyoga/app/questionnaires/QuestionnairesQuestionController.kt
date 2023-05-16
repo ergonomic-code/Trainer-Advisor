@@ -7,6 +7,7 @@ import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateAnswerDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionnaireDto
 import nsu.fit.qyoga.core.questionnaires.api.errors.ElementNotFound
+import nsu.fit.qyoga.core.questionnaires.api.errors.QuestionnaireException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -26,8 +27,7 @@ class QuestionnairesQuestionController(
      */
     @GetMapping("/edit/add-question")
     fun addNewQuestionToQuestionnaire(): String {
-        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
-            ?: throw ElementNotFound("Невозможно добавить новый вопрос")
+        val questionnaire = getQuestionnaireFromSession()
         val lastId = if (questionnaire.question.isEmpty()) 0 else questionnaire.question.last().id + 1
         val newQuestion = CreateQuestionDto(id = lastId, answers = listOf(CreateAnswerDto()))
         httpSession.setAttribute(
@@ -46,8 +46,7 @@ class QuestionnairesQuestionController(
         @PathVariable questionId: Long,
         model: Model
     ): String {
-        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
-            ?: throw ElementNotFound("Невозможно добавить изображение")
+        val questionnaire = getQuestionnaireFromSession()
         val questionList = questionnaire.question.mapIndexed { qIdx, question ->
             if (question.id == questionId) {
                 model.addAttribute("questionIndex", qIdx)
@@ -81,8 +80,7 @@ class QuestionnairesQuestionController(
     fun deleteImageFromQuestion(
         @PathVariable questionId: Long
     ): ResponseEntity<String>  {
-        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
-            ?: throw ElementNotFound("Невозможно удалить изображение")
+        val questionnaire = getQuestionnaireFromSession()
         val questionList = questionnaire.question.mapIndexed { qIdx, question ->
             if (question.id == questionId) {
                 imageService.deleteImage(question.imageId!!)
@@ -106,8 +104,7 @@ class QuestionnairesQuestionController(
     fun deleteQuestionFromQuestionnaire(
         @PathVariable questionId: Long
     ): ResponseEntity<String> {
-        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
-            ?: throw ElementNotFound("Невозможно удалить вопрос")
+        val questionnaire = getQuestionnaireFromSession()
         httpSession.setAttribute(
             "questionnaire",
             questionnaire.copy(question = questionnaire.question.filter { it.id != questionId }.toMutableList())
@@ -124,8 +121,7 @@ class QuestionnairesQuestionController(
         @ModelAttribute("questionnaire") questionnaireDto: CreateQuestionnaireDto,
         model: Model
     ): String {
-        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
-            ?: throw ElementNotFound("Невозможно изменить тип вопроса")
+        val questionnaire = getQuestionnaireFromSession()
         val question = getQuestionById(questionnaireDto, questionId)
             ?: throw ElementNotFound("Выбранный вопрос не найден")
         val questionList = questionnaire.question.mapIndexed { idx, value ->
@@ -156,8 +152,7 @@ class QuestionnairesQuestionController(
         @ModelAttribute("questionnaire") questionnaireDto: CreateQuestionnaireDto,
         @PathVariable questionId: Long
     ): HttpStatus {
-        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
-            ?: throw ElementNotFound("Невозможно изменить вопрос")
+        val questionnaire = getQuestionnaireFromSession()
         val changedQuestion = getQuestionById(questionnaireDto, questionId)
             ?: throw ElementNotFound("Выбранный вопрос не найден")
         val questionList = questionnaire.question.map {
@@ -174,6 +169,11 @@ class QuestionnairesQuestionController(
             )
         )
         return HttpStatus.OK
+    }
+
+    fun getQuestionnaireFromSession(): CreateQuestionnaireDto {
+        return httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
+            ?: throw QuestionnaireException("Ошибка извлечения опросника из сессии")
     }
 
     fun getQuestionById( questionnaire: CreateQuestionnaireDto, questionId: Long): CreateQuestionDto? {

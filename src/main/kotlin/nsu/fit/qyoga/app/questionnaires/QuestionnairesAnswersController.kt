@@ -7,6 +7,7 @@ import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateAnswerDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionnaireDto
 import nsu.fit.qyoga.core.questionnaires.api.errors.ElementNotFound
+import nsu.fit.qyoga.core.questionnaires.api.errors.QuestionnaireException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -31,8 +32,7 @@ class QuestionnairesAnswersController(
         @PathVariable answerId: Long,
         model: Model
     ): String {
-        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
-            ?: throw ElementNotFound("Невозможно добавить изображение ответу")
+        val questionnaire = getQuestionnaireFromSession()
         val questionList = questionnaire.question.mapIndexed { qIdx, question ->
             if (question.id == questionId) {
                 model.addAttribute("questionIndex", qIdx)
@@ -79,8 +79,7 @@ class QuestionnairesAnswersController(
         @PathVariable questionId: Long,
         @PathVariable answerId: Long
     ): ResponseEntity<String> {
-        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
-            ?: throw ElementNotFound("Невозможно удалить изображение из ответа")
+        val questionnaire = getQuestionnaireFromSession()
         val questionList = questionnaire.question.map { question ->
             if (question.id == questionId) {
                 question.copy(
@@ -114,8 +113,7 @@ class QuestionnairesAnswersController(
         @PathVariable questionId: Long,
         model: Model
     ): String {
-        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
-            ?: throw ElementNotFound("Невозможно добавить новый ответ")
+        val questionnaire = getQuestionnaireFromSession()
         val changedQuestion = getQuestionById(questionnaire, questionId)
         val lastId = if (changedQuestion.answers.isEmpty()) 0 else changedQuestion.answers.last().id + 1
         val questionList = questionnaire.question.mapIndexed { idx, value ->
@@ -148,8 +146,7 @@ class QuestionnairesAnswersController(
         @PathVariable questionId: Long,
         model: Model
     ): String {
-        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
-            ?: throw ElementNotFound("Невозможно удалить ответ")
+        val questionnaire = getQuestionnaireFromSession()
         val changedQuestion = getQuestionById(questionnaire, questionId)
         val questionList = questionnaire.question.mapIndexed { idx, value ->
             if (value.id == questionId) {
@@ -182,8 +179,7 @@ class QuestionnairesAnswersController(
         @PathVariable answerId: Long,
         @PathVariable questionId: Long
     ): HttpStatus {
-        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
-            ?: throw ElementNotFound("Невозможно сохранить ответ")
+        val questionnaire = getQuestionnaireFromSession()
         val changedQuestion = getQuestionById(questionnaireDto, questionId)
         val changedAnswer = changedQuestion.answers.filter { it.id == answerId }.getOrNull(0)
             ?: throw ElementNotFound("Выбранный ответ не найден")
@@ -216,8 +212,7 @@ class QuestionnairesAnswersController(
         @ModelAttribute("questionnaire") questionnaireDto: CreateQuestionnaireDto,
         model: Model
     ): String {
-        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
-            ?: throw ElementNotFound("Невозможно сохранить ответ")
+        val questionnaire = getQuestionnaireFromSession()
 
         httpSession.setAttribute(
             "questionnaire",
@@ -235,8 +230,7 @@ class QuestionnairesAnswersController(
         @ModelAttribute("questionnaire") questionnaireDto: CreateQuestionnaireDto,
         model: Model
     ): String {
-        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
-            ?: throw ElementNotFound("Невозможно сохранить ответ")
+        val questionnaire = getQuestionnaireFromSession()
         httpSession.setAttribute(
             "questionnaire",
             updateQuestion(questionnaire, questionnaireDto, questionId, model)
@@ -264,6 +258,11 @@ class QuestionnairesAnswersController(
         return questionnaire.copy(
             question = questionList
         )
+    }
+
+    fun getQuestionnaireFromSession(): CreateQuestionnaireDto {
+        return httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
+            ?: throw QuestionnaireException("Ошибка извлечения опросника из сессии")
     }
 
     fun getQuestionById( questionnaire: CreateQuestionnaireDto, questionId: Long): CreateQuestionDto {
