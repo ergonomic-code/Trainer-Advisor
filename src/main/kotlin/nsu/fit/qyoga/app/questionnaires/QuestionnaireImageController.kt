@@ -18,7 +18,7 @@ class QuestionnaireImageController(
      */
     @GetMapping("/image/{id}")
     @ResponseBody
-    fun loImageToPage(
+    fun getImage(
         @PathVariable id: Long
     ): ResponseEntity<InputStreamResource> {
         val image = imageService.getImage(id)

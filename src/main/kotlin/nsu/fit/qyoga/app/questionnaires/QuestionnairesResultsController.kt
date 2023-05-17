@@ -16,6 +16,7 @@ class QuestionnairesResultsController(
     private val questionnaireService: QuestionnaireService,
     private val httpSession: HttpSession
 ) {
+    val questionnaireFieldName = "questionnaire"
 
     /**
      * Получить страницу задания результатов опросников
@@ -63,7 +64,7 @@ class QuestionnairesResultsController(
         @ModelAttribute("questionnaire") questionnaireDto: CreateQuestionnaireDto,
     ): HttpStatus {
         val questionnaire = getQuestionnaireFromSession()
-        val changedDecoding = getDecodingById(questionnaireDto, resultId)
+        val changedDecoding = questionnaireDto.decoding.filter { it.id == resultId }.getOrNull(0)
             ?: throw ElementNotFound("Выбранная расшифровка результатов не найдена")
         val decodingList = questionnaire.decoding.map { value ->
             if (value.id == resultId) changedDecoding else value
@@ -81,23 +82,19 @@ class QuestionnairesResultsController(
     ): String {
         val questionnaire = getQuestionnaireFromSession()
         questionnaireService.saveQuestionnaire(questionnaire.copy(decoding = questionnaireDto.decoding))
-        httpSession.removeAttribute("questionnaire")
+        httpSession.removeAttribute(questionnaireFieldName)
         return "redirect:/questionnaires"
     }
 
     fun getQuestionnaireFromSession(): CreateQuestionnaireDto {
-        return httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
+        return httpSession.getAttribute(questionnaireFieldName) as CreateQuestionnaireDto?
             ?: throw QuestionnaireException("Ошибка извлечения опросника из сессии")
     }
 
-    fun setQuestionnaireInSession(questionnaire: CreateQuestionnaireDto){
+    fun setQuestionnaireInSession(questionnaire: CreateQuestionnaireDto) {
         httpSession.setAttribute(
-            "questionnaire",
+            questionnaireFieldName,
             questionnaire
         )
-    }
-
-    fun getDecodingById(questionnaire: CreateQuestionnaireDto, decodingId: Long): DecodingDto? {
-        return questionnaire.decoding.filter { it.id == decodingId }.getOrNull(0)
     }
 }

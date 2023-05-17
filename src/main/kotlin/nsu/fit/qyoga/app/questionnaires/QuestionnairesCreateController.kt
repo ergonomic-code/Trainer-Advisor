@@ -13,6 +13,7 @@ class QuestionnairesCreateController(
     private val questionnaireService: QuestionnaireService,
     private val httpSession: HttpSession
 ) {
+    val questionnaireFieldName = "questionnaire"
 
     /**
      * Получение страницы редактирования
@@ -22,7 +23,7 @@ class QuestionnairesCreateController(
         val questionnaire = getQuestionnaireFromSession()
         if (questionnaire == null) {
             httpSession.setAttribute(
-                "questionnaire",
+                questionnaireFieldName,
                 CreateQuestionnaireDto(
                     id = 0,
                     title = "",
@@ -40,7 +41,7 @@ class QuestionnairesCreateController(
     @GetMapping("/new")
     fun createQuestionnaire(): String {
         httpSession.setAttribute(
-            "questionnaire",
+            questionnaireFieldName,
             CreateQuestionnaireDto(
                 id = 0,
                 title = "",
@@ -59,7 +60,7 @@ class QuestionnairesCreateController(
         @PathVariable id: Long
     ): String {
         httpSession.setAttribute(
-            "questionnaire",
+            questionnaireFieldName,
             questionnaireService.findQuestionnaireWithQuestions(id)
         )
         return "redirect:/therapist/questionnaires/edit"
@@ -72,7 +73,7 @@ class QuestionnairesCreateController(
     fun createQuestionnaire(
         @ModelAttribute("questionnaire") questionnaire: CreateQuestionnaireDto,
     ): String {
-        httpSession.setAttribute("questionnaire", questionnaire)
+        httpSession.setAttribute(questionnaireFieldName, questionnaire)
         return "redirect:/therapist/questionnaires/edit/setResult"
     }
 
@@ -87,11 +88,11 @@ class QuestionnairesCreateController(
     ): HttpStatus {
         val questionnaire = getQuestionnaireFromSession()
             ?: return HttpStatus.NOT_FOUND
-        httpSession.setAttribute("questionnaire", questionnaire.copy(title = title))
+        httpSession.setAttribute(questionnaireFieldName, questionnaire.copy(title = title))
         return HttpStatus.OK
     }
 
     fun getQuestionnaireFromSession(): CreateQuestionnaireDto? {
-        return httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
+        return httpSession.getAttribute(questionnaireFieldName) as CreateQuestionnaireDto?
     }
 }

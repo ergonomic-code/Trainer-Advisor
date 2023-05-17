@@ -15,12 +15,17 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 
+const val QUESTION_FRAGMENT = "fragments/create-questionnaire-answer::question"
+
 @Controller
 @RequestMapping("/therapist/questionnaires")
 class QuestionnairesAnswersController(
     private val httpSession: HttpSession,
     private val imageService: ImageService
 ) {
+    val questionIndexFieldName = "questionIndex"
+    val questionFieldName = "question"
+    val questionnaireFieldName = "questionnaire"
 
     /**
      * Добавление изображение ответу
@@ -63,10 +68,8 @@ class QuestionnairesAnswersController(
             }
         }.toMutableList()
         httpSession.setAttribute(
-            "questionnaire",
-            questionnaire.copy(
-                question = questionList
-            )
+            questionnaireFieldName,
+            questionnaire.copy(question = questionList)
         )
         return "fragments/create-questionnaire-image::answerImage"
     }
@@ -97,10 +100,8 @@ class QuestionnairesAnswersController(
             }
         }.toMutableList()
         httpSession.setAttribute(
-            "questionnaire",
-            questionnaire.copy(
-                question = questionList
-            )
+            questionnaireFieldName,
+            questionnaire.copy(question = questionList)
         )
         return ResponseEntity.ok().body("")
     }
@@ -118,23 +119,21 @@ class QuestionnairesAnswersController(
         val lastId = if (changedQuestion.answers.isEmpty()) 0 else changedQuestion.answers.last().id + 1
         val questionList = questionnaire.question.mapIndexed { idx, value ->
             if (value.id == questionId) {
-                setQuestionnaires(model, idx)
+                model.addAttribute(questionIndexFieldName, idx)
                 val copiedQuestion = changedQuestion.copy(
                     answers = changedQuestion.answers + CreateAnswerDto(id = lastId)
                 )
-                setQuestionToModel(model, copiedQuestion)
+                model.addAttribute(questionFieldName, copiedQuestion)
                 copiedQuestion
             } else {
                 value
             }
         }.toMutableList()
         httpSession.setAttribute(
-            "questionnaire",
-            questionnaire.copy(
-                question = questionList
-            )
+            questionnaireFieldName,
+            questionnaire.copy(question = questionList)
         )
-        return "fragments/create-questionnaire-answer::question"
+        return QUESTION_FRAGMENT
     }
 
     /**
@@ -150,23 +149,21 @@ class QuestionnairesAnswersController(
         val changedQuestion = getQuestionById(questionnaire, questionId)
         val questionList = questionnaire.question.mapIndexed { idx, value ->
             if (value.id == questionId) {
-                setQuestionnaires(model, idx)
+                model.addAttribute(questionIndexFieldName, idx)
                 val copiedQuestion = changedQuestion.copy(
                     answers = changedQuestion.answers.filter { it.id != answerId }
                 )
-                setQuestionToModel(model, copiedQuestion)
+                model.addAttribute(questionFieldName, copiedQuestion)
                 copiedQuestion
             } else {
                 value
             }
         }.toMutableList()
         httpSession.setAttribute(
-            "questionnaire",
-            questionnaire.copy(
-                question = questionList
-            )
+            questionnaireFieldName,
+            questionnaire.copy(question = questionList)
         )
-        return "fragments/create-questionnaire-answer::question"
+        return QUESTION_FRAGMENT
     }
 
     /**
@@ -196,7 +193,7 @@ class QuestionnairesAnswersController(
             }
         }.toMutableList()
         httpSession.setAttribute(
-            "questionnaire",
+            questionnaireFieldName,
             questionnaire.copy(question = questionList)
         )
         return HttpStatus.OK
@@ -213,7 +210,7 @@ class QuestionnairesAnswersController(
     ): String {
         val questionnaire = getQuestionnaireFromSession()
         httpSession.setAttribute(
-            "questionnaire",
+            questionnaireFieldName,
             updateQuestion(questionnaire, questionnaireDto, questionId, model)
         )
         return "fragments/create-questionnaire-answer-set-score::answersScore"
@@ -230,10 +227,10 @@ class QuestionnairesAnswersController(
     ): String {
         val questionnaire = getQuestionnaireFromSession()
         httpSession.setAttribute(
-            "questionnaire",
+            questionnaireFieldName,
             updateQuestion(questionnaire, questionnaireDto, questionId, model)
         )
-        return "fragments/create-questionnaire-answer::question"
+        return QUESTION_FRAGMENT
     }
 
     fun updateQuestion(
@@ -245,9 +242,9 @@ class QuestionnairesAnswersController(
         val changedQuestion = getQuestionById(questionnaireDto, questionId)
         val questionList = questionnaire.question.mapIndexed { idx, value ->
             if (value.id == questionId) {
-                setQuestionnaires(model, idx)
+                model.addAttribute(questionIndexFieldName, idx)
                 val copiedQuestion = changedQuestion.copy(answers = changedQuestion.answers)
-                setQuestionToModel(model, copiedQuestion)
+                model.addAttribute(questionFieldName, copiedQuestion)
                 copiedQuestion
             } else {
                 value
@@ -256,13 +253,6 @@ class QuestionnairesAnswersController(
         return questionnaire.copy(
             question = questionList
         )
-    }
-
-    fun setQuestionnaires(model: Model, idx: Int) {
-        model.addAttribute("questionIndex", idx)
-    }
-    fun setQuestionToModel(model: Model, copiedQuestion: CreateQuestionDto) {
-        model.addAttribute("question", copiedQuestion)
     }
 
     fun getQuestionnaireFromSession(): CreateQuestionnaireDto {

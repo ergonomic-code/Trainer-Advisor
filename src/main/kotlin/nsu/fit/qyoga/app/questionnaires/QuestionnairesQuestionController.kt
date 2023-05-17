@@ -21,6 +21,7 @@ class QuestionnairesQuestionController(
     private val httpSession: HttpSession,
     private val imageService: ImageService
 ) {
+    val questionnaireFieldName = "questionnaire"
 
     /***
      * Добавление нового вопроса
@@ -31,7 +32,7 @@ class QuestionnairesQuestionController(
         val lastId = if (questionnaire.question.isEmpty()) 0 else questionnaire.question.last().id + 1
         val newQuestion = CreateQuestionDto(id = lastId, answers = listOf(CreateAnswerDto()))
         httpSession.setAttribute(
-            "questionnaire",
+            questionnaireFieldName,
             questionnaire.copy(question = (questionnaire.question + newQuestion).toMutableList())
         )
         return "questionnaire/create-questionnaire::questions"
@@ -67,7 +68,7 @@ class QuestionnairesQuestionController(
             }
         }.toMutableList()
         httpSession.setAttribute(
-            "questionnaire",
+            questionnaireFieldName,
             questionnaire.copy(question = questionList)
         )
         return "fragments/create-questionnaire-image::questionImage"
@@ -91,7 +92,7 @@ class QuestionnairesQuestionController(
             }
         }.toMutableList()
         httpSession.setAttribute(
-            "questionnaire",
+            questionnaireFieldName,
             questionnaire.copy(question = questionList)
         )
         return ResponseEntity.ok().body("")
@@ -106,7 +107,7 @@ class QuestionnairesQuestionController(
     ): ResponseEntity<String> {
         val questionnaire = getQuestionnaireFromSession()
         httpSession.setAttribute(
-            "questionnaire",
+            questionnaireFieldName,
             questionnaire.copy(question = questionnaire.question.filter { it.id != questionId }.toMutableList())
         )
         return ResponseEntity.ok().body("")
@@ -118,7 +119,7 @@ class QuestionnairesQuestionController(
     @PostMapping("/edit/question/{questionId}/change-type")
     fun changeAnswersType(
         @PathVariable questionId: Long,
-        @ModelAttribute("questionnaire") questionnaireDto: CreateQuestionnaireDto,
+        @ModelAttribute("questionnaires") questionnaireDto: CreateQuestionnaireDto,
         model: Model
     ): String {
         val questionnaire = getQuestionnaireFromSession()
@@ -135,7 +136,7 @@ class QuestionnairesQuestionController(
             }
         }.toMutableList()
         httpSession.setAttribute(
-            "questionnaire",
+            questionnaireFieldName,
             questionnaire.copy(
                 question = questionList
             )
@@ -149,7 +150,7 @@ class QuestionnairesQuestionController(
     @PostMapping("/edit/question/{questionId}/update")
     @ResponseBody
     fun changeQuestionTitle(
-        @ModelAttribute("questionnaire") questionnaireDto: CreateQuestionnaireDto,
+        @ModelAttribute("questionnaires") questionnaireDto: CreateQuestionnaireDto,
         @PathVariable questionId: Long
     ): HttpStatus {
         val questionnaire = getQuestionnaireFromSession()
@@ -163,7 +164,7 @@ class QuestionnairesQuestionController(
             }
         }.toMutableList()
         httpSession.setAttribute(
-            "questionnaire",
+            questionnaireFieldName,
             questionnaire.copy(
                 question = questionList
             )
@@ -172,7 +173,7 @@ class QuestionnairesQuestionController(
     }
 
     fun getQuestionnaireFromSession(): CreateQuestionnaireDto {
-        return httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
+        return httpSession.getAttribute(questionnaireFieldName) as CreateQuestionnaireDto?
             ?: throw QuestionnaireException("Ошибка извлечения опросника из сессии")
     }
 
