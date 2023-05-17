@@ -79,9 +79,9 @@ class QuestionnairesQuestionController(
     @DeleteMapping("/edit/question/{questionId}/image")
     fun deleteImageFromQuestion(
         @PathVariable questionId: Long
-    ): ResponseEntity<String>  {
+    ): ResponseEntity<String> {
         val questionnaire = getQuestionnaireFromSession()
-        val questionList = questionnaire.question.mapIndexed { qIdx, question ->
+        val questionList = questionnaire.question.map { question ->
             if (question.id == questionId) {
                 imageService.deleteImage(question.imageId!!)
                 val copiedQuestion = question.copy(imageId = null)
@@ -176,7 +176,7 @@ class QuestionnairesQuestionController(
             ?: throw QuestionnaireException("Ошибка извлечения опросника из сессии")
     }
 
-    fun getQuestionById( questionnaire: CreateQuestionnaireDto, questionId: Long): CreateQuestionDto? {
+    fun getQuestionById(questionnaire: CreateQuestionnaireDto, questionId: Long): CreateQuestionDto? {
         return questionnaire.question.filter { it.id == questionId }.getOrNull(0)
     }
 }

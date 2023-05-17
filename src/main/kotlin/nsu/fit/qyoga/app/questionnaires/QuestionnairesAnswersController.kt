@@ -118,11 +118,11 @@ class QuestionnairesAnswersController(
         val lastId = if (changedQuestion.answers.isEmpty()) 0 else changedQuestion.answers.last().id + 1
         val questionList = questionnaire.question.mapIndexed { idx, value ->
             if (value.id == questionId) {
-                model.addAttribute("questionIndex", idx)
+                setQuestionnaires(model, idx)
                 val copiedQuestion = changedQuestion.copy(
                     answers = changedQuestion.answers + CreateAnswerDto(id = lastId)
                 )
-                model.addAttribute("question", copiedQuestion)
+                setQuestionToModel(model, copiedQuestion)
                 copiedQuestion
             } else {
                 value
@@ -150,11 +150,11 @@ class QuestionnairesAnswersController(
         val changedQuestion = getQuestionById(questionnaire, questionId)
         val questionList = questionnaire.question.mapIndexed { idx, value ->
             if (value.id == questionId) {
-                model.addAttribute("questionIndex", idx)
+                setQuestionnaires(model, idx)
                 val copiedQuestion = changedQuestion.copy(
                     answers = changedQuestion.answers.filter { it.id != answerId }
                 )
-                model.addAttribute("question", copiedQuestion)
+                setQuestionToModel(model, copiedQuestion)
                 copiedQuestion
             } else {
                 value
@@ -245,9 +245,9 @@ class QuestionnairesAnswersController(
         val changedQuestion = getQuestionById(questionnaireDto, questionId)
         val questionList = questionnaire.question.mapIndexed { idx, value ->
             if (value.id == questionId) {
-                model.addAttribute("questionIndex", idx)
+                setQuestionnaires(model, idx)
                 val copiedQuestion = changedQuestion.copy(answers = changedQuestion.answers)
-                model.addAttribute("question", copiedQuestion)
+                setQuestionToModel(model, copiedQuestion)
                 copiedQuestion
             } else {
                 value
@@ -258,12 +258,19 @@ class QuestionnairesAnswersController(
         )
     }
 
+    fun setQuestionnaires(model: Model, idx: Int) {
+        model.addAttribute("questionIndex", idx)
+    }
+    fun setQuestionToModel(model: Model, copiedQuestion: CreateQuestionDto) {
+        model.addAttribute("question", copiedQuestion)
+    }
+
     fun getQuestionnaireFromSession(): CreateQuestionnaireDto {
         return httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
             ?: throw QuestionnaireException("Ошибка извлечения опросника из сессии")
     }
 
-    fun getQuestionById( questionnaire: CreateQuestionnaireDto, questionId: Long): CreateQuestionDto {
+    fun getQuestionById(questionnaire: CreateQuestionnaireDto, questionId: Long): CreateQuestionDto {
         return questionnaire.question.filter { it.id == questionId }.getOrNull(0)
             ?: throw ElementNotFound("Выбранный вопрос не найден")
     }

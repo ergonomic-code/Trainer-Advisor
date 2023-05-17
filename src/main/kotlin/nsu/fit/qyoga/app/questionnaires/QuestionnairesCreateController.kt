@@ -19,7 +19,7 @@ class QuestionnairesCreateController(
      */
     @GetMapping("/edit")
     fun getCreateQuestionnairePage(): String {
-        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
+        val questionnaire = getQuestionnaireFromSession()
         if (questionnaire == null) {
             httpSession.setAttribute(
                 "questionnaire",
@@ -85,9 +85,13 @@ class QuestionnairesCreateController(
     fun changeQuestionnaireTitle(
         @RequestParam title: String
     ): HttpStatus {
-        val questionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
+        val questionnaire = getQuestionnaireFromSession()
             ?: return HttpStatus.NOT_FOUND
         httpSession.setAttribute("questionnaire", questionnaire.copy(title = title))
         return HttpStatus.OK
+    }
+
+    fun getQuestionnaireFromSession(): CreateQuestionnaireDto? {
+        return httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
     }
 }

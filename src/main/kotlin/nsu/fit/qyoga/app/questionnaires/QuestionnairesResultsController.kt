@@ -34,8 +34,7 @@ class QuestionnairesResultsController(
         @PathVariable resultId: Long
     ): String {
         val questionnaire = getQuestionnaireFromSession()
-        httpSession.setAttribute(
-            "questionnaire",
+        setQuestionnaireInSession(
             questionnaire.copy(decoding = questionnaire.decoding.filter { it.id != resultId }.toMutableList())
         )
         return "questionnaire/questionnaire-decoding::tableDecoding"
@@ -48,8 +47,7 @@ class QuestionnairesResultsController(
     fun addResultToQuestionnaire(): String {
         val questionnaire = getQuestionnaireFromSession()
         val lastId = if (questionnaire.decoding.isEmpty()) 0 else questionnaire.decoding.last().id + 1
-        httpSession.setAttribute(
-            "questionnaire",
+        setQuestionnaireInSession(
             questionnaire.copy(decoding = (questionnaire.decoding + DecodingDto(id = lastId)).toMutableList())
         )
         return "questionnaire/questionnaire-decoding::tableDecoding"
@@ -65,15 +63,12 @@ class QuestionnairesResultsController(
         @ModelAttribute("questionnaire") questionnaireDto: CreateQuestionnaireDto,
     ): HttpStatus {
         val questionnaire = getQuestionnaireFromSession()
-        val changedDecoding =  getDecodingById(questionnaireDto, resultId)
+        val changedDecoding = getDecodingById(questionnaireDto, resultId)
             ?: throw ElementNotFound("Выбранная расшифровка результатов не найдена")
-        val decodingList = questionnaire.decoding.mapIndexed { idx, value ->
+        val decodingList = questionnaire.decoding.map { value ->
             if (value.id == resultId) changedDecoding else value
         }.toMutableList()
-        httpSession.setAttribute(
-            "questionnaire",
-            questionnaire.copy(decoding = decodingList)
-        )
+        setQuestionnaireInSession(questionnaire.copy(decoding = decodingList))
         return HttpStatus.OK
     }
 
@@ -93,6 +88,13 @@ class QuestionnairesResultsController(
     fun getQuestionnaireFromSession(): CreateQuestionnaireDto {
         return httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
             ?: throw QuestionnaireException("Ошибка извлечения опросника из сессии")
+    }
+
+    fun setQuestionnaireInSession(questionnaire: CreateQuestionnaireDto){
+        httpSession.setAttribute(
+            "questionnaire",
+            questionnaire
+        )
     }
 
     fun getDecodingById(questionnaire: CreateQuestionnaireDto, decodingId: Long): DecodingDto? {

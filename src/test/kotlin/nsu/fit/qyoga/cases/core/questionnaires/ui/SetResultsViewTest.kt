@@ -52,6 +52,7 @@ class SetResultsViewTest : QYogaAppTestBase() {
             }
         }
     }
+
     @Test
     fun `QYoga can't get result list page if questionnaire not exists in session`() {
         Given {
@@ -68,6 +69,7 @@ class SetResultsViewTest : QYogaAppTestBase() {
             }
         }
     }
+
     @Test
     fun `QYoga can add new decoding entry`() {
         Given {
@@ -107,6 +109,7 @@ class SetResultsViewTest : QYogaAppTestBase() {
             }
         }
     }
+
     @Test
     fun `QYoga can't add new result if questionnaire not exists in session`() {
         Given {
@@ -123,6 +126,7 @@ class SetResultsViewTest : QYogaAppTestBase() {
             }
         }
     }
+
     @Test
     fun `QYoga can delete result entry`() {
         Given {
@@ -164,6 +168,7 @@ class SetResultsViewTest : QYogaAppTestBase() {
             }
         }
     }
+
     @Test
     fun `QYoga can't delete result if questionnaire not exists in session`() {
         Given {
@@ -180,6 +185,7 @@ class SetResultsViewTest : QYogaAppTestBase() {
             }
         }
     }
+
     @Test
     fun `QYoga can save changes`() {
         Given {
@@ -193,6 +199,7 @@ class SetResultsViewTest : QYogaAppTestBase() {
             extract().statusCode().compareTo(200) shouldBe 0
         }
     }
+
     @Test
     fun `QYoga can't save changes if result is not exists`() {
         Given {
@@ -215,6 +222,7 @@ class SetResultsViewTest : QYogaAppTestBase() {
             }
         }
     }
+
     @Test
     fun `QYoga can't update questionnaire if it not in session`() {
         Given {
@@ -232,6 +240,7 @@ class SetResultsViewTest : QYogaAppTestBase() {
             }
         }
     }
+
     @Test
     fun `QYoga redirect on questionnaire list page after save`() {
         Given {
@@ -244,6 +253,7 @@ class SetResultsViewTest : QYogaAppTestBase() {
             extract().statusCode().compareTo(302) shouldBe 0
         }
     }
+
     @Test
     fun `QYoga can't save questionnaire if it not in session`() {
         Given {

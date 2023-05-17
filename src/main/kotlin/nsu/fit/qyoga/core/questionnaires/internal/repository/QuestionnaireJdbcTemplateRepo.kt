@@ -1,8 +1,6 @@
 package nsu.fit.qyoga.core.questionnaires.internal.repository
 
 import nsu.fit.qyoga.core.questionnaires.api.dtos.*
-import nsu.fit.qyoga.core.questionnaires.api.dtos.enums.QuestionType
-import nsu.fit.qyoga.core.questionnaires.api.model.Questionnaire
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
@@ -20,7 +18,7 @@ class QuestionnaireJdbcTemplateRepo(
         val params = MapSqlParameterSource()
         params.addValue("pageSize", pageable.pageSize)
         params.addValue("title", title)
-        params.addValue("offset", pageable.pageSize*pageable.pageNumber)
+        params.addValue("offset", pageable.pageSize * pageable.pageNumber)
         jdbcTemplate.query(
             getQueryBySortType(pageable.sort.toString().substringAfter(": ")),
             params
@@ -49,7 +47,7 @@ class QuestionnaireJdbcTemplateRepo(
         return jdbcTemplate.queryForObject(
             query,
             MapSqlParameterSource("title", title)
-        ) {rs: ResultSet, _: Int ->
+        ) { rs: ResultSet, _: Int ->
             rs.getLong("questionnaireCount")
         } ?: 0
     }

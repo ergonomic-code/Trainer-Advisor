@@ -24,6 +24,7 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
             "db/questionnaires/questionnaires-insert-single-questionnaire.sql" to "dataSource"
         )
     }
+
     @Test
     fun `QYoga can save answer image`() {
         Given {
@@ -42,6 +43,7 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
             }
         }
     }
+
     @Test
     fun `QYoga can't add image if questionnaire not in session`() {
         Given {
@@ -60,6 +62,7 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
             }
         }
     }
+
     @Test
     fun `QYoga can delete question image`() {
         Given {
@@ -74,6 +77,7 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
             extract().body().asString() shouldBe ""
         }
     }
+
     @Test
     fun `QYoga can't delete image if questionnaire not in session`() {
         Given {
@@ -90,6 +94,7 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
             }
         }
     }
+
     @Test
     fun `QYoga can add answer to question`() {
         Given {
@@ -114,6 +119,7 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
             }
         }
     }
+
     @Test
     fun `QYoga can't add answer if questionnaire not in session`() {
         Given {
@@ -152,6 +158,7 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
             }
         }
     }
+
     @Test
     fun `QYoga can delete answer from question`() {
         Given {
@@ -172,6 +179,7 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
             }
         }
     }
+
     @Test
     fun `QYoga can't delete answer if questionnaire not in session`() {
         Given {
@@ -188,6 +196,7 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
             }
         }
     }
+
     @Test
     fun `QYoga can't delete answer to question if it not exists in questionnaire`() {
         Given {
@@ -209,6 +218,7 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
             }
         }
     }
+
     @Test
     fun `QYoga can update answer`() {
         Given {
@@ -221,6 +231,7 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
             extract().statusCode().compareTo(200) shouldBe 0
         }
     }
+
     @Test
     fun `QYoga can't change answer if questionnaire not in session`() {
         Given {
@@ -238,6 +249,7 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
             }
         }
     }
+
     @Test
     fun `QYoga can't change answer to question if it not exists in questionnaire`() {
         Given {
@@ -260,6 +272,7 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
             }
         }
     }
+
     @Test
     fun `QYoga can't change answer to question if it not exists in question`() {
         Given {
@@ -282,6 +295,7 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
             }
         }
     }
+
     @Test
     fun `QYoga can change answer fragment to set answer score`() {
         Given {
@@ -298,6 +312,7 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
             }
         }
     }
+
     @Test
     fun `QYoga can't change answer fragment to set answer score if questionnaire not in session`() {
         Given {
@@ -338,6 +353,7 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
             }
         }
     }
+
     @Test
     fun `QYoga can change answer fragment to change answer fields after set scores`() {
         Given {
@@ -359,6 +375,7 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
             }
         }
     }
+
     @Test
     fun `QYoga can't change answer fragment to change answer fields if questionnaire not in session`() {
         Given {

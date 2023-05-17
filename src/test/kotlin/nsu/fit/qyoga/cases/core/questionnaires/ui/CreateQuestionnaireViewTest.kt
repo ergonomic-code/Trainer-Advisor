@@ -39,8 +39,8 @@ class CreateQuestionnaireViewTest : QYogaAppTestBase() {
                 }
                 node("#question0") { notExists() }
                 node("#question0Header") { notExists() }
-                node("#question0Body") { notExists()  }
-                node("#answer0") { notExists()  }
+                node("#question0Body") { notExists() }
+                node("#answer0") { notExists() }
             }
         }
     }
