@@ -4,7 +4,7 @@ spring:
   datasource:
     username: postgres
     password: P@ssw0rd
-    url: jdbc:postgresql://localhost:5433/qyoga
+    url: jdbc:postgresql://localhost:54501/qyoga
   servlet:
     multipart:
       max-file-size: 1MB
@@ -17,4 +17,3 @@ server:
     session:
       cookie:
         name: JSESSIONID
-#54501
