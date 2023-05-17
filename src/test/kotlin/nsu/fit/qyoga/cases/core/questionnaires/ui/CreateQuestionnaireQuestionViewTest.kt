@@ -48,6 +48,28 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
     }
 
     @Test
+    fun `QYoga can add question to questionnaire if there are no question`() {
+        Given {
+            authorized()
+        } When {
+            get("/therapist/questionnaires/new")
+            delete("/therapist/questionnaires/edit/question/0")
+            get("/therapist/questionnaires/edit/add-question")
+        } Then {
+            val body = Jsoup.parse(extract().body().asString())
+            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
+                node("#question0") { exists() }
+                node("#question0Header") { exists() }
+                node("#question0Body") { exists() }
+                node("#answer0") { exists() }
+                node("#question1") { notExists() }
+                node("#question1Header") { notExists() }
+                node("#question1Body") { notExists() }
+            }
+        }
+    }
+
+    @Test
     fun `QYoga can't add question if questionnaire not in session`() {
         Given {
             authorized()
@@ -106,6 +128,7 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
             authorized()
         } When {
             get("/therapist/questionnaires/new")
+            get("/therapist/questionnaires/edit/add-question")
             param("id", "1")
             param("title", "test")
             param("question[0].id", "0")
@@ -115,6 +138,13 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
             param("question[0].answers[0].questionId", "1")
             param("question[0].answers[0].score", "1")
             param("question[0].answers[0].title", "answer title")
+            param("question[1].id", "0")
+            param("question[1].title", "questions title")
+            param("question[1].questionType", "SEVERAL")
+            param("question[1].answers[0].id", "1")
+            param("question[1].answers[0].questionId", "1")
+            param("question[1].answers[0].score", "1")
+            param("question[1].answers[0].title", "answer title")
             post("/therapist/questionnaires/edit/question/0/change-type")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
@@ -182,6 +212,7 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
             authorized()
         } When {
             get("/therapist/questionnaires/new")
+            get("/therapist/questionnaires/edit/add-question")
             param("id", "1")
             param("title", "test")
             param("question[0].id", "0")
@@ -190,6 +221,12 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
             param("question[0].answers[0].id", "0")
             param("question[0].answers[0].score", "1")
             param("question[0].answers[0].title", "answer title")
+            param("question[1].id", "0")
+            param("question[1].title", "questions title")
+            param("question[1].questionType", "SEVERAL")
+            param("question[1].answers[0].id", "0")
+            param("question[1].answers[0].score", "1")
+            param("question[1].answers[0].title", "answer title")
             post("/therapist/questionnaires/edit/question/0/update")
         } Then {
             extract().statusCode().compareTo(200) shouldBe 0
@@ -251,6 +288,7 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
             authorized()
         } When {
             get("/therapist/questionnaires/new")
+            get("/therapist/questionnaires/edit/add-question")
             contentType(ContentType.MULTIPART)
             multiPart(File("src/test/resources/images/testImage.png"))
             post("/therapist/questionnaires/edit/question/0/add-image")
@@ -289,6 +327,7 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
             authorized()
         } When {
             get("/therapist/questionnaires/new")
+            get("/therapist/questionnaires/edit/add-question")
             contentType(ContentType.MULTIPART)
             multiPart(File("src/test/resources/images/testImage.png"))
             post("/therapist/questionnaires/edit/question/0/add-image")
