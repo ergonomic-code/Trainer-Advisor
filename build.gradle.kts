@@ -76,6 +76,7 @@ tasks.withType<KotlinCompile> {
 }
 
 tasks.withType<Test> {
+	this.systemProperty("file.encoding", "utf-8")
 	useJUnitPlatform()
 }
 

@@ -212,6 +212,50 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
     }
 
     @Test
+    fun `QYoga ignore delete answer if it not in question`() {
+        Given {
+            authorized()
+        } When {
+            get("/therapist/questionnaires/new")
+            delete("/therapist/questionnaires/edit/question/0/answer/-1")
+        } Then {
+            val body = Jsoup.parse(extract().body().asString())
+            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
+                node("#question0Header") { exists() }
+                node("#question0Body") { exists() }
+
+                node("#answer0") { exists() }
+                node(".answer0Id") { exists() }
+                node(".answer0QuestionId") { exists() }
+                node(".answer0Score") { exists() }
+            }
+        }
+    }
+
+    @Test
+    fun `QYoga can delete answer from question answer list`() {
+        Given {
+            authorized()
+        } When {
+            get("/therapist/questionnaires/new")
+            get("/therapist/questionnaires/edit/question/0/addAnswer")
+            delete("/therapist/questionnaires/edit/question/0/answer/0")
+        } Then {
+            val body = Jsoup.parse(extract().body().asString())
+            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
+                node("#question0Header") { exists() }
+                node("#question0Body") { exists() }
+
+                node("#answer0") { notExists() }
+
+                node("#answer1") { exists() }
+                node(".answer0Id") { exists() }
+                node(".answer0Score") { exists() }
+            }
+        }
+    }
+
+    @Test
     fun `QYoga can't delete answer if questionnaire not in session`() {
         Given {
             authorized()
@@ -251,13 +295,26 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
     }
 
     @Test
-    fun `QYoga can update answer`() {
+    fun `QYoga can update answer in list of answers`() {
         Given {
             authorized()
         } When {
             get("/therapist/questionnaires/new")
             get("/therapist/questionnaires/edit/add-question")
             get("/therapist/questionnaires/edit/question/0/addAnswer")
+            params(setParams())
+            post("/therapist/questionnaires/edit/question/0/answer/0/update")
+        } Then {
+            extract().statusCode().compareTo(200) shouldBe 0
+        }
+    }
+
+    @Test
+    fun `QYoga can update answer`() {
+        Given {
+            authorized()
+        } When {
+            get("/therapist/questionnaires/new")
             params(setParams())
             post("/therapist/questionnaires/edit/question/0/answer/0/update")
         } Then {

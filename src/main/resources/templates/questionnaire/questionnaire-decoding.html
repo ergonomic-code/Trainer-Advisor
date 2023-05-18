@@ -75,10 +75,10 @@
                                     </thead>
                                     <tbody id="tableBody" style="gap: 10px">
                                         <tr th:each="result, i : ${session.questionnaire.decoding}" th:fragment="tableDecoding" class="decodingRow">
-                                            <input class="decodingId" type="hidden" th:value="${result.id}" th:name="|decoding[${i.index}].id|">
+                                            <input th:id="|decoding${i.index}Id|" type="hidden" th:value="${result.id}" th:name="|decoding[${i.index}].id|">
                                             <td style="text-align: center">
                                                 <input type="number" min="0" oninput="validity.valid||(value='');"
-                                                       class="decodingLowerBound" style="border-radius: 5px; width: 50%; text-align: center"
+                                                       th:id="|decoding${i.index}LowerBound|" style="border-radius: 5px; width: 50%; text-align: center"
                                                        th:value="${result.lowerBound}"
                                                        th:name="|decoding[${i.index}].lowerBound|"
                                                        hx-trigger="keyup changed delay:500ms, search"
@@ -89,7 +89,7 @@
                                             </td>
                                             <td style="text-align: center">
                                                 <input type="number" min="0" oninput="validity.valid||(value='');"
-                                                       class="decodingUpperBound" style="border-radius: 5px; width: 50%; text-align: center"
+                                                       th:id="|decoding${i.index}UpperBound|" style="border-radius: 5px; width: 50%; text-align: center"
                                                        th:value="${result.upperBound}"
                                                        th:name="|decoding[${i.index}].upperBound|"
                                                        hx-trigger="keyup changed delay:500ms, search"
@@ -100,7 +100,7 @@
                                             </td>
                                             <td style="text-align: center">
                                                 <input type="text" style="border-radius: 5px; width: 100%"
-                                                       class="decodingResult"
+                                                       th:id="|decoding${i.index}Result|"
                                                        th:value="${result.result}"
                                                        th:name="|decoding[${i.index}].result|"
                                                        hx-trigger="keyup changed delay:500ms, search"

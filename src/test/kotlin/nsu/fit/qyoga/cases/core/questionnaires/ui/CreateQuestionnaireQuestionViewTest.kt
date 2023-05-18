@@ -106,6 +106,48 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
     }
 
     @Test
+    fun `QYoga can delete question from questionnaire question list`() {
+        Given {
+            authorized()
+        } When {
+            get("/therapist/questionnaires/new")
+            get("/therapist/questionnaires/edit/add-question")
+            delete("/therapist/questionnaires/edit/question/0")
+            get("/therapist/questionnaires/edit")
+        } Then {
+            val body = Jsoup.parse(extract().body().asString())
+            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
+                node("#question0") { notExists() }
+                node("#question0Header") { notExists() }
+                node("#question0Body") { notExists() }
+
+                node("#question1") { exists() }
+                node("#question1Header") { exists() }
+                node("#question1Body") { exists() }
+            }
+        }
+    }
+
+    @Test
+    fun `QYoga ignore delete question if it not in questionnaire`() {
+        Given {
+            authorized()
+        } When {
+            get("/therapist/questionnaires/new")
+            delete("/therapist/questionnaires/edit/question/-1")
+            get("/therapist/questionnaires/edit")
+        } Then {
+            val body = Jsoup.parse(extract().body().asString())
+            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
+                node("#question0") { exists() }
+                node("#question0Header") { exists() }
+                node("#question0Body") { exists() }
+                node("#answer0") { exists() }
+            }
+        }
+    }
+
+    @Test
     fun `QYoga can't delete question if questionnaire not in session`() {
         Given {
             authorized()

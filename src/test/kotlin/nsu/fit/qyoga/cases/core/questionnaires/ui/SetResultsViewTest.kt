@@ -80,7 +80,7 @@ class SetResultsViewTest : QYogaAppTestBase() {
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node(".decodingId") {
+                node("#decoding0Id") {
                     exists()
                     attribute("type") { hasText("hidden") }
                     attribute("name") { hasText("decoding[0].id") }
@@ -91,20 +91,55 @@ class SetResultsViewTest : QYogaAppTestBase() {
                     attribute("hx-delete") { hasText("/therapist/questionnaires/setResult/0") }
                     hasText("Удалить")
                 }
-                node(".decodingLowerBound") {
+                node("#decoding0LowerBound") {
                     exists()
                     attribute("type") { hasText("number") }
                     attribute("name") { hasText("decoding[0].lowerBound") }
                 }
-                node(".decodingUpperBound") {
+                node("#decoding0UpperBound") {
                     exists()
                     attribute("type") { hasText("number") }
                     attribute("name") { hasText("decoding[0].upperBound") }
 
                 }
-                node(".decodingResult") {
+                node("#decoding0Result") {
                     exists()
                     attribute("name") { hasText("decoding[0].result") }
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `QYoga will add decoding with next id on add`() {
+        Given {
+            authorized()
+        } When {
+            get("/therapist/questionnaires/new")
+            get("/therapist/questionnaires/setResult/addResult")
+            get("/therapist/questionnaires/setResult/addResult")
+        } Then {
+            val body = Jsoup.parse(extract().body().asString())
+            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
+                node("#decoding1Id") {
+                    exists()
+                    attribute("type") { hasText("hidden") }
+                    attribute("name") { hasText("decoding[1].id") }
+                }
+                node("#decoding1LowerBound") {
+                    exists()
+                    attribute("type") { hasText("number") }
+                    attribute("name") { hasText("decoding[1].lowerBound") }
+                }
+                node("#decoding1UpperBound") {
+                    exists()
+                    attribute("type") { hasText("number") }
+                    attribute("name") { hasText("decoding[1].upperBound") }
+
+                }
+                node("#decoding1Result") {
+                    exists()
+                    attribute("name") { hasText("decoding[1].result") }
                 }
             }
         }
@@ -139,7 +174,7 @@ class SetResultsViewTest : QYogaAppTestBase() {
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node(".decodingId") {
+                node("#decoding0Id") {
                     exists()
                     attribute("type") { hasText("hidden") }
                     attribute("name") { hasText("decoding[0].id") }
@@ -150,18 +185,18 @@ class SetResultsViewTest : QYogaAppTestBase() {
                     attribute("hx-delete") { hasText("/therapist/questionnaires/setResult/1") }
                     hasText("Удалить")
                 }
-                node(".decodingLowerBound") {
+                node("#decoding0LowerBound") {
                     exists()
                     attribute("type") { hasText("number") }
                     attribute("name") { hasText("decoding[0].lowerBound") }
                 }
-                node(".decodingUpperBound") {
+                node("#decoding0UpperBound") {
                     exists()
                     attribute("type") { hasText("number") }
                     attribute("name") { hasText("decoding[0].upperBound") }
 
                 }
-                node(".decodingResult") {
+                node("#decoding0Result") {
                     exists()
                     attribute("name") { hasText("decoding[0].result") }
                 }
