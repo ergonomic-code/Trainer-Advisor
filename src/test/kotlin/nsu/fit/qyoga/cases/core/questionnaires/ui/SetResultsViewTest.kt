@@ -198,6 +198,11 @@ class SetResultsViewTest : QYogaAppTestBase() {
             post("/therapist/questionnaires/setResult/0/update")
         } Then {
             extract().statusCode().compareTo(200) shouldBe 0
+            val body = Jsoup.parse(extract().body().asString())
+            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
+                node("#reload-page-btn") { notExists() }
+                node(".error-text") { notExists() }
+            }
         }
     }
 
@@ -280,10 +285,10 @@ class SetResultsViewTest : QYogaAppTestBase() {
             "question[0].id" to "0",
             "question[0].title" to "questions title",
             "question[0].questionType" to "SEVERAL",
-            "question[0].decoding[0].id" to "0",
-            "question[0].decoding[0].lowerBound" to "1",
-            "question[0].decoding[0].upperBound" to "10",
-            "question[0].decoding[0].result" to "result"
+            "decoding[0].id" to "0",
+            "decoding[0].lowerBound" to "1",
+            "decoding[0].upperBound" to "10",
+            "decoding[0].result" to "result"
         )
     }
 }

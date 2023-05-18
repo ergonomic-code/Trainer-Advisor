@@ -61,7 +61,7 @@ class QuestionnairesResultsController(
     @ResponseBody
     fun updateResultsTableRow(
         @PathVariable resultId: Long,
-        @ModelAttribute("questionnaire") questionnaireDto: CreateQuestionnaireDto,
+        @ModelAttribute("questionnaire") questionnaireDto: CreateQuestionnaireDto
     ): HttpStatus {
         val questionnaire = getQuestionnaireFromSession()
         val changedDecoding = questionnaireDto.decoding.filter { it.id == resultId }.getOrNull(0)
@@ -78,7 +78,7 @@ class QuestionnairesResultsController(
      */
     @PostMapping("/edit/setResult")
     fun saveResultsTable(
-        @ModelAttribute("questionnaire") questionnaireDto: CreateQuestionnaireDto,
+        @ModelAttribute("questionnaire") questionnaireDto: CreateQuestionnaireDto
     ): String {
         val questionnaire = getQuestionnaireFromSession()
         questionnaireService.saveQuestionnaire(questionnaire.copy(decoding = questionnaireDto.decoding))
