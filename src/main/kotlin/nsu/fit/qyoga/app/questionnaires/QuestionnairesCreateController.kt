@@ -2,6 +2,7 @@ package nsu.fit.qyoga.app.questionnaires
 
 import jakarta.servlet.http.HttpSession
 import nsu.fit.qyoga.core.questionnaires.api.dtos.*
+import nsu.fit.qyoga.core.questionnaires.api.errors.QuestionnaireException
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireService
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
@@ -87,7 +88,7 @@ class QuestionnairesCreateController(
         @RequestParam title: String
     ): HttpStatus {
         val questionnaire = getQuestionnaireFromSession()
-            ?: return HttpStatus.NOT_FOUND
+            ?: throw QuestionnaireException("Ошибка извлечения опросника из сессии")
         httpSession.setAttribute(questionnaireFieldName, questionnaire.copy(title = title))
         return HttpStatus.OK
     }

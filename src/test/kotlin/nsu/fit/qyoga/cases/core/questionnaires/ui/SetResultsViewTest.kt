@@ -193,6 +193,7 @@ class SetResultsViewTest : QYogaAppTestBase() {
         } When {
             get("/therapist/questionnaires/new")
             get("/therapist/questionnaires/setResult/addResult")
+            get("/therapist/questionnaires/setResult/addResult")
             params(setParams())
             post("/therapist/questionnaires/setResult/0/update")
         } Then {

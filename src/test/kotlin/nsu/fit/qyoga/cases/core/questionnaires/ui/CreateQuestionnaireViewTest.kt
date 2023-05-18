@@ -80,6 +80,25 @@ class CreateQuestionnaireViewTest : QYogaAppTestBase() {
     }
 
     @Test
+    fun `QYoga can't update questionnaire title if it not in session`() {
+        Given {
+            authorized()
+        } When {
+            param("id", 1)
+            param("title", "asd")
+            post("/therapist/questionnaires/edit/title")
+        } Then {
+            val body = Jsoup.parse(extract().body().asString())
+            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
+                node("#layoutSidenav_content") {
+                    exists()
+                    hasText("Ошибка извлечения опросника из сессии")
+                }
+            }
+        }
+    }
+
+    @Test
     fun `QYoga can get questionnaire edit page`() {
         Given {
             authorized()
