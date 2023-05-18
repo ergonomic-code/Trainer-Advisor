@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-<head th:include="~{fragments/header::header (titleName=${'Список упражнений'})}">
+<head>
+    <div th:replace="~{fragments/header.html}"></div>
+    <title>Список упражнений</title>
 </head>
+
 <body class="sb-nav-fixed">
 
 <div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>

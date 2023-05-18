@@ -118,6 +118,9 @@ formatting:
   MaximumLineLength:
     active: false
 
+  Indentation:
+    active: false
+
   FinalNewline:
     active: false
 

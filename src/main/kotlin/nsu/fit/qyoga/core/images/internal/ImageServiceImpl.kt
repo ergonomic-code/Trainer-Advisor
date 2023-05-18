@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service
 class ImageServiceImpl(
     private val imageJdbcTemplateRepo: ImageJdbcTemplateRepo
 ) : ImageService {
+
     override fun uploadImage(image: Image): Long {
         return imageJdbcTemplateRepo.save(image)
     }
@@ -27,4 +28,5 @@ class ImageServiceImpl(
     override fun getImageList(idList: List<Long>): List<Image> {
         return imageJdbcTemplateRepo.findImageList(idList)
     }
+
 }

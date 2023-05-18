@@ -1,4 +1,4 @@
-package nsu.fit.qyoga.app.therapist.exercises
+package nsu.fit.qyoga.core.exercises.api.dtos
 
 data class ExerciseStepDto(
     var description: String = "",

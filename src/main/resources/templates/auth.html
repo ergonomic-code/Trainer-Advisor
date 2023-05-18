@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-<head th:include="~{fragments/header::header (titleName=${'Вход в систему'})}">
+<head>
+    <div th:replace="~{fragments/header.html}"></div>
+    <title>Вход в систему</title>
+</head>
+
 <body class="login-body">
 <style>
     .login-body {
@@ -20,7 +24,8 @@
                                 <form action="/login" id="loginForm" method="post">
                                     <div class="form-floating mb-3">
                                         <input class="form-control" id="inputUsername" name="username"
-                                               placeholder="username" required th:classappend="${loginError} ? 'is-invalid' : ''"
+                                               placeholder="username" required
+                                               th:classappend="${loginError} ? 'is-invalid' : ''"
                                                type="text"
                                         />
                                         <label for="inputUsername" id="usernameLabel">Email</label>
@@ -30,7 +35,8 @@
                                     </div>
                                     <div class="form-floating mb-3">
                                         <input class="form-control" id="inputPassword" name="password"
-                                               placeholder="password" required th:classappend="${passwordError} ? 'is-invalid' : ''"
+                                               placeholder="password" required
+                                               th:classappend="${passwordError} ? 'is-invalid' : ''"
                                                type="password"
                                         />
                                         <label for="inputPassword">Password</label>

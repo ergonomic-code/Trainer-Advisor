@@ -65,9 +65,9 @@ class ImagesServiceTests(
     fun `QYoga can find image list`() {
         val multipartFile = getMultipartFileFromInputStream(FileInputStream(file))
         val fileByteArr = multipartFile.bytes
-        imageService.uploadImage(multipartFileToImage(multipartFile))
-        imageService.uploadImage(multipartFileToImage(multipartFile))
-        val imageList = imageService.getImageList(listOf(1, 1, 2))
+        val id1 = imageService.uploadImage(multipartFileToImage(multipartFile))
+        val id2 = imageService.uploadImage(multipartFileToImage(multipartFile))
+        val imageList = imageService.getImageList(listOf(id1, id1, id2))
         imageList.size shouldBe 2
         for (image in imageList) {
             image.data shouldBe fileByteArr
@@ -94,12 +94,12 @@ class ImagesServiceTests(
         )
     }
 
-    fun multipartFileToImage(multipartFile: MultipartFile): Image {
+    private fun multipartFileToImage(multipartFile: MultipartFile): Image {
         return Image(
-            name = multipartFile.originalFilename ?: "",
-            mediaType = multipartFile.contentType ?: "application/octet-stream",
-            size = multipartFile.size,
-            data = multipartFile.bytes
+                name = multipartFile.originalFilename ?: "",
+                mediaType = multipartFile.contentType ?: "application/octet-stream",
+                size = multipartFile.size,
+                data = multipartFile.bytes
         )
     }
 }

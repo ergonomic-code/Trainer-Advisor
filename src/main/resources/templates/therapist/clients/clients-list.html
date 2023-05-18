@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
-<head th:include="~{fragments/header::header (titleName=${'Список клиентов'})}">
+<head>
+    <div th:replace="~{fragments/header.html}"></div>
+    <title>Список клиентов</title>
 </head>
 
 <body class="sb-nav-fixed">
