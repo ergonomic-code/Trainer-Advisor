@@ -158,7 +158,11 @@ class QuestionnairesQuestionController(
             ?: throw ElementNotFound("Выбранный вопрос не найден")
         val questionList = questionnaire.question.map {
             if (it.id == questionId) {
-                changedQuestion
+                it.copy(
+                    title = changedQuestion.title,
+                    questionType = changedQuestion.questionType,
+                    answers = changedQuestion.answers
+                )
             } else {
                 it
             }

@@ -332,12 +332,12 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
                 mutableMapOf(
                     "id" to "1",
                     "title" to "test",
-                    "question[0].answers[1].id" to "0",
+                    "question[0].answers[1].id" to "-1",
                     "question[0].answers[1].score" to "1",
                     "question[0].answers[1].title" to "answer title"
                 )
             )
-            post("/therapist/questionnaires/edit/question/0/answer/1/update")
+            post("/therapist/questionnaires/edit/question/0/answer/-1/update")
         } Then {
             extract().statusCode().compareTo(200) shouldBe 0
         }
