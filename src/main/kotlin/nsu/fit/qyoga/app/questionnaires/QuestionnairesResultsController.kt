@@ -48,6 +48,7 @@ class QuestionnairesResultsController(
     fun addResultToQuestionnaire(): String {
         val questionnaire = getQuestionnaireFromSession()
         val lastId = if (questionnaire.decoding.isEmpty()) 0 else questionnaire.decoding.last().id + 1
+        println(lastId)
         setQuestionnaireInSession(
             questionnaire.copy(decoding = (questionnaire.decoding + DecodingDto(id = lastId)).toMutableList())
         )

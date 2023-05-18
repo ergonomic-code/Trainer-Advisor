@@ -29,7 +29,7 @@ class QuestionnairesCreateController(
                     id = 0,
                     title = "",
                     question = mutableListOf(CreateQuestionDto(answers = listOf(CreateAnswerDto()))),
-                    decoding = mutableListOf(DecodingDto())
+                    decoding = mutableListOf()
                 )
             )
         }

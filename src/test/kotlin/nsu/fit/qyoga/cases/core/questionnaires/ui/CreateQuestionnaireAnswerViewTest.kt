@@ -323,6 +323,26 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
     }
 
     @Test
+    fun `QYoga ignore update answer if it not exists in question from session`() {
+        Given {
+            authorized()
+        } When {
+            get("/therapist/questionnaires/new")
+            params(setParams())
+            params(
+                mutableMapOf(
+                    "question[0].answers[0].id" to "0",
+                    "question[0].answers[0].score" to "1",
+                    "question[0].answers[0].title" to "answer title"
+                )
+            )
+            post("/therapist/questionnaires/edit/question/0/answer/1/update")
+        } Then {
+            extract().statusCode().compareTo(200) shouldBe 0
+        }
+    }
+
+    @Test
     fun `QYoga can't change answer if questionnaire not in session`() {
         Given {
             authorized()
