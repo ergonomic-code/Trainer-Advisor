@@ -328,12 +328,13 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
             authorized()
         } When {
             get("/therapist/questionnaires/new")
-            params(setParams())
             params(
                 mutableMapOf(
-                    "question[0].answers[0].id" to "0",
-                    "question[0].answers[0].score" to "1",
-                    "question[0].answers[0].title" to "answer title"
+                    "id" to "1",
+                    "title" to "test",
+                    "question[0].answers[1].id" to "0",
+                    "question[0].answers[1].score" to "1",
+                    "question[0].answers[1].title" to "answer title"
                 )
             )
             post("/therapist/questionnaires/edit/question/0/answer/1/update")

@@ -76,6 +76,7 @@ class SetResultsViewTest : QYogaAppTestBase() {
             authorized()
         } When {
             get("/therapist/questionnaires/new")
+            delete("/therapist/questionnaires/setResult/0")
             get("/therapist/questionnaires/setResult/addResult")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
@@ -116,6 +117,7 @@ class SetResultsViewTest : QYogaAppTestBase() {
             authorized()
         } When {
             get("/therapist/questionnaires/new")
+            delete("/therapist/questionnaires/setResult/0")
             get("/therapist/questionnaires/setResult/addResult")
             get("/therapist/questionnaires/setResult/addResult")
         } Then {

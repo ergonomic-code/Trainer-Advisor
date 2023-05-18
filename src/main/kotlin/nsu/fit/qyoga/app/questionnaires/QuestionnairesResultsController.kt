@@ -48,7 +48,6 @@ class QuestionnairesResultsController(
     fun addResultToQuestionnaire(): String {
         val questionnaire = getQuestionnaireFromSession()
         val lastId = if (questionnaire.decoding.isEmpty()) 0 else questionnaire.decoding.last().id + 1
-        println(lastId)
         setQuestionnaireInSession(
             questionnaire.copy(decoding = (questionnaire.decoding + DecodingDto(id = lastId)).toMutableList())
         )
@@ -84,7 +83,7 @@ class QuestionnairesResultsController(
         val questionnaire = getQuestionnaireFromSession()
         questionnaireService.saveQuestionnaire(questionnaire.copy(decoding = questionnaireDto.decoding))
         httpSession.removeAttribute(questionnaireFieldName)
-        return "redirect:/questionnaires"
+        return "redirect:/therapist/questionnaires"
     }
 
     fun getQuestionnaireFromSession(): CreateQuestionnaireDto {
