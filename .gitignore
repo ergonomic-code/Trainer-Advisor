@@ -13,3 +13,4 @@ deploy/server/hosts
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
+/build/

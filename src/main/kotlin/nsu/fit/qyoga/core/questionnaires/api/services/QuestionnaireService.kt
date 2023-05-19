@@ -1,5 +1,6 @@
-package nsu.fit.qyoga.core.questionnaires.api
+package nsu.fit.qyoga.core.questionnaires.api.services
 
+import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionnaireDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.QuestionnaireSearchDto
 import org.springframework.data.domain.Page
@@ -10,4 +11,8 @@ interface QuestionnaireService {
         questionnaireSearchDto: QuestionnaireSearchDto,
         pageable: Pageable
     ): Page<QuestionnaireDto>
+
+    fun saveQuestionnaire(createQuestionnaireDto: CreateQuestionnaireDto): Long
+    fun findQuestionnaireWithQuestions(id: Long): CreateQuestionnaireDto
+
 }

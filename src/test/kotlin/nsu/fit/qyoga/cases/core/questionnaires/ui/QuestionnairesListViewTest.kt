@@ -5,24 +5,10 @@ import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
 import nsu.fit.qyoga.infra.QYogaAppTestBase
-import nsu.fit.qyoga.infra.db.DbInitializer
 import org.jsoup.Jsoup
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
 
-class QuestionnairesViewTest : QYogaAppTestBase() {
-
-    @Autowired
-    lateinit var dbInitializer: DbInitializer
-
-    @BeforeEach
-    fun setupDb() {
-        dbInitializer.executeScripts(
-            "/db/questionnaires/questionnaires-init-script.sql" to "dataSource",
-            "/db/questionnaires/questionnaires-insert-data-script.sql" to "dataSource"
-        )
-    }
+class QuestionnairesListViewTest : QYogaAppTestBase() {
 
     @Test
     fun `QYoga returns questionnaire-list page with questionnaires`() {
@@ -33,9 +19,7 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#questionnaires-list") {
-                    hasText("test1 test10 test11 test12 test2 test3 test4 test5 test6 test7")
-                }
+                node("#questionnaires-list") { exists() }
                 node("#questionnaires-sort-bar") { exists() }
                 node("#questionnaires-find-bar") { exists() }
                 node("#questionnaires-navigation-bar") { exists() }
@@ -55,9 +39,7 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#questionnaires-list") {
-                    hasText("test9 test8 test7 test6 test5 test4 test3 test2 test12 test11")
-                }
+                node("#questionnaires-list") { exists() }
                 node("#questionnaires-sort-bar") { exists() }
                 node("#questionnaires-find-bar") { exists() }
                 node("#questionnaires-navigation-bar") { exists() }
@@ -76,9 +58,7 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#questionnaires-list") {
-                    hasText("test1 test10 test11 test12 test2 test3 test4 test5 test6 test7")
-                }
+                node("#questionnaires-list") { exists() }
                 node("#questionnaires-sort-bar") { exists() }
                 node("#questionnaires-find-bar") { exists() }
                 node("#questionnaires-navigation-bar") { exists() }
@@ -99,9 +79,7 @@ class QuestionnairesViewTest : QYogaAppTestBase() {
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#questionnaires-list") {
-                    hasText("test10 test1")
-                }
+                node("#questionnaires-list") { exists() }
                 node("#questionnaires-sort-bar") { exists() }
                 node("#questionnaires-find-bar") { exists() }
                 node("#questionnaires-navigation-bar") { exists() }

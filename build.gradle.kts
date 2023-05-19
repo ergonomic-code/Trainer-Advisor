@@ -34,7 +34,7 @@ dependencies {
 	implementation("jakarta.validation:jakarta.validation-api:3.0.2")
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 	implementation("org.postgresql:postgresql:42.5.1")
-
+	implementation("org.springframework.session:spring-session-jdbc:3.0.1")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.testcontainers:junit-jupiter")
@@ -76,6 +76,7 @@ tasks.withType<KotlinCompile> {
 }
 
 tasks.withType<Test> {
+	this.systemProperty("file.encoding", "utf-8")
 	useJUnitPlatform()
 }
 
