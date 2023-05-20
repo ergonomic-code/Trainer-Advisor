@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
-<head th:include="~{fragments/header::header (titleName=${'Новое упражнение'})}">
+<head>
+    <div th:replace="~{fragments/header.html}"></div>
+    <title>Новое упражнение</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="/styles/therapist/create-exercise.css" rel="stylesheet"/>
 </head>
 <body class="sb-nav-fixed">
 
@@ -13,12 +17,10 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container">
-                <h1 class="mt-4">Упражнения</h1>
+                <h1 class="mt-4">Новое упражнение</h1>
 
                 <form class="mt-4"
-                      hx-post="/exercises/create" id="createExerciseForm" x-data="{
-                                  title: ''
-                              }">
+                      enctype="multipart/form-data" hx-post="/therapist/exercises/create" id="createExerciseForm">
                     <div class="form-group row mb-3">
                         <label class="col-sm-2 col-form-label" for="title">Название упражнения</label>
                         <div class="col-sm-7">
@@ -71,38 +73,101 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group row mb-3 col-sm-9">
-                        <label for="description">Описание:</label>
-                        <textarea class="form-control" id="description" name="description"
-                                  placeholder="Глубоко вдохните..."
-                                  required
-                                  rows="10"></textarea>
+                    <div class="form-group row mb-3">
+                        <div class="col-sm-9">
+                            <label for="description">Описание:</label>
+                            <textarea class="form-control" id="description" name="description"
+                                      placeholder="Глубоко вдохните..."
+                                      required
+                                      rows="10"></textarea>
+                        </div>
                     </div>
 
-                    <fieldset class="mb-3 row col-sm-9 justify-content-center" id="steps" x-data="{steps: ['']}">
-                        <legend>Шаги:</legend>
-                        <template x-for="(step, idx) in steps">
-                            <div class="form-group mb-3 g-0">
-                                <input :name="`steps[${idx}].id`" type="hidden">
-                                <input :name="`steps[${idx}].imageId`" type="hidden">
-                                <img class="d-inline" src="/img/no-image.png" width="100px">
-                                <textarea :name="`steps[${idx}].description`" class="form-control"
-                                          placeholder="Глубоко вдохните..."
-                                          rows="10"
-                                          x-model="steps[idx]">
-                            </textarea>
-                            </div>
-                        </template>
-                        <input @click="steps.push('')" class="btn btn-secondary mt-3 mb-4 col-sm-8 text-center" type="button"
-                               value="+">
-                    </fieldset>
+                    <div class="row">
+                        <script>
+                            function fileToDataUrl(event, callback) {
+                                if (!event.target.files.length) return
 
-                    <input class="btn btn-primary" type="submit" value="Сохранить">
+                                let file = event.target.files[0],
+                                    reader = new FileReader()
+
+                                reader.readAsDataURL(file)
+                                reader.onload = e => callback(e.target.result)
+                            }
+
+                            const noImage = "/img/no-image.png";
+
+                            function exerciseStep() {
+                                return {
+                                    description: "",
+                                    imageUrl: noImage,
+                                    fileName: null,
+                                    fileChosen(event) {
+                                        fileToDataUrl(event, src => this.imageUrl = src)
+                                    },
+                                    removeImage() {
+                                        this.imageUrl = noImage
+                                        this.fileName = null
+                                    }
+                                }
+                            }
+                        </script>
+                        <fieldset class="mb-3 col-sm-9 justify-content-center" id="steps"
+                                  x-data="{steps: [exerciseStep()]}">
+                            <template x-for="(step, idx) in steps">
+                                <div class="form-group mb-3 g-0">
+                                    <h5 class="" x-text="`Шаг ${idx + 1}`"></h5>
+                                    <input :name="`steps[${idx}].id`" type="hidden">
+                                    <input :name="`steps[${idx}].imageId`" type="hidden">
+                                    <div class="row align-items-center" x-data="step">
+                                        <div class="col-sm-2 d-table-cell">
+                                            <label :for="`stepImageInput${idx}`" class="image-container">
+                                                <i
+                                                        @click.prevent="removeImage" aria-hidden="true"
+                                                        class="fa fa-trash overlay"
+                                                        x-show.important="imageUrl != '/img/no-image.png'"
+                                                ></i>
+                                                <img :id="`stepImage${idx}`" :src="step.imageUrl"
+                                                     class="img-fluid mb-3">
+                                            </label>
+                                            <input :id="`stepImageInput${idx}`" :name="`stepImage${idx}`"
+                                                   @change="fileChosen"
+                                                   accept="image/*" class="form-control d-none"
+                                                   type="file"
+                                                   x-model="fileName"
+                                            />
+                                        </div>
+                                        <div class="col-sm-10">
+                                    <textarea :name="`steps[${idx}].description`" class="form-control "
+                                              placeholder="Глубоко вдохните..."
+                                              rows="10"
+                                              x-model="step.description">
+                                    </textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row col-sm-12 justify-content-end">
+                                        <input @click="steps.splice(idx, 1)"
+                                               class="btn btn-dark mt-3 col-sm-2 float-end"
+                                               value="Удалить шаг">
+                                    </div>
+                                    <hr>
+                                </div>
+                            </template>
+                            <input @click="steps.push(exerciseStep())"
+                                   class="btn btn-secondary mt-3 mb-4"
+                                   type="button"
+                                   value="Добавить шаг">
+                        </fieldset>
+
+                        <div class="row col-sm-9 justify-content-end">
+                            <input class="btn btn-secondary col-sm-2" type="submit" value="Сохранить">
+                        </div>
+                    </div>
                 </form>
             </div>
 
         </main>
-        <footer class="py-4 bg-light mt-auto" th:insert="~{/fragments/footer.html :: footer}"></footer>
+        <footer class="py-4 bg-light mt-auto" th:insert="~{fragments/footer.html}"></footer>
 
     </div>
 </div>

@@ -11,5 +11,9 @@ import org.springframework.data.relational.core.mapping.Table
 @Suppress("UseDataClass")
 @Table("exercise_purposes")
 class ExercisePurpose(
-    val purposeId: AggregateReference<TherapeuticPurpose, Long>
-)
+        val purposeId: AggregateReference<TherapeuticPurpose, Long>
+) {
+
+    constructor(therapeuticPurpose: TherapeuticPurpose) : this(AggregateReference.to(therapeuticPurpose.id))
+
+}

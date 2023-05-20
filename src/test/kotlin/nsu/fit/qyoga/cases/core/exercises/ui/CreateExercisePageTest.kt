@@ -8,6 +8,7 @@ import nsu.fit.platform.lang.toDecimalMinutes
 import nsu.fit.qyoga.core.exercises.api.model.Exercise
 import nsu.fit.qyoga.core.exercises.api.model.ExerciseStep
 import nsu.fit.qyoga.infra.QYogaAppTestBase
+import nsu.fit.qyoga.platform.loadResource
 import org.junit.jupiter.api.Test
 import java.time.Duration
 
@@ -20,6 +21,8 @@ const val DESCRIPTION = "description"
 const val EXERCISE_TYPE_ID = "exerciseTypeId"
 
 fun stepsDescription(idx: Int) = "steps[$idx].description"
+
+fun stepImage(idx: Int) = "stepImage$idx"
 
 class CreateExercisePageTest : QYogaAppTestBase() {
 
@@ -45,22 +48,24 @@ class CreateExercisePageTest : QYogaAppTestBase() {
 
     @Test
     fun `When new exercise is added it should be present in exercises list`() {
-        val purpose = "Вылечить пальчик"
-        val step1 = ExerciseStep("Глубоко вдохните", null, 1)
-        val step2 = ExerciseStep("И выдохните", null, 2)
+        val purpose = "Health a finger"
+        val step1 = ExerciseStep("Take a deep breath", null, 1)
+        val step2 = ExerciseStep("And exhale", null, 2)
         val exercise = Exercise(
-            "Just added exercise",
-            "Description",
-            "Indications",
-            "Contradictions",
-            Duration.ofMinutes(2),
-            1,
-            2,
-            setOf(),
-            listOf(step1, step2)
+                "Just added exercise",
+                "Description",
+                "Indications",
+                "Contradictions",
+                Duration.ofMinutes(2),
+                1,
+                2,
+                setOf(),
+                listOf(step1, step2)
         )
+        val stepImage = loadResource("/images/testImage.png")
         Given {
             authorized()
+            contentType("multipart/form-data; charset=UTF-8")
             filter(RequestLoggingFilter())
             formParam(TITLE, exercise.title)
             formParam(INDICATIONS, exercise.indications)
@@ -71,6 +76,8 @@ class CreateExercisePageTest : QYogaAppTestBase() {
             formParam(DESCRIPTION, exercise.description)
             formParam(stepsDescription(0), step1.description)
             formParam(stepsDescription(1), step2.description)
+            multiPart(stepImage(0), "step1.png", stepImage, "image/png")
+            multiPart(stepImage(1), "step2.png", stepImage, "image/png")
         } When {
             post("/therapist/exercises/create")
         } Then {
@@ -83,7 +90,7 @@ class CreateExercisePageTest : QYogaAppTestBase() {
             get("/therapist/exercises")
         } Then {
             assertThatBody {
-                hasExercisesTableWithExercise(exercise, "Разминка", "Вылечить пальчик")
+                hasExercisesTableWithExercise(exercise, "Разминка", purpose)
             }
         }
     }

@@ -5,12 +5,12 @@ import org.springframework.data.relational.core.mapping.Table
 
 @Table("images")
 data class Image(
-    @Id
-    val id: Long = 0,
-    val name: String,
-    val mediaType: String,
-    val size: Long,
-    val data: ByteArray
+        val name: String,
+        val mediaType: String,
+        val size: Long,
+        val data: ByteArray,
+        @Id
+        val id: Long = 0,
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -22,9 +22,7 @@ data class Image(
         if (name != other.name) return false
         if (mediaType != other.mediaType) return false
         if (size != other.size) return false
-        if (!data.contentEquals(other.data)) return false
-
-        return true
+        return data.contentEquals(other.data)
     }
 
     override fun hashCode(): Int {
