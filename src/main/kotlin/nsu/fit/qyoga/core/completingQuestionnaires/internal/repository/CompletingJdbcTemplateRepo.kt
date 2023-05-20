@@ -1,6 +1,6 @@
 package nsu.fit.qyoga.core.completingQuestionnaires.internal.repository
 
-import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.ClientDto
+import nsu.fit.qyoga.core.clients.api.Dto.ClientDto
 import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.CompletingDto
 import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.CompletingFindDto
 import org.springframework.data.domain.Page
@@ -37,7 +37,8 @@ class CompletingJdbcTemplateRepo(
                 ClientDto(
                     rs.getLong("clientId"),
                     rs.getString("clientFirstName"),
-                    rs.getString("clientLastName")
+                    rs.getString("clientLastName"),
+                    rs.getString("clientPatronymic")
                 ),
                 rs.getDate("completingDate"),
                 rs.getLong("numericResult"),
@@ -55,6 +56,7 @@ class CompletingJdbcTemplateRepo(
             clients.id AS clientId,
             clients.first_name AS clientFirstName,
             clients.last_name AS clientLastName,
+            clients.patronymic as clientPatronymic
             completing.id AS completingId,
             completing.completing_date AS completingDate,
             completing.numeric_result AS numericResult,

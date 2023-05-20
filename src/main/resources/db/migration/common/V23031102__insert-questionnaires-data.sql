@@ -1,1 +1,0 @@
-INSERT INTO questionnaires (title) VALUES ('test')

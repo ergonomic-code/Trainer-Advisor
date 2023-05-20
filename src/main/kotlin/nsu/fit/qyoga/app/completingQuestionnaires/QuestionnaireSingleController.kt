@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import java.security.Principal
 
 @Controller
-@RequestMapping("/questionnaires/")
+@RequestMapping("/therapist/questionnaires")
 class QuestionnaireSingleController(
     private val completingService: CompletingService,
     private val questionnaireService: QuestionnaireService,
@@ -24,14 +24,14 @@ class QuestionnaireSingleController(
     /**
      * Просмотр опросника
      */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     fun getQuestionnaireById(
         @PageableDefault(value = 10, page = 0, sort = ["date"]) pageable: Pageable,
         @PathVariable id: Long,
         principal: Principal,
         model: Model
     ): String {
-        model.addAttribute("questionnaireTitle", questionnaireService.findQuestionnaireById(id))
+        //model.addAttribute("questionnaireTitle", questionnaireService.findQuestionnaireById(id))
         model.addAttribute(
             "results",
             completingService.findCompletingByQId(
@@ -47,7 +47,7 @@ class QuestionnaireSingleController(
     /**
      * Получение модального окна для генерации ссылки на прохождение опросника
      */
-    @GetMapping("{id}/generateLinkModal")
+    @GetMapping("/{id}/generateLinkModal")
     fun getGenerateLinkModalWindow(
         @PathVariable id: Long,
         model: Model

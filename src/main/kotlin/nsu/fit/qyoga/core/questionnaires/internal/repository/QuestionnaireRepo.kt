@@ -11,21 +11,4 @@ import org.springframework.transaction.annotation.Transactional
 
 @Repository
 @Transactional(readOnly = false)
-interface QuestionnaireRepo : CrudRepository<Questionnaire, Long>, PagingAndSortingRepository<Questionnaire, Long> {
-
-    fun countAllByTitleContaining(title: String): Long
-
-    fun findAllByTitleContaining(title: String, pageable: Pageable): List<Questionnaire>
-
-    @Query(
-        """
-           SELECT *
-        FROM questionnaires ques
-            LEFT JOIN questions quns ON ques.id = quns.questionnaire_id
-            LEFT JOIN images imgs ON imgs.id = quns.image_id
-            LEFT JOIN answers anrs ON ques.id = quns.question_id
-        WHERE ques.id = :id
-        """
-    )
-    fun getQuestionnaireWithQuestionById(id: Long): List<QuestionnaireDto>
-}
+interface QuestionnaireRepo : CrudRepository<Questionnaire, Long>, PagingAndSortingRepository<Questionnaire, Long>

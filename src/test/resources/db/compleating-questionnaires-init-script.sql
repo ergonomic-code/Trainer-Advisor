@@ -1,0 +1,1 @@
+TRUNCATE completing, users, questionnaires, clients RESTART IDENTITY;
