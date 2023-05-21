@@ -44,7 +44,6 @@
 
         <main style="height: calc(100% - 75px);">
             <div class="container-fluid px-4" style="height: 100%">
-
                 <div>
                     <h1 class="mt-4" th:text="${questionnaireTitle}">Название опросника</h1>
                     <button id="button" class="text-truncate mt-sm-2"
@@ -58,6 +57,38 @@
                     >Сгенерировать ссылку для отправки</button>
                 </div>
 
+                <div class="input-group" style="flex-direction: row; flex-wrap: wrap;">
+                    <div class="me-auto" id="questionnaires-find-bar"
+                         style="width: calc(100% - 240px); min-width: 210px; height: 40px; margin-top: 10px">
+                        <input aria-describedby="basic-addon2"
+                               hx-target="#card-body"
+                               placeholder="ФИО"
+                               class="form-control"
+                               style="border-color:inherit; height: 40px"
+                               th:field="*{completingSearchDto.clientName}"
+                               hx-trigger="keyup changed delay:500ms, search"
+                               th:value="${completingSearchDto.clientName}"
+                               type="text">
+                    </div>
+                    <div class="input-group" id="questionnaires-sort-bar"
+                         style="width: 220px; margin-top: 10px">
+                        <div class="input-group-prepend w-auto float-md-end" style="height: 40px">
+                            <label class="input-group-text" for="sort-type-select" style="height: 40px">Сортировка:</label>
+                        </div>
+                        <select class="custom-select w-auto float-md-end" hx-params="*"
+                                hx-target="#card-body"
+                                style="height: 40px; border-radius: 5px"
+                                id="sort-type-select"
+                                hx-trigger="change"
+                                th:name="sort">
+                            <option th:if="${sortType} == 'ASC'" selected disabled hidden>Новее</option>
+                            <option th:if="${sortType} == 'DESC'" selected disabled hidden>Старее</option>
+                            <option value='title,asc'>Новее</option>
+                            <option value='title,desc'>Старее</option>
+                        </select>
+                    </div>
+                </div>
+
                 <div class="card mb-2 mt-sm-2">
                     <div class="card-header">
                         <i class="fas fa-table me-1"></i>
@@ -65,7 +96,6 @@
                     </div>
                     <div class="card-body" id="card-body" style="overflow: auto">
                         <div th:fragment="page-content">
-
 
                             <div id="tablePag" style="height: calc(100% - 105px); margin-top: 20px">
 

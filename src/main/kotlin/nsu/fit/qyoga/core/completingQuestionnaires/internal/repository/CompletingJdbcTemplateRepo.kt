@@ -27,8 +27,8 @@ class CompletingJdbcTemplateRepo(
         params.addValue("therapistId", therapistId)
         params.addValue("pageSize", pageable.pageSize)
         params.addValue("offset", pageable.pageSize*pageable.pageNumber)
-        params.addValue("first", completingSearchDto.clientName.substringBefore(" "))
-        params.addValue("last", completingSearchDto.clientName.substringAfter(" "))
+        params.addValue("first", "")
+        params.addValue("last", "")
         jdbcTemplate.query(
             getQueryBySortType(pageable.sort.toString().substringAfter(": ")),
             params
@@ -74,5 +74,4 @@ class CompletingJdbcTemplateRepo(
             LIMIT :pageSize OFFSET :offset
         """.trimIndent()
     }
-
 }
