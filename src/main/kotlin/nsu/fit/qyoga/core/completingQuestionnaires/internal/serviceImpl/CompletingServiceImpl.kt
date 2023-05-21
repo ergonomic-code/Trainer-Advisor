@@ -1,7 +1,7 @@
 package nsu.fit.qyoga.core.completingQuestionnaires.internal.serviceImpl
 
 import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.CompletingDto
-import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.CompletingFindDto
+import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.CompletingSearchDto
 import nsu.fit.qyoga.core.completingQuestionnaires.api.services.CompletingService
 import nsu.fit.qyoga.core.completingQuestionnaires.internal.repository.CompletingJdbcTemplateRepo
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,9 +17,14 @@ class CompletingServiceImpl(
     override fun findCompletingByQId(
         questionnaireId: Long,
         therapistId: Long,
-        completingFindDto: CompletingFindDto,
+        completingSearchDto: CompletingSearchDto,
         pageable: Pageable
     ): Page<CompletingDto> {
-        return completingJdbcTemplateRepo.findQuestionnaireCompletingById(questionnaireId,therapistId, completingFindDto, pageable)
+        return completingJdbcTemplateRepo.findQuestionnaireCompletingById(
+            questionnaireId,
+            therapistId,
+            completingSearchDto,
+            pageable
+        )
     }
 }

@@ -12,7 +12,10 @@ interface QuestionnaireService {
         pageable: Pageable
     ): Page<QuestionnaireDto>
 
+    fun getQuestionnairesTitleById(id: Long): String?
+
     fun saveQuestionnaire(createQuestionnaireDto: CreateQuestionnaireDto): Long
+
     fun findQuestionnaireWithQuestions(id: Long): CreateQuestionnaireDto
 
 }

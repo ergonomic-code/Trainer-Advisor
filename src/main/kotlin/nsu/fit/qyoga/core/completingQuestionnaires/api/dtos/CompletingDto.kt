@@ -4,8 +4,8 @@ import nsu.fit.qyoga.core.clients.api.Dto.ClientDto
 import java.util.Date
 
 data class CompletingDto(
-    var completingId: Long,
-    var client: ClientDto,
+    var id: Long,
+    var client: CompletingClientDto,
     var completingDate: Date,
     var numericResult: Long,
     var textResult: String,

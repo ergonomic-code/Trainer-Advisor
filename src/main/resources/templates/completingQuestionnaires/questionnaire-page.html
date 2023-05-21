@@ -38,7 +38,7 @@
 
 <div id="layoutSidenav">
 
-    <div th:replace="~{/fragments/leftNavPanel.html :: leftNavPanel}"></div>
+    <div th:replace="~{fragments/leftNavPanel.html :: leftNavPanel}"></div>
 
     <div id="layoutSidenav_content">
 
@@ -50,7 +50,7 @@
                     <button id="button" class="text-truncate mt-sm-2"
                             th:attr = "
                             hx-get=|@{/questionnaires/{id}/generateLinkModal
-                            (id=${results.questionnaireId})}|"
+                            (id=${questionnaireId})}|"
                             hx-target="main"
                             hx-swap="beforeend"
                             style="
@@ -83,22 +83,22 @@
                                         </tr>
                                         </thead>
                                         <tbody id="table-body" style="gap: 10px">
-                                        <tr th:each="result : ${results.resultList}" th:fragment="table-completing" class="table-completing-row">
+                                        <tr th:each="result : ${results.content}" th:fragment="table-completing" class="table-completing-row">
                                             <td class="col"><a th:href="@{/customerСard/{clientId}(clientId=${result.client.userId})}" th:text="|${result.client.firstName} ${result.client.lastName}|"></a></td>
                                             <td class="col" th:text="${#dates.format(result.completingDate, 'dd-MM-yyyy')}"></td>
                                             <td class="col" th:text="${result.numericResult}"></td>
                                             <td class="col" th:text="${result.textResult}"></td>
-                                            <td class="col"> <a th:href="@{/questionnaire/results/{clientId}(clientId=${result.client.userId})}">Просмотр</a></td>
+                                            <td class="col"> <a th:href="@{/questionnaire/results/{clientId}(clientId=${result.client.id})}">Просмотр</a></td>
                                         </tr>
                                         </tbody>
                                     </table>
                                 </div>
 
-                                <div id="questionnaires-navigation-bar" style="height: 50px">
+                                <!--<div id="questionnaires-navigation-bar" style="height: 50px">
                                     <ul class="pagination justify-content-center">
                                         <div class="pagination">
                                             <li class="page-item"
-                                                th:classappend="${(questionnaires.getPageable().pageNumber == 0) ? 'disabled' : ''}">
+                                                th:classappend="${(results.getPageable().pageNumber == 0) ? 'disabled' : ''}">
                                                 <a class="page-link"
                                                    hx-target="#card-body"
                                                    hx-trigger="click"
@@ -110,7 +110,7 @@
 
                                         <div class="pagination">
                                             <li class="page-item"
-                                                th:classappend="${(questionnaires.getPageable().pageNumber == 0) ? 'disabled' : ''}">
+                                                th:classappend="${(results.getPageable().pageNumber == 0) ? 'disabled' : ''}">
                                                 <a class="page-link"
                                                    hx-target="#card-body"
                                                    hx-trigger="click"
@@ -158,7 +158,7 @@
                                             </li>
                                         </div>
                                     </ul>
-                                </div>
+                                </div>-->
 
                             </div>
                         </div>

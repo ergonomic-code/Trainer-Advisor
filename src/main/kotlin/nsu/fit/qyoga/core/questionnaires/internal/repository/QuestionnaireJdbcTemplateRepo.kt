@@ -52,7 +52,6 @@ class QuestionnaireJdbcTemplateRepo(
         } ?: 0
     }
 
-
     fun getQueryBySortType(type: String): String {
         return """
             SELECT
@@ -63,5 +62,20 @@ class QuestionnaireJdbcTemplateRepo(
             ORDER BY questionnaires.title ${if (type == "UNSORTED") "ASC" else type}
             LIMIT :pageSize OFFSET :offset
         """.trimIndent()
+    }
+
+    fun getQuestionnaireTitleById(id: Long): String?{
+        val query = """
+            SELECT
+            questionnaires.title AS questionnaireTitle
+            FROM questionnaires
+            WHERE questionnaires.id = :id
+        """.trimIndent()
+        return jdbcTemplate.queryForObject(
+            query,
+            MapSqlParameterSource("id", id)
+        ) { rs: ResultSet, _: Int ->
+            rs.getString("questionnaireTitle")
+        }
     }
 }

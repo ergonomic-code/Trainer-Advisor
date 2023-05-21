@@ -1,8 +1,8 @@
 package nsu.fit.qyoga.core.completingQuestionnaires.internal.repository
 
-import nsu.fit.qyoga.core.clients.api.Dto.ClientDto
+import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.CompletingClientDto
 import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.CompletingDto
-import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.CompletingFindDto
+import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.CompletingSearchDto
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
@@ -15,15 +15,20 @@ import java.sql.ResultSet
 class CompletingJdbcTemplateRepo(
     private val jdbcTemplate: NamedParameterJdbcOperations
 ) {
-    fun findQuestionnaireCompletingById(questionnaireId: Long, therapistId: Long, completingFindDto: CompletingFindDto, pageable: Pageable): Page<CompletingDto> {
+    fun findQuestionnaireCompletingById(
+        questionnaireId: Long,
+        therapistId: Long,
+        completingSearchDto: CompletingSearchDto,
+        pageable: Pageable
+    ): Page<CompletingDto> {
         val completingList: MutableList<CompletingDto> = mutableListOf()
         val params = MapSqlParameterSource()
         params.addValue("questionnaireId", questionnaireId)
         params.addValue("therapistId", therapistId)
         params.addValue("pageSize", pageable.pageSize)
         params.addValue("offset", pageable.pageSize*pageable.pageNumber)
-        params.addValue("first", completingFindDto.clientName.substringBefore(" "))
-        params.addValue("last", completingFindDto.clientName.substringAfter(" "))
+        params.addValue("first", completingSearchDto.clientName.substringBefore(" "))
+        params.addValue("last", completingSearchDto.clientName.substringAfter(" "))
         jdbcTemplate.query(
             getQueryBySortType(pageable.sort.toString().substringAfter(": ")),
             params
@@ -34,7 +39,7 @@ class CompletingJdbcTemplateRepo(
             }
             val completing = CompletingDto(
                 completingId,
-                ClientDto(
+                CompletingClientDto(
                     rs.getLong("clientId"),
                     rs.getString("clientFirstName"),
                     rs.getString("clientLastName"),
@@ -56,7 +61,7 @@ class CompletingJdbcTemplateRepo(
             clients.id AS clientId,
             clients.first_name AS clientFirstName,
             clients.last_name AS clientLastName,
-            clients.patronymic as clientPatronymic
+            clients.patronymic as clientPatronymic,
             completing.id AS completingId,
             completing.completing_date AS completingDate,
             completing.numeric_result AS numericResult,
@@ -64,9 +69,8 @@ class CompletingJdbcTemplateRepo(
             FROM completing
             LEFT JOIN clients ON clients.id = completing.client_id
             WHERE completing.questionnaire_id = :questionnaireId AND completing.therapist_id = :therapistId
-            AND ( clients.first_name LIKE '%' || :first || '%' OR clients.first_name LIKE '%' || :last || '%' )
-            AND ( clients.last_name LIKE '%' || :first || '%' OR clients.last_name LIKE '%' || :last || '%' )
-            ORDER BY completingDate $type
+            AND ( clients.first_name LIKE '%' || :first || '%' OR clients.last_name LIKE '%' || :last || '%' )
+            ORDER BY completingDate ${if (type == "UNSORTED") "ASC" else type}
             LIMIT :pageSize OFFSET :offset
         """.trimIndent()
     }
