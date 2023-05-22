@@ -29,10 +29,6 @@ class QuestionnaireServiceImpl(
         )
     }
 
-    override fun getQuestionnairesTitleById(id: Long): String? {
-        return questionnaireJdbcTemplateRepo.getQuestionnaireTitleById(id)
-    }
-
     override fun saveQuestionnaire(createQuestionnaireDto: CreateQuestionnaireDto): Long {
         return questionnaireRepo.save(
             Questionnaire(

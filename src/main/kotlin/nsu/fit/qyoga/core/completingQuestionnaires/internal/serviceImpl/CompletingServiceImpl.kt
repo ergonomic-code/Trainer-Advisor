@@ -14,14 +14,12 @@ class CompletingServiceImpl(
     @Autowired val completingJdbcTemplateRepo: CompletingJdbcTemplateRepo
 ) : CompletingService {
 
-    override fun findCompletingByQId(
-        questionnaireId: Long,
+    override fun findCompletingByTherapistId(
         therapistId: Long,
         completingSearchDto: CompletingSearchDto,
         pageable: Pageable
     ): Page<CompletingDto> {
         return completingJdbcTemplateRepo.findQuestionnaireCompletingById(
-            questionnaireId,
             therapistId,
             completingSearchDto,
             pageable

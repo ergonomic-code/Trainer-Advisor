@@ -8,8 +8,7 @@ import org.springframework.data.domain.Pageable
 
 interface CompletingService {
 
-    fun findCompletingByQId(
-        questionnaireId: Long,
+    fun findCompletingByTherapistId(
         therapistId: Long,
         completingSearchDto: CompletingSearchDto,
         pageable: Pageable
