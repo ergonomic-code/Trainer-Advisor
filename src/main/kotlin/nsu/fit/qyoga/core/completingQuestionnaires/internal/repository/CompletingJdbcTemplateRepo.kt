@@ -55,7 +55,7 @@ class CompletingJdbcTemplateRepo(
 
             completingList.add(completing)
         }
-        return PageImpl(completingList, pageable, completingList.size.toLong())
+        return PageImpl(completingList, pageable, getRecordsNum(therapistId, completingSearchDto))
     }
 
     fun getQueryBySortType(type: String): String {
@@ -80,5 +80,31 @@ class CompletingJdbcTemplateRepo(
             ORDER BY completingDate ${if (type == "UNSORTED") "ASC" else type}
             LIMIT :pageSize OFFSET :offset
         """.trimIndent()
+    }
+
+    fun getRecordsNum(
+        therapistId: Long,
+        completingSearchDto: CompletingSearchDto
+    ): Long {
+        val query = """
+            SELECT
+            COUNT(*) AS totalRecords
+            FROM completing
+            LEFT JOIN clients ON clients.id = completing.client_id
+            LEFT JOIN questionnaires ON questionnaires.id = completing.questionnaire_id
+            WHERE completing.therapist_id = :therapistId
+            AND clients.first_name||''||clients.last_name||''||clients.patronymic LIKE '%' || :name || '%'
+            AND questionnaires.title LIKE '%' || :qTitle || '%'
+        """.trimIndent()
+        val params = MapSqlParameterSource()
+        params.addValue("therapistId", therapistId)
+        params.addValue("name", completingSearchDto.clientName)
+        params.addValue("qTitle", completingSearchDto.title)
+        return jdbcTemplate.queryForObject(
+            query,
+            params
+        ) { rs: ResultSet, _: Int ->
+            rs.getLong("totalRecords")
+        } ?: 0
     }
 }
