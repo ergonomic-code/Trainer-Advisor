@@ -1,5 +1,6 @@
 package nsu.fit.qyoga.cases.core.completingQuestionnaires.internal
 
+import io.kotest.matchers.ints.shouldBeLessThan
 import io.kotest.matchers.shouldBe
 import nsu.fit.qyoga.cases.core.completingQuestionnaires.CompletingQuestionnairesTestConfig
 import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.CompletingSearchDto
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
+import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.ContextConfiguration
 
 @ContextConfiguration(
@@ -21,6 +23,7 @@ import org.springframework.test.context.ContextConfiguration
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.NONE
 )
+@ActiveProfiles("test")
 class CompletingServiceTest(
     @Autowired private val completingService: CompletingService,
 ) : QYogaModuleBaseTest() {
@@ -28,75 +31,106 @@ class CompletingServiceTest(
     @BeforeEach
     fun setupDb() {
         dbInitializer.executeScripts(
-            "db/completing/completing-questionnaires-init-script.sql" to "dataSource",
-            "db/completing/insert_completing_data.sql" to "dataSource"
+            "/db/completing/completing-questionnaires-init-script.sql" to "dataSource",
+            "/db/migration/common/V23051304__insert_questionnaires_data.sql" to "dataSource",
+            "/db/completing/insert_completing_data.sql" to "dataSource"
         )
     }
 
     @Test
-    fun `QYoga can retrieve questionnaires with different type of sort`() {
-        val questionnairesASK = completingService.findCompletingByTherapistId(
+    fun `QYoga can retrieve questionnaires without title`() {
+        val completing = completingService.findCompletingByTherapistId(
             1,
             CompletingSearchDto(),
             PageRequest.of(0, 10, Sort.by("date").ascending())
         )
-        val questionnairesDESK = completingService.findCompletingByTherapistId(
+        completing.content.size shouldBe 10
+        completing.content.map { it.id.toInt() } shouldBe listOf(1, 2, 3, 4, 5, 6, 7, 8, 10, 12)
+    }
+
+    @Test
+    fun `QYoga can retrieve questionnaires with different type of sort`() {
+        val completingASK = completingService.findCompletingByTherapistId(
+            1,
+            CompletingSearchDto(),
+            PageRequest.of(0, 10, Sort.by("date").ascending())
+        )
+        val completingDESK = completingService.findCompletingByTherapistId(
             1,
             CompletingSearchDto(),
             PageRequest.of(0, 10, Sort.by("date").descending())
         )
-        questionnairesASK.content.size shouldBe 10
-        questionnairesASK.content.map { it.id.toInt() } shouldBe listOf(6, 7, 8 , 9, 10, 11, 12, 13, 14, 15)
-        questionnairesDESK.content.size shouldBe 10
-        questionnairesDESK.content.map { it.id.toInt() } shouldBe listOf(5, 4, 3, 2, 1, 3, 15, 14, 13, 12)
-    }
-
-    /*@Test
-    fun `QYoga can retrieve questionnaires without title`() {
-        val questionnaires = questionnaireService.findQuestionnaires(
-            QuestionnaireSearchDto(title = null),
-            PageRequest.of(0, 10, Sort.by("title").ascending())
-        )
-        questionnaires.content.size shouldBe 10
-        questionnaires.content.map { it.id.toInt() } shouldBe listOf(2, 16, 17, 18, 6, 4, 8, 9, 12, 13)
+        completingASK.content.size shouldBe 10
+        completingASK.content.map { it.id.toInt() } shouldBe listOf(1, 2, 3, 4, 5, 6, 7, 8, 10, 12)
+        completingDESK.content.size shouldBe 10
+        completingDESK.content.map { it.id.toInt() } shouldBe listOf(13, 12, 10, 8, 7, 6, 5, 4, 3, 2)
     }
 
     @Test
     fun `QYoga can retrieve questionnaires page by page`() {
-        val questionnairesPage1 = questionnaireService.findQuestionnaires(
-            QuestionnaireSearchDto(title = null),
-            PageRequest.of(0, 10)
+        val completingPage2 = completingService.findCompletingByTherapistId(
+            1,
+            CompletingSearchDto(),
+            PageRequest.of(1, 10, Sort.by("date").ascending())
         )
-        questionnairesPage1.content.size shouldBe 10
-        val questionnairesPage2 = questionnaireService.findQuestionnaires(
-            QuestionnaireSearchDto(title = null),
-            PageRequest.of(1, 10)
-        )
-        questionnairesPage2.content.size shouldBeLessThan 10
-        questionnairesPage1.content.map {
-            it.id.toInt()
-        }.sorted() shouldNotBe questionnairesPage2.content.map {
-            it.id.toInt()
-        }.sorted()
-        questionnairesPage1.content.map { it.id.toInt() }.plus(
-            questionnairesPage2.content.map { it.id.toInt() }
-        ).sorted() shouldBe (1..18).toList()
+        completingPage2.content.size shouldBeLessThan 10
+        completingPage2.content[0].id shouldBe 13
+        completingPage2.content[0].numericResult shouldBe 10
+        completingPage2.content[0].textResult shouldBe "large_text_result_123456789011121314151617181920"
     }
 
     @Test
     fun `QYoga can retrieve questionnaires by title`() {
-        val questionnairesTitle = questionnaireService.findQuestionnaires(
-            QuestionnaireSearchDto("title"),
-            PageRequest.of(0, 10)
+        val completing = completingService.findCompletingByTherapistId(
+            1,
+            CompletingSearchDto(title = "test"),
+            PageRequest.of(0, 10, Sort.by("date").ascending())
         )
-        questionnairesTitle.content.size shouldBe 0
-        val questionnairesTest = questionnaireService.findQuestionnaires(
-            QuestionnaireSearchDto("test"),
-            PageRequest.of(0, 10)
-        )
-        questionnairesTest.content.size shouldBe 10
-        for (questionnaire in questionnairesTest.content) {
-            questionnaire.title shouldContain "test"
+        completing.content.size shouldBe 5
+        val regex = """.*test.*""".toRegex()
+        for (c in completing.content) {
+            regex.containsMatchIn(c.questionnaire.title) shouldBe true
         }
-    }*/
+    }
+
+    @Test
+    fun `QYoga can retrieve questionnaires by client first name`() {
+        val completing = completingService.findCompletingByTherapistId(
+            1,
+            CompletingSearchDto(clientName = "first_name"),
+            PageRequest.of(0, 10, Sort.by("date").ascending())
+        )
+        completing.content.size shouldBe 10
+        val regex = """.*first_name.*""".toRegex()
+        for (c in completing.content) {
+            regex.containsMatchIn(c.client.firstName) shouldBe true
+        }
+    }
+
+    @Test
+    fun `QYoga can retrieve questionnaires by client last name`() {
+        val completing = completingService.findCompletingByTherapistId(
+            1,
+            CompletingSearchDto(clientName = "last_name"),
+            PageRequest.of(0, 10, Sort.by("date").ascending())
+        )
+        val regex = """.*last_name.*""".toRegex()
+        for (c in completing.content) {
+            regex.containsMatchIn(c.client.lastName) shouldBe true
+        }
+    }
+
+    @Test
+    fun `QYoga can retrieve questionnaires by client patronymic`() {
+        val completing = completingService.findCompletingByTherapistId(
+            1,
+            CompletingSearchDto(clientName = "patronymic"),
+            PageRequest.of(0, 10, Sort.by("date").ascending())
+        )
+        completing.content.size shouldBe 10
+        val regex = """.*patronymic.*""".toRegex()
+        for (c in completing.content) {
+            regex.containsMatchIn(c.client.patronymic) shouldBe true
+        }
+    }
 }

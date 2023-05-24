@@ -2,34 +2,35 @@ INSERT INTO clients
     (first_name, last_name, patronymic, birth_date, phone_number, diagnose, email, distribution_source)
 VALUES
     ('first_name', 'last_name', 'patronymic', '2023-05-20', 'phone_number', 'diagnose', 'email', 'test'),
-    ('first_name', 'last_name', 'patronymic', '2023-05-20', 'phone_number', 'diagnose', 'email', 'test');
+    ('first_name2', 'last_name2', 'patronymic2', '2023-05-20', 'phone_number2', 'diagnose2', 'email2', 'test2');
 
-insert into users
-    (username, password_hash, roles)
-values
-    ('therapist2', '$2y$10$rfVqttKA1NL/C7BpPjZn7eeQ/QiI2z.iPzbt4TleECJrq8KSkSihi', '{"ROLE_THERAPIST"}');
+insert into users (username, password_hash, roles)
+values ('therapist', '$2a$12$wAIeyLso8yKIlIlv62EeL.R1co2DmJdb5DitjmdP.qYZflJNMP.ua', '{"ROLE_THERAPIST"}');
 
-INSERT into therapists
-    (user_id, name)
-VALUES
-    ((SELECT id from users WHERE username = 'therapist'),
+INSERT into therapists (id, name)
+VALUES ((SELECT id from users WHERE username = 'therapist'),
         'Екатерина Маркова');
+
+insert into users (username, password_hash, roles)
+values ('therapist2', '$2a$12$wAIeyLso8yKIlIlv62EeL.R1co2DmJdb5DitjmdP.qYZflJNMP.ua', '{"ROLE_THERAPIST"}');
+
+INSERT into therapists (id, name)
+VALUES ((SELECT id from users WHERE username = 'therapist2'),
+        'Тестовый Терапевт');
 
 INSERT INTO completing
     (completing_date, numeric_result, text_result, questionnaire_id, client_id, therapist_id)
 VALUES
-    ('2023-05-22', 10, 'large_text_result_123456789011121314151617181920', 1, 1, 1),
-    ('2023-06-22', 10, 'large_text_result_123456789011121314151617181920', 2, 1, 1),
-    ('2023-07-22', 10, 'large_text_result_123456789011121314151617181920', 3, 1, 1),
-    ('2023-08-22', 10, 'large_text_result_123456789011121314151617181920', 4, 1, 1),
-    ('2023-09-22', 10, 'large_text_result_123456789011121314151617181920', 1, 1, 1),
-    ('2023-01-22', 10, 'large_text_result_123456789011121314151617181920', 6, 1, 1),
-    ('2023-02-22', 10, 'large_text_result_123456789011121314151617181920', 1, 1, 1),
-    ('2023-03-22', 10, 'large_text_result_123456789011121314151617181920', 10, 1, 1),
-    ('2023-04-22', 10, 'large_text_result_123456789011121314151617181920', 1, 1, 1),
-    ('2023-05-22', 10, 'large_text_result_123456789011121314151617181920', 9, 1, 1),
-    ('2023-05-22', 10, 'large_text_result_123456789011121314151617181920', 9, 1, 1),
-    ('2023-05-22', 10, 'large_text_result_123456789011121314151617181920', 9, 1, 1),
-    ('2023-05-22', 10, 'large_text_result_123456789011121314151617181920', 9, 1, 1),
-    ('2023-05-22', 10, 'large_text_result_123456789011121314151617181920', 9, 1, 1),
-    ('2023-05-22', 10, 'large_text_result_123456789011121314151617181920', 1, 1, 1)
+    ('2023-05-1', 10, 'large_text_result_123456789011121314151617181920', 1, 1,(SELECT id from therapists WHERE name = 'Екатерина Маркова')),
+    ('2023-05-2', 10, 'text_result', 2, 1,(SELECT id from therapists WHERE name = 'Екатерина Маркова')),
+    ('2023-05-3', 10, 'large_text_result_123456789011121314151617181920', 3, 1,(SELECT id from therapists WHERE name = 'Екатерина Маркова')),
+    ('2023-05-4', 10, 'result', 4, 1,(SELECT id from therapists WHERE name = 'Екатерина Маркова')),
+    ('2023-05-5', 10, 'large_text_result_123456789011121314151617181920', 5, 1,(SELECT id from therapists WHERE name = 'Екатерина Маркова')),
+    ('2023-05-6', 10, 'large_text_result_123456789011121314151617181920', 2, 2,(SELECT id from therapists WHERE name = 'Екатерина Маркова')),
+    ('2023-05-7', 10, 'large_text_result_123456789011121314151617181920', 1, 1,(SELECT id from therapists WHERE name = 'Екатерина Маркова')),
+    ('2023-05-8', 10, 'large_text_result_123456789011121314151617181920', 2, 2,(SELECT id from therapists WHERE name = 'Екатерина Маркова')),
+    ('2023-05-9', 10, 'large_text_result_123456789011121314151617181920', 6, 1,(SELECT id from therapists WHERE name = 'Тестовый Терапевт')),
+    ('2023-05-10', 10, 'large_text_result_123456789011121314151617181920', 1, 2,(SELECT id from therapists WHERE name = 'Екатерина Маркова')),
+    ('2023-05-11', 10, 'large_text_result_123456789011121314151617181920', 2, 1,(SELECT id from therapists WHERE name = 'Тестовый Терапевт')),
+    ('2023-05-12', 10, 'large_text_result_123456789011121314151617181920', 7, 2,(SELECT id from therapists WHERE name = 'Екатерина Маркова')),
+    ('2023-05-13', 10, 'large_text_result_123456789011121314151617181920', 2, 2,(SELECT id from therapists WHERE name = 'Екатерина Маркова'))
