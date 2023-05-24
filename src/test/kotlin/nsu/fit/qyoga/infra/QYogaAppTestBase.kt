@@ -5,8 +5,6 @@ import io.restassured.builder.RequestSpecBuilder
 import io.restassured.config.LogConfig
 import io.restassured.config.RestAssuredConfig
 import io.restassured.filter.log.LogDetail
-import io.restassured.filter.log.RequestLoggingFilter
-import io.restassured.filter.log.ResponseLoggingFilter
 import io.restassured.http.Cookie
 import io.restassured.module.kotlin.extensions.Extract
 import io.restassured.module.kotlin.extensions.Given
@@ -50,8 +48,6 @@ class QYogaAppTestBase {
             .setBaseUri("http://localhost:$port")
             .setContentType("application/x-www-form-urlencoded; charset=UTF-8")
             .setRelaxedHTTPSValidation()
-            .addFilter(ResponseLoggingFilter())
-            .addFilter(RequestLoggingFilter())
             .setConfig(config)
             .build()
     }
