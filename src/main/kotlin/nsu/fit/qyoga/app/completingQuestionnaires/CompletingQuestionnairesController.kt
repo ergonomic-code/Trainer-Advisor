@@ -1,9 +1,11 @@
 package nsu.fit.qyoga.app.completingQuestionnaires
 
 import jakarta.servlet.http.HttpSession
+import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.CompletingDto
 import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.CompletingSearchDto
 import nsu.fit.qyoga.core.completingQuestionnaires.api.services.CompletingService
 import nsu.fit.qyoga.core.users.api.UserService
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.stereotype.Controller
@@ -15,7 +17,7 @@ import java.security.Principal
 
 @Controller
 @RequestMapping("/therapist/questionnaires/performing")
-class СompletingQuestionnairesController(
+class CompletingQuestionnairesController(
     private val completingService: CompletingService,
     private val httpSession: HttpSession,
     private val userService: UserService
@@ -31,29 +33,13 @@ class СompletingQuestionnairesController(
         principal: Principal,
         model: Model
     ): String {
-        val therapistId = httpSession.getAttribute("therapistId") as Long?
-            ?: let {
-                val userId = userService.findByUsername(principal.name)!!.id
-                httpSession.setAttribute("therapistId", userId)
-                userId
-            }
+        val therapistId = getTherapistId(principal.name)
         val completingList = completingService.findCompletingByTherapistId(
             therapistId,
             completingSearchDto,
             pageable
         )
-        model.addAttribute(
-            "results",
-            completingList
-        )
-        model.addAttribute(
-            "completingSearchDto",
-            completingSearchDto
-        )
-        model.addAttribute(
-            "sortType",
-            completingList.sort.getOrderFor("date").toString().substringAfter(' ')
-        )
+        addPageAttributes(model, completingList, completingSearchDto)
         return "completingQuestionnaires/questionnaire-page"
     }
 
@@ -67,18 +53,30 @@ class СompletingQuestionnairesController(
         model: Model,
         principal: Principal
     ): String {
-        print("HI")
-        val therapistId = httpSession.getAttribute("therapistId") as Long?
-            ?: let {
-                val userId = userService.findByUsername(principal.name)!!.id
-                httpSession.setAttribute("therapistId", userId)
-                userId
-            }
+        val therapistId = getTherapistId(principal.name)
         val completingList = completingService.findCompletingByTherapistId(
             therapistId,
             completingSearchDto,
             pageable
         )
+        addPageAttributes(model, completingList, completingSearchDto)
+        return "completingQuestionnaires/questionnaire-page :: page-content"
+    }
+
+    fun getTherapistId(username: String): Long {
+        return httpSession.getAttribute("therapistId") as Long?
+            ?: let {
+                val userId = userService.findByUsername(username)!!.id
+                httpSession.setAttribute("therapistId", userId)
+                userId
+            }
+    }
+
+    fun addPageAttributes(
+        model: Model,
+        completingList: Page<CompletingDto>,
+        completingSearchDto: CompletingSearchDto
+    ) {
         model.addAttribute(
             "results",
             completingList
@@ -91,6 +89,5 @@ class СompletingQuestionnairesController(
             "sortType",
             completingList.sort.getOrderFor("date").toString().substringAfter(' ')
         )
-        return "completingQuestionnaires/questionnaire-page :: page-content"
     }
 }
