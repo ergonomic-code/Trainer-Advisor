@@ -1,16 +1,16 @@
 package nsu.fit.qyoga.core.completingQuestionnaires.internal.repository
 
+import java.sql.ResultSet
 import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.CompletingClientDto
 import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.CompletingDto
-import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.CompletingSearchDto
 import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.CompletingQuestionnaireDto
+import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.CompletingSearchDto
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
-import java.sql.ResultSet
 
 @Repository
 class CompletingJdbcTemplateRepo(
@@ -25,7 +25,7 @@ class CompletingJdbcTemplateRepo(
         val params = MapSqlParameterSource()
         params.addValue("therapistId", therapistId)
         params.addValue("pageSize", pageable.pageSize)
-        params.addValue("offset", pageable.pageSize*pageable.pageNumber)
+        params.addValue("offset", pageable.pageSize * pageable.pageNumber)
         params.addValue("name", completingSearchDto.clientName)
         params.addValue("qTitle", completingSearchDto.title)
         jdbcTemplate.query(
