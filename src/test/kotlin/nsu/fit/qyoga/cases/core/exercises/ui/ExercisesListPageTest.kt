@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired
 
 private const val EXERCISE_SEARCH_ENDPOINT = "/therapist/exercises/search"
 
-class ExerciseViewTest : QYogaAppTestBase() {
+class ExercisesListPageTest : QYogaAppTestBase() {
 
     @Autowired
     lateinit var dbInitializer: DbInitializer
@@ -23,13 +23,13 @@ class ExerciseViewTest : QYogaAppTestBase() {
     @BeforeEach
     fun setupDb() {
         dbInitializer.executeScripts(
-            "/db/exercises-init-script.sql" to "dataSource",
-            "/db/migration/demo/V23050906__insert_exercises_data.sql" to "dataSource",
+                "/db/exercises-init-script.sql" to "dataSource",
         )
     }
 
     @Test
-    fun `QYoga returns exercise-search page with exercise table`() {
+    fun `Exercises list page should be rendered correctly, when exercises are exists`() {
+        setupDemoData()
         val body = Given {
             authorized()
         } When {
@@ -56,7 +56,34 @@ class ExerciseViewTest : QYogaAppTestBase() {
     }
 
     @Test
-    fun `QYoga returns exercises table with pagination`() {
+    fun `Exercises list page should be rendered correctly, when exercises no exercise exists`() {
+        val body = Given {
+            authorized()
+        } When {
+            get("/therapist/exercises")
+        } Extract {
+            Jsoup.parse(this.body().asString())
+        }
+
+        Assertions.assertThatSpec(body) {
+            node("#titleFilter") { exists() }
+            node("#contradictionFilter") { exists() }
+            node("#therapeuticPurposeFilter") { exists() }
+            node("#exerciseTypeFilter") { exists() }
+            node("form") {
+                attribute("hx-get") { hasText(EXERCISE_SEARCH_ENDPOINT) }
+            }
+
+            node("#exercisesTable") { exists() }
+            node("#exercises-list") { exists() }
+        }
+
+        assertLinkValid(body, "Новое упражнение")
+    }
+
+    @Test
+    fun `Search result fragment should be rendered correctly`() {
+        setupDemoData()
         Given {
             authorized()
         } When {
@@ -70,5 +97,11 @@ class ExerciseViewTest : QYogaAppTestBase() {
                 node("#pagination") { exists() }
             }
         }
+    }
+
+    fun setupDemoData() {
+        dbInitializer.executeScripts(
+                "/db/migration/demo/V23050906__insert_exercises_data.sql" to "dataSource",
+        )
     }
 }

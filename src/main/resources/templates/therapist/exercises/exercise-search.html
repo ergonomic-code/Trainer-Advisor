@@ -103,13 +103,13 @@
                                 <ul class="pagination justify-content-center">
                                     <div class="pagination">
                                         <li class="page-item"
-                                            th:classappend="${(exercises.getPageable().pageNumber == 0) ? 'disabled' : ''}">
+                                            th:classappend="${(exercises.number == 0) ? 'disabled' : ''}">
                                             <a class="page-link"
                                                hx-target="#tablePagination"
                                                hx-trigger="click"
                                                style="cursor: pointer"
-                                               th:attr="hx-get=@{/therapist/exercises/search(pageNumber=${exercises.getPageable().pageNumber}, searchDto=${searchDto})}"
-                                               th:if="${exercises.getPageable().pageNumber >= 1}"
+                                               th:attr="hx-get=@{/therapist/exercises/search(pageNumber=${exercises.number}, searchDto=${searchDto})}"
+                                               th:if="${exercises.number >= 1}"
                                             >Назад</a>
                                         </li>
                                     </div>
@@ -118,7 +118,7 @@
                                          th:each="pageNumber : ${#numbers.sequence(1, exercises.getTotalPages(), 1)}"
                                          th:if="${exercises.totalPages > 0}">
                                         <li class="page-item"
-                                            th:classappend="${pageNumber == (exercises.getPageable().pageNumber + 1)} ? 'active' : ''">
+                                            th:classappend="${pageNumber == (exercises.number + 1)} ? 'active' : ''">
                                             <a class="page-link"
                                                hx-target="#tablePagination"
                                                hx-trigger="click"
@@ -130,13 +130,13 @@
 
                                     <div class="pagination">
                                         <li class="page-item"
-                                            th:classappend="${!(exercises.getPageable().pageNumber < exercises.totalPages) ? 'disabled' : ''}">
+                                            th:classappend="${!(exercises.number < exercises.totalPages) ? 'disabled' : ''}">
                                             <a class="page-link"
                                                hx-target="#tablePagination"
                                                hx-trigger="click"
                                                style="cursor: pointer"
                                                th:attr="hx-get=@{/therapist/exercises/search(pageNumber=${exercises.getPageable().pageNumber + 2}, searchDto=${searchDto})}"
-                                               th:if="${exercises.getPageable().pageNumber < exercises.totalPages - 1}"
+                                               th:if="${exercises.number < exercises.totalPages - 1}"
                                             >Вперед</a>
                                         </li>
                                     </div>
