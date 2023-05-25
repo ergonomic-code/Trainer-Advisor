@@ -6,8 +6,8 @@ import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.CompletingDto
 import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.CompletingQuestionnaireDto
 import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.CompletingSearchDto
 import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.PageImpl
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
