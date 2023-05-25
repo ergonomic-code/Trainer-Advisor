@@ -1,5 +1,6 @@
 package nsu.fit.qyoga.cases.core.completingQuestionnaires.ui
 
+import io.kotest.matchers.shouldBe
 import io.restassured.http.ContentType
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
@@ -125,6 +126,26 @@ class CompletingListViewTest : QYogaAppTestBase() {
                 node("#questionnaire-find-bar") { exists() }
                 node("#completing-navigation-bar") { exists() }
             }
+        }
+    }
+
+    @Test
+    fun `QYoga returns similar completing-list on second request`() {
+        val body1 = Given {
+            authorized()
+            contentType(ContentType.JSON)
+            param("clientName", "first_name")
+        } When {
+            get("/therapist/questionnaires/performing/action")
+        } Then {}
+        Given {
+            authorized()
+            contentType(ContentType.JSON)
+            param("clientName", "first_name")
+        } When {
+            get("/therapist/questionnaires/performing/action")
+        } Then {
+            extract().body().asString() shouldBe body1.extract().body().asString()
         }
     }
 }
