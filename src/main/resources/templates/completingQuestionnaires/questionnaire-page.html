@@ -54,6 +54,7 @@
                                    hx-target="#page-content"
                                    placeholder="ФИО"
                                    class="form-control"
+                                   id="client-find-bar"
                                    style="border-color:inherit; height: 40px"
                                    th:field="*{completingSearchDto.clientName}"
                                    hx-trigger="keyup changed delay:500ms, search"
@@ -66,6 +67,7 @@
                              style="width: calc((100% - 250px)/2); min-width: 210px; height: 40px; margin-top: 10px">
                             <input aria-describedby="basic-addon2"
                                    hx-target="#page-content"
+                                   id="questionnaire-find-bar"
                                    placeholder="Название опросника"
                                    class="form-control"
                                    style="border-color:inherit; height: 40px"
@@ -131,7 +133,7 @@
                                     </table>
                                 </div>
 
-                                <div id="questionnaires-navigation-bar" style="height: 50px">
+                                <div id="completing-navigation-bar" style="height: 50px">
                                     <ul class="pagination justify-content-center">
                                         <div class="pagination">
                                             <li class="page-item"
