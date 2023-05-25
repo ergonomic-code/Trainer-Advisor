@@ -44,7 +44,7 @@
     </div>
 
     <div th:id="|question${question.id}Img|" style="margin-top: 20px">
-        <div th:replace="~{/fragments/create-questionnaire-image.html :: questionImage(${question}, ${questionIndex}) }"></div>
+        <div th:replace="~{fragments/create-questionnaire-image.html :: questionImage(${question}, ${questionIndex}) }"></div>
     </div>
 </div>
 <div th:id="|question${question.id}Body|" >
@@ -86,7 +86,7 @@
             </div>
 
             <div th:id="|question${question.id}answer${answer.id}Img|" style="margin-top: 20px">
-                <div th:replace="~{/fragments/create-questionnaire-image.html :: answerImage(${answer}, ${questionIndex}, ${j.index}, ${question.id}) }"></div>
+                <div th:replace="~{fragments/create-questionnaire-image.html :: answerImage(${answer}, ${questionIndex}, ${j.index}, ${question.id}) }"></div>
             </div>
         </div>
 
@@ -119,7 +119,7 @@
             </div>
 
             <div th:id="|question${question.id}answer${answer.id}Img|" style="margin-top: 20px">
-                <div th:replace="~{/fragments/create-questionnaire-image.html :: answerImage(${answer}, ${questionIndex}, ${j.index}, ${question.id}) }"></div>
+                <div th:replace="~{fragments/create-questionnaire-image.html :: answerImage(${answer}, ${questionIndex}, ${j.index}, ${question.id}) }"></div>
             </div>
         </div>
 

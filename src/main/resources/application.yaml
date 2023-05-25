@@ -9,11 +9,3 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 1MB
-  session:
-    jdbc:
-      initialize-schema: always
-server:
-  servlet:
-    session:
-      cookie:
-        name: JSESSIONID
