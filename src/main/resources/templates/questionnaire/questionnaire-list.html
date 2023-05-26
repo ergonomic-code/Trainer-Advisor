@@ -13,68 +13,72 @@
 
     <div th:replace="~{fragments/leftNavPanel.html :: leftNavPanel}"></div>
 
-    <div id="layoutSidenav_content" style="height: calc(100% - 60px)">
-        <main style="height: calc(100% - 75px);">
-            <div class="container-fluid px-4" style="height: 100%">
-                <div style="display: flex; justify-content:space-between; flex-direction: row;">
-                    <h1 class="mt-4">Опросники</h1>
-                    <form class="input-group" th:action="@{/therapist/questionnaires/new}" th:method="GET"
-                          style="height: 40px; margin-top: 26px; width: auto;">
-                        <button class="btn btn-secondary" type="submit">Новый опросник</button>
-                    </form>
-                </div>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
 
-                <div class="card" style="height: calc(100% - 70px);">
-                    <div class="card-header" style="height: 40px;">
-                        <i class="fas fa-table me-1"></i>
-                        Список опросников
+                <div style="display: flex; justify-content:space-between; flex-direction: row; margin-top: 10px">
+                    <h1 >Опросники</h1>
+                    <div class="navbar">
+                        <form class="input-group mx-3" th:action="@{/therapist/questionnaires/performing}" th:method="GET"
+                              style="height: 40px; width: auto;">
+                            <button class="btn btn-secondary" type="submit">Прохождения</button>
+                        </form>
+                        <form class="input-group " th:action="@{/therapist/questionnaires/new}" th:method="GET"
+                              style="height: 40px; width: auto;">
+                            <button class="btn btn-secondary" type="submit">Новый опросник</button>
+                        </form>
                     </div>
-                    <div class="card-body" id="card-body" style="padding: 0.5rem 0.5rem; height: calc(100% - 40px)" >
-                        <div th:fragment="page-content" style="height: 100%; flex-direction: column">
-                            <div class="input-group" style="flex-direction: row; flex-wrap: wrap; height: 85px">
+                </div>
+                <div th:fragment="page-content">
 
-                                <div class="me-auto" id="questionnaires-find-bar"
-                                     style="width: calc(100% - 240px); min-width: 210px; height: 40px; margin-top: 10px">
-                                    <input aria-describedby="basic-addon2"
-                                           hx-target="#card-body"
-                                           placeholder="Название опросника"
-                                           class="form-control"
-                                           style="border-color:inherit; height: 40px"
-                                           th:attr="hx-get=@{/therapist/questionnaires/action(sort=${'title,'+sortType})}"
-                                           th:field="*{questionnaireSearchDto.title}"
-                                           hx-trigger="keyup changed delay:500ms, search"
-                                           th:value="${questionnaireSearchDto.title}"
-                                           type="text">
-                                </div>
-
-                                <div class="input-group" id="questionnaires-sort-bar"
-                                     style="width: 220px; margin-top: 10px">
-                                    <div class="input-group-prepend w-auto float-md-end" style="height: 40px">
-                                        <label class="input-group-text" for="sort-type-select" style="height: 40px">Сортировка:</label>
-                                    </div>
-                                    <select class="custom-select w-auto float-md-end" hx-params="*"
-                                            hx-target="#card-body"
-                                            style="height: 40px; border-radius: 5px"
-                                            id="sort-type-select"
-                                            hx-trigger="change"
-                                            th:attr="hx-get=@{/therapist/questionnaires/action(title=${questionnaireSearchDto.title}, page=${0})}"
-                                            th:name="sort">
-                                        <option th:if="${sortType} == 'ASC'" selected disabled hidden>От А до Я</option>
-                                        <option th:if="${sortType} == 'DESC'" selected disabled hidden>От Я до А</option>
-                                        <option value='title,asc'>От А до Я</option>
-                                        <option value='title,desc'>От Я до А</option>
-                                    </select>
-                                </div>
-
+                    <div class="input-group bg-dark" style="flex-direction: row; flex-wrap: wrap; border-radius: 0.25rem;
+                         padding: 10px 10px 20px 10px; margin-top: 10px">
+                        <div class="me-auto" id="questionnaires-find-bar"
+                             style="width: calc(100% - 240px); min-width: 210px; height: 40px; margin-top: 10px">
+                            <input aria-describedby="basic-addon2"
+                                   hx-target="#card-body"
+                                   placeholder="Название опросника"
+                                   class="form-control"
+                                   style="border-color:inherit; height: 40px"
+                                   th:attr="hx-get=@{/therapist/questionnaires/action(sort=${'title,'+sortType})}"
+                                   th:field="*{questionnaireSearchDto.title}"
+                                   hx-trigger="keyup changed delay:500ms, search"
+                                   th:value="${questionnaireSearchDto.title}"
+                                   type="text">
+                        </div>
+                        <div class="input-group" id="questionnaires-sort-bar"
+                             style="width: 220px; margin-top: 10px">
+                            <div class="input-group-prepend w-auto float-md-end" style="height: 40px">
+                                <label class="input-group-text" for="sort-type-select" style="height: 40px">Сортировка:</label>
                             </div>
+                            <select class="custom-select w-auto float-md-end" hx-params="*"
+                                    hx-target="#card-body"
+                                    style="height: 40px; border-radius: 5px"
+                                    id="sort-type-select"
+                                    hx-trigger="change"
+                                    th:attr="hx-get=@{/therapist/questionnaires/action(title=${questionnaireSearchDto.title}, page=${0})}"
+                                    th:name="sort">
+                                <option th:if="${sortType} == 'ASC'" selected disabled hidden>От А до Я</option>
+                                <option th:if="${sortType} == 'DESC'" selected disabled hidden>От Я до А</option>
+                                <option value='title,asc'>От А до Я</option>
+                                <option value='title,desc'>От Я до А</option>
+                            </select>
+                        </div>
+                    </div>
 
-                            <div id="tablePag" style="height: calc(100% - 105px); margin-top: 20px">
+                    <div class="card" style="margin-top: 10px">
+                        <div class="card-header" style="height: 40px;">
+                            <i class="fas fa-table me-1"></i>
+                            Список опросников
+                        </div>
+                        <div class="card-body" id="card-body" style="overflow: auto" >
+                            <div id="tablePag" style="margin-top: 20px">
 
-                                <div th:fragment="pagination-content" style="height: calc(100% - 50px); overflow: auto">
-
-                                    <table class="table table-hover" id="questionnaires-list">
+                                <div th:fragment="pagination-content" style="overflow: auto">
+                                    <table style="width: 100%; border-spacing: 0 10px" class="table table-hover" id="questionnaires-list">
                                         <thead></thead>
-                                        <tbody>
+                                        <tbody style="gap: 10px">
                                         <tr class="questionnaire" th:each="questionnaire : ${questionnaires.content}"
                                             th:fragment="questionnaires">
                                             <td>
@@ -155,7 +159,6 @@
                                 </div>
 
                             </div>
-
                         </div>
                     </div>
                 </div>

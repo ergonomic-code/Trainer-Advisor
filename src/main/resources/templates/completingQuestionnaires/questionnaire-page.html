@@ -1,35 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="IE=edge" http-equiv="X-UA-Compatible"/>
-    <meta content="width=device-width, initial-scale=1, shrink-to-fit=no" name="viewport"/>
-    <meta content="" name="description"/>
-    <meta content="" name="author"/>
-    <link href="/img/caret-down-square-fill.svg" rel="icon" type="image/x-icon">
-    <title>Упражнение</title>
-    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet"/>
-    <link href="/styles/styles.css" rel="stylesheet"/>
-    <link href="/styles/upload-file-style.css" rel="stylesheet">
-    <link href="/styles/input-number-style.css" rel="stylesheet">
-    <script crossorigin="anonymous" src="https://use.fontawesome.com/releases/v6.1.0/js/all.js"></script>
-    <script>
-        window.addEventListener('DOMContentLoaded', _ => {
-            // Toggle the side navigation
-            const sidebarToggle = document.body.querySelector('#sidebarToggle');
-            if (sidebarToggle) {
-                sidebarToggle.addEventListener('click', event => {
-                    event.preventDefault();
-                    document.body.classList.toggle('sb-sidenav-toggled');
-                    localStorage.setItem('sb|sidebar-toggle', document.body.classList.contains('sb-sidenav-toggled'));
-                });
-            }
-
-        });
-    </script>
-    <script crossorigin="anonymous"
-            integrity="sha384-Bj8qm/6B+71E6FQSySofJOUjA/gq330vEqjFx9LakWybUySyI1IQHwPtbTU7bNwx"
-            src="https://unpkg.com/htmx.org@1.8.6"></script>
+    <div th:replace="~{fragments/header.html}"></div>
+    <title>Прохождения опросников</title>
 </head>
 
 <body class="sb-nav-fixed sb-sidenav-toggled">
@@ -41,12 +14,11 @@
     <div th:replace="~{fragments/leftNavPanel.html :: leftNavPanel}"></div>
 
     <div id="layoutSidenav_content">
-
         <main style="height: calc(100% - 75px);">
             <div class="container-fluid px-4" style="height: 100%">
                 <div th:fragment="page-content" id="page-content">
-                    <div class="input-group bg-dark"
-                         style="flex-direction: row; flex-wrap: wrap; border-radius: 0.25rem;
+
+                    <div class="input-group bg-dark" style="flex-direction: row; flex-wrap: wrap; border-radius: 0.25rem;
                          padding: 10px 10px 20px 10px; margin-top: 10px">
                         <div class="me-auto"
                              style="width: calc((100% - 250px)/2); min-width: 210px; height: 40px; margin-top: 10px">
@@ -108,7 +80,6 @@
                             <div id="tablePag" style="height: calc(100% - 105px);">
 
                                 <div th:fragment="pagination-content" style="height: calc(100% - 50px); overflow: auto">
-
                                     <table style="width: 100%; border-spacing: 0 10px" class="table table-hover" >
                                         <thead>
                                         <tr>
@@ -223,9 +194,11 @@
         <footer class="py-4 bg-light mt-auto" th:insert="~{fragments/footer.html :: footer}"></footer>
     </div>
 </div>
-<script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<div w3-include-html=""></div>
+
+<script crossorigin="anonymous"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
 <script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>
-
 </body>
 </html>
