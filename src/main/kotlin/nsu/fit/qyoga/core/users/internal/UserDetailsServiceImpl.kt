@@ -15,9 +15,4 @@ class UserDetailsServiceImpl(
         return QyogaUserDetails.build(user)
     }
 
-    fun findUserIdByUsername(username: String): Long {
-        val user = usersRepo.findByUsername(username) ?: throw BadCredentials()
-        return user.id
-    }
-
 }
