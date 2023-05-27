@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div th:replace="~{fragments/header.html}"></div>
+    <title>Упражнение</title>
+    <link href="/styles/upload-file-style.css" rel="stylesheet">
+    <link href="/styles/input-number-style.css" rel="stylesheet">
+</head>
+
+<body class="sb-nav-fixed sb-sidenav-toggled">
+
+<div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
+
+<div id="layoutSidenav">
+
+    <div th:replace="~{fragments/leftNavPanel.html :: leftNavPanel}"></div>
+
+    <div id="layoutSidenav_content">
+
+
+        <div id="questionnaire" style="padding-left: 15%; padding-right: 15%; margin-bottom: 100px">
+
+            <div id="questionnaire-title" class="bg-dark form-control-lg mt-4"
+                 style="text-align: center; padding-bottom: 20px; border-radius: 10px">
+                <input style="width: 90%; background-color: white; margin-top: 15px;
+                border-radius: 5px; min-width: 100px; overflow: auto; text-align: center"
+                       th:value="${questionnaire.title}" disabled="">
+
+            </div>
+
+            <div id="questions" >
+                <div th:each="question, i : ${questionnaire.question}"
+                     th:fragment="questions" th:id="|question${question.id}|">
+                    <div th:replace="~{fragments/questionnaire-answer::question(${question})}"></div>
+                </div>
+            </div>
+
+            <div class="position-fixed bottom-0 start-0 w-100 text-end bg-white"
+                 style="height: 75px; box-sizing: border-box; padding-top: 10px; padding-right: 5%;">
+                <button class="btn btn-secondary" type="submit" style="height: 50px">Посмотреть ключи</button>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<script crossorigin="anonymous"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js">
+</script>
+<script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+<script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>
+</body>
+</html>

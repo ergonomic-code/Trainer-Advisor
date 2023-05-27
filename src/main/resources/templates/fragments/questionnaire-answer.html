@@ -1,0 +1,104 @@
+<div class="p-3"
+     th:fragment="question (question)"
+     style="margin-top: 20px; background-color: #dcdcdc; border-radius: 8px;">
+    <div th:id="|question${question.id}Header|" th:fragment="questionHeader">
+
+        <div class="flex-row justify-content-start d-flex" style="flex-wrap: wrap">
+            <input class="question-text" type="text" style="width: 100%; border-radius: 5px; min-width: 60px; background-color: white"
+                  th:value="${question.title}" disabled="">
+        </div>
+
+        <div th:id="|question${question.id}Img|" style="margin-top: 20px">
+            <div th:replace="~{fragments/questionnaire-image.html :: questionImage(${question})}"></div>
+        </div>
+    </div>
+    <div th:id="|question${question.id}Body|" >
+        <div style="margin-top: 20px"
+             th:each="answer,j : ${question.answers}"
+             th:id="|answer${answer.id}|"
+             th:switch="${question.questionType.name}">
+            <input th:class="|answer${j.index}Score|" hidden th:name="|question[${questionIndex}].answers[${j.index}].score|" th:value="${answer.score}">
+
+            <div th:case="SINGLE">
+                <div class="d-flex flex-row">
+                    <img src="/img/circle.png" alt="answer type" style="width: 25px; height: 25px">
+                    <label style="width: calc(100% - 100px); margin-left: 10px">
+                        <input style="border-radius: 5px; background-color: white; overflow: auto"
+                               class="answerText w-100" type="text" name="answer"
+                               th:value="${answer.title}" disabled="">
+                    </label>
+                    <label style="width: 50px; margin-left: 10px">
+                        <input style="height: 28px; width: 60px; border-radius: 5px;
+                        background-color: white; overflow: auto; text-align: center"
+                               class="answerScore" type="number" disabled=""
+                               th:value="${answer.score}">
+                    </label>
+                </div>
+
+                <div th:id="|question${question.id}answer${answer.id}Img|" style="margin-top: 20px">
+                    <div th:replace="~{fragments/questionnaire-image.html :: answerImage(${answer}) }"></div>
+                </div>
+            </div>
+
+            <div th:case="SEVERAL">
+                <div class="d-flex flex-row">
+                    <img src="/img/square.png" alt="answer type" style="width: 25px; height: 25px">
+                    <label style="width: calc(100% - 100px); margin-left: 10px">
+                        <input style="border-radius: 5px; background-color: white"
+                               class="answerText w-100" type="text" name="answer"
+                               th:value="${answer.title}" disabled="">
+                    </label>
+                    <label style="width: 50px; margin-left: 10px">
+                        <input style="height: 28px; width: 60px; border-radius: 5px;
+                        background-color: white; overflow: auto; text-align: center"
+                               class="answerScore" type="number" disabled=""
+                               th:value="${answer.score}">
+                    </label>
+                </div>
+
+                <div th:id="|question${question.id}answer${answer.id}Img|" style="margin-top: 20px">
+                    <div th:replace="~{fragments/questionnaire-image.html :: answerImage(${answer}) }"></div>
+                </div>
+            </div>
+
+            <div th:case="TEXT" style="margin-top: 20px" >
+                <label style="width: 100%">
+                    <input style="width: 100%; border-radius: 5px; background-color: white"
+                           class="answerText" type="text" name="answer" disabled="" >
+                </label>
+            </div>
+
+            <div th:case="RANGE" th:id="|answer${answer.id}|" class="answer" >
+                <div style="display: flex">
+                    <label>
+                        <input name="range"
+                               class="sortBtn" style="width: 50px; border-radius: 5px;
+                               text-align: center; background-color: white"
+                               disabled="" th:value="${answer.bounds.lowerBound}">
+                    </label>
+                    <label style="margin-left: 20px; width: 100%">
+                        <input style="border-radius: 5px; width: 100%; background-color: white"
+                               type="text" class="answerText"
+                               th:value="${answer.bounds.lowerBoundText}" disabled="">
+                    </label>
+                </div>
+                <div style="display: flex; margin-top: 20px">
+                    <label>
+                        <input name="range"
+                                class="sortBtn" style="width: 50px; border-radius: 5px;
+                                text-align: center; background-color: white"
+                                disabled="" th:value="${answer.bounds.upperBound}">
+                    </label>
+                    <label style="margin-left: 20px; width: 100%">
+                        <input style="border-radius: 5px; width: 100%; background-color: white"
+                               type="text" class="answerText"
+                               th:value="${answer.bounds.upperBoundText}" disabled="">
+                    </label>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,11 @@
+<div th:fragment="questionImage (question)"
+     th:if="${question.imageId} != null">
+    <img class="questionImage" th:src="@{'/therapist/questionnaires/image/'+${question.imageId}}"
+         style="width: 50%; min-width: 250px">
+</div>
+
+<div th:fragment="answerImage (answer)"
+     th:if="${answer.imageId} != null" >
+    <img class="answerImage" th:src="@{'/therapist/questionnaires/image/'+${answer.imageId}}"
+         style="width: 50%; min-width: 250px">
+</div>

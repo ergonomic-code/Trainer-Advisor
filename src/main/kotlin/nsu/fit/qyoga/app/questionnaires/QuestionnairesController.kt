@@ -49,6 +49,19 @@ class QuestionnairesController(
         return "questionnaire/questionnaire-list :: page-content"
     }
 
+    /**
+     * Получение опросника
+     */
+    @GetMapping("/{questionnaireId}")
+    fun getQuestionnaire(
+        model: Model,
+        @PathVariable questionnaireId: Long
+    ): String {
+        val questionnaire = questionnaireService.findQuestionnaireWithQuestions(questionnaireId)
+        model.addAttribute("questionnaire", questionnaire)
+        return "questionnaire/questionnaire"
+    }
+
     fun addQuestionnairePageAttributes(
         model: Model,
         questionnaireSearchDto: QuestionnaireSearchDto,
