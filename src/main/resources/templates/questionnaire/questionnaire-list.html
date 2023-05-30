@@ -3,6 +3,21 @@
 <head>
     <div th:replace="~{fragments/header.html}"></div>
     <title>Список опросников</title>
+    <style>
+        .dot {
+            border-radius: 50%;
+            height: 6px;
+            width: 6px;
+            background: black;
+            margin: 4px auto;
+        }
+        .dot-wrapper {
+            width: 20px;
+        }
+        .dot { display: none; }
+        .row:hover .dot { display: block; }
+        .row:hover .field { font-size: 18px }
+    </style>
 </head>
 
 <body class="sb-nav-fixed sb-sidenav-toggled" style="height: 100%">
@@ -81,11 +96,18 @@
                                         <tbody style="gap: 10px">
                                         <tr class="questionnaire" th:each="questionnaire : ${questionnaires.content}"
                                             th:fragment="questionnaires">
-                                            <td>
-                                                <a class="field"
-                                                   th:href="@{/therapist/questionnaires/{id}(id=${questionnaire.id})}" th:text="${questionnaire.title}">
-                                                    questionnaire
-                                                </a>
+                                            <td class="row" style="width: 100%">
+                                                <div style="display: inline-block; width: calc(100% - 40px)">
+                                                    <a class="field"
+                                                       th:href="@{/therapist/questionnaires/{id}(id=${questionnaire.id})}" th:text="${questionnaire.title}">
+                                                        questionnaire
+                                                    </a>
+                                                </div>
+                                                <div class="dot-wrapper" style="display: inline-block;">
+                                                    <div class="dot"></div>
+                                                    <div class="dot"></div>
+                                                    <div class="dot"></div>
+                                                </div>
                                             </td>
                                         </tr>
                                         </tbody>

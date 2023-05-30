@@ -1,5 +1,6 @@
 package nsu.fit.qyoga.app.questionnaires
 
+import jakarta.servlet.http.HttpSession
 import nsu.fit.qyoga.core.questionnaires.api.dtos.*
 import nsu.fit.qyoga.core.questionnaires.api.services.*
 import org.springframework.data.domain.Page
@@ -12,7 +13,8 @@ import org.springframework.web.bind.annotation.*
 @Controller
 @RequestMapping("/therapist/questionnaires")
 class QuestionnairesController(
-    private val questionnaireService: QuestionnaireService
+    private val questionnaireService: QuestionnaireService,
+    private val httpSession: HttpSession
 ) {
 
     /**
@@ -57,9 +59,31 @@ class QuestionnairesController(
         model: Model,
         @PathVariable questionnaireId: Long
     ): String {
-        val questionnaire = questionnaireService.findQuestionnaireWithQuestions(questionnaireId)
-        model.addAttribute("questionnaire", questionnaire)
+        model.addAttribute("questionnaire", getQuestionnaire(questionnaireId))
         return "questionnaire/questionnaire"
+    }
+
+    /**
+     * Получение результатов опросника
+     */
+    @GetMapping("/{questionnaireId}/decoding")
+    fun getQuestionnaireResults(
+        model: Model,
+        @PathVariable questionnaireId: Long
+    ): String {
+        model.addAttribute("questionnaire", getQuestionnaire(questionnaireId))
+        return "questionnaire/decoding"
+    }
+
+    fun getQuestionnaire(questionnaireId: Long): CreateQuestionnaireDto? {
+        val inSessionQuestionnaire = httpSession.getAttribute("watchQuestionnaire") as CreateQuestionnaireDto?
+        return if (inSessionQuestionnaire == null || inSessionQuestionnaire.id != questionnaireId) {
+            val tempQ = questionnaireService.findQuestionnaireWithQuestions(questionnaireId)
+            httpSession.setAttribute("watchQuestionnaire", tempQ)
+            tempQ
+        } else {
+            inSessionQuestionnaire
+        }
     }
 
     fun addQuestionnairePageAttributes(
