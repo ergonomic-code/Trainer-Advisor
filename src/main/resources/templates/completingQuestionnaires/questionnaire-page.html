@@ -15,8 +15,8 @@
 
     <div id="layoutSidenav_content">
         <main style="height: calc(100% - 75px);">
-            <div class="container-fluid px-4" style="height: 100%">
-                <div th:fragment="page-content" id="page-content">
+            <div class="container-fluid px-4" style="height: 100%" id="page-content">
+                <div th:fragment="page-content">
 
                     <div class="input-group bg-dark" style="flex-direction: row; flex-wrap: wrap; border-radius: 0.25rem;
                          padding: 10px 10px 20px 10px; margin-top: 10px">
@@ -194,11 +194,5 @@
         <footer class="py-4 bg-light mt-auto" th:insert="~{fragments/footer.html :: footer}"></footer>
     </div>
 </div>
-<div w3-include-html=""></div>
-
-<script crossorigin="anonymous"
-        src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-<script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
-<script crossorigin="anonymous" src="https://cdn.jsdelivr.net/npm/simple-datatables@latest"></script>
 </body>
 </html>

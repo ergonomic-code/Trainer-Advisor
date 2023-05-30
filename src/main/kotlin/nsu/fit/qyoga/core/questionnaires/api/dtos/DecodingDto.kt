@@ -5,4 +5,4 @@ data class DecodingDto(
     var lowerBound: Int = 0,
     var upperBound: Int = 0,
     var result: String = ""
-) : java.io.Serializable
+)

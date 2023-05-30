@@ -1,10 +1,10 @@
 package nsu.fit.qyoga.core.completingQuestionnaires.internal.repository
 
+import nsu.fit.platform.errors.ResourceNotFound
+import nsu.fit.platform.spring.queryForPage
 import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.*
 import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
 import java.sql.ResultSet
@@ -18,23 +18,22 @@ class CompletingJdbcTemplateRepo(
         completingSearchDto: CompletingSearchDto,
         pageable: Pageable
     ): Page<CompletingDto> {
-        val completingList: MutableList<CompletingDto> = mutableListOf()
-        val params = MapSqlParameterSource()
-        params.addValue("therapistId", therapistId)
-        params.addValue("pageSize", pageable.pageSize)
-        params.addValue("offset", pageable.pageSize * pageable.pageNumber)
-        params.addValue("name", completingSearchDto.clientName)
-        params.addValue("qTitle", completingSearchDto.title)
-        jdbcTemplate.query(
-            getQueryBySortType(pageable.sort.toString().substringAfter(": ")),
-            params
+        val params = mapOf<String, Any>(
+            "therapistId" to therapistId,
+            "name" to completingSearchDto.clientName,
+            "qTitle" to completingSearchDto.title
+        )
+        val pageableSortType = pageable.sort.toString().substringAfter(": ")
+        if (pageableSortType != "ASC" && pageableSortType != "DESC") {
+            throw ResourceNotFound("Ошибка типа сортировки")
+        }
+        return jdbcTemplate.queryForPage(
+            getQueryBySortType(pageableSortType),
+            params,
+            pageable
         ) { rs: ResultSet, _: Int ->
-            val completingId = rs.getLong("completingId")
-            if (completingId == 0L) {
-                return@query
-            }
-            val completing = CompletingDto(
-                completingId,
+            CompletingDto(
+                rs.getLong("completingId"),
                 CompletingQuestionnaireDto(
                     rs.getLong("questionnaireId"),
                     rs.getString("questionnaireTitle")
@@ -49,10 +48,7 @@ class CompletingJdbcTemplateRepo(
                 rs.getLong("numericResult"),
                 rs.getString("textResult")
             )
-
-            completingList.add(completing)
         }
-        return PageImpl(completingList, pageable, getRecordsNum(therapistId, completingSearchDto))
     }
 
     fun getQueryBySortType(type: String): String {
@@ -75,33 +71,6 @@ class CompletingJdbcTemplateRepo(
             AND clients.first_name||''||clients.last_name||''||clients.patronymic LIKE '%' || :name || '%'
             AND questionnaires.title LIKE '%' || :qTitle || '%'
             ORDER BY completingDate ${if (type == "UNSORTED") "ASC" else type}
-            LIMIT :pageSize OFFSET :offset
         """.trimIndent()
-    }
-
-    fun getRecordsNum(
-        therapistId: Long,
-        completingSearchDto: CompletingSearchDto
-    ): Long {
-        val query = """
-            SELECT
-            COUNT(*) AS totalRecords
-            FROM completing
-            LEFT JOIN clients ON clients.id = completing.client_id
-            LEFT JOIN questionnaires ON questionnaires.id = completing.questionnaire_id
-            WHERE completing.therapist_id = :therapistId
-            AND clients.first_name||''||clients.last_name||''||clients.patronymic LIKE '%' || :name || '%'
-            AND questionnaires.title LIKE '%' || :qTitle || '%'
-        """.trimIndent()
-        val params = MapSqlParameterSource()
-        params.addValue("therapistId", therapistId)
-        params.addValue("name", completingSearchDto.clientName)
-        params.addValue("qTitle", completingSearchDto.title)
-        return jdbcTemplate.queryForObject(
-            query,
-            params
-        ) { rs: ResultSet, _: Int ->
-            rs.getLong("totalRecords")
-        } ?: 0
     }
 }

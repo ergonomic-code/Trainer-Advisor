@@ -5,4 +5,4 @@ data class CreateQuestionnaireDto(
     val title: String,
     val question: MutableList<CreateQuestionDto> = mutableListOf(),
     val decoding: MutableList<DecodingDto> = mutableListOf()
-) : java.io.Serializable
+)
