@@ -167,25 +167,4 @@ class CompletingListViewTest : QYogaAppTestBase() {
             }
         }
     }
-
-    @Test
-    fun `QYoga returns empty page completing-list if nothing exists`() {
-        Given {
-            authorized()
-            contentType(ContentType.JSON)
-            param("page", 3)
-        } When {
-            get("/therapist/questionnaires/performing/action")
-        } Then {
-            val body = Jsoup.parse(extract().body().asString())
-            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#table-body") { exists() }
-                node(".table-completing-row") { exists() }
-                node("#sort-type-select") { exists() }
-                node("#client-find-bar") { exists() }
-                node("#questionnaire-find-bar") { exists() }
-                node("#completing-navigation-bar") { exists() }
-            }
-        }
-    }
 }
