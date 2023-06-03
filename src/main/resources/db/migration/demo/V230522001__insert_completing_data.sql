@@ -20,4 +20,4 @@ VALUES
     ('2023-05-22', 10, 'large_text_result_123456789011121314151617181920', 9, 1, (SELECT id from therapists WHERE name = 'Екатерина Маркова')),
     ('2023-05-22', 10, 'large_text_result_123456789011121314151617181920', 9, 1, (SELECT id from therapists WHERE name = 'Екатерина Маркова')),
     ('2023-05-22', 10, 'large_text_result_123456789011121314151617181920', 9, 1, (SELECT id from therapists WHERE name = 'Екатерина Маркова')),
-    ('2023-05-22', 10, 'large_text_result_123456789011121314151617181920', 1, 1, (SELECT id from therapists WHERE name = 'Екатерина Маркова'))
+    ('2023-05-22', 10, 'large_text_result_123456789011121314151617181920', 1, 1, (SELECT id from therapists WHERE name = 'Екатерина Маркова'));
