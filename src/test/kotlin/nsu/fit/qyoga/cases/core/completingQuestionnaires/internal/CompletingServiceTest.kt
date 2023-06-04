@@ -33,6 +33,7 @@ class CompletingServiceTest(
         dbInitializer.executeScripts(
             "/db/completing/completing-questionnaires-init-script.sql" to "dataSource",
             "/db/migration/common/V23051304__insert_questionnaires_data.sql" to "dataSource",
+            "/db/completing/insert_therapist.sql" to "dataSource",
             "/db/completing/insert_completing_data.sql" to "dataSource"
         )
     }

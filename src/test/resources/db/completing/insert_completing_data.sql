@@ -4,20 +4,6 @@ VALUES
     ('first_name', 'last_name', 'patronymic', '2023-05-20', 'phone_number', 'diagnose', 'email', 'test'),
     ('first_name2', 'last_name2', 'patronymic2', '2023-05-20', 'phone_number2', 'diagnose2', 'email2', 'test2');
 
-insert into users (username, password_hash, roles)
-values ('therapist', '$2a$12$wAIeyLso8yKIlIlv62EeL.R1co2DmJdb5DitjmdP.qYZflJNMP.ua', '{"ROLE_THERAPIST"}');
-
-INSERT into therapists (id, name)
-VALUES ((SELECT id from users WHERE username = 'therapist'),
-        'Екатерина Маркова');
-
-insert into users (username, password_hash, roles)
-values ('therapist2', '$2a$12$wAIeyLso8yKIlIlv62EeL.R1co2DmJdb5DitjmdP.qYZflJNMP.ua', '{"ROLE_THERAPIST"}');
-
-INSERT into therapists (id, name)
-VALUES ((SELECT id from users WHERE username = 'therapist2'),
-        'Тестовый Терапевт');
-
 INSERT INTO completing
     (completing_date, numeric_result, text_result, questionnaire_id, client_id, therapist_id)
 VALUES
