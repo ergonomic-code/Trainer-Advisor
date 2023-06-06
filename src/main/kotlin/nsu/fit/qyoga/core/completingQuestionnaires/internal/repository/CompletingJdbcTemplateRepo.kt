@@ -1,13 +1,15 @@
 package nsu.fit.qyoga.core.completingQuestionnaires.internal.repository
 
-import nsu.fit.platform.errors.ResourceNotFound
+import nsu.fit.platform.lang.sortDirection
 import nsu.fit.platform.spring.queryForPage
 import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.*
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
 import java.sql.ResultSet
+import java.time.LocalDate
 
 @Repository
 class CompletingJdbcTemplateRepo(
@@ -23,12 +25,9 @@ class CompletingJdbcTemplateRepo(
             "name" to completingSearchDto.clientName,
             "qTitle" to completingSearchDto.title
         )
-        val pageableSortType = pageable.sort.toString().substringAfter(": ")
-        if (pageableSortType != "ASC" && pageableSortType != "DESC") {
-            throw ResourceNotFound("Ошибка типа сортировки")
-        }
+        val sortDirection = pageable.sortDirection("date") ?: Sort.Direction.ASC
         return jdbcTemplate.queryForPage(
-            getQueryBySortType(pageableSortType),
+            getQueryBySortType(sortDirection),
             params,
             pageable
         ) { rs: ResultSet, _: Int ->
@@ -44,14 +43,14 @@ class CompletingJdbcTemplateRepo(
                     rs.getString("clientLastName"),
                     rs.getString("clientPatronymic")
                 ),
-                rs.getDate("completingDate"),
+                LocalDate.parse(rs.getString("completingDate")),
                 rs.getLong("numericResult"),
                 rs.getString("textResult")
             )
         }
     }
 
-    fun getQueryBySortType(type: String): String {
+    fun getQueryBySortType(sortDirection: Sort.Direction): String {
         return """
             SELECT
             clients.id AS clientId,
@@ -70,7 +69,7 @@ class CompletingJdbcTemplateRepo(
             WHERE completing.therapist_id = :therapistId
             AND clients.first_name||''||clients.last_name||''||clients.patronymic LIKE '%' || :name || '%'
             AND questionnaires.title LIKE '%' || :qTitle || '%'
-            ORDER BY completingDate ${if (type == "UNSORTED") "ASC" else type}
+            ORDER BY completingDate ${sortDirection.name}
         """.trimIndent()
     }
 }

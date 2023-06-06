@@ -92,13 +92,13 @@
                                         </tr>
                                         </thead>
                                         <tbody id="table-body" style="gap: 10px">
-                                        <tr th:each="result : ${results.content}" th:fragment="table-completing" class="table-completing-row">
-                                            <td class="col" style="text-align: center"><a th:href="@{/}" th:text="|${result.client.firstName} ${result.client.lastName}|"></a></td>
-                                            <td class="col" style="text-align: center"><a th:href="@{/}" th:text="${result.questionnaire.title}"></a></td>
-                                            <td class="col" style="text-align: center" th:text="${#dates.format(result.completingDate, 'dd-MM-yyyy')}"></td>
-                                            <td class="col" style="text-align: center" th:text="${result.numericResult}"></td>
-                                            <td class="col" style="text-align: center" th:text="${result.textResult}"></td>
-                                            <td class="col" style="text-align: center"> <a th:href="@{/}">Просмотр</a></td>
+                                        <tr th:each="result : ${results.content}" th:fragment="table-completing" th:id="|completing${result.id}|" class="table-completing-row">
+                                            <td class="col" th:id="|completing${result.id}ClientName|" style="text-align: center"><a th:href="@{/}" th:text="|${result.client.firstName} ${result.client.lastName}|"></a></td>
+                                            <td class="col" th:id="|completing${result.id}Title|" style="text-align: center"><a th:href="@{/}" th:text="${result.questionnaire.title}"></a></td>
+                                            <td class="col" th:id="|completing${result.id}Date|" style="text-align: center" th:text="${#temporals.format(result.completingDate, 'dd-MM-yyyy')}"></td>
+                                            <td class="col" th:id="|completing${result.id}NumericResult|" style="text-align: center" th:text="${result.numericResult}"></td>
+                                            <td class="col" th:id="|completing${result.id}TextResult|" style="text-align: center" th:text="${result.textResult}"></td>
+                                            <td class="col" th:id="|completing${result.id}Watch|" style="text-align: center"> <a th:href="@{/}">Просмотр</a></td>
                                         </tr>
                                         </tbody>
                                     </table>

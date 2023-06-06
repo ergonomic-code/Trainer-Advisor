@@ -11,14 +11,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Import
 
+//отсортировано по алфавиту
 @Import(
-    UsersConfig::class,
-    ExercisesConfig::class,
-    QuestionnairesConfig::class,
     ClientConfig::class,
+    CompletingQuestionnairesConfig::class,
+    ExercisesConfig::class,
     ImagesConfig::class,
+    QuestionnairesConfig::class,
     TherapeuticPurposesConfig::class,
-    CompletingQuestionnairesConfig::class
+    UsersConfig::class
 )
 @SpringBootApplication
 class QYogaApplication

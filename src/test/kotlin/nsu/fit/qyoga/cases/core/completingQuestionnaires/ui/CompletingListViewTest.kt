@@ -35,19 +35,17 @@ class CompletingListViewTest : QYogaAppTestBase() {
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#table-body") {
-                    exists()
-                    containsText("01-05-2023")
-                    containsText("02-05-2023")
-                    containsText("03-05-2023")
-                    containsText("04-05-2023")
-                    containsText("05-05-2023")
-                    containsText("06-05-2023")
-                    containsText("07-05-2023")
-                    containsText("08-05-2023")
-                    containsText("10-05-2023")
-                    containsText("12-05-2023")
-                }
+                node("#table-body") { exists() }
+                node("#completing1") { exists() }
+                node("#completing2") { exists() }
+                node("#completing3") { exists() }
+                node("#completing4") { exists() }
+                node("#completing5") { exists() }
+                node("#completing6") { exists() }
+                node("#completing7") { exists() }
+                node("#completing8") { exists() }
+                node("#completing10") { exists() }
+                node("#completing12") { exists() }
                 node(".table-completing-row") { exists() }
                 node("#sort-type-select") { exists() }
                 node("#client-find-bar") { exists() }
@@ -58,95 +56,7 @@ class CompletingListViewTest : QYogaAppTestBase() {
     }
 
     @Test
-    fun `QYoga returns part of page completing-list when user change sort type`() {
-        Given {
-            authorized()
-            contentType(ContentType.JSON)
-            param("sort", "date,desc")
-        } When {
-            get("/therapist/questionnaires/performing/action")
-        } Then {
-            val body = Jsoup.parse(extract().body().asString())
-            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#table-body") {
-                    exists()
-                    containsText("13-05-2023")
-                    containsText("12-05-2023")
-                    containsText("10-05-2023")
-                    containsText("8-05-2023")
-                    containsText("7-05-2023")
-                    containsText("6-05-2023")
-                    containsText("5-05-2023")
-                    containsText("4-05-2023")
-                    containsText("2-05-2023")
-                    containsText("2-05-2023")
-                }
-                node(".table-completing-row") { exists() }
-                node("#sort-type-select") { exists() }
-                node("#client-find-bar") { exists() }
-                node("#questionnaire-find-bar") { exists() }
-                node("#completing-navigation-bar") { exists() }
-            }
-        }
-    }
-
-    @Test
-    fun `QYoga returns part of page completing-list when user change title`() {
-        Given {
-            authorized()
-            contentType(ContentType.JSON)
-            param("title", "test")
-        } When {
-            get("/therapist/questionnaires/performing/action")
-        } Then {
-            val body = Jsoup.parse(extract().body().asString())
-            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#table-body") {
-                    exists()
-                    containsText("02-05-2023")
-                    containsText("04-05-2023")
-                    containsText("06-05-2023")
-                    containsText("08-05-2023")
-                    containsText("13-05-2023")
-                }
-                node(".table-completing-row") { exists() }
-                node("#sort-type-select") { exists() }
-                node("#client-find-bar") { exists() }
-                node("#questionnaire-find-bar") { exists() }
-                node("#completing-navigation-bar") { exists() }
-            }
-        }
-    }
-
-    @Test
-    fun `QYoga returns part of page completing-list when user change client name`() {
-        Given {
-            authorized()
-            contentType(ContentType.JSON)
-            param("clientName", "first_name2")
-        } When {
-            get("/therapist/questionnaires/performing/action")
-        } Then {
-            val body = Jsoup.parse(extract().body().asString())
-            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#table-body") {
-                    exists()
-                    containsText("06-05-2023")
-                    containsText("08-05-2023")
-                    containsText("10-05-2023")
-                    containsText("12-05-2023")
-                }
-                node(".table-completing-row") { exists() }
-                node("#sort-type-select") { exists() }
-                node("#client-find-bar") { exists() }
-                node("#questionnaire-find-bar") { exists() }
-                node("#completing-navigation-bar") { exists() }
-            }
-        }
-    }
-
-    @Test
-    fun `QYoga returns part of page completing-list when user change page`() {
+    fun `QYoga returns table of completing when user change page`() {
         Given {
             authorized()
             contentType(ContentType.JSON)
@@ -156,9 +66,117 @@ class CompletingListViewTest : QYogaAppTestBase() {
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#table-body") {
+                node("#table-body") {exists() }
+                node("#completing13") { exists() }
+                node(".table-completing-row") { exists() }
+                node("#sort-type-select") { exists() }
+                node("#client-find-bar") { exists() }
+                node("#questionnaire-find-bar") { exists() }
+                node("#completing-navigation-bar") { exists() }
+            }
+        }
+    }
+
+    @Test
+    fun `QYoga returns table of completing sorted by date DESC when user change sort type`() {
+        Given {
+            authorized()
+            contentType(ContentType.JSON)
+            param("sort", "date,desc")
+        } When {
+            get("/therapist/questionnaires/performing/action")
+        } Then {
+            val body = Jsoup.parse(extract().body().asString())
+            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
+                node("#table-body") { exists() }
+                node("#completing13") { exists() }
+                node("#completing12") { exists() }
+                node("#completing10") { exists() }
+                node("#completing8") { exists() }
+                node("#completing7") { exists() }
+                node("#completing6") { exists() }
+                node("#completing5") { exists() }
+                node("#completing4") { exists() }
+                node("#completing3") { exists() }
+                node("#completing2") { exists() }
+                node(".table-completing-row") { exists() }
+                node("#sort-type-select") { exists() }
+                node("#client-find-bar") { exists() }
+                node("#questionnaire-find-bar") { exists() }
+                node("#completing-navigation-bar") { exists() }
+            }
+        }
+    }
+
+    @Test
+    fun `QYoga returns table of completing where title in completing title, when user change title`()
+    {
+        Given {
+            authorized()
+            contentType(ContentType.JSON)
+            param("title", "test")
+        } When {
+            get("/therapist/questionnaires/performing/action")
+        } Then {
+            val body = Jsoup.parse(extract().body().asString())
+            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
+                node("#table-body") { exists() }
+                node("#completing2Title") {
                     exists()
-                    containsText("13-05-2023")
+                    containsText("test")
+                }
+                node("#completing4Title") {
+                    exists()
+                    containsText("test")
+                }
+                node("#completing6Title") {
+                    exists()
+                    containsText("test")
+                }
+                node("#completing8Title") {
+                    exists()
+                    containsText("test")
+                }
+                node("#completing13Title") {
+                    exists()
+                    containsText("test")
+                }
+                node(".table-completing-row") { exists() }
+                node("#sort-type-select") { exists() }
+                node("#client-find-bar") { exists() }
+                node("#questionnaire-find-bar") { exists() }
+                node("#completing-navigation-bar") { exists() }
+            }
+        }
+    }
+
+    @Test
+    fun `QYoga returns table of completing where name in client full name, when user change client name`() {
+        Given {
+            authorized()
+            contentType(ContentType.JSON)
+            param("clientName", "first_name2")
+        } When {
+            get("/therapist/questionnaires/performing/action")
+        } Then {
+            val body = Jsoup.parse(extract().body().asString())
+            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
+                node("#table-body") { exists() }
+                node("#completing6ClientName") {
+                    exists()
+                    containsText("first_name2")
+                }
+                node("#completing8ClientName") {
+                    exists()
+                    containsText("first_name2")
+                }
+                node("#completing10ClientName") {
+                    exists()
+                    containsText("first_name2")
+                }
+                node("#completing12ClientName") {
+                    exists()
+                    containsText("first_name2")
                 }
                 node(".table-completing-row") { exists() }
                 node("#sort-type-select") { exists() }
