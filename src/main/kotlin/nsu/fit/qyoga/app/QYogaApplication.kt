@@ -11,7 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Import
 
-//отсортировано по алфавиту
+// Отсортировано по алфавиту
 @Import(
     ClientConfig::class,
     CompletingQuestionnairesConfig::class,
