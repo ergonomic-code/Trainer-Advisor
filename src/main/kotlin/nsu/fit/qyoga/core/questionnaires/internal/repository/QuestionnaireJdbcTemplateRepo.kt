@@ -52,7 +52,6 @@ class QuestionnaireJdbcTemplateRepo(
         } ?: 0
     }
 
-
     fun getQueryBySortType(type: String): String {
         return """
             SELECT

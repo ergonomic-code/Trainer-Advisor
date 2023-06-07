@@ -1,6 +1,7 @@
 package nsu.fit.qyoga.app
 
 import nsu.fit.qyoga.core.clients.ClientConfig
+import nsu.fit.qyoga.core.completingQuestionnaires.CompletingQuestionnairesConfig
 import nsu.fit.qyoga.core.exercises.ExercisesConfig
 import nsu.fit.qyoga.core.images.ImagesConfig
 import nsu.fit.qyoga.core.questionnaires.QuestionnairesConfig
@@ -10,13 +11,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Import
 
+// Отсортировано по алфавиту
 @Import(
-    UsersConfig::class,
-    ExercisesConfig::class,
-    QuestionnairesConfig::class,
     ClientConfig::class,
+    CompletingQuestionnairesConfig::class,
+    ExercisesConfig::class,
     ImagesConfig::class,
-    TherapeuticPurposesConfig::class
+    QuestionnairesConfig::class,
+    TherapeuticPurposesConfig::class,
+    UsersConfig::class
 )
 @SpringBootApplication
 class QYogaApplication

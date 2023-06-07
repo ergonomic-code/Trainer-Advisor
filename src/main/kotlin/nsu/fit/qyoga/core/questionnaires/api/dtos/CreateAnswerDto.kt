@@ -6,4 +6,4 @@ data class CreateAnswerDto(
     var bounds: AnswerBoundsDto = AnswerBoundsDto(),
     var score: Int? = null,
     var imageId: Long? = null
-) : java.io.Serializable
+)

@@ -13,6 +13,7 @@ interface QuestionnaireService {
     ): Page<QuestionnaireDto>
 
     fun saveQuestionnaire(createQuestionnaireDto: CreateQuestionnaireDto): Long
+
     fun findQuestionnaireWithQuestions(id: Long): CreateQuestionnaireDto
 
 }

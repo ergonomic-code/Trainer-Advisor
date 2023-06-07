@@ -32,6 +32,7 @@ class QuestionnaireServiceImpl(
     override fun saveQuestionnaire(createQuestionnaireDto: CreateQuestionnaireDto): Long {
         return questionnaireRepo.save(
             Questionnaire(
+                id = createQuestionnaireDto.id,
                 title = createQuestionnaireDto.title,
                 question = createQuestionnaireDto.question.map { question -> questionDtoToQuestion(question) }.toSet(),
                 decoding = createQuestionnaireDto.decoding.map { decoding -> decodingDtoToDecoding(decoding) }.toSet()

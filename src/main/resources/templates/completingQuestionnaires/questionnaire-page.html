@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div th:replace="~{fragments/header.html}"></div>
+    <title>Прохождения опросников</title>
+</head>
+
+<body class="sb-nav-fixed sb-sidenav-toggled">
+
+<div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
+
+<div id="layoutSidenav">
+
+    <div th:replace="~{fragments/leftNavPanel.html :: leftNavPanel}"></div>
+
+    <div id="layoutSidenav_content">
+        <main style="height: calc(100% - 75px);">
+            <div class="container-fluid px-4" style="height: 100%" id="page-content">
+                <div th:fragment="page-content">
+
+                    <div class="input-group bg-dark" style="flex-direction: row; flex-wrap: wrap; border-radius: 0.25rem;
+                         padding: 10px 10px 20px 10px; margin-top: 10px">
+                        <div class="me-auto"
+                             style="width: calc((100% - 250px)/2); min-width: 210px; height: 40px; margin-top: 10px">
+                            <input aria-describedby="basic-addon2"
+                                   hx-target="#page-content"
+                                   placeholder="ФИО"
+                                   class="form-control"
+                                   id="client-find-bar"
+                                   style="border-color:inherit; height: 40px"
+                                   th:field="*{completingSearchDto.clientName}"
+                                   hx-trigger="keyup changed delay:500ms, search"
+                                   th:attr="hx-get=@{/therapist/questionnaires/performing/action
+                                   (sort=${'date,' + sortType},title=${completingSearchDto.title})}"
+                                   th:value="${completingSearchDto.clientName}"
+                                   type="text">
+                        </div>
+                        <div class="me-auto"
+                             style="width: calc((100% - 250px)/2); min-width: 210px; height: 40px; margin-top: 10px">
+                            <input aria-describedby="basic-addon2"
+                                   hx-target="#page-content"
+                                   id="questionnaire-find-bar"
+                                   placeholder="Название опросника"
+                                   class="form-control"
+                                   style="border-color:inherit; height: 40px"
+                                   th:field="*{completingSearchDto.title}"
+                                   hx-trigger="keyup changed delay:500ms, search"
+                                   th:attr="hx-get=@{/therapist/questionnaires/performing/action
+                                   (sort=${'date,' + sortType},clientName=${completingSearchDto.clientName})}"
+                                   th:value="${completingSearchDto.title}"
+                                   type="text">
+                        </div>
+                        <div class="input-group" id="questionnaires-sort-bar"
+                             style="width: 240px; margin-top: 10px">
+                            <div class="input-group-prepend float-md-end" style="height: 40px; width: 120px">
+                                <label class="input-group-text" for="sort-type-select" style="height: 40px">Сортировка:</label>
+                            </div>
+                            <select class="custom-select float-md-end" hx-params="*"
+                                    hx-target="#page-content"
+                                    style="height: 40px; border-radius: 5px; width: 120px"
+                                    id="sort-type-select"
+                                    hx-trigger="change"
+                                    th:attr="hx-get=@{/therapist/questionnaires/performing/action
+                                   (title=${completingSearchDto.title},clientName=${completingSearchDto.clientName})}"
+                                    th:name="sort">
+                                <option th:if="${sortType} == 'ASC'" selected disabled hidden>Старее</option>
+                                <option th:if="${sortType} == 'DESC'" selected disabled hidden>Новее</option>
+                                <option value='date,ASC'>Старее</option>
+                                <option value='date,DESC'>Новее</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="card mb-2 mt-sm-2">
+                        <div class="card-header">
+                            <i class="fas fa-table me-1"></i>
+                            Результаты прохождения
+                        </div>
+                        <div class="card-body" id="card-body" style="overflow: auto">
+                            <div id="tablePag" style="height: calc(100% - 105px);">
+
+                                <div th:fragment="pagination-content" style="height: calc(100% - 50px); overflow: auto">
+                                    <table style="width: 100%; border-spacing: 0 10px" class="table table-hover" >
+                                        <thead>
+                                        <tr>
+                                            <th style="text-align: center">Клиент</th>
+                                            <th style="text-align: center">Опросник</th>
+                                            <th style="text-align: center">Дата прохождения</th>
+                                            <th style="text-align: center">Набранные баллы</th>
+                                            <th style="text-align: center">Результат</th>
+                                            <th style="text-align: center">Просмотр</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="table-body" style="gap: 10px">
+                                        <tr th:each="result : ${results.content}" th:fragment="table-completing" th:id="|completing${result.id}|" class="table-completing-row">
+                                            <td class="col" th:id="|completing${result.id}ClientName|" style="text-align: center"><a th:href="@{/}" th:text="|${result.client.firstName} ${result.client.lastName}|"></a></td>
+                                            <td class="col" th:id="|completing${result.id}Title|" style="text-align: center"><a th:href="@{/}" th:text="${result.questionnaire.title}"></a></td>
+                                            <td class="col" th:id="|completing${result.id}Date|" style="text-align: center" th:text="${#temporals.format(result.completingDate, 'dd-MM-yyyy')}"></td>
+                                            <td class="col" th:id="|completing${result.id}NumericResult|" style="text-align: center" th:text="${result.numericResult}"></td>
+                                            <td class="col" th:id="|completing${result.id}TextResult|" style="text-align: center" th:text="${result.textResult}"></td>
+                                            <td class="col" th:id="|completing${result.id}Watch|" style="text-align: center"> <a th:href="@{/}">Просмотр</a></td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div id="completing-navigation-bar" style="height: 50px">
+                                    <ul class="pagination justify-content-center">
+                                        <div class="pagination">
+                                            <li class="page-item"
+                                                th:classappend="${(results.getPageable().pageNumber == 0) ? 'disabled' : ''}">
+                                                <a class="page-link"
+                                                   hx-target="#page-content"
+                                                   hx-trigger="click"
+                                                   style="cursor: pointer"
+                                                   th:attr="
+                                                   hx-get=@{/therapist/questionnaires/performing/action
+                                                   (sort=${'date,'+sortType}, title=${completingSearchDto.title}
+                                                   , page=${0}, clientName=${completingSearchDto.clientName})}"
+                                                >Первая</a>
+                                            </li>
+                                        </div>
+
+                                        <div class="pagination">
+                                            <li class="page-item"
+                                                th:classappend="${(results.getPageable().pageNumber == 0) ? 'disabled' : ''}">
+                                                <a class="page-link"
+                                                   hx-target="#page-content"
+                                                   hx-trigger="click"
+                                                   style="cursor: pointer"
+                                                   th:attr="
+                                                   hx-get=@{/therapist/questionnaires/performing/action
+                                                   (sort=${'date,'+sortType}, title=${completingSearchDto.title}
+                                                   , page=${results.getPageable().pageNumber - 1}, clientName=${completingSearchDto.clientName})}"
+                                                >Назад</a>
+                                            </li>
+                                        </div>
+
+                                        <div class="pagination" style="max-width: 50%;">
+
+                                            <li class="page-item"
+                                                th:classappend="${(pageNumber == results.getPageable().pageNumber + 1) ? 'active' : ''}"
+                                                th:each="pageNumber : ${#numbers.sequence(((results.getPageable().pageNumber - 1 >= 0)? results.getPageable().pageNumber: results.getPageable().pageNumber + 1), ((results.getPageable().pageNumber + 3 < results.totalPages)? results.getPageable().pageNumber + 2 : results.totalPages), 1)}">
+                                                <a class="page-link"
+                                                   hx-target="#page-content"
+                                                   hx-trigger="click"
+                                                   style="cursor: pointer"
+                                                   th:attr="
+                                                   hx-get=@{/therapist/questionnaires/performing/action
+                                                   (sort=${'date,'+sortType}, title=${completingSearchDto.title}
+                                                   , page=${pageNumber - 1}, clientName=${completingSearchDto.clientName})}"
+                                                   th:text="${pageNumber}"></a>
+                                            </li>
+                                        </div>
+
+                                        <div class="pagination">
+                                            <li class="page-item"
+                                                th:classappend="${!(results.getPageable().pageNumber < results.totalPages - 1) ? 'disabled' : ''}">
+                                                <a class="page-link"
+                                                   hx-target="#page-content"
+                                                   hx-trigger="click"
+                                                   style="cursor: pointer"
+                                                   th:attr="
+                                                   hx-get=@{/therapist/questionnaires/performing/action
+                                                   (sort=${'date,'+sortType}, title=${completingSearchDto.title}
+                                                   , page=${results.getPageable().pageNumber + 1}, clientName=${completingSearchDto.clientName})}"
+                                                >Вперед</a>
+                                            </li>
+                                        </div>
+
+                                        <div class="pagination">
+                                            <li class="page-item"
+                                                th:classappend="${!(results.getPageable().pageNumber < results.totalPages - 1) ? 'disabled' : ''}">
+                                                <a class="page-link"
+                                                   hx-target="#page-content"
+                                                   hx-trigger="click"
+                                                   style="cursor: pointer"
+                                                   th:attr="
+                                                   hx-get=@{/therapist/questionnaires/performing/action
+                                                   (sort=${'date,'+sortType}, title=${completingSearchDto.title}
+                                                   , page=${results.totalPages - 1}, clientName=${completingSearchDto.clientName})}"
+                                                >Последняя</a>
+                                            </li>
+                                        </div>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer class="py-4 bg-light mt-auto" th:insert="~{fragments/footer.html :: footer}"></footer>
+    </div>
+</div>
+</body>
+</html>
