@@ -4,20 +4,47 @@
     <div th:replace="~{fragments/header.html}"></div>
     <title>Список опросников</title>
     <style>
-        .dot {
-            border-radius: 50%;
-            height: 6px;
-            width: 6px;
-            background: black;
-            margin: 4px auto;
-        }
-        .dot-wrapper {
+        .triangle-left {
             width: 20px;
+            height: 20px;
+            cursor: pointer;
+            z-index: 1;
+            border-top: 10px solid transparent;
+            border-right: 15px solid black;
+            border-bottom: 10px solid transparent;
         }
-        .dot { display: none; }
-        .row:hover .dot { display: block; }
+
+        .input-triangle {
+            opacity: 0;
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            z-index: 1;
+        }
+
+        .triangle-left { display: none; }
+        .row:hover .triangle-left { display: block; }
+        .row:hover .input-triangle { margin-top: -20px; }
         .row:hover .field { font-size: 18px }
     </style>
+    <script>
+        function SwitchButtons(buttonId) {
+            var hideBtn, showBtn, menuToggle;
+            if (buttonId == 'button1') {
+                menuToggle = 'menu2';
+                showBtn = 'button2';
+                hideBtn = 'button1';
+            } else {
+                menuToggle = 'menu3';
+                showBtn = 'button1';
+                hideBtn = 'button2';
+            }
+            //I don't have your menus, so this is commented out.  just uncomment for your usage
+            // document.getElementById(menuToggle).toggle(); //step 1: toggle menu
+            document.getElementById(hideBtn).style.display = 'none'; //step 2 :additional feature hide button
+            document.getElementById(showBtn).style.display = ''; //step 3:additional feature show button
+        }
+    </script>
 </head>
 
 <body class="sb-nav-fixed sb-sidenav-toggled" style="height: 100%">
@@ -103,10 +130,14 @@
                                                         questionnaire
                                                     </a>
                                                 </div>
-                                                <div class="dot-wrapper" style="display: inline-block;">
-                                                    <div class="dot"></div>
-                                                    <div class="dot"></div>
-                                                    <div class="dot"></div>
+                                                <div class="triangle" style="display: inline-block; width: 20px" >
+                                                    <div class="triangle-left"></div>
+                                                    <input type="button" class="input-triangle" aria-hidden="true">
+                                                </div>
+                                                <div style="display: inline-block;">
+                                                    <input type="button" style="width: 40px">
+                                                    <input type="button" style="width: 40px">
+                                                    <input type="button" style="width: 40px">
                                                 </div>
                                             </td>
                                         </tr>

@@ -71,8 +71,19 @@ class QuestionnairesController(
         model: Model,
         @PathVariable questionnaireId: Long
     ): String {
-        model.addAttribute("questionnaire", getQuestionnaire(questionnaireId))
         return "questionnaire/decoding"
+    }
+
+    /**
+     * Действия с опросником
+     */
+    @GetMapping("/{questionnaireId}/action")
+    fun getQuestionnaireAction(
+        model: Model,
+        @PathVariable questionnaireId: Long
+    ): String {
+        model.addAttribute("questionnaire", getQuestionnaire(questionnaireId))
+        return "questionnaire/modal_window"
     }
 
     fun getQuestionnaire(questionnaireId: Long): CreateQuestionnaireDto? {
