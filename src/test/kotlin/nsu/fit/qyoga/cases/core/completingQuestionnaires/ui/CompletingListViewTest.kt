@@ -66,7 +66,7 @@ class CompletingListViewTest : QYogaAppTestBase() {
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#table-body") {exists() }
+                node("#table-body") { exists() }
                 node("#completing13") { exists() }
                 node(".table-completing-row") { exists() }
                 node("#sort-type-select") { exists() }
@@ -109,8 +109,7 @@ class CompletingListViewTest : QYogaAppTestBase() {
     }
 
     @Test
-    fun `QYoga returns table of completing where title in completing title, when user change title`()
-    {
+    fun `QYoga returns table of completing where title in completing title, when user change title`() {
         Given {
             authorized()
             contentType(ContentType.JSON)
