@@ -1,57 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
 <head>
     <div th:replace="~{fragments/header.html}"></div>
     <title>Список опросников</title>
-    <style>
-        .triangle-left {
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-            z-index: 1;
-            border-top: 10px solid transparent;
-            border-right: 15px solid black;
-            border-bottom: 10px solid transparent;
-        }
-
-        .input-triangle {
-            opacity: 0;
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            z-index: 1;
-        }
-
-        .triangle-left { display: none; }
-        .row:hover .triangle-left { display: block; }
-        .row:hover .input-triangle { margin-top: -20px; }
-        .row:hover .field { font-size: 18px }
-    </style>
-    <script>
-        function SwitchButtons(buttonId) {
-            var hideBtn, showBtn, menuToggle;
-            if (buttonId == 'button1') {
-                menuToggle = 'menu2';
-                showBtn = 'button2';
-                hideBtn = 'button1';
-            } else {
-                menuToggle = 'menu3';
-                showBtn = 'button1';
-                hideBtn = 'button2';
-            }
-            //I don't have your menus, so this is commented out.  just uncomment for your usage
-            // document.getElementById(menuToggle).toggle(); //step 1: toggle menu
-            document.getElementById(hideBtn).style.display = 'none'; //step 2 :additional feature hide button
-            document.getElementById(showBtn).style.display = ''; //step 3:additional feature show button
-        }
-    </script>
+    <link href="/styles/dropdown-menu.css" rel="stylesheet"/>
+    <link href="/styles/dropdown-menu-triangle.css" rel="stylesheet"/>
+    <script src="/js/dropdown-menu-script.js"></script>
 </head>
 
 <body class="sb-nav-fixed sb-sidenav-toggled" style="height: 100%">
 
 <div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
 
-<div id="layoutSidenav" style="height: 100%">
+<div id="layoutSidenav" >
 
     <div th:replace="~{fragments/leftNavPanel.html :: leftNavPanel}"></div>
 
@@ -109,7 +70,7 @@
                         </div>
                     </div>
 
-                    <div class="card" style="margin-top: 10px">
+                    <div class="card" style="margin-top: 10px; overflow: auto">
                         <div class="card-header" style="height: 40px;">
                             <i class="fas fa-table me-1"></i>
                             Список опросников
@@ -130,93 +91,97 @@
                                                         questionnaire
                                                     </a>
                                                 </div>
-                                                <div class="triangle" style="display: inline-block; width: 20px" >
+                                                <div class="triangle" style="display: inline-block; width: 20px;" >
                                                     <div class="triangle-left"></div>
-                                                    <input type="button" class="input-triangle" aria-hidden="true">
-                                                </div>
-                                                <div style="display: inline-block;">
-                                                    <input type="button" style="width: 40px">
-                                                    <input type="button" style="width: 40px">
-                                                    <input type="button" style="width: 40px">
+                                                    <input type="button" th:onclick="|myFunction(${questionnaire.id})|" class="input-triangle" aria-hidden="true">
+                                                    <div th:id="|myDropdown${questionnaire.id}|" class="dropdown-content" style="margin-left: -220px; margin-top: -20px;">
+                                                        <form th:action="@{/therapist/questionnaires/{id}/edit(id=${questionnaire.id})}" th:method="GET">
+                                                            <button href="#home" class="dropdown-row">Изменить</button>
+                                                        </form>
+                                                        <form th:action="@{/therapist/questionnaires/{id}}" th:method="DELETE">
+                                                            <button href="#about" class="dropdown-row">Удалить</button>
+                                                        </form>
+                                                        <form th:action="@{/}" th:method="GET">
+                                                            <button href="#contact" class="dropdown-row">Сгенерировать ссылку на прохождение</button>
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </td>
                                         </tr>
                                         </tbody>
                                     </table>
                                 </div>
-
-                                <div id="questionnaires-navigation-bar" style="height: 50px">
-                                    <ul class="pagination justify-content-center">
-                                        <div class="pagination">
-                                            <li class="page-item"
-                                                th:classappend="${(questionnaires.getPageable().pageNumber == 0) ? 'disabled' : ''}">
-                                                <a class="page-link"
-                                                   hx-target="#page-content"
-                                                   hx-swap = "outerHTML"
-                                                   hx-trigger="click"
-                                                   style="cursor: pointer"
-                                                   th:attr="hx-get=@{/therapist/questionnaires/action(sort=${'title,'+sortType}, title=${questionnaireSearchDto.title}, page=${0})}"
-                                                >Первая</a>
-                                            </li>
-                                        </div>
-
-                                        <div class="pagination">
-                                            <li class="page-item"
-                                                th:classappend="${(questionnaires.getPageable().pageNumber == 0) ? 'disabled' : ''}">
-                                                <a class="page-link"
-                                                   hx-target="#page-content"
-                                                   hx-swap = "outerHTML"
-                                                   hx-trigger="click"
-                                                   style="cursor: pointer"
-                                                   th:attr="hx-get=@{/therapist/questionnaires/action(sort=${'title,'+sortType}, title=${questionnaireSearchDto.title}, page=${questionnaires.getPageable().pageNumber - 1})}"
-                                                >Назад</a>
-                                            </li>
-                                        </div>
-
-                                        <div class="pagination" style="max-width: 50%;">
-
-                                            <li class="page-item"
-                                                th:classappend="${(pageNumber == questionnaires.getPageable().pageNumber + 1) ? 'active' : ''}"
-                                                th:each="pageNumber : ${#numbers.sequence(((questionnaires.getPageable().pageNumber - 1 >= 0)? questionnaires.getPageable().pageNumber: questionnaires.getPageable().pageNumber + 1), ((questionnaires.getPageable().pageNumber + 3 < questionnaires.totalPages)? questionnaires.getPageable().pageNumber + 2 : questionnaires.totalPages), 1)}">
-                                                <a class="page-link"
-                                                   hx-target="#page-content"
-                                                   hx-swap = "outerHTML"
-                                                   hx-trigger="click"
-                                                   style="cursor: pointer"
-                                                   th:attr="hx-get=@{/therapist/questionnaires/action(page=${pageNumber - 1}, sort=${'title,'+sortType}, title=${questionnaireSearchDto.title})}"
-                                                   th:text="${pageNumber}"></a>
-                                            </li>
-                                        </div>
-
-                                        <div class="pagination">
-                                            <li class="page-item"
-                                                th:classappend="${!(questionnaires.getPageable().pageNumber < questionnaires.totalPages - 1) ? 'disabled' : ''}">
-                                                <a class="page-link"
-                                                   hx-target="#page-content"
-                                                   hx-swap = "outerHTML"
-                                                   hx-trigger="click"
-                                                   style="cursor: pointer"
-                                                   th:attr="hx-get=@{/therapist/questionnaires/action(sort=${'title,'+sortType}, title=${questionnaireSearchDto.title}, page=${questionnaires.getPageable().pageNumber + 1})}"
-                                                >Вперед</a>
-                                            </li>
-                                        </div>
-
-                                        <div class="pagination">
-                                            <li class="page-item"
-                                                th:classappend="${!(questionnaires.getPageable().pageNumber < questionnaires.totalPages - 1) ? 'disabled' : ''}">
-                                                <a class="page-link"
-                                                   hx-target="#page-content"
-                                                   hx-swap = "outerHTML"
-                                                   hx-trigger="click"
-                                                   style="cursor: pointer"
-                                                   th:attr="hx-get=@{/therapist/questionnaires/action(sort=${'title,'+sortType}, title=${questionnaireSearchDto.title}, page=${questionnaires.totalPages - 1})}"
-                                                >Последняя</a>
-                                            </li>
-                                        </div>
-                                    </ul>
+                            </div>
+                        </div>
+                        <div id="questionnaires-navigation-bar" style="height: 50px">
+                            <ul class="pagination justify-content-center">
+                                <div class="pagination">
+                                    <li class="page-item"
+                                        th:classappend="${(questionnaires.getPageable().pageNumber == 0) ? 'disabled' : ''}">
+                                        <a class="page-link"
+                                           hx-target="#page-content"
+                                           hx-swap = "outerHTML"
+                                           hx-trigger="click"
+                                           style="cursor: pointer"
+                                           th:attr="hx-get=@{/therapist/questionnaires/action(sort=${'title,'+sortType}, title=${questionnaireSearchDto.title}, page=${0})}"
+                                        >Первая</a>
+                                    </li>
                                 </div>
 
-                            </div>
+                                <div class="pagination">
+                                    <li class="page-item"
+                                        th:classappend="${(questionnaires.getPageable().pageNumber == 0) ? 'disabled' : ''}">
+                                        <a class="page-link"
+                                           hx-target="#page-content"
+                                           hx-swap = "outerHTML"
+                                           hx-trigger="click"
+                                           style="cursor: pointer"
+                                           th:attr="hx-get=@{/therapist/questionnaires/action(sort=${'title,'+sortType}, title=${questionnaireSearchDto.title}, page=${questionnaires.getPageable().pageNumber - 1})}"
+                                        >Назад</a>
+                                    </li>
+                                </div>
+
+                                <div class="pagination" style="max-width: 50%;">
+
+                                    <li class="page-item"
+                                        th:classappend="${(pageNumber == questionnaires.getPageable().pageNumber + 1) ? 'active' : ''}"
+                                        th:each="pageNumber : ${#numbers.sequence(((questionnaires.getPageable().pageNumber - 1 >= 0)? questionnaires.getPageable().pageNumber: questionnaires.getPageable().pageNumber + 1), ((questionnaires.getPageable().pageNumber + 3 < questionnaires.totalPages)? questionnaires.getPageable().pageNumber + 2 : questionnaires.totalPages), 1)}">
+                                        <a class="page-link"
+                                           hx-target="#page-content"
+                                           hx-swap = "outerHTML"
+                                           hx-trigger="click"
+                                           style="cursor: pointer"
+                                           th:attr="hx-get=@{/therapist/questionnaires/action(page=${pageNumber - 1}, sort=${'title,'+sortType}, title=${questionnaireSearchDto.title})}"
+                                           th:text="${pageNumber}"></a>
+                                    </li>
+                                </div>
+
+                                <div class="pagination">
+                                    <li class="page-item"
+                                        th:classappend="${!(questionnaires.getPageable().pageNumber < questionnaires.totalPages - 1) ? 'disabled' : ''}">
+                                        <a class="page-link"
+                                           hx-target="#page-content"
+                                           hx-swap = "outerHTML"
+                                           hx-trigger="click"
+                                           style="cursor: pointer"
+                                           th:attr="hx-get=@{/therapist/questionnaires/action(sort=${'title,'+sortType}, title=${questionnaireSearchDto.title}, page=${questionnaires.getPageable().pageNumber + 1})}"
+                                        >Вперед</a>
+                                    </li>
+                                </div>
+
+                                <div class="pagination">
+                                    <li class="page-item"
+                                        th:classappend="${!(questionnaires.getPageable().pageNumber < questionnaires.totalPages - 1) ? 'disabled' : ''}">
+                                        <a class="page-link"
+                                           hx-target="#page-content"
+                                           hx-swap = "outerHTML"
+                                           hx-trigger="click"
+                                           style="cursor: pointer"
+                                           th:attr="hx-get=@{/therapist/questionnaires/action(sort=${'title,'+sortType}, title=${questionnaireSearchDto.title}, page=${questionnaires.totalPages - 1})}"
+                                        >Последняя</a>
+                                    </li>
+                                </div>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -225,5 +190,6 @@
         <footer class="py-4 bg-light mt-auto" th:insert="~{fragments/footer.html :: footer}"></footer>
     </div>
 </div>
+
 </body>
 </html>
