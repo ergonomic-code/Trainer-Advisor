@@ -21,7 +21,7 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
     fun setupDb() {
         dbInitializer.executeScripts(
             "db/questionnaires/questionnaires-init-script.sql" to "dataSource",
-            "db/questionnaires/questionnaires-insert-single-questionnaire.sql" to "dataSource"
+            "db/questionnaires/questionnaires-insert-empty-questionnaire.sql" to "dataSource"
         )
     }
 
@@ -120,7 +120,6 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
                 node("#question0") { notExists() }
                 node("#question0Header") { notExists() }
                 node("#question0Body") { notExists() }
-
                 node("#question1") { exists() }
                 node("#question1Header") { exists() }
                 node("#question1Body") { exists() }

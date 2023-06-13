@@ -5,6 +5,7 @@
 
         <div class="flex-row justify-content-start d-flex" style="flex-wrap: wrap">
             <input class="question-text" type="text" style="width: 100%; border-radius: 5px; min-width: 60px; background-color: white"
+                   th:id="|question${question.id}Title|"
                   th:value="${question.title}" disabled="">
         </div>
 
@@ -17,7 +18,6 @@
              th:each="answer,j : ${question.answers}"
              th:id="|answer${answer.id}|"
              th:switch="${question.questionType.name}">
-            <input th:class="|answer${j.index}Score|" hidden th:name="|question[${questionIndex}].answers[${j.index}].score|" th:value="${answer.score}">
 
             <div th:case="SINGLE">
                 <div class="d-flex flex-row">
@@ -25,12 +25,14 @@
                     <label style="width: calc(100% - 100px); margin-left: 10px">
                         <input style="border-radius: 5px; background-color: white; overflow: auto"
                                class="answerText w-100" type="text" name="answer"
+                               th:id="|question${question.id}Answer${j.index}|"
                                th:value="${answer.title}" disabled="">
                     </label>
                     <label style="width: 50px; margin-left: 10px">
                         <input style="height: 28px; width: 60px; border-radius: 5px;
                         background-color: white; overflow: auto; text-align: center"
                                class="answerScore" type="number" disabled=""
+                               th:id="|question${question.id}Score${j.index}|"
                                th:value="${answer.score}">
                     </label>
                 </div>
@@ -46,12 +48,14 @@
                     <label style="width: calc(100% - 100px); margin-left: 10px">
                         <input style="border-radius: 5px; background-color: white"
                                class="answerText w-100" type="text" name="answer"
+                               th:id="|question${question.id}Answer${j.index}|"
                                th:value="${answer.title}" disabled="">
                     </label>
                     <label style="width: 50px; margin-left: 10px">
                         <input style="height: 28px; width: 60px; border-radius: 5px;
                         background-color: white; overflow: auto; text-align: center"
                                class="answerScore" type="number" disabled=""
+                               th:id="|question${question.id}Score${j.index}|"
                                th:value="${answer.score}">
                     </label>
                 </div>
@@ -74,11 +78,13 @@
                         <input name="range"
                                class="sortBtn" style="width: 50px; border-radius: 5px;
                                text-align: center; background-color: white"
+                               th:id="|question${question.id}Answer${j.index}LowerBound|"
                                disabled="" th:value="${answer.bounds.lowerBound}">
                     </label>
                     <label style="margin-left: 20px; width: 100%">
                         <input style="border-radius: 5px; width: 100%; background-color: white"
                                type="text" class="answerText"
+                               th:id="|question${question.id}Answer${j.index}LowerBoundText|"
                                th:value="${answer.bounds.lowerBoundText}" disabled="">
                     </label>
                 </div>
@@ -87,11 +93,13 @@
                         <input name="range"
                                 class="sortBtn" style="width: 50px; border-radius: 5px;
                                 text-align: center; background-color: white"
+                               th:id="|question${question.id}Answer${j.index}UpperBound|"
                                 disabled="" th:value="${answer.bounds.upperBound}">
                     </label>
                     <label style="margin-left: 20px; width: 100%">
                         <input style="border-radius: 5px; width: 100%; background-color: white"
                                type="text" class="answerText"
+                               th:id="|question${question.id}Answer${j.index}UpperBoundText|"
                                th:value="${answer.bounds.upperBoundText}" disabled="">
                     </label>
                 </div>
