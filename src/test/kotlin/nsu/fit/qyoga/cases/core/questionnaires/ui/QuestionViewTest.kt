@@ -33,7 +33,6 @@ class QuestionViewTest : QYogaAppTestBase() {
             print(body)
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
                 node("#questions") { exists() }
-                node("#question0") { exists() }
 
                 node("#question0") { exists() }
                 node("#question0Title") {
@@ -77,6 +76,71 @@ class QuestionViewTest : QYogaAppTestBase() {
                     exists()
                     attribute("action") { hasText("/therapist/questionnaires/1/decoding") }
                     containsText("Посмотреть ключи")
+                }
+                node("#end-watching-btn") {
+                    exists()
+                    attribute("action") { hasText("/therapist/questionnaires") }
+                    containsText("Закончить просмотр")
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `QYoga returns questionnaire view result page`() {
+        Given {
+            authorized()
+        } When {
+            get("/therapist/questionnaires/1/decoding")
+        } Then {
+            val body = Jsoup.parse(extract().body().asString())
+            print(body)
+            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
+                node("#card-body") { exists() }
+
+                node("#decoding0LowerBound") {
+                    exists()
+                    attribute("value") { hasText("10") }
+                }
+                node("#decoding0UpperBound") {
+                    exists()
+                    attribute("value") { hasText("20") }
+                }
+                node("#decoding0Result") {
+                    exists()
+                    attribute("value") { hasText("test1") }
+                }
+
+                node("#decoding1LowerBound") {
+                    exists()
+                    attribute("value") { hasText("20") }
+                }
+                node("#decoding1UpperBound") {
+                    exists()
+                    attribute("value") { hasText("30") }
+                }
+                node("#decoding1Result") {
+                    exists()
+                    attribute("value") { hasText("test2") }
+                }
+
+                node("#decoding2LowerBound") {
+                    exists()
+                    attribute("value") { hasText("30") }
+                }
+                node("#decoding2UpperBound") {
+                    exists()
+                    attribute("value") { hasText("40") }
+                }
+                node("#decoding2Result") {
+                    exists()
+                    attribute("value") { hasText("test3") }
+                }
+
+                node("#watch-questionnaire-btn") {
+                    exists()
+                    attribute("action") { hasText("/therapist/questionnaires/1") }
+                    containsText("Опросник")
                 }
                 node("#end-watching-btn") {
                     exists()
