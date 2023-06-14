@@ -4,7 +4,13 @@
     background-color: #f1f1f1;
     width: 220px;
     overflow: auto;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 4px 4px 4px 4px rgba(0,0,0,0.4);
+}
+
+.dropdown-row {
+    width: 100%;
+    border: none;
+    word-wrap: break-word;
 }
 
 .dropdown-content button {
@@ -16,5 +22,5 @@
     display: block;
 }
 
-.dropdown-content button:hover {background-color: #ddd;}
+.dropdown-content input:hover,button:hover {background-color: #ddd;}
 .show {display: block;}

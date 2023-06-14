@@ -16,4 +16,5 @@ interface QuestionnaireService {
 
     fun findQuestionnaireWithQuestions(id: Long): CreateQuestionnaireDto
 
+    fun deleteQuestionnaireById(id: Long)
 }
