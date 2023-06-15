@@ -17,7 +17,7 @@ class QuestionViewTest : QYogaAppTestBase() {
     @BeforeEach
     fun setupDb() {
         dbInitializer.executeScripts(
-            "/db/questionnaires/questionnaires-init-script.sql" to "dataSource",
+            "db/questionnaires/questionnaires-init-script.sql" to "dataSource",
             "db/questionnaires/questionnaires-insert-questionnaire.sql" to "dataSource"
         )
     }
@@ -30,7 +30,6 @@ class QuestionViewTest : QYogaAppTestBase() {
             get("/therapist/questionnaires/1")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
-            print(body)
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
                 node("#questions") { exists() }
 
@@ -94,7 +93,6 @@ class QuestionViewTest : QYogaAppTestBase() {
             get("/therapist/questionnaires/1/decoding")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
-            print(body)
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
                 node("#card-body") { exists() }
 

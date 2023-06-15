@@ -86,7 +86,7 @@
                                             th:fragment="questionnaires">
                                             <td class="row" style="width: 100%">
                                                 <div style="display: inline-block; width: calc(100% - 40px); overflow-wrap: break-word">
-                                                    <a class="field"
+                                                    <a class="field" th:id="|question${questionnaire.id}|"
                                                        th:href="@{/therapist/questionnaires/{id}(id=${questionnaire.id})}" th:text="${questionnaire.title}">
                                                         questionnaire
                                                     </a>
