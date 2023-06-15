@@ -22,6 +22,7 @@ class QuestionnairesListViewTest : QYogaAppTestBase() {
             "db/questionnaires/questionnaires-insert-data-script.sql" to "dataSource"
         )
     }
+
     @Test
     fun `QYoga returns questionnaire-list page with questionnaires`() {
         Given {
