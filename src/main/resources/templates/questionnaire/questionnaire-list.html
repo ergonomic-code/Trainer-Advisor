@@ -99,7 +99,7 @@
                                                             <button href="#home" class="dropdown-row" style="height: 40px">Изменить</button>
                                                         </form>
                                                         <input class="dropdown-row" style="height: 40px" value="Удалить" type="button" hx-trigger="click" hx-target="#page-content"
-                                                               th:attr="hx-get=@{/therapist/questionnaires/{id}/delete
+                                                               th:attr="hx-delete=@{/therapist/questionnaires/{id}
                                                         (id=${questionnaire.id}, sort=${'title,'+sortType}, title=${questionnaireSearchDto.title})}">
                                                         <input class="dropdown-row" style="height: 40px" value="Сгенерировать ссылку" type="button" hx-trigger="click"
                                                                th:attr="hx-get=@{/}">

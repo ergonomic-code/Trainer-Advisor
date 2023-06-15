@@ -105,7 +105,7 @@ class QuestionnairesListViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/2/delete")
+            delete("/therapist/questionnaires/2")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             print(body)

@@ -52,7 +52,7 @@ class QuestionnairesController(
     /**
      * Удаление опросника
      */
-    @GetMapping("/{questionnaireId}/delete")
+    @DeleteMapping("/{questionnaireId}")
     fun deleteQuestionnaire(
         @PathVariable questionnaireId: Long,
         @ModelAttribute("questionnaireSearchDto") questionnaireSearchDto: QuestionnaireSearchDto,
