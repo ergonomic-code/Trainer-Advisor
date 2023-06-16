@@ -95,13 +95,14 @@
                                                     <div class="triangle-left"></div>
                                                     <input type="button" th:onclick="|myFunction(${questionnaire.id})|" class="input-triangle" aria-hidden="true">
                                                     <div th:id="|myDropdown${questionnaire.id}|" class="dropdown-content" style="margin-left: -220px; margin-top: -70px;">
-                                                        <form th:action="@{/therapist/questionnaires/{id}/edit(id=${questionnaire.id})}" th:method="GET">
-                                                            <button href="#home" class="dropdown-row" style="height: 40px">Изменить</button>
-                                                        </form>
-                                                        <input class="dropdown-row" style="height: 40px" value="Удалить" type="button" hx-trigger="click" hx-target="#page-content"
+                                                        <input th:onclick="'window.location.href = \'' + @{/therapist/questionnaires/{id}/edit(id=${questionnaire.id})} + '\''"
+                                                               type="button" class="dropdown-row" style="height: 40px; text-align: left" value="Редактировать">
+
+                                                        <input class="dropdown-row" style="height: 40px; text-align: left" value="Удалить" type="button" hx-trigger="click" hx-target="#page-content"
                                                                th:attr="hx-delete=@{/therapist/questionnaires/{id}
                                                         (id=${questionnaire.id}, sort=${'title,'+sortType}, title=${questionnaireSearchDto.title})}">
-                                                        <input class="dropdown-row" style="height: 40px" value="Сгенерировать ссылку" type="button" hx-trigger="click"
+
+                                                        <input class="dropdown-row" style="height: 40px; text-align: left" value="Сгенерировать ссылку" type="button" hx-trigger="click"
                                                                th:attr="hx-get=@{/}">
                                                     </div>
                                                 </div>

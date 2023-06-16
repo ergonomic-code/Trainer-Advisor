@@ -7,5 +7,4 @@ spring:
     url: jdbc:postgresql://localhost:54501/qyoga
   servlet:
     multipart:
-      max-file-size: 10MB
-      max-request-size: 1MB
+      max-file-size: 1MB

@@ -34,7 +34,7 @@ class QuestionnaireJdbcTemplateRepo(
             questionnaires.id AS questionnaireId,
             questionnaires.title AS questionnaireTitle
             FROM questionnaires
-            WHERE lower(questionnaires.title) LIKE '%' || lower(:title) || '%'
+            WHERE questionnaires.title ILIKE '%' || :title || '%'
             ORDER BY questionnaires.title ${sortDirection.name}
         """.trimIndent()
     }
