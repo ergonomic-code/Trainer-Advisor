@@ -74,7 +74,11 @@ class QuestionnairesCreateController(
     fun createQuestionnaire(
         @ModelAttribute("questionnaire") questionnaire: CreateQuestionnaireDto,
     ): String {
-        httpSession.setAttribute(questionnaireFieldName, questionnaire)
+        val sessionQuestionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto
+        httpSession.setAttribute(
+            questionnaireFieldName,
+            sessionQuestionnaire.copy(title = questionnaire.title, question = questionnaire.question)
+        )
         return "redirect:/therapist/questionnaires/edit/setResult"
     }
 

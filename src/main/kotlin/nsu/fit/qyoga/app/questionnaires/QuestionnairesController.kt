@@ -49,6 +49,25 @@ class QuestionnairesController(
         return "questionnaire/questionnaire-list :: page-content"
     }
 
+    /**
+     * Удаление опросника
+     */
+    @DeleteMapping("/{questionnaireId}")
+    fun deleteQuestionnaire(
+        @PathVariable questionnaireId: Long,
+        @ModelAttribute("questionnaireSearchDto") questionnaireSearchDto: QuestionnaireSearchDto,
+        @PageableDefault(value = 10, page = 0, sort = ["title"]) pageable: Pageable,
+        model: Model
+    ): String {
+        questionnaireService.deleteQuestionnaireById(questionnaireId)
+        val questionnaires = questionnaireService.findQuestionnaires(
+            questionnaireSearchDto,
+            pageable
+        )
+        addQuestionnairePageAttributes(model, questionnaireSearchDto, questionnaires)
+        return "questionnaire/questionnaire-list :: page-content"
+    }
+
     fun addQuestionnairePageAttributes(
         model: Model,
         questionnaireSearchDto: QuestionnaireSearchDto,

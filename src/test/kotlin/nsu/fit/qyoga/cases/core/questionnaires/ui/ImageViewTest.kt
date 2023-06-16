@@ -21,7 +21,7 @@ class ImageViewTest : QYogaAppTestBase() {
     fun setupDb() {
         dbInitializer.executeScripts(
             "/db/questionnaires/questionnaires-init-script.sql" to "dataSource",
-            "db/questionnaires/questionnaires-insert-single-questionnaire.sql" to "dataSource"
+            "db/questionnaires/questionnaires-insert-empty-questionnaire.sql" to "dataSource"
         )
     }
 

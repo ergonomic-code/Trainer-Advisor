@@ -56,6 +56,10 @@ class QuestionnaireServiceImpl(
         return questionnaireDto
     }
 
+    override fun deleteQuestionnaireById(id: Long) {
+        questionnaireRepo.deleteById(id)
+    }
+
     fun questionDtoToQuestion(questionDto: CreateQuestionDto): Question {
         return Question(
             title = questionDto.title,

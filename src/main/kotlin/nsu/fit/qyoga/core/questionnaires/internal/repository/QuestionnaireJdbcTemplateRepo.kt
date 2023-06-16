@@ -1,10 +1,11 @@
 package nsu.fit.qyoga.core.questionnaires.internal.repository
 
+import nsu.fit.platform.lang.sortDirection
+import nsu.fit.platform.spring.queryForPage
 import nsu.fit.qyoga.core.questionnaires.api.dtos.*
 import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
+import org.springframework.data.domain.Sort
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
 import java.sql.ResultSet
@@ -14,53 +15,27 @@ class QuestionnaireJdbcTemplateRepo(
     private val jdbcTemplate: NamedParameterJdbcOperations
 ) {
     fun findQuestionnaireOnPage(title: String, pageable: Pageable): Page<QuestionnaireDto> {
-        val questionnaireDtoList: MutableList<QuestionnaireDto> = mutableListOf()
-        val params = MapSqlParameterSource()
-        params.addValue("pageSize", pageable.pageSize)
-        params.addValue("title", title)
-        params.addValue("offset", pageable.pageSize * pageable.pageNumber)
-        jdbcTemplate.query(
-            getQueryBySortType(pageable.sort.toString().substringAfter(": ")),
-            params
+        val sortDirection = pageable.sortDirection("title") ?: Sort.Direction.ASC
+        return jdbcTemplate.queryForPage(
+            getQueryBySortType(sortDirection),
+            mapOf<String, Any>("title" to title),
+            pageable
         ) { rs: ResultSet, _: Int ->
-            val questionnaireId = rs.getLong("questionnaireId")
-            if (questionnaireId == 0L) {
-                return@query
-            }
-            questionnaireDtoList.add(
-                QuestionnaireDto(
-                    id = questionnaireId,
-                    title = rs.getString("questionnaireTitle")
-                )
+            QuestionnaireDto(
+                id = rs.getLong("questionnaireId"),
+                title = rs.getString("questionnaireTitle")
             )
         }
-        return PageImpl(questionnaireDtoList, pageable, getCount(title))
     }
 
-    fun getCount(title: String): Long {
-        val query = """
-            SELECT
-            count(*) as questionnaireCount
-            FROM questionnaires
-            WHERE questionnaires.title LIKE '%' || :title || '%'
-        """.trimIndent()
-        return jdbcTemplate.queryForObject(
-            query,
-            MapSqlParameterSource("title", title)
-        ) { rs: ResultSet, _: Int ->
-            rs.getLong("questionnaireCount")
-        } ?: 0
-    }
-
-    fun getQueryBySortType(type: String): String {
+    fun getQueryBySortType(sortDirection: Sort.Direction): String {
         return """
             SELECT
             questionnaires.id AS questionnaireId,
             questionnaires.title AS questionnaireTitle
             FROM questionnaires
-            WHERE questionnaires.title LIKE '%' || :title || '%'
-            ORDER BY questionnaires.title ${if (type == "UNSORTED") "ASC" else type}
-            LIMIT :pageSize OFFSET :offset
+            WHERE questionnaires.title ILIKE '%' || :title || '%'
+            ORDER BY questionnaires.title ${sortDirection.name}
         """.trimIndent()
     }
 }
