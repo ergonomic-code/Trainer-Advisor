@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+<div id="modal" _="on closeModal add .closing then wait for animationend then remove me">
+  <div class="modal-underlay" _="on click trigger closeModal"></div>
+  <div class="main-container">
+    <form hx-get="/therapist/clients/search-cl" hx-target="#tablePagination"
+          hx-trigger="submit"
+          th:object="${searchDto}">
+      <div class="input-group mb-3 m-auto" id="searchClientsFilterForm">
+        <div class="mt-3 mb-3 w-25" id="lastnameFilter">
+          <input aria-describedby="basic-addon2"
+                 class="form-control"
+                 placeholder="Фамилия"
+                 style="border-color:inherit"
+                 th:field="${searchDto.lastName}"
+                 type="text">
+        </div>
+
+        <div class="mt-3 mb-3 w-25" id="firstnameFilter">
+          <input aria-describedby="basic-addon2"
+                 class="form-control"
+                 placeholder="Имя"
+                 style="border-color:inherit"
+                 th:field="${searchDto.firstName}"
+                 type="text">
+        </div>
+
+        <div class="mt-3 mb-3 w-25" id="patronymicFilter">
+          <input aria-describedby="basic-addon2"
+                 class="form-control"
+                 placeholder="Отчество"
+                 style="border-color:inherit"
+                 th:field="${searchDto.patronymic}"
+                 type="text">
+        </div>
+
+        <div class="mt-3 mb-3 w-25" id="phoneFilter">
+          <input aria-describedby="basic-addon2"
+                 class="form-control"
+                 placeholder="Номер телефона"
+                 style="border-color:inherit"
+                 th:field="${searchDto.phoneNumber}" type="text">
+        </div>
+
+        <div class="mt-3 mb-3 w-25" id="diagnoseFilter">
+          <input aria-describedby="basic-addon2"
+                 class="form-control"
+                 placeholder="Диагноз"
+                 style="border-color:inherit"
+                 th:field="${searchDto.diagnose}" type="text">
+        </div>
+
+        <div class="mt-3 mb-3 w-25" id="lastAppointmentFilter">
+          <input aria-describedby="basic-addon2"
+                 class="form-control"
+                 placeholder="Дата приема"
+                 style="border-color:inherit"
+                 th:field="${searchDto.appointmentDate}" type="date">
+        </div>
+
+        <div class="input-group mt-2 mb-5">
+          <button class="btn btn-secondary" style="position: absolute" type="submit">Поиск
+          </button>
+        </div>
+
+      </div>
+
+    </form>
+      <table style="width: 100%" class="table table-hover" id="clients">
+        <tbody>
+          <tr th:each="client : ${clients.content}">
+            <td class="client-panel" style="width: 100%; margin-left: 0">
+              <div>
+                <a class="client-link">
+                  <span th:text="${client.firstName}+' '+${client.lastName}+' '+${client.patronymic}"></span>
+                </a>
+              </div>
+              <div style="margin-left: auto;">
+                <input type="button" value="Выбрать" class="button"
+                       hx-trigger="click"
+                       th:attr = "hx-get=|@{/generateLink/{questionId}/{clientId}(questionId = ${questionId}, clientId = ${client.id})}|"
+                       hx-target="questionnaire-url">
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    <div style="display: flex;
+                flex-direction: row;">
+      <div id="questionnaire-url" >
+        <input id="questionnaire-url-text" type="text" onfocus="this.select()" th:value="${generatedLink}" value="http/completeQuestionnaire" th:fragment="generateLink">
+      </div>
+      <div id="close-mw">
+        <button class="input-group" _="on click trigger closeModal" id="close-mw-button">Закрыть</button>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

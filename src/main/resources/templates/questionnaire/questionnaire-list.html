@@ -4,8 +4,10 @@
     <div th:replace="~{fragments/header.html}"></div>
     <title>Список опросников</title>
     <link href="/styles/dropdown-menu.css" rel="stylesheet"/>
+    <link href="/styles/generate-link-modal.css" rel="stylesheet"/>
     <link href="/styles/dropdown-menu-triangle.css" rel="stylesheet"/>
     <script src="/js/dropdown-menu-script.js"></script>
+    <script src="https://unpkg.com/hyperscript.org@0.9.7"></script>
 </head>
 
 <body class="sb-nav-fixed sb-sidenav-toggled" style="height: 100%">
@@ -103,7 +105,9 @@
                                                         (id=${questionnaire.id}, sort=${'title,'+sortType}, title=${questionnaireSearchDto.title})}">
 
                                                         <input class="dropdown-row" style="height: 40px; text-align: left" value="Сгенерировать ссылку" type="button" hx-trigger="click"
-                                                               th:attr="hx-get=@{/}">
+                                                               th:attr = "hx-get=@{/therapist/questionnaires/generate-link/{id}(id=${questionnaire.id})}"
+                                                               hx-target="body"
+                                                               hx-swap="beforeend">
                                                     </div>
                                                 </div>
                                             </td>
