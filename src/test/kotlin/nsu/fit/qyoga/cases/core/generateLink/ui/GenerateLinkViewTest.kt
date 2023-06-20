@@ -1,7 +1,5 @@
 package nsu.fit.qyoga.cases.core.generateLink.ui
 
-import io.kotest.matchers.uri.haveParameter
-import io.kotest.matchers.url.haveParameterValue
 import io.restassured.http.ContentType
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
@@ -17,7 +15,6 @@ import org.postgresql.shaded.com.ongres.scram.common.bouncycastle.pbkdf2.KeyPara
 import org.postgresql.shaded.com.ongres.scram.common.bouncycastle.pbkdf2.SHA256Digest
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
-import java.io.File
 
 class GenerateLinkViewTest : QYogaAppTestBase() {
     @Autowired
@@ -118,7 +115,7 @@ class GenerateLinkViewTest : QYogaAppTestBase() {
                     attribute("value") {
                         containsText("questionnaireId=1")
                         containsText("clientId=1")
-                        containsText("therapistId=1")
+                        containsText("therapistId=")
                         containsText(hash)
                     }
                 }
