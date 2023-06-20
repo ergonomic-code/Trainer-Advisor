@@ -76,10 +76,10 @@ class QuestionnaireGenerateLinkController(
         @AuthenticationPrincipal principal: QyogaUserDetails,
         model: Model
     ): String {
-        val hash = generateHash("questionnaireId:{$questionnaireId}clientId{$clientId}therapist:${principal.id}")
+        val hash = generateHash("questionnaireId:${questionnaireId}clientId:${clientId}therapist:${principal.id}")
         val link = """
             http://$host/client/questionnaire-completions?
-            questionnaire=$questionnaireId
+            questionnaireId=$questionnaireId
             &clientId=$clientId
             &therapistId=${principal.id}
             &hash=$hash

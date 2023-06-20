@@ -52,7 +52,7 @@
           <tr th:each="client : ${clients.content}">
             <td class="client-panel" style="width: 100%; margin-left: 0">
               <div>
-                <a class="client-link" href="/therapist/clients" th:text="${client.firstName}+' '+${client.lastName}+' '+${client.patronymic}"></a>
+                <a class="client-link" th:id="|client${client.id}|" href="/therapist/clients" th:text="${client.lastName}+' '+${client.firstName}+' '+${client.patronymic}"></a>
               </div>
               <div style="margin-left: auto;">
                 <input type="button" value="Выбрать" class="button"

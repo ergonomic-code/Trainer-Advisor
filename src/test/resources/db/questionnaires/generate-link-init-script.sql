@@ -1,0 +1,1 @@
+TRUNCATE completing, appointments, clients, decoding, exercise_steps, questionnaires, questions, answers, images RESTART IDENTITY;
