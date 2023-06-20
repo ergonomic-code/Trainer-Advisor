@@ -1,4 +1,4 @@
-package nsu.fit.qyoga.app.questionnaires
+package nsu.fit.qyoga.app.questionnaires.createQuestionnaires
 
 import jakarta.servlet.http.HttpSession
 import nsu.fit.qyoga.core.questionnaires.api.dtos.*

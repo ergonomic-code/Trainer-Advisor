@@ -9,9 +9,8 @@
     font-family: Arial, Helvetica, sans-serif;
     border-radius: 5px;
     padding: 5px;
-    height: 24px;
-    font-size: 16px;
-    border: none;
+    height: 33px;
+    font-size: 18px;
     width: 100%;
 }
 
@@ -45,12 +44,11 @@
 #close-mw{
     margin-top: 20px;
     margin-left: auto;
-    border-radius: 5px;
+    border-radius: 10px;
     border: 1px solid;
 }
 
 #close-mw-button{
-    width: 80px;
     height: 33px;
     border-radius: 10px;
     border: none;

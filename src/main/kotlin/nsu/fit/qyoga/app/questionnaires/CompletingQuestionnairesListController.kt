@@ -1,4 +1,4 @@
-package nsu.fit.qyoga.app.completingQuestionnaires
+package nsu.fit.qyoga.app.questionnaires
 
 import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.CompletingDto
 import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.CompletingSearchDto
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
 @RequestMapping("/therapist/questionnaires/performing")
-class CompletingQuestionnairesController(
+class CompletingQuestionnairesListController(
     private val completingService: CompletingService
 ) {
 

@@ -9,7 +9,10 @@ import java.util.*
 data class Completing(
     @Id
     val id: Long = 0,
+    val completingDate: LocalDate?,
+    val numericResult: Long,
+    val textResult: String,
     val questionnaireId: Long,
-    val completingDate: LocalDate,
-    val clientId: Long
+    val clientId: Long,
+    val therapistId: Long
 )
