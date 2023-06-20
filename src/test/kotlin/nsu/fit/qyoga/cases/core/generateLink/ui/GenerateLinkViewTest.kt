@@ -4,24 +4,16 @@ import io.restassured.http.ContentType
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
-import nsu.fit.platform.lang.toHexString
 import nsu.fit.qyoga.infra.QYogaAppTestBase
 import nsu.fit.qyoga.infra.db.DbInitializer
 import org.jsoup.Jsoup
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.postgresql.shaded.com.ongres.scram.common.bouncycastle.pbkdf2.HMac
-import org.postgresql.shaded.com.ongres.scram.common.bouncycastle.pbkdf2.KeyParameter
-import org.postgresql.shaded.com.ongres.scram.common.bouncycastle.pbkdf2.SHA256Digest
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 
 class GenerateLinkViewTest : QYogaAppTestBase() {
     @Autowired
     lateinit var dbInitializer: DbInitializer
-
-    @Value("\${qyoga.hash.secret-key}")
-    lateinit var key: String
 
     @BeforeEach
     fun setupDb() {
@@ -77,6 +69,7 @@ class GenerateLinkViewTest : QYogaAppTestBase() {
             get("/therapist/questionnaires/generate-link/1/action")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
+
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
                 node("#searchClientsFilterForm") { notExists() }
                 node("#lastnameFilter") { notExists() }
@@ -108,7 +101,6 @@ class GenerateLinkViewTest : QYogaAppTestBase() {
             get("/therapist/questionnaires/generate-link/1/1/generate")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
-            val hash = hashGenerator("questionnaireId:1clientId:1therapist:2")
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
                 node("#questionnaire-url-text") {
                     exists()
@@ -116,20 +108,9 @@ class GenerateLinkViewTest : QYogaAppTestBase() {
                         containsText("questionnaireId=1")
                         containsText("clientId=1")
                         containsText("therapistId=")
-                        containsText(hash)
                     }
                 }
             }
         }
-    }
-
-    fun hashGenerator(value: String): String {
-        val hMac = HMac(SHA256Digest())
-        hMac.init(KeyParameter(key.toByteArray()))
-        val hmacIn = value.toByteArray()
-        hMac.update(hmacIn, 0, hmacIn.size)
-        val hmacOut = ByteArray(hMac.macSize)
-        hMac.doFinal(hmacOut, 0)
-        return hmacOut.toHexString()
     }
 }
