@@ -25,7 +25,9 @@ import org.springframework.web.bind.annotation.RequestMapping
 class QuestionnaireGenerateLinkController(
     private val clientService: ClientService,
     @Value("\${qyoga.hash.secret-key}")
-    private val key: String
+    private val key: String,
+    @Value("\${qyoga.url.host}")
+    private val host: String
 ) {
 
     /**
@@ -76,7 +78,7 @@ class QuestionnaireGenerateLinkController(
     ): String {
         val hash = generateHash("questionnaireId:{$questionnaireId}clientId{$clientId}therapist:${principal.id}")
         val link = """
-            /client/questionnaire-completions?
+            http://$host/client/questionnaire-completions?
             questionnaire=$questionnaireId
             &clientId=$clientId
             &therapistId=${principal.id}

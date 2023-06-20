@@ -9,6 +9,8 @@ spring:
     multipart:
       max-file-size: 1MB
 qyoga:
+  url:
+    host: localhost:8080
   hash:
     secret-key: secret-key
 #54501
