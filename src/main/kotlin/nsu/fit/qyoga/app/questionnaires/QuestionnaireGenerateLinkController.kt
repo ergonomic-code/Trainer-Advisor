@@ -4,7 +4,6 @@ import nsu.fit.platform.lang.toHexString
 import nsu.fit.qyoga.core.clients.api.ClientService
 import nsu.fit.qyoga.core.clients.api.Dto.ClientDto
 import nsu.fit.qyoga.core.clients.api.Dto.ClientSearchDto
-import nsu.fit.qyoga.core.completingQuestionnaires.api.services.CompletingService
 import nsu.fit.qyoga.core.users.internal.QyogaUserDetails
 import org.postgresql.shaded.com.ongres.scram.common.bouncycastle.pbkdf2.HMac
 import org.postgresql.shaded.com.ongres.scram.common.bouncycastle.pbkdf2.KeyParameter
@@ -26,8 +25,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 class QuestionnaireGenerateLinkController(
     private val clientService: ClientService,
     @Value("\${qyoga.hash.secret-key}")
-    private val  key: String
-)  {
+    private val key: String
+) {
 
     /**
      * Получение модального окна генерации ссылки на прохождение
@@ -47,6 +46,9 @@ class QuestionnaireGenerateLinkController(
         return "questionnaire/generate_link_modal"
     }
 
+    /**
+     * Действмя с клиентами
+     */
     @GetMapping("/generate-link/{questionnaireId}/action")
     fun getClientsFiltered(
         @ModelAttribute("searchDto") searchDto: ClientSearchDto,
@@ -62,6 +64,9 @@ class QuestionnaireGenerateLinkController(
         return "questionnaire/generate_link_modal :: clients"
     }
 
+    /**
+     * Генерация ссылки на прохождение
+     */
     @GetMapping("/generate-link/{questionnaireId}/{clientId}/generate")
     fun generateLink(
         @PathVariable questionnaireId: Long,
@@ -69,14 +74,15 @@ class QuestionnaireGenerateLinkController(
         @AuthenticationPrincipal principal: QyogaUserDetails,
         model: Model
     ): String {
-        val hash = generateHash("questionnaireId:{$questionnaireId}clientId{$clientId}")
+        val hash = generateHash("questionnaireId:{$questionnaireId}clientId{$clientId}therapist:${principal.id}")
         val link = """
             /client/questionnaire-completions?
             questionnaire=$questionnaireId
             &clientId=$clientId
+            &therapistId=${principal.id}
             &hash=$hash
-            """.trimIndent().replace(" ", "")
-        model.addAttribute("generatedLink",link)
+        """.trimIndent().replace(" ", "")
+        model.addAttribute("generatedLink", link)
         return "questionnaire/generate_link_modal :: questionnaire-url"
     }
 
