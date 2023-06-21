@@ -88,7 +88,11 @@ class QuestionnaireGenerateLinkController(
         return "questionnaire/generate_link_modal :: questionnaire-url"
     }
 
-    fun toModelAttributes(clients: Page<ClientDto>, searchDto: ClientSearchDto, questionnaireId: Long): Map<String, *> = mapOf(
+    fun toModelAttributes(
+        clients: Page<ClientDto>,
+        searchDto: ClientSearchDto,
+        questionnaireId: Long
+    ): Map<String, *> = mapOf(
         "searchDto" to searchDto,
         "clients" to clients,
         "questionnaireId" to questionnaireId
