@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value
 class GenerateLinkViewTest : QYogaAppTestBase() {
     @Autowired
     lateinit var dbInitializer: DbInitializer
+
     @Value("\${qyoga.hash.secret-key}")
     lateinit var key: String
 
