@@ -4,7 +4,7 @@ spring:
   datasource:
     username: postgres
     password: P@ssw0rd
-    url: jdbc:postgresql://localhost:5432/qyoga
+    url: jdbc:postgresql://localhost:54501/qyoga
   servlet:
     multipart:
       max-file-size: 1MB
@@ -13,4 +13,3 @@ qyoga:
     host: localhost:8080
   hash:
     secret-key: secret-key
-#54501
