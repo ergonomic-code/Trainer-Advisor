@@ -81,7 +81,7 @@ class QuestionnairesCreateController(
     ): HttpStatus {
         val questionnaire = getQuestionnaireFromSession()
             ?: throw QuestionnaireException("Ошибка извлечения опросника из сессии")
-        setQuestionnaireInSession( questionnaire.copy(title = title))
+        setQuestionnaireInSession(questionnaire.copy(title = title))
         return HttpStatus.OK
     }
 
