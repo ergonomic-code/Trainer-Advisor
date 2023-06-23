@@ -22,6 +22,9 @@ class QuestionnairesAnswersController(
     private val imageService: ImageService
 ) {
 
+    private val baseQuestionErrorText = "Выбранный вопрос не найден"
+    private val baseAnswerErrorText = "Выбранный ответ не найден"
+
     /**
      * Добавление изображение ответу
      */
@@ -44,10 +47,10 @@ class QuestionnairesAnswersController(
         val updatedQuestionnaire = questionnaire.addAnswerImage(questionId, answerId, imageId)
         if (updatedQuestionnaire == null) {
             imageService.deleteImage(imageId)
-            throw ElementNotFound("Выбранный вопрос не найден")
+            throw ElementNotFound(baseQuestionErrorText)
         }
         httpSession.setQuestionnaireInSession(updatedQuestionnaire)
-        val questionIndex = updatedQuestionnaire.getQuestionIdx(questionId)
+        val questionIndex = updatedQuestionnaire.getQuestionIdxById(questionId)
         val attributes: Map<String, *> = mapOf(
             "questionIndex" to questionIndex,
             "answer" to updatedQuestionnaire.question[questionIndex].answers.first { it.id == answerId },
@@ -69,7 +72,7 @@ class QuestionnairesAnswersController(
         val questionnaire = httpSession.getQuestionnaireFromSession()
         imageService.deleteImage(imageId)
         val updatedQuestionnaire = questionnaire.deleteAnswersImage(questionId, answerId)
-            ?: throw ElementNotFound("Выбранный ответ не найден")
+            ?: throw ElementNotFound(baseAnswerErrorText)
         httpSession.setQuestionnaireInSession(updatedQuestionnaire)
         return ResponseEntity.ok().body("")
     }
@@ -85,11 +88,12 @@ class QuestionnairesAnswersController(
         @PathVariable questionId: Long
     ): HttpStatus {
         val questionnaire = httpSession.getQuestionnaireFromSession()
-        val changedQuestion = getQuestionById(questionnaireDto, questionId)
+        val changedQuestion = questionnaireDto.getQuestionByIdOrNull(questionId)
+            ?: throw ElementNotFound(baseQuestionErrorText)
         val changedAnswer = changedQuestion.answers.filter { it.id == answerId }.getOrNull(0)
-            ?: throw ElementNotFound("Выбранный ответ не найден")
+            ?: throw ElementNotFound(baseAnswerErrorText)
         val updatedQuestionnaire = questionnaire.updateAnswer(questionId, answerId, changedAnswer)
-            ?: throw ElementNotFound("Выбранный ответ не найден")
+            ?: throw ElementNotFound(baseAnswerErrorText)
         httpSession.setQuestionnaireInSession(updatedQuestionnaire)
         return HttpStatus.OK
     }
@@ -136,10 +140,12 @@ class QuestionnairesAnswersController(
         questionId: Long,
         model: Model
     ) {
+        val question = questionnaire.getQuestionByIdOrNull(questionId)
+            ?: throw ElementNotFound(baseQuestionErrorText)
         val updatedQuestionnaire = questionnaire.updateQuestionAnswers(
-            getQuestionById(changedQuestionnaire, questionId),
+            question,
             questionId
-        ) ?: throw ElementNotFound("Выбранный вопрос не найден")
+        ) ?: throw ElementNotFound(baseQuestionErrorText)
         httpSession.setQuestionnaireInSession(updatedQuestionnaire)
         model.addAllAttributes(setQuestionIdxAndQuestion(updatedQuestionnaire, questionId))
     }
@@ -153,8 +159,10 @@ class QuestionnairesAnswersController(
         model: Model
     ): String {
         val questionnaire = httpSession.getQuestionnaireFromSession()
+        val question = questionnaire.getQuestionByIdOrNull(questionId)
+            ?: throw ElementNotFound(baseQuestionErrorText)
         val updatedQuestionnaire = questionnaire.addAnswer(
-            getQuestionById(questionnaire, questionId),
+            question,
             questionId
         )
         httpSession.setQuestionnaireInSession(updatedQuestionnaire)
@@ -172,8 +180,10 @@ class QuestionnairesAnswersController(
         model: Model
     ): String {
         val questionnaire = httpSession.getQuestionnaireFromSession()
+        val question = questionnaire.getQuestionByIdOrNull(questionId)
+            ?: throw ElementNotFound(baseQuestionErrorText)
         val updatedQuestionnaire = questionnaire.deleteAnswer(
-            getQuestionById(questionnaire, questionId),
+            question,
             questionId,
             answerId
         )
@@ -186,15 +196,10 @@ class QuestionnairesAnswersController(
         questionnaire: CreateQuestionnaireDto,
         questionId: Long
     ): Map<String, *> {
-        val questionIndex = questionnaire.getQuestionIdx(questionId)
+        val questionIndex = questionnaire.getQuestionIdxById(questionId)
         return mapOf(
             "questionIndex" to questionIndex,
             "question" to questionnaire.question.first { it.id == questionId }
         )
-    }
-
-    fun getQuestionById(questionnaire: CreateQuestionnaireDto, questionId: Long): CreateQuestionDto {
-        return questionnaire.question.filter { it.id == questionId }.getOrNull(0)
-            ?: throw ElementNotFound("Выбранный вопрос не найден")
     }
 }

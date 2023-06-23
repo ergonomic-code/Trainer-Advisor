@@ -5,10 +5,10 @@ import nsu.fit.platform.lang.getQuestionnaireFromSession
 import nsu.fit.platform.lang.setQuestionnaireInSession
 import nsu.fit.qyoga.core.images.api.ImageService
 import nsu.fit.qyoga.core.images.api.model.Image
-import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionnaireDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.extensions.*
-import nsu.fit.qyoga.core.questionnaires.api.dtos.getQuestionIdx
+import nsu.fit.qyoga.core.questionnaires.api.dtos.getQuestionByIdOrNull
+import nsu.fit.qyoga.core.questionnaires.api.dtos.getQuestionIdxById
 import nsu.fit.qyoga.core.questionnaires.api.errors.ElementNotFound
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -24,7 +24,7 @@ class QuestionnairesQuestionController(
     private val imageService: ImageService
 ) {
 
-    private val baseErrorText = "Выбранный вопрос не найден"
+    private val baseQuestionErrorText = "Выбранный вопрос не найден"
 
     /***
      * Добавление нового вопроса
@@ -57,10 +57,10 @@ class QuestionnairesQuestionController(
         val updatedQuestionnaire = questionnaire.addQuestionImage(questionId, imageId)
         if (updatedQuestionnaire == null) {
             imageService.deleteImage(imageId)
-            throw ElementNotFound(baseErrorText)
+            throw ElementNotFound(baseQuestionErrorText)
         }
         httpSession.setQuestionnaireInSession(updatedQuestionnaire)
-        model.addAllAttributes(setQuestionIdxAndQuestion(model, updatedQuestionnaire, questionId))
+        model.addAllAttributes(setQuestionIdxAndQuestion(updatedQuestionnaire, questionId))
         return "fragments/create-questionnaire-image::questionImage"
     }
 
@@ -75,7 +75,7 @@ class QuestionnairesQuestionController(
         val questionnaire = httpSession.getQuestionnaireFromSession()
         imageService.deleteImage(imageId)
         val updatedQuestionnaire = questionnaire.deleteQuestionImage(questionId)
-            ?: throw ElementNotFound(baseErrorText)
+            ?: throw ElementNotFound(baseQuestionErrorText)
         httpSession.setQuestionnaireInSession(updatedQuestionnaire)
         return ResponseEntity.ok().body("")
     }
@@ -102,11 +102,11 @@ class QuestionnairesQuestionController(
         model: Model
     ): String {
         val questionnaire = httpSession.getQuestionnaireFromSession()
-        val changedQuestion = getQuestionById(questionnaireDto, questionId)
-            ?: throw ElementNotFound(baseErrorText)
+        val changedQuestion = questionnaireDto.getQuestionByIdOrNull(questionId)
+            ?: throw ElementNotFound(baseQuestionErrorText)
         val updatedQuestionnaire = questionnaire.changeQuestionType(questionId, changedQuestion)
         httpSession.setQuestionnaireInSession(updatedQuestionnaire)
-        model.addAllAttributes(setQuestionIdxAndQuestion(model, updatedQuestionnaire, questionId))
+        model.addAllAttributes(setQuestionIdxAndQuestion(updatedQuestionnaire, questionId))
         return "fragments/create-questionnaire-answer::question"
     }
 
@@ -120,27 +120,22 @@ class QuestionnairesQuestionController(
         @PathVariable questionId: Long
     ): HttpStatus {
         val questionnaire = httpSession.getQuestionnaireFromSession()
-        val changedQuestion = getQuestionById(questionnaireDto, questionId)
-            ?: throw ElementNotFound(baseErrorText)
+        val changedQuestion = questionnaireDto.getQuestionByIdOrNull(questionId)
+            ?: throw ElementNotFound(baseQuestionErrorText)
         val updatedQuestionnaire = questionnaire.updateQuestion(questionId, changedQuestion)
-            ?: throw ElementNotFound(baseErrorText)
+            ?: throw ElementNotFound(baseQuestionErrorText)
         httpSession.setQuestionnaireInSession(updatedQuestionnaire)
         return HttpStatus.OK
     }
 
     fun setQuestionIdxAndQuestion(
-        model: Model,
         questionnaire: CreateQuestionnaireDto,
         questionId: Long
     ): Map<String, *> {
-        val questionIndex = questionnaire.getQuestionIdx(questionId)
+        val questionIndex = questionnaire.getQuestionIdxById(questionId)
         return mapOf(
             "questionIndex" to questionIndex,
             "question" to questionnaire.question.first { it.id == questionId }
         )
-    }
-
-    fun getQuestionById(questionnaire: CreateQuestionnaireDto, questionId: Long): CreateQuestionDto? {
-        return questionnaire.question.filter { it.id == questionId }.getOrNull(0)
     }
 }

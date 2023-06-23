@@ -7,5 +7,9 @@ data class CreateQuestionnaireDto(
     val decoding: MutableList<DecodingDto> = mutableListOf()
 )
 
-fun CreateQuestionnaireDto.getQuestionIdx(questionId: Long) =
+fun CreateQuestionnaireDto.getQuestionIdxById(questionId: Long) =
     this.question.withIndex().first { questionId == it.value.id }.index
+
+fun CreateQuestionnaireDto.getQuestionByIdOrNull(questionId: Long): CreateQuestionDto? {
+    return this.question.filter { it.id == questionId }.getOrNull(0)
+}
