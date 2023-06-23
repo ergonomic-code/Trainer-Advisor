@@ -108,6 +108,7 @@ class QuestionnairesAnswersController(
     ): String {
         updateQuestion(
             httpSession.getQuestionnaireFromSession(),
+            questionnaireDto,
             questionId,
             model
         )
@@ -125,6 +126,7 @@ class QuestionnairesAnswersController(
     ): String {
         updateQuestion(
             httpSession.getQuestionnaireFromSession(),
+            questionnaireDto,
             questionId,
             model
         )
@@ -133,10 +135,11 @@ class QuestionnairesAnswersController(
 
     fun updateQuestion(
         questionnaire: CreateQuestionnaireDto,
+        changedQuestionnaireDto: CreateQuestionnaireDto,
         questionId: Long,
         model: Model
     ) {
-        val question = questionnaire.getQuestionByIdOrNull(questionId)
+        val question = changedQuestionnaireDto.getQuestionByIdOrNull(questionId)
             ?: throw ElementNotFound(baseQuestionErrorText)
         val updatedQuestionnaire = questionnaire.updateQuestionAnswers(
             question,
