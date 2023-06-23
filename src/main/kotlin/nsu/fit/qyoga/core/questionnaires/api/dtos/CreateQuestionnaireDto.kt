@@ -10,6 +10,11 @@ data class CreateQuestionnaireDto(
 fun CreateQuestionnaireDto.getQuestionIdxById(questionId: Long) =
     this.question.withIndex().first { questionId == it.value.id }.index
 
-fun CreateQuestionnaireDto.getQuestionByIdOrNull(questionId: Long): CreateQuestionDto? {
-    return this.question.filter { it.id == questionId }.getOrNull(0)
+fun CreateQuestionnaireDto.getQuestionByIdOrNull(questionId: Long): CreateQuestionDto? =
+    this.question.filter { it.id == questionId }.getOrNull(0)
+
+fun CreateQuestionnaireDto.getAnswerByIdOrNull(questionId: Long, answerId: Long): CreateAnswerDto? {
+    val question = this.getQuestionByIdOrNull(questionId)
+        ?: return null
+    return question.answers.filter { it.id == answerId }.getOrNull(0)
 }

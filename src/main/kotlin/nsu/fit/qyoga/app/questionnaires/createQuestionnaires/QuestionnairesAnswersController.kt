@@ -24,6 +24,7 @@ class QuestionnairesAnswersController(
 
     private val baseQuestionErrorText = "Выбранный вопрос не найден"
     private val baseAnswerErrorText = "Выбранный ответ не найден"
+    private val questionHtmlFragment = "fragments/create-questionnaire-answer::question"
 
     /**
      * Добавление изображение ответу
@@ -88,9 +89,7 @@ class QuestionnairesAnswersController(
         @PathVariable questionId: Long
     ): HttpStatus {
         val questionnaire = httpSession.getQuestionnaireFromSession()
-        val changedQuestion = questionnaireDto.getQuestionByIdOrNull(questionId)
-            ?: throw ElementNotFound(baseQuestionErrorText)
-        val changedAnswer = changedQuestion.answers.filter { it.id == answerId }.getOrNull(0)
+        val changedAnswer = questionnaireDto.getAnswerByIdOrNull(questionId, answerId)
             ?: throw ElementNotFound(baseAnswerErrorText)
         val updatedQuestionnaire = questionnaire.updateAnswer(questionId, answerId, changedAnswer)
             ?: throw ElementNotFound(baseAnswerErrorText)
@@ -109,7 +108,6 @@ class QuestionnairesAnswersController(
     ): String {
         updateQuestion(
             httpSession.getQuestionnaireFromSession(),
-            questionnaireDto,
             questionId,
             model
         )
@@ -127,16 +125,14 @@ class QuestionnairesAnswersController(
     ): String {
         updateQuestion(
             httpSession.getQuestionnaireFromSession(),
-            questionnaireDto,
             questionId,
             model
         )
-        return "fragments/create-questionnaire-answer::question"
+        return questionHtmlFragment
     }
 
     fun updateQuestion(
         questionnaire: CreateQuestionnaireDto,
-        changedQuestionnaire: CreateQuestionnaireDto,
         questionId: Long,
         model: Model
     ) {
@@ -167,7 +163,7 @@ class QuestionnairesAnswersController(
         )
         httpSession.setQuestionnaireInSession(updatedQuestionnaire)
         model.addAllAttributes(setQuestionIdxAndQuestion(updatedQuestionnaire, questionId))
-        return "fragments/create-questionnaire-answer::question"
+        return questionHtmlFragment
     }
 
     /**
@@ -189,7 +185,7 @@ class QuestionnairesAnswersController(
         )
         httpSession.setQuestionnaireInSession(updatedQuestionnaire)
         model.addAllAttributes(setQuestionIdxAndQuestion(updatedQuestionnaire, questionId))
-        return "fragments/create-questionnaire-answer::question"
+        return questionHtmlFragment
     }
 
     fun setQuestionIdxAndQuestion(
