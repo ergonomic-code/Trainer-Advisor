@@ -76,7 +76,7 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
             contentType(ContentType.MULTIPART)
             multiPart(File("src/test/resources/images/testImage.png"))
             post("/therapist/questionnaires/edit/question/0/answer/0/add-image")
-            delete("/therapist/questionnaires/edit/question/0/answer/0/image")
+            delete("/therapist/questionnaires/edit/question/0/answer/0/image/0")
         } Then {
             extract().body().asString() shouldBe ""
         }
@@ -87,7 +87,7 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            delete("/therapist/questionnaires/edit/question/0/answer/0/image")
+            delete("/therapist/questionnaires/edit/question/0/answer/0/image/0")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
@@ -378,7 +378,7 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
                 }
                 node(".error-text") {
                     exists()
-                    hasText("Выбранный вопрос не найден Перезагрузить")
+                    hasText("Выбранный ответ не найден Перезагрузить")
                 }
             }
         }

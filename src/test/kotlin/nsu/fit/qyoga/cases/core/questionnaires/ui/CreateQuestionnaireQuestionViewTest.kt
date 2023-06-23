@@ -372,7 +372,7 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
             contentType(ContentType.MULTIPART)
             multiPart(File("src/test/resources/images/testImage.png"))
             post("/therapist/questionnaires/edit/question/0/add-image")
-            delete("/therapist/questionnaires/edit/question/0/image")
+            delete("/therapist/questionnaires/edit/question/0/image/0")
         } Then {
             extract().body().asString() shouldBe ""
         }
@@ -383,7 +383,7 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            delete("/therapist/questionnaires/edit/question/0/image")
+            delete("/therapist/questionnaires/edit/question/0/image/0")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {

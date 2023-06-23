@@ -1,8 +1,6 @@
 package nsu.fit.qyoga.app.questionnaires.createQuestionnaires
 
 import jakarta.servlet.http.HttpSession
-import nsu.fit.platform.lang.getQuestionnaireFromSession
-import nsu.fit.platform.lang.setQuestionnaireInSession
 import nsu.fit.qyoga.core.images.api.ImageService
 import nsu.fit.qyoga.core.images.api.model.Image
 import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionnaireDto
@@ -10,6 +8,7 @@ import nsu.fit.qyoga.core.questionnaires.api.dtos.extensions.*
 import nsu.fit.qyoga.core.questionnaires.api.dtos.getQuestionByIdOrNull
 import nsu.fit.qyoga.core.questionnaires.api.dtos.getQuestionIdxById
 import nsu.fit.qyoga.core.questionnaires.api.errors.ElementNotFound
+import nsu.fit.qyoga.core.questionnaires.api.errors.QuestionnaireException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -31,8 +30,8 @@ class QuestionnairesQuestionController(
      */
     @GetMapping("/edit/add-question")
     fun addNewQuestionToQuestionnaire(): String {
-        val questionnaire = httpSession.getQuestionnaireFromSession()
-        httpSession.setQuestionnaireInSession(questionnaire.addQuestion())
+        val questionnaire = getQuestionnaireFromSession()
+        setQuestionnaireInSession(questionnaire.addQuestion())
         return "questionnaire/create-questionnaire::questions"
     }
 
@@ -45,7 +44,7 @@ class QuestionnairesQuestionController(
         @PathVariable questionId: Long,
         model: Model
     ): String {
-        val questionnaire = httpSession.getQuestionnaireFromSession()
+        val questionnaire = getQuestionnaireFromSession()
         val imageId = imageService.uploadImage(
             Image(
                 name = file.name,
@@ -59,7 +58,7 @@ class QuestionnairesQuestionController(
             imageService.deleteImage(imageId)
             throw ElementNotFound(baseQuestionErrorText)
         }
-        httpSession.setQuestionnaireInSession(updatedQuestionnaire)
+        setQuestionnaireInSession(updatedQuestionnaire)
         model.addAllAttributes(setQuestionIdxAndQuestion(updatedQuestionnaire, questionId))
         return "fragments/create-questionnaire-image::questionImage"
     }
@@ -72,11 +71,11 @@ class QuestionnairesQuestionController(
         @PathVariable questionId: Long,
         @PathVariable imageId: Long
     ): ResponseEntity<String> {
-        val questionnaire = httpSession.getQuestionnaireFromSession()
+        val questionnaire = getQuestionnaireFromSession()
         imageService.deleteImage(imageId)
         val updatedQuestionnaire = questionnaire.deleteQuestionImage(questionId)
             ?: throw ElementNotFound(baseQuestionErrorText)
-        httpSession.setQuestionnaireInSession(updatedQuestionnaire)
+        setQuestionnaireInSession(updatedQuestionnaire)
         return ResponseEntity.ok().body("")
     }
 
@@ -87,8 +86,8 @@ class QuestionnairesQuestionController(
     fun deleteQuestionFromQuestionnaire(
         @PathVariable questionId: Long
     ): ResponseEntity<String> {
-        val questionnaire = httpSession.getQuestionnaireFromSession()
-        httpSession.setQuestionnaireInSession(questionnaire.deleteQuestion(questionId))
+        val questionnaire = getQuestionnaireFromSession()
+        setQuestionnaireInSession(questionnaire.deleteQuestion(questionId))
         return ResponseEntity.ok().body("")
     }
 
@@ -101,11 +100,11 @@ class QuestionnairesQuestionController(
         @ModelAttribute("questionnaires") questionnaireDto: CreateQuestionnaireDto,
         model: Model
     ): String {
-        val questionnaire = httpSession.getQuestionnaireFromSession()
+        val questionnaire = getQuestionnaireFromSession()
         val changedQuestion = questionnaireDto.getQuestionByIdOrNull(questionId)
             ?: throw ElementNotFound(baseQuestionErrorText)
         val updatedQuestionnaire = questionnaire.changeQuestionType(questionId, changedQuestion)
-        httpSession.setQuestionnaireInSession(updatedQuestionnaire)
+        setQuestionnaireInSession(updatedQuestionnaire)
         model.addAllAttributes(setQuestionIdxAndQuestion(updatedQuestionnaire, questionId))
         return "fragments/create-questionnaire-answer::question"
     }
@@ -119,12 +118,12 @@ class QuestionnairesQuestionController(
         @ModelAttribute("questionnaires") questionnaireDto: CreateQuestionnaireDto,
         @PathVariable questionId: Long
     ): HttpStatus {
-        val questionnaire = httpSession.getQuestionnaireFromSession()
+        val questionnaire = getQuestionnaireFromSession()
         val changedQuestion = questionnaireDto.getQuestionByIdOrNull(questionId)
             ?: throw ElementNotFound(baseQuestionErrorText)
         val updatedQuestionnaire = questionnaire.updateQuestion(questionId, changedQuestion)
             ?: throw ElementNotFound(baseQuestionErrorText)
-        httpSession.setQuestionnaireInSession(updatedQuestionnaire)
+        setQuestionnaireInSession(updatedQuestionnaire)
         return HttpStatus.OK
     }
 
@@ -137,5 +136,14 @@ class QuestionnairesQuestionController(
             "questionIndex" to questionIndex,
             "question" to questionnaire.question.first { it.id == questionId }
         )
+    }
+
+    fun getQuestionnaireFromSession(): CreateQuestionnaireDto {
+        return httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
+            ?: throw QuestionnaireException("Ошибка извлечения опросника из сессии")
+    }
+
+    fun setQuestionnaireInSession(questionnaire: CreateQuestionnaireDto) {
+        httpSession.setAttribute("questionnaire", questionnaire)
     }
 }
