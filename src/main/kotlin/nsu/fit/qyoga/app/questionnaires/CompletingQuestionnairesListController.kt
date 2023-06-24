@@ -63,17 +63,12 @@ class CompletingQuestionnairesListController(
         completingList: Page<CompletingDto>,
         completingSearchDto: CompletingSearchDto
     ) {
-        model.addAttribute(
-            "results",
-            completingList
-        )
-        model.addAttribute(
-            "completingSearchDto",
-            completingSearchDto
-        )
-        model.addAttribute(
-            "sortType",
-            completingList.sort.getOrderFor("date").toString().substringAfter(' ')
+        model.addAllAttributes(
+            mapOf(
+                "results" to  completingList,
+                "completingSearchDto" to completingSearchDto,
+                "sortType" to completingList.sort.getOrderFor("date").toString().substringAfter(' ')
+            )
         )
     }
 }

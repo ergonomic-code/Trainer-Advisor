@@ -99,7 +99,7 @@ class CreateQuestionnaireViewTest : QYogaAppTestBase() {
     }
 
     @Test
-    fun `QYoga can get questionnaire edit page`() {
+    fun `QYoga can't get questionnaire edit page if it not in session`() {
         Given {
             authorized()
         } When {
@@ -107,11 +107,10 @@ class CreateQuestionnaireViewTest : QYogaAppTestBase() {
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#questions") { exists() }
-                node("#question0") { exists() }
-                node("#question0Header") { exists() }
-                node("#question0Body") { exists() }
-                node("#answer0") { exists() }
+                node("#layoutSidenav_content") {
+                    exists()
+                    hasText("Ошибка извлечения опросника из сессии")
+                }
             }
         }
     }

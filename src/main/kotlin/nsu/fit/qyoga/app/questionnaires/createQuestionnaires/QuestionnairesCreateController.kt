@@ -20,15 +20,7 @@ class QuestionnairesCreateController(
      */
     @GetMapping("/edit")
     fun getCreateQuestionnairePage(): String {
-        val questionnaire = getQuestionnaireFromSession()
-        if (questionnaire == null) {
-            setQuestionnaireInSession(
-                CreateQuestionnaireDto(
-                    question = mutableListOf(CreateQuestionDto(answers = listOf(CreateAnswerDto()))),
-                    decoding = mutableListOf()
-                )
-            )
-        }
+        getQuestionnaireFromSession()
         return "questionnaire/create-questionnaire"
     }
 
@@ -65,7 +57,6 @@ class QuestionnairesCreateController(
         @ModelAttribute("questionnaire") questionnaire: CreateQuestionnaireDto,
     ): String {
         val sQuestionnaire = getQuestionnaireFromSession()
-            ?: throw QuestionnaireException("Ошибка извлечения опросника из сессии")
         setQuestionnaireInSession(sQuestionnaire.copy(title = questionnaire.title, question = questionnaire.question))
         return "redirect:/therapist/questionnaires/edit/setResult"
     }
@@ -80,13 +71,13 @@ class QuestionnairesCreateController(
         @RequestParam title: String
     ): HttpStatus {
         val questionnaire = getQuestionnaireFromSession()
-            ?: throw QuestionnaireException("Ошибка извлечения опросника из сессии")
         setQuestionnaireInSession(questionnaire.copy(title = title))
         return HttpStatus.OK
     }
 
-    fun getQuestionnaireFromSession(): CreateQuestionnaireDto? {
+    fun getQuestionnaireFromSession(): CreateQuestionnaireDto {
         return httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
+            ?: throw QuestionnaireException("Ошибка извлечения опросника из сессии")
     }
 
     fun setQuestionnaireInSession(questionnaire: CreateQuestionnaireDto) {

@@ -1,14 +1,10 @@
 package nsu.fit.qyoga.app.questionnaires
 
-import nsu.fit.platform.lang.toHexString
 import nsu.fit.qyoga.core.clients.api.ClientService
 import nsu.fit.qyoga.core.clients.api.Dto.ClientDto
 import nsu.fit.qyoga.core.clients.api.Dto.ClientSearchDto
+import nsu.fit.qyoga.core.questionnaires.internal.CompletingLinkGenerator
 import nsu.fit.qyoga.core.users.internal.QyogaUserDetails
-import org.postgresql.shaded.com.ongres.scram.common.bouncycastle.pbkdf2.HMac
-import org.postgresql.shaded.com.ongres.scram.common.bouncycastle.pbkdf2.KeyParameter
-import org.postgresql.shaded.com.ongres.scram.common.bouncycastle.pbkdf2.SHA256Digest
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
@@ -24,10 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 @RequestMapping("/therapist/questionnaires")
 class QuestionnaireGenerateLinkController(
     private val clientService: ClientService,
-    @Value("\${qyoga.hash.secret-key}")
-    private val key: String,
-    @Value("\${qyoga.url.host}")
-    private val host: String
+    private val completingLinkGenerator: CompletingLinkGenerator
 ) {
 
     /**
@@ -76,15 +69,10 @@ class QuestionnaireGenerateLinkController(
         @AuthenticationPrincipal principal: QyogaUserDetails,
         model: Model
     ): String {
-        val hash = generateHash("questionnaireId:${questionnaireId}clientId:${clientId}therapist:${principal.id}")
-        val link = """
-            http://$host/client/questionnaire-completions?
-            questionnaireId=$questionnaireId
-            &clientId=$clientId
-            &therapistId=${principal.id}
-            &hash=$hash
-        """.trimIndent().replace(" ", "")
-        model.addAttribute("generatedLink", link)
+        model.addAttribute(
+            "generatedLink",
+            completingLinkGenerator.generateCompletingLink(questionnaireId, clientId, principal.id)
+        )
         return "questionnaire/generate_link_modal :: questionnaire-url"
     }
 
@@ -97,14 +85,4 @@ class QuestionnaireGenerateLinkController(
         "clients" to clients,
         "questionnaireId" to questionnaireId
     )
-
-    fun generateHash(value: String): String {
-        val hMac = HMac(SHA256Digest())
-        hMac.init(KeyParameter(key.toByteArray()))
-        val hmacIn = value.toByteArray()
-        hMac.update(hmacIn, 0, hmacIn.size)
-        val hmacOut = ByteArray(hMac.macSize)
-        hMac.doFinal(hmacOut, 0)
-        return hmacOut.toHexString()
-    }
 }

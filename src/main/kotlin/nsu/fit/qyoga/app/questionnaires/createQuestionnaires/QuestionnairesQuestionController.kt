@@ -1,8 +1,6 @@
 package nsu.fit.qyoga.app.questionnaires.createQuestionnaires
 
 import jakarta.servlet.http.HttpSession
-import nsu.fit.qyoga.core.images.api.ImageService
-import nsu.fit.qyoga.core.images.api.model.Image
 import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionnaireDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.extensions.*
 import nsu.fit.qyoga.core.questionnaires.api.dtos.getQuestionByIdOrNull
@@ -14,13 +12,11 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.multipart.MultipartFile
 
 @Controller
 @RequestMapping("/therapist/questionnaires")
 class QuestionnairesQuestionController(
-    private val httpSession: HttpSession,
-    private val imageService: ImageService
+    private val httpSession: HttpSession
 ) {
 
     private val baseQuestionErrorText = "Выбранный вопрос не найден"
@@ -33,50 +29,6 @@ class QuestionnairesQuestionController(
         val questionnaire = getQuestionnaireFromSession()
         setQuestionnaireInSession(questionnaire.addQuestion())
         return "questionnaire/create-questionnaire::questions"
-    }
-
-    /**
-     * Добавление изображение вопросу
-     */
-    @PostMapping("/edit/question/{questionId}/add-image")
-    fun addImageToQuestion(
-        @RequestParam("file") file: MultipartFile,
-        @PathVariable questionId: Long,
-        model: Model
-    ): String {
-        val questionnaire = getQuestionnaireFromSession()
-        val imageId = imageService.uploadImage(
-            Image(
-                name = file.name,
-                mediaType = file.contentType.toString(),
-                size = file.size,
-                data = file.bytes
-            )
-        )
-        val updatedQuestionnaire = questionnaire.addQuestionImage(questionId, imageId)
-        if (updatedQuestionnaire == null) {
-            imageService.deleteImage(imageId)
-            throw ElementNotFound(baseQuestionErrorText)
-        }
-        setQuestionnaireInSession(updatedQuestionnaire)
-        model.addAllAttributes(setQuestionIdxAndQuestion(updatedQuestionnaire, questionId))
-        return "fragments/create-questionnaire-image::questionImage"
-    }
-
-    /**
-     * Удаление изображение из вопроса
-     */
-    @DeleteMapping("/edit/question/{questionId}/image/{imageId}")
-    fun deleteImageFromQuestion(
-        @PathVariable questionId: Long,
-        @PathVariable imageId: Long
-    ): ResponseEntity<String> {
-        val questionnaire = getQuestionnaireFromSession()
-        imageService.deleteImage(imageId)
-        val updatedQuestionnaire = questionnaire.deleteQuestionImage(questionId)
-            ?: throw ElementNotFound(baseQuestionErrorText)
-        setQuestionnaireInSession(updatedQuestionnaire)
-        return ResponseEntity.ok().body("")
     }
 
     /**
@@ -105,7 +57,13 @@ class QuestionnairesQuestionController(
             ?: throw ElementNotFound(baseQuestionErrorText)
         val updatedQuestionnaire = questionnaire.changeQuestionType(questionId, changedQuestion)
         setQuestionnaireInSession(updatedQuestionnaire)
-        model.addAllAttributes(setQuestionIdxAndQuestion(updatedQuestionnaire, questionId))
+        val questionIndex = questionnaire.getQuestionIdxById(questionId)
+        model.addAllAttributes(
+            mapOf(
+                "questionIndex" to questionIndex,
+                "question" to updatedQuestionnaire.question.first { it.id == questionId }
+            )
+        )
         return "fragments/create-questionnaire-answer::question"
     }
 
@@ -125,17 +83,6 @@ class QuestionnairesQuestionController(
             ?: throw ElementNotFound(baseQuestionErrorText)
         setQuestionnaireInSession(updatedQuestionnaire)
         return HttpStatus.OK
-    }
-
-    fun setQuestionIdxAndQuestion(
-        questionnaire: CreateQuestionnaireDto,
-        questionId: Long
-    ): Map<String, *> {
-        val questionIndex = questionnaire.getQuestionIdxById(questionId)
-        return mapOf(
-            "questionIndex" to questionIndex,
-            "question" to questionnaire.question.first { it.id == questionId }
-        )
     }
 
     fun getQuestionnaireFromSession(): CreateQuestionnaireDto {

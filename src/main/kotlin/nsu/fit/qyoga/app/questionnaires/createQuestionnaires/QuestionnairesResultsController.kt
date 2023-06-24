@@ -92,9 +92,6 @@ class QuestionnairesResultsController(
     }
 
     fun setQuestionnaireInSession(questionnaire: CreateQuestionnaireDto) {
-        httpSession.setAttribute(
-            questionnaireFieldName,
-            questionnaire
-        )
+        httpSession.setAttribute(questionnaireFieldName, questionnaire)
     }
 }

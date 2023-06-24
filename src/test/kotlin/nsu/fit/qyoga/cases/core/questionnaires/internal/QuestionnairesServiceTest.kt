@@ -38,7 +38,7 @@ class QuestionnairesServiceTest(
     @Autowired private val questionnaireService: QuestionnaireService,
     @Autowired private val imageService: ImageService
 ) : QYogaModuleBaseTest() {
-    val file = File("src/test/resources/images/testImage.png")
+    private val file = File("src/test/resources/images/testImage.png")
 
     @BeforeEach
     fun setupDb() {
