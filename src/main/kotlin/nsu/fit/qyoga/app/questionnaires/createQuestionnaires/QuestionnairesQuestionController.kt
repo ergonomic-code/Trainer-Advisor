@@ -61,7 +61,7 @@ class QuestionnairesQuestionController(
         model.addAllAttributes(
             mapOf(
                 "questionIndex" to questionIndex,
-                "question" to updatedQuestionnaire.question.first { it.id == questionId }
+                "question" to updatedQuestionnaire.getQuestionByIdOrNull(questionId)
             )
         )
         return "fragments/create-questionnaire-answer::question"

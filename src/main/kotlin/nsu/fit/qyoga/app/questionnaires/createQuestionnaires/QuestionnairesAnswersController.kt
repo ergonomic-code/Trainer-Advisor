@@ -140,7 +140,7 @@ class QuestionnairesAnswersController(
         val questionIndex = questionnaire.getQuestionIdxById(questionId)
         return mapOf(
             "questionIndex" to questionIndex,
-            "question" to questionnaire.question.first { it.id == questionId }
+            "question" to questionnaire.getQuestionByIdOrNull(questionId)
         )
     }
 

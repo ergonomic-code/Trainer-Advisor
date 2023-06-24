@@ -3,14 +3,11 @@ package nsu.fit.qyoga.app.questionnaires.createQuestionnaires
 import jakarta.servlet.http.HttpSession
 import nsu.fit.qyoga.core.images.api.ImageService
 import nsu.fit.qyoga.core.images.api.model.Image
-import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionnaireDto
+import nsu.fit.qyoga.core.questionnaires.api.dtos.*
 import nsu.fit.qyoga.core.questionnaires.api.dtos.extensions.addAnswerImage
 import nsu.fit.qyoga.core.questionnaires.api.dtos.extensions.addQuestionImage
 import nsu.fit.qyoga.core.questionnaires.api.dtos.extensions.deleteAnswersImage
 import nsu.fit.qyoga.core.questionnaires.api.dtos.extensions.deleteQuestionImage
-import nsu.fit.qyoga.core.questionnaires.api.dtos.getAnswerByIdOrNull
-import nsu.fit.qyoga.core.questionnaires.api.dtos.getAnswerIdxById
-import nsu.fit.qyoga.core.questionnaires.api.dtos.getQuestionIdxById
 import nsu.fit.qyoga.core.questionnaires.api.errors.ElementNotFound
 import nsu.fit.qyoga.core.questionnaires.api.errors.QuestionnaireException
 import org.springframework.http.ResponseEntity
@@ -109,7 +106,7 @@ class QuestionnaireImageController(
         model.addAllAttributes(
             mapOf(
                 "questionIndex" to questionIndex,
-                "question" to updatedQuestionnaire.question.first { it.id == questionId }
+                "question" to updatedQuestionnaire.getQuestionByIdOrNull(questionId)
             )
         )
         return "fragments/create-questionnaire-image::questionImage"
