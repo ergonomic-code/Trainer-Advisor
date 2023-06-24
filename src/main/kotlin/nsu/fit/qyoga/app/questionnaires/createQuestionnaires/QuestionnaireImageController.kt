@@ -8,6 +8,8 @@ import nsu.fit.qyoga.core.questionnaires.api.dtos.extensions.addAnswerImage
 import nsu.fit.qyoga.core.questionnaires.api.dtos.extensions.addQuestionImage
 import nsu.fit.qyoga.core.questionnaires.api.dtos.extensions.deleteAnswersImage
 import nsu.fit.qyoga.core.questionnaires.api.dtos.extensions.deleteQuestionImage
+import nsu.fit.qyoga.core.questionnaires.api.dtos.getAnswerByIdOrNull
+import nsu.fit.qyoga.core.questionnaires.api.dtos.getAnswerIdxById
 import nsu.fit.qyoga.core.questionnaires.api.dtos.getQuestionIdxById
 import nsu.fit.qyoga.core.questionnaires.api.errors.ElementNotFound
 import nsu.fit.qyoga.core.questionnaires.api.errors.QuestionnaireException
@@ -49,13 +51,13 @@ class QuestionnaireImageController(
         val updatedQuestionnaire = questionnaire.addAnswerImage(questionId, answerId, imageId)
         if (updatedQuestionnaire == null) {
             imageService.deleteImage(imageId)
-            throw ElementNotFound(baseQuestionErrorText)
+            throw ElementNotFound(baseAnswerErrorText)
         }
         setQuestionnaireInSession(updatedQuestionnaire)
-        val questionIndex = updatedQuestionnaire.getQuestionIdxById(questionId)
         val attributes: Map<String, *> = mapOf(
-            "questionIndex" to questionIndex,
-            "answer" to updatedQuestionnaire.question[questionIndex].answers.first { it.id == answerId },
+            "questionIndex" to updatedQuestionnaire.getQuestionIdxById(questionId),
+            "answerIndex" to updatedQuestionnaire.getAnswerIdxById(questionId, answerId),
+            "answer" to updatedQuestionnaire.getAnswerByIdOrNull(questionId, answerId),
             "questionId" to questionId
         )
         model.addAllAttributes(attributes)

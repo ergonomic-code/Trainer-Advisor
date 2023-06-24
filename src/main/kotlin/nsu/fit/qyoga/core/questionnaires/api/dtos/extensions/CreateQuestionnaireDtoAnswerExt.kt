@@ -39,8 +39,8 @@ fun CreateQuestionnaireDto.deleteAnswersImage(
         if (question.id == questionId) {
             question.copy(
                 answers = question.answers.map { answer ->
-                    isFound = true
                     if (answer.id == answerId) {
+                        isFound = true
                         answer.copy(imageId = null)
                     } else {
                         answer
