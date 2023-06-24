@@ -15,7 +15,7 @@ class CompletingLinkGenerator(
     private val host: String
 ) {
     fun generateCompletingLink(questionnaireId: Long, clientId: Long, therapistId: Long): String {
-        val hash = generateHash("questionnaireId:${questionnaireId}clientId:${clientId}therapist:${therapistId}")
+        val hash = generateHash("questionnaireId:${questionnaireId}clientId:${clientId}therapist:$therapistId")
         return """
             http://$host/client/questionnaire-completions?
             questionnaireId=$questionnaireId

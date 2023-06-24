@@ -65,7 +65,7 @@ class CompletingQuestionnairesListController(
     ) {
         model.addAllAttributes(
             mapOf(
-                "results" to  completingList,
+                "results" to completingList,
                 "completingSearchDto" to completingSearchDto,
                 "sortType" to completingList.sort.getOrderFor("date").toString().substringAfter(' ')
             )
