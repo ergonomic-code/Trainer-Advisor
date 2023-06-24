@@ -57,7 +57,7 @@
               <div style="margin-left: auto;">
                 <input type="button" value="Выбрать" class="button"
                        hx-trigger="click"
-                       th:attr = "hx-get=@{/therapist/questionnaires/generate-link/{questionnaireId}/{clientId}/generate
+                       th:attr = "hx-post=@{/therapist/questionnaires/generate-link
                        (questionnaireId=${questionnaireId}, clientId = ${client.id})}"
                        hx-target="#questionnaire-url">
               </div>

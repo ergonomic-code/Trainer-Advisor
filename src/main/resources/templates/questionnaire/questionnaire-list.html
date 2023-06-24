@@ -105,7 +105,7 @@
                                                         (id=${questionnaire.id}, sort=${'title,'+sortType}, title=${questionnaireSearchDto.title})}">
 
                                                         <input class="dropdown-row" style="height: 40px; text-align: left" value="Сгенерировать ссылку" type="button" hx-trigger="click"
-                                                               th:attr = "hx-get=@{/therapist/questionnaires/generate-link/{id}(id=${questionnaire.id})}"
+                                                               th:attr = "hx-get=@{/therapist/questionnaires/generate-link(questionnaireId=${questionnaire.id})}"
                                                                hx-target="body"
                                                                hx-swap="beforeend">
                                                     </div>
