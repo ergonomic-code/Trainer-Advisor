@@ -41,11 +41,11 @@ class QuestionnaireGenerateLinkController(
     /**
      * Действмя с клиентами
      */
-    @GetMapping("/generate-link/{questionnaireId}/action")
+    @GetMapping("/generate-link", params = ["action=true"])
     fun getClientsFiltered(
         @ModelAttribute("searchDto") searchDto: ClientSearchDto,
         @PageableDefault(value = 5, page = 0) pageable: Pageable,
-        @PathVariable questionnaireId: Long,
+        @ModelAttribute("questionnaireId") questionnaireId: Long,
         model: Model
     ): String {
         val clients = clientService.getClients(

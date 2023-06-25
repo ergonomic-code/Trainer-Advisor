@@ -66,10 +66,11 @@ class GenerateLinkViewTest : QYogaAppTestBase() {
             param("lastName", "п")
             param("firstName", "п")
             param("patronymic", "п")
-            get("/therapist/questionnaires/generate-link/1/action")
+            param("action", "true")
+            param("questionnaireId", "1")
+            get("/therapist/questionnaires/generate-link")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
-
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
                 node("#searchClientsFilterForm") { notExists() }
                 node("#lastnameFilter") { notExists() }

@@ -7,7 +7,7 @@
 <div id="modal" _="on closeModal add .closing then wait for animationend then remove me">
   <div class="modal-underlay" _="on click trigger closeModal"></div>
   <div class="main-container">
-    <form th:attr = "hx-get=|@{/therapist/questionnaires/generate-link/{questionnaireId}/action(questionnaireId=${questionnaireId})}|"
+    <form th:attr = "hx-get=|@{/therapist/questionnaires/generate-link(questionnaireId=${questionnaireId},action='true')}|"
           hx-target="#generate-link-content"
           hx-trigger="submit"
           th:object="${searchDto}">
