@@ -13,7 +13,7 @@
           th:object="${searchDto}">
 
       <div class="input-group mb-3 m-auto" id="searchClientsFilterForm">
-        <div class="mt-3 mb-3 w-75" id="lastnameFilter">
+        <div class="mt-3 mb-3 w-75" id="nameFilter">
           <input aria-describedby="basic-addon2"
                  class="form-control"
                  placeholder="ФИО"
@@ -60,9 +60,9 @@
                  hx-swap = "outerHTML"
                  hx-trigger="click"
                  style="cursor: pointer"
-                 th:attr="hx-get=@{/therapist/questionnaires/generate-link/{questionnaireId}/action
+                 th:attr="hx-get=@{/therapist/questionnaires/generate-link
                  (questionnaireId=${questionnaireId}, page=${clients.getPageable().pageNumber - 1},
-                 searchDto=${searchDto.clientName})}"
+                 clientName=${searchDto.clientName}, action='true')}"
               >Назад</a>
             </li>
           </div>
@@ -77,10 +77,9 @@
                  hx-swap = "outerHTML"
                  hx-trigger="click"
                  style="cursor: pointer"
-                 th:object="${searchDto}"
-                 th:attr="hx-get=@{/therapist/questionnaires/generate-link/{questionnaireId}/action
+                 th:attr="hx-get=@{/therapist/questionnaires/generate-link
                  (questionnaireId=${questionnaireId}, page=${pageNumber - 1},
-                 searchDto=${searchDto.clientName})}"
+                 clientName=${searchDto.clientName}, action='true')}"
                  th:text="${pageNumber}"></a>
             </li>
           </div>
@@ -93,10 +92,9 @@
                  hx-swap = "outerHTML"
                  hx-trigger="click"
                  style="cursor: pointer"
-                 th:field="*{searchDto}"
-                 th:attr="hx-get=@{/therapist/questionnaires/generate-link/{questionnaireId}/action
+                 th:attr="hx-get=@{/therapist/questionnaires/generate-link
                  (questionnaireId=${questionnaireId}, page=${clients.getPageable().pageNumber + 1},
-                 searchDto=${searchDto.clientName})}"
+                 clientName=${searchDto.clientName}, action='true')}"
               >Вперед</a>
             </li>
           </div>

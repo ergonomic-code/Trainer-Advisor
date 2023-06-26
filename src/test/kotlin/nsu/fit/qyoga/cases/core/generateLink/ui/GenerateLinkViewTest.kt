@@ -33,11 +33,10 @@ class GenerateLinkViewTest : QYogaAppTestBase() {
             get("/therapist/questionnaires/generate-link")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
+            print(body)
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
                 node("#searchClientsFilterForm") { exists() }
-                node("#lastnameFilter") { exists() }
-                node("#firstnameFilter") { exists() }
-                node("#patronymicFilter") { exists() }
+                node("#nameFilter") { exists() }
                 node("#generate-link-content") { exists() }
                 node("#client1") {
                     exists()
@@ -71,9 +70,7 @@ class GenerateLinkViewTest : QYogaAppTestBase() {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
                 node("#searchClientsFilterForm") { notExists() }
-                node("#lastnameFilter") { notExists() }
-                node("#firstnameFilter") { notExists() }
-                node("#patronymicFilter") { notExists() }
+                node("#nameFilter") { notExists() }
                 node("#generate-link-content") { exists() }
                 node("#client1") { notExists() }
                 node("#client2") {

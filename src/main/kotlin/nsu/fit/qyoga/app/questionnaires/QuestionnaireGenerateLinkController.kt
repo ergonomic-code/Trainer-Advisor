@@ -41,7 +41,7 @@ class QuestionnaireGenerateLinkController(
     }
 
     /**
-     * Действмя с клиентами
+     * Действия с клиентами
      */
     @GetMapping("/generate-link", params = ["action=true"])
     fun getClientsFiltered(
