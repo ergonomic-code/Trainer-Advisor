@@ -11,31 +11,14 @@
           hx-target="#generate-link-content"
           hx-trigger="submit"
           th:object="${searchDto}">
+
       <div class="input-group mb-3 m-auto" id="searchClientsFilterForm">
-        <div class="mt-3 mb-3 w-25" id="lastnameFilter">
+        <div class="mt-3 mb-3 w-75" id="lastnameFilter">
           <input aria-describedby="basic-addon2"
                  class="form-control"
-                 placeholder="Фамилия"
+                 placeholder="ФИО"
                  style="border-color:inherit"
-                 th:field="${searchDto.lastName}"
-                 type="text">
-        </div>
-
-        <div class="mt-3 mb-3 w-25" id="firstnameFilter">
-          <input aria-describedby="basic-addon2"
-                 class="form-control"
-                 placeholder="Имя"
-                 style="border-color:inherit"
-                 th:field="${searchDto.firstName}"
-                 type="text">
-        </div>
-
-        <div class="mt-3 mb-3 w-25" id="patronymicFilter">
-          <input aria-describedby="basic-addon2"
-                 class="form-control"
-                 placeholder="Отчество"
-                 style="border-color:inherit"
-                 th:field="${searchDto.patronymic}"
+                 th:field="${searchDto.clientName}"
                  type="text">
         </div>
 
@@ -79,7 +62,7 @@
                  style="cursor: pointer"
                  th:attr="hx-get=@{/therapist/questionnaires/generate-link/{questionnaireId}/action
                  (questionnaireId=${questionnaireId}, page=${clients.getPageable().pageNumber - 1},
-                 firstName=${searchDto.firstName}, lastName=${searchDto.lastName} , patronymic=${searchDto.patronymic})}"
+                 searchDto=${searchDto.clientName})}"
               >Назад</a>
             </li>
           </div>
@@ -97,7 +80,7 @@
                  th:object="${searchDto}"
                  th:attr="hx-get=@{/therapist/questionnaires/generate-link/{questionnaireId}/action
                  (questionnaireId=${questionnaireId}, page=${pageNumber - 1},
-                 firstName=${searchDto.firstName}, lastName=${searchDto.lastName} , patronymic=${searchDto.patronymic})}"
+                 searchDto=${searchDto.clientName})}"
                  th:text="${pageNumber}"></a>
             </li>
           </div>
@@ -113,7 +96,7 @@
                  th:field="*{searchDto}"
                  th:attr="hx-get=@{/therapist/questionnaires/generate-link/{questionnaireId}/action
                  (questionnaireId=${questionnaireId}, page=${clients.getPageable().pageNumber + 1},
-                 firstName=${searchDto.firstName}, lastName=${searchDto.lastName} , patronymic=${searchDto.patronymic})}"
+                 searchDto=${searchDto.clientName})}"
               >Вперед</a>
             </li>
           </div>

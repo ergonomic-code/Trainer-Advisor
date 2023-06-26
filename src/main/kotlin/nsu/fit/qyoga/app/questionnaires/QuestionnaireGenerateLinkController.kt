@@ -2,7 +2,8 @@ package nsu.fit.qyoga.app.questionnaires
 
 import nsu.fit.qyoga.core.clients.api.ClientService
 import nsu.fit.qyoga.core.clients.api.Dto.ClientDto
-import nsu.fit.qyoga.core.clients.api.Dto.ClientSearchDto
+import nsu.fit.qyoga.core.questionnaires.api.dtos.GenerateLinkSearchClientsDto
+import nsu.fit.qyoga.core.questionnaires.api.dtos.toClientSearchDto
 import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireCompletionService
 import nsu.fit.qyoga.core.users.internal.QyogaUserDetails
 import org.springframework.data.domain.Page
@@ -25,13 +26,14 @@ class QuestionnaireGenerateLinkController(
      */
     @GetMapping("/generate-link")
     fun getGenerateLinkModalWindow(
-        @ModelAttribute("searchDto") searchDto: ClientSearchDto,
+        @ModelAttribute("searchDto") searchDto: GenerateLinkSearchClientsDto,
         @PageableDefault(value = 5, page = 0) pageable: Pageable,
         @ModelAttribute("questionnaireId") questionnaireId: Long,
         model: Model
     ): String {
+        val clientSearch = searchDto.toClientSearchDto()
         val clients = clientService.getClients(
-            searchDto,
+            clientSearch,
             pageable
         )
         model.addAllAttributes(toModelAttributes(clients, searchDto, questionnaireId))
@@ -43,13 +45,14 @@ class QuestionnaireGenerateLinkController(
      */
     @GetMapping("/generate-link", params = ["action=true"])
     fun getClientsFiltered(
-        @ModelAttribute("searchDto") searchDto: ClientSearchDto,
+        @ModelAttribute("searchDto") searchDto: GenerateLinkSearchClientsDto,
         @PageableDefault(value = 5, page = 0) pageable: Pageable,
         @ModelAttribute("questionnaireId") questionnaireId: Long,
         model: Model
     ): String {
+        val clientSearch = searchDto.toClientSearchDto()
         val clients = clientService.getClients(
-            searchDto,
+            clientSearch,
             pageable
         )
         model.addAllAttributes(toModelAttributes(clients, searchDto, questionnaireId))
@@ -75,7 +78,7 @@ class QuestionnaireGenerateLinkController(
 
     fun toModelAttributes(
         clients: Page<ClientDto>,
-        searchDto: ClientSearchDto,
+        searchDto: GenerateLinkSearchClientsDto,
         questionnaireId: Long
     ): Map<String, *> = mapOf(
         "searchDto" to searchDto,
