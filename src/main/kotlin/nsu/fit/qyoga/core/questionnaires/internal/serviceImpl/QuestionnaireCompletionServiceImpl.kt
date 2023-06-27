@@ -19,7 +19,7 @@ class QuestionnaireCompletionServiceImpl(
             key
         )
         return """
-            http://$host/client/questionnaire-completions?
+            $host/client/questionnaire-completions?
             questionnaireId=$questionnaireId
             &clientId=$clientId
             &therapistId=$therapistId

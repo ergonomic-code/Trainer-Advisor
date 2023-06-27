@@ -30,7 +30,7 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Run build with Gradle Wrapper
-        run: ./gradlew build -x check
+        run: ./gradlew build -x check -Dspring.profiles.active=prod
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
