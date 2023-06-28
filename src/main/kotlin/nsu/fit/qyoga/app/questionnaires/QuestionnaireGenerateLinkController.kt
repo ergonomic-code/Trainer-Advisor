@@ -43,7 +43,7 @@ class QuestionnaireGenerateLinkController(
     /**
      * Действия с клиентами
      */
-    @GetMapping("/generate-link", params = ["action=true"])
+    @GetMapping("/generate-link", headers = ["action=true"])
     fun getClientsFiltered(
         @ModelAttribute("searchDto") searchDto: GenerateLinkSearchClientsDto,
         @PageableDefault(value = 5, page = 0) pageable: Pageable,

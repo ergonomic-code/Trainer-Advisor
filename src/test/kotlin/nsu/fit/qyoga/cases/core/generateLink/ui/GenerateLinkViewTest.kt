@@ -62,8 +62,8 @@ class GenerateLinkViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
+            header("action", "true")
             param("clientName", "п п п")
-            param("action", "true")
             param("questionnaireId", "1")
             get("/therapist/questionnaires/generate-link")
         } Then {

@@ -3,104 +3,60 @@ package nsu.fit.qyoga.core.questionnaires.api.dtos.extensions
 import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateAnswerDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionnaireDto
+import nsu.fit.qyoga.core.questionnaires.api.errors.ElementNotFound
 
 fun CreateQuestionnaireDto.addAnswerImage(
     questionId: Long,
     answerId: Long,
     imageId: Long
-): CreateQuestionnaireDto? {
-    var isFound = false
-    val questionList = this.question.map { question ->
-        if (question.id == questionId) {
-            question.copy(
-                answers = question.answers.map { answer ->
-                    if (answer.id == answerId) {
-                        isFound = true
-                        answer.copy(imageId = imageId)
-                    } else {
-                        answer
-                    }
-                }
+): CreateQuestionnaireDto {
+    return this.copy(
+        question = modifyAnswer(answerId, questionId) {
+            it.copy(
+                imageId = imageId
             )
-        } else {
-            question
-        }
-    }
-    if (!isFound) return null
-    return this.copy(question = questionList.toMutableList())
+        }.toMutableList()
+    )
 }
 
 fun CreateQuestionnaireDto.deleteAnswersImage(
     questionId: Long,
     answerId: Long
-): CreateQuestionnaireDto? {
-    var isFound = false
-    val questionList = this.question.map { question ->
-        if (question.id == questionId) {
-            question.copy(
-                answers = question.answers.map { answer ->
-                    if (answer.id == answerId) {
-                        isFound = true
-                        answer.copy(imageId = null)
-                    } else {
-                        answer
-                    }
-                }
+): CreateQuestionnaireDto {
+    return this.copy(
+        question = modifyAnswer(answerId, questionId) {
+            it.copy(
+                imageId = null
             )
-        } else {
-            question
-        }
-    }
-    if (!isFound) return null
-    return this.copy(question = questionList.toMutableList())
+        }.toMutableList()
+    )
 }
 
 fun CreateQuestionnaireDto.updateAnswer(
     questionId: Long,
     answerId: Long,
     changedAnswer: CreateAnswerDto
-): CreateQuestionnaireDto? {
-    var isFound = false
-    val questionList = this.question.map { value ->
-        if (value.id == questionId) {
-            val copiedQuestion = value.copy(
-                answers = value.answers.map {
-                    if (it.id == answerId) {
-                        isFound = true
-                        it.copy(
-                            title = changedAnswer.title,
-                            bounds = changedAnswer.bounds,
-                            score = changedAnswer.score
-                        )
-                    } else {
-                        it
-                    }
-                }
+): CreateQuestionnaireDto {
+    return this.copy(
+        question = modifyAnswer(answerId, questionId) {
+            it.copy(
+                title = changedAnswer.title,
+                bounds = changedAnswer.bounds,
+                score = changedAnswer.score
             )
-            copiedQuestion
-        } else {
-            value
-        }
-    }
-    if (!isFound) return null
-    return this.copy(question = questionList.toMutableList())
+        }.toMutableList()
+    )
 }
 
 fun CreateQuestionnaireDto.updateQuestionAnswers(
     changedQuestion: CreateQuestionDto,
     questionId: Long
-): CreateQuestionnaireDto? {
-    var isFound = false
-    val questionList = this.question.map { value ->
-        if (value.id == questionId) {
-            isFound = true
-            value.copy(answers = changedQuestion.answers)
-        } else {
-            value
-        }
-    }
-    if (!isFound) return null
-    return this.copy(question = questionList.toMutableList())
+): CreateQuestionnaireDto {
+    return this.copy(
+        question = modifyQuestion(questionId) {
+            it.copy(answers = changedQuestion.answers)
+        }.toMutableList()
+    )
 }
 
 fun CreateQuestionnaireDto.addAnswer(
@@ -108,17 +64,11 @@ fun CreateQuestionnaireDto.addAnswer(
     questionId: Long
 ): CreateQuestionnaireDto {
     val lastId = if (changedQuestion.answers.isEmpty()) 0 else changedQuestion.answers.last().id + 1
-    val questionList = this.question.map { value ->
-        if (value.id == questionId) {
-            val copiedQuestion = changedQuestion.copy(
-                answers = changedQuestion.answers + CreateAnswerDto(id = lastId)
-            )
-            copiedQuestion
-        } else {
-            value
-        }
-    }
-    return this.copy(question = questionList.toMutableList())
+    return this.copy(
+        question = modifyQuestion(questionId) {
+            it.copy(answers = changedQuestion.answers + CreateAnswerDto(id = lastId))
+        }.toMutableList()
+    )
 }
 
 fun CreateQuestionnaireDto.deleteAnswer(
@@ -126,15 +76,35 @@ fun CreateQuestionnaireDto.deleteAnswer(
     questionId: Long,
     answerId: Long
 ): CreateQuestionnaireDto {
-    val questionList = this.question.map { value ->
-        if (value.id == questionId) {
-            val copiedQuestion = changedQuestion.copy(
-                answers = changedQuestion.answers.filter { it.id != answerId }
+    return this.copy(
+        question = modifyQuestion(questionId) {
+            it.copy(answers = changedQuestion.answers.filter { it.id != answerId })
+        }.toMutableList()
+    )
+}
+
+fun CreateQuestionnaireDto.modifyAnswer(
+    questionId: Long,
+    answerId: Long,
+    body: (CreateAnswerDto) -> CreateAnswerDto
+): List<CreateQuestionDto> {
+    var isFound = false
+    val questionList = this.question.map { question ->
+        if (question.id == questionId) {
+            question.copy(
+                answers = question.answers.map { answer ->
+                    if (answer.id == answerId) {
+                        isFound = true
+                        body(answer)
+                    } else {
+                        answer
+                    }
+                }
             )
-            copiedQuestion
         } else {
-            value
+            question
         }
     }
-    return this.copy(question = questionList.toMutableList())
+    if (!isFound) throw ElementNotFound("Выбранный ответ не найден")
+    return questionList
 }

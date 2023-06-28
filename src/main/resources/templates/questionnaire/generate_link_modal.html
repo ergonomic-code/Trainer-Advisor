@@ -7,7 +7,8 @@
 <div id="modal">
   <div class="modal-underlay" onclick="closeModal()"></div>
   <div class="main-container">
-    <form th:attr = "hx-get=|@{/therapist/questionnaires/generate-link(questionnaireId=${questionnaireId},action='true')}|"
+    <form th:attr = "hx-get=|@{/therapist/questionnaires/generate-link(questionnaireId=${questionnaireId})}|"
+          hx-headers='{"action": "true"}'
           hx-target="#generate-link-content"
           hx-trigger="submit"
           th:object="${searchDto}">
@@ -60,9 +61,10 @@
                  hx-swap = "outerHTML"
                  hx-trigger="click"
                  style="cursor: pointer"
+                 hx-headers='{"action": "true"}'
                  th:attr="hx-get=@{/therapist/questionnaires/generate-link
                  (questionnaireId=${questionnaireId}, page=${clients.getPageable().pageNumber - 1},
-                 clientName=${searchDto.clientName}, action='true')}"
+                 clientName=${searchDto.clientName})}"
               >Назад</a>
             </li>
           </div>
@@ -77,9 +79,10 @@
                  hx-swap = "outerHTML"
                  hx-trigger="click"
                  style="cursor: pointer"
+                 hx-headers='{"action": "true"}'
                  th:attr="hx-get=@{/therapist/questionnaires/generate-link
                  (questionnaireId=${questionnaireId}, page=${pageNumber - 1},
-                 clientName=${searchDto.clientName}, action='true')}"
+                 clientName=${searchDto.clientName})}"
                  th:text="${pageNumber}"></a>
             </li>
           </div>
@@ -92,9 +95,10 @@
                  hx-swap = "outerHTML"
                  hx-trigger="click"
                  style="cursor: pointer"
+                 hx-headers='{"action": "true"}'
                  th:attr="hx-get=@{/therapist/questionnaires/generate-link
                  (questionnaireId=${questionnaireId}, page=${clients.getPageable().pageNumber + 1},
-                 clientName=${searchDto.clientName}, action='true')}"
+                 clientName=${searchDto.clientName})}"
               >Вперед</a>
             </li>
           </div>

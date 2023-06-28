@@ -34,7 +34,6 @@ class QuestionnairesAnswersController(
         val changedAnswer = questionnaireDto.getAnswerByIdOrNull(questionId, answerId)
             ?: throw ElementNotFound(baseAnswerErrorText)
         val updatedQuestionnaire = questionnaire.updateAnswer(questionId, answerId, changedAnswer)
-            ?: throw ElementNotFound(baseAnswerErrorText)
         setQuestionnaireInSession(updatedQuestionnaire)
         return HttpStatus.OK
     }
@@ -48,12 +47,7 @@ class QuestionnairesAnswersController(
         @ModelAttribute("questionnaire") questionnaireDto: CreateQuestionnaireDto,
         model: Model
     ): String {
-        updateQuestion(
-            getQuestionnaireFromSession(),
-            questionnaireDto,
-            questionId,
-            model
-        )
+        updateQuestion(getQuestionnaireFromSession(), questionnaireDto, questionId, model)
         return "fragments/create-questionnaire-answer-set-score::answersScore"
     }
 
@@ -86,10 +80,7 @@ class QuestionnairesAnswersController(
         val questionnaire = getQuestionnaireFromSession()
         val question = questionnaire.getQuestionByIdOrNull(questionId)
             ?: throw ElementNotFound(baseQuestionErrorText)
-        val updatedQuestionnaire = questionnaire.addAnswer(
-            question,
-            questionId
-        )
+        val updatedQuestionnaire = questionnaire.addAnswer(question, questionId)
         setQuestionnaireInSession(updatedQuestionnaire)
         model.addAllAttributes(setQuestionIdxAndQuestion(updatedQuestionnaire, questionId))
         return questionHtmlFragment
@@ -107,11 +98,7 @@ class QuestionnairesAnswersController(
         val questionnaire = getQuestionnaireFromSession()
         val question = questionnaire.getQuestionByIdOrNull(questionId)
             ?: throw ElementNotFound(baseQuestionErrorText)
-        val updatedQuestionnaire = questionnaire.deleteAnswer(
-            question,
-            questionId,
-            answerId
-        )
+        val updatedQuestionnaire = questionnaire.deleteAnswer(question, questionId, answerId)
         setQuestionnaireInSession(updatedQuestionnaire)
         model.addAllAttributes(setQuestionIdxAndQuestion(updatedQuestionnaire, questionId))
         return questionHtmlFragment
@@ -125,10 +112,7 @@ class QuestionnairesAnswersController(
     ) {
         val question = changedQuestionnaireDto.getQuestionByIdOrNull(questionId)
             ?: throw ElementNotFound(baseQuestionErrorText)
-        val updatedQuestionnaire = questionnaire.updateQuestionAnswers(
-            question,
-            questionId
-        ) ?: throw ElementNotFound(baseQuestionErrorText)
+        val updatedQuestionnaire = questionnaire.updateQuestionAnswers(question, questionId)
         setQuestionnaireInSession(updatedQuestionnaire)
         model.addAllAttributes(setQuestionIdxAndQuestion(updatedQuestionnaire, questionId))
     }

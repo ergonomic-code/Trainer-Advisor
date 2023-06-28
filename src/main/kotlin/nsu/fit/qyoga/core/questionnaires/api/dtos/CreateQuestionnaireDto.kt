@@ -11,7 +11,7 @@ fun CreateQuestionnaireDto.getQuestionIdxById(questionId: Long) =
     this.question.withIndex().first { questionId == it.value.id }.index
 
 fun CreateQuestionnaireDto.getQuestionByIdOrNull(questionId: Long): CreateQuestionDto? =
-    this.question.filter { it.id == questionId }.getOrNull(0)
+    this.question.filter { it.id == questionId }.firstOrNull()
 
 fun CreateQuestionnaireDto.getAnswerIdxById(questionId: Long, answerId: Long): Int {
     val questionIdx = this.getQuestionIdxById(questionId)
@@ -22,5 +22,5 @@ fun CreateQuestionnaireDto.getAnswerIdxById(questionId: Long, answerId: Long): I
 fun CreateQuestionnaireDto.getAnswerByIdOrNull(questionId: Long, answerId: Long): CreateAnswerDto? {
     val question = this.getQuestionByIdOrNull(questionId)
         ?: return null
-    return question.answers.filter { it.id == answerId }.getOrNull(0)
+    return question.answers.filter { it.id == answerId }.firstOrNull()
 }

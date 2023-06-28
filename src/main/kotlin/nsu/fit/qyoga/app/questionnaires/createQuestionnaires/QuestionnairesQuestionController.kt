@@ -80,7 +80,6 @@ class QuestionnairesQuestionController(
         val changedQuestion = questionnaireDto.getQuestionByIdOrNull(questionId)
             ?: throw ElementNotFound(baseQuestionErrorText)
         val updatedQuestionnaire = questionnaire.updateQuestion(questionId, changedQuestion)
-            ?: throw ElementNotFound(baseQuestionErrorText)
         setQuestionnaireInSession(updatedQuestionnaire)
         return HttpStatus.OK
     }
