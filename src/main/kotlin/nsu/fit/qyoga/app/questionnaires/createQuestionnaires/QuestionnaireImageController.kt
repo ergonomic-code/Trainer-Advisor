@@ -8,7 +8,6 @@ import nsu.fit.qyoga.core.questionnaires.api.dtos.extensions.addAnswerImage
 import nsu.fit.qyoga.core.questionnaires.api.dtos.extensions.addQuestionImage
 import nsu.fit.qyoga.core.questionnaires.api.dtos.extensions.deleteAnswersImage
 import nsu.fit.qyoga.core.questionnaires.api.dtos.extensions.deleteQuestionImage
-import nsu.fit.qyoga.core.questionnaires.api.errors.ElementNotFound
 import nsu.fit.qyoga.core.questionnaires.api.errors.QuestionnaireException
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -22,9 +21,6 @@ class QuestionnaireImageController(
     private val httpSession: HttpSession,
     private val imageService: ImageService
 ) {
-
-    private val baseQuestionErrorText = "Выбранный вопрос не найден"
-    private val baseAnswerErrorText = "Выбранный ответ не найден"
 
     /**
      * Добавление изображение ответу
@@ -45,11 +41,7 @@ class QuestionnaireImageController(
                 data = file.bytes
             )
         )
-        val updatedQuestionnaire = questionnaire.addAnswerImage(questionId, answerId, imageId)
-        if (updatedQuestionnaire == null) {
-            imageService.deleteImage(imageId)
-            throw ElementNotFound(baseAnswerErrorText)
-        }
+        val updatedQuestionnaire = questionnaire.addAnswerImage(questionId, answerId, imageId, imageService)
         setQuestionnaireInSession(updatedQuestionnaire)
         val attributes: Map<String, *> = mapOf(
             "questionIndex" to updatedQuestionnaire.getQuestionIdxById(questionId),
@@ -73,7 +65,6 @@ class QuestionnaireImageController(
         val questionnaire = getQuestionnaireFromSession()
         imageService.deleteImage(imageId)
         val updatedQuestionnaire = questionnaire.deleteAnswersImage(questionId, answerId)
-            ?: throw ElementNotFound(baseAnswerErrorText)
         setQuestionnaireInSession(updatedQuestionnaire)
         return ResponseEntity.ok().body("")
     }
@@ -97,10 +88,6 @@ class QuestionnaireImageController(
             )
         )
         val updatedQuestionnaire = questionnaire.addQuestionImage(questionId, imageId)
-        if (updatedQuestionnaire == null) {
-            imageService.deleteImage(imageId)
-            throw ElementNotFound(baseQuestionErrorText)
-        }
         setQuestionnaireInSession(updatedQuestionnaire)
         val questionIndex = questionnaire.getQuestionIdxById(questionId)
         model.addAllAttributes(
@@ -123,7 +110,6 @@ class QuestionnaireImageController(
         val questionnaire = getQuestionnaireFromSession()
         imageService.deleteImage(imageId)
         val updatedQuestionnaire = questionnaire.deleteQuestionImage(questionId)
-            ?: throw ElementNotFound(baseQuestionErrorText)
         setQuestionnaireInSession(updatedQuestionnaire)
         return ResponseEntity.ok().body("")
     }

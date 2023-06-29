@@ -1,5 +1,6 @@
 package nsu.fit.qyoga.core.questionnaires.api.dtos.extensions
 
+import nsu.fit.qyoga.core.images.api.ImageService
 import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateAnswerDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionnaireDto
@@ -8,14 +9,20 @@ import nsu.fit.qyoga.core.questionnaires.api.errors.ElementNotFound
 fun CreateQuestionnaireDto.addAnswerImage(
     questionId: Long,
     answerId: Long,
-    imageId: Long
+    imageId: Long,
+    imageService: ImageService
 ): CreateQuestionnaireDto {
     return this.copy(
-        question = modifyAnswer(answerId, questionId) {
-            it.copy(
-                imageId = imageId
-            )
-        }.toMutableList()
+        question = try {
+            modifyAnswer(answerId, questionId) {
+                it.copy(
+                    imageId = imageId
+                )
+            }.toMutableList()
+        } catch (e: ElementNotFound) {
+            imageService.deleteImage(imageId)
+            throw e
+        }
     )
 }
 
