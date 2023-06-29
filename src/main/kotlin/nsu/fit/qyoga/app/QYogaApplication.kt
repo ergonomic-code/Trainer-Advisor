@@ -21,7 +21,6 @@ import org.springframework.context.annotation.Import
     TherapeuticPurposesConfig::class,
     UsersConfig::class
 )
-
 @SpringBootApplication
 class QYogaApplication
 
