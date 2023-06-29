@@ -96,7 +96,7 @@
                                         </thead>
                                         <tbody id="table-body" style="gap: 10px">
                                         <tr th:each="result : ${results.content}" th:fragment="table-completing" th:id="|completing${result.id}|" class="table-completing-row">
-                                            <td class="col" th:id="|completing${result.id}ClientName|" style="text-align: center"><a th:href="@{/}" th:text="|${result.client.firstName} ${result.client.lastName}|"></a></td>
+                                            <td class="col" th:id="|completing${result.id}ClientName|" style="text-align: center"><a th:href="@{/}" th:text="|${result.client.firstName} ${result.client.lastName}  ${result.client.patronymic}|"></a></td>
                                             <td class="col" th:id="|completing${result.id}Title|" style="text-align: center"><a th:href="@{/}" th:text="${result.questionnaire.title}"></a></td>
                                             <td class="col" th:id="|completing${result.id}Date|" style="text-align: center" th:text="${#temporals.format(result.completingDate, 'dd-MM-yyyy')}"></td>
                                             <td class="col" th:id="|completing${result.id}NumericResult|" style="text-align: center" th:text="${result.numericResult}"></td>

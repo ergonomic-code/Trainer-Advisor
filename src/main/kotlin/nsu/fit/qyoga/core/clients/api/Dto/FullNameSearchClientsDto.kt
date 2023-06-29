@@ -1,12 +1,10 @@
-package nsu.fit.qyoga.core.questionnaires.api.dtos
+package nsu.fit.qyoga.core.clients.api.Dto
 
-import nsu.fit.qyoga.core.clients.api.Dto.ClientSearchDto
-
-data class GenerateLinkSearchClientsDto(
+data class FullNameClientsSearchDto(
     val clientName: String = ""
 )
 
-fun GenerateLinkSearchClientsDto.toClientSearchDto(): ClientSearchDto {
+fun FullNameClientsSearchDto.toClientSearchDto(): ClientSearchDto {
     val fullName = this.clientName.split(" ").toTypedArray()
     return ClientSearchDto(
         lastName = fullName.getOrNull(0),

@@ -67,7 +67,13 @@ class CompletingJdbcTemplateRepo(
             LEFT JOIN clients ON clients.id = completing.client_id
             LEFT JOIN questionnaires ON questionnaires.id = completing.questionnaire_id
             WHERE completing.therapist_id = :therapistId
-            AND clients.first_name||''||clients.last_name||''||clients.patronymic LIKE '%' || :name || '%'
+            AND (
+            clients.first_name||' '||clients.last_name||' '||clients.patronymic ILIKE '%' || :name || '%' OR
+            clients.first_name||' '||clients.patronymic||' '||clients.last_name ILIKE '%' || :name || '%' OR
+            clients.last_name||' '||clients.first_name||' '||clients.patronymic ILIKE '%' || :name || '%' OR
+            clients.last_name||' '||clients.patronymic||' '||clients.first_name ILIKE '%' || :name || '%' OR
+            clients.patronymic||' '||clients.first_name||' '||clients.last_name ILIKE '%' || :name || '%' OR
+            clients.patronymic||' '||clients.last_name||' '||clients.first_name ILIKE '%' || :name || '%')
             AND questionnaires.title LIKE '%' || :qTitle || '%'
             ORDER BY completingDate ${sortDirection.name}
         """.trimIndent()

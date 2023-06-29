@@ -2,8 +2,8 @@ package nsu.fit.qyoga.app.questionnaires
 
 import nsu.fit.qyoga.core.clients.api.ClientService
 import nsu.fit.qyoga.core.clients.api.Dto.ClientDto
-import nsu.fit.qyoga.core.questionnaires.api.dtos.GenerateLinkSearchClientsDto
-import nsu.fit.qyoga.core.questionnaires.api.dtos.toClientSearchDto
+import nsu.fit.qyoga.core.clients.api.Dto.FullNameClientsSearchDto
+import nsu.fit.qyoga.core.clients.api.Dto.toClientSearchDto
 import nsu.fit.qyoga.core.questionnaires.internal.QuestionnaireCompletionService
 import nsu.fit.qyoga.core.users.internal.QyogaUserDetails
 import org.springframework.data.domain.Page
@@ -26,17 +26,19 @@ class QuestionnaireGenerateLinkController(
      */
     @GetMapping("/generate-link")
     fun getGenerateLinkModalWindow(
-        @ModelAttribute("searchDto") searchDto: GenerateLinkSearchClientsDto,
+        @ModelAttribute("searchDto") searchDto: FullNameClientsSearchDto,
         @PageableDefault(value = 5, page = 0) pageable: Pageable,
         @ModelAttribute("questionnaireId") questionnaireId: Long,
         model: Model
     ): String {
-        val clientSearch = searchDto.toClientSearchDto()
-        val clients = clientService.getClients(
-            clientSearch,
-            pageable
+        model.addAllAttributes(toModelAttributes(
+            clientService.getClients(
+                searchDto.toClientSearchDto(),
+                pageable
+            ),
+            searchDto,
+            questionnaireId)
         )
-        model.addAllAttributes(toModelAttributes(clients, searchDto, questionnaireId))
         return "questionnaire/generate_link_modal"
     }
 
@@ -45,17 +47,19 @@ class QuestionnaireGenerateLinkController(
      */
     @GetMapping("/generate-link", headers = ["action=true"])
     fun getClientsFiltered(
-        @ModelAttribute("searchDto") searchDto: GenerateLinkSearchClientsDto,
+        @ModelAttribute("searchDto") searchDto: FullNameClientsSearchDto,
         @PageableDefault(value = 5, page = 0) pageable: Pageable,
         @ModelAttribute("questionnaireId") questionnaireId: Long,
         model: Model
     ): String {
-        val clientSearch = searchDto.toClientSearchDto()
-        val clients = clientService.getClients(
-            clientSearch,
-            pageable
+        model.addAllAttributes(toModelAttributes(
+            clientService.getClients(
+                searchDto.toClientSearchDto(),
+                pageable
+            ),
+            searchDto,
+            questionnaireId)
         )
-        model.addAllAttributes(toModelAttributes(clients, searchDto, questionnaireId))
         return "questionnaire/generate_link_modal :: clients"
     }
 
@@ -78,7 +82,7 @@ class QuestionnaireGenerateLinkController(
 
     fun toModelAttributes(
         clients: Page<ClientDto>,
-        searchDto: GenerateLinkSearchClientsDto,
+        searchDto: FullNameClientsSearchDto,
         questionnaireId: Long
     ): Map<String, *> = mapOf(
         "searchDto" to searchDto,

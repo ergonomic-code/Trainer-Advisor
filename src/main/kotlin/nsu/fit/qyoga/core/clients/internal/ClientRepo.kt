@@ -32,9 +32,20 @@ class ClientRepo(
             FROM appointments
                      INNER JOIN clients ON clients.id = appointments.client_id
             WHERE
-                (:firstName::varchar IS NULL OR first_name ilike '%' || :firstName || '%') AND
-                (:lastName::varchar IS NULL OR last_name ilike  '%' || :lastName || '%') AND
-                (:patronymic::varchar IS NULL OR patronymic ilike  '%' || :patronymic || '%') AND
+                (
+                (:firstName::varchar IS NULL 
+                OR first_name ilike '%' || :firstName || '%' 
+                OR last_name ilike '%' || :firstName || '%' 
+                OR patronymic ilike '%' || :firstName || '%') AND
+                (:lastName::varchar IS NULL 
+                OR first_name ilike  '%' || :lastName || '%'
+                OR last_name ilike  '%' || :lastName || '%'
+                OR patronymic ilike  '%' || :lastName || '%') AND
+                (:patronymic::varchar IS NULL 
+                OR first_name ilike  '%' || :patronymic || '%'
+                OR last_name ilike  '%' || :patronymic || '%'
+                OR patronymic ilike  '%' || :patronymic || '%')
+                ) AND
                 (:phoneNumber::varchar IS NULL OR phone_number ilike '%' || :phoneNumber || '%') AND
                 (:diagnose::varchar IS NULL OR diagnose ilike    '%' || :diagnose || '%') 
             GROUP BY clients.id
