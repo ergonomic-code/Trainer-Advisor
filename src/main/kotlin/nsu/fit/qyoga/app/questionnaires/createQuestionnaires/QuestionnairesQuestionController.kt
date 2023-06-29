@@ -24,7 +24,7 @@ class QuestionnairesQuestionController(
     /***
      * Добавление нового вопроса
      */
-    @GetMapping("/edit/add-question")
+    @PatchMapping("/edit/add-question")
     fun addNewQuestionToQuestionnaire(): String {
         val questionnaire = getQuestionnaireFromSession()
         setQuestionnaireInSession(questionnaire.addQuestion())

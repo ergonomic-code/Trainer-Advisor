@@ -62,7 +62,7 @@
             <button type="button" class="saveScore"
                     style=" border-radius: 5px; color: black; padding: 2px; text-decoration: none;background-color: #c2c2c2; cursor: pointer; position: absolute; right: 0"
                     th:attr = "
-                    hx-post=|@{/therapist/questionnaires/edit/question/{questionId}/answer/setAnswers
+                    hx-post=|@{/therapist/questionnaires/edit/question/{questionId}/set-answers
                     (questionId=${question.id})}|,
                     hx-target=|#question${question.id}|">Сохранить</button>
         </div>

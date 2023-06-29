@@ -41,7 +41,7 @@ class QuestionnairesAnswersController(
     /**
      * Получить фрагмент страницы задания баллов для ответов
      */
-    @PostMapping("/edit/question/{questionId}/answer/setScores")
+    @PostMapping("/edit/question/{questionId}/set-scores")
     fun setQuestionScore(
         @PathVariable("questionId") questionId: Long,
         @ModelAttribute("questionnaire") questionnaireDto: CreateQuestionnaireDto,
@@ -54,7 +54,7 @@ class QuestionnairesAnswersController(
     /**
      * Получить фрагмент страницы редактирования ответа
      */
-    @PostMapping("/edit/question/{questionId}/answer/setAnswers")
+    @PostMapping("/edit/question/{questionId}/set-answers")
     fun setQuestionAnswers(
         @PathVariable("questionId") questionId: Long,
         @ModelAttribute("questionnaire") questionnaireDto: CreateQuestionnaireDto,
@@ -72,7 +72,7 @@ class QuestionnairesAnswersController(
     /**
      * Добавление ответа в вопрос
      */
-    @GetMapping("/edit/question/{questionId}/addAnswer")
+    @PatchMapping("/edit/question/{questionId}/add-answer")
     fun addAnswerToQuestion(
         @PathVariable questionId: Long,
         model: Model

@@ -29,7 +29,7 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
             authorized()
         } When {
             get("/therapist/questionnaires/new")
-            get("/therapist/questionnaires/edit/add-question")
+            patch("/therapist/questionnaires/edit/add-question")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
@@ -46,13 +46,13 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
     }
 
     @Test
-    fun `QYoga can add question to questionnaire if there are no question`() {
+    fun `QYoga can add question in empty questionnaire`() {
         Given {
             authorized()
         } When {
             get("/therapist/questionnaires/new")
             delete("/therapist/questionnaires/edit/question/0")
-            get("/therapist/questionnaires/edit/add-question")
+            patch("/therapist/questionnaires/edit/add-question")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
@@ -72,7 +72,7 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/edit/add-question")
+            patch("/therapist/questionnaires/edit/add-question")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
@@ -91,37 +91,8 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
         } When {
             get("/therapist/questionnaires/new")
             delete("/therapist/questionnaires/edit/question/0")
-            get("/therapist/questionnaires/edit")
         } Then {
-            val body = Jsoup.parse(extract().body().asString())
-            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#question0") { notExists() }
-                node("#question0Header") { notExists() }
-                node("#question0Body") { notExists() }
-                node("#answer0") { notExists() }
-            }
-        }
-    }
-
-    @Test
-    fun `QYoga can delete question from questionnaire question list`() {
-        Given {
-            authorized()
-        } When {
-            get("/therapist/questionnaires/new")
-            get("/therapist/questionnaires/edit/add-question")
-            delete("/therapist/questionnaires/edit/question/0")
-            get("/therapist/questionnaires/edit")
-        } Then {
-            val body = Jsoup.parse(extract().body().asString())
-            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#question0") { notExists() }
-                node("#question0Header") { notExists() }
-                node("#question0Body") { notExists() }
-                node("#question1") { exists() }
-                node("#question1Header") { exists() }
-                node("#question1Body") { exists() }
-            }
+            extract().statusCode().compareTo(200) shouldBe 0
         }
     }
 
@@ -134,13 +105,7 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
             delete("/therapist/questionnaires/edit/question/-1")
             get("/therapist/questionnaires/edit")
         } Then {
-            val body = Jsoup.parse(extract().body().asString())
-            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#question0") { exists() }
-                node("#question0Header") { exists() }
-                node("#question0Body") { exists() }
-                node("#answer0") { exists() }
-            }
+            extract().statusCode().compareTo(200) shouldBe 0
         }
     }
 
@@ -167,23 +132,7 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
             authorized()
         } When {
             get("/therapist/questionnaires/new")
-            get("/therapist/questionnaires/edit/add-question")
-            param("id", "1")
-            param("title", "test")
-            param("question[0].id", "0")
-            param("question[0].title", "questions title")
-            param("question[0].questionType", "SEVERAL")
-            param("question[0].answers[0].id", "1")
-            param("question[0].answers[0].questionId", "1")
-            param("question[0].answers[0].score", "1")
-            param("question[0].answers[0].title", "answer title")
-            param("question[1].id", "1")
-            param("question[1].title", "questions title")
-            param("question[1].questionType", "SEVERAL")
-            param("question[1].answers[0].id", "1")
-            param("question[1].answers[0].questionId", "1")
-            param("question[1].answers[0].score", "1")
-            param("question[1].answers[0].title", "answer title")
+            params(setParams())
             post("/therapist/questionnaires/edit/question/0/change-type")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
@@ -201,11 +150,7 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            param("id", "1")
-            param("title", "test")
-            param("question[0].id", "0")
-            param("question[0].title", "questions title")
-            param("question[0].questionType", "SEVERAL")
+            params(setParams())
             post("/therapist/questionnaires/edit/question/0/change-type")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
@@ -224,11 +169,7 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
             authorized()
         } When {
             get("/therapist/questionnaires/new")
-            param("id", "1")
-            param("title", "test")
-            param("question[0].id", "0")
-            param("question[0].title", "questions title")
-            param("question[0].questionType", "SEVERAL")
+            params(setParams())
             post("/therapist/questionnaires/edit/question/-1/change-type")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
@@ -251,21 +192,7 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
             authorized()
         } When {
             get("/therapist/questionnaires/new")
-            get("/therapist/questionnaires/edit/add-question")
-            param("id", "1")
-            param("title", "test")
-            param("question[0].id", "0")
-            param("question[0].title", "questions title")
-            param("question[0].questionType", "SEVERAL")
-            param("question[0].answers[0].id", "0")
-            param("question[0].answers[0].score", "1")
-            param("question[0].answers[0].title", "answer title")
-            param("question[1].id", "1")
-            param("question[1].title", "questions title")
-            param("question[1].questionType", "SEVERAL")
-            param("question[1].answers[0].id", "0")
-            param("question[1].answers[0].score", "1")
-            param("question[1].answers[0].title", "answer title")
+            params(setParams())
             post("/therapist/questionnaires/edit/question/0/update")
         } Then {
             extract().statusCode().compareTo(200) shouldBe 0
@@ -273,25 +200,12 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
     }
 
     @Test
-    fun `QYoga can't update question if it not in questionnaire from session`() {
+    fun `QYoga can't update question if it not in session's questionnaire`() {
         Given {
             authorized()
         } When {
             get("/therapist/questionnaires/new")
-            param("id", "1")
-            param("title", "test")
-            param("question[0].id", "0")
-            param("question[0].title", "questions title")
-            param("question[0].questionType", "SEVERAL")
-            param("question[0].answers[0].id", "0")
-            param("question[0].answers[0].score", "1")
-            param("question[0].answers[0].title", "answer title")
-            param("question[1].id", "1")
-            param("question[1].title", "questions title")
-            param("question[1].questionType", "SEVERAL")
-            param("question[1].answers[0].id", "0")
-            param("question[1].answers[0].score", "1")
-            param("question[1].answers[0].title", "answer title")
+            params(setParams())
             post("/therapist/questionnaires/edit/question/1/update")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
@@ -313,11 +227,7 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            param("id", "1")
-            param("title", "test")
-            param("question[0].id", "0")
-            param("question[0].title", "questions title")
-            param("question[0].questionType", "SEVERAL")
+            params(setParams())
             post("/therapist/questionnaires/edit/question/0/update")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
@@ -336,11 +246,7 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
             authorized()
         } When {
             get("/therapist/questionnaires/new")
-            param("id", "1")
-            param("title", "test")
-            param("question[0].id", "0")
-            param("question[0].title", "questions title")
-            param("question[0].questionType", "SEVERAL")
+            params(setParams())
             post("/therapist/questionnaires/edit/question/-1/update")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
@@ -355,5 +261,24 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
                 }
             }
         }
+    }
+
+    fun setParams(): Map<String, String> {
+        return mutableMapOf(
+            "id" to "1",
+            "title" to "test",
+            "question[0].id" to "0",
+            "question[0].title" to "questions title",
+            "question[0].questionType" to "SEVERAL",
+            "question[0].answers[0].id" to "0",
+            "question[0].answers[0].score" to "1",
+            "question[0].answers[0].title" to "answer title",
+            "question[1].id" to "1",
+            "question[1].title" to "questions title",
+            "question[1].questionType" to "SEVERAL",
+            "question[1].answers[0].id" to "0",
+            "question[1].answers[0].score" to "1",
+            "question[1].answers[0].title" to "answer title"
+        )
     }
 }

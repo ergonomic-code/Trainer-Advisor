@@ -192,7 +192,7 @@
                    placeholder="нажмите, чтобы добавить новый ответ"
                    hx-trigger="click"
                    th:attr = "
-                   hx-get=|@{/therapist/questionnaires/edit/question/{questionId}/addAnswer
+                   hx-patch=|@{/therapist/questionnaires/edit/question/{questionId}/add-answer
                    (questionId=${question.id})}|,
                    hx-target=|#question${question.id}|"
             >
@@ -218,7 +218,7 @@
                     style=" border-radius: 5px; color: black; padding: 2px; text-decoration: none;background-color: #c2c2c2; cursor: pointer;"
                     hx-swap="outerHTML"
                     th:attr = "
-                    hx-post=|@{/therapist/questionnaires/edit/question/{questionId}/answer/setScores
+                    hx-post=|@{/therapist/questionnaires/edit/question/{questionId}/set-scores
                     (questionId=${question.id})}|,
                     hx-target=|#question${question.id}Body|">Задать баллы</button>
         </div>

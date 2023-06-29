@@ -4,7 +4,7 @@ import nsu.fit.qyoga.core.clients.api.ClientService
 import nsu.fit.qyoga.core.clients.api.Dto.ClientDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.GenerateLinkSearchClientsDto
 import nsu.fit.qyoga.core.questionnaires.api.dtos.toClientSearchDto
-import nsu.fit.qyoga.core.questionnaires.api.services.QuestionnaireCompletionService
+import nsu.fit.qyoga.core.questionnaires.internal.QuestionnaireCompletionService
 import nsu.fit.qyoga.core.users.internal.QyogaUserDetails
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable

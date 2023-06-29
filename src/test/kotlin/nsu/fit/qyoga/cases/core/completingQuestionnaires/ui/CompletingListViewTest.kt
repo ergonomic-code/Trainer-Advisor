@@ -1,6 +1,5 @@
 package nsu.fit.qyoga.cases.core.completingQuestionnaires.ui
 
-import io.restassured.http.ContentType
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
@@ -59,10 +58,10 @@ class CompletingListViewTest : QYogaAppTestBase() {
     fun `QYoga returns table of completing when user change page`() {
         Given {
             authorized()
-            contentType(ContentType.JSON)
+            header("action", "true")
             param("page", 1)
         } When {
-            get("/therapist/questionnaires/performing/action")
+            get("/therapist/questionnaires/performing")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
@@ -81,10 +80,10 @@ class CompletingListViewTest : QYogaAppTestBase() {
     fun `QYoga returns table of completing sorted by date DESC when user change sort type`() {
         Given {
             authorized()
-            contentType(ContentType.JSON)
+            header("action", "true")
             param("sort", "date,desc")
         } When {
-            get("/therapist/questionnaires/performing/action")
+            get("/therapist/questionnaires/performing")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
@@ -112,10 +111,10 @@ class CompletingListViewTest : QYogaAppTestBase() {
     fun `QYoga returns table of completing where title in completing title, when user change title`() {
         Given {
             authorized()
-            contentType(ContentType.JSON)
+            header("action", "true")
             param("title", "test")
         } When {
-            get("/therapist/questionnaires/performing/action")
+            get("/therapist/questionnaires/performing")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
@@ -153,10 +152,10 @@ class CompletingListViewTest : QYogaAppTestBase() {
     fun `QYoga returns table of completing where name in client full name, when user change client name`() {
         Given {
             authorized()
-            contentType(ContentType.JSON)
+            header("action", "true")
             param("clientName", "first_name2")
         } When {
-            get("/therapist/questionnaires/performing/action")
+            get("/therapist/questionnaires/performing")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {

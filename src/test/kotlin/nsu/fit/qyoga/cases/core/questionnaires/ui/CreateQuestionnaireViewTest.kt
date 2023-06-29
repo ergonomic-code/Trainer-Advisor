@@ -29,7 +29,6 @@ class CreateQuestionnaireViewTest : QYogaAppTestBase() {
             authorized()
         } When {
             get("/therapist/questionnaires/1/edit")
-            get("/therapist/questionnaires/edit")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
@@ -51,7 +50,6 @@ class CreateQuestionnaireViewTest : QYogaAppTestBase() {
             authorized()
         } When {
             get("/therapist/questionnaires/new")
-            get("/therapist/questionnaires/edit")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
@@ -70,7 +68,6 @@ class CreateQuestionnaireViewTest : QYogaAppTestBase() {
             authorized()
         } When {
             get("/therapist/questionnaires/new")
-            get("/therapist/questionnaires/edit")
             param("id", 1)
             param("title", "asd")
             post("/therapist/questionnaires/edit/title")
@@ -121,7 +118,6 @@ class CreateQuestionnaireViewTest : QYogaAppTestBase() {
             authorized()
         } When {
             get("/therapist/questionnaires/new")
-            get("/therapist/questionnaires/edit")
             param("id", "1")
             param("title", "test")
             param("questions[0].id", "1")

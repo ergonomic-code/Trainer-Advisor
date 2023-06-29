@@ -45,7 +45,8 @@
                                    placeholder="Название опросника"
                                    class="form-control"
                                    style="border-color:inherit; height: 40px"
-                                   th:attr="hx-get=@{/therapist/questionnaires/action(sort=${'title,'+sortType})}"
+                                   hx-headers='{"action": "true"}'
+                                   th:attr="hx-get=@{/therapist/questionnaires(sort=${'title,'+sortType})}"
                                    th:field="*{questionnaireSearchDto.title}"
                                    hx-trigger="keyup changed delay:500ms, search"
                                    th:value="${questionnaireSearchDto.title}"
@@ -61,7 +62,8 @@
                                     style="height: 40px; border-radius: 5px"
                                     id="sort-type-select"
                                     hx-trigger="change"
-                                    th:attr="hx-get=@{/therapist/questionnaires/action(title=${questionnaireSearchDto.title}, page=${0})}"
+                                    hx-headers='{"action": "true"}'
+                                    th:attr="hx-get=@{/therapist/questionnaires(title=${questionnaireSearchDto.title}, page=${0})}"
                                     th:name="sort">
                                 <option th:if="${sortType} == 'ASC'" selected disabled hidden>От А до Я</option>
                                 <option th:if="${sortType} == 'DESC'" selected disabled hidden>От Я до А</option>
@@ -126,7 +128,8 @@
                                            hx-swap = "outerHTML"
                                            hx-trigger="click"
                                            style="cursor: pointer"
-                                           th:attr="hx-get=@{/therapist/questionnaires/action(sort=${'title,'+sortType}, title=${questionnaireSearchDto.title}, page=${0})}"
+                                           hx-headers='{"action": "true"}'
+                                           th:attr="hx-get=@{/therapist/questionnaires(sort=${'title,'+sortType}, title=${questionnaireSearchDto.title}, page=${0})}"
                                         >Первая</a>
                                     </li>
                                 </div>
@@ -139,7 +142,8 @@
                                            hx-swap = "outerHTML"
                                            hx-trigger="click"
                                            style="cursor: pointer"
-                                           th:attr="hx-get=@{/therapist/questionnaires/action(sort=${'title,'+sortType}, title=${questionnaireSearchDto.title}, page=${questionnaires.getPageable().pageNumber - 1})}"
+                                           hx-headers='{"action": "true"}'
+                                           th:attr="hx-get=@{/therapist/questionnaires(sort=${'title,'+sortType}, title=${questionnaireSearchDto.title}, page=${questionnaires.getPageable().pageNumber - 1})}"
                                         >Назад</a>
                                     </li>
                                 </div>
@@ -154,7 +158,8 @@
                                            hx-swap = "outerHTML"
                                            hx-trigger="click"
                                            style="cursor: pointer"
-                                           th:attr="hx-get=@{/therapist/questionnaires/action(page=${pageNumber - 1}, sort=${'title,'+sortType}, title=${questionnaireSearchDto.title})}"
+                                           hx-headers='{"action": "true"}'
+                                           th:attr="hx-get=@{/therapist/questionnaires(page=${pageNumber - 1}, sort=${'title,'+sortType}, title=${questionnaireSearchDto.title})}"
                                            th:text="${pageNumber}"></a>
                                     </li>
                                 </div>
@@ -167,7 +172,8 @@
                                            hx-swap = "outerHTML"
                                            hx-trigger="click"
                                            style="cursor: pointer"
-                                           th:attr="hx-get=@{/therapist/questionnaires/action(sort=${'title,'+sortType}, title=${questionnaireSearchDto.title}, page=${questionnaires.getPageable().pageNumber + 1})}"
+                                           hx-headers='{"action": "true"}'
+                                           th:attr="hx-get=@{/therapist/questionnaires(sort=${'title,'+sortType}, title=${questionnaireSearchDto.title}, page=${questionnaires.getPageable().pageNumber + 1})}"
                                         >Вперед</a>
                                     </li>
                                 </div>
@@ -180,7 +186,8 @@
                                            hx-swap = "outerHTML"
                                            hx-trigger="click"
                                            style="cursor: pointer"
-                                           th:attr="hx-get=@{/therapist/questionnaires/action(sort=${'title,'+sortType}, title=${questionnaireSearchDto.title}, page=${questionnaires.totalPages - 1})}"
+                                           hx-headers='{"action": "true"}'
+                                           th:attr="hx-get=@{/therapist/questionnaires(sort=${'title,'+sortType}, title=${questionnaireSearchDto.title}, page=${questionnaires.totalPages - 1})}"
                                         >Последняя</a>
                                     </li>
                                 </div>

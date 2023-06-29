@@ -42,7 +42,7 @@ class CompletingQuestionnairesListController(
     /**
      * Фильтрация прохождений
      */
-    @GetMapping("/action")
+    @GetMapping("", headers = ["action=true"])
     fun sortQuestionnaires(
         @ModelAttribute("completingSearchDto") completingSearchDto: CompletingSearchDto,
         @PageableDefault(value = 10, page = 0, sort = ["date"]) pageable: Pageable,
