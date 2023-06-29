@@ -3,7 +3,6 @@ package nsu.fit.qyoga.app.questionnaires
 import nsu.fit.qyoga.core.clients.api.ClientService
 import nsu.fit.qyoga.core.clients.api.Dto.ClientDto
 import nsu.fit.qyoga.core.clients.api.Dto.FullNameClientsSearchDto
-import nsu.fit.qyoga.core.clients.api.Dto.toClientSearchDto
 import nsu.fit.qyoga.core.questionnaires.internal.QuestionnaireCompletionService
 import nsu.fit.qyoga.core.users.internal.QyogaUserDetails
 import org.springframework.data.domain.Page
@@ -32,8 +31,8 @@ class QuestionnaireGenerateLinkController(
         model: Model
     ): String {
         model.addAllAttributes(toModelAttributes(
-            clientService.getClients(
-                searchDto.toClientSearchDto(),
+            clientService.getClientsByFullName(
+                searchDto,
                 pageable
             ),
             searchDto,
@@ -53,8 +52,8 @@ class QuestionnaireGenerateLinkController(
         model: Model
     ): String {
         model.addAllAttributes(toModelAttributes(
-            clientService.getClients(
-                searchDto.toClientSearchDto(),
+            clientService.getClientsByFullName(
+                searchDto,
                 pageable
             ),
             searchDto,
