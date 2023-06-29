@@ -4,7 +4,7 @@ import nsu.fit.platform.lang.dataClassToMap
 import nsu.fit.platform.spring.queryForPage
 import nsu.fit.qyoga.core.clients.api.Dto.ClientDto
 import nsu.fit.qyoga.core.clients.api.Dto.ClientSearchDto
-import nsu.fit.qyoga.core.clients.api.Dto.FullNameClientsSearchDto
+import nsu.fit.qyoga.core.clients.api.Dto.FullNameSearchClientsDto
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.jdbc.core.DataClassRowMapper
@@ -56,7 +56,7 @@ class ClientRepo(
     }
 
     fun getClientsByFullName(
-        search: FullNameClientsSearchDto,
+        search: FullNameSearchClientsDto,
         page: Pageable
     ): PageImpl<ClientDto> {
         val query = """

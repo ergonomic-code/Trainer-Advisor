@@ -2,7 +2,7 @@ package nsu.fit.qyoga.app.questionnaires
 
 import nsu.fit.qyoga.core.clients.api.ClientService
 import nsu.fit.qyoga.core.clients.api.Dto.ClientDto
-import nsu.fit.qyoga.core.clients.api.Dto.FullNameClientsSearchDto
+import nsu.fit.qyoga.core.clients.api.Dto.FullNameSearchClientsDto
 import nsu.fit.qyoga.core.questionnaires.internal.QuestionnaireCompletionService
 import nsu.fit.qyoga.core.users.internal.QyogaUserDetails
 import org.springframework.data.domain.Page
@@ -25,18 +25,20 @@ class QuestionnaireGenerateLinkController(
      */
     @GetMapping("/generate-link")
     fun getGenerateLinkModalWindow(
-        @ModelAttribute("searchDto") searchDto: FullNameClientsSearchDto,
+        @ModelAttribute("searchDto") searchDto: FullNameSearchClientsDto,
         @PageableDefault(value = 5, page = 0) pageable: Pageable,
         @ModelAttribute("questionnaireId") questionnaireId: Long,
         model: Model
     ): String {
-        model.addAllAttributes(toModelAttributes(
-            clientService.getClientsByFullName(
+        model.addAllAttributes(
+            toModelAttributes(
+                clientService.getClientsByFullName(
+                    searchDto,
+                    pageable
+                ),
                 searchDto,
-                pageable
-            ),
-            searchDto,
-            questionnaireId)
+                questionnaireId
+            )
         )
         return "questionnaire/generate_link_modal"
     }
@@ -46,18 +48,20 @@ class QuestionnaireGenerateLinkController(
      */
     @GetMapping("/generate-link", headers = ["action=true"])
     fun getClientsFiltered(
-        @ModelAttribute("searchDto") searchDto: FullNameClientsSearchDto,
+        @ModelAttribute("searchDto") searchDto: FullNameSearchClientsDto,
         @PageableDefault(value = 5, page = 0) pageable: Pageable,
         @ModelAttribute("questionnaireId") questionnaireId: Long,
         model: Model
     ): String {
-        model.addAllAttributes(toModelAttributes(
-            clientService.getClientsByFullName(
+        model.addAllAttributes(
+            toModelAttributes(
+                clientService.getClientsByFullName(
+                    searchDto,
+                    pageable
+                ),
                 searchDto,
-                pageable
-            ),
-            searchDto,
-            questionnaireId)
+                questionnaireId
+            )
         )
         return "questionnaire/generate_link_modal :: clients"
     }
@@ -81,7 +85,7 @@ class QuestionnaireGenerateLinkController(
 
     fun toModelAttributes(
         clients: Page<ClientDto>,
-        searchDto: FullNameClientsSearchDto,
+        searchDto: FullNameSearchClientsDto,
         questionnaireId: Long
     ): Map<String, *> = mapOf(
         "searchDto" to searchDto,

@@ -6,7 +6,7 @@ import io.kotest.matchers.string.shouldContain
 import nsu.fit.qyoga.cases.core.clients.ClientsTestConfig
 import nsu.fit.qyoga.core.clients.api.ClientService
 import nsu.fit.qyoga.core.clients.api.Dto.ClientSearchDto
-import nsu.fit.qyoga.core.clients.api.Dto.FullNameClientsSearchDto
+import nsu.fit.qyoga.core.clients.api.Dto.FullNameSearchClientsDto
 import nsu.fit.qyoga.infra.QYogaModuleBaseTest
 import nsu.fit.qyoga.infra.TestContainerDbContextInitializer
 import org.junit.jupiter.api.BeforeEach
@@ -74,7 +74,7 @@ class ClientsServiceTests(
     @Test
     fun `QYoga can retrieve clients by full name`() {
         // Given
-        val searchDto = FullNameClientsSearchDto("Иванов Иван Иванович")
+        val searchDto = FullNameSearchClientsDto("Иванов Иван Иванович")
 
         // When
         val clients = clientService.getClientsByFullName(
