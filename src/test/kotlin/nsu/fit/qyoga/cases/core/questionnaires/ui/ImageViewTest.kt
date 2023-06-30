@@ -1,6 +1,8 @@
 package nsu.fit.qyoga.cases.core.questionnaires.ui
 
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
+import io.kotest.matchers.string.shouldNotContain
 import io.restassured.http.ContentType
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
@@ -51,13 +53,15 @@ class ImageViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
+            post("/therapist/questionnaires/new")
             contentType(ContentType.MULTIPART)
             multiPart(File("src/test/resources/images/testImage.png"))
             post("/therapist/questionnaires/edit/question/0/answer/0/add-image")
             get("/therapist/questionnaires/image/1")
         } Then {
+            extract().statusCode().compareTo(200) shouldBe 0
             extract().body().asString().length shouldNotBe 0
+            extract().body().asString() shouldNotContain "Изображение не найдено"
         }
     }
 }
