@@ -31,7 +31,7 @@ class QuestionnaireImageViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
+            post("/therapist/questionnaires/new")
             contentType(ContentType.MULTIPART)
             multiPart(File("src/test/resources/images/testImage.png"))
             post("/therapist/questionnaires/edit/question/0/answer/0/add-image")
@@ -69,7 +69,7 @@ class QuestionnaireImageViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
+            post("/therapist/questionnaires/new")
             contentType(ContentType.MULTIPART)
             multiPart(File("src/test/resources/images/testImage.png"))
             post("therapist/questionnaires/edit/question/0/answer/-1/add-image")
@@ -93,7 +93,7 @@ class QuestionnaireImageViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
+            post("/therapist/questionnaires/new")
             contentType(ContentType.MULTIPART)
             multiPart(File("src/test/resources/images/testImage.png"))
             post("/therapist/questionnaires/edit/question/0/answer/0/add-image")
@@ -108,7 +108,7 @@ class QuestionnaireImageViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
+            post("/therapist/questionnaires/new")
             contentType(ContentType.MULTIPART)
             multiPart(File("src/test/resources/images/testImage.png"))
             post("/therapist/questionnaires/edit/question/0/answer/0/add-image")
@@ -150,7 +150,7 @@ class QuestionnaireImageViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
+            post("/therapist/questionnaires/new")
             contentType(ContentType.MULTIPART)
             multiPart(File("src/test/resources/images/testImage.png"))
             post("/therapist/questionnaires/edit/question/0/add-image")
@@ -188,7 +188,7 @@ class QuestionnaireImageViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
+            post("/therapist/questionnaires/new")
             contentType(ContentType.MULTIPART)
             multiPart(File("src/test/resources/images/testImage.png"))
             post("/therapist/questionnaires/edit/question/0/add-image")
@@ -220,7 +220,7 @@ class QuestionnaireImageViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
+            post("/therapist/questionnaires/new")
             contentType(ContentType.MULTIPART)
             multiPart(File("src/test/resources/images/testImage.png"))
             post("therapist/questionnaires/edit/question/-1/add-image")
@@ -244,7 +244,7 @@ class QuestionnaireImageViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
+            post("/therapist/questionnaires/new")
             contentType(ContentType.MULTIPART)
             multiPart(File("src/test/resources/images/testImage.png"))
             post("/therapist/questionnaires/edit/question/0/add-image")

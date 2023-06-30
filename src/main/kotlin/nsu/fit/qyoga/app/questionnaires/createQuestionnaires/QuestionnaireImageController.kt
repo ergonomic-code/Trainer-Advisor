@@ -41,7 +41,7 @@ class QuestionnaireImageController(
                 data = file.bytes
             )
         )
-        val updatedQuestionnaire = questionnaire.addAnswerImage(questionId, answerId, imageId, imageService)
+        val updatedQuestionnaire = questionnaire.addAnswerImage(questionId, answerId, imageId)
         setQuestionnaireInSession(updatedQuestionnaire)
         val attributes: Map<String, *> = mapOf(
             "questionIndex" to updatedQuestionnaire.getQuestionIdxById(questionId),

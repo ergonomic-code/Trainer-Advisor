@@ -44,7 +44,7 @@ class QuestionnairesResultsController(
     /**
      * Добавить результат опросника
      */
-    @GetMapping("/setResult/addResult")
+    @PatchMapping("/setResult/addResult")
     fun addResultToQuestionnaire(): String {
         val questionnaire = getQuestionnaireFromSession()
         val lastId = if (questionnaire.decoding.isEmpty()) 0 else questionnaire.decoding.last().id + 1

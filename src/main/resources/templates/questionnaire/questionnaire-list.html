@@ -28,7 +28,7 @@
                               style="height: 40px; width: auto;">
                             <button class="btn btn-secondary" type="submit">Прохождения</button>
                         </form>
-                        <form class="input-group " th:action="@{/therapist/questionnaires/new}" th:method="GET"
+                        <form class="input-group " th:action="@{/therapist/questionnaires/new}" th:method="POST"
                               style="height: 40px; width: auto;">
                             <button class="btn btn-secondary" type="submit">Новый опросник</button>
                         </form>
@@ -98,8 +98,10 @@
                                                     <div class="triangle-left"></div>
                                                     <input type="button" th:onclick="|myFunction(${questionnaire.id})|" class="input-triangle" aria-hidden="true">
                                                     <div th:id="|myDropdown${questionnaire.id}|" class="dropdown-content" style="margin-left: -220px; margin-top: -70px;">
-                                                        <input th:onclick="'window.location.href = \'' + @{/therapist/questionnaires/{id}/edit(id=${questionnaire.id})} + '\''"
-                                                               type="button" class="dropdown-row" style="height: 40px; text-align: left" value="Редактировать">
+
+                                                        <form class="dropdown-row" th:action="@{/therapist/questionnaires/{id}/edit(id=${questionnaire.id})}" th:method="POST">
+                                                            <input type="submit" class="dropdown-row" style="height: 40px; text-align: left" value="Редактировать">
+                                                        </form>
 
                                                         <input class="dropdown-row" style="height: 40px; text-align: left" value="Удалить" type="button" hx-trigger="click" hx-target="#page-content"
                                                                th:attr="hx-delete=@{/therapist/questionnaires/{id}

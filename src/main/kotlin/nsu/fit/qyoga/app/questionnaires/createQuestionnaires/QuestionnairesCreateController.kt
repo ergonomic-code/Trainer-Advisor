@@ -27,7 +27,7 @@ class QuestionnairesCreateController(
     /**
      * Создание нового опросника
      */
-    @GetMapping("/new")
+    @PostMapping("/new")
     fun createQuestionnaire(): String {
         setQuestionnaireInSession(
             CreateQuestionnaireDto(
@@ -41,7 +41,7 @@ class QuestionnairesCreateController(
     /**
      * Редактирование опросника
      */
-    @GetMapping("/{id}/edit")
+    @PostMapping("/{id}/edit")
     fun editQuestionnaire(
         @PathVariable id: Long
     ): String {

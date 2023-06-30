@@ -12,7 +12,7 @@ fun CreateQuestionnaireDto.addQuestionImage(
     return this.copy(
         question = modifyQuestion(questionId) {
             it.copy(imageId = imageId)
-        }.toMutableList()
+        }
     )
 }
 
@@ -22,7 +22,7 @@ fun CreateQuestionnaireDto.deleteQuestionImage(
     return this.copy(
         question = modifyQuestion(questionId) {
             it.copy(imageId = null)
-        }.toMutableList()
+        }
     )
 }
 
@@ -41,11 +41,8 @@ fun CreateQuestionnaireDto.changeQuestionType(
 ): CreateQuestionnaireDto {
     return this.copy(
         question = modifyQuestion(questionId) {
-            it.copy(
-                questionType = changedQuestion.questionType,
-                answers = listOf(CreateAnswerDto())
-            )
-        }.toMutableList()
+            it.copy(questionType = changedQuestion.questionType, answers = listOf(CreateAnswerDto()))
+        }
     )
 }
 
@@ -60,14 +57,14 @@ fun CreateQuestionnaireDto.updateQuestion(
                 questionType = changedQuestion.questionType,
                 answers = changedQuestion.answers
             )
-        }.toMutableList()
+        }
     )
 }
 
 fun CreateQuestionnaireDto.modifyQuestion(
     questionId: Long,
     body: (CreateQuestionDto) -> CreateQuestionDto
-): List<CreateQuestionDto> {
+): MutableList<CreateQuestionDto> {
     var isFound = false
     val questionList = this.question.map { question ->
         if (question.id == questionId) {
@@ -78,5 +75,5 @@ fun CreateQuestionnaireDto.modifyQuestion(
         }
     }
     if (!isFound) throw ElementNotFound("Выбранный вопрос не найден")
-    return questionList
+    return questionList.toMutableList()
 }

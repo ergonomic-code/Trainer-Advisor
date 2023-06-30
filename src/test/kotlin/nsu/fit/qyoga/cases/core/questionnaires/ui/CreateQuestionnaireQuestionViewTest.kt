@@ -28,7 +28,7 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
+            post("/therapist/questionnaires/new")
             patch("/therapist/questionnaires/edit/add-question")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
@@ -50,7 +50,7 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
+            post("/therapist/questionnaires/new")
             delete("/therapist/questionnaires/edit/question/0")
             patch("/therapist/questionnaires/edit/add-question")
         } Then {
@@ -131,7 +131,7 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
+            post("/therapist/questionnaires/new")
             params(setParams())
             post("/therapist/questionnaires/edit/question/0/change-type")
         } Then {
@@ -168,7 +168,7 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
+            post("/therapist/questionnaires/new")
             params(setParams())
             post("/therapist/questionnaires/edit/question/-1/change-type")
         } Then {
@@ -191,7 +191,7 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
+            post("/therapist/questionnaires/new")
             params(setParams())
             post("/therapist/questionnaires/edit/question/0/update")
         } Then {
@@ -204,7 +204,7 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
+            post("/therapist/questionnaires/new")
             params(setParams())
             post("/therapist/questionnaires/edit/question/1/update")
         } Then {
@@ -245,7 +245,7 @@ class CreateQuestionnaireQuestionViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
+            post("/therapist/questionnaires/new")
             params(setParams())
             post("/therapist/questionnaires/edit/question/-1/update")
         } Then {
