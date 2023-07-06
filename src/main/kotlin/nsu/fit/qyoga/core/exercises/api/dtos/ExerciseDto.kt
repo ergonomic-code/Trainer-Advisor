@@ -11,5 +11,5 @@ data class ExerciseDto(
     val contradictions: String,
     val duration: Duration,
     val type: ExerciseType,
-    val purpose: String
+    val purposes: List<String>
 )

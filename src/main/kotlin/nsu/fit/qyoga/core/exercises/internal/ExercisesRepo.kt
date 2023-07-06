@@ -5,6 +5,7 @@ import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseDto
 import nsu.fit.qyoga.core.exercises.api.dtos.ExerciseSearchDto
 import nsu.fit.qyoga.core.exercises.api.model.Exercise
 import nsu.fit.qyoga.core.exercises.api.model.ExerciseType
+import org.intellij.lang.annotations.Language
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
@@ -17,8 +18,9 @@ import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 import java.sql.ResultSet
 
+@Language("PostgreSQL")
 const val SELECT_EXERCISES_BY_FILTERS_QUERY = """
-        SELECT ex.id as id, title, description, indications, contradictions, duration, et.id type_id, et.name as type_title, tp.purpose as purpose
+        SELECT ex.id as id, title, description, indications, contradictions, duration, et.id type_id, et.name as type_title, array_agg(tp.purpose) as purposes
         FROM exercises ex
             INNER JOIN exercise_purposes ep ON ex.id = ep.exercise_id
             INNER JOIN therapeutic_purposes tp ON tp.id = ep.purpose_id
@@ -27,7 +29,7 @@ const val SELECT_EXERCISES_BY_FILTERS_QUERY = """
             AND (ex.contradictions LIKE '%' || :#{#search?.contradiction ?: ""} || '%')
             AND (et.id = :#{#search.exerciseTypeId ?: 0} OR :#{#search.exerciseTypeId ?: 0} = 0)
             AND (tp.purpose LIKE '%' || :#{#search.therapeuticPurpose ?: ""} || '%')
-
+        GROUP BY ex.id, et.id
 """
 
 @JvmDefaultWithoutCompatibility
@@ -87,7 +89,7 @@ object ExerciseDtoRowMapper : RowMapper<ExerciseDto> {
             rs["contradictions"],
             rs["duration"],
             ExerciseType(rs["type_id"], rs["type_title"]),
-            rs["purpose"]
+            rs["purposes"]
         )
     }
 
