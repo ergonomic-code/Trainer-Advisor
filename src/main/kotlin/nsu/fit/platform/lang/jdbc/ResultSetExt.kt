@@ -10,5 +10,6 @@ inline operator fun <reified T> ResultSet.get(colName: String): T = when (T::cla
     Int::class -> this.getInt(colName)
     String::class -> this.getString(colName)
     Duration::class -> (this.getObject(colName) as PGInterval).toDuration()
+    List::class -> (this.getArray(colName).array as Array<*>).toList()
     else -> this.getObject(colName)
 } as T

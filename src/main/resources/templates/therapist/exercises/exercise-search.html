@@ -93,7 +93,7 @@
                                     <td th:text="${exercise.contradictions}"></td>
                                     <td th:text="${T(nsu.fit.platform.lang.DurationExt).toDecimalMinutes(exercise.duration) + ' мин.'}"></td>
                                     <td th:text="${exercise.type.name}"></td>
-                                    <td th:text="${exercise.purpose}"></td>
+                                    <td th:text="${T(java.lang.String).join(',', exercise.purposes)}"></td>
                                 </tr>
                                 </tbody>
                             </table>
