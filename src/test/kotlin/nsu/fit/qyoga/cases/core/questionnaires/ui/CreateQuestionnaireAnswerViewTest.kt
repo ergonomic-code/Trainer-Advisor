@@ -1,7 +1,6 @@
 package nsu.fit.qyoga.cases.core.questionnaires.ui
 
 import io.kotest.matchers.shouldBe
-import io.restassured.http.ContentType
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
@@ -11,7 +10,6 @@ import org.jsoup.Jsoup
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import java.io.File
 
 class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
     @Autowired
@@ -26,87 +24,12 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
     }
 
     @Test
-    fun `QYoga can save answer image`() {
-        Given {
-            authorized()
-        } When {
-            get("/therapist/questionnaires/new")
-            get("/therapist/questionnaires/edit/question/0/addAnswer")
-            get("/therapist/questionnaires/edit/add-question")
-            contentType(ContentType.MULTIPART)
-            multiPart(File("src/test/resources/images/testImage.png"))
-            post("/therapist/questionnaires/edit/question/0/answer/0/add-image")
-        } Then {
-            val body = Jsoup.parse(extract().body().asString())
-            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node(".answerImageId") { exists() }
-                node(".answerImage") { exists() }
-                node(".answerDeleteImage") { exists() }
-            }
-        }
-    }
-
-    @Test
-    fun `QYoga can't add image if questionnaire not in session`() {
-        Given {
-            authorized()
-        } When {
-            contentType(ContentType.MULTIPART)
-            multiPart(File("src/test/resources/images/testImage.png"))
-            post("/therapist/questionnaires/edit/question/0/answer/0/add-image")
-        } Then {
-            val body = Jsoup.parse(extract().body().asString())
-            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#layoutSidenav_content") {
-                    exists()
-                    hasText("Ошибка извлечения опросника из сессии")
-                }
-            }
-        }
-    }
-
-    @Test
-    fun `QYoga can delete question image`() {
-        Given {
-            authorized()
-        } When {
-            get("/therapist/questionnaires/new")
-            get("/therapist/questionnaires/edit/question/0/addAnswer")
-            get("/therapist/questionnaires/edit/add-question")
-            contentType(ContentType.MULTIPART)
-            multiPart(File("src/test/resources/images/testImage.png"))
-            post("/therapist/questionnaires/edit/question/0/answer/0/add-image")
-            delete("/therapist/questionnaires/edit/question/0/answer/0/image")
-        } Then {
-            extract().body().asString() shouldBe ""
-        }
-    }
-
-    @Test
-    fun `QYoga can't delete image if questionnaire not in session`() {
-        Given {
-            authorized()
-        } When {
-            delete("/therapist/questionnaires/edit/question/0/answer/0/image")
-        } Then {
-            val body = Jsoup.parse(extract().body().asString())
-            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#layoutSidenav_content") {
-                    exists()
-                    hasText("Ошибка извлечения опросника из сессии")
-                }
-            }
-        }
-    }
-
-    @Test
     fun `QYoga can add answer to question`() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
-            get("/therapist/questionnaires/edit/add-question")
-            get("/therapist/questionnaires/edit/question/0/addAnswer")
+            post("/therapist/questionnaires/new")
+            patch("/therapist/questionnaires/edit/question/0/add-answer")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
@@ -130,10 +53,9 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
-            get("/therapist/questionnaires/edit/add-question")
+            post("/therapist/questionnaires/new")
             delete("/therapist/questionnaires/edit/question/0/answer/0")
-            get("/therapist/questionnaires/edit/question/0/addAnswer")
+            patch("/therapist/questionnaires/edit/question/0/add-answer")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
@@ -154,7 +76,7 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/edit/question/0/addAnswer")
+            patch("/therapist/questionnaires/edit/question/0/add-answer")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
@@ -171,9 +93,8 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
-            get("/therapist/questionnaires/edit/add-question")
-            get("/therapist/questionnaires/edit/question/-1/addAnswer")
+            post("/therapist/questionnaires/new")
+            patch("/therapist/questionnaires/edit/question/-1/add-answer")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
@@ -194,15 +115,13 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
-            get("/therapist/questionnaires/edit/add-question")
+            post("/therapist/questionnaires/new")
             delete("/therapist/questionnaires/edit/question/0/answer/0")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
                 node("#question0Header") { exists() }
                 node("#question0Body") { exists() }
-
                 node("#answer0") { notExists() }
                 node(".answer0Id") { notExists() }
                 node(".answer0QuestionId") { notExists() }
@@ -216,7 +135,7 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
+            post("/therapist/questionnaires/new")
             delete("/therapist/questionnaires/edit/question/0/answer/-1")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
@@ -227,29 +146,6 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
                 node("#answer0") { exists() }
                 node(".answer0Id") { exists() }
                 node(".answer0QuestionId") { exists() }
-                node(".answer0Score") { exists() }
-            }
-        }
-    }
-
-    @Test
-    fun `QYoga can delete answer from question answer list`() {
-        Given {
-            authorized()
-        } When {
-            get("/therapist/questionnaires/new")
-            get("/therapist/questionnaires/edit/question/0/addAnswer")
-            delete("/therapist/questionnaires/edit/question/0/answer/0")
-        } Then {
-            val body = Jsoup.parse(extract().body().asString())
-            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#question0Header") { exists() }
-                node("#question0Body") { exists() }
-
-                node("#answer0") { notExists() }
-
-                node("#answer1") { exists() }
-                node(".answer0Id") { exists() }
                 node(".answer0Score") { exists() }
             }
         }
@@ -277,7 +173,7 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
+            post("/therapist/questionnaires/new")
             delete("/therapist/questionnaires/edit/question/-1/answer/0")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
@@ -295,26 +191,11 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
     }
 
     @Test
-    fun `QYoga can update answer in list of answers`() {
-        Given {
-            authorized()
-        } When {
-            get("/therapist/questionnaires/new")
-            get("/therapist/questionnaires/edit/add-question")
-            get("/therapist/questionnaires/edit/question/0/addAnswer")
-            params(setParams())
-            post("/therapist/questionnaires/edit/question/0/answer/0/update")
-        } Then {
-            extract().statusCode().compareTo(200) shouldBe 0
-        }
-    }
-
-    @Test
     fun `QYoga can update answer`() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
+            post("/therapist/questionnaires/new")
             params(setParams())
             post("/therapist/questionnaires/edit/question/0/answer/0/update")
         } Then {
@@ -323,28 +204,21 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
     }
 
     @Test
-    fun `QYoga ignore update answer if it not exists in question from session`() {
+    fun `QYoga ignore update answer if it not exists in the session's questionnaire`() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
-            params(
-                mutableMapOf(
-                    "id" to "1",
-                    "title" to "test",
-                    "question[0].answers[1].id" to "-1",
-                    "question[0].answers[1].score" to "1",
-                    "question[0].answers[1].title" to "answer title"
-                )
-            )
-            post("/therapist/questionnaires/edit/question/0/answer/-1/update")
+            post("/therapist/questionnaires/new")
+            delete("/therapist/questionnaires/edit/question/0/answer/0")
+            params(setParams())
+            post("/therapist/questionnaires/edit/question/0/answer/0/update")
         } Then {
             extract().statusCode().compareTo(200) shouldBe 0
         }
     }
 
     @Test
-    fun `QYoga can't change answer if questionnaire not in session`() {
+    fun `QYoga can't change answer if questionnaire not exists in session`() {
         Given {
             authorized()
         } When {
@@ -366,7 +240,7 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
+            post("/therapist/questionnaires/new")
             params(setParams())
             post("/therapist/questionnaires/edit/question/-1/answer/0/update")
         } Then {
@@ -378,18 +252,18 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
                 }
                 node(".error-text") {
                     exists()
-                    hasText("Выбранный вопрос не найден Перезагрузить")
+                    hasText("Выбранный ответ не найден Перезагрузить")
                 }
             }
         }
     }
 
     @Test
-    fun `QYoga can't change answer to question if it not exists in question`() {
+    fun `QYoga can't change answer if it not exists in question`() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
+            post("/therapist/questionnaires/new")
             params(setParams())
             post("/therapist/questionnaires/edit/question/0/answer/-1/update")
         } Then {
@@ -412,10 +286,9 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
-            get("/therapist/questionnaires/edit/add-question")
+            post("/therapist/questionnaires/new")
             params(setParams())
-            post("/therapist/questionnaires/edit/question/0/answer/setScores")
+            post("/therapist/questionnaires/edit/question/0/set-scores")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
@@ -431,7 +304,7 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
             authorized()
         } When {
             params(setParams())
-            post("/therapist/questionnaires/edit/question/0/answer/setScores")
+            post("/therapist/questionnaires/edit/question/0/set-scores")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
@@ -448,9 +321,9 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
+            post("/therapist/questionnaires/new")
             params(setParams())
-            post("/therapist/questionnaires/edit/question/-1/answer/setScores")
+            post("/therapist/questionnaires/edit/question/-1/set-scores")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
@@ -471,10 +344,9 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
-            get("/therapist/questionnaires/edit/question/0/addAnswer")
+            post("/therapist/questionnaires/new")
             params(setParams())
-            post("/therapist/questionnaires/edit/question/0/answer/setAnswers")
+            post("/therapist/questionnaires/edit/question/0/set-answers")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
@@ -495,7 +367,7 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
             authorized()
         } When {
             params(setParams())
-            post("/therapist/questionnaires/edit/question/-1/answer/setAnswers")
+            post("/therapist/questionnaires/edit/question/0/set-answers")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
@@ -508,13 +380,61 @@ class CreateQuestionnaireAnswerViewTest : QYogaAppTestBase() {
     }
 
     @Test
-    fun `QYoga can't get answer fragment to change answer fields if not in question`() {
+    fun `QYoga can't get answer fragment to change answer fields if it not in question`() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
+            post("/therapist/questionnaires/new")
             params(setParams())
-            post("/therapist/questionnaires/edit/question/-1/answer/setScores")
+            post("/therapist/questionnaires/edit/question/-1/set-scores")
+        } Then {
+            val body = Jsoup.parse(extract().body().asString())
+            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
+                node("#reload-page-btn") {
+                    exists()
+                    hasText("Перезагрузить")
+                }
+                node(".error-text") {
+                    exists()
+                    hasText("Выбранный вопрос не найден Перезагрузить")
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `QYoga can't get answer fragment to set answer score if question not exist in session's questionnaire`() {
+        Given {
+            authorized()
+        } When {
+            post("/therapist/questionnaires/new")
+            delete("/therapist/questionnaires/edit/question/0")
+            params(setParams())
+            post("/therapist/questionnaires/edit/question/0/set-scores")
+        } Then {
+            val body = Jsoup.parse(extract().body().asString())
+            io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
+                node("#reload-page-btn") {
+                    exists()
+                    hasText("Перезагрузить")
+                }
+                node(".error-text") {
+                    exists()
+                    hasText("Выбранный вопрос не найден Перезагрузить")
+                }
+            }
+        }
+    }
+
+    @Test
+    fun `QYoga can't get answer fragment to set answer if question not exist in session's questionnaire`() {
+        Given {
+            authorized()
+        } When {
+            post("/therapist/questionnaires/new")
+            delete("/therapist/questionnaires/edit/question/0")
+            params(setParams())
+            post("/therapist/questionnaires/edit/question/0/set-answers")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {

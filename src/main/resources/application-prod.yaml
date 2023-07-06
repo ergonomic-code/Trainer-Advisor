@@ -1,0 +1,5 @@
+qyoga:
+  url:
+    host: https://qyoga.pro
+  hash:
+    secret-key: NbpKelh2oSnK

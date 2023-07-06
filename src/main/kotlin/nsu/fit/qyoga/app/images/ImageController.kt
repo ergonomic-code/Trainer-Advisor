@@ -1,4 +1,4 @@
-package nsu.fit.qyoga.app.questionnaires
+package nsu.fit.qyoga.app.images
 
 import nsu.fit.qyoga.core.images.api.ImageService
 import nsu.fit.qyoga.core.questionnaires.api.errors.ElementNotFound
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*
 
 @Controller
 @RequestMapping("/therapist/questionnaires")
-class QuestionnaireImageController(
+class ImageController(
     private val imageService: ImageService
 ) {
     /**

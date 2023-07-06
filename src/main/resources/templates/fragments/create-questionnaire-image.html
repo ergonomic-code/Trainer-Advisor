@@ -6,8 +6,8 @@
     <img class="questionDeleteImage" src="/img/cross-in-circle.png" alt="delete image"
          style="position: absolute; width: 25px; margin-top: -13px; margin-left: -13px;"
          th:attr = "
-         hx-delete=|@{/therapist/questionnaires/edit/question/{questionId}/image
-         (questionId=${question.id})}|,
+         hx-delete=|@{/therapist/questionnaires/edit/question/{questionId}/image/{imageId}
+         (questionId=${question.id}, imageId=${question.imageId})}|,
          hx-target=|#question${question.id}Img|">
 </div>
 
@@ -19,7 +19,7 @@
     <img class="answerDeleteImage" src="/img/cross-in-circle.png" alt="delete image"
          style="position: absolute; width: 25px; margin-top: -13px; margin-left: -13px;"
          th:attr = "
-         hx-delete=|@{/therapist/questionnaires/edit/question/{questionId}/answer/{answerId}/image
-         (answerId=${answer.id}, questionId=${questionId})}|,
+         hx-delete=|@{/therapist/questionnaires/edit/question/{questionId}/answer/{answerId}/image/{imageId}
+         (answerId=${answer.id}, questionId=${questionId}, imageId=${answer.imageId})}|,
          hx-target=|#question${questionId}answer${answer.id}Img|">
 </div>

@@ -3,6 +3,7 @@ package nsu.fit.qyoga.core.clients.internal
 import nsu.fit.qyoga.core.clients.api.ClientService
 import nsu.fit.qyoga.core.clients.api.Dto.ClientDto
 import nsu.fit.qyoga.core.clients.api.Dto.ClientSearchDto
+import nsu.fit.qyoga.core.clients.api.Dto.FullNameSearchClientsDto
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -16,6 +17,10 @@ class ClientServiceImpl(
 
     override fun getClients(searchDto: ClientSearchDto, page: Pageable): Page<ClientDto> {
         return clientRepo.getClientsByFilters(searchDto, page)
+    }
+
+    override fun getClientsByFullName(searchDto: FullNameSearchClientsDto, page: Pageable): Page<ClientDto> {
+        return clientRepo.getClientsByFullName(searchDto, page)
     }
 
     override fun deleteClient(id: Int): Boolean {

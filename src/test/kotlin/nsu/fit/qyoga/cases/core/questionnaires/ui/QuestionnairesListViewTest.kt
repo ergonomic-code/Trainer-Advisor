@@ -1,6 +1,5 @@
 package nsu.fit.qyoga.cases.core.questionnaires.ui
 
-import io.restassured.http.ContentType
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
@@ -44,11 +43,11 @@ class QuestionnairesListViewTest : QYogaAppTestBase() {
     fun `QYoga returns part of page questionnaire-list then user change sort type`() {
         Given {
             authorized()
-            contentType(ContentType.JSON)
+            header("action", "true")
             param("title", "test")
             param("sort", "title,desc")
         } When {
-            get("/therapist/questionnaires/action")
+            get("/therapist/questionnaires")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
@@ -64,10 +63,10 @@ class QuestionnairesListViewTest : QYogaAppTestBase() {
     fun `QYoga returns part of page questionnaire-list then user change title`() {
         Given {
             authorized()
-            contentType(ContentType.JSON)
+            header("action", "true")
             param("title", "test")
         } When {
-            get("/therapist/questionnaires/action")
+            get("/therapist/questionnaires")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
@@ -83,12 +82,12 @@ class QuestionnairesListViewTest : QYogaAppTestBase() {
     fun `QYoga returns part of page questionnaire-list then user change page`() {
         Given {
             authorized()
-            contentType(ContentType.JSON)
+            header("action", "true")
             param("title", "test")
             param("sort", "title,desc")
             param("page", 1)
         } When {
-            get("/therapist/questionnaires/action")
+            get("/therapist/questionnaires")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {

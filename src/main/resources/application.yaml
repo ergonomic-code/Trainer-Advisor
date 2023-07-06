@@ -8,3 +8,8 @@ spring:
   servlet:
     multipart:
       max-file-size: 1MB
+qyoga:
+  url:
+    host: http://localhost:8080
+  hash:
+    secret-key: secret-key

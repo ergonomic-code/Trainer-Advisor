@@ -124,7 +124,7 @@
                                             <button class="field" style="cursor: pointer; width: 100%; border-radius: 5px" type="button"
                                                     hx-trigger="click"
                                                     id="addDecodingBtn"
-                                                    th:attr="hx-get=|@{/therapist/questionnaires/setResult/addResult}|"
+                                                    th:attr="hx-patch=|@{/therapist/questionnaires/setResult/addResult}|"
                                                     hx-target="#tableBody"
                                             >Нажмите для добавления строки</button>
                                         </td>

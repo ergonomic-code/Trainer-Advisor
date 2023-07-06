@@ -2,6 +2,7 @@ package nsu.fit.qyoga.core.completingQuestionnaires.api.services
 
 import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.CompletingDto
 import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.CompletingSearchDto
+import nsu.fit.qyoga.core.completingQuestionnaires.api.model.Completing
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 
@@ -13,4 +14,6 @@ interface CompletingService {
         completingSearchDto: CompletingSearchDto,
         pageable: Pageable
     ): Page<CompletingDto>
+
+    fun saveCompleting(completing: Completing): Long
 }

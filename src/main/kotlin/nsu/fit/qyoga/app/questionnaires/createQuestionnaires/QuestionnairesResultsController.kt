@@ -1,4 +1,4 @@
-package nsu.fit.qyoga.app.questionnaires
+package nsu.fit.qyoga.app.questionnaires.createQuestionnaires
 
 import jakarta.servlet.http.HttpSession
 import nsu.fit.qyoga.core.questionnaires.api.dtos.CreateQuestionnaireDto
@@ -44,7 +44,7 @@ class QuestionnairesResultsController(
     /**
      * Добавить результат опросника
      */
-    @GetMapping("/setResult/addResult")
+    @PatchMapping("/setResult/addResult")
     fun addResultToQuestionnaire(): String {
         val questionnaire = getQuestionnaireFromSession()
         val lastId = if (questionnaire.decoding.isEmpty()) 0 else questionnaire.decoding.last().id + 1
@@ -92,9 +92,6 @@ class QuestionnairesResultsController(
     }
 
     fun setQuestionnaireInSession(questionnaire: CreateQuestionnaireDto) {
-        httpSession.setAttribute(
-            questionnaireFieldName,
-            questionnaire
-        )
+        httpSession.setAttribute(questionnaireFieldName, questionnaire)
     }
 }

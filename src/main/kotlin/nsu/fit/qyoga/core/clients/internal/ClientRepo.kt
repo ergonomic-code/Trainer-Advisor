@@ -4,6 +4,7 @@ import nsu.fit.platform.lang.dataClassToMap
 import nsu.fit.platform.spring.queryForPage
 import nsu.fit.qyoga.core.clients.api.Dto.ClientDto
 import nsu.fit.qyoga.core.clients.api.Dto.ClientSearchDto
+import nsu.fit.qyoga.core.clients.api.Dto.FullNameSearchClientsDto
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.jdbc.core.DataClassRowMapper
@@ -32,9 +33,12 @@ class ClientRepo(
             FROM appointments
                      INNER JOIN clients ON clients.id = appointments.client_id
             WHERE
-                (:firstName::varchar IS NULL OR first_name ilike '%' || :firstName || '%') AND
-                (:lastName::varchar IS NULL OR last_name ilike  '%' || :lastName || '%') AND
-                (:patronymic::varchar IS NULL OR patronymic ilike  '%' || :patronymic || '%') AND
+                (:firstName::varchar IS NULL 
+                OR first_name ilike '%' || :firstName || '%') AND
+                (:lastName::varchar IS NULL 
+                OR last_name ilike  '%' || :lastName || '%') AND
+                (:patronymic::varchar IS NULL
+                OR patronymic ilike  '%' || :patronymic || '%') AND
                 (:phoneNumber::varchar IS NULL OR phone_number ilike '%' || :phoneNumber || '%') AND
                 (:diagnose::varchar IS NULL OR diagnose ilike    '%' || :diagnose || '%') 
             GROUP BY clients.id
@@ -49,7 +53,37 @@ class ClientRepo(
                 ClientDto::class.java
             )
         )
+    }
 
+    fun getClientsByFullName(
+        search: FullNameSearchClientsDto,
+        page: Pageable
+    ): PageImpl<ClientDto> {
+        val query = """
+            SELECT clients.id,
+                   clients.first_name,
+                   clients.last_name,
+                   clients.patronymic
+            FROM appointments
+                     INNER JOIN clients ON clients.id = appointments.client_id
+            WHERE
+            clients.first_name||' '||clients.last_name||' '||clients.patronymic ILIKE '%' || :clientName || '%' OR
+            clients.first_name||' '||clients.patronymic||' '||clients.last_name ILIKE '%' || :clientName || '%' OR
+            clients.last_name||' '||clients.first_name||' '||clients.patronymic ILIKE '%' || :clientName || '%' OR
+            clients.last_name||' '||clients.patronymic||' '||clients.first_name ILIKE '%' || :clientName || '%' OR
+            clients.patronymic||' '||clients.first_name||' '||clients.last_name ILIKE '%' || :clientName || '%' OR
+            clients.patronymic||' '||clients.last_name||' '||clients.first_name ILIKE '%' || :clientName || '%'
+            GROUP BY clients.id
+        """.trimIndent()
+
+        return jdbcTemplate.queryForPage(
+            query,
+            dataClassToMap(search),
+            page,
+            DataClassRowMapper(
+                ClientDto::class.java
+            )
+        )
     }
 
     fun deleteClient(id: Int): Boolean {

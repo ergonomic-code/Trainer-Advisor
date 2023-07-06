@@ -1,4 +1,4 @@
-package nsu.fit.qyoga.app.questionnaires
+package nsu.fit.qyoga.app.questionnaires.createQuestionnaires
 
 import jakarta.servlet.http.HttpSession
 import nsu.fit.qyoga.core.questionnaires.api.dtos.*
@@ -14,38 +14,23 @@ class QuestionnairesCreateController(
     private val questionnaireService: QuestionnaireService,
     private val httpSession: HttpSession
 ) {
-    val questionnaireFieldName = "questionnaire"
 
     /**
      * Получение страницы редактирования
      */
     @GetMapping("/edit")
     fun getCreateQuestionnairePage(): String {
-        val questionnaire = getQuestionnaireFromSession()
-        if (questionnaire == null) {
-            httpSession.setAttribute(
-                questionnaireFieldName,
-                CreateQuestionnaireDto(
-                    id = 0,
-                    title = "",
-                    question = mutableListOf(CreateQuestionDto(answers = listOf(CreateAnswerDto()))),
-                    decoding = mutableListOf()
-                )
-            )
-        }
+        getQuestionnaireFromSession()
         return "questionnaire/create-questionnaire"
     }
 
     /**
      * Создание нового опросника
      */
-    @GetMapping("/new")
+    @PostMapping("/new")
     fun createQuestionnaire(): String {
-        httpSession.setAttribute(
-            questionnaireFieldName,
+        setQuestionnaireInSession(
             CreateQuestionnaireDto(
-                id = 0,
-                title = "",
                 question = mutableListOf(CreateQuestionDto(answers = listOf(CreateAnswerDto()))),
                 decoding = mutableListOf(DecodingDto())
             )
@@ -56,14 +41,11 @@ class QuestionnairesCreateController(
     /**
      * Редактирование опросника
      */
-    @GetMapping("/{id}/edit")
+    @PostMapping("/{id}/edit")
     fun editQuestionnaire(
         @PathVariable id: Long
     ): String {
-        httpSession.setAttribute(
-            questionnaireFieldName,
-            questionnaireService.findQuestionnaireWithQuestions(id)
-        )
+        setQuestionnaireInSession(questionnaireService.findQuestionnaireWithQuestions(id))
         return "redirect:/therapist/questionnaires/edit"
     }
 
@@ -74,11 +56,8 @@ class QuestionnairesCreateController(
     fun createQuestionnaire(
         @ModelAttribute("questionnaire") questionnaire: CreateQuestionnaireDto,
     ): String {
-        val sessionQuestionnaire = httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto
-        httpSession.setAttribute(
-            questionnaireFieldName,
-            sessionQuestionnaire.copy(title = questionnaire.title, question = questionnaire.question)
-        )
+        val sQuestionnaire = getQuestionnaireFromSession()
+        setQuestionnaireInSession(sQuestionnaire.copy(title = questionnaire.title, question = questionnaire.question))
         return "redirect:/therapist/questionnaires/edit/setResult"
     }
 
@@ -92,12 +71,16 @@ class QuestionnairesCreateController(
         @RequestParam title: String
     ): HttpStatus {
         val questionnaire = getQuestionnaireFromSession()
-            ?: throw QuestionnaireException("Ошибка извлечения опросника из сессии")
-        httpSession.setAttribute(questionnaireFieldName, questionnaire.copy(title = title))
+        setQuestionnaireInSession(questionnaire.copy(title = title))
         return HttpStatus.OK
     }
 
-    fun getQuestionnaireFromSession(): CreateQuestionnaireDto? {
-        return httpSession.getAttribute(questionnaireFieldName) as CreateQuestionnaireDto?
+    fun getQuestionnaireFromSession(): CreateQuestionnaireDto {
+        return httpSession.getAttribute("questionnaire") as CreateQuestionnaireDto?
+            ?: throw QuestionnaireException("Ошибка извлечения опросника из сессии")
+    }
+
+    fun setQuestionnaireInSession(questionnaire: CreateQuestionnaireDto) {
+        httpSession.setAttribute("questionnaire", questionnaire)
     }
 }

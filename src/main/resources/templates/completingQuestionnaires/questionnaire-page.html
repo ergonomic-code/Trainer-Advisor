@@ -30,7 +30,8 @@
                                    style="border-color:inherit; height: 40px"
                                    th:field="*{completingSearchDto.clientName}"
                                    hx-trigger="keyup changed delay:500ms, search"
-                                   th:attr="hx-get=@{/therapist/questionnaires/performing/action
+                                   hx-headers='{"action": "true"}'
+                                   th:attr="hx-get=@{/therapist/questionnaires/performing
                                    (sort=${'date,' + sortType},title=${completingSearchDto.title})}"
                                    th:value="${completingSearchDto.clientName}"
                                    type="text">
@@ -45,7 +46,8 @@
                                    style="border-color:inherit; height: 40px"
                                    th:field="*{completingSearchDto.title}"
                                    hx-trigger="keyup changed delay:500ms, search"
-                                   th:attr="hx-get=@{/therapist/questionnaires/performing/action
+                                   hx-headers='{"action": "true"}'
+                                   th:attr="hx-get=@{/therapist/questionnaires/performing
                                    (sort=${'date,' + sortType},clientName=${completingSearchDto.clientName})}"
                                    th:value="${completingSearchDto.title}"
                                    type="text">
@@ -60,7 +62,8 @@
                                     style="height: 40px; border-radius: 5px; width: 120px"
                                     id="sort-type-select"
                                     hx-trigger="change"
-                                    th:attr="hx-get=@{/therapist/questionnaires/performing/action
+                                    hx-headers='{"action": "true"}'
+                                    th:attr="hx-get=@{/therapist/questionnaires/performing
                                    (title=${completingSearchDto.title},clientName=${completingSearchDto.clientName})}"
                                     th:name="sort">
                                 <option th:if="${sortType} == 'ASC'" selected disabled hidden>Старее</option>
@@ -93,7 +96,7 @@
                                         </thead>
                                         <tbody id="table-body" style="gap: 10px">
                                         <tr th:each="result : ${results.content}" th:fragment="table-completing" th:id="|completing${result.id}|" class="table-completing-row">
-                                            <td class="col" th:id="|completing${result.id}ClientName|" style="text-align: center"><a th:href="@{/}" th:text="|${result.client.firstName} ${result.client.lastName}|"></a></td>
+                                            <td class="col" th:id="|completing${result.id}ClientName|" style="text-align: center"><a th:href="@{/}" th:text="|${result.client.firstName} ${result.client.lastName}  ${result.client.patronymic}|"></a></td>
                                             <td class="col" th:id="|completing${result.id}Title|" style="text-align: center"><a th:href="@{/}" th:text="${result.questionnaire.title}"></a></td>
                                             <td class="col" th:id="|completing${result.id}Date|" style="text-align: center" th:text="${#temporals.format(result.completingDate, 'dd-MM-yyyy')}"></td>
                                             <td class="col" th:id="|completing${result.id}NumericResult|" style="text-align: center" th:text="${result.numericResult}"></td>
@@ -113,8 +116,9 @@
                                                    hx-target="#page-content"
                                                    hx-trigger="click"
                                                    style="cursor: pointer"
+                                                   hx-headers='{"action": "true"}'
                                                    th:attr="
-                                                   hx-get=@{/therapist/questionnaires/performing/action
+                                                   hx-get=@{/therapist/questionnaires/performing
                                                    (sort=${'date,'+sortType}, title=${completingSearchDto.title}
                                                    , page=${0}, clientName=${completingSearchDto.clientName})}"
                                                 >Первая</a>
@@ -128,8 +132,9 @@
                                                    hx-target="#page-content"
                                                    hx-trigger="click"
                                                    style="cursor: pointer"
+                                                   hx-headers='{"action": "true"}'
                                                    th:attr="
-                                                   hx-get=@{/therapist/questionnaires/performing/action
+                                                   hx-get=@{/therapist/questionnaires/performing
                                                    (sort=${'date,'+sortType}, title=${completingSearchDto.title}
                                                    , page=${results.getPageable().pageNumber - 1}, clientName=${completingSearchDto.clientName})}"
                                                 >Назад</a>
@@ -145,8 +150,9 @@
                                                    hx-target="#page-content"
                                                    hx-trigger="click"
                                                    style="cursor: pointer"
+                                                   hx-headers='{"action": "true"}'
                                                    th:attr="
-                                                   hx-get=@{/therapist/questionnaires/performing/action
+                                                   hx-get=@{/therapist/questionnaires/performing
                                                    (sort=${'date,'+sortType}, title=${completingSearchDto.title}
                                                    , page=${pageNumber - 1}, clientName=${completingSearchDto.clientName})}"
                                                    th:text="${pageNumber}"></a>
@@ -160,8 +166,9 @@
                                                    hx-target="#page-content"
                                                    hx-trigger="click"
                                                    style="cursor: pointer"
+                                                   hx-headers='{"action": "true"}'
                                                    th:attr="
-                                                   hx-get=@{/therapist/questionnaires/performing/action
+                                                   hx-get=@{/therapist/questionnaires/performing
                                                    (sort=${'date,'+sortType}, title=${completingSearchDto.title}
                                                    , page=${results.getPageable().pageNumber + 1}, clientName=${completingSearchDto.clientName})}"
                                                 >Вперед</a>
@@ -175,8 +182,9 @@
                                                    hx-target="#page-content"
                                                    hx-trigger="click"
                                                    style="cursor: pointer"
+                                                   hx-headers='{"action": "true"}'
                                                    th:attr="
-                                                   hx-get=@{/therapist/questionnaires/performing/action
+                                                   hx-get=@{/therapist/questionnaires/performing
                                                    (sort=${'date,'+sortType}, title=${completingSearchDto.title}
                                                    , page=${results.totalPages - 1}, clientName=${completingSearchDto.clientName})}"
                                                 >Последняя</a>

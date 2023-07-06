@@ -28,7 +28,7 @@ class SetResultsViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
+            post("/therapist/questionnaires/new")
             get("/therapist/questionnaires/edit/setResult")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
@@ -40,7 +40,7 @@ class SetResultsViewTest : QYogaAppTestBase() {
                 }
                 node("#addDecodingBtn") {
                     containsText("Нажмите для добавления строки")
-                    attribute("hx-get") { hasText("/therapist/questionnaires/setResult/addResult") }
+                    attribute("hx-patch") { hasText("/therapist/questionnaires/setResult/addResult") }
                 }
                 node("#saveBtn") {
                     containsText("Сохранить")
@@ -75,9 +75,9 @@ class SetResultsViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
+            post("/therapist/questionnaires/new")
             delete("/therapist/questionnaires/setResult/0")
-            get("/therapist/questionnaires/setResult/addResult")
+            patch("/therapist/questionnaires/setResult/addResult")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
@@ -116,10 +116,10 @@ class SetResultsViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
+            post("/therapist/questionnaires/new")
             delete("/therapist/questionnaires/setResult/0")
-            get("/therapist/questionnaires/setResult/addResult")
-            get("/therapist/questionnaires/setResult/addResult")
+            patch("/therapist/questionnaires/setResult/addResult")
+            patch("/therapist/questionnaires/setResult/addResult")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
@@ -169,9 +169,9 @@ class SetResultsViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
-            get("/therapist/questionnaires/setResult/addResult")
-            get("/therapist/questionnaires/setResult/addResult")
+            post("/therapist/questionnaires/new")
+            patch("/therapist/questionnaires/setResult/addResult")
+            patch("/therapist/questionnaires/setResult/addResult")
             delete("/therapist/questionnaires/setResult/0")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
@@ -228,9 +228,9 @@ class SetResultsViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
-            get("/therapist/questionnaires/setResult/addResult")
-            get("/therapist/questionnaires/setResult/addResult")
+            post("/therapist/questionnaires/new")
+            patch("/therapist/questionnaires/setResult/addResult")
+            patch("/therapist/questionnaires/setResult/addResult")
             params(setParams())
             post("/therapist/questionnaires/setResult/0/update")
         } Then {
@@ -238,7 +238,7 @@ class SetResultsViewTest : QYogaAppTestBase() {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
                 node("#reload-page-btn") { notExists() }
-                node(".error-text") { notExists() }
+                node("#error-text") { notExists() }
             }
         }
     }
@@ -248,7 +248,7 @@ class SetResultsViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
+            post("/therapist/questionnaires/new")
             params(setParams())
             post("/therapist/questionnaires/setResult/-1/update")
         } Then {
@@ -289,7 +289,7 @@ class SetResultsViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
+            post("/therapist/questionnaires/new")
             params(setParams())
             post("/therapist/questionnaires/edit/setResult")
         } Then {

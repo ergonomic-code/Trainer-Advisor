@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*
 
 @Controller
 @RequestMapping("/therapist/questionnaires")
-class QuestionnairesController(
+class QuestionnairesListController(
     private val questionnaireService: QuestionnaireService
 ) {
 
@@ -35,7 +35,7 @@ class QuestionnairesController(
     /**
      * Фильтрация опросников
      */
-    @GetMapping("action")
+    @GetMapping("", headers = ["action=true"])
     fun sortQuestionnaires(
         @ModelAttribute("questionnaireSearchDto") questionnaireSearchDto: QuestionnaireSearchDto,
         @PageableDefault(value = 10, page = 0, sort = ["title"]) pageable: Pageable,
@@ -80,4 +80,6 @@ class QuestionnairesController(
             questionnaires.sort.getOrderFor("title").toString().substringAfter(' ')
         )
     }
+
+
 }

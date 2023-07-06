@@ -28,10 +28,11 @@ class CreateQuestionnaireViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/1/edit")
+            post("/therapist/questionnaires/1/edit")
             get("/therapist/questionnaires/edit")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
+            print(body)
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
                 node("#questions") { exists() }
                 node("#questionnaireTitle") {
@@ -50,10 +51,11 @@ class CreateQuestionnaireViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
+            post("/therapist/questionnaires/new")
             get("/therapist/questionnaires/edit")
         } Then {
             val body = Jsoup.parse(extract().body().asString())
+            print(body)
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
                 node("#questions") { exists() }
                 node("#question0") { exists() }
@@ -69,8 +71,7 @@ class CreateQuestionnaireViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
-            get("/therapist/questionnaires/edit")
+            post("/therapist/questionnaires/new")
             param("id", 1)
             param("title", "asd")
             post("/therapist/questionnaires/edit/title")
@@ -99,7 +100,7 @@ class CreateQuestionnaireViewTest : QYogaAppTestBase() {
     }
 
     @Test
-    fun `QYoga can get questionnaire edit page`() {
+    fun `QYoga can't get questionnaire edit page if it not in session`() {
         Given {
             authorized()
         } When {
@@ -107,11 +108,10 @@ class CreateQuestionnaireViewTest : QYogaAppTestBase() {
         } Then {
             val body = Jsoup.parse(extract().body().asString())
             io.github.ulfs.assertj.jsoup.Assertions.assertThatSpec(body) {
-                node("#questions") { exists() }
-                node("#question0") { exists() }
-                node("#question0Header") { exists() }
-                node("#question0Body") { exists() }
-                node("#answer0") { exists() }
+                node("#layoutSidenav_content") {
+                    exists()
+                    hasText("Ошибка извлечения опросника из сессии")
+                }
             }
         }
     }
@@ -121,8 +121,7 @@ class CreateQuestionnaireViewTest : QYogaAppTestBase() {
         Given {
             authorized()
         } When {
-            get("/therapist/questionnaires/new")
-            get("/therapist/questionnaires/edit")
+            post("/therapist/questionnaires/new")
             param("id", "1")
             param("title", "test")
             param("questions[0].id", "1")

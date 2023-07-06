@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+</head>
+<body>
+<div id="modal">
+  <div class="modal-underlay" onclick="closeModal()"></div>
+  <div class="main-container">
+    <form th:attr = "hx-get=|@{/therapist/questionnaires/generate-link(questionnaireId=${questionnaireId})}|"
+          hx-headers='{"action": "true"}'
+          hx-target="#generate-link-content"
+          hx-trigger="submit"
+          th:object="${searchDto}">
+
+      <div class="input-group mb-3 m-auto" id="searchClientsFilterForm">
+        <div class="mt-3 mb-3 w-75" id="nameFilter">
+          <input aria-describedby="basic-addon2"
+                 class="form-control"
+                 placeholder="ФИО"
+                 style="border-color:inherit"
+                 th:field="${searchDto.clientName}"
+                 type="text">
+        </div>
+
+        <div class="input-group mt-3 mb-3 w-25">
+          <button class="btn btn-secondary" style="position: absolute; width: 100%" type="submit">Поиск
+          </button>
+        </div>
+      </div>
+    </form>
+    <div id="generate-link-content" th:fragment="clients">
+      <table style="width: 100%" class="table table-hover" id="clients">
+        <thead></thead>
+        <tbody>
+          <tr th:each="client : ${clients.content}">
+            <td class="client-panel" style="width: 100%; margin-left: 0">
+              <div>
+                <a class="client-link" th:id="|client${client.id}|" href="/therapist/clients" th:text="${client.lastName}+' '+${client.firstName}+' '+${client.patronymic}"></a>
+              </div>
+              <div style="margin-left: auto;">
+                <input type="button" value="Выбрать" class="button"
+                       hx-trigger="click"
+                       th:attr = "hx-post=@{/therapist/questionnaires/generate-link
+                       (questionnaireId=${questionnaireId}, clientId = ${client.id})}"
+                       hx-target="#questionnaire-url">
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div id="tablePagination" style="height: 50px">
+        <ul class="pagination justify-content-center">
+
+          <div class="pagination">
+            <li class="page-item"
+                th:classappend="${(clients.getPageable().pageNumber == 0) ? 'disabled' : ''}">
+              <a class="page-link"
+                 hx-target="#generate-link-content"
+                 hx-swap = "outerHTML"
+                 hx-trigger="click"
+                 style="cursor: pointer"
+                 hx-headers='{"action": "true"}'
+                 th:attr="hx-get=@{/therapist/questionnaires/generate-link
+                 (questionnaireId=${questionnaireId}, page=${clients.getPageable().pageNumber - 1},
+                 clientName=${searchDto.clientName})}"
+              >Назад</a>
+            </li>
+          </div>
+
+          <div class="pagination" style="max-width: 50%;">
+
+            <li class="page-item"
+                th:classappend="${(pageNumber == clients.getPageable().pageNumber + 1) ? 'active' : ''}"
+                th:each="pageNumber : ${#numbers.sequence(((clients.getPageable().pageNumber - 1 >= 0)? clients.getPageable().pageNumber: clients.getPageable().pageNumber + 1), ((clients.getPageable().pageNumber + 3 < clients.totalPages)? clients.getPageable().pageNumber + 2 : clients.totalPages), 1)}">
+              <a class="page-link"
+                 hx-target="#generate-link-content"
+                 hx-swap = "outerHTML"
+                 hx-trigger="click"
+                 style="cursor: pointer"
+                 hx-headers='{"action": "true"}'
+                 th:attr="hx-get=@{/therapist/questionnaires/generate-link
+                 (questionnaireId=${questionnaireId}, page=${pageNumber - 1},
+                 clientName=${searchDto.clientName})}"
+                 th:text="${pageNumber}"></a>
+            </li>
+          </div>
+
+          <div class="pagination">
+            <li class="page-item"
+                th:classappend="${!(clients.getPageable().pageNumber < clients.totalPages - 1) ? 'disabled' : ''}">
+              <a class="page-link"
+                 hx-target="#generate-link-content"
+                 hx-swap = "outerHTML"
+                 hx-trigger="click"
+                 style="cursor: pointer"
+                 hx-headers='{"action": "true"}'
+                 th:attr="hx-get=@{/therapist/questionnaires/generate-link
+                 (questionnaireId=${questionnaireId}, page=${clients.getPageable().pageNumber + 1},
+                 clientName=${searchDto.clientName})}"
+              >Вперед</a>
+            </li>
+          </div>
+        </ul>
+      </div>
+    </div>
+    <div style="display: flex;
+                flex-direction: row;">
+      <div id="questionnaire-url">
+        <input id="questionnaire-url-text" type="text" onfocus="this.select()" th:value="${generatedLink}" value="http/completeQuestionnaire" th:fragment="questionnaire-url">
+      </div>
+      <div id="close-mw">
+        <button class="input-group" onclick="closeModal()" id="close-mw-button">Закрыть</button>
+      </div>
+    </div>
+  </div>
+  <script src="/js/closeModal.js"></script>
+</div>
+</body>
+</html>

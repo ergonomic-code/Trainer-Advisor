@@ -1,4 +1,4 @@
-package nsu.fit.qyoga.app.completingQuestionnaires
+package nsu.fit.qyoga.app.questionnaires
 
 import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.CompletingDto
 import nsu.fit.qyoga.core.completingQuestionnaires.api.dtos.CompletingSearchDto
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
 @RequestMapping("/therapist/questionnaires/performing")
-class CompletingQuestionnairesController(
+class CompletingQuestionnairesListController(
     private val completingService: CompletingService
 ) {
 
@@ -42,7 +42,7 @@ class CompletingQuestionnairesController(
     /**
      * Фильтрация прохождений
      */
-    @GetMapping("/action")
+    @GetMapping("", headers = ["action=true"])
     fun sortQuestionnaires(
         @ModelAttribute("completingSearchDto") completingSearchDto: CompletingSearchDto,
         @PageableDefault(value = 10, page = 0, sort = ["date"]) pageable: Pageable,
@@ -63,17 +63,12 @@ class CompletingQuestionnairesController(
         completingList: Page<CompletingDto>,
         completingSearchDto: CompletingSearchDto
     ) {
-        model.addAttribute(
-            "results",
-            completingList
-        )
-        model.addAttribute(
-            "completingSearchDto",
-            completingSearchDto
-        )
-        model.addAttribute(
-            "sortType",
-            completingList.sort.getOrderFor("date").toString().substringAfter(' ')
+        model.addAllAttributes(
+            mapOf(
+                "results" to completingList,
+                "completingSearchDto" to completingSearchDto,
+                "sortType" to completingList.sort.getOrderFor("date").toString().substringAfter(' ')
+            )
         )
     }
 }
