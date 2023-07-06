@@ -1,17 +1,16 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "3.0.6"
+	id("org.springframework.boot") version "3.1.0"
 	id("io.spring.dependency-management") version "1.1.0"
-	kotlin("jvm") version "1.8.10"
-	kotlin("plugin.spring") version "1.8.10"
+	kotlin("jvm") version "1.8.21"
+	kotlin("plugin.spring") version "1.8.21"
 	id("io.gitlab.arturbosch.detekt") version "1.22.0"
 	id("org.jetbrains.kotlinx.kover") version "0.6.1"
 }
 
 group = "nsu.fit"
 version = "0.0.1-SNAPSHOT"
-extra["testcontainersVersion"] = "1.17.4"
 
 java {
 	toolchain {
@@ -34,8 +33,12 @@ dependencies {
 	implementation("jakarta.validation:jakarta.validation-api:3.0.2")
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 	implementation("org.postgresql:postgresql:42.5.1")
+
+	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
+
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.boot:spring-boot-testcontainers")
 	testImplementation("org.testcontainers:junit-jupiter")
 	testImplementation("org.testcontainers:postgresql")
 	testImplementation("io.rest-assured:rest-assured:5.3.0")
@@ -54,12 +57,6 @@ dependencies {
 		module("org.codehaus.groovy:groovy-xml") {
 			replacedBy("org.apache.groovy:groovy-xml", "conflicts in current rest-assured version")
 		}
-	}
-}
-
-dependencyManagement {
-	imports {
-		mavenBom("org.testcontainers:testcontainers-bom:${property("testcontainersVersion")}")
 	}
 }
 

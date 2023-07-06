@@ -1,0 +1,6 @@
+spring:
+  docker:
+    compose:
+      file: ./deploy/qyoga/docker-compose-infra.yml
+      enabled: true
+      lifecycle-management: start_only

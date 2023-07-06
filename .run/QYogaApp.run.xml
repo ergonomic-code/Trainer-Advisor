@@ -1,0 +1,11 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="QYogaApp" type="SpringBootApplicationConfigurationType"
+                   factoryName="Spring Boot">
+        <option name="ACTIVE_PROFILES" value="demo,local-dev"/>
+        <module name="QYoga.main"/>
+        <option name="SPRING_BOOT_MAIN_CLASS" value="nsu.fit.qyoga.app.QYogaApplication"/>
+        <method v="2">
+            <option name="Make" enabled="true"/>
+        </method>
+    </configuration>
+</component>
