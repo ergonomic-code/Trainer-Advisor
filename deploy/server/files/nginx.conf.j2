@@ -1,7 +1,6 @@
 map $http_origin $header_origin {
     default "";
     "~(^|^http:\/\/)(localhost$|localhost:[0-9]{1,4}$)" "$http_origin";
-    "https://ng-trans-admin.siberian.pro" "$http_origin";
 }
 
 upstream qyoga-backend {
@@ -15,9 +14,13 @@ server {
     access_log /var/log/nginx/access.log;
     error_log /var/log/nginx/error.log warn;
 
-        location / {
-          rewrite ^(.*)$ https://qyoga.pro$1 redirect;
-        }
+    location ~ \.well-known/.* {
+        root /var/www/html;
+    }
+
+    location / {
+      rewrite ^(.*)$ https://qyoga.pro$1 redirect;
+    }
 }
 
 server {
