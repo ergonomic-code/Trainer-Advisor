@@ -1,8 +1,8 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "3.1.0"
-	id("io.spring.dependency-management") version "1.1.0"
+	id("org.springframework.boot") version "3.1.5"
+	id("io.spring.dependency-management") version "1.1.3"
 	kotlin("jvm") version "1.9.0"
 	kotlin("plugin.spring") version "1.9.0"
 	id("io.gitlab.arturbosch.detekt") version "1.23.1"
@@ -32,7 +32,7 @@ dependencies {
 	implementation("org.flywaydb:flyway-core")
 	implementation("jakarta.validation:jakarta.validation-api:3.0.2")
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-	implementation("org.postgresql:postgresql:42.5.1")
+	implementation("org.postgresql:postgresql:42.6.0")
 
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
@@ -41,11 +41,11 @@ dependencies {
 	testImplementation("org.springframework.boot:spring-boot-testcontainers")
 	testImplementation("org.testcontainers:junit-jupiter")
 	testImplementation("org.testcontainers:postgresql")
-	testImplementation("io.rest-assured:rest-assured:5.3.0")
-	testImplementation("io.rest-assured:kotlin-extensions:5.3.0")
-	testImplementation("io.kotest:kotest-assertions-core:5.5.5")
-	testImplementation("com.tngtech.archunit:archunit:1.0.1")
-	testImplementation("org.jsoup:jsoup:1.15.4")
+	testImplementation("io.rest-assured:rest-assured:5.3.2")
+	testImplementation("io.rest-assured:kotlin-extensions:5.3.2")
+	testImplementation("io.kotest:kotest-assertions-core:5.7.2")
+	testImplementation("com.tngtech.archunit:archunit:1.1.0")
+	testImplementation("org.jsoup:jsoup:1.16.2")
 	testImplementation("io.github.ulfs:assertj-jsoup:0.1.4")
 
 	detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.1")
@@ -75,7 +75,7 @@ tasks.withType<Test> {
 detekt {
 	buildUponDefaultConfig = true
 	allRules = false
-	config = files("$projectDir/conf/qyoga-detekt.yaml")
+	config.from(files("$projectDir/conf/qyoga-detekt.yaml"))
 }
 
 tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
