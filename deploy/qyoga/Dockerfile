@@ -1,4 +1,4 @@
-FROM openjdk:17-alpine
+FROM eclipse-temurin:21-alpine
 EXPOSE 8080
 
 WORKDIR /app
