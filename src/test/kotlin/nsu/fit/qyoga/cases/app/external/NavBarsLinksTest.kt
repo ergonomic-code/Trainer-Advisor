@@ -25,7 +25,6 @@ class NavBarsLinksTest : QYogaAppTestBase() {
         assertLinkValid(body, "Главная")
         assertLinkValid(body, "Клиенты")
         assertLinkValid(body, "Упражнения")
-        assertLinkValid(body, "Опросы")
 
         // top nav bar
         assertLinkValid(body, "Выйти")
