@@ -1,0 +1,15 @@
+version: '3'
+
+name: qyoga-tests-dev
+
+services:
+
+  postgres:
+    extends:
+      file: docker-compose-infra-base.yml
+      service: postgres
+
+    container_name: qg-pg-dev
+
+    ports:
+      - "54501:5432"

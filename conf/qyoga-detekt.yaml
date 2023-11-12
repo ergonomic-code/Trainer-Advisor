@@ -8,6 +8,12 @@ complexity:
   StringLiteralDuplication:
     active: true
 
+  CyclomaticComplexMethod:
+    active: false
+
+  LongParameterList:
+    active: false
+
 naming:
   PackageNaming:
     active: false
@@ -21,17 +27,19 @@ style:
     maxLineLength: 150
     excludeRawStrings: true
 
-  WildcardImport:
-    excludeImports: [ 'java.util.*', 'nsu.fit.qyoga.*', 'org.springframework.*' ]
-
   AlsoCouldBeApply:
     active: true
+
+  BracesOnIfStatements:
+    active: true
+    multiLine: always
+
 
   CanBeNonNullable:
     active: true
 
   ClassOrdering:
-    active: true
+    active: false
 
   CollapsibleIfStatements:
     active: true
@@ -45,9 +53,6 @@ style:
 
   FunctionOnlyReturningConstant:
     active: false
-
-  MandatoryBracesIfStatements:
-    active: true
 
   MandatoryBracesLoops:
     active: true
@@ -67,8 +72,8 @@ style:
   OptionalUnit:
     active: true
 
-  OptionalWhenBraces:
-    active: true
+  ProtectedMemberInFinalClass:
+    active: false
 
   TrailingWhitespace:
     active: true
@@ -93,6 +98,9 @@ style:
 
   UselessCallOnNotNull:
     active: true
+
+  WildcardImport:
+    active: false
 
 
 performance:
@@ -131,6 +139,9 @@ formatting:
     active: false
 
   NoBlankLineBeforeRbrace:
+    active: false
+
+  NoBlankLinesInChainedMethodCalls:
     active: false
 
   NoUnusedImports:

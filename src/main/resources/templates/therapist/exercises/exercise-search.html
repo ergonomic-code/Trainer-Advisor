@@ -27,6 +27,7 @@
 
                         <form hx-get="/therapist/exercises/search" hx-target="#tablePagination"
                               hx-trigger="submit"
+                              id="exercisesSearch"
                               th:object="${searchDto}">
                             <div class="input-group mb-3 m-auto" id="searchExercisesFilterForm">
                                 <div class="mt-3 mb-3 w-25" id="titleFilter">
@@ -38,36 +39,21 @@
                                            type="text">
                                 </div>
 
-                                <div class="mt-3 mb-3 w-25" id="contradictionFilter">
-                                    <input aria-describedby="basic-addon2"
-                                           class="form-control"
-                                           placeholder="Противопоказание"
-                                           style="border-color:inherit"
-                                           th:field="${searchDto.contradiction}" type="text">
-                                </div>
-
-                                <div class="mt-3 mb-3 w-25" id="therapeuticPurposeFilter">
-                                    <input aria-describedby="basic-addon2"
-                                           class="form-control"
-                                           placeholder="Терапевтическая задача"
-                                           style="border-color:inherit"
-                                           th:field="${searchDto.therapeuticPurpose}" type="text">
-                                </div>
-
                                 <div class="input-group mb-3 mt-3" id="exerciseTypeFilter">
                                     <div class="input-group-prepend">
                                         <label class="input-group-text" for="inputGroupSelect01">Категории</label>
                                     </div>
                                     <select class="custom-select w-25"
                                             id="inputGroupSelect01"
-                                            th:field="${searchDto.exerciseTypeId}">
+                                            th:field="${searchDto.exerciseType}">
                                         <option selected th:value="null">Тип упражнения</option>
-                                        <option th:each="type : ${types}" th:text="${type.name}"
-                                                th:value="${type.name}"></option>
+                                        <option th:each="type : ${types}" th:text="${type.label}"
+                                                th:value="${type}"></option>
                                     </select>
                                 </div>
                                 <div class="input-group mt-2 mb-5">
-                                    <button class="btn btn-secondary" style="position: absolute" type="submit">Поиск
+                                    <button class="btn btn-secondary" name="search" style="position: absolute"
+                                            type="submit">Поиск
                                     </button>
                                 </div>
 
@@ -81,19 +67,15 @@
                                 <thead>
                                 <tr>
                                     <th>Название</th>
-                                    <th>Противопоказания</th>
                                     <th>Длительность</th>
                                     <th>Тип упражнения</th>
-                                    <th>Терапевтическая задача</th>
                                 </tr>
                                 </thead>
                                 <tbody id="exercises-list">
                                 <tr th:each="exercise : ${exercises.content}">
                                     <td th:text="${exercise.title}"></td>
-                                    <td th:text="${exercise.contradictions}"></td>
-                                    <td th:text="${T(nsu.fit.platform.lang.DurationExt).toDecimalMinutes(exercise.duration) + ' мин.'}"></td>
-                                    <td th:text="${exercise.type.name}"></td>
-                                    <td th:text="${T(java.lang.String).join(',', exercise.purposes)}"></td>
+                                    <td th:text="${exercise.durationLabel}"></td>
+                                    <td th:text="${exercise.type.label}"></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -149,7 +131,7 @@
 
                 <div class="input-group">
                     <a href="/therapist/exercises/create" id="newExerciseLink">
-                        <button class="btn btn-secondary" id="btnNewExercise" type="button">
+                        <button class="btn btn-secondary" name="newExercise" type="button">
                             Новое упражнение
                         </button>
                     </a>

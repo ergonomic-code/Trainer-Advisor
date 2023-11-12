@@ -25,9 +25,11 @@
                     </div>
                     <div class="card-body">
 
-                        <form hx-get="/therapist/clients/search-cl" hx-target="#tablePagination"
+                        <form hx-get="/therapist/clients/search" hx-target="#tablePagination"
                               hx-trigger="submit"
-                              th:object="${searchDto}">
+                              id="clientSearch"
+                              th:object="${searchDto}"
+                        >
                             <div class="input-group mb-3 m-auto" id="searchClientsFilterForm">
                                 <div class="mt-3 mb-3 w-25" id="lastnameFilter">
                                     <input aria-describedby="basic-addon2"
@@ -62,22 +64,6 @@
                                            placeholder="Номер телефона"
                                            style="border-color:inherit"
                                            th:field="${searchDto.phoneNumber}" type="text">
-                                </div>
-
-                                <div class="mt-3 mb-3 w-25" id="diagnoseFilter">
-                                    <input aria-describedby="basic-addon2"
-                                           class="form-control"
-                                           placeholder="Диагноз"
-                                           style="border-color:inherit"
-                                           th:field="${searchDto.diagnose}" type="text">
-                                </div>
-
-                                <div class="mt-3 mb-3 w-25" id="lastAppointmentFilter">
-                                    <input aria-describedby="basic-addon2"
-                                           class="form-control"
-                                           placeholder="Дата приема"
-                                           style="border-color:inherit"
-                                           th:field="${searchDto.appointmentDate}" type="date">
                                 </div>
 
                                 <div class="input-group mt-2 mb-5">

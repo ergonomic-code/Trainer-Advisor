@@ -2,9 +2,10 @@ version: '3'
 
 services:
 
-  API:
+  api:
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/qyoga
+      - SPRING_PROFILES_ACTIVE=prod,demo
 
     build:
       context: ../../
