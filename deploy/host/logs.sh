@@ -1,1 +1,1 @@
-docker --context qyoga-prod logs -f qyoga-API-1
+docker --context qyoga-prod logs -f qyoga-api-1

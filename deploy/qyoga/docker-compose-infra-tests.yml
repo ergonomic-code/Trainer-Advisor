@@ -1,0 +1,21 @@
+version: '3'
+
+name: qyoga-tests-infra
+
+services:
+
+  postgres:
+    extends:
+      file: docker-compose-infra-base.yml
+      service: postgres
+
+    container_name: qg-pg-tests
+
+    environment:
+      PGDATA: /tmp/pgdata
+
+    tmpfs:
+      - /tmp
+
+    ports:
+      - "54502:5432"

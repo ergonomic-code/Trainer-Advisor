@@ -1,0 +1,13 @@
+version: '3'
+
+name: qyoga-infra
+
+services:
+
+  postgres:
+    image: postgres:15.2
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: qyoga
+      PGDATA: /var/lib/postgresql/data/pgdata

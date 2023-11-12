@@ -3,13 +3,13 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
 	id("org.springframework.boot") version "3.1.5"
 	id("io.spring.dependency-management") version "1.1.3"
-	kotlin("jvm") version "1.9.0"
-	kotlin("plugin.spring") version "1.9.0"
-	id("io.gitlab.arturbosch.detekt") version "1.23.1"
+	kotlin("jvm") version "1.9.10"
+	kotlin("plugin.spring") version "1.9.10"
+	id("io.gitlab.arturbosch.detekt") version "1.23.3"
 	id("org.jetbrains.kotlinx.kover") version "0.6.1"
 }
 
-group = "nsu.fit"
+group = "pro.qyoga"
 version = "0.0.1-SNAPSHOT"
 
 java {
@@ -23,21 +23,22 @@ repositories {
 }
 
 dependencies {
+	implementation(kotlin("reflect"))
 	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	implementation("org.flywaydb:flyway-core")
 	implementation("jakarta.validation:jakarta.validation-api:3.0.2")
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 	implementation("org.postgresql:postgresql:42.6.0")
 
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
-	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.boot:spring-boot-starter-test") {
+		// Когда этот jar есть в класспасе, спринг инициализирует Мокито, что добавляет 0.5 секунды ко времени теста
+		exclude(group = "org.mockito")
+	}
 	testImplementation("org.springframework.boot:spring-boot-testcontainers")
 	testImplementation("org.testcontainers:junit-jupiter")
 	testImplementation("org.testcontainers:postgresql")
@@ -113,10 +114,9 @@ kover {
 			target = kotlinx.kover.api.VerificationTarget.CLASS
 
 			overrideClassFilter {
-				includes += "nsu.fit.qyoga.*Controller"
+				includes += "pro.qyoga.**Controller"
 			}
 
-			// add rule bound
 			bound {
 				minValue = 100
 				counter = kotlinx.kover.api.CounterType.INSTRUCTION

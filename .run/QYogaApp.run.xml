@@ -1,9 +1,9 @@
 <component name="ProjectRunConfigurationManager">
-    <configuration default="false" name="QYogaApp" type="SpringBootApplicationConfigurationType"
-                   factoryName="Spring Boot">
-        <option name="ACTIVE_PROFILES" value="local-dev,demo"/>
+    <configuration default="false" name="QYogaApp" type="JetRunConfigurationType">
+        <option name="MAIN_CLASS_NAME" value="pro.qyoga.app.QYogaAppKt"/>
         <module name="QYoga.main"/>
-        <option name="SPRING_BOOT_MAIN_CLASS" value="nsu.fit.qyoga.app.QYogaApplication"/>
+        <shortenClasspath name="NONE"/>
+        <option name="VM_PARAMETERS" value="-Dspring.profiles.active=local-dev,demo"/>
         <method v="2">
             <option name="Make" enabled="true"/>
         </method>

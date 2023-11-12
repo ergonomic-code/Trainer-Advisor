@@ -3,13 +3,10 @@ spring:
     locations: classpath:db/migration/common
   datasource:
     username: postgres
-    password: P@ssw0rd
+    password: password
     url: jdbc:postgresql://localhost:54501/qyoga
   servlet:
     multipart:
       max-file-size: 1MB
-qyoga:
-  url:
-    host: http://localhost:8080
-  hash:
-    secret-key: secret-key
+
+debug: false

@@ -10,7 +10,7 @@
         <appender-ref ref="CONSOLE"/>
     </root>
 
-    <logger name="nsu.fit.qyoga" level="info" additivity="false">
+    <logger name="pro.qyoga" level="info" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>
 

@@ -1,1 +1,0 @@
-TRUNCATE completing, appointments, clients RESTART IDENTITY;

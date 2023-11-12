@@ -20,37 +20,12 @@
                 <h1 class="mt-4">Новое упражнение</h1>
 
                 <form class="mt-4"
-                      enctype="multipart/form-data" hx-post="/therapist/exercises/create" id="createExerciseForm">
+                      enctype="multipart/form-data" hx-post="/therapist/exercises/create" id="createExercise">
                     <div class="form-group row mb-3">
                         <label class="col-sm-2 col-form-label" for="title">Название упражнения</label>
                         <div class="col-sm-7">
                             <input class="form-control" id="title" name="title" placeholder="Собака мордой вниз"
                                    required type="text">
-                        </div>
-                    </div>
-                    <div class="form-group row mb-3">
-                        <label class="col-sm-2 col-form-label" for="contradictions">Противопоказания</label>
-                        <div class="col-sm-7">
-                            <input class="form-control" id="contradictions" name="contradictions"
-                                   placeholder="Травма сухожилия бицепса бедра. Травма запястья"
-                                   required type="text">
-                        </div>
-                    </div>
-                    <div class="form-group row mb-3">
-                        <label class="col-sm-2 col-form-label" for="indications">Показания</label>
-                        <div class="col-sm-7">
-                            <input class="form-control" id="indications" name="indications"
-                                   placeholder="Вытяжение позвоночника."
-                                   required type="text">
-                        </div>
-                    </div>
-                    <div class="form-group row mb-3">
-                        <label class="col-sm-2 col-form-label" for="purposes">Терапевтические задачи</label>
-                        <div class="col-sm-7">
-                            <input class="form-control" hi id="purposes" name="purposes"
-                                   placeholder="Улучшение мобильности плечевых суставов, Вытяжение задней поверхности ног"
-                                   required type="text">
-                            <div class="form-text">Список терапевтических задач через запятую</div>
                         </div>
                     </div>
                     <div class="form-group row mb-3">
@@ -63,13 +38,13 @@
                     <div class="form-group row mb-3">
                         <label class="col-sm-2 col-form-label" for="type">Тип упражнения</label>
                         <div class="col-sm-7">
-                            <select class="form-select col-sm-7" id="type" name="exerciseTypeId">
-                                <option value="1">Разминка</option>
-                                <option selected value="2">Мобилизация</option>
-                                <option value="3">Укрепление</option>
-                                <option value="4">Вытяжение</option>
-                                <option value="5">Расслабление</option>
-                                <option value="6">Тракция</option>
+                            <select class="form-select col-sm-7" id="type" name="exerciseType">
+                                <option value="WARM_UP">Разминка</option>
+                                <option value="MOBILISATION">Мобилизация</option>
+                                <option value="STRENGTHENING">Укрепление</option>
+                                <option value="STRETCHING">Вытяжение</option>
+                                <option value="RELAXATION">Расслабление</option>
+                                <option value="TRACTION">Тракция</option>
                             </select>
                         </div>
                     </div>
@@ -148,6 +123,8 @@
                                     <div class="row col-sm-12 justify-content-end">
                                         <input @click="steps.splice(idx, 1)"
                                                class="btn btn-dark mt-3 col-sm-2 float-end"
+                                               name="deleteStep"
+                                               type="text"
                                                value="Удалить шаг">
                                     </div>
                                     <hr>
@@ -156,11 +133,12 @@
                             <input @click="steps.push(exerciseStep())"
                                    class="btn btn-secondary mt-3 mb-4"
                                    type="button"
+                                   name="addStep"
                                    value="Добавить шаг">
                         </fieldset>
 
                         <div class="row col-sm-9 justify-content-end">
-                            <input class="btn btn-secondary col-sm-2" type="submit" value="Сохранить">
+                            <input class="btn btn-secondary col-sm-2" name="save" type="submit" value="Сохранить">
                         </div>
                     </div>
                 </form>
