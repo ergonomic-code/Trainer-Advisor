@@ -7,8 +7,8 @@ import org.springframework.data.annotation.Version
 import org.springframework.data.relational.core.mapping.Table
 import java.time.Instant
 
-@Table("images")
-data class Image(
+@Table("files")
+data class File(
     val name: String,
     val mediaType: String,
     val size: Long,
@@ -27,7 +27,7 @@ data class Image(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as Image
+        other as File
 
         if (id != other.id) return false
         if (name != other.name) return false
