@@ -1,4 +1,4 @@
-package pro.qyoga.infra.images.api
+package pro.qyoga.infra.files.api
 
 
 interface FilesService {

@@ -12,7 +12,7 @@ import pro.qyoga.clients.pages.therapist.programs.exercises.CreateExercisePage
 import pro.qyoga.clients.pages.therapist.programs.exercises.ExercisesListPage
 import pro.qyoga.core.programs.exercises.api.CreateExerciseRequest
 import pro.qyoga.core.programs.exercises.api.ExerciseSearchDto
-import pro.qyoga.infra.images.api.File
+import pro.qyoga.infra.files.api.File
 
 
 class TherapistExercisesApi(override val authCookie: Cookie) : AuthorizedApi {

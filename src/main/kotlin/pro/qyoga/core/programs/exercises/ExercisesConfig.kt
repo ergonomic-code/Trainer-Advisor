@@ -6,13 +6,13 @@ import org.springframework.context.annotation.Import
 import pro.qyoga.core.programs.exercises.internal.ExercisesRepo
 import pro.qyoga.core.programs.exercises.internal.ExercisesServiceImpl
 import pro.qyoga.infra.db.SdjConfig
-import pro.qyoga.infra.images.ImagesConfig
+import pro.qyoga.infra.files.FilesConfig
 
-@Import(SdjConfig::class, ImagesConfig::class)
+@Import(SdjConfig::class, FilesConfig::class)
 @Configuration
 class ExercisesConfig(
     val sdjConfig: SdjConfig,
-    val imagesConfig: ImagesConfig
+    val filesConfig: FilesConfig
 ) {
 
     @Bean
@@ -20,6 +20,6 @@ class ExercisesConfig(
 
     @Bean
     fun exercisesService() =
-        ExercisesServiceImpl(exercisesRepo(), imagesConfig.imagesService())
+        ExercisesServiceImpl(exercisesRepo(), filesConfig.imagesService())
 
 }

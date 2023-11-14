@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile
 import pro.qyoga.core.programs.exercises.api.CreateExerciseRequest
 import pro.qyoga.core.programs.exercises.api.ExercisesService
 import pro.qyoga.core.users.internal.QyogaUserDetails
-import pro.qyoga.infra.images.api.File
+import pro.qyoga.infra.files.api.File
 import pro.qyoga.platform.spring.http.hxRedirect
 
 @Controller

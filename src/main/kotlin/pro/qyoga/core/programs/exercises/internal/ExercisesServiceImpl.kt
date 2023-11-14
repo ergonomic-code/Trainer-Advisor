@@ -6,8 +6,8 @@ import pro.qyoga.core.programs.exercises.api.CreateExerciseRequest
 import pro.qyoga.core.programs.exercises.api.ExerciseDto
 import pro.qyoga.core.programs.exercises.api.ExerciseSearchDto
 import pro.qyoga.core.programs.exercises.api.ExercisesService
-import pro.qyoga.infra.images.api.File
-import pro.qyoga.infra.images.api.FilesService
+import pro.qyoga.infra.files.api.File
+import pro.qyoga.infra.files.api.FilesService
 
 
 class ExercisesServiceImpl(

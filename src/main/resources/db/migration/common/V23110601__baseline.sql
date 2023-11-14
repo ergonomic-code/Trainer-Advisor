@@ -36,7 +36,7 @@ create table clients
     version             BIGINT      NOT NULL
 );
 
-CREATE TABLE files
+CREATE TABLE images
 (
     id          BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     name        VARCHAR   NOT NULL,
