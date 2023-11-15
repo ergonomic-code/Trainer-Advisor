@@ -1,8 +1,11 @@
+# Проект для локальной отладки в контейнере
+# Собирает образ приложения на базе текущего состояния рабочей директории и запускает систему целиком
+
 version: '3'
 
 services:
 
-  api:
+  app:
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/qyoga
       - SPRING_PROFILES_ACTIVE=prod,demo

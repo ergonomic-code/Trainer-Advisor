@@ -1,21 +1,20 @@
+# Проект для прода
+
 version: '3'
 
 services:
 
   postgres:
+    extends:
+      file: docker-compose-infra-base.yml
+      service: postgres
     logging:
       driver: journald
-    image: postgres:15.2
     restart: always
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: qyoga
-      PGDATA: var/lib/postgresql/data/pgdata
     volumes:
       - /var/pgdata/qyoga:/var/lib/postgresql/data/pgdata
 
-  API:
+  app:
     logging:
       driver: journald
     image: ghcr.io/d-r-q/qyoga:latest
