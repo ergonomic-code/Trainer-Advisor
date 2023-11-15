@@ -7,7 +7,6 @@ import pro.qyoga.tests.infra.html.*
 import pro.qyoga.tests.infra.html.Input.Companion.button
 import pro.qyoga.tests.infra.html.Input.Companion.file
 import pro.qyoga.tests.infra.html.Input.Companion.number
-import pro.qyoga.tests.infra.html.Input.Companion.submit
 import pro.qyoga.tests.infra.html.Input.Companion.text
 
 
@@ -32,7 +31,7 @@ object CreateExercisePage : QYogaPage {
 
         val deleteStep = Button("deleteStep", "")
         val addStep = button("addStep", "Добавить шаг")
-        val save = submit("save", value = "Сохранить")
+        val save = Button("save", "Сохранить")
 
         override val components = listOf(
             title,

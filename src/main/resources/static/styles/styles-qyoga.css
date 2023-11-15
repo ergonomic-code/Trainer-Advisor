@@ -1,14 +1,34 @@
 .nav-pills .nav-link.active {
-    color: #fff;
-    background-color: #198754;
+    color: #0d503c;
+    background-color: #20c997;
 }
 
-.nav-pills .nav-link.disabled {
+.nav-pills .nav-link.disabled, .nav-tabs .nav-link.disabled {
     color: #6c757d;
 }
 
-.nav-pills .nav-link {
-    color: #198754;
+.nav-pills .nav-link, .nav-tabs .nav-link {
+    color: #06281e;
+}
+
+.nav-pills .nav-link:not(.active):hover {
+    color: #20c997;
+}
+
+.btn.nav-drop, .btn.nav-drop:active {
+    color: #0d503c;
+    border-color: #20c997;
+    background-color: #20c997;
+}
+
+.nav-drop .dropdown-item.active {
+    color: #0d503c;;
+    background-color: #20c997;
+}
+
+.nav-drop .dropdown-item:active {
+    color: #0d503c;;
+    background-color: #20c997;
 }
 
 div.htmx-swapping {
@@ -54,22 +74,6 @@ tr.htmx-swapping {
 .active > .page-link {
     background-color: white;
     color: var(--bs-pagination-active-border-color)
-}
-
-.nav-underline {
-    --bs-nav-underline-gap: 0;
-}
-
-.nav-underline .nav-link.active {
-    font-weight: normal;
-}
-
-.nav-link {
-    color: #36772c;
-}
-
-.nav-link:hover {
-    color: #36772c;
 }
 
 .btn-outline-danger.bg-white:hover, .btn-outline-danger.bg-white:focus-visible {
