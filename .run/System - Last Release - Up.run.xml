@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
-    <configuration default="false" name="System - Local - Up" type="ShConfigurationType">
+    <configuration default="false" name="System - Last Release - Up" type="ShConfigurationType">
         <option name="SCRIPT_TEXT"
-                value="docker compose -f deploy/qyoga/docker-compose-infra-base.yml -f deploy/qyoga/docker-compose-dev.yml up --build app"/>
+                value="docker compose -f deploy/qyoga/docker-compose.yml pull; docker compose -f deploy/qyoga/docker-compose.yml up"/>
         <option name="INDEPENDENT_SCRIPT_PATH" value="true"/>
         <option name="SCRIPT_PATH" value=""/>
         <option name="SCRIPT_OPTIONS" value=""/>
@@ -13,9 +13,6 @@
         <option name="EXECUTE_IN_TERMINAL" value="true"/>
         <option name="EXECUTE_SCRIPT_FILE" value="false"/>
         <envs/>
-        <method v="2">
-            <option name="Gradle.BeforeRunTask" enabled="true" tasks="bootJar" externalProjectPath="$PROJECT_DIR$"
-                    vmOptions="" scriptParameters=""/>
-        </method>
+        <method v="2"/>
     </configuration>
 </component>
