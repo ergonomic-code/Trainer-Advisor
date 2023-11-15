@@ -54,13 +54,14 @@
 
                 <div class="row d-flex d-sm-none pb-3 mb-4 border-bottom">
                     <div class="btn-group">
-                        <button aria-expanded="false" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown"
+                        <button aria-expanded="false" class="btn btn-outline-primary dropdown-toggle nav-drop"
+                                data-bs-toggle="dropdown"
                                 type="button">
                             <span th:if="${activeTab == 'journal'}">Журнал</span>
                             <span th:if="${activeTab == 'card'}">Карточка</span>
                         </button>
 
-                        <ul class="dropdown-menu dropdown-menu-start">
+                        <ul class="dropdown-menu dropdown-menu-start nav-drop">
                             <li>
                                 <a class="dropdown-item " id="journalLink"
                                    th:classappend="${activeTab == 'journal'} ? 'active'"
