@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile
 import pro.qyoga.core.programs.exercises.api.CreateExerciseRequest
 import pro.qyoga.core.programs.exercises.api.ExercisesService
 import pro.qyoga.core.users.internal.QyogaUserDetails
-import pro.qyoga.infra.images.api.Image
+import pro.qyoga.infra.files.api.File
 import pro.qyoga.platform.spring.http.hxRedirect
 
 @Controller
@@ -30,7 +30,7 @@ class CreateExercisePageController(
     ): ResponseEntity<Unit> {
         val stepImages = imagesMap
             .map { (partName, img) ->
-                partName.toStepIdx() to Image(img.originalFilename!!, img.contentType!!, img.size, img.bytes)
+                partName.toStepIdx() to File(img.originalFilename!!, img.contentType!!, img.size, img.bytes)
             }.toMap()
 
         exercisesService.addExercise(createExerciseRequest, stepImages, principal.id)

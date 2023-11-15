@@ -12,7 +12,7 @@ import pro.qyoga.clients.pages.therapist.programs.exercises.CreateExercisePage
 import pro.qyoga.clients.pages.therapist.programs.exercises.ExercisesListPage
 import pro.qyoga.core.programs.exercises.api.CreateExerciseRequest
 import pro.qyoga.core.programs.exercises.api.ExerciseSearchDto
-import pro.qyoga.infra.images.api.Image
+import pro.qyoga.infra.files.api.File
 
 
 class TherapistExercisesApi(override val authCookie: Cookie) : AuthorizedApi {
@@ -30,7 +30,7 @@ class TherapistExercisesApi(override val authCookie: Cookie) : AuthorizedApi {
 
     }
 
-    fun createExercise(exercise: CreateExerciseRequest, images: Map<Long, Image>) {
+    fun createExercise(exercise: CreateExerciseRequest, images: Map<Long, File>) {
         Given {
             contentType("multipart/form-data; charset=UTF-8")
             authorized()
