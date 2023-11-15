@@ -1,4 +1,4 @@
-package pro.qyoga.infra.images
+package pro.qyoga.infra.files
 
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
@@ -8,4 +8,4 @@ import pro.qyoga.infra.db.SdjConfig
 @Import(SdjConfig::class)
 @ComponentScan
 @Configuration
-class ImagesConfig
+class FilesConfig
