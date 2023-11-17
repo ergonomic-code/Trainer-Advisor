@@ -9,6 +9,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
 import pro.qyoga.clients.pages.therapist.clients.ClientsListPage
+import pro.qyoga.clients.pages.therapist.clients.CreateClientPage
 import pro.qyoga.core.clients.api.ClientSearchDto
 import pro.qyoga.core.clients.api.CreateClientRequest
 
@@ -65,4 +66,21 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
         }
     }
 
+    fun createClient(request: CreateClientRequest) {
+        Given {
+            authorized()
+            formParam(CreateClientPage.CreateClientForm.firstName.name, request.firstName)
+            formParam(CreateClientPage.CreateClientForm.lastName.name, request.lastName)
+            formParam(CreateClientPage.CreateClientForm.middleName.name, request.middleName)
+            formParam(CreateClientPage.CreateClientForm.birthDate.name, request.birthDate)
+            formParam(CreateClientPage.CreateClientForm.email.name, request.email)
+            formParam(CreateClientPage.CreateClientForm.areaOfResidence.name, request.areaOfResidence)
+            formParam(CreateClientPage.CreateClientForm.distributionSource.name, request.distributionSource)
+            formParam(CreateClientPage.CreateClientForm.complains.name, request.complains)
+        } When {
+            post(CreateClientPage.CreateClientForm.action.url)
+        } Then {
+            statusCode(HttpStatus.OK.value())
+        }
+    }
 }
