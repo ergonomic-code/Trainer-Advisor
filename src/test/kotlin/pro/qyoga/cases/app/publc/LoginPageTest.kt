@@ -1,5 +1,6 @@
 package pro.qyoga.cases.app.publc
 
+import io.kotest.assertions.withClue
 import io.restassured.module.kotlin.extensions.Extract
 import io.restassured.module.kotlin.extensions.Then
 import org.hamcrest.Matchers.matchesRegex
@@ -42,7 +43,9 @@ class LoginPageTest : QYogaAppBaseTest() {
             Jsoup.parse(body().asString())
         }
 
-        page shouldHave LoginPage.LoginForm.invalidUserName
+        withClue("Cannot find error message by ${LoginPage.LoginForm.invalidUserName}") {
+            page shouldHave LoginPage.LoginForm.invalidUserName
+        }
     }
 
 }

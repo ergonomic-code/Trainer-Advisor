@@ -1,5 +1,6 @@
 package pro.qyoga.clients.pages.publc
 
+import io.kotest.assertions.withClue
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import org.jsoup.nodes.Element
@@ -15,7 +16,7 @@ object LoginPage : QYogaPage {
 
     override val path = "/login"
 
-    object LoginForm : QYogaForm("loginForm", FormAction.classic(path)) {
+    object LoginForm : QYogaForm("loginForm", FormAction.classicPost(path)) {
 
         val username = email("username")
         val invalidUserName = "${username.selector()}.is-invalid"
@@ -34,7 +35,13 @@ object LoginPage : QYogaPage {
     override fun match(element: Element) {
         element.select("title").text() shouldBe title
 
-        element.select(LoginForm.selector())[0] shouldBeElement LoginForm
+        withClue("Cannot find login form by ${LoginForm.selector()}") {
+            element.select(LoginForm.selector()) shouldHaveSize 1
+        }
+        withClue("Login form has invalid structure") {
+            element.select(LoginForm.selector())[0] shouldBeElement LoginForm
+            element.select(LoginForm.selector())[0] shouldBeElement LoginForm.action
+        }
 
         element.select(LOGIN_ERROR_MESSAGE) shouldHaveSize 1
     }
