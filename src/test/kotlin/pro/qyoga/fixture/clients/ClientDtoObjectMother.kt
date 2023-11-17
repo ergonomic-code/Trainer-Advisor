@@ -17,9 +17,12 @@ object ClientDtoObjectMother {
         patronymic: String = randomCyrillicWord(),
         localDate: LocalDate = randomBirthDate(),
         phone: String = randomPhoneNumber(),
-        email: String = randomEmail()
+        email: String = randomEmail(),
+        areaOfResidence: String = randomCyrillicWord(),
+        distributionSource: String = randomCyrillicWord(),
+        complains: String = randomCyrillicWord(),
     ): ClientDto =
-        ClientDto(firstName, lastName, patronymic, localDate, phone, email)
+        ClientDto(firstName, lastName, patronymic, localDate, phone, email, areaOfResidence, distributionSource, complains)
 
     fun createClientDtos(count: Int): List<ClientDto> =
         (1..count).map { createClientDto() }

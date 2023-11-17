@@ -62,7 +62,7 @@ object ClientsListPage : QYogaPage {
             element.select(CLIENT_ROW).forAny { row ->
                 row.select("td:nth-child(1)").text() shouldBe client.lastName
                 row.select("td:nth-child(2)").text() shouldBe client.firstName
-                row.select("td:nth-child(3)").text() shouldBe client.patronymic
+                row.select("td:nth-child(3)").text() shouldBe client.middleName
                 row.select("td button").attr("hx-delete") shouldMatch deleteActionPattern
             }
         }

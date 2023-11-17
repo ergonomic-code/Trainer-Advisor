@@ -36,14 +36,14 @@ class ClientRepo(
         val example = example<Client>(probeFrom(searchDto)) {
             withMatcher(searchDto::firstName, ExampleMatcher.GenericPropertyMatcher().contains().ignoreCase())
             withMatcher(searchDto::lastName, ExampleMatcher.GenericPropertyMatcher().contains().ignoreCase())
-            withMatcher(searchDto::patronymic, ExampleMatcher.GenericPropertyMatcher().contains().ignoreCase())
+            withMatcher(searchDto::middleName, ExampleMatcher.GenericPropertyMatcher().contains().ignoreCase())
             withMatcher(searchDto::phoneNumber, ExampleMatcher.GenericPropertyMatcher().contains().ignoreCase())
         }
 
         val pageRequest = PageRequest.of(page.pageNumber, page.pageSize, sortBy(Client::lastName))
 
         return findAll(example, pageRequest).map {
-            ClientDto(it.firstName, it.lastName, it.patronymic, it.birthDate, it.phoneNumber, it.email, it.id)
+            ClientDto(it.firstName, it.lastName, it.middleName, it.birthDate, it.phoneNumber, it.email, it.areaOfResidence, it.distributionSource, it.complains, it.id)
         }
     }
 

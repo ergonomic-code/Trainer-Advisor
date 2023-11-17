@@ -14,10 +14,13 @@ import java.time.LocalDate
 data class Client(
     val firstName: String,
     val lastName: String,
-    val patronymic: String,
+    val middleName: String,
     val birthDate: LocalDate,
     val phoneNumber: String,
     val email: String?,
+    val areaOfResidence: String?,
+    val distributionSource: String?,
+    val complains: String,
 
     @Id
     val id: Long = 0,
@@ -30,8 +33,8 @@ data class Client(
 ) {
 
     constructor(dto: ClientDto) :
-            this(dto.firstName, dto.lastName, dto.patronymic, dto.birthDate, dto.phoneNumber, dto.email)
+            this(dto.firstName, dto.lastName, dto.middleName, dto.birthDate, dto.phoneNumber, dto.email, dto.areaOfResidence, dto.distributionSource, dto.complains)
 
-    fun toDto(): ClientDto = ClientDto(firstName, lastName, patronymic, birthDate, phoneNumber, email, id)
+    fun toDto(): ClientDto = ClientDto(firstName, lastName, middleName, birthDate, phoneNumber, email, areaOfResidence, distributionSource, complains, id)
 
 }
