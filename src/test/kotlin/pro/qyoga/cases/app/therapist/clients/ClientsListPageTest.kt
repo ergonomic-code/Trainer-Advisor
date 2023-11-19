@@ -61,9 +61,9 @@ class ClientsListPageTest : QYogaAppBaseTest() {
 
         val fullMatch1 = createClientDto(firstName, lastName, patronymic, birthDate, "+7-$phonePart-22-44")
         val fullMatch2 = createClientDto(firstName, lastName + "ский", patronymic, birthDate, "+7-$phonePart-22-33")
-        val nonMatchByLastName = createClientDto(firstName)
-        val nonMatchByPatronymic = createClientDto(firstName, lastName)
-        val nonMatchByPhone = createClientDto(firstName, lastName, patronymic, birthDate)
+        val nonMatchByLastName = createClientDto(firstName, lastName = lastName.reversed())
+        val nonMatchByPatronymic = createClientDto(firstName, lastName, patronymic = patronymic.reversed())
+        val nonMatchByPhone = createClientDto(firstName, lastName, patronymic, birthDate, phone = phonePart.reversed())
         backgrounds.clients.createClients(
             listOf(
                 fullMatch1,
