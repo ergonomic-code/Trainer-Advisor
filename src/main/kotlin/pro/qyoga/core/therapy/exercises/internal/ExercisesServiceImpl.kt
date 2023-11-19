@@ -8,8 +8,9 @@ import pro.qyoga.core.therapy.exercises.api.CreateExerciseRequest
 import pro.qyoga.core.therapy.exercises.api.ExerciseDto
 import pro.qyoga.core.therapy.exercises.api.ExerciseSearchDto
 import pro.qyoga.core.therapy.exercises.api.ExercisesService
-import pro.qyoga.platform.file_storage.api.File
+import pro.qyoga.platform.file_storage.api.FileMetaData
 import pro.qyoga.platform.file_storage.api.FilesStorage
+import pro.qyoga.platform.file_storage.api.StoredFile
 import pro.qyoga.platform.kotlin.unzip
 
 
@@ -22,7 +23,7 @@ class ExercisesServiceImpl(
     @Transactional
     override fun addExercise(
         createExerciseRequest: CreateExerciseRequest,
-        stepImages: Map<Int, File>,
+        stepImages: Map<Int, StoredFile>,
         therapistId: Long
     ) {
         val stepIdxToStepImageId = exerciseStepsImagesStorage.uploadAllStepImages(stepImages)
@@ -39,7 +40,7 @@ class ExercisesServiceImpl(
 
     @Transactional
     override fun addExercises(
-        createExerciseRequests: List<Pair<CreateExerciseRequest, Map<Int, File>>>,
+        createExerciseRequests: List<Pair<CreateExerciseRequest, Map<Int, StoredFile>>>,
         therapistId: Long
     ): List<ExerciseDto> {
         val exercises = createExerciseRequests.map { Exercise.of(it.first, emptyMap(), therapistId) }
@@ -48,12 +49,12 @@ class ExercisesServiceImpl(
 
 }
 
-fun FilesStorage.uploadAllStepImages(stepImages: Map<Int, File>): Map<Int, File> {
+fun FilesStorage.uploadAllStepImages(stepImages: Map<Int, StoredFile>): Map<Int, FileMetaData> {
     val (stepIndexes, stepImageFiles) = stepImages.unzip()
 
     val persistedImages = uploadAll(stepImageFiles)
 
-    val stepIdxToStepImage: Map<Int, File> = stepIndexes.zip(persistedImages)
+    val stepIdxToStepImage: Map<Int, FileMetaData> = stepIndexes.zip(persistedImages)
         .associate { (stepIdx, persistedImage) -> stepIdx to persistedImage }
 
     return stepIdxToStepImage
