@@ -4,7 +4,8 @@ import org.springframework.context.ApplicationContextInitializer
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.core.env.MapPropertySource
 
-class TestContainerDbContextInitializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
+class TestContainerDbContextInitializer :
+    ApplicationContextInitializer<ConfigurableApplicationContext> {
 
     override fun initialize(applicationContext: ConfigurableApplicationContext) {
         applicationContext.environment.propertySources.addFirst(
@@ -12,6 +13,14 @@ class TestContainerDbContextInitializer : ApplicationContextInitializer<Configur
                 "Integration postgres test properties",
                 mapOf(
                     "spring.datasource.url" to jdbcUrl
+                )
+            )
+        )
+        applicationContext.environment.propertySources.addFirst(
+            MapPropertySource(
+                "Integration minio test properties",
+                mapOf(
+                    "spring.datasource.url" to minioUrl
                 )
             )
         )

@@ -24,3 +24,19 @@ services:
 
     ports:
       - "54502:5432"
+
+  minio:
+    extends:
+      file: docker-compose-infra-base.yml
+      service: minio
+
+    container_name: qg-minio-tests
+
+    tmpfs:
+      - /tmp
+
+    ports:
+      - "50001:9000"
+      - "9020:9020"
+
+    command: server /tmp --console-address ":9020"
