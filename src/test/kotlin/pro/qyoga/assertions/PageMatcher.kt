@@ -20,7 +20,9 @@ infix fun Element.shouldBeElement(pageMatcher: PageMatcher) = pageMatcher.match(
 
 infix fun Element.shouldHave(component: Component) {
     val element = this.select(component.selector())
-    withClue("Cannot find component ${component.name} by selector ${component.selector()}") { element shouldHaveSize 1 }
+    withClue("Cannot find component ${component.name} by selector ${component.selector()} in $this") {
+        element shouldHaveSize 1
+    }
     component.match(element[0])
 }
 

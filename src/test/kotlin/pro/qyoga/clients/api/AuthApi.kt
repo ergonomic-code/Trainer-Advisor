@@ -6,8 +6,12 @@ import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
 import io.restassured.response.Response
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
 import pro.qyoga.clients.pages.publc.LoginPage
+import pro.qyoga.clients.pages.publc.RegisterPage
+import pro.qyoga.core.users.api.RegisterTherapistRequest
 
 
 object AuthApi {
@@ -34,6 +38,32 @@ object AuthApi {
             formParam(LoginPage.LoginForm.password.name, password)
         } When {
             post(LoginPage.LoginForm.action.url)
+        }
+    }
+
+    fun getRegistrationPage(): Document {
+        return Given {
+            this
+        } When {
+            get(RegisterPage.path)
+        } Then {
+            statusCode(HttpStatus.OK.value())
+        } Extract {
+            Jsoup.parse(body().asString())
+        }
+    }
+
+    fun registerTherapist(registerTherapistRequest: RegisterTherapistRequest): Document {
+        return Given {
+            formParam(RegisterPage.RegisterForm.firstName.name, registerTherapistRequest.firstName)
+            formParam(RegisterPage.RegisterForm.lastName.name, registerTherapistRequest.lastName)
+            formParam(RegisterPage.RegisterForm.email.name, registerTherapistRequest.email)
+        } When {
+            post(RegisterPage.RegisterForm.action.url)
+        } Then {
+            statusCode(HttpStatus.OK.value())
+        } Extract {
+            Jsoup.parse(body().asString())
         }
     }
 

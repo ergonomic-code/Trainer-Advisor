@@ -27,6 +27,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springframework.boot:spring-boot-starter-mail")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.flywaydb:flyway-core")
 	implementation("jakarta.validation:jakarta.validation-api:3.0.2")
@@ -48,6 +49,7 @@ dependencies {
 	testImplementation("com.tngtech.archunit:archunit:1.1.0")
 	testImplementation("org.jsoup:jsoup:1.16.2")
 	testImplementation("io.github.ulfs:assertj-jsoup:0.1.4")
+	testImplementation("com.icegreen:greenmail-junit5:2.0.0")
 
 	detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.1")
 

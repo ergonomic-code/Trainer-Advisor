@@ -1,6 +1,6 @@
 # Базовый проект для инфраструктуры
 
-version: '3'
+version: '3.8'
 
 name: qyoga-infra
 

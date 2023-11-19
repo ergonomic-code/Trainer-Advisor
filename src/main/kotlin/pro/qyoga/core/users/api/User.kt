@@ -11,7 +11,7 @@ import java.time.Instant
 data class User(
     val email: String,
     val passwordHash: String,
-    val roles: Set<Role>,
+    val roles: Array<Role>,
 
     @Id
     val id: Long = 0,
@@ -21,4 +21,38 @@ data class User(
     val modifiedAt: Instant? = null,
     @Version
     val version: Long = 0
-)
+) {
+
+    init {
+        check(roles.size == roles.toSet().size) { "Duplicated roles: $roles" }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as User
+
+        if (email != other.email) return false
+        if (passwordHash != other.passwordHash) return false
+        if (!roles.contentEquals(other.roles)) return false
+        if (id != other.id) return false
+        if (createdAt != other.createdAt) return false
+        if (modifiedAt != other.modifiedAt) return false
+        if (version != other.version) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = email.hashCode()
+        result = 31 * result + passwordHash.hashCode()
+        result = 31 * result + roles.contentHashCode()
+        result = 31 * result + id.hashCode()
+        result = 31 * result + createdAt.hashCode()
+        result = 31 * result + (modifiedAt?.hashCode() ?: 0)
+        result = 31 * result + version.hashCode()
+        return result
+    }
+
+}

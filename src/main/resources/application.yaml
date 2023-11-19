@@ -1,12 +1,32 @@
 spring:
+
   flyway:
     locations: classpath:db/migration/common
+
   datasource:
     username: postgres
     password: password
     url: jdbc:postgresql://localhost:54501/qyoga
+
   servlet:
     multipart:
       max-file-size: 1MB
+
+  mail:
+    username: qyogapro@yandex.ru
+    password: <secret>
+    host: smtp.yandex.ru
+    port: 465
+    protocol: smtps
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+qyoga:
+  admin:
+    email: me@azhidkov.pro
 
 debug: false

@@ -1,4 +1,4 @@
-package pro.qyoga.fixture
+package pro.qyoga.fixture.therapists
 
 
 const val THE_THERAPIST_LOGIN = "therapist@qyoga.pro"
