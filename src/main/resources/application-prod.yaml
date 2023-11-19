@@ -1,3 +1,17 @@
 qyoga:
   url:
     host: https://qyoga.pro
+
+spring:
+
+  mail:
+    username: qyogapro@yandex.ru
+    host: smtp.yandex.ru
+    port: 465
+    protocol: smtps
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true

@@ -10,8 +10,8 @@ import org.springframework.http.HttpStatus
 import pro.qyoga.assertions.shouldHave
 import pro.qyoga.clients.PublicClient
 import pro.qyoga.clients.pages.publc.LoginPage
-import pro.qyoga.fixture.THE_THERAPIST_LOGIN
-import pro.qyoga.fixture.THE_THERAPIST_PASSWORD
+import pro.qyoga.fixture.therapists.THE_THERAPIST_LOGIN
+import pro.qyoga.fixture.therapists.THE_THERAPIST_PASSWORD
 import pro.qyoga.infra.web.QYogaAppBaseTest
 
 

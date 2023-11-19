@@ -1,2 +1,16 @@
 server:
   port: 10803
+
+spring:
+  mail:
+    username: qyogapro@yandex.ru
+    password: password
+    host: localhost
+    port: 10025
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true

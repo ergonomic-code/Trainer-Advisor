@@ -3,9 +3,7 @@ package pro.qyoga.core.users.internal
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
-import pro.qyoga.core.users.api.Role
 import pro.qyoga.core.users.api.User
-import java.util.stream.Collectors
 
 data class QyogaUserDetails(
     val id: Long,
@@ -31,11 +29,8 @@ data class QyogaUserDetails(
     companion object {
 
         fun of(user: User): QyogaUserDetails {
-            val authorities: List<GrantedAuthority> = user.roles.stream()
-                .map { role: Role ->
-                    SimpleGrantedAuthority(role.toString())
-                }
-                .collect(Collectors.toList())
+            val authorities = user.roles
+                .map { SimpleGrantedAuthority(it.toString()) }
             return QyogaUserDetails(
                 user.id,
                 user.email,

@@ -10,6 +10,7 @@ import org.springframework.data.jdbc.repository.support.SimpleJdbcRepository
 import org.springframework.data.mapping.model.BasicPersistentEntity
 import org.springframework.data.util.TypeInformation
 import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Transactional
 import pro.qyoga.core.clients.api.ClientDto
 import pro.qyoga.core.clients.api.ClientSearchDto
 import pro.qyoga.core.clients.api.ClientsCrudService
@@ -27,6 +28,7 @@ class ClientRepo(
     jdbcConverter
 ), ClientsCrudService {
 
+    @Transactional
     override fun saveAll(clientDtos: List<ClientDto>): List<ClientDto> {
         return jdbcAggregateTemplate.saveAll(clientDtos.map { Client(it) }).map { it.toDto() }
     }
@@ -49,6 +51,7 @@ class ClientRepo(
         }
     }
 
+    @Transactional
     override fun deleteById(id: Long) {
         super.deleteById(id)
     }

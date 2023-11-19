@@ -8,6 +8,7 @@ import pro.qyoga.core.programs.exercises.api.ExerciseDto
 import pro.qyoga.core.programs.exercises.api.ExerciseSearchDto
 import pro.qyoga.core.programs.exercises.api.ExercisesService
 import pro.qyoga.fixture.clients.ClientDtoObjectMother
+import pro.qyoga.fixture.therapists.THE_THERAPIST_ID
 
 
 data class Backgrounds(

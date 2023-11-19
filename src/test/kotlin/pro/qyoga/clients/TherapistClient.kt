@@ -10,12 +10,11 @@ import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
 import pro.qyoga.clients.api.TherapistClientsApi
 import pro.qyoga.clients.api.TherapistExercisesApi
-import pro.qyoga.fixture.THE_THERAPIST_ID
-import pro.qyoga.fixture.THE_THERAPIST_LOGIN
-import pro.qyoga.fixture.THE_THERAPIST_PASSWORD
+import pro.qyoga.fixture.therapists.THE_THERAPIST_LOGIN
+import pro.qyoga.fixture.therapists.THE_THERAPIST_PASSWORD
 
 
-class TherapistClient(val id: Long, val authCookie: Cookie) {
+class TherapistClient(val authCookie: Cookie) {
 
     val clients = TherapistClientsApi(authCookie)
     val exercises = TherapistExercisesApi(authCookie)
@@ -35,9 +34,11 @@ class TherapistClient(val id: Long, val authCookie: Cookie) {
     companion object {
 
         fun loginAsTheTherapist(): TherapistClient =
+            login(THE_THERAPIST_LOGIN, THE_THERAPIST_PASSWORD)
+
+        fun login(email: String, password: String): TherapistClient =
             TherapistClient(
-                THE_THERAPIST_ID,
-                PublicClient.authApi.login(THE_THERAPIST_LOGIN, THE_THERAPIST_PASSWORD)
+                PublicClient.authApi.login(email, password)
             )
 
     }

@@ -24,7 +24,7 @@ abstract class QYogaForm(
         }
 
         components.forAll {
-            withClue("Cannot find component ${it.name} by selector ${it.selector()}") {
+            withClue("Cannot find component ${it.name} by selector ${it.selector()} in $element") {
                 element.select(it.selector()) shouldHaveSize 1
             }
             element.select(it.selector())[0] shouldBeElement it

@@ -2,12 +2,14 @@ package pro.qyoga.clients.pages.publc
 
 import io.kotest.assertions.withClue
 import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.shouldBe
 import org.jsoup.nodes.Element
 import pro.qyoga.assertions.shouldBeElement
+import pro.qyoga.assertions.shouldHave
+import pro.qyoga.assertions.shouldHaveTitle
 import pro.qyoga.infra.html.FormAction
 import pro.qyoga.infra.html.Input.Companion.email
 import pro.qyoga.infra.html.Input.Companion.password
+import pro.qyoga.infra.html.Link
 import pro.qyoga.infra.html.QYogaForm
 import pro.qyoga.infra.html.QYogaPage
 
@@ -29,11 +31,12 @@ object LoginPage : QYogaPage {
 
     override val title = "Вход в систему"
 
-
     private const val LOGIN_ERROR_MESSAGE = "div.invalid-feedback:contains(Неверный логин)"
 
+    private val registerLink = Link(RegisterPage, "Оставить заявку на регистрацию")
+
     override fun match(element: Element) {
-        element.select("title").text() shouldBe title
+        element.shouldHaveTitle(title)
 
         withClue("Cannot find login form by ${LoginForm.selector()}") {
             element.select(LoginForm.selector()) shouldHaveSize 1
@@ -43,7 +46,9 @@ object LoginPage : QYogaPage {
             element.select(LoginForm.selector())[0] shouldBeElement LoginForm.action
         }
 
-        element.select(LOGIN_ERROR_MESSAGE) shouldHaveSize 1
+        element shouldHave LOGIN_ERROR_MESSAGE
+
+        element shouldHave registerLink
     }
 
 }

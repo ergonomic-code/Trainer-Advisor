@@ -20,7 +20,7 @@ services:
     image: ghcr.io/d-r-q/qyoga:latest
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/qyoga
-      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_PROFILES_ACTIVE=prod,prod-secrets
 
     restart: always
 

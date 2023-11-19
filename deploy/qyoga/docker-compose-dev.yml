@@ -1,14 +1,16 @@
 # Проект для локальной отладки в контейнере
 # Собирает образ приложения на базе текущего состояния рабочей директории и запускает систему целиком
 
-version: '3'
+version: '3.8'
+
+name: qyoga-system-dev
 
 services:
 
   app:
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/qyoga
-      - SPRING_PROFILES_ACTIVE=prod,demo
+      - SPRING_PROFILES_ACTIVE=prod,demo,prod-secrets
 
     build:
       context: ../../

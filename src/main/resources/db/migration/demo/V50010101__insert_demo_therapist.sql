@@ -6,9 +6,8 @@ VALUES ('therapist@qyoga.pro',
         now(),
         1);
 
-INSERT INTO therapists
-    (id, name, created_at, version)
+INSERT INTO therapists (id, first_name, last_name, created_at, version)
 VALUES ((SELECT id FROM users WHERE email = 'therapist@qyoga.pro'),
-        'Елена Маркова',
+        'Елена', 'Маркова',
         now(),
         1);

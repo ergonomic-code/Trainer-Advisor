@@ -14,3 +14,5 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 /build/
+
+src/main/resources/application-prod-secrets.yaml

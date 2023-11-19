@@ -13,7 +13,7 @@ class AuthTests : QYogaAppBaseTest() {
     @Test
     fun `When unauthenticated user requests secured page he should be redirected to login page`() {
         // Given
-        val therapist = TherapistClient(-1, Cookie.Builder("unauthorized").build())
+        val therapist = TherapistClient(Cookie.Builder("unauthorized").build())
 
         // When
         val response = therapist.clients.getClientsListPage()
