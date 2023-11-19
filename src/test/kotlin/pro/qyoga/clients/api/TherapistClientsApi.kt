@@ -80,6 +80,7 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
         } When {
             post(CreateClientPage.CreateClientForm.action.url)
         } Then {
+            //todo add to DB
             statusCode(HttpStatus.OK.value())
         }
     }

@@ -51,4 +51,16 @@ class ClientRepo(
         super.deleteById(id)
     }
 
+    override fun exists(clientDto: ClientDto): Boolean = super.exists(example<Client>(probeFrom(clientDto)) {
+        withMatcher(clientDto::firstName, ExampleMatcher.GenericPropertyMatcher().contains().ignoreCase())
+        withMatcher(clientDto::lastName, ExampleMatcher.GenericPropertyMatcher().contains().ignoreCase())
+        withMatcher(clientDto::middleName, ExampleMatcher.GenericPropertyMatcher().contains().ignoreCase())
+        withMatcher(clientDto::birthDate, ExampleMatcher.GenericPropertyMatcher().contains().ignoreCase())
+        withMatcher(clientDto::phoneNumber, ExampleMatcher.GenericPropertyMatcher().contains().ignoreCase())
+        withMatcher(clientDto::email, ExampleMatcher.GenericPropertyMatcher().contains().ignoreCase())
+        withMatcher(clientDto::areaOfResidence, ExampleMatcher.GenericPropertyMatcher().contains().ignoreCase())
+        withMatcher(clientDto::distributionSource, ExampleMatcher.GenericPropertyMatcher().contains().ignoreCase())
+        withMatcher(clientDto::complains, ExampleMatcher.GenericPropertyMatcher().contains().ignoreCase())
+    })
+
 }

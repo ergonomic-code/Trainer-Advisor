@@ -18,7 +18,9 @@ data class Backgrounds(
 class ClientsBackgrounds(
     private val clientsCrudService: ClientsCrudService
 ) {
-
+    fun exists(clientDto: ClientDto) : Boolean {
+        return clientsCrudService.exists(clientDto)
+    }
     fun createClients(clients: List<ClientDto>) {
         clientsCrudService.saveAll(clients)
     }

@@ -12,4 +12,5 @@ interface ClientsCrudService {
 
     fun deleteById(id: Long)
 
+    fun exists(clientDto: ClientDto): Boolean
 }
