@@ -33,6 +33,7 @@ dependencies {
 	implementation("jakarta.validation:jakarta.validation-api:3.0.2")
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 	implementation("org.postgresql:postgresql:42.6.0")
+	implementation("io.minio:minio:8.5.7")
 
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 

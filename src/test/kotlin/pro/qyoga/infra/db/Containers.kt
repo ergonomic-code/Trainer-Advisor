@@ -1,5 +1,6 @@
 package pro.qyoga.infra.db
 
+import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.PostgreSQLContainer
 
 val pgContainer: PostgreSQLContainer<*> by lazy {
@@ -17,4 +18,15 @@ val pgContainer: PostgreSQLContainer<*> by lazy {
                 // Сначала подключаемся к postgres, пересоздаём qyoga для обнуления фикстуры и подключаемся к ней
                 this.withDatabaseName("qyoga")
             }
+}
+
+val minioContainer: GenericContainer<*> by lazy {
+    GenericContainer("minio/minio")
+        .withExposedPorts(9000)
+        .withTmpFs(mapOf("/tmp" to "rw"))
+        .withReuse(true)
+        .withCommand("server /tmp")
+        .apply {
+            start()
+        }
 }

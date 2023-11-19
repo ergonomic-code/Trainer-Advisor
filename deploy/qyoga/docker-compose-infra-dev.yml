@@ -17,3 +17,14 @@ services:
 
     ports:
       - "54501:5432"
+
+
+  minio:
+    extends:
+      file: docker-compose-infra-base.yml
+      service: minio
+
+    container_name: qg-minio-dev
+
+    ports:
+      - "50000:9000"
