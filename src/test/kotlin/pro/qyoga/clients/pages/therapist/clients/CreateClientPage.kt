@@ -13,14 +13,14 @@ object CreateClientPage : QYogaPage {
 
     override val path = "/therapist/clients/create"
 
-    override val title = "Создать клиента"
+    override val title = "Новый клиент"
 
     object CreateClientForm : QYogaForm("createClientForm", FormAction.hxPost(path)) {
 
         val firstName = text("firstName")
         val lastName = text("lastName")
         val middleName = text("middleName")
-        val birthDate = text("birthDate") //?)
+        val birthDate = text("birthDate")
         val phoneNumber = text("phoneNumber")
         val email = text("email")
         val areaOfResidence = text("areaOfResidence")

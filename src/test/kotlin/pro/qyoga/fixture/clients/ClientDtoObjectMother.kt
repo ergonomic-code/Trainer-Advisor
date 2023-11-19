@@ -1,6 +1,7 @@
 package pro.qyoga.fixture.clients
 
 import pro.qyoga.core.clients.api.ClientDto
+import pro.qyoga.core.clients.api.CreateClientRequest
 import pro.qyoga.fixture.data.randomCyrillicWord
 import pro.qyoga.fixture.data.randomEmail
 import pro.qyoga.fixture.data.randomLocalDate
@@ -22,11 +23,55 @@ object ClientDtoObjectMother {
         distributionSource: String = randomCyrillicWord(),
         complains: String = randomCyrillicWord(),
     ): ClientDto =
-        ClientDto(firstName, lastName, patronymic, localDate, phone, email, areaOfResidence, distributionSource, complains)
+        ClientDto(
+            firstName,
+            lastName,
+            patronymic,
+            localDate,
+            phone,
+            email,
+            areaOfResidence,
+            distributionSource,
+            complains
+        )
 
     fun createClientDtos(count: Int): List<ClientDto> =
         (1..count).map { createClientDto() }
 
+    fun createClientRequest(
+        firstName: String = randomCyrillicWord(),
+        lastName: String = randomCyrillicWord(),
+        patronymic: String = randomCyrillicWord(),
+        localDate: LocalDate = randomBirthDate(),
+        phone: String = randomPhoneNumber(),
+        email: String = randomEmail(),
+        areaOfResidence: String = randomCyrillicWord(),
+        distributionSource: String = randomCyrillicWord(),
+        complains: String = randomCyrillicWord(),
+    ): CreateClientRequest = CreateClientRequest(
+        firstName,
+        lastName,
+        patronymic,
+        localDate,
+        phone,
+        email,
+        areaOfResidence,
+        distributionSource,
+        complains
+    )
+
+    fun createClientDto(createClientRequest: CreateClientRequest):
+            ClientDto = ClientDto(
+        createClientRequest.firstName,
+        createClientRequest.lastName,
+        createClientRequest.middleName,
+        createClientRequest.birthDate,
+        createClientRequest.phoneNumber,
+        createClientRequest.email,
+        createClientRequest.areaOfResidence,
+        createClientRequest.distributionSource,
+        createClientRequest.complains
+    )
 }
 
 val minBirthDate: LocalDate = LocalDate.ofYearDay(1960, 1)

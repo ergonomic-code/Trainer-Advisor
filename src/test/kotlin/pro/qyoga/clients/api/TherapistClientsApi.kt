@@ -19,7 +19,7 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
         return Given {
             authorized()
         } When {
-            get(CreateClientPage.path)
+            get(ClientsListPage.path)
         } Then {
             statusCode(HttpStatus.OK.value())
         } Extract {
