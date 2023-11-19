@@ -3,7 +3,6 @@ package pro.qyoga.cases.app.therapist.clients
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import pro.qyoga.clients.TherapistClient
-import pro.qyoga.clients.pages.therapist.clients.ClientsListPage
 import pro.qyoga.fixture.clients.ClientDtoObjectMother
 import pro.qyoga.infra.test_config.ClientsTestConfig
 import pro.qyoga.infra.web.QYogaAppBaseTest
