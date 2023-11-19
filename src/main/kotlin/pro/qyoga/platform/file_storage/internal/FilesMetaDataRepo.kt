@@ -6,14 +6,14 @@ import org.springframework.data.jdbc.repository.support.SimpleJdbcRepository
 import org.springframework.data.mapping.model.BasicPersistentEntity
 import org.springframework.data.util.TypeInformation
 import org.springframework.stereotype.Repository
-import pro.qyoga.platform.file_storage.api.File
+import pro.qyoga.platform.file_storage.api.FileMetaData
 
 @Repository
-class FilesRepo(
+class FilesMetaDataRepo(
     jdbcAggregateTemplate: JdbcAggregateOperations,
     jdbcConverter: JdbcConverter
-) : SimpleJdbcRepository<File, Long>(
+) : SimpleJdbcRepository<FileMetaData, Long>(
     jdbcAggregateTemplate,
-    BasicPersistentEntity(TypeInformation.of(File::class.java)),
+    BasicPersistentEntity(TypeInformation.of(FileMetaData::class.java)),
     jdbcConverter
 )

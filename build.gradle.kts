@@ -52,6 +52,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
 	implementation("org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.4.RELEASE")
 	implementation("org.postgresql:postgresql:42.6.0")
+	implementation("io.minio:minio:8.5.7")
 
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 
@@ -63,6 +64,7 @@ dependencies {
 	testFixturesImplementation("org.testcontainers:junit-jupiter")
 	testFixturesImplementation("org.testcontainers:postgresql")
 	testFixturesApi("io.kotest:kotest-assertions-core:5.7.2")
+	testFixturesImplementation("org.testcontainers:minio:1.19.3")
 
 	testImplementation(testFixtures(project(":")))
 	testImplementation("io.rest-assured:rest-assured:5.3.2")

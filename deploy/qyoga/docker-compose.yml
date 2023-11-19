@@ -14,6 +14,16 @@ services:
     volumes:
       - /var/pgdata/qyoga:/var/lib/postgresql/data/pgdata
 
+  minio:
+    extends:
+      file: docker-compose-infra-base.yml
+      service: minio
+    logging:
+      driver: journald
+    restart: always
+    volumes:
+      - /var/minio/qyoga:/var/data/qyoga/minio
+
   app:
     logging:
       driver: journald
@@ -21,11 +31,13 @@ services:
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/qyoga
       - SPRING_PROFILES_ACTIVE=prod,prod-secrets
+      - MINIO_ENDPOINT=http://minio:9000
 
     restart: always
 
     depends_on:
       - postgres
+      - minio
     ports:
       - "8080:8080"
     links:

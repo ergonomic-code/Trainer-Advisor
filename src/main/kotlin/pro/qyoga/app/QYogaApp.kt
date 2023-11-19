@@ -8,6 +8,7 @@ import pro.qyoga.app.publc.PublicAppConfig
 import pro.qyoga.app.therapist.TherapistWebAppConfig
 import pro.qyoga.core.users.UsersConfig
 import pro.qyoga.infra.db.SdjConfig
+import pro.qyoga.infra.minio.MinioConfig
 import pro.qyoga.infra.web.WebConfig
 
 @Import(
@@ -19,6 +20,7 @@ import pro.qyoga.infra.web.WebConfig
 
     WebConfig::class,
     SdjConfig::class,
+    MinioConfig::class
 )
 @Configuration
 class QYogaApp

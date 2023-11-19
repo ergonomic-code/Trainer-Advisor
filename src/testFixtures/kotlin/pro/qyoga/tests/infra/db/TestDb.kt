@@ -17,7 +17,11 @@ private const val DB_PASSWORD = "password"
 
 val jdbcUrl: String by lazy {
     try {
-        val con = DriverManager.getConnection(PROVIDED_DB_URL.replace("qyoga", DB_USER), DB_USER, DB_PASSWORD)
+        val con = DriverManager.getConnection(
+            PROVIDED_DB_URL.replace("qyoga", DB_USER),
+            DB_USER,
+            DB_PASSWORD
+        )
         log.info("Provided db found, recreating it")
         con.prepareStatement(
             """

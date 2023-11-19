@@ -11,6 +11,7 @@ services:
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/qyoga
       - SPRING_PROFILES_ACTIVE=prod,demo,prod-secrets
+      - MINIO_ENDPOINT=http://minio:9000
 
     build:
       context: ../../
@@ -18,7 +19,9 @@ services:
 
     depends_on:
       - postgres
+      - minio
     ports:
       - "8080:8080"
     links:
       - "postgres:database"
+      - "minio:minio"

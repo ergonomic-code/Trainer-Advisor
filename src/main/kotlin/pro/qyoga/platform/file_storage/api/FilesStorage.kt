@@ -3,8 +3,8 @@ package pro.qyoga.platform.file_storage.api
 
 interface FilesStorage {
 
-    fun uploadFile(file: File): Long
+    fun uploadFile(file: StoredFile): FileMetaData
 
-    fun uploadAll(files: Iterable<File>): Iterable<File>
+    fun uploadAll(files: Iterable<StoredFile>): Iterable<FileMetaData>
 
 }
