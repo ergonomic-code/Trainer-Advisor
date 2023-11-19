@@ -14,6 +14,14 @@ services:
     volumes:
       - /var/pgdata/qyoga:/var/lib/postgresql/data/pgdata
 
+  minio:
+    extends:
+      file: docker-compose-infra-base.yml
+      service: minio
+    logging:
+      driver: journald
+    restart: always
+
   app:
     logging:
       driver: journald
@@ -26,6 +34,7 @@ services:
 
     depends_on:
       - postgres
+      - minio
     ports:
       - "8080:8080"
     links:

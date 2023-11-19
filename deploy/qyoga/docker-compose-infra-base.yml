@@ -13,3 +13,13 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: qyoga
       PGDATA: /var/lib/postgresql/data/pgdata
+
+
+  minio:
+    image: minio/minio
+    container_name: minio
+    environment:
+      MINIO_ROOT_USER: user
+      MINIO_ROOT_PASSWORD: password
+
+    command: server /var/data
