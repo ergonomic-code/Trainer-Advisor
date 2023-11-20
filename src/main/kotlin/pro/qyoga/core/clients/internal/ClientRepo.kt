@@ -4,11 +4,12 @@ import org.springframework.data.domain.ExampleMatcher
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
-import org.springframework.data.jdbc.core.JdbcAggregateTemplate
+import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.data.jdbc.core.convert.JdbcConverter
 import org.springframework.data.jdbc.repository.support.SimpleJdbcRepository
 import org.springframework.data.mapping.model.BasicPersistentEntity
 import org.springframework.data.util.TypeInformation
+import org.springframework.stereotype.Repository
 import pro.qyoga.core.clients.api.ClientDto
 import pro.qyoga.core.clients.api.ClientSearchDto
 import pro.qyoga.core.clients.api.ClientsCrudService
@@ -16,8 +17,9 @@ import pro.qyoga.platform.spring.sdj.example
 import pro.qyoga.platform.spring.sdj.probeFrom
 import pro.qyoga.platform.spring.sdj.sortBy
 
+@Repository
 class ClientRepo(
-    private val jdbcAggregateTemplate: JdbcAggregateTemplate,
+    private val jdbcAggregateTemplate: JdbcAggregateOperations,
     jdbcConverter: JdbcConverter
 ) : SimpleJdbcRepository<Client, Long>(
     jdbcAggregateTemplate,

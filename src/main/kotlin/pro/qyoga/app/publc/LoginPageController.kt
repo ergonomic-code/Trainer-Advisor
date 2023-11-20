@@ -5,7 +5,7 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 
-private const val AUTH_VIEW = "auth"
+private const val AUTH_VIEW = "public/auth"
 
 @Controller
 class LoginPageController {

@@ -1,3 +1,5 @@
 spring:
   flyway:
     locations: classpath:db/migration/common, classpath:db/migration/demo
+  thymeleaf:
+    cache: false

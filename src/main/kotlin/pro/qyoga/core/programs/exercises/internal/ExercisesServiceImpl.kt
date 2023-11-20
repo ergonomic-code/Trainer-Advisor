@@ -2,6 +2,7 @@ package pro.qyoga.core.programs.exercises.internal
 
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.stereotype.Service
 import pro.qyoga.core.programs.exercises.api.CreateExerciseRequest
 import pro.qyoga.core.programs.exercises.api.ExerciseDto
 import pro.qyoga.core.programs.exercises.api.ExerciseSearchDto
@@ -10,6 +11,7 @@ import pro.qyoga.infra.images.api.Image
 import pro.qyoga.infra.images.api.ImagesService
 
 
+@Service
 class ExercisesServiceImpl(
     private val exercisesRepo: ExercisesRepo,
     private val imagesService: ImagesService

@@ -16,7 +16,12 @@ abstract class QYogaForm(
     abstract val components: List<Component>
 
     override fun match(element: Element) {
-        element.attr(action.attr) shouldBe action.url
+        withClue("Invalid form action") {
+            withClue("Form has no '${action.attr}' attribute") {
+                element.hasAttr(action.attr) shouldBe true
+            }
+            element.attr(action.attr) shouldBe action.url
+        }
 
         components.forAll {
             withClue("Cannot find component ${it.name} by selector ${it.selector()}") {
