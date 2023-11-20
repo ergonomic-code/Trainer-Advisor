@@ -5,44 +5,24 @@ import io.restassured.builder.RequestSpecBuilder
 import io.restassured.config.LogConfig
 import io.restassured.config.RestAssuredConfig
 import org.junit.jupiter.api.BeforeEach
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.web.server.LocalServerPort
-import org.springframework.test.context.ActiveProfiles
-import org.springframework.test.context.ContextConfiguration
-import pro.qyoga.app.QYogaApp
+import org.springframework.boot.autoconfigure.web.ServerProperties
 import pro.qyoga.fixture.Backgrounds
-import pro.qyoga.fixture.BackgroundsConfig
 import pro.qyoga.infra.db.DbInitializer
-import pro.qyoga.infra.db.TestContainerDbContextInitializer
-import pro.qyoga.infra.test_config.spring.auth.TestPasswordEncoderConfig
-import pro.qyoga.infra.test_config.spring.db.TestDataSourceConfig
+import pro.qyoga.infra.test_config.spring.context
 import javax.sql.DataSource
 
 
-@ContextConfiguration(
-    classes = [
-        QYogaApp::class,
-        BackgroundsConfig::class,
-        TestPasswordEncoderConfig::class,
-        TestDataSourceConfig::class,
-    ],
-    initializers = [TestContainerDbContextInitializer::class]
-)
-@SpringBootTest(
-    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
-)
-@ActiveProfiles("test")
-class QYogaAppBaseTest {
+open class QYogaAppBaseTest {
 
-    @LocalServerPort
-    var port: Int = 0
 
-    @Autowired
-    private lateinit var dataSource: DataSource
+    private val dataSource: DataSource = context.getBean(DataSource::class.java)
 
-    @Autowired
-    protected lateinit var backgrounds: Backgrounds
+    private val port: Int = context.getBean(ServerProperties::class.java).port
+
+    protected val backgrounds: Backgrounds = context.getBean(Backgrounds::class.java)
+
+    inline fun <reified T> getBean(): T =
+        context.getBean(T::class.java)
 
     @BeforeEach
     fun setupRestAssured() {
