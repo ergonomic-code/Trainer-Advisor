@@ -32,6 +32,9 @@ services:
 
     container_name: qg-minio-tests
 
+    environment:
+      MINIO_VOLUMES: /tmp/minio
+
     tmpfs:
       - /tmp
 
@@ -39,4 +42,4 @@ services:
       - "50001:9000"
       - "9020:9020"
 
-    command: server /tmp --console-address ":9020"
+    command: server --console-address ":9020"

@@ -21,5 +21,6 @@ services:
     environment:
       MINIO_ROOT_USER: user
       MINIO_ROOT_PASSWORD: password
+      MINIO_VOLUMES: /var/data/qyoga/minio
 
-    command: server /var/data
+    command: server

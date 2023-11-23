@@ -4,7 +4,7 @@ import org.springframework.context.ApplicationContextInitializer
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.core.env.MapPropertySource
 
-class TestContainerDbContextInitializer :
+class TestInfraContextInitializer :
     ApplicationContextInitializer<ConfigurableApplicationContext> {
 
     override fun initialize(applicationContext: ConfigurableApplicationContext) {
