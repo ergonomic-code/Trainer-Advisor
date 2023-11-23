@@ -21,6 +21,8 @@ services:
     logging:
       driver: journald
     restart: always
+    volumes:
+      - /var/minio/qyoga:/var/data/qyoga/minio
 
   app:
     logging:

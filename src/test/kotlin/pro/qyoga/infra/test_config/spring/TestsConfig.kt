@@ -6,14 +6,14 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import pro.qyoga.app.QYogaApp
 import pro.qyoga.fixture.BackgroundsConfig
-import pro.qyoga.infra.db.TestContainerDbContextInitializer
+import pro.qyoga.infra.db.TestInfraContextInitializer
 import pro.qyoga.infra.test_config.spring.auth.TestPasswordEncoderConfig
 import pro.qyoga.infra.test_config.spring.db.TestDataSourceConfig
 
 
 val context: ConfigurableApplicationContext = SpringApplicationBuilder(TestsConfig::class.java)
     .profiles("test")
-    .initializers(TestContainerDbContextInitializer())
+    .initializers(TestInfraContextInitializer())
     .build()
     .run()
 
