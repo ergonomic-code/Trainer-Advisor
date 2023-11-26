@@ -5,17 +5,16 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer
 import org.springframework.security.web.SecurityFilterChain
 import pro.qyoga.core.users.UsersConfig
 import pro.qyoga.core.users.api.Role
+import pro.qyoga.infra.auth.AuthConfig
 
 
-@Import(UsersConfig::class)
+@Import(AuthConfig::class, UsersConfig::class)
 @Configuration
-@EnableWebSecurity
 class WebSecurityConfig {
 
     @Bean
