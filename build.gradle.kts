@@ -3,9 +3,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
 	id("org.springframework.boot") version "3.2.0"
 	id("io.spring.dependency-management") version "1.1.4"
-	kotlin("jvm") version "1.9.10"
-	kotlin("plugin.spring") version "1.9.10"
-	id("io.gitlab.arturbosch.detekt") version "1.23.3"
+	kotlin("jvm") version "1.9.21"
+	kotlin("plugin.spring") version "1.9.21"
+	id("io.gitlab.arturbosch.detekt") version "1.23.4"
 	id("org.jetbrains.kotlinx.kover") version "0.6.1"
 }
 
@@ -14,7 +14,7 @@ version = "0.0.1-SNAPSHOT"
 
 java {
 	toolchain {
-		languageVersion.set(JavaLanguageVersion.of(17))
+		languageVersion.set(JavaLanguageVersion.of(21))
 	}
 }
 
@@ -51,7 +51,7 @@ dependencies {
 	testImplementation("io.github.ulfs:assertj-jsoup:0.1.4")
 	testImplementation("com.icegreen:greenmail-junit5:2.0.0")
 
-	detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.1")
+	detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.4")
 
 	modules {
 		module("org.codehaus.groovy:groovy") {
@@ -66,7 +66,7 @@ dependencies {
 tasks.withType<KotlinCompile> {
 	kotlinOptions {
 		freeCompilerArgs = listOf("-Xjsr305=strict", "-Xjvm-default=all")
-		jvmTarget = "17"
+		jvmTarget = "21"
 	}
 }
 
