@@ -7,7 +7,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.ui.ExtendedModelMap
 import pro.qyoga.app.therapist.clients.ClientListPageController
-import pro.qyoga.core.clients.api.ClientDto
+import pro.qyoga.core.clients.internal.Client
 import pro.qyoga.infra.web.QYogaAppBaseTest
 
 
@@ -29,7 +29,7 @@ class ClientsListPageControllerTest : QYogaAppBaseTest() {
 
         // Then
         @Suppress("UNCHECKED_CAST")
-        val clients = (model["clients"] as Page<ClientDto>).content
+        val clients = (model["clients"] as Page<Client>).content
         clients shouldHaveSize clientsCount
         clients shouldBeSortedWith Comparator.comparing { it.lastName.lowercase() }
     }

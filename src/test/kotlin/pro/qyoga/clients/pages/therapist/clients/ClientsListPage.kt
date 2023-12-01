@@ -8,12 +8,10 @@ import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 import pro.qyoga.assertions.PageMatcher
 import pro.qyoga.assertions.shouldBeElement
-import pro.qyoga.core.clients.api.ClientDto
-import pro.qyoga.infra.html.FormAction
-import pro.qyoga.infra.html.Input
+import pro.qyoga.assertions.shouldHave
+import pro.qyoga.core.clients.internal.Client
+import pro.qyoga.infra.html.*
 import pro.qyoga.infra.html.Input.Companion.text
-import pro.qyoga.infra.html.QYogaForm
-import pro.qyoga.infra.html.QYogaPage
 
 
 object ClientsListPage : QYogaPage {
@@ -26,13 +24,13 @@ object ClientsListPage : QYogaPage {
 
         val lastName = text("lastName")
         val firstName = text("firstName")
-        val patronymic = text("patronymic")
+        val middleName = text("middleName")
         val phoneNumber = text("phoneNumber")
 
         override val components: List<Input> = listOf(
             lastName,
             firstName,
-            patronymic,
+            middleName,
             phoneNumber
         )
 
@@ -41,6 +39,8 @@ object ClientsListPage : QYogaPage {
     val deleteAction = "$path/delete/{id}"
     val deleteActionPattern = deleteAction.replace("{id}", "(\\d+)").toRegex()
 
+    private val addLink = Link(CreateClientPage, "Добавить клиента")
+    private val addButton = Button("addClient", "Добавить клиента")
 
     private const val CLIENT_ROW = "tbody tr"
 
@@ -48,6 +48,9 @@ object ClientsListPage : QYogaPage {
         element.select("title").text() shouldBe title
 
         element.getElementById(ClientSearchForm.id)!! shouldBeElement ClientSearchForm
+
+        element shouldHave addLink
+        element shouldHave addButton
     }
 
     fun clientId(document: Document, rowIdx: Int): Long {
@@ -57,12 +60,12 @@ object ClientsListPage : QYogaPage {
         return matcher.groups[1]!!.value.toLong()
     }
 
-    fun clientRow(client: ClientDto): PageMatcher = object : PageMatcher {
+    fun clientRow(client: Client): PageMatcher = object : PageMatcher {
         override fun match(element: Element) {
             element.select(CLIENT_ROW).forAny { row ->
                 row.select("td:nth-child(1)").text() shouldBe client.lastName
                 row.select("td:nth-child(2)").text() shouldBe client.firstName
-                row.select("td:nth-child(3)").text() shouldBe client.patronymic
+                row.select("td:nth-child(3)").text() shouldBe client.middleName
                 row.select("td button").attr("hx-delete") shouldMatch deleteActionPattern
             }
         }

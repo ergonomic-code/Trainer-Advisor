@@ -6,21 +6,22 @@ import org.springframework.data.web.PageableDefault
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
-import pro.qyoga.core.clients.api.ClientDto
 import pro.qyoga.core.clients.api.ClientSearchDto
-import pro.qyoga.core.clients.api.ClientsCrudService
+import pro.qyoga.core.clients.api.ClientsService
+import pro.qyoga.core.clients.internal.Client
 
 @Controller
 @RequestMapping("/therapist/clients")
 class ClientListPageController(
-    private val clientsCrudService: ClientsCrudService
+    private val clientsService: ClientsService
 ) {
+
     @GetMapping
     fun getClients(
         @PageableDefault(value = 10, page = 0) pageable: Pageable,
         model: Model
     ): String {
-        val clients = clientsCrudService.findClients(ClientSearchDto.ALL, pageable)
+        val clients = clientsService.findClients(ClientSearchDto.ALL, pageable)
         model.addAllAttributes(toModelAttributes(clients, ClientSearchDto.ALL))
         return "therapist/clients/clients-list"
     }
@@ -31,7 +32,7 @@ class ClientListPageController(
         @PageableDefault(value = 10, page = 0) pageable: Pageable,
         model: Model
     ): String {
-        val clients = clientsCrudService.findClients(searchDto, pageable)
+        val clients = clientsService.findClients(searchDto, pageable)
         model.addAllAttributes(toModelAttributes(clients, searchDto))
         return "therapist/clients/clients-list :: clients"
     }
@@ -39,13 +40,14 @@ class ClientListPageController(
     @DeleteMapping("/delete/{id}")
     @ResponseBody
     fun deleteClient(@PathVariable id: Long) {
-        clientsCrudService.deleteById(id)
+        clientsService.deleteClient(id)
     }
 
-    fun toModelAttributes(clients: Page<ClientDto>, searchDto: ClientSearchDto): Map<String, *> =
+    fun toModelAttributes(clients: Page<Client>, searchDto: ClientSearchDto): Map<String, *> =
         mapOf(
             "searchDto" to searchDto,
             "clients" to clients,
             "pageNumbers" to 1..clients.totalPages
         )
+
 }

@@ -4,8 +4,10 @@ import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.annotation.Version
+import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.Table
-import pro.qyoga.core.clients.api.ClientDto
+import pro.qyoga.core.clients.api.CreateClientRequest
+import pro.qyoga.core.users.api.Therapist
 import java.time.Instant
 import java.time.LocalDate
 
@@ -14,10 +16,14 @@ import java.time.LocalDate
 data class Client(
     val firstName: String,
     val lastName: String,
-    val patronymic: String,
+    val middleName: String?,
     val birthDate: LocalDate,
     val phoneNumber: String,
     val email: String?,
+    val address: String?,
+    val distributionSource: String?,
+    val complaints: String,
+    val therapistId: AggregateReference<Therapist, Long>,
 
     @Id
     val id: Long = 0,
@@ -29,9 +35,18 @@ data class Client(
     val version: Long = 0
 ) {
 
-    constructor(dto: ClientDto) :
-            this(dto.firstName, dto.lastName, dto.patronymic, dto.birthDate, dto.phoneNumber, dto.email)
-
-    fun toDto(): ClientDto = ClientDto(firstName, lastName, patronymic, birthDate, phoneNumber, email, id)
+    constructor(therapistId: Long, createRequest: CreateClientRequest) :
+            this(
+                createRequest.firstName,
+                createRequest.lastName,
+                createRequest.middleName,
+                createRequest.birthDate,
+                createRequest.phoneNumber,
+                createRequest.email,
+                createRequest.address,
+                createRequest.distributionSource,
+                createRequest.complaints,
+                AggregateReference.to(therapistId)
+            )
 
 }

@@ -1,6 +1,6 @@
 package pro.qyoga.fixture.clients
 
-import pro.qyoga.core.clients.api.ClientDto
+import pro.qyoga.core.clients.api.CreateClientRequest
 import pro.qyoga.fixture.data.randomCyrillicWord
 import pro.qyoga.fixture.data.randomEmail
 import pro.qyoga.fixture.data.randomLocalDate
@@ -9,20 +9,32 @@ import java.time.LocalDate
 import kotlin.random.Random
 
 
-object ClientDtoObjectMother {
+object ClientsObjectMother {
 
-    fun createClientDto(
+    fun createClientRequests(count: Int): List<CreateClientRequest> =
+        (1..count).map { createClientRequest() }
+
+    fun createClientRequest(
         firstName: String = randomCyrillicWord(),
         lastName: String = randomCyrillicWord(),
-        patronymic: String = randomCyrillicWord(),
+        middleName: String = randomCyrillicWord(),
         localDate: LocalDate = randomBirthDate(),
         phone: String = randomPhoneNumber(),
-        email: String = randomEmail()
-    ): ClientDto =
-        ClientDto(firstName, lastName, patronymic, localDate, phone, email)
-
-    fun createClientDtos(count: Int): List<ClientDto> =
-        (1..count).map { createClientDto() }
+        email: String = randomEmail(),
+        address: String = randomCyrillicWord(),
+        distributionSource: String = randomCyrillicWord(),
+        complains: String = randomCyrillicWord(),
+    ): CreateClientRequest = CreateClientRequest(
+        firstName,
+        lastName,
+        middleName,
+        localDate,
+        phone,
+        email,
+        address,
+        distributionSource,
+        complains
+    )
 
 }
 

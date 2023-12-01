@@ -8,8 +8,10 @@ import pro.qyoga.assertions.shouldHave
 import pro.qyoga.clients.TherapistClient
 import pro.qyoga.clients.pages.therapist.clients.ClientsListPage
 import pro.qyoga.core.clients.api.ClientSearchDto
-import pro.qyoga.fixture.clients.ClientDtoObjectMother
-import pro.qyoga.fixture.clients.ClientDtoObjectMother.createClientDto
+import pro.qyoga.core.clients.internal.Client
+import pro.qyoga.fixture.clients.ClientsObjectMother
+import pro.qyoga.fixture.clients.ClientsObjectMother.createClientRequest
+import pro.qyoga.fixture.therapists.THE_THERAPIST_ID
 import pro.qyoga.infra.web.QYogaAppBaseTest
 import java.time.LocalDate
 
@@ -34,9 +36,8 @@ class ClientsListPageTest : QYogaAppBaseTest() {
         // Given
         val pageSize = 10
         val therapist = TherapistClient.loginAsTheTherapist()
-        val clients = ClientDtoObjectMother.createClientDtos(pageSize + 1)
-        val firstPage = clients.sortedBy { it.lastName.lowercase() }
-            .take(pageSize)
+        val clients = ClientsObjectMother.createClientRequests(pageSize + 1)
+        val firstPage = clients.sortedBy { it.lastName.lowercase() }.take(pageSize)
         backgrounds.clients.createClients(clients)
 
         // When
@@ -46,7 +47,7 @@ class ClientsListPageTest : QYogaAppBaseTest() {
         document shouldBe ClientsListPage
         ClientsListPage.clientRows(document) shouldHaveSize pageSize
         firstPage.forAll {
-            document shouldHave ClientsListPage.clientRow(it)
+            document shouldHave ClientsListPage.clientRow(Client(THE_THERAPIST_ID, it))
         }
     }
 
@@ -55,26 +56,32 @@ class ClientsListPageTest : QYogaAppBaseTest() {
         // Given
         val firstName = "Иван"
         val lastName = "Иванов"
-        val patronymic = "Иванович"
+        val midddleName = "Иванович"
         val birthDate = LocalDate.of(2000, 1, 12)
         val phonePart = "923-111"
 
-        val fullMatch1 = createClientDto(firstName, lastName, patronymic, birthDate, "+7-$phonePart-22-44")
-        val fullMatch2 = createClientDto(firstName, lastName + "ский", patronymic, birthDate, "+7-$phonePart-22-33")
-        val nonMatchByLastName = createClientDto(firstName, lastName = lastName.reversed())
-        val nonMatchByPatronymic = createClientDto(firstName, lastName, patronymic = patronymic.reversed())
-        val nonMatchByPhone = createClientDto(firstName, lastName, patronymic, birthDate, phone = phonePart.reversed())
+        val fullMatch1 =
+            createClientRequest(firstName, lastName, midddleName, birthDate, "+7-$phonePart-22-44")
+        val fullMatch2 =
+            createClientRequest(firstName, lastName + "ский", midddleName, birthDate, "+7-$phonePart-22-33")
+        val nonMatchByLastName =
+            createClientRequest(firstName, lastName = lastName.reversed())
+        val nonMatchByMiddleName =
+            createClientRequest(firstName, lastName, middleName = midddleName.reversed())
+        val nonMatchByPhone =
+            createClientRequest(firstName, lastName, midddleName, birthDate, phone = phonePart.reversed())
+
         backgrounds.clients.createClients(
             listOf(
                 fullMatch1,
                 fullMatch2,
                 nonMatchByLastName,
-                nonMatchByPatronymic,
+                nonMatchByMiddleName,
                 nonMatchByPhone
             )
         )
 
-        val searchForm = ClientSearchDto(firstName, lastName, patronymic, phonePart)
+        val searchForm = ClientSearchDto(firstName, lastName, midddleName, phonePart)
 
         val therapist = TherapistClient.loginAsTheTherapist()
 
@@ -83,8 +90,8 @@ class ClientsListPageTest : QYogaAppBaseTest() {
 
         // Then
         ClientsListPage.clientRows(document) shouldHaveSize 2
-        document shouldHave ClientsListPage.clientRow(fullMatch1)
-        document shouldHave ClientsListPage.clientRow(fullMatch2)
+        document shouldHave ClientsListPage.clientRow(Client(THE_THERAPIST_ID, fullMatch1))
+        document shouldHave ClientsListPage.clientRow(Client(THE_THERAPIST_ID, fullMatch2))
     }
 
     @Test
