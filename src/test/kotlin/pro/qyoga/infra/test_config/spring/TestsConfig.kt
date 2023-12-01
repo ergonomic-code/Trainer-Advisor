@@ -22,6 +22,7 @@ val context: ConfigurableApplicationContext = SpringApplicationBuilder(TestsConf
     BackgroundsConfig::class,
     TestPasswordEncoderConfig::class,
     TestDataSourceConfig::class,
+    FailingController::class
 )
 @Configuration
 class TestsConfig
