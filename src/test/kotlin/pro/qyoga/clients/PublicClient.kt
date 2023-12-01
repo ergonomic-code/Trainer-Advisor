@@ -26,4 +26,28 @@ object PublicClient {
         }
     }
 
+    fun getFailPage(): Document {
+        return Given {
+            this
+        } When {
+            get("/fail")
+        } Then {
+            statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
+        } Extract {
+            Jsoup.parse(body().asString())
+        }
+    }
+
+    fun getNotFoundPage(): Document {
+        return Given {
+            this
+        } When {
+            get("/not-found")
+        } Then {
+            statusCode(HttpStatus.NOT_FOUND.value())
+        } Extract {
+            Jsoup.parse(body().asString())
+        }
+    }
+
 }
