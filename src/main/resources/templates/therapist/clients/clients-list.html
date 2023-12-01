@@ -49,12 +49,12 @@
                                            type="text">
                                 </div>
 
-                                <div class="mt-3 mb-3 w-25" id="patronymicFilter">
+                                <div class="mt-3 mb-3 w-25" id="middleNameFilter">
                                     <input aria-describedby="basic-addon2"
                                            class="form-control"
                                            placeholder="Отчество"
                                            style="border-color:inherit"
-                                           th:field="${searchDto.patronymic}"
+                                           th:field="${searchDto.middleName}"
                                            type="text">
                                 </div>
 
@@ -87,7 +87,7 @@
                                 <tr th:each="client : ${clients.content}">
                                     <td th:text="${client.lastName}"></td>
                                     <td th:text="${client.firstName}"></td>
-                                    <td th:text="${client.patronymic}"></td>
+                                    <td th:text="${client.middleName}"></td>
                                     <td>
                                         <button class="btn btn-danger" hx-swap="outerHTML swap:1s"
                                                 hx-target="closest tr"
@@ -143,6 +143,14 @@
                                         </li>
                                     </div>
                                 </ul>
+
+                                <div class="input-group">
+                                    <a href="/therapist/clients/create" id="newClientLink">
+                                        <button class="btn btn-secondary" name="addClient" type="button">
+                                            Добавить клиента
+                                        </button>
+                                    </a>
+                                </div>
                             </div>
                         </div>
 

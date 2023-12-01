@@ -2,6 +2,7 @@ package pro.qyoga.infra.html
 
 import io.kotest.assertions.withClue
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldBeEqualIgnoringCase
 import org.jsoup.nodes.Element
 import pro.qyoga.assertions.PageMatcher
 
@@ -36,7 +37,7 @@ data class FormAction(
 
         if (method != null) {
             withClue("Form has invalid method") {
-                element.attr("method") shouldBe method
+                element.attr("method") shouldBeEqualIgnoringCase method
             }
         }
     }

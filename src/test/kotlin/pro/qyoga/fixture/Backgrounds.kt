@@ -1,13 +1,16 @@
 package pro.qyoga.fixture
 
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-import pro.qyoga.core.clients.api.ClientDto
-import pro.qyoga.core.clients.api.ClientsCrudService
+import pro.qyoga.core.clients.api.ClientSearchDto
+import pro.qyoga.core.clients.api.ClientsService
+import pro.qyoga.core.clients.api.CreateClientRequest
+import pro.qyoga.core.clients.internal.Client
 import pro.qyoga.core.programs.exercises.api.CreateExerciseRequest
 import pro.qyoga.core.programs.exercises.api.ExerciseDto
 import pro.qyoga.core.programs.exercises.api.ExerciseSearchDto
 import pro.qyoga.core.programs.exercises.api.ExercisesService
-import pro.qyoga.fixture.clients.ClientDtoObjectMother
+import pro.qyoga.fixture.clients.ClientsObjectMother
 import pro.qyoga.fixture.therapists.THE_THERAPIST_ID
 
 
@@ -17,15 +20,19 @@ data class Backgrounds(
 )
 
 class ClientsBackgrounds(
-    private val clientsCrudService: ClientsCrudService
+    private val clientsService: ClientsService
 ) {
 
-    fun createClients(clients: List<ClientDto>) {
-        clientsCrudService.saveAll(clients)
+    fun createClients(clients: List<CreateClientRequest>, therapistId: Long = THE_THERAPIST_ID) {
+        clientsService.createClients(therapistId, clients)
     }
 
-    fun createClients(count: Int) {
-        clientsCrudService.saveAll(ClientDtoObjectMother.createClientDtos(count))
+    fun createClients(count: Int, therapistId: Long = THE_THERAPIST_ID) {
+        clientsService.createClients(therapistId, ClientsObjectMother.createClientRequests(count))
+    }
+
+    fun getAllClients(): Page<Client> {
+        return clientsService.findClients(ClientSearchDto.ALL, Pageable.ofSize(Int.MAX_VALUE))
     }
 
 }

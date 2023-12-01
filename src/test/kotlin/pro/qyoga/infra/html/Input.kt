@@ -38,6 +38,12 @@ data class Input(
         fun number(name: String) =
             Input(name, "number")
 
+        fun date(name: String) =
+            Input(name, "date")
+
+        fun tel(name: String) =
+            Input(name, "tel")
+
         fun file(name: String, alpineJs: Boolean = false) =
             Input(name, "file", alpineJs)
 

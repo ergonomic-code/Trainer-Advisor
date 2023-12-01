@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div th:replace="~{fragments/header.html}"></div>
+    <title>Новый клиент</title>
+    <link href="/styles/therapist/clients/normalize.css" rel="stylesheet">
+    <link href="/styles/therapist/clients/style.css" rel="stylesheet">
+</head>
+
+<body class="sb-nav-fixed">
+
+<div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
+
+<div id="layoutSidenav">
+
+    <div th:replace="~{fragments/leftNavPanel :: leftNavPanel}"></div>
+
+    <div id="layoutSidenav_content">
+        <main>
+
+            <section class="client__card container">
+                <h1 class="mt-4">Новый клиент</h1>
+                <div class="client__container">
+                    <div class="client__form">
+                        <form action="/therapist/clients/create" class="form__client-card" id="createClientForm"
+                              method="post">
+                            <div class="form__client-name">
+                                <label class="form__label" for="ClientFirstName">Клиент</label>
+                                <div class="input__container">
+                                    <input class="form__input" id="ClientFirstName" name="firstName" placeholder="Имя"
+                                           required type="text">
+                                    <input class="form__input" id="ClientLastName" name="lastName" placeholder="Фамилия"
+                                           required type="text">
+                                    <input class="form__input" id="ClientMiddleName" name="middleName"
+                                           placeholder="Отчество"
+                                           type="text" value="">
+                                    <input class="form__input" id="ClientEmail" name="email"
+                                           placeholder="example@mail.ru" type="email" value="">
+                                    <input class="form__input" id="ClientPhone" name="phoneNumber"
+                                           placeholder="+7 (999) 000-0000"
+                                           required type="tel">
+                                    <input class="form__date" id="ClientDate" name="birthDate"
+                                           pattern="\d{2}\.\d{2}\.\d{4}" placeholder="дд.мм.гггг"
+                                           required type="text">
+                                    <input class="form__adress" id="ClientAddress"
+                                           name="address" placeholder="Адрес (город, улица, дом, квартира)"
+                                           type="text" value="">
+                                </div>
+                            </div>
+                            <div class="textarea__container">
+                                <label class="form__label" for="ClientComplaints">Жалобы</label>
+                                <textarea class="form__textarea" cols="20" id="ClientComplaints" name="complaints"
+                                          placeholder="Введите данные"
+                                          required rows="10"></textarea>
+                            </div>
+                            <div class="textarea__container">
+                                <label class="form__label" for="ClientFeatures">Особенности</label>
+                                <textarea class="form__textarea form__special" cols="20" disabled id="ClientFeatures"
+                                          placeholder="Введите данные" rows="1"></textarea>
+                            </div>
+                            <div class="textarea__container">
+                                <label class="form__label" for="howYourKnown">Как вы о нас узнали?</label>
+                                <textarea class="form__textarea" cols="20" id="howYourKnown" name="distributionSource"
+                                          placeholder="Введите данные" rows="5"></textarea>
+                            </div>
+
+                            <div class="client__btn-right">
+                                <button class="client__btn-save btn-reset">Сохранить</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <footer class="py-4 bg-light mt-auto" th:insert="~{fragments/footer.html :: footer}"></footer>
+    </div>
+</div>
+
+</body>
+</html>

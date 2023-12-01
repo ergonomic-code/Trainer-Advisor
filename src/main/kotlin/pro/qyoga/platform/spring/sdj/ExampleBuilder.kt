@@ -9,6 +9,7 @@ package pro.qyoga.platform.spring.sdj
 
 import org.springframework.data.domain.Example
 import org.springframework.data.domain.ExampleMatcher
+import org.springframework.data.jdbc.core.mapping.AggregateReference
 import java.time.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty0
@@ -103,6 +104,9 @@ private fun defaultValue(type: KClass<*>): Any {
         type == LocalDate::class -> LocalDate.MIN
         type == LocalDateTime::class -> LocalDateTime.MIN
         type == OffsetDateTime::class -> OffsetDateTime.MIN
+
+        type == AggregateReference::class -> AggregateReference.to<Any, Long>(0)
+
         else -> throw IllegalArgumentException("Unknown type: $type")
     }
 }

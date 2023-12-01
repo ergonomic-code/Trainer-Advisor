@@ -27,3 +27,5 @@ infix fun Element.shouldHave(component: Component) {
 }
 
 infix fun Document.shouldHave(pageMatcher: PageMatcher) = pageMatcher.match(this)
+
+infix fun Element.shouldHaveAttr(pageMatcher: PageMatcher) = pageMatcher.match(this)
