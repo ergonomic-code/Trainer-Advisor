@@ -6,7 +6,7 @@ ALTER TABLE clients
     ADD COLUMN complaints   VARCHAR NOT NULL                       DEFAULT '',
     ADD COLUMN therapist_id BIGINT  NOT NULL REFERENCES therapists DEFAULT 2;
 
-ALTER TABLE qyoga.public.clients
+ALTER TABLE clients
     ALTER COLUMN middle_name DROP NOT NULL,
     DROP CONSTRAINT clients_email_key;
 
