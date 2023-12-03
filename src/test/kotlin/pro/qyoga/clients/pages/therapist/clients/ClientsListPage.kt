@@ -36,6 +36,9 @@ object ClientsListPage : QYogaPage {
 
     }
 
+    val updateAction = "$path/{id}"
+    val updateActionPattern = updateAction.replace("{id}", "(\\d+)").toRegex()
+
     val deleteAction = "$path/delete/{id}"
     val deleteActionPattern = deleteAction.replace("{id}", "(\\d+)").toRegex()
 
@@ -63,10 +66,9 @@ object ClientsListPage : QYogaPage {
     fun clientRow(client: Client): PageMatcher = object : PageMatcher {
         override fun match(element: Element) {
             element.select(CLIENT_ROW).forAny { row ->
-                row.select("td:nth-child(1)").text() shouldBe client.lastName
-                row.select("td:nth-child(2)").text() shouldBe client.firstName
-                row.select("td:nth-child(3)").text() shouldBe client.middleName
-                row.select("td button").attr("hx-delete") shouldMatch deleteActionPattern
+                row.select("td:nth-child(1)").text() shouldBe client.fullName()
+                row.select("td a[name=update]").attr("href") shouldMatch updateActionPattern
+                row.select("td button[name=delete]").attr("hx-delete") shouldMatch deleteActionPattern
             }
         }
     }

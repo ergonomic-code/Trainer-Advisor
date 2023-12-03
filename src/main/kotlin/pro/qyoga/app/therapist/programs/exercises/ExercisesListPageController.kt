@@ -12,6 +12,8 @@ import pro.qyoga.core.programs.exercises.api.ExerciseSearchDto
 import pro.qyoga.core.programs.exercises.api.ExerciseType
 import pro.qyoga.core.programs.exercises.api.ExercisesService
 
+private const val EXERCISES = "exercises"
+
 @Controller
 @RequestMapping("/therapist/exercises")
 class ExercisesListPageController(
@@ -43,8 +45,15 @@ class ExercisesListPageController(
         mapOf(
             "searchDto" to ExerciseSearchDto(),
             "types" to ExerciseType.entries,
-            "exercises" to exercises,
+            EXERCISES to exercises,
             "pageNumbers" to (1..exercises.totalPages).toList()
         )
+
+    companion object {
+
+        @Suppress("UNCHECKED_CAST")
+        fun getExercises(model: Model): Page<ExerciseDto> = model.getAttribute(EXERCISES) as Page<ExerciseDto>
+
+    }
 
 }

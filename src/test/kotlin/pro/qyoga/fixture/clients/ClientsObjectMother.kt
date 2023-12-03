@@ -1,6 +1,6 @@
 package pro.qyoga.fixture.clients
 
-import pro.qyoga.core.clients.api.CreateClientRequest
+import pro.qyoga.core.clients.api.ClientCardDto
 import pro.qyoga.fixture.data.randomCyrillicWord
 import pro.qyoga.fixture.data.randomEmail
 import pro.qyoga.fixture.data.randomLocalDate
@@ -11,10 +11,10 @@ import kotlin.random.Random
 
 object ClientsObjectMother {
 
-    fun createClientRequests(count: Int): List<CreateClientRequest> =
-        (1..count).map { createClientRequest() }
+    fun createClientCardDtos(count: Int): List<ClientCardDto> =
+        (1..count).map { createClientCardDto() }
 
-    fun createClientRequest(
+    fun createClientCardDto(
         firstName: String = randomCyrillicWord(),
         lastName: String = randomCyrillicWord(),
         middleName: String = randomCyrillicWord(),
@@ -24,7 +24,7 @@ object ClientsObjectMother {
         address: String = randomCyrillicWord(),
         distributionSource: String = randomCyrillicWord(),
         complains: String = randomCyrillicWord(),
-    ): CreateClientRequest = CreateClientRequest(
+    ): ClientCardDto = ClientCardDto(
         firstName,
         lastName,
         middleName,

@@ -30,4 +30,8 @@
         <appender-ref ref="CONSOLE"/>
     </logger>
 
+    <logger name="org.thymeleaf" level="info" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
 </configuration>

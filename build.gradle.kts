@@ -32,6 +32,7 @@ dependencies {
 	implementation("org.flywaydb:flyway-core")
 	implementation("jakarta.validation:jakarta.validation-api:3.0.2")
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+	implementation("org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.4.RELEASE")
 	implementation("org.postgresql:postgresql:42.6.0")
 
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")

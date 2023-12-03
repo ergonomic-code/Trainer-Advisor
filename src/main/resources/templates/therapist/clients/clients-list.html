@@ -15,7 +15,7 @@
 
     <div id="layoutSidenav_content">
         <main>
-            <div class="container-fluid px-4">
+            <div class="container px-4">
                 <h1 class="mt-4">Клиенты</h1>
 
                 <div class="card mb-4">
@@ -85,13 +85,18 @@
                                 </thead>
                                 <tbody id="clients-list">
                                 <tr th:each="client : ${clients.content}">
-                                    <td th:text="${client.lastName}"></td>
-                                    <td th:text="${client.firstName}"></td>
-                                    <td th:text="${client.middleName}"></td>
+                                    <td class="w-75" th:text="${client.fullName()}"></td>
+                                    <td>
+                                        <a name="update" th:attr="href=@{/therapist/clients/{id} (id=${client.id})}">
+                                            <button class="btn btn-link">
+                                                Изменить
+                                            </button>
+                                        </a>
+                                    </td>
                                     <td>
                                         <button class="btn btn-danger" hx-swap="outerHTML swap:1s"
                                                 hx-target="closest tr"
-                                                id="btnDeleteClient"
+                                                name="delete"
                                                 th:attr="hx-delete=@{/therapist/clients/delete/{id} (id=${client.id})}">
                                             Удалить
                                         </button>
