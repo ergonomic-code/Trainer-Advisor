@@ -3,12 +3,14 @@ package pro.qyoga.app.therapist.clients
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import pro.qyoga.core.clients.api.ClientSearchDto
 import pro.qyoga.core.clients.api.ClientsService
 import pro.qyoga.core.clients.internal.Client
+import pro.qyoga.core.users.internal.QyogaUserDetails
 
 private const val CLIENTS = "clients"
 
@@ -20,21 +22,24 @@ class ClientListPageController(
 
     @GetMapping
     fun getClients(
+        @AuthenticationPrincipal principal: QyogaUserDetails,
         @PageableDefault(value = 10, page = 0) pageable: Pageable,
         model: Model
     ): String {
-        val clients = clientsService.findClients(ClientSearchDto.ALL, pageable)
-        model.addAllAttributes(toModelAttributes(clients, ClientSearchDto.ALL))
+        val searchDto = ClientSearchDto.ALL
+        val clients = clientsService.findClients(principal.id, searchDto, pageable)
+        model.addAllAttributes(toModelAttributes(clients, searchDto))
         return "therapist/clients/clients-list"
     }
 
     @GetMapping("/search")
     fun getClientsFiltered(
+        @AuthenticationPrincipal principal: QyogaUserDetails,
         searchDto: ClientSearchDto,
         @PageableDefault(value = 10, page = 0) pageable: Pageable,
         model: Model
     ): String {
-        val clients = clientsService.findClients(searchDto, pageable)
+        val clients = clientsService.findClients(principal.id, searchDto, pageable)
         model.addAllAttributes(toModelAttributes(clients, searchDto))
         return "therapist/clients/clients-list :: clients"
     }

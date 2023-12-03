@@ -13,7 +13,7 @@ interface ClientsService {
 
     fun findClient(id: Long): Client?
 
-    fun findClients(searchDto: ClientSearchDto, page: Pageable): Page<Client>
+    fun findClients(therapistId: Long, searchDto: ClientSearchDto, pageRequest: Pageable): Page<Client>
 
     fun deleteClient(id: Long)
 
