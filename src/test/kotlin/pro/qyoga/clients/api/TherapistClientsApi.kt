@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus
 import pro.qyoga.clients.pages.therapist.clients.ClientsListPage
 import pro.qyoga.clients.pages.therapist.clients.CreateClientPage
 import pro.qyoga.clients.pages.therapist.clients.EditClientPage
-import pro.qyoga.clients.pages.therapist.clients.editClientPath
 import pro.qyoga.core.clients.api.ClientCardDto
 import pro.qyoga.core.clients.api.ClientSearchDto
 import pro.qyoga.infra.rest_assured.addResponseLogging
@@ -95,7 +94,7 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
             formParam(editClientPage.clientForm.distributionSource.name, request.distributionSource)
             formParam(editClientPage.clientForm.complaints.name, request.complaints)
         } When {
-            post(editClientPath)
+            post(editClientPage.path)
         } Then {
             statusCode(HttpStatus.FOUND.value())
             header("Location", endsWith(ClientsListPage.path))

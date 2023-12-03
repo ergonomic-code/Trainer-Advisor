@@ -42,22 +42,22 @@ abstract class ClientPage(action: FormAction) : QYogaPage {
 
 }
 
-val createClientPath = "/therapist/clients/create"
+private const val CREATE_CLIENT_PATH = "/therapist/clients/create"
 
-object CreateClientPage : ClientPage(FormAction.classicPost(createClientPath)) {
+object CreateClientPage : ClientPage(FormAction.classicPost(CREATE_CLIENT_PATH)) {
 
-    override val path = createClientPath
+    override val path = CREATE_CLIENT_PATH
 
     override val title = "Новый клиент"
 
 }
 
-val editClientPath = "/therapist/clients/{id}"
+private const val EDIT_CLIENT_PATH = "/therapist/clients/{id}"
 
 class EditClientPage(clientId: Long) :
-    ClientPage(FormAction.classicPost(editClientPath.replace("{id}", clientId.toString()))) {
+    ClientPage(FormAction.classicPost(EDIT_CLIENT_PATH.replace("{id}", clientId.toString()))) {
 
-    override val path = createClientPath
+    override val path = EDIT_CLIENT_PATH
 
     override val title = ".*"
 

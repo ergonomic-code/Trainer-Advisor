@@ -1,5 +1,6 @@
 package pro.qyoga.app.auth
 
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
@@ -20,7 +21,8 @@ import javax.sql.DataSource
 @Import(AuthConfig::class, UsersConfig::class)
 @Configuration
 class WebSecurityConfig(
-    private val dataSource: DataSource
+    private val dataSource: DataSource,
+    @Value("\${trainer-advisor.auth.remember-me-time:9d}") private val rememberMeTime: Duration
 ) {
 
     @Bean
@@ -46,7 +48,7 @@ class WebSecurityConfig(
                 rememberMeConfigurer
                     .alwaysRemember(true)
                     .tokenRepository(tokenRepository())
-                    .tokenValiditySeconds(Duration.ofDays(9).toSeconds().toInt())
+                    .tokenValiditySeconds(rememberMeTime.toSeconds().toInt())
             }
         return http.build()
     }

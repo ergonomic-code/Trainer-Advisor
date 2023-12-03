@@ -45,3 +45,5 @@ fun randomEmail(): String =
 
 fun randomFileName(extension: () -> String = { randomLatinWord(1, 3) }) =
     randomLatinWord(3, 9) + "." + extension()
+
+fun randomPassword() = randomLatinWord(minLength = 8)

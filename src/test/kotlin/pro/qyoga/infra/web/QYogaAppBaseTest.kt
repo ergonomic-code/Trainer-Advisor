@@ -7,7 +7,7 @@ import io.restassured.config.RestAssuredConfig
 import io.restassured.http.ContentType
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.boot.autoconfigure.web.ServerProperties
-import pro.qyoga.fixture.Backgrounds
+import pro.qyoga.fixture.backgrounds.Backgrounds
 import pro.qyoga.infra.db.DbInitializer
 import pro.qyoga.infra.test_config.spring.context
 import javax.sql.DataSource

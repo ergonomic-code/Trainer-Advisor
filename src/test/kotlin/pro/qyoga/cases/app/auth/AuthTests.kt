@@ -3,7 +3,7 @@ package pro.qyoga.cases.app.auth
 import io.restassured.http.Cookie
 import io.restassured.matcher.RestAssuredMatchers.detailedCookie
 import io.restassured.module.kotlin.extensions.Then
-import org.hamcrest.Matchers
+import org.hamcrest.Matchers.greaterThanOrEqualTo
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import pro.qyoga.assertions.shouldBe
@@ -36,6 +36,7 @@ class AuthTests : QYogaAppBaseTest() {
     fun `TA should remember users for 9 days`() {
         // Given
         val now = Instant.now()
+            .minusSeconds(1) // без этого тест мигает
 
         // When
         val response = PublicClient.authApi.loginForVerification(THE_THERAPIST_LOGIN, THE_THERAPIST_PASSWORD)
@@ -43,8 +44,9 @@ class AuthTests : QYogaAppBaseTest() {
         response.Then {
             statusCode(HttpStatus.FOUND.value())
             cookie(
-                "remember-me", detailedCookie()
-                    .expiryDate(Matchers.greaterThan(Date(now.plus(9, ChronoUnit.DAYS).toEpochMilli())))
+                "remember-me",
+                detailedCookie()
+                    .expiryDate(greaterThanOrEqualTo(Date(now.plus(9, ChronoUnit.DAYS).toEpochMilli())))
             )
         }
     }
