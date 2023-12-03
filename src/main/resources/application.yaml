@@ -25,6 +25,12 @@ spring:
           starttls:
             enable: true
 
+server:
+  tomcat:
+    remoteip:
+      protocol-header: X-Forwarded-Proto
+      remote-ip-header: X-Forwarded-For
+
 qyoga:
   admin:
     email: me@azhidkov.pro

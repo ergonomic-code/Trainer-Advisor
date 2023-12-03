@@ -32,8 +32,13 @@ object AuthApi {
         return cookie
     }
 
-    fun loginForVerification(login: String, password: String): Response {
+    fun loginForVerification(
+        login: String,
+        password: String,
+        headers: Map<String, *> = emptyMap<String, Any>()
+    ): Response {
         return Given {
+            headers(headers)
             formParam(LoginPage.LoginForm.username.name, login)
             formParam(LoginPage.LoginForm.password.name, password)
         } When {

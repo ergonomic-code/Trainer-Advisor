@@ -62,6 +62,7 @@
         update_cache: yes
 
     - name: Configure nginx
+      tags: configure-nginx
       template:
         src: files/nginx.conf.j2
         dest: /etc/nginx/conf.d/backend.conf
@@ -170,6 +171,7 @@
 
   handlers:
     - name: Restart Nginx
+      tags: configure-nginx
       service:
         name: nginx
         state: reloaded
