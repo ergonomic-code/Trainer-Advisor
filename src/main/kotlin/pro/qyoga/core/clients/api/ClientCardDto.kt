@@ -3,7 +3,7 @@ package pro.qyoga.core.clients.api
 import org.springframework.format.annotation.DateTimeFormat
 import java.time.LocalDate
 
-data class CreateClientRequest(
+data class ClientCardDto(
     val firstName: String,
     val lastName: String,
     val middleName: String?,

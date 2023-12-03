@@ -7,7 +7,11 @@ import pro.qyoga.core.clients.internal.Client
 
 interface ClientsService {
 
-    fun createClients(therapistId: Long, createClientRequests: List<CreateClientRequest>): Iterable<Client>
+    fun createClients(therapistId: Long, clientCardDtos: List<ClientCardDto>): Iterable<Client>
+
+    fun editClient(clientId: Long, clientCardDto: ClientCardDto): Client
+
+    fun findClient(id: Long): Client?
 
     fun findClients(searchDto: ClientSearchDto, page: Pageable): Page<Client>
 

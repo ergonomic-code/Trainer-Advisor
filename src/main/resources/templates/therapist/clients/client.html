@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <div th:replace="~{fragments/header.html}"></div>
-    <title>Новый клиент</title>
+    <title th:text="${client?.fullName() ?: 'Новый клиент'}">Новый клиент</title>
     <link href="/styles/therapist/clients/normalize.css" rel="stylesheet">
     <link href="/styles/therapist/clients/style.css" rel="stylesheet">
 </head>
@@ -19,39 +19,40 @@
         <main>
 
             <section class="client__card container">
-                <h1 class="mt-4">Новый клиент</h1>
+                <h1 class="mt-4" th:text="${client?.fullName() ?: 'Новый клиент'}">Новый клиент</h1>
                 <div class="client__container">
                     <div class="client__form">
-                        <form action="/therapist/clients/create" class="form__client-card" id="createClientForm"
-                              method="post">
+                        <form class="form__client-card" id="createClientForm" method="post" th:action="${formAction}">
                             <div class="form__client-name">
                                 <label class="form__label" for="ClientFirstName">Клиент</label>
                                 <div class="input__container">
                                     <input class="form__input" id="ClientFirstName" name="firstName" placeholder="Имя"
-                                           required type="text">
+                                           required th:value="${client?.firstName ?: ''}" type="text">
                                     <input class="form__input" id="ClientLastName" name="lastName" placeholder="Фамилия"
-                                           required type="text">
+                                           required th:value="${client?.lastName ?: ''}" type="text">
                                     <input class="form__input" id="ClientMiddleName" name="middleName"
                                            placeholder="Отчество"
-                                           type="text" value="">
+                                           th:value="${client?.middleName ?: ''}" type="text" value="">
                                     <input class="form__input" id="ClientEmail" name="email"
-                                           placeholder="example@mail.ru" type="email" value="">
+                                           placeholder="example@mail.ru" th:value="${client?.email ?: ''}" type="email"
+                                           value="">
                                     <input class="form__input" id="ClientPhone" name="phoneNumber"
                                            placeholder="+7 (999) 000-0000"
-                                           required type="tel">
+                                           required th:value="${client?.phoneNumber ?: ''}" type="tel">
                                     <input class="form__date" id="ClientDate" name="birthDate"
                                            pattern="\d{2}\.\d{2}\.\d{4}" placeholder="дд.мм.гггг"
-                                           required type="text">
+                                           required th:value="${client?.birthDate != null} ? ${#temporals.format(client.birthDate, 'dd.MM.yyyy')}"
+                                           type="text">
                                     <input class="form__adress" id="ClientAddress"
                                            name="address" placeholder="Адрес (город, улица, дом, квартира)"
-                                           type="text" value="">
+                                           th:value="${client?.address ?: ''}" type="text" value="">
                                 </div>
                             </div>
                             <div class="textarea__container">
                                 <label class="form__label" for="ClientComplaints">Жалобы</label>
                                 <textarea class="form__textarea" cols="20" id="ClientComplaints" name="complaints"
                                           placeholder="Введите данные"
-                                          required rows="10"></textarea>
+                                          required rows="10" th:text="${client?.complaints ?: ''}"></textarea>
                             </div>
                             <div class="textarea__container">
                                 <label class="form__label" for="ClientFeatures">Особенности</label>
@@ -61,7 +62,8 @@
                             <div class="textarea__container">
                                 <label class="form__label" for="howYourKnown">Как вы о нас узнали?</label>
                                 <textarea class="form__textarea" cols="20" id="howYourKnown" name="distributionSource"
-                                          placeholder="Введите данные" rows="5"></textarea>
+                                          placeholder="Введите данные" rows="5"
+                                          th:text="${client?.distributionSource ?: ''}"></textarea>
                             </div>
 
                             <div class="client__btn-right">

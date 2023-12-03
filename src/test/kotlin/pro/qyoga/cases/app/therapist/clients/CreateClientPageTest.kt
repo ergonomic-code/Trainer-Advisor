@@ -9,7 +9,7 @@ import pro.qyoga.clients.pages.therapist.clients.CreateClientPage
 import pro.qyoga.fixture.clients.ClientsObjectMother
 import pro.qyoga.infra.web.QYogaAppBaseTest
 
-class CreateClientTest : QYogaAppBaseTest() {
+class CreateClientPageTest : QYogaAppBaseTest() {
 
     @Test
     fun `Create client page should be rendered correctly`() {
@@ -27,7 +27,7 @@ class CreateClientTest : QYogaAppBaseTest() {
     fun `After creating a client, it should appear in the client table`() {
         // Given
         val therapist = TherapistClient.loginAsTheTherapist()
-        val newClientRequest = ClientsObjectMother.createClientRequest()
+        val newClientRequest = ClientsObjectMother.createClientCardDto()
 
         // When
         therapist.clients.createClient(newClientRequest)

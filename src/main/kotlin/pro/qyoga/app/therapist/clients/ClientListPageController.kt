@@ -10,6 +10,8 @@ import pro.qyoga.core.clients.api.ClientSearchDto
 import pro.qyoga.core.clients.api.ClientsService
 import pro.qyoga.core.clients.internal.Client
 
+private const val CLIENTS = "clients"
+
 @Controller
 @RequestMapping("/therapist/clients")
 class ClientListPageController(
@@ -46,8 +48,14 @@ class ClientListPageController(
     fun toModelAttributes(clients: Page<Client>, searchDto: ClientSearchDto): Map<String, *> =
         mapOf(
             "searchDto" to searchDto,
-            "clients" to clients,
+            CLIENTS to clients,
             "pageNumbers" to 1..clients.totalPages
         )
 
+    companion object {
+
+        @Suppress("UNCHECKED_CAST")
+        fun getClients(model: Model) = model.getAttribute(CLIENTS) as Page<Client>
+
+    }
 }
