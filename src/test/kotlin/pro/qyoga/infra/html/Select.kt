@@ -6,11 +6,21 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import org.jsoup.nodes.Element
 import org.jsoup.parser.Tag
+import pro.qyoga.platform.kotlin.LabeledEnum
 
 data class Option(
     val value: String,
     val title: String
-)
+) {
+
+    companion object {
+
+        fun of(enumValue: LabeledEnum): Option =
+            Option(enumValue.name, enumValue.label)
+
+    }
+
+}
 
 data class Select(
     override val name: String,

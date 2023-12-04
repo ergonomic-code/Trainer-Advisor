@@ -12,6 +12,11 @@ data class ClientCardDto(
     val phoneNumber: String,
     val email: String?,
     val address: String?,
-    val distributionSource: String?,
+    val distributionSourceType: DistributionSourceType?,
+    val distributionSourceComment: String?,
     val complaints: String,
-)
+) {
+
+    val distributionSource = distributionSourceType?.let { DistributionSource(it, distributionSourceComment) }
+
+}

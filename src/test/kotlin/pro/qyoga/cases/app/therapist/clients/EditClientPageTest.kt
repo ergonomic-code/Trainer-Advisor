@@ -59,8 +59,9 @@ class EditClientPageTest : QYogaAppBaseTest() {
         therapist.clients.editClient(client.id, editedClientCardDto)
 
         // Then
-        backgrounds.clients.getAllClients().content.forNone { it shouldMatch newClientCardDto }
-        backgrounds.clients.getAllClients().content.forAny { it shouldMatch editedClientCardDto }
+        val clients = backgrounds.clients.getAllClients().content
+        clients.forNone { it shouldMatch newClientCardDto }
+        clients.forAny { it shouldMatch editedClientCardDto }
     }
 
 }

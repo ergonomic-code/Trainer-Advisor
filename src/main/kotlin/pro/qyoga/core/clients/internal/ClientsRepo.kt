@@ -8,6 +8,7 @@ import org.springframework.data.jdbc.repository.support.SimpleJdbcRepository
 import org.springframework.data.mapping.model.BasicPersistentEntity
 import org.springframework.data.util.TypeInformation
 import org.springframework.stereotype.Repository
+import pro.qyoga.core.clients.api.Client
 import pro.qyoga.core.clients.api.ClientSearchDto
 import pro.qyoga.platform.spring.sdj.query
 
