@@ -6,6 +6,8 @@ import pro.qyoga.assertions.shouldBe
 import pro.qyoga.assertions.shouldMatch
 import pro.qyoga.clients.TherapistClient
 import pro.qyoga.clients.pages.therapist.clients.CreateClientPage
+import pro.qyoga.core.clients.api.DistributionSource
+import pro.qyoga.core.clients.api.DistributionSourceType
 import pro.qyoga.fixture.clients.ClientsObjectMother
 import pro.qyoga.infra.web.QYogaAppBaseTest
 
@@ -28,6 +30,22 @@ class CreateClientPageTest : QYogaAppBaseTest() {
         // Given
         val therapist = TherapistClient.loginAsTheTherapist()
         val newClientRequest = ClientsObjectMother.createClientCardDto()
+
+        // When
+        therapist.clients.createClient(newClientRequest)
+
+        // Then
+        val clients = backgrounds.clients.getAllClients()
+        clients.content.forAny { it shouldMatch newClientRequest }
+    }
+
+    @Test
+    fun `Null distribution source comment should be persisted as null`() {
+        // Given
+        val therapist = TherapistClient.loginAsTheTherapist()
+        val newClientRequest = ClientsObjectMother.createClientCardDto(
+            distributionSource = DistributionSource(DistributionSourceType.OTHER, null)
+        )
 
         // When
         therapist.clients.createClient(newClientRequest)

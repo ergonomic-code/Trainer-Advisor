@@ -1,9 +1,12 @@
 package pro.qyoga.fixture.clients
 
 import pro.qyoga.core.clients.api.ClientCardDto
+import pro.qyoga.core.clients.api.DistributionSource
+import pro.qyoga.core.clients.api.DistributionSourceType
 import pro.qyoga.fixture.data.randomCyrillicWord
 import pro.qyoga.fixture.data.randomEmail
 import pro.qyoga.fixture.data.randomLocalDate
+import pro.qyoga.fixture.data.randomSentence
 import java.time.Duration
 import java.time.LocalDate
 import kotlin.random.Random
@@ -22,7 +25,7 @@ object ClientsObjectMother {
         phone: String = randomPhoneNumber(),
         email: String = randomEmail(),
         address: String = randomCyrillicWord(),
-        distributionSource: String = randomCyrillicWord(),
+        distributionSource: DistributionSource = randomDistributionSource(),
         complains: String = randomCyrillicWord(),
     ): ClientCardDto = ClientCardDto(
         firstName,
@@ -32,7 +35,8 @@ object ClientsObjectMother {
         phone,
         email,
         address,
-        distributionSource,
+        distributionSource.type,
+        distributionSource.comment,
         complains
     )
 
@@ -47,3 +51,10 @@ fun randomBirthDate(): LocalDate =
 
 fun randomPhoneNumber() =
     "+7-${Random.nextInt(900, 999)}-${Random.nextInt(100, 999)}-${Random.nextInt(10, 99)}-${Random.nextInt(10, 99)}"
+
+fun randomDistributionSource(): DistributionSource {
+    val type = DistributionSourceType.entries.random()
+    val hasComment = Random.nextBoolean()
+    val comment = if (hasComment) randomSentence(1, 5) else null
+    return DistributionSource(type, comment)
+}

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import pro.qyoga.core.clients.api.Client
 import pro.qyoga.core.clients.api.ClientCardDto
 import pro.qyoga.core.clients.api.ClientSearchDto
 import pro.qyoga.core.clients.api.ClientsService

@@ -7,9 +7,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
+import pro.qyoga.core.clients.api.Client
 import pro.qyoga.core.clients.api.ClientSearchDto
 import pro.qyoga.core.clients.api.ClientsService
-import pro.qyoga.core.clients.internal.Client
 import pro.qyoga.core.users.internal.QyogaUserDetails
 
 private const val CLIENTS = "clients"

@@ -1,8 +1,8 @@
 package pro.qyoga.assertions
 
 import io.kotest.matchers.shouldBe
+import pro.qyoga.core.clients.api.Client
 import pro.qyoga.core.clients.api.ClientCardDto
-import pro.qyoga.core.clients.internal.Client
 
 
 infix fun Client.shouldMatch(clientCardDto: ClientCardDto) {
@@ -13,6 +13,7 @@ infix fun Client.shouldMatch(clientCardDto: ClientCardDto) {
     phoneNumber shouldBe clientCardDto.phoneNumber
     email shouldBe clientCardDto.email
     address shouldBe clientCardDto.address
-    distributionSource shouldBe clientCardDto.distributionSource
+    distributionSource?.type shouldBe clientCardDto.distributionSourceType
+    distributionSource?.comment shouldBe clientCardDto.distributionSourceComment
     complaints shouldBe clientCardDto.complaints
 }

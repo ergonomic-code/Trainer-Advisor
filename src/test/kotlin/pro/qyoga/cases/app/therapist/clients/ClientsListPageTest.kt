@@ -7,8 +7,8 @@ import pro.qyoga.assertions.shouldBe
 import pro.qyoga.assertions.shouldHave
 import pro.qyoga.clients.TherapistClient
 import pro.qyoga.clients.pages.therapist.clients.ClientsListPage
+import pro.qyoga.core.clients.api.Client
 import pro.qyoga.core.clients.api.ClientSearchDto
-import pro.qyoga.core.clients.internal.Client
 import pro.qyoga.fixture.clients.ClientsObjectMother
 import pro.qyoga.fixture.clients.ClientsObjectMother.createClientCardDto
 import pro.qyoga.fixture.therapists.THE_THERAPIST_ID

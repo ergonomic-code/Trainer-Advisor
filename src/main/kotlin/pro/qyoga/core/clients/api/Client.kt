@@ -1,12 +1,12 @@
-package pro.qyoga.core.clients.internal
+package pro.qyoga.core.clients.api
 
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.annotation.Version
 import org.springframework.data.jdbc.core.mapping.AggregateReference
+import org.springframework.data.relational.core.mapping.Embedded
 import org.springframework.data.relational.core.mapping.Table
-import pro.qyoga.core.clients.api.ClientCardDto
 import pro.qyoga.core.users.api.Therapist
 import java.time.Instant
 import java.time.LocalDate
@@ -21,7 +21,8 @@ data class Client(
     val phoneNumber: String,
     val email: String?,
     val address: String?,
-    val distributionSource: String?,
+    @Embedded(onEmpty = Embedded.OnEmpty.USE_NULL, prefix = "distribution_source_")
+    val distributionSource: DistributionSource?,
     val complaints: String,
     val therapistId: AggregateReference<Therapist, Long>,
 

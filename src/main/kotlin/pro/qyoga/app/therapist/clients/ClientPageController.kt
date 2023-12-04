@@ -11,6 +11,7 @@ import pro.qyoga.core.clients.api.ClientCardDto
 import pro.qyoga.core.clients.api.ClientsService
 import pro.qyoga.core.users.internal.QyogaUserDetails
 
+
 @Controller
 @RequestMapping("/therapist/clients")
 class ClientPageController(

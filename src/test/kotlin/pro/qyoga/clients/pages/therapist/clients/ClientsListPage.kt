@@ -9,7 +9,7 @@ import org.jsoup.select.Elements
 import pro.qyoga.assertions.PageMatcher
 import pro.qyoga.assertions.shouldBeElement
 import pro.qyoga.assertions.shouldHave
-import pro.qyoga.core.clients.internal.Client
+import pro.qyoga.core.clients.api.Client
 import pro.qyoga.infra.html.*
 import pro.qyoga.infra.html.Input.Companion.text
 

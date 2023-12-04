@@ -29,8 +29,9 @@ fun randomSentence(minWords: Int = 3, maxWords: Int = 20) =
     buildString {
         val length = Random.nextInt(minWords, maxWords)
         (1..length).joinToString(". ") {
-            randomCyrillicWord()
+            append(randomCyrillicWord())
         }
+        check(length > 0)
     }
 
 fun randomEmail(): String =
