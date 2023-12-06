@@ -7,8 +7,8 @@ import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import org.springframework.data.domain.PageRequest
 import org.springframework.ui.ExtendedModelMap
-import pro.qyoga.app.therapist.clients.ClientListPageController
-import pro.qyoga.core.clients.api.ClientSearchDto
+import pro.qyoga.app.therapist.clients.ClientsListPageController
+import pro.qyoga.core.clients.cards.api.ClientSearchDto
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_REF
 import pro.qyoga.tests.fixture.therapists.theTherapistUserDetails
@@ -17,7 +17,7 @@ import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 
 class ClientsListPageControllerTest : QYogaAppIntegrationBaseTest() {
 
-    private val clientListPageController = getBean<ClientListPageController>()
+    private val clientsListPageController = getBean<ClientsListPageController>()
 
     @Test
     fun `Clients table should be sorted by last name`() {
@@ -29,14 +29,14 @@ class ClientsListPageControllerTest : QYogaAppIntegrationBaseTest() {
         val model = ExtendedModelMap()
 
         // When
-        clientListPageController.getClients(
+        clientsListPageController.getClients(
             theTherapistUserDetails,
             PageRequest.ofSize(clientsCount),
             model
         )
 
         // Then
-        val clients = ClientListPageController.getClients(model)
+        val clients = ClientsListPageController.getClients(model)
         clients shouldHaveSize clientsCount
         clients shouldBeSortedWith Comparator.comparing { it.lastName.lowercase() }
     }
@@ -55,12 +55,12 @@ class ClientsListPageControllerTest : QYogaAppIntegrationBaseTest() {
         val model = ExtendedModelMap()
 
         // When
-        clientListPageController.getClients(
+        clientsListPageController.getClients(
             theTherapistUserDetails,
             PageRequest.ofSize(Int.MAX_VALUE),
             model
         )
-        val clients = ClientListPageController.getClients(model)
+        val clients = ClientsListPageController.getClients(model)
 
         // Then
         clients.content shouldHaveSize ownClientsCount
@@ -81,13 +81,13 @@ class ClientsListPageControllerTest : QYogaAppIntegrationBaseTest() {
         val model = ExtendedModelMap()
 
         // When
-        clientListPageController.getClientsFiltered(
+        clientsListPageController.getClientsFiltered(
             theTherapistUserDetails,
             ClientSearchDto.ALL,
             PageRequest.ofSize(Int.MAX_VALUE),
             model
         )
-        val clients = ClientListPageController.getClients(model)
+        val clients = ClientsListPageController.getClients(model)
 
         // Then
         clients.content shouldHaveSize ownClientsCount

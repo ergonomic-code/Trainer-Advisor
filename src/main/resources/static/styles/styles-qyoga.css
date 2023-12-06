@@ -1,0 +1,17 @@
+.btn-gray {
+    color: #fff;
+    background-color: #667085;
+}
+
+.nav-pills .nav-link.active {
+    color: #fff;
+    background-color: #198754;
+}
+
+.nav-pills .nav-link.disabled {
+    color: #6c757d;
+}
+
+.nav-pills .nav-link {
+    color: #198754;
+}

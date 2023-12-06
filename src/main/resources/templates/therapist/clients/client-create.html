@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div th:replace="~{fragments/header.html}"></div>
+    <title>Новый клиент</title>
+    <link href="/styles/therapist/clients/style.css" rel="stylesheet">
+</head>
+
+<body class="sb-nav-fixed">
+
+<div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
+
+<div id="layoutSidenav">
+
+    <div th:replace="~{fragments/leftNavPanel :: leftNavPanel}"></div>
+
+    <div id="layoutSidenav_content">
+        <main>
+
+            <section class="client__card container">
+                <h1 class="mt-4">Новый клиент</h1>
+                <div th:replace="~{therapist/clients/client-card-fragment.html}"></div>
+            </section>
+        </main>
+        <footer class="py-4 bg-light mt-auto" th:insert="~{fragments/footer.html :: footer}"></footer>
+    </div>
+</div>
+
+</body>
+</html>

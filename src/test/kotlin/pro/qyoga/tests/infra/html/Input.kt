@@ -46,6 +46,9 @@ data class Input(
         fun tel(name: String, required: Boolean) =
             Input(name, required, "tel")
 
+        fun hidden(name: String, required: Boolean) =
+            Input(name, required, "hidden")
+
         fun file(name: String, required: Boolean, alpineJs: Boolean = false) =
             Input(name, required, "file", alpineJs)
 

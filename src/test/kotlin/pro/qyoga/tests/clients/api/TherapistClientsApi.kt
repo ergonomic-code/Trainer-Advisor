@@ -9,11 +9,13 @@ import org.hamcrest.CoreMatchers.endsWith
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
-import pro.qyoga.core.clients.api.ClientCardDto
-import pro.qyoga.core.clients.api.ClientSearchDto
+import pro.qyoga.core.clients.cards.api.ClientCardDto
+import pro.qyoga.core.clients.cards.api.ClientSearchDto
 import pro.qyoga.tests.clients.pages.therapist.clients.ClientsListPage
-import pro.qyoga.tests.clients.pages.therapist.clients.CreateClientPage
-import pro.qyoga.tests.clients.pages.therapist.clients.EditClientPage
+import pro.qyoga.tests.clients.pages.therapist.clients.card.CreateClientForm
+import pro.qyoga.tests.clients.pages.therapist.clients.card.CreateClientPage
+import pro.qyoga.tests.clients.pages.therapist.clients.card.EditClientForm
+import pro.qyoga.tests.clients.pages.therapist.clients.card.EditClientPage
 
 
 class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
@@ -55,22 +57,35 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
         }
     }
 
+    fun getEditClientCardPage(clientId: Long): Document {
+        return Given {
+            authorized()
+            pathParam("id", clientId)
+        } When {
+            get(EditClientPage.path)
+        } Then {
+            statusCode(HttpStatus.OK.value())
+        } Extract {
+            Jsoup.parse(body().asString())
+        }
+    }
+
     fun createClient(request: ClientCardDto) {
         Given {
             authorized()
-            formParam(CreateClientPage.clientForm.firstName.name, request.firstName)
-            formParam(CreateClientPage.clientForm.lastName.name, request.lastName)
-            formParam(CreateClientPage.clientForm.middleName.name, request.middleName)
-            formParam(CreateClientPage.clientForm.birthDate.name, request.birthDate.toString())
-            formParam(CreateClientPage.clientForm.email.name, request.email)
-            formParam(CreateClientPage.clientForm.phoneNumber.name, request.phoneNumber)
-            formParam(CreateClientPage.clientForm.address.name, request.address)
-            formParam(CreateClientPage.clientForm.complaints.name, request.complaints)
-            formParam(CreateClientPage.clientForm.anamnesis.name, request.anamnesis)
-            formParam(CreateClientPage.clientForm.distributionSourceType.name, request.distributionSourceType)
-            formParam(CreateClientPage.clientForm.distributionSourceComment.name, request.distributionSourceComment)
+            formParam(CreateClientForm.firstName.name, request.firstName)
+            formParam(CreateClientForm.lastName.name, request.lastName)
+            formParam(CreateClientForm.middleName.name, request.middleName ?: "")
+            formParam(CreateClientForm.birthDate.name, request.birthDate?.toString() ?: "")
+            formParam(CreateClientForm.email.name, request.email ?: "")
+            formParam(CreateClientForm.phoneNumber.name, request.phoneNumber)
+            formParam(CreateClientForm.address.name, request.address ?: "")
+            formParam(CreateClientForm.complaints.name, request.complaints)
+            formParam(CreateClientForm.anamnesis.name, request.anamnesis ?: "")
+            formParam(CreateClientForm.distributionSourceType.name, request.distributionSourceType ?: "")
+            formParam(CreateClientForm.distributionSourceComment.name, request.distributionSourceComment ?: "")
         } When {
-            post(CreateClientPage.clientForm.action.url)
+            post(CreateClientForm.action.url)
         } Then {
             statusCode(HttpStatus.FOUND.value())
             header("Location", endsWith(ClientsListPage.path))
@@ -78,25 +93,24 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
     }
 
     fun editClient(clientId: Long, request: ClientCardDto) {
-        val editClientPage = EditClientPage(clientId)
         Given {
             authorized()
 
             pathParam("id", clientId)
 
-            formParam(editClientPage.clientForm.firstName.name, request.firstName)
-            formParam(editClientPage.clientForm.lastName.name, request.lastName)
-            formParam(editClientPage.clientForm.middleName.name, request.middleName)
-            formParam(editClientPage.clientForm.birthDate.name, request.birthDate.toString())
-            formParam(editClientPage.clientForm.email.name, request.email)
-            formParam(editClientPage.clientForm.phoneNumber.name, request.phoneNumber)
-            formParam(editClientPage.clientForm.address.name, request.address)
-            formParam(editClientPage.clientForm.complaints.name, request.complaints)
-            formParam(editClientPage.clientForm.anamnesis.name, request.anamnesis)
-            formParam(editClientPage.clientForm.distributionSourceType.name, request.distributionSourceType?.name ?: "")
-            formParam(editClientPage.clientForm.distributionSourceComment.name, request.distributionSourceComment)
+            formParam(EditClientForm.firstName.name, request.firstName)
+            formParam(EditClientForm.lastName.name, request.lastName)
+            formParam(EditClientForm.middleName.name, request.middleName ?: "")
+            formParam(EditClientForm.birthDate.name, request.birthDate?.toString() ?: "")
+            formParam(EditClientForm.email.name, request.email ?: "")
+            formParam(EditClientForm.phoneNumber.name, request.phoneNumber)
+            formParam(EditClientForm.address.name, request.address ?: "")
+            formParam(EditClientForm.complaints.name, request.complaints)
+            formParam(EditClientForm.anamnesis.name, request.anamnesis ?: "")
+            formParam(EditClientForm.distributionSourceType.name, request.distributionSourceType?.name ?: "")
+            formParam(EditClientForm.distributionSourceComment.name, request.distributionSourceComment ?: "")
         } When {
-            post(editClientPage.path)
+            post(EditClientPage.path)
         } Then {
             statusCode(HttpStatus.FOUND.value())
             header("Location", endsWith(ClientsListPage.path))

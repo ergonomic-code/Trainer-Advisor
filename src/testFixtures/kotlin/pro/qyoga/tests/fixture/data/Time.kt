@@ -7,5 +7,10 @@ import kotlin.random.Random
 fun randomMinutesDuration(minMinutes: Long = 1, maxMinutes: Long = Long.MAX_VALUE): Duration =
     Duration.ofMinutes(Random.nextLong(minMinutes, maxMinutes))
 
+const val recentPeriod = 365L
+
+fun randomRecentLocalDate() =
+    randomLocalDate(LocalDate.now().minusDays(recentPeriod), Duration.ofDays(recentPeriod))
+
 fun randomLocalDate(from: LocalDate, period: Duration): LocalDate =
-    from.plusDays(period.toDays())
+    from.plusDays(Random.nextLong(0, period.toDays() + 1))

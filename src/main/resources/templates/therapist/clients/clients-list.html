@@ -85,9 +85,10 @@
                                 </thead>
                                 <tbody id="clients-list">
                                 <tr th:each="client : ${clients.content}">
-                                    <td class="w-75" th:text="${client.fullName()}"></td>
+                                    <td class="nameCell w-75" th:text="${client.fullName()}"></td>
                                     <td>
-                                        <a name="update" th:attr="href=@{/therapist/clients/{id} (id=${client.id})}">
+                                        <a class="updateLink"
+                                           th:attr="href=@{/therapist/clients/{id}/journal (id=${client.id})}">
                                             <button class="btn btn-link">
                                                 Изменить
                                             </button>
@@ -150,7 +151,7 @@
                                 </ul>
 
                                 <div class="input-group">
-                                    <a href="/therapist/clients/create" id="newClientLink">
+                                    <a href="/therapist/clients/create" id="createClientLink">
                                         <button class="btn btn-secondary" name="addClient" type="button">
                                             Добавить клиента
                                         </button>

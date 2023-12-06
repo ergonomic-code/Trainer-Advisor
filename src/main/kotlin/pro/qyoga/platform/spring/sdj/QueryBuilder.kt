@@ -4,6 +4,7 @@ import org.springframework.data.relational.core.query.Criteria
 import org.springframework.data.relational.core.query.CriteriaDefinition
 import org.springframework.data.relational.core.query.Query
 import org.springframework.data.relational.core.query.isEqual
+import java.time.LocalDate
 import kotlin.reflect.KProperty1
 
 class QueryBuilder {
@@ -23,6 +24,12 @@ class QueryBuilder {
     infix fun KProperty1<*, String?>.isILikeIfNotNull(value: String?) {
         if (value != null) {
             criteria.addLast(Criteria.where(this.name).like("%$value%").ignoreCase(true))
+        }
+    }
+
+    infix fun KProperty1<*, LocalDate>.isLessThanIfNotNull(value: LocalDate?) {
+        if (value != null) {
+            criteria.addLast(Criteria.where(this.name).lessThan(value))
         }
     }
 
