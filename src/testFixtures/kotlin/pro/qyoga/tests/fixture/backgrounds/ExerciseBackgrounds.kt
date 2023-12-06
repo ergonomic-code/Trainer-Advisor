@@ -3,11 +3,11 @@ package pro.qyoga.tests.fixture.backgrounds
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Component
 import org.springframework.ui.ExtendedModelMap
-import pro.qyoga.app.therapist.programs.exercises.ExercisesListPageController
-import pro.qyoga.core.programs.exercises.api.CreateExerciseRequest
-import pro.qyoga.core.programs.exercises.api.ExerciseDto
-import pro.qyoga.core.programs.exercises.api.ExerciseSearchDto
-import pro.qyoga.core.programs.exercises.api.ExercisesService
+import pro.qyoga.app.therapist.therapy.exercises.ExercisesListPageController
+import pro.qyoga.core.therapy.exercises.api.CreateExerciseRequest
+import pro.qyoga.core.therapy.exercises.api.ExerciseDto
+import pro.qyoga.core.therapy.exercises.api.ExerciseSearchDto
+import pro.qyoga.core.therapy.exercises.api.ExercisesService
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
 
 @Component

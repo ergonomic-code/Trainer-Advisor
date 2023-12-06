@@ -18,7 +18,6 @@ object AuthApi {
 
     fun login(login: String, password: String): Cookie {
         val cookie = Given {
-            LoginPage
             formParam(LoginPage.LoginForm.username.name, login)
             formParam(LoginPage.LoginForm.password.name, password)
         } When {

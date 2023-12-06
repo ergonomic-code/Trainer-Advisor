@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div th:replace="~{fragments/header.html}"></div>
+    <title th:text="${client?.fullName() ?: 'ФИО'}"></title>
+    <link href="/styles/therapist/clients/style.css" rel="stylesheet">
+    <style>
+        .pill {
+            padding: 0.5rem 0;
+        }
+    </style>
+</head>
+
+<body class="sb-nav-fixed">
+
+<div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
+
+<div id="layoutSidenav">
+
+    <div th:replace="~{fragments/leftNavPanel :: leftNavPanel}"></div>
+
+    <div id="layoutSidenav_content">
+        <main class="h-100">
+
+            <section class="client__card container">
+                <h1 class="mt-4" th:text="${client?.fullName() ?: 'ФИО'}">Новый клиент</h1>
+                <ul class="mt-4 nav nav-pills text-center align-content-center container g-0" id="cardTabs">
+                    <div class="row g-0 w-100">
+                        <li class="nav-item mb-3 col-4 col-xl-2 col-xxl-2">
+                            <a class="nav-link pill small" id="journalLink"
+                               th:classappend="${activeTab == 'journal'} ? 'active'"
+                               th:href="@{/therapist/clients/{id}/journal(id=${client.id})}">Журнал</a>
+                        </li>
+                        <li class="nav-item mb-3 col-4 col-xl-2 col-xxl-2">
+                            <a class="nav-link pill disabled small" href="#">Особенности</a>
+                        </li>
+                        <li class="nav-item mb-3 col-4 col-xl-2 col-xxl-2">
+                            <a aria-current="page" class="nav-link pill small" id="cardLink"
+                               th:classappend="${activeTab == 'card'} ? 'active'"
+                               th:href="@{/therapist/clients/{id}/card(id=${client.id})}">Карточка</a>
+                        </li>
+                        <li class="nav-item mb-3 col-4 col-xl-2 col-xxl-2">
+                            <a class="nav-link pill disabled text-wrap small" href="#">Объём<br/>движений</a>
+                        </li>
+                        <li class="nav-item mb-3 col-4 col-xl-2 col-xxl-2">
+                            <a class="nav-link pill disabled small" href="#">Файлы</a>
+                        </li>
+                        <li class="nav-item mb-3 col-4 col-xl-2 col-xxl-2">
+                            <a class="nav-link pill disabled small" href="#">Программы</a>
+                        </li>
+                    </div>
+                </ul>
+                <div id="tabContent"
+                     th:insert="@{'therapist/clients/client-' + ${activeTab.toLowerCase()} + '-fragment.html'}"></div>
+            </section>
+        </main>
+        <footer class="py-4 bg-light mt-auto" th:insert="~{fragments/footer.html :: footer}"></footer>
+    </div>
+</div>
+
+</body>
+</html>

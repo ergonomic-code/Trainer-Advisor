@@ -4,10 +4,10 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import pro.qyoga.core.clients.ClientsConfig
-import pro.qyoga.core.programs.exercises.ExercisesConfig
+import pro.qyoga.core.therapy.TherapyConfig
 
 
-@Import(ClientsConfig::class, ExercisesConfig::class)
+@Import(ClientsConfig::class, TherapyConfig::class)
 @ComponentScan
 @Configuration
 class TherapistWebAppConfig

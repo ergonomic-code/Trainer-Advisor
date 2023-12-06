@@ -3,6 +3,7 @@ package pro.qyoga.tests.infra.html
 import io.kotest.assertions.withClue
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldBeEqualIgnoringCase
+import io.kotest.matchers.string.shouldMatch
 import org.jsoup.nodes.Element
 import pro.qyoga.tests.assertions.PageMatcher
 
@@ -32,7 +33,7 @@ data class FormAction(
         }
 
         withClue("Form has invalid url") {
-            element.attr(attr) shouldBe url
+            element.attr(attr) shouldMatch url.replace("\\{.*}".toRegex(), ".*")
         }
 
         if (method != null) {

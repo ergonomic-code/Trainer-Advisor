@@ -14,7 +14,7 @@ object NotFoundErrorPage : QYogaPage {
 
     override val title = "Страница не существует"
 
-    private val returnToMainLink = Link("/", "Вернуться на главную")
+    private val returnToMainLink = Link("toMainLink", "/", "Вернуться на главную")
 
     override fun match(element: Element) {
         element shouldHaveTitle title

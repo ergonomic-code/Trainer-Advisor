@@ -8,11 +8,11 @@ import io.restassured.module.kotlin.extensions.When
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
-import pro.qyoga.core.programs.exercises.api.CreateExerciseRequest
-import pro.qyoga.core.programs.exercises.api.ExerciseSearchDto
+import pro.qyoga.core.therapy.exercises.api.CreateExerciseRequest
+import pro.qyoga.core.therapy.exercises.api.ExerciseSearchDto
 import pro.qyoga.infra.images.api.Image
-import pro.qyoga.tests.clients.pages.therapist.programs.exercises.CreateExercisePage
-import pro.qyoga.tests.clients.pages.therapist.programs.exercises.ExercisesListPage
+import pro.qyoga.tests.clients.pages.therapist.therapy.exercises.CreateExercisePage
+import pro.qyoga.tests.clients.pages.therapist.therapy.exercises.ExercisesListPage
 
 
 class TherapistExercisesApi(override val authCookie: Cookie) : AuthorizedApi {

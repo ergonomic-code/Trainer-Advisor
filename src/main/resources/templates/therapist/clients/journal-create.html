@@ -1,0 +1,47 @@
+<div id="createJournalEntryTabContent">
+    <style>
+        /* For medium screens and larger */
+        @media (min-width: 768px) {
+            #text-input {
+                height: 25rem;
+            }
+        }
+
+        /* For small screens */
+        @media (max-width: 767px) {
+            #text-input {
+                height: 10rem;
+            }
+        }
+    </style>
+
+    <h2 class="mb-5">Новая запись</h2>
+    <form id="journalEntryFrom" method="POST" th:action="@{/therapist/clients/{id}/journal/create(id=${client.id})}">
+        <div class="row">
+            <div class="mb-3 col-12 col-md-2">
+                <label class="form-label" for="date-input">Дата</label>
+                <input class="form-control" id="date-input" name="date" required type="text">
+            </div>
+            <div class="mb-3 col">
+                <label class="form-label" for="task-input">Терапевтическая задача</label>
+                <input class="form-control" id="task-input" name="therapeuticTaskName" required type="text">
+                <input name="therapeuticTaskId" type="hidden">
+            </div>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="text-input">Запись</label>
+            <textarea class="form-control" id="text-input" name="journalEntryText" required rows="12"></textarea>
+        </div>
+        <div class="row g-2 justify-content-end">
+            <div class="col-auto">
+                <a class="btn btn-danger" style="min-width: 110px;"
+                   th:href="@{/therapist/clients/{id}/journal(id=${client.id})}">
+                    Отмена
+                </a>
+            </div>
+            <div class="col-auto">
+                <button class="btn btn-success" style="min-width: 110px;">Добавить</button>
+            </div>
+        </div>
+    </form>
+</div>

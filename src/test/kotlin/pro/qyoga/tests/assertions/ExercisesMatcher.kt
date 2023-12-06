@@ -1,8 +1,8 @@
 package pro.qyoga.tests.assertions
 
 import io.kotest.matchers.shouldBe
-import pro.qyoga.core.programs.exercises.api.CreateExerciseRequest
-import pro.qyoga.core.programs.exercises.api.ExerciseDto
+import pro.qyoga.core.therapy.exercises.api.CreateExerciseRequest
+import pro.qyoga.core.therapy.exercises.api.ExerciseDto
 import pro.qyoga.platform.java.time.toDecimalMinutes
 
 

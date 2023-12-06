@@ -6,10 +6,11 @@ import io.kotest.matchers.string.shouldMatch
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
-import pro.qyoga.core.clients.api.Client
+import pro.qyoga.core.clients.cards.api.Client
 import pro.qyoga.tests.assertions.PageMatcher
 import pro.qyoga.tests.assertions.shouldBeElement
 import pro.qyoga.tests.assertions.shouldHave
+import pro.qyoga.tests.clients.pages.therapist.clients.card.CreateClientPage
 import pro.qyoga.tests.infra.html.*
 import pro.qyoga.tests.infra.html.Input.Companion.text
 
@@ -36,13 +37,13 @@ object ClientsListPage : QYogaPage {
 
     }
 
-    val updateAction = "$path/{id}"
+    val updateAction = "$path/{id}/journal"
     val updateActionPattern = updateAction.replace("{id}", "(\\d+)").toRegex()
 
     val deleteAction = "$path/delete/{id}"
     val deleteActionPattern = deleteAction.replace("{id}", "(\\d+)").toRegex()
 
-    private val addLink = Link(CreateClientPage, "Добавить клиента")
+    private val addLink = Link("createClientLink", CreateClientPage, "Добавить клиента")
     private val addButton = Button("addClient", "Добавить клиента")
 
     private const val CLIENT_ROW = "tbody tr"
@@ -66,8 +67,8 @@ object ClientsListPage : QYogaPage {
     fun clientRow(client: Client): PageMatcher = object : PageMatcher {
         override fun match(element: Element) {
             element.select(CLIENT_ROW).forAny { row ->
-                row.select("td:nth-child(1)").text() shouldBe client.fullName()
-                row.select("td a[name=update]").attr("href") shouldMatch updateActionPattern
+                row.select("td.nameCell").text() shouldBe client.fullName()
+                row.select("td a.updateLink").attr("href") shouldMatch updateActionPattern
                 row.select("td button[name=delete]").attr("hx-delete") shouldMatch deleteActionPattern
             }
         }

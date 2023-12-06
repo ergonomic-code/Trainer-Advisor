@@ -26,6 +26,17 @@ infix fun Element.shouldHave(component: Component) {
     component.match(element[0])
 }
 
+infix fun Element.shouldHave(pageMatcher: PageMatcher) {
+    pageMatcher.match(this)
+}
+
 infix fun Document.shouldHave(pageMatcher: PageMatcher) = pageMatcher.match(this)
+
+infix fun Element.shouldNotHave(component: Component) {
+    val element = this.select(component.selector())
+    withClue("Component ${component.name} is found by selector ${component.selector()} in $this") {
+        element shouldHaveSize 0
+    }
+}
 
 infix fun Element.shouldHaveAttr(pageMatcher: PageMatcher) = pageMatcher.match(this)

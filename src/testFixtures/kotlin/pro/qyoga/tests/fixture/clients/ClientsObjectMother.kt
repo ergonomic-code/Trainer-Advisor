@@ -1,8 +1,8 @@
 package pro.qyoga.tests.fixture.clients
 
-import pro.qyoga.core.clients.api.ClientCardDto
-import pro.qyoga.core.clients.api.DistributionSource
-import pro.qyoga.core.clients.api.DistributionSourceType
+import pro.qyoga.core.clients.cards.api.ClientCardDto
+import pro.qyoga.core.clients.cards.api.DistributionSource
+import pro.qyoga.core.clients.cards.api.DistributionSourceType
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
 import pro.qyoga.tests.fixture.data.randomEmail
 import pro.qyoga.tests.fixture.data.randomLocalDate
@@ -45,7 +45,7 @@ object ClientsObjectMother {
         firstName: String = randomCyrillicWord(),
         lastName: String = randomCyrillicWord(),
         middleName: String? = null,
-        localDate: LocalDate = randomBirthDate(),
+        birthDate: LocalDate? = null,
         phone: String = randomPhoneNumber(),
         email: String? = null,
         address: String? = null,
@@ -56,7 +56,7 @@ object ClientsObjectMother {
         firstName,
         lastName,
         middleName,
-        localDate,
+        birthDate,
         phone,
         email,
         address,
