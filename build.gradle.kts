@@ -7,6 +7,7 @@ plugins {
 	kotlin("plugin.spring") version "1.9.21"
 	id("io.gitlab.arturbosch.detekt") version "1.23.4"
 	id("org.jetbrains.kotlinx.kover") version "0.6.1"
+	id("java-test-fixtures")
 }
 
 group = "pro.qyoga"
@@ -15,6 +16,20 @@ version = "0.0.1-SNAPSHOT"
 java {
 	toolchain {
 		languageVersion.set(JavaLanguageVersion.of(21))
+	}
+}
+
+testing {
+	suites {
+		val e2eTest by registering(JvmTestSuite::class) {
+			dependencies {
+				implementation(project())
+				implementation(testFixtures(project()))
+				implementation("com.codeborne:selenide-proxy:7.0.3")
+				implementation("org.testcontainers:selenium:1.19.3")
+				implementation("com.icegreen:greenmail-junit5:2.0.0")
+			}
+		}
 	}
 }
 
@@ -37,16 +52,18 @@ dependencies {
 
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 
-	testImplementation("org.springframework.boot:spring-boot-starter-test") {
+	testFixturesImplementation("org.springframework.boot:spring-boot-starter-test") {
 		// Когда этот jar есть в класспасе, спринг инициализирует Мокито, что добавляет 0.5 секунды ко времени теста
 		exclude(group = "org.mockito")
 	}
-	testImplementation("org.springframework.boot:spring-boot-testcontainers")
-	testImplementation("org.testcontainers:junit-jupiter")
-	testImplementation("org.testcontainers:postgresql")
+	testFixturesApi("org.springframework.boot:spring-boot-testcontainers")
+	testFixturesImplementation("org.testcontainers:junit-jupiter")
+	testFixturesImplementation("org.testcontainers:postgresql")
+	testFixturesApi("io.kotest:kotest-assertions-core:5.7.2")
+
+	testImplementation(testFixtures(project(":")))
 	testImplementation("io.rest-assured:rest-assured:5.3.2")
 	testImplementation("io.rest-assured:kotlin-extensions:5.3.2")
-	testImplementation("io.kotest:kotest-assertions-core:5.7.2")
 	testImplementation("com.tngtech.archunit:archunit:1.1.0")
 	testImplementation("org.jsoup:jsoup:1.16.2")
 	testImplementation("io.github.ulfs:assertj-jsoup:0.1.4")
@@ -74,6 +91,12 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test> {
 	this.systemProperty("file.encoding", "utf-8")
 	useJUnitPlatform()
+}
+
+tasks {
+	named("e2eTest", Test::class) {
+		systemProperties["selenide.browser"] = "chrome"
+	}
 }
 
 detekt {
