@@ -1,4 +1,7 @@
 spring:
+  flyway:
+    out-of-order: true
+
   docker:
     compose:
       file: ./deploy/qyoga/docker-compose-infra-dev.yml

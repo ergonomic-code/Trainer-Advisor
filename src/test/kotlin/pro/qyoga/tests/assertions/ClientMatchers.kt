@@ -16,4 +16,5 @@ infix fun Client.shouldMatch(clientCardDto: ClientCardDto) {
     distributionSource?.type shouldBe clientCardDto.distributionSourceType
     distributionSource?.comment shouldBe clientCardDto.distributionSourceComment
     complaints shouldBe clientCardDto.complaints
+    anamnesis shouldBe clientCardDto.anamnesis
 }

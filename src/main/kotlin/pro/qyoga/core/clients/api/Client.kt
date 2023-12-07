@@ -21,9 +21,10 @@ data class Client(
     val phoneNumber: String,
     val email: String?,
     val address: String?,
+    val complaints: String,
+    val anamnesis: String?,
     @Embedded(onEmpty = Embedded.OnEmpty.USE_NULL, prefix = "distribution_source_")
     val distributionSource: DistributionSource?,
-    val complaints: String,
     val therapistId: AggregateReference<Therapist, Long>,
 
     @Id
@@ -45,8 +46,9 @@ data class Client(
                 createRequest.phoneNumber,
                 createRequest.email,
                 createRequest.address,
-                createRequest.distributionSource,
                 createRequest.complaints,
+                createRequest.anamnesis,
+                createRequest.distributionSource,
                 AggregateReference.to(therapistId)
             )
 
@@ -64,6 +66,7 @@ data class Client(
         address = clientCardDto.address,
         distributionSource = clientCardDto.distributionSource,
         complaints = clientCardDto.complaints,
+        anamnesis = clientCardDto.anamnesis,
         therapistId = therapistId,
 
         id = id,
