@@ -20,13 +20,38 @@ object ClientsObjectMother {
     fun createClientCardDto(
         firstName: String = randomCyrillicWord(),
         lastName: String = randomCyrillicWord(),
-        middleName: String = randomCyrillicWord(),
+        middleName: String? = randomCyrillicWord(),
         localDate: LocalDate = randomBirthDate(),
         phone: String = randomPhoneNumber(),
-        email: String = randomEmail(),
-        address: String = randomCyrillicWord(),
-        distributionSource: DistributionSource = randomDistributionSource(),
+        email: String? = randomEmail(),
+        address: String? = randomCyrillicWord(),
         complains: String = randomCyrillicWord(),
+        anamnesis: String? = randomSentence(),
+        distributionSource: DistributionSource = randomDistributionSource(),
+    ): ClientCardDto = createClientCardDtoMinimal(
+        firstName,
+        lastName,
+        middleName,
+        localDate,
+        phone,
+        email,
+        address,
+        complains,
+        anamnesis,
+        distributionSource,
+    )
+
+    fun createClientCardDtoMinimal(
+        firstName: String = randomCyrillicWord(),
+        lastName: String = randomCyrillicWord(),
+        middleName: String? = null,
+        localDate: LocalDate = randomBirthDate(),
+        phone: String = randomPhoneNumber(),
+        email: String? = null,
+        address: String? = null,
+        complains: String = randomCyrillicWord(),
+        anamnesis: String? = null,
+        distributionSource: DistributionSource? = null
     ): ClientCardDto = ClientCardDto(
         firstName,
         lastName,
@@ -35,9 +60,10 @@ object ClientsObjectMother {
         phone,
         email,
         address,
-        distributionSource.type,
-        distributionSource.comment,
-        complains
+        complains,
+        anamnesis,
+        distributionSource?.type,
+        distributionSource?.comment,
     )
 
 }

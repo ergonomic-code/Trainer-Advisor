@@ -65,9 +65,10 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
             formParam(CreateClientPage.clientForm.email.name, request.email)
             formParam(CreateClientPage.clientForm.phoneNumber.name, request.phoneNumber)
             formParam(CreateClientPage.clientForm.address.name, request.address)
+            formParam(CreateClientPage.clientForm.complaints.name, request.complaints)
+            formParam(CreateClientPage.clientForm.anamnesis.name, request.anamnesis)
             formParam(CreateClientPage.clientForm.distributionSourceType.name, request.distributionSourceType)
             formParam(CreateClientPage.clientForm.distributionSourceComment.name, request.distributionSourceComment)
-            formParam(CreateClientPage.clientForm.complaints.name, request.complaints)
         } When {
             post(CreateClientPage.clientForm.action.url)
         } Then {
@@ -90,9 +91,10 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
             formParam(editClientPage.clientForm.email.name, request.email)
             formParam(editClientPage.clientForm.phoneNumber.name, request.phoneNumber)
             formParam(editClientPage.clientForm.address.name, request.address)
+            formParam(editClientPage.clientForm.complaints.name, request.complaints)
+            formParam(editClientPage.clientForm.anamnesis.name, request.anamnesis)
             formParam(editClientPage.clientForm.distributionSourceType.name, request.distributionSourceType?.name ?: "")
             formParam(editClientPage.clientForm.distributionSourceComment.name, request.distributionSourceComment)
-            formParam(editClientPage.clientForm.complaints.name, request.complaints)
         } When {
             post(editClientPage.path)
         } Then {

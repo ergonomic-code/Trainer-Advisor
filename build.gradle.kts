@@ -22,12 +22,16 @@ java {
 testing {
 	suites {
 		val e2eTest by registering(JvmTestSuite::class) {
+			testType = "e2e"
 			dependencies {
 				implementation(project())
 				implementation(testFixtures(project()))
 				implementation("com.codeborne:selenide-proxy:7.0.3")
 				implementation("org.testcontainers:selenium:1.19.3")
 				implementation("com.icegreen:greenmail-junit5:2.0.0")
+			}
+			sources {
+				output.dir("e2eTest")
 			}
 		}
 	}
