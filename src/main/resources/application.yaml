@@ -1,5 +1,11 @@
 spring:
 
+  minio:
+    user: user
+    password: password
+    endpoint: http://localhost:50000
+
+
   flyway:
     locations: classpath:db/migration/common
 
