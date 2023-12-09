@@ -36,7 +36,7 @@ abstract class ClientPage(action: FormAction) : QYogaPage {
             element.select(clientForm.email.selector()).`val`() shouldBe (client.email ?: "")
             element.select(clientForm.address.selector()).`val`() shouldBe (client.address ?: "")
             element.select(clientForm.complaints.selector()).text() shouldBe client.complaints
-            element.select(clientForm.complaints.selector()).text() shouldBe client.complaints
+            element.select(clientForm.anamnesis.selector()).text() shouldBe client.anamnesis
             element.select(clientForm.distributionSourceType.selector())
                 .`val`() shouldBe (client.distributionSource?.type?.name ?: "")
             element.select(clientForm.distributionSourceComment.selector())
@@ -77,8 +77,8 @@ class ClientForm(action: FormAction) : QYogaForm("createClientForm", action) {
     val phoneNumber = tel("phoneNumber")
     val email = email("email")
     val address = text("address")
-    val complaints = TextArea("complaints")
-    val anamnesis = TextArea("anamnesis")
+    val complaints = TextArea("complaints", true)
+    val anamnesis = TextArea("anamnesis", false)
     val distributionSourceType = Select("distributionSourceType", DistributionSourceType.entries.map { Option.of(it) })
     val distributionSourceComment = text("distributionSourceComment")
 
