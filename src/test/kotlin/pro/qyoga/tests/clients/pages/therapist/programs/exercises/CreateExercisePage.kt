@@ -22,12 +22,12 @@ object CreateExercisePage : QYogaPage {
 
         val duration = number("duration")
         val exerciseType = Select("exerciseType")
-        val description = TextArea("description")
+        val description = TextArea("description", true)
 
         val stepImage = file("`stepImage\${idx}`", alpineJs = true)
         fun stepImage(idx: Int): String = "stepImage$idx"
 
-        val stepDescription = TextArea("`steps[\${idx}].description`", alpineJs = true)
+        val stepDescription = TextArea("`steps[\${idx}].description`", true, alpineJs = true)
         fun stepsDescription(idx: Int): String = "steps[$idx].description"
 
         val deleteStep = text("deleteStep", value = "Удалить шаг")

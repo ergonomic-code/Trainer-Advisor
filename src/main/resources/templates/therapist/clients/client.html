@@ -120,7 +120,7 @@
                                     <textarea class="form-control w-100 mt-2" cols="20" id="ClientAnamnesis"
                                               name="anamnesis"
                                               placeholder="Введите данные"
-                                              required rows="10"></textarea>
+                                              rows="10" th:text="${client?.anamnesis ?: ''}"></textarea>
                                 </div>
                             </div>
                             <div class="textarea__container row g-0 input-group">
@@ -133,7 +133,7 @@
                             </div>
                             <div class="from-group row g-0 input-group">
                                 <label class="form-label" for="distributionSourceType">Как вы о нас узнали?</label>
-                                <div class="col me-xxl-4">
+                                <div class="col me-md-4 me-xl-4 me-xxl-4">
                                     <select class="form-control w-100 q-input form-select mb-2"
                                             id="distributionSourceType"
                                             name="distributionSourceType"

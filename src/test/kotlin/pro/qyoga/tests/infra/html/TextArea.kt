@@ -7,12 +7,14 @@ import org.jsoup.parser.Tag
 
 data class TextArea(
     override val name: String,
+    override val required: Boolean,
     val alpineJs: Boolean = false
-) : Component {
+) : InputBase {
 
     private val nameAttrName = if (alpineJs) ":name" else "name"
 
     override fun match(element: Element) {
+        super.match(element)
         element.tag() shouldBe Tag.valueOf("textarea")
         element.attr(nameAttrName) shouldBe name
     }
