@@ -14,9 +14,9 @@ data class TextArea(
     private val nameAttrName = if (alpineJs) ":name" else "name"
 
     override fun match(element: Element) {
-        super.match(element)
         element.tag() shouldBe Tag.valueOf("textarea")
         element.attr(nameAttrName) shouldBe name
+        matchRequired(element)
     }
 
     override fun selector(): String = "textarea[$nameAttrName=$name]"

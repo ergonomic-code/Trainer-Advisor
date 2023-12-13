@@ -22,8 +22,8 @@ object ExercisesListPage : QYogaPage {
 
     object ExercisesSearchForm : QYogaForm("exercisesSearch", action = hxGet("$path/search")) {
 
-        val title = text("title")
-        val exercisesType = Select("exerciseType", ExerciseType.entries.map { Option(it.name, it.label) })
+        val title = text("title", false)
+        val exercisesType = Select("exerciseType", false, ExerciseType.entries.map { Option(it.name, it.label) })
         val searchButton = Button("search", "Поиск")
 
         override val components = listOf(

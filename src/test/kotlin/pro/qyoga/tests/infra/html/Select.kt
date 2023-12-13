@@ -24,12 +24,14 @@ data class Option(
 
 data class Select(
     override val name: String,
+    override val required: Boolean,
     val options: List<Option>? = null
-) : Component {
+) : InputBase {
 
     override fun match(element: Element) {
         element.tag() shouldBe Tag.valueOf("select")
         element.attr("name") shouldBe name
+        matchRequired(element)
 
         options?.forAll {
             withClue("Cannot find option $it") {

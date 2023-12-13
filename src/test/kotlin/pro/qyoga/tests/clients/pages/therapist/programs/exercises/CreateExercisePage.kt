@@ -18,19 +18,19 @@ object CreateExercisePage : QYogaPage {
     override val title = "Новое упражнение"
 
     object CreateExerciseForm : QYogaForm("createExercise", FormAction.hxPost(path)) {
-        val title = text("title")
+        val title = text("title", true)
 
-        val duration = number("duration")
-        val exerciseType = Select("exerciseType")
+        val duration = number("duration", true)
+        val exerciseType = Select("exerciseType", true)
         val description = TextArea("description", true)
 
-        val stepImage = file("`stepImage\${idx}`", alpineJs = true)
+        val stepImage = file("`stepImage\${idx}`", false, alpineJs = true)
         fun stepImage(idx: Int): String = "stepImage$idx"
 
         val stepDescription = TextArea("`steps[\${idx}].description`", true, alpineJs = true)
         fun stepsDescription(idx: Int): String = "steps[$idx].description"
 
-        val deleteStep = text("deleteStep", value = "Удалить шаг")
+        val deleteStep = button("deleteStep", "Удалить шаг")
         val addStep = button("addStep", "Добавить шаг")
         val save = submit("save", value = "Сохранить")
 

@@ -8,7 +8,7 @@ interface InputBase : Component {
 
     val required: Boolean
 
-    override fun match(element: Element) {
+    fun matchRequired(element: Element) {
         val actualRequired = element.hasAttr("required")
         withClue("Unexpected required value") {
             actualRequired shouldBe required
