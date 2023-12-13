@@ -70,17 +70,18 @@ class EditClientPage(clientId: Long) :
 
 class ClientForm(action: FormAction) : QYogaForm("createClientForm", action) {
 
-    val firstName = text("firstName")
-    val lastName = text("lastName")
-    val middleName = text("middleName")
-    val birthDate = text("birthDate")
-    val phoneNumber = tel("phoneNumber")
-    val email = email("email")
-    val address = text("address")
+    val firstName = text("firstName", true)
+    val lastName = text("lastName", true)
+    val middleName = text("middleName", false)
+    val birthDate = text("birthDate", false)
+    val phoneNumber = tel("phoneNumber", true)
+    val email = email("email", false)
+    val address = text("address", false)
     val complaints = TextArea("complaints", true)
     val anamnesis = TextArea("anamnesis", false)
-    val distributionSourceType = Select("distributionSourceType", DistributionSourceType.entries.map { Option.of(it) })
-    val distributionSourceComment = text("distributionSourceComment")
+    val distributionSourceType =
+        Select("distributionSourceType", false, DistributionSourceType.entries.map { Option.of(it) })
+    val distributionSourceComment = text("distributionSourceComment", false)
 
     override val components: List<Component> = listOf(
         firstName,

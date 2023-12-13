@@ -22,10 +22,10 @@ object ClientsListPage : QYogaPage {
 
     object ClientSearchForm : QYogaForm("clientSearch", FormAction.hxGet("$path/search")) {
 
-        val lastName = text("lastName")
-        val firstName = text("firstName")
-        val middleName = text("middleName")
-        val phoneNumber = text("phoneNumber")
+        val lastName = text("lastName", false)
+        val firstName = text("firstName", false)
+        val middleName = text("middleName", false)
+        val phoneNumber = text("phoneNumber", false)
 
         override val components: List<Input> = listOf(
             lastName,

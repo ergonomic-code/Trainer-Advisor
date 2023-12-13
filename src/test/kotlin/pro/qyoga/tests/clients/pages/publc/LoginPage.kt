@@ -20,10 +20,10 @@ object LoginPage : QYogaPage {
 
     object LoginForm : QYogaForm("loginForm", FormAction.classicPost(path)) {
 
-        val username = email("username")
+        val username = email("username", true)
         val invalidUserName = "${username.selector()}.is-invalid"
 
-        val password = password("password")
+        val password = password("password", true)
 
         override val components = listOf(username, password)
 

@@ -6,10 +6,11 @@ import org.jsoup.parser.Tag
 
 data class Input(
     override val name: String,
+    override val required: Boolean,
     val type: String,
     val alpineJs: Boolean = false,
     val value: String? = null
-) : Component {
+) : InputBase {
 
     private val nameAttrName = if (alpineJs) ":name" else "name"
 
@@ -22,36 +23,37 @@ data class Input(
         if (value != null) {
             element.attr("value") shouldBe value
         }
+        matchRequired(element)
     }
 
     companion object {
 
-        fun text(name: String, value: String? = null) =
-            Input(name, "text", value = value)
+        fun text(name: String, required: Boolean, value: String? = null) =
+            Input(name, required, "text", value = value)
 
-        fun email(name: String) =
-            Input(name, "email")
+        fun email(name: String, required: Boolean) =
+            Input(name, required, "email")
 
-        fun password(name: String) =
-            Input(name, "password")
+        fun password(name: String, required: Boolean) =
+            Input(name, required, "password")
 
-        fun number(name: String) =
-            Input(name, "number")
+        fun number(name: String, required: Boolean) =
+            Input(name, required, "number")
 
-        fun date(name: String) =
-            Input(name, "date")
+        fun date(name: String, required: Boolean) =
+            Input(name, required, "date")
 
-        fun tel(name: String) =
-            Input(name, "tel")
+        fun tel(name: String, required: Boolean) =
+            Input(name, required, "tel")
 
-        fun file(name: String, alpineJs: Boolean = false) =
-            Input(name, "file", alpineJs)
+        fun file(name: String, required: Boolean, alpineJs: Boolean = false) =
+            Input(name, required, "file", alpineJs)
 
         fun button(name: String, value: String? = null) =
-            Input(name, "button", value = value)
+            Input(name, false, "button", value = value)
 
         fun submit(name: String, value: String? = null) =
-            Input(name, "submit", value = value)
+            Input(name, false, "submit", value = value)
 
     }
 

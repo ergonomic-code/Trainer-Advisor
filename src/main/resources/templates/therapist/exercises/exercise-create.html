@@ -38,7 +38,7 @@
                     <div class="form-group row mb-3">
                         <label class="col-sm-2 col-form-label" for="type">Тип упражнения</label>
                         <div class="col-sm-7">
-                            <select class="form-select col-sm-7" id="type" name="exerciseType">
+                            <select class="form-select col-sm-7" id="type" name="exerciseType" required>
                                 <option value="WARM_UP">Разминка</option>
                                 <option value="MOBILISATION">Мобилизация</option>
                                 <option value="STRENGTHENING">Укрепление</option>
@@ -125,7 +125,7 @@
                                         <input @click="steps.splice(idx, 1)"
                                                class="btn btn-dark mt-3 col-sm-2 float-end"
                                                name="deleteStep"
-                                               type="text"
+                                               type="button"
                                                value="Удалить шаг">
                                     </div>
                                     <hr>

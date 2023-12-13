@@ -18,11 +18,11 @@ object RegisterPage : QYogaPage {
 
     object RegisterForm : QYogaForm("registerForm", action = FormAction.hxPost(path)) {
 
-        val firstName = text("firstName")
+        val firstName = text("firstName", true)
 
-        val lastName = text("lastName")
+        val lastName = text("lastName", true)
 
-        val email = email("email")
+        val email = email("email", true)
         val duplicatedEmail = "${email.selector()}.is-invalid"
 
         const val duplicatedEmailMessage = "#duplicatedEmailMessage"
