@@ -2,9 +2,9 @@ package pro.qyoga.tests.cases.app.therapist.clients.journal
 
 import io.kotest.inspectors.forAny
 import org.junit.jupiter.api.Test
+import pro.qyoga.app.therapist.clients.journal.JournalEntryPageController
 import pro.qyoga.app.therapist.clients.journal.JournalPageController
 import pro.qyoga.tests.assertions.shouldMatch
-import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.fixture.clients.JournalEntriesObjectMother
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
 import pro.qyoga.tests.fixture.therapists.theTherapistUserDetails
@@ -17,7 +17,6 @@ class CreateJournalEntryPageControllerTest : QYogaAppIntegrationBaseTest() {
     @Test
     fun `Journal entry for today should be included in first journal page`() {
         // Given
-        val therapist = TherapistClient.loginAsTheTherapist()
         val client = backgrounds.clients.createClients(1, THE_THERAPIST_ID).first()
         val createJournalEntryRequest = JournalEntriesObjectMother.journalEntry(date = LocalDate.now())
 
@@ -30,6 +29,26 @@ class CreateJournalEntryPageControllerTest : QYogaAppIntegrationBaseTest() {
         // Then
         val journal = JournalPageController.getJournal(modelAndView.model).content
         journal.forAny { it shouldMatch createJournalEntryRequest }
+    }
+
+    @Test
+    fun `Journal entry page should accept existing therapeutic task name and reuse existing entity`() {
+        // Given
+        val taskName = "Йогатерапия гастрита"
+        backgrounds.therapeuticTasks.createTherapeuticTask(THE_THERAPIST_ID, taskName)
+        val client = backgrounds.clients.createClients(1, THE_THERAPIST_ID).first()
+        val createJournalEntryRequest =
+            JournalEntriesObjectMother.journalEntry(date = LocalDate.now(), therapeuticTaskName = taskName)
+
+        // When
+        getBean<JournalEntryPageController>().createJournalEntry(
+            client.id,
+            createJournalEntryRequest,
+            theTherapistUserDetails
+        )
+
+        // Then
+        backgrounds.clientJournal.getWholeJournal(client.id).content.forAny { it shouldMatch createJournalEntryRequest }
     }
 
 }

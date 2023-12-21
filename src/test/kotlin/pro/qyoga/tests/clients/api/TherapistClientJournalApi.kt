@@ -12,7 +12,6 @@ import org.springframework.http.HttpStatus
 import pro.qyoga.app.therapist.clients.journal.CreateJournalEntryRequest
 import pro.qyoga.tests.clients.pages.therapist.clients.journal.CreateJournalEntryPage
 import pro.qyoga.tests.clients.pages.therapist.clients.journal.EmptyClientJournalPage
-import pro.qyoga.tests.infra.rest_assured.addResponseLogging
 import pro.qyoga.tests.platform.pathToRegex
 
 
@@ -33,16 +32,11 @@ class TherapistClientJournalApi(override val authCookie: Cookie) : AuthorizedApi
 
     fun createJournalEntry(clientId: Long, journalEntry: CreateJournalEntryRequest) {
         Given {
-            addResponseLogging()
             authorized()
             formParam(CreateJournalEntryPage.JournalEntryFrom.dateInput.name, journalEntry.date.toString())
             formParam(
                 CreateJournalEntryPage.JournalEntryFrom.therapeuticTaskNameInput.name,
                 journalEntry.therapeuticTaskName
-            )
-            formParam(
-                CreateJournalEntryPage.JournalEntryFrom.therapeuticTaskIdInput.name,
-                journalEntry.therapeuticTaskId
             )
             formParam(CreateJournalEntryPage.JournalEntryFrom.entryTextInput.name, journalEntry.journalEntryText)
             pathParam("id", clientId)

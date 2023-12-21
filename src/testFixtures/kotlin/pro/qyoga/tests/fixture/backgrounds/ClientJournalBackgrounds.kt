@@ -1,10 +1,14 @@
 package pro.qyoga.tests.fixture.backgrounds
 
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageImpl
 import org.springframework.stereotype.Component
 import pro.qyoga.app.therapist.clients.journal.CreateJournalEntryRequest
 import pro.qyoga.app.therapist.clients.journal.CreateJournalEntryResult
 import pro.qyoga.app.therapist.clients.journal.CreateJournalEntryWorkflow
 import pro.qyoga.core.clients.journals.api.JournalEntry
+import pro.qyoga.core.clients.journals.api.JournalPageRequest
+import pro.qyoga.core.clients.journals.api.JournalsService
 import pro.qyoga.core.clients.journals.api.hydrate
 import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTasksService
 import pro.qyoga.core.users.internal.QyogaUserDetails
@@ -15,6 +19,7 @@ import pro.qyoga.tests.fixture.data.randomRecentLocalDate
 @Component
 class ClientJournalBackgrounds(
     private val createJournalEntryWorkflow: CreateJournalEntryWorkflow,
+    private val journalsService: JournalsService,
     private val therapeuticTasksService: TherapeuticTasksService
 ) {
 
@@ -38,5 +43,17 @@ class ClientJournalBackgrounds(
 
     fun hydrate(journalEntries: List<JournalEntry>): List<JournalEntry> =
         journalEntries.hydrate(therapeuticTasksService::findAllById)
+
+    fun getWholeJournal(clientId: Long): Page<JournalEntry> {
+        var journal = journalsService.getJournalPage(JournalPageRequest.wholeJournal(clientId))
+
+        journal = PageImpl(
+            journal.content.hydrate(therapeuticTasksService::findAllById),
+            journal.pageable,
+            journal.totalElements
+        )
+
+        return journal
+    }
 
 }
