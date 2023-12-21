@@ -11,8 +11,13 @@ class TherapeuticTasksServiceImpl(
     private val therapeuticTasksRepo: TherapeuticTasksRepo
 ) : TherapeuticTasksService {
 
-    override fun createTherapeuticTask(therapistId: Long, therapeuticTaskName: String): TherapeuticTask {
-        return therapeuticTasksRepo.save(TherapeuticTask(AggregateReference.to(therapistId), therapeuticTaskName))
+    override fun getOrCreate(therapistId: Long, therapeuticTaskName: String): TherapeuticTask {
+        return therapeuticTasksRepo.getOrCreate(
+            TherapeuticTask(
+                AggregateReference.to(therapistId),
+                therapeuticTaskName
+            )
+        )
     }
 
     override fun findAllById(ids: List<Long>): Map<Long, TherapeuticTask> {

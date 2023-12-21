@@ -7,14 +7,29 @@ import org.springframework.data.mapping.model.BasicPersistentEntity
 import org.springframework.data.util.TypeInformation
 import org.springframework.stereotype.Repository
 import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTask
+import pro.qyoga.platform.spring.sdj.findOneBy
 
 
 @Repository
 class TherapeuticTasksRepo(
-    jdbcAggregateTemplate: JdbcAggregateOperations,
+    private val jdbcAggregateTemplate: JdbcAggregateOperations,
     jdbcConverter: JdbcConverter
 ) : SimpleJdbcRepository<TherapeuticTask, Long>(
     jdbcAggregateTemplate,
     BasicPersistentEntity(TypeInformation.of(TherapeuticTask::class.java)),
     jdbcConverter
-)
+) {
+
+    fun getOrCreate(therapeuticTask: TherapeuticTask): TherapeuticTask {
+        var persistedTask = jdbcAggregateTemplate.findOneBy<TherapeuticTask> {
+            TherapeuticTask::name isEqual therapeuticTask.name
+        }
+
+        if (persistedTask == null) {
+            persistedTask = jdbcAggregateTemplate.save(therapeuticTask)
+        }
+
+        return persistedTask
+    }
+
+}

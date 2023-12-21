@@ -30,7 +30,7 @@ class CreateJournalEntryWorkflow(
         val client = clientsService.findClient(clientId)
             ?: return CreateJournalEntryResult.ClientNotFound
 
-        val therapeuticTask = therapeuticTasksService.createTherapeuticTask(
+        val therapeuticTask = therapeuticTasksService.getOrCreate(
             principal.id,
             createJournalEntryRequest.therapeuticTaskName
         )

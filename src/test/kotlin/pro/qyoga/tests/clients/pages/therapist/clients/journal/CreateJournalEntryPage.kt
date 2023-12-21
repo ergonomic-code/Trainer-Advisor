@@ -13,13 +13,11 @@ object CreateJournalEntryPage : Component {
 
         val dateInput = Input.text("date", true)
         val therapeuticTaskNameInput = Input.text("therapeuticTaskName", true)
-        val therapeuticTaskIdInput = Input.hidden("therapeuticTaskId", false)
         val entryTextInput = TextArea("journalEntryText", true)
 
         override val components = listOf(
             dateInput,
             therapeuticTaskNameInput,
-            therapeuticTaskIdInput,
             entryTextInput
         )
 
