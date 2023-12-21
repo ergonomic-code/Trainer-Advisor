@@ -7,6 +7,7 @@ import org.springframework.web.servlet.ModelAndView
 import pro.qyoga.core.clients.cards.api.ClientsService
 import pro.qyoga.core.users.internal.QyogaUserDetails
 import pro.qyoga.platform.spring.mvc.modelAndView
+import java.time.LocalDate
 
 @Controller
 @RequestMapping("/therapist/clients/{clientId}/journal")
@@ -24,6 +25,7 @@ class JournalEntryPageController(
 
         return modelAndView("therapist/clients/journal-create") {
             "client" bindTo client
+            "entryDate" bindTo LocalDate.now()
         }
     }
 

@@ -26,6 +26,10 @@ data class Input(
         matchRequired(element)
     }
 
+    fun value(element: Element): String {
+        return element.select(selector()).`val`()
+    }
+
     companion object {
 
         fun text(name: String, required: Boolean, value: String? = null) =
