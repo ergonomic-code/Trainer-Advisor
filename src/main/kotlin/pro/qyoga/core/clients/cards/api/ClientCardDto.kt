@@ -1,14 +1,14 @@
 package pro.qyoga.core.clients.cards.api
 
 import org.springframework.format.annotation.DateTimeFormat
-import pro.qyoga.core.formats.russianDateFormatPattern
+import pro.qyoga.core.formats.RUSSIAN_DATE_FORMAT_PATTERN
 import java.time.LocalDate
 
 data class ClientCardDto(
     val firstName: String,
     val lastName: String,
     val middleName: String?,
-    @DateTimeFormat(pattern = russianDateFormatPattern)
+    @DateTimeFormat(pattern = RUSSIAN_DATE_FORMAT_PATTERN)
     val birthDate: LocalDate?,
     val phoneNumber: String,
     val email: String?,

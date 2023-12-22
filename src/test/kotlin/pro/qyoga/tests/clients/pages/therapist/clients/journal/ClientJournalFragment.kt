@@ -9,18 +9,18 @@ import pro.qyoga.core.clients.journals.api.JournalEntry
 import pro.qyoga.core.formats.russianDateFormat
 import pro.qyoga.platform.spring.sdj.AggregateReferenceTarget
 import pro.qyoga.tests.assertions.PageMatcher
-import pro.qyoga.tests.assertions.shouldHave
+import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.infra.html.Link
 
 
 object ClientJournalFragment {
 
-    private val addEntryLink = Link.hxGet("addEntryLink", CreateJournalEntryPage.path, "Добавить запись")
+    private val addEntryLink = Link.hxGet("addEntryLink", CreateJournalEntryPage.PATH, "Добавить запись")
 
     fun fragmentFor(entries: List<JournalEntry>): PageMatcher = object : PageMatcher {
 
         override fun match(element: Element) {
-            element shouldHave addEntryLink
+            element shouldHaveComponent addEntryLink
 
             val entryElements = element.select("div.journalEntry")
             entryElements shouldHaveSize entries.size

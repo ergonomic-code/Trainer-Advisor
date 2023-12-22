@@ -5,7 +5,6 @@ plugins {
 	id("io.spring.dependency-management") version "1.1.4"
 	kotlin("jvm") version "1.9.21"
 	kotlin("plugin.spring") version "1.9.21"
-	id("io.gitlab.arturbosch.detekt") version "1.23.4"
 	id("org.jetbrains.kotlinx.kover") version "0.6.1"
 	id("java-test-fixtures")
 }
@@ -73,8 +72,6 @@ dependencies {
 	testImplementation("io.github.ulfs:assertj-jsoup:0.1.4")
 	testImplementation("com.icegreen:greenmail-junit5:2.0.0")
 
-	detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.4")
-
 	modules {
 		module("org.codehaus.groovy:groovy") {
 			replacedBy("org.apache.groovy:groovy", "conflicts in current rest-assured version")
@@ -100,18 +97,6 @@ tasks.withType<Test> {
 tasks {
 	named("e2eTest", Test::class) {
 		systemProperties["selenide.browser"] = "chrome"
-	}
-}
-
-detekt {
-	buildUponDefaultConfig = true
-	allRules = false
-	config.from(files("$projectDir/conf/qyoga-detekt.yaml"))
-}
-
-tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
-	reports {
-		html.required.set(true)
 	}
 }
 

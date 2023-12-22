@@ -1,7 +1,7 @@
 package pro.qyoga.tests.clients.pages.publc
 
 import org.jsoup.nodes.Element
-import pro.qyoga.tests.assertions.shouldHave
+import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.assertions.shouldHaveTitle
 import pro.qyoga.tests.infra.html.FormAction
 import pro.qyoga.tests.infra.html.Input.Companion.email
@@ -25,7 +25,7 @@ object RegisterPage : QYogaPage {
         val email = email("email", true)
         val duplicatedEmail = "${email.selector()}.is-invalid"
 
-        const val duplicatedEmailMessage = "#duplicatedEmailMessage"
+        const val DUPLICATED_EMAIL_MESSAGE = "#duplicatedEmailMessage"
 
         override val components = listOf(
             firstName,
@@ -38,7 +38,7 @@ object RegisterPage : QYogaPage {
 
     override fun match(element: Element) {
         element.shouldHaveTitle(title)
-        element shouldHave RegisterForm
+        element shouldHaveComponent RegisterForm
     }
 
 }

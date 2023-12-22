@@ -5,6 +5,7 @@ import io.kotest.matchers.collections.shouldHaveSize
 import org.jsoup.nodes.Element
 import pro.qyoga.tests.assertions.shouldBeElement
 import pro.qyoga.tests.assertions.shouldHave
+import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.assertions.shouldHaveTitle
 import pro.qyoga.tests.infra.html.FormAction
 import pro.qyoga.tests.infra.html.Input.Companion.email
@@ -48,7 +49,7 @@ object LoginPage : QYogaPage {
 
         element shouldHave LOGIN_ERROR_MESSAGE
 
-        element shouldHave registerLink
+        element shouldHaveComponent registerLink
     }
 
 }

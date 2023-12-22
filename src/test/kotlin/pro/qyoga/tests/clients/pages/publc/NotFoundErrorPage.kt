@@ -2,6 +2,7 @@ package pro.qyoga.tests.clients.pages.publc
 
 import org.jsoup.nodes.Element
 import pro.qyoga.tests.assertions.shouldHave
+import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.assertions.shouldHaveTitle
 import pro.qyoga.tests.infra.html.Link
 import pro.qyoga.tests.infra.html.QYogaPage
@@ -19,7 +20,7 @@ object NotFoundErrorPage : QYogaPage {
     override fun match(element: Element) {
         element shouldHaveTitle title
         element shouldHave "#notFoundErrorMessage"
-        element shouldHave returnToMainLink
+        element shouldHaveComponent returnToMainLink
     }
 
 }

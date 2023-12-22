@@ -57,14 +57,14 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
         }
     }
 
-    fun getEditClientCardPage(clientId: Long): Document {
+    fun getEditClientCardPage(clientId: Long, expectedStatus: HttpStatus = HttpStatus.OK): Document {
         return Given {
             authorized()
             pathParam("id", clientId)
         } When {
-            get(EditClientPage.path)
+            get(EditClientPage.PATH)
         } Then {
-            statusCode(HttpStatus.OK.value())
+            statusCode(expectedStatus.value())
         } Extract {
             Jsoup.parse(body().asString())
         }
@@ -110,7 +110,7 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
             formParam(EditClientForm.distributionSourceType.name, request.distributionSourceType?.name ?: "")
             formParam(EditClientForm.distributionSourceComment.name, request.distributionSourceComment ?: "")
         } When {
-            post(EditClientPage.path)
+            post(EditClientPage.PATH)
         } Then {
             statusCode(HttpStatus.FOUND.value())
             header("Location", endsWith(ClientsListPage.path))

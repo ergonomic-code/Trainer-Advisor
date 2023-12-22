@@ -9,7 +9,7 @@ import org.jsoup.select.Elements
 import pro.qyoga.core.clients.cards.api.Client
 import pro.qyoga.tests.assertions.PageMatcher
 import pro.qyoga.tests.assertions.shouldBeElement
-import pro.qyoga.tests.assertions.shouldHave
+import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.clients.pages.therapist.clients.card.CreateClientPage
 import pro.qyoga.tests.infra.html.*
 import pro.qyoga.tests.infra.html.Input.Companion.text
@@ -53,8 +53,8 @@ object ClientsListPage : QYogaPage {
 
         element.getElementById(ClientSearchForm.id)!! shouldBeElement ClientSearchForm
 
-        element shouldHave addLink
-        element shouldHave addButton
+        element shouldHaveComponent addLink
+        element shouldHaveComponent addButton
     }
 
     fun clientId(document: Document, rowIdx: Int): Long {
