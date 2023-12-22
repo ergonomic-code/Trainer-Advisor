@@ -2,7 +2,7 @@ package pro.qyoga.tests.clients.pages.therapist.therapy.exercises
 
 import io.kotest.matchers.shouldBe
 import org.jsoup.nodes.Element
-import pro.qyoga.tests.assertions.shouldHave
+import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.infra.html.*
 import pro.qyoga.tests.infra.html.Input.Companion.button
 import pro.qyoga.tests.infra.html.Input.Companion.file
@@ -53,7 +53,7 @@ object CreateExercisePage : QYogaPage {
     override fun match(element: Element) {
         element.select("title")[0].text() shouldBe title
 
-        element shouldHave CreateExerciseForm
+        element shouldHaveComponent CreateExerciseForm
     }
 
 }

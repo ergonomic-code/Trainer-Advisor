@@ -14,4 +14,7 @@ interface InputBase : Component {
             actualRequired shouldBe required
         }
     }
+
+    fun value(element: Element): String
+
 }

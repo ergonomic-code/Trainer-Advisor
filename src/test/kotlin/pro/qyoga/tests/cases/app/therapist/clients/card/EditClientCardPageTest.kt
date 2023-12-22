@@ -3,9 +3,11 @@ package pro.qyoga.tests.cases.app.therapist.clients.card
 import io.kotest.inspectors.forAny
 import io.kotest.inspectors.forNone
 import org.junit.jupiter.api.Test
+import org.springframework.http.HttpStatus
 import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
+import pro.qyoga.tests.clients.pages.publc.NotFoundErrorPage
 import pro.qyoga.tests.clients.pages.therapist.clients.card.EditClientPage
 import pro.qyoga.tests.fixture.clients.ClientsObjectMother
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
@@ -60,6 +62,20 @@ class EditClientCardPageTest : QYogaAppIntegrationBaseTest() {
         // Then
         val clients = backgrounds.clients.getAllClients().content
         clients.forAny { it shouldMatch editedMinimalClient }
+    }
+
+    @Test
+    fun `Request of edit page for not existing client id should return 404 error page`() {
+        // Given
+        val therapist = TherapistClient.loginAsTheTherapist()
+        val notExistingClientId: Long = -1
+
+        // When
+        val document =
+            therapist.clients.getEditClientCardPage(notExistingClientId, expectedStatus = HttpStatus.NOT_FOUND)
+
+        // Then
+        document shouldBe NotFoundErrorPage
     }
 
 }

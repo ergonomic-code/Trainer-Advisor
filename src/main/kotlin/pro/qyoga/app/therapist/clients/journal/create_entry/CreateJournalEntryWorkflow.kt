@@ -1,4 +1,4 @@
-package pro.qyoga.app.therapist.clients.journal
+package pro.qyoga.app.therapist.clients.journal.create_entry
 
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
@@ -8,11 +8,6 @@ import pro.qyoga.core.clients.journals.api.JournalsService
 import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTasksService
 import pro.qyoga.core.users.internal.QyogaUserDetails
 import pro.qyoga.platform.spring.sdj.ref
-
-sealed interface CreateJournalEntryResult {
-    data class Success(val entry: JournalEntry) : CreateJournalEntryResult
-    data object ClientNotFound : CreateJournalEntryResult
-}
 
 @Component
 class CreateJournalEntryWorkflow(
@@ -26,9 +21,9 @@ class CreateJournalEntryWorkflow(
         clientId: Long,
         createJournalEntryRequest: CreateJournalEntryRequest,
         principal: QyogaUserDetails,
-    ): CreateJournalEntryResult {
+    ): JournalEntry {
         val client = clientsService.findClient(clientId)
-            ?: return CreateJournalEntryResult.ClientNotFound
+            ?: throw ClientNotFound(clientId)
 
         val therapeuticTask = therapeuticTasksService.getOrCreate(
             principal.id,
@@ -40,9 +35,9 @@ class CreateJournalEntryWorkflow(
             therapeuticTask.ref(),
             createJournalEntryRequest.journalEntryText
         )
-        val entry = journalsService.createJournalEntry(newEntry)
+        val persistedEntry = journalsService.createJournalEntry(newEntry)
 
-        return CreateJournalEntryResult.Success(entry)
+        return persistedEntry
     }
 
 }

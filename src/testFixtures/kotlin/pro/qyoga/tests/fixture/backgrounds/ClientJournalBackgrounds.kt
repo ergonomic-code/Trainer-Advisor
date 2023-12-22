@@ -3,9 +3,8 @@ package pro.qyoga.tests.fixture.backgrounds
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.stereotype.Component
-import pro.qyoga.app.therapist.clients.journal.CreateJournalEntryRequest
-import pro.qyoga.app.therapist.clients.journal.CreateJournalEntryResult
-import pro.qyoga.app.therapist.clients.journal.CreateJournalEntryWorkflow
+import pro.qyoga.app.therapist.clients.journal.create_entry.CreateJournalEntryRequest
+import pro.qyoga.app.therapist.clients.journal.create_entry.CreateJournalEntryWorkflow
 import pro.qyoga.core.clients.journals.api.JournalEntry
 import pro.qyoga.core.clients.journals.api.JournalPageRequest
 import pro.qyoga.core.clients.journals.api.JournalsService
@@ -28,8 +27,7 @@ class ClientJournalBackgrounds(
         createJournalEntryRequest: CreateJournalEntryRequest,
         therapist: QyogaUserDetails
     ): JournalEntry {
-        val res = createJournalEntryWorkflow.createJournalEntry(clientId, createJournalEntryRequest, therapist)
-        return (res as CreateJournalEntryResult.Success).entry
+        return createJournalEntryWorkflow.createJournalEntry(clientId, createJournalEntryRequest, therapist)
     }
 
     fun createEntries(clientId: Long, therapist: QyogaUserDetails, count: Int): List<JournalEntry> {

@@ -16,21 +16,39 @@
     </style>
 
     <h2 class="mb-5">Новая запись</h2>
-    <form id="journalEntryFrom" method="POST" th:action="@{/therapist/clients/{id}/journal/create(id=${client.id})}">
+    <form hx-swap="outerHtml" id="journalEntryFrom"
+          th:fragment="journalEntryFrom"
+          th:hx-post="@{/therapist/clients/{id}/journal/create(id=${client.id})}">
         <div class="row">
             <div class="mb-3 col-12 col-md-2">
                 <label class="form-label" for="date-input">Дата</label>
-                <input class="form-control" id="date-input" name="date" required th:value="${#temporals.format(entryDate, T(pro.qyoga.core.formats.DateFormatsKt).russianDateFormatPattern)}"
-                       type="text">
+                <input aria-describedby="duplicatedDateMessage"
+                       class="form-control"
+                       id="date-input"
+                       name="date" pattern="\d{2}\.\d{2}\.\d{4}" required
+                       th:classappend="${duplicatedDate} ? 'is-invalid' : ''"
+                       th:value="${#temporals.format((entry?.date ?: entryDate), T(pro.qyoga.core.formats.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN)}"
+                       type="text"
+                >
+                <div class="invalid-feedback" id="duplicatedDateMessage">
+                    Запись за эту дату уже существует
+                </div>
             </div>
             <div class="mb-3 col">
                 <label class="form-label" for="task-input">Терапевтическая задача</label>
-                <input class="form-control" id="task-input" name="therapeuticTaskName" required type="text">
+                <input class="form-control"
+                       id="task-input" minlength="3" name="therapeuticTaskName" required
+                       th:value="${entry?.therapeuticTask?.entity?.name ?: ''}"
+                       type="text"
+                >
             </div>
         </div>
         <div class="mb-3">
             <label class="form-label" for="text-input">Запись</label>
-            <textarea class="form-control" id="text-input" name="journalEntryText" required rows="12"></textarea>
+            <textarea class="form-control"
+                      id="text-input" name="journalEntryText" required rows="12"
+                      th:text="${entry?.entryText ?: ''}"
+            ></textarea>
         </div>
         <div class="row g-2 justify-content-end">
             <div class="col-auto">

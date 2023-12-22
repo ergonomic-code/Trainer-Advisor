@@ -18,7 +18,7 @@ infix fun Document.shouldBe(pageMatcher: PageMatcher) = pageMatcher.match(this)
 
 infix fun Element.shouldBeElement(pageMatcher: PageMatcher) = pageMatcher.match(this)
 
-infix fun Element.shouldHave(component: Component) {
+infix fun Element.shouldHaveComponent(component: Component) {
     val element = this.select(component.selector())
     withClue("Cannot find component ${component.name} by selector ${component.selector()} in $this") {
         element shouldHaveSize 1

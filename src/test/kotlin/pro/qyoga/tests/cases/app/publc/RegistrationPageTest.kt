@@ -75,7 +75,7 @@ class RegistrationPageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         document shouldHave RegisterPage.RegisterForm.duplicatedEmail
-        document.select(RegisterPage.RegisterForm.duplicatedEmailMessage)[0].text() shouldContain adminEmail
+        document.select(RegisterPage.RegisterForm.DUPLICATED_EMAIL_MESSAGE)[0].text() shouldContain adminEmail
     }
 
     companion object {

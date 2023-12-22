@@ -8,7 +8,7 @@ import org.jsoup.select.Elements
 import pro.qyoga.core.therapy.exercises.api.ExerciseDto
 import pro.qyoga.core.therapy.exercises.api.ExerciseType
 import pro.qyoga.tests.assertions.PageMatcher
-import pro.qyoga.tests.assertions.shouldHave
+import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.infra.html.*
 import pro.qyoga.tests.infra.html.FormAction.Companion.hxGet
 import pro.qyoga.tests.infra.html.Input.Companion.text
@@ -41,8 +41,8 @@ object ExercisesListPage : QYogaPage {
     override fun match(element: Element) {
         element.select("title")[0].text() shouldBe title
 
-        element shouldHave ExercisesSearchForm
-        element shouldHave newExerciseButton
+        element shouldHaveComponent ExercisesSearchForm
+        element shouldHaveComponent newExerciseButton
     }
 
     fun exercisesRows(document: Document): Elements =

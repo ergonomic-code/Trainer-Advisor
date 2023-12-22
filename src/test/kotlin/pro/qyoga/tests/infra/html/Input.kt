@@ -26,9 +26,8 @@ data class Input(
         matchRequired(element)
     }
 
-    fun value(element: Element): String {
-        return element.select(selector()).`val`()
-    }
+    override fun value(element: Element): String =
+        element.select(selector()).`val`()
 
     companion object {
 
@@ -49,9 +48,6 @@ data class Input(
 
         fun tel(name: String, required: Boolean) =
             Input(name, required, "tel")
-
-        fun hidden(name: String, required: Boolean) =
-            Input(name, required, "hidden")
 
         fun file(name: String, required: Boolean, alpineJs: Boolean = false) =
             Input(name, required, "file", alpineJs)

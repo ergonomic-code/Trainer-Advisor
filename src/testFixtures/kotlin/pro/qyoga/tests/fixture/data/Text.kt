@@ -25,14 +25,14 @@ fun randomCyrillicWord(minLength: Int = 1, maxLength: Int = 12) =
 fun randomLatinWord(minLength: Int = 1, maxLength: Int = 12) =
     randomWord(lowerCaseLatinLetters, minLength, maxLength)
 
-fun randomSentence(minWords: Int = 3, maxWords: Int = 20) =
-    buildString {
-        val length = Random.nextInt(minWords, maxWords)
-        (1..length).joinToString(". ") {
-            append(randomCyrillicWord())
-        }
-        check(length > 0)
+fun randomSentence(minWords: Int = 3, maxWords: Int = 20): String {
+    val length = Random.nextInt(minWords, maxWords)
+    val sentence = (1..length).joinToString(". ") {
+        randomCyrillicWord()
     }
+    check(sentence.isNotEmpty())
+    return sentence
+}
 
 fun randomEmail(): String =
     buildString {
