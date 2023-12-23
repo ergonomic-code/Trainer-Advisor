@@ -43,4 +43,8 @@ class ClientsServiceImpl(
         clientsRepo.deleteById(id)
     }
 
+    override fun clientExists(id: Long): Boolean {
+        return clientsRepo.existsById(id)
+    }
+
 }

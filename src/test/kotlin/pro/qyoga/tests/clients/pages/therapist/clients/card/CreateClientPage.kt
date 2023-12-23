@@ -13,7 +13,6 @@ object CreateClientPage : QYogaPage {
 
     override val title = "Новый клиент"
 
-
     override fun match(element: Element) {
         element shouldHaveTitle title
         element.getElementById(CreateClientForm.id)!! shouldBeElement CreateClientForm
