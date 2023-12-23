@@ -28,4 +28,8 @@ class JournalsServiceImpl(
         return journalEntriesRepo.getJournalPage(journalPageRequest)
     }
 
+    override fun getJournalEntry(clientId: Long, entryId: Long): JournalEntry? {
+        return journalEntriesRepo.getEntry(clientId, entryId)
+    }
+
 }

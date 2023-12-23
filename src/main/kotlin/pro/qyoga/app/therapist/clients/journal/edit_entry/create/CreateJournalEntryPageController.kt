@@ -1,9 +1,11 @@
-package pro.qyoga.app.therapist.clients.journal.create_entry
+package pro.qyoga.app.therapist.clients.journal.edit_entry.create
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
+import pro.qyoga.app.therapist.clients.journal.edit_entry.edit.EditJournalEntryRequest
+import pro.qyoga.app.therapist.clients.journal.edit_entry.shared.JOURNAL_ENTRY_VIEW_NAME
 import pro.qyoga.core.clients.cards.api.ClientsService
 import pro.qyoga.core.clients.journals.api.DuplicatedDate
 import pro.qyoga.core.users.internal.QyogaUserDetails
@@ -12,11 +14,10 @@ import pro.qyoga.platform.spring.http.hxRedirect
 import pro.qyoga.platform.spring.mvc.modelAndView
 import java.time.LocalDate
 
-private const val CREATE_ENTRY_VIEW_NAME = "therapist/clients/journal-create"
 
 @Controller
 @RequestMapping("/therapist/clients/{clientId}/journal")
-class JournalEntryPageController(
+class CreateJournalEntryPageController(
     private val clientsService: ClientsService,
     private val createJournalEntryWorkflow: CreateJournalEntryWorkflow
 ) {
@@ -28,20 +29,22 @@ class JournalEntryPageController(
         val client = clientsService.findClient(clientId)
             ?: return ModelAndView("forward:error/404")
 
-        return modelAndView(CREATE_ENTRY_VIEW_NAME) {
+        return modelAndView(JOURNAL_ENTRY_VIEW_NAME) {
             "client" bindTo client
             "entryDate" bindTo LocalDate.now()
+            "formAction" bindTo createFormAction(clientId)
         }
     }
+
 
     @PostMapping("/create")
     fun createJournalEntry(
         @PathVariable clientId: Long,
-        @ModelAttribute createJournalEntryRequest: CreateJournalEntryRequest,
+        @ModelAttribute editJournalEntryRequest: EditJournalEntryRequest,
         @AuthenticationPrincipal principal: QyogaUserDetails,
     ): Any {
         val result = runCatching {
-            createJournalEntryWorkflow.createJournalEntry(clientId, createJournalEntryRequest, principal)
+            createJournalEntryWorkflow.createJournalEntry(clientId, editJournalEntryRequest, principal)
         }
 
         return when {
@@ -50,11 +53,11 @@ class JournalEntryPageController(
 
             result.isFailureOf<DuplicatedDate>() -> {
                 val ex = result.exceptionOrNull() as DuplicatedDate
-                modelAndView("$CREATE_ENTRY_VIEW_NAME :: journalEntryFrom") {
+                modelAndView("$JOURNAL_ENTRY_VIEW_NAME :: journalEntryFrom") {
                     "client" bindTo ex.duplicatedEntry.client
                     "entry" bindTo ex.duplicatedEntry
-                    "entryDate" bindTo ex.duplicatedEntry.date
                     "duplicatedDate" bindTo true
+                    "formAction" bindTo createFormAction(clientId)
                 }
             }
 
@@ -62,5 +65,7 @@ class JournalEntryPageController(
                 result.getOrThrow()
         }
     }
+
+    private fun createFormAction(clientId: Long) = "/therapist/clients/$clientId/journal/create"
 
 }

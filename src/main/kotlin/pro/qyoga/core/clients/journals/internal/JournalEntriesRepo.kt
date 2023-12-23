@@ -38,4 +38,14 @@ class JournalEntriesRepo(
         )
     }
 
+    fun getEntry(clientId: Long, entryId: Long): JournalEntry? {
+        val query = query {
+            JournalEntry::client isEqual AggregateReference.to(clientId)
+            JournalEntry::id isEqual entryId
+        }
+
+        return jdbcAggregateTemplate.findOne(query, JournalEntry::class.java)
+            .orElse(null)
+    }
+
 }

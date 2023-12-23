@@ -9,4 +9,6 @@ interface JournalsService {
 
     fun getJournalPage(journalPageRequest: JournalPageRequest): Page<JournalEntry>
 
+    fun getJournalEntry(clientId: Long, entryId: Long): JournalEntry?
+
 }

@@ -6,12 +6,12 @@ import org.jsoup.nodes.Element
 
 class Link(
     val id: String,
-    url: String,
+    val urlPattern: String,
     val text: String,
     val targetAttr: String = "href"
 ) : Component {
 
-    val urlRegex = url.replace("\\{.*}".toRegex(), ".*")
+    private val urlRegex = urlPattern.replace("\\{.*}".toRegex(), ".*")
 
     constructor(id: String, page: QYogaPage, text: String) : this(id, page.path, text)
 

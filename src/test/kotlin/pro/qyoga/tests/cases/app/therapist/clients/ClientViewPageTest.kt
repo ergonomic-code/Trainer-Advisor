@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus
 import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.clients.pages.publc.NotFoundErrorPage
-import pro.qyoga.tests.clients.pages.therapist.clients.journal.EmptyClientJournalPage
+import pro.qyoga.tests.clients.pages.therapist.clients.journal.list.EmptyClientJournalPage
 import pro.qyoga.tests.fixture.clients.ClientsObjectMother.createClientCardDto
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest

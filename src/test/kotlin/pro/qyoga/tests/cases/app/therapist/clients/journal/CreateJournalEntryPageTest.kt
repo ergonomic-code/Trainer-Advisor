@@ -13,7 +13,9 @@ import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.clients.pages.publc.GenericErrorPage
 import pro.qyoga.tests.clients.pages.publc.NotFoundErrorPage
-import pro.qyoga.tests.clients.pages.therapist.clients.journal.CreateJournalEntryPage
+import pro.qyoga.tests.clients.pages.therapist.clients.journal.entry.CreateJournalEntryForm
+import pro.qyoga.tests.clients.pages.therapist.clients.journal.entry.CreateJournalEntryPage
+import pro.qyoga.tests.clients.pages.therapist.clients.journal.entry.JournalEntryFrom
 import pro.qyoga.tests.fixture.clients.JournalEntriesObjectMother
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
 import pro.qyoga.tests.fixture.therapists.theTherapistUserDetails
@@ -64,7 +66,7 @@ class CreateJournalEntryPageTest : QYogaAppIntegrationBaseTest() {
         val document = therapist.clientJournal.getCreateJournalEntryPage(client.id)
 
         // Then
-        CreateJournalEntryPage.JournalEntryFrom.dateInput.value(document) shouldBe russianDateFormat.format(LocalDate.now())
+        CreateJournalEntryForm.dateInput.value(document) shouldBe russianDateFormat.format(LocalDate.now())
     }
 
     @Test
@@ -80,11 +82,11 @@ class CreateJournalEntryPageTest : QYogaAppIntegrationBaseTest() {
         val document = therapist.clientJournal.createJournalEntryForError(client.id, createJournalEntryRequest)
 
         // Then
-        document.select("body form").single() shouldBeElement CreateJournalEntryPage.JournalEntryFrom
-        CreateJournalEntryPage.JournalEntryFrom.dateInput.value(document) shouldBe russianDateFormat.format(LocalDate.now())
-        CreateJournalEntryPage.JournalEntryFrom.therapeuticTaskNameInput.value(document) shouldBe createJournalEntryRequest.therapeuticTaskName
-        CreateJournalEntryPage.JournalEntryFrom.entryTextInput.value(document) shouldBe createJournalEntryRequest.journalEntryText
-        document shouldHave CreateJournalEntryPage.JournalEntryFrom.DUPLICATED_DATE_MESSAGE
+        document.select("body form").single() shouldBeElement CreateJournalEntryForm
+        CreateJournalEntryForm.dateInput.value(document) shouldBe russianDateFormat.format(LocalDate.now())
+        CreateJournalEntryForm.therapeuticTaskNameInput.value(document) shouldBe createJournalEntryRequest.therapeuticTaskName
+        CreateJournalEntryForm.entryTextInput.value(document) shouldBe createJournalEntryRequest.journalEntryText
+        document shouldHave JournalEntryFrom.DUPLICATED_DATE_MESSAGE
     }
 
     @Test

@@ -16,4 +16,6 @@ interface ClientsService {
 
     fun deleteClient(id: Long)
 
+    fun clientExists(id: Long): Boolean
+
 }

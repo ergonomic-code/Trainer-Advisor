@@ -3,7 +3,7 @@ package pro.qyoga.tests.clients.pages.therapist.clients
 import org.jsoup.nodes.Element
 import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.clients.pages.therapist.clients.card.EditClientPage
-import pro.qyoga.tests.clients.pages.therapist.clients.journal.EmptyClientJournalPage
+import pro.qyoga.tests.clients.pages.therapist.clients.journal.list.EmptyClientJournalPage
 import pro.qyoga.tests.infra.html.Component
 import pro.qyoga.tests.infra.html.Link
 

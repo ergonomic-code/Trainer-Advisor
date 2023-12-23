@@ -3,7 +3,7 @@ package pro.qyoga.tests.cases.app.therapist.clients.journal
 import org.junit.jupiter.api.Test
 import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.clients.TherapistClient
-import pro.qyoga.tests.clients.pages.therapist.clients.journal.NonEmptyClientJournalPage
+import pro.qyoga.tests.clients.pages.therapist.clients.journal.list.NonEmptyClientJournalPage
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
 import pro.qyoga.tests.fixture.therapists.theTherapistUserDetails
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest

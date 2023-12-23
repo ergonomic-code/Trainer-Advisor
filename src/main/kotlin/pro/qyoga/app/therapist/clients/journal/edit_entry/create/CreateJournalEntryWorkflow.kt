@@ -1,7 +1,9 @@
-package pro.qyoga.app.therapist.clients.journal.create_entry
+package pro.qyoga.app.therapist.clients.journal.edit_entry.create
 
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
+import pro.qyoga.app.therapist.clients.journal.edit_entry.edit.EditJournalEntryRequest
+import pro.qyoga.app.therapist.clients.journal.edit_entry.shared.ClientNotFound
 import pro.qyoga.core.clients.cards.api.ClientsService
 import pro.qyoga.core.clients.journals.api.JournalEntry
 import pro.qyoga.core.clients.journals.api.JournalsService
@@ -19,7 +21,7 @@ class CreateJournalEntryWorkflow(
     @Transactional
     fun createJournalEntry(
         clientId: Long,
-        createJournalEntryRequest: CreateJournalEntryRequest,
+        editJournalEntryRequest: EditJournalEntryRequest,
         principal: QyogaUserDetails,
     ): JournalEntry {
         val client = clientsService.findClient(clientId)
@@ -27,13 +29,13 @@ class CreateJournalEntryWorkflow(
 
         val therapeuticTask = therapeuticTasksService.getOrCreate(
             principal.id,
-            createJournalEntryRequest.therapeuticTaskName
+            editJournalEntryRequest.therapeuticTaskName
         )
         val newEntry = JournalEntry(
             client.ref(),
-            createJournalEntryRequest.date,
+            editJournalEntryRequest.date,
             therapeuticTask.ref(),
-            createJournalEntryRequest.journalEntryText
+            editJournalEntryRequest.journalEntryText
         )
         val persistedEntry = journalsService.createJournalEntry(newEntry)
 

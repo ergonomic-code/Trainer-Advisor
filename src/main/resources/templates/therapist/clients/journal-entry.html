@@ -15,10 +15,9 @@
         }
     </style>
 
-    <h2 class="mb-5">Новая запись</h2>
     <form hx-swap="outerHtml" id="journalEntryFrom"
           th:fragment="journalEntryFrom"
-          th:hx-post="@{/therapist/clients/{id}/journal/create(id=${client.id})}">
+          th:hx-post="${formAction}">
         <div class="row">
             <div class="mb-3 col-12 col-md-2">
                 <label class="form-label" for="date-input">Дата</label>
@@ -58,7 +57,7 @@
                 </a>
             </div>
             <div class="col-auto">
-                <button class="btn btn-success" style="min-width: 110px;">Добавить</button>
+                <button class="btn btn-success" name="confirmButton" style="min-width: 110px;">Сохранить</button>
             </div>
         </div>
     </form>

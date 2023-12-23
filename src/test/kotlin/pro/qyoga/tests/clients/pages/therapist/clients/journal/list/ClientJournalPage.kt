@@ -1,4 +1,4 @@
-package pro.qyoga.tests.clients.pages.therapist.clients.journal
+package pro.qyoga.tests.clients.pages.therapist.clients.journal.list
 
 import org.jsoup.nodes.Element
 import pro.qyoga.core.clients.journals.api.JournalEntry
