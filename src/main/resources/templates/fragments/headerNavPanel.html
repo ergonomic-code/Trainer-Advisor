@@ -1,22 +1,9 @@
 <div th:fragment="headerNavPanel">
     <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+        <!-- Sidebar Toggle-->
+        <button class="btn btn-link btn-sm order-0 order-lg-0 me-4 me-lg-0" id="sidebarToggle"><i
+                class="fas fa-bars"></i></button>
         <!-- Navbar Brand-->
         <a class="navbar-brand ps-3">Trainer Advisor</a>
-        <!-- Sidebar Toggle-->
-        <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle"><i
-                class="fas fa-bars"></i></button>
-        <!-- Navbar-->
-        <ul class="navbar-nav ms-auto me-5">
-            <li class="nav-item dropdown">
-                <a aria-expanded="false" class="nav-link dropdown-toggle"
-                   data-bs-target="#navbarDropdown" data-bs-toggle="dropdown"
-                   id="navbarDropdown"
-                   role="button"><i class="fas fa-user fa-fw"></i></a>
-                <ul aria-labelledby="navbarDropdown" class="dropdown-menu dropdown-menu-end">
-                    <li><a class="dropdown-item" href="#">Настройки</a></li>
-                    <li><a class="dropdown-item" href="/logout">Выйти</a></li>
-                </ul>
-            </li>
-        </ul>
     </nav>
 </div>

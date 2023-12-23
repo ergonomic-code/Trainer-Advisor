@@ -25,3 +25,8 @@ div.htmx-swapping {
     opacity: 0;
     transition: opacity 0.1s ease-out;
 }
+
+tr.htmx-swapping {
+    opacity: 0;
+    transition: opacity 0.1s ease-out;
+}

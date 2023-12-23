@@ -19,11 +19,9 @@ class NavBarLinksTest : QYogaAppIntegrationBaseTest() {
         // Then
 
         // left nav bar
-        document.shouldHaveValidLink("Главная", therapist.authCookie)
         document.shouldHaveValidLink("Клиенты", therapist.authCookie)
         document.shouldHaveValidLink("Упражнения", therapist.authCookie)
 
-        // top nav bar
         document.shouldHaveValidLink("Выйти", therapist.authCookie)
     }
 

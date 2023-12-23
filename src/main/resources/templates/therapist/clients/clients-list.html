@@ -78,29 +78,23 @@
                         <div id="tablePagination" th:fragment="clients">
 
                             <table class="table table-hover" id="clientsTable" th:fragment="clients-table">
-                                <thead>
-                                <tr>
-                                    <th>ФИО</th>
-                                </tr>
-                                </thead>
                                 <tbody id="clients-list">
                                 <tr th:each="client : ${clients.content}">
-                                    <td class="nameCell w-75" th:text="${client.fullName()}"></td>
-                                    <td>
-                                        <a class="updateLink"
-                                           th:attr="href=@{/therapist/clients/{id}/journal (id=${client.id})}">
-                                            <button class="btn btn-link">
-                                                Изменить
-                                            </button>
+                                    <td class="nameCell w-100 align-middle">
+                                        <a
+                                                class="link-primary updateLink"
+                                                th:attr="href=@{/therapist/clients/{id}/journal (id=${client.id})}"
+                                                th:text="${client.fullName}">
                                         </a>
                                     </td>
-                                    <td>
-                                        <button class="btn btn-danger" hx-swap="outerHTML swap:1s"
-                                                hx-target="closest tr"
-                                                name="delete"
-                                                th:attr="hx-delete=@{/therapist/clients/delete/{id} (id=${client.id})}">
-                                            Удалить
-                                        </button>
+                                    <td class="text-end">
+                                        <a class="deleteClientLink btn btn-gray text"
+                                           hx-swap="outerHTML swap:0.2s"
+                                           hx-target="closest tr"
+                                           th:hx-confirm="'Удалить клиента ' + ${client.fullName} + '?'"
+                                           th:hx-delete="@{/therapist/clients/delete/{id} (id=${client.id})}">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
                                     </td>
                                 </tr>
                                 </tbody>
