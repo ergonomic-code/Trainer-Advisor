@@ -3,6 +3,11 @@
     background-color: #667085;
 }
 
+.btn-gray:hover {
+    color: #fff;
+    background-color: #5a6273;
+}
+
 .nav-pills .nav-link.active {
     color: #fff;
     background-color: #198754;
@@ -14,4 +19,9 @@
 
 .nav-pills .nav-link {
     color: #198754;
+}
+
+div.htmx-swapping {
+    opacity: 0;
+    transition: opacity 0.1s ease-out;
 }

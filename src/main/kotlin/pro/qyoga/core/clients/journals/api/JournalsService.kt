@@ -11,4 +11,6 @@ interface JournalsService {
 
     fun getJournalEntry(clientId: Long, entryId: Long): JournalEntry?
 
+    fun deleteEntry(clientId: Long, entryId: Long)
+
 }

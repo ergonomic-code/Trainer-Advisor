@@ -138,4 +138,16 @@ class TherapistClientJournalApi(override val authCookie: Cookie) : AuthorizedApi
         post(EditJournalEntryPage.PATH)
     }
 
+    fun deleteEntry(clientId: Long, entryId: Long, expectedStatus: HttpStatus = HttpStatus.OK) {
+        Given {
+            authorized()
+            pathParam("clientId", clientId)
+            pathParam("entryId", entryId)
+        } When {
+            delete(EditJournalEntryPage.PATH)
+        } Then {
+            statusCode(expectedStatus.value())
+        }
+    }
+
 }
