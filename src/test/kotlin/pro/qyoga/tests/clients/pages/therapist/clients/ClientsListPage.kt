@@ -58,7 +58,7 @@ object ClientsListPage : QYogaPage {
     }
 
     fun clientId(document: Document, rowIdx: Int): Long {
-        val deleteUrl = document.select(CLIENT_ROW)[rowIdx].select("td button").attr("hx-delete")
+        val deleteUrl = document.select(CLIENT_ROW)[rowIdx].select("td a").attr("hx-delete")
         val matcher = deleteActionPattern.matchEntire(deleteUrl)
         checkNotNull(matcher)
         return matcher.groups[1]!!.value.toLong()
@@ -69,7 +69,7 @@ object ClientsListPage : QYogaPage {
             element.select(CLIENT_ROW).forAny { row ->
                 row.select("td.nameCell").text() shouldBe client.fullName()
                 row.select("td a.updateLink").attr("href") shouldMatch updateActionPattern
-                row.select("td button[name=delete]").attr("hx-delete") shouldMatch deleteActionPattern
+                row.select("td a.deleteClientLink").attr("hx-delete") shouldMatch deleteActionPattern
             }
         }
     }
