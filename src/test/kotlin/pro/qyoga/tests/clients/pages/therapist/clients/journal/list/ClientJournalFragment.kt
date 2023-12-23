@@ -19,6 +19,7 @@ object ClientJournalFragment {
 
     private val addEntryLink = Link.hxGet("addEntryLink", CreateJournalEntryPage.PATH, "Добавить запись")
     private val editEntryLink = Link.hxGet("editEntryLink", EditJournalEntryPage.PATH, "")
+    private val deleteEntryLink = Link.hxDelete("deleteEntryLink", EditJournalEntryPage.PATH, "")
 
     fun fragmentFor(entries: List<JournalEntry>): PageMatcher = object : PageMatcher {
 
@@ -34,6 +35,11 @@ object ClientJournalFragment {
                     .replace("{clientId}", entry.client.id.toString())
                     .replace("{entryId}", entry.id.toString())
                 el.select(".editEntryLink").attr(editEntryLink.targetAttr) shouldBe expectedEditLink
+
+                val expectedDeleteLink = deleteEntryLink.urlPattern
+                    .replace("{clientId}", entry.client.id.toString())
+                    .replace("{entryId}", entry.id.toString())
+                el.select(".deleteEntryLink").attr(deleteEntryLink.targetAttr) shouldBe expectedDeleteLink
 
                 el.select(".entryDate").text() shouldBe russianDateFormat.format(entry.date)
                 el.select(".entryTherapeuticTask")

@@ -4,10 +4,7 @@ import org.springframework.dao.DuplicateKeyException
 import org.springframework.data.domain.Page
 import org.springframework.data.relational.core.conversion.DbActionExecutionException
 import org.springframework.stereotype.Service
-import pro.qyoga.core.clients.journals.api.DuplicatedDate
-import pro.qyoga.core.clients.journals.api.JournalEntry
-import pro.qyoga.core.clients.journals.api.JournalPageRequest
-import pro.qyoga.core.clients.journals.api.JournalsService
+import pro.qyoga.core.clients.journals.api.*
 
 @Service
 class JournalsServiceImpl(
@@ -30,6 +27,13 @@ class JournalsServiceImpl(
 
     override fun getJournalEntry(clientId: Long, entryId: Long): JournalEntry? {
         return journalEntriesRepo.getEntry(clientId, entryId)
+    }
+
+    override fun deleteEntry(clientId: Long, entryId: Long) {
+        if (!journalEntriesRepo.existsById(entryId)) {
+            throw EntryNotFound(clientId, entryId)
+        }
+        journalEntriesRepo.deleteById(entryId)
     }
 
 }

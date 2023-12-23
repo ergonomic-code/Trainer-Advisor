@@ -1,4 +1,4 @@
-package pro.qyoga.app.therapist.clients.journal.edit_entry.shared
+package pro.qyoga.core.clients.journals.api
 
 import pro.qyoga.platform.errors.DomainError
 

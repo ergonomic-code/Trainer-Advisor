@@ -28,6 +28,8 @@ class Link(
 
         fun hxGet(id: String, url: String, text: String) = Link(id, url, text, "hx-get")
 
+        fun hxDelete(id: String, url: String, text: String) = Link(id, url, text, "hx-delete")
+
     }
 
 }

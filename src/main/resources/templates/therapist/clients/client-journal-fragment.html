@@ -51,7 +51,14 @@
                            th:hx-get="@{/therapist/clients/{clientId}/journal/{entryId}(clientId=${client.id},entryId=${entry.id})}">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <a class="btn btn-gray"><i class="fas fa-trash"></i></a>
+                        <a class="deleteEntryLink btn btn-gray"
+                           hx-swap="outerHTML swap:0.2s"
+                           hx-target="closest div.journalEntry"
+                           th:hx-confirm="'Удалить запись за ' + ${entryDate} + '?'"
+                           th:hx-delete="@{/therapist/clients/{clientId}/journal/{entryId}(clientId=${client.id},entryId=${entry.id})}"
+                           th:with="entryDate=${#temporals.format(entry.date, T(pro.qyoga.core.formats.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN)}">
+                            <i class="fas fa-trash"></i>
+                        </a>
                     </div>
                 </div>
             </div>
