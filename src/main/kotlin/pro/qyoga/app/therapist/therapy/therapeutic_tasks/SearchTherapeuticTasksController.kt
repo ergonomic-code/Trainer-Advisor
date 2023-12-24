@@ -20,7 +20,7 @@ class SearchTherapeuticTasksController(
         @RequestParam("therapeuticTaskName") searchKey: String
     ): ModelAndView {
         val tasks = therapeuticTasksService.findByNameContaining(searchKey)
-        return modelAndView("/therapist/therapy/therapeutic-tasks/search-result") {
+        return modelAndView("therapist/therapy/therapeutic-tasks/search-result") {
             "tasks" bindTo tasks
         }
     }
