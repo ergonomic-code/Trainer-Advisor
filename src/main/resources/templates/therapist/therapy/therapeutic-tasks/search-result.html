@@ -1,0 +1,7 @@
+<datalist id="therapeuticTasks">
+    <option
+            th:each="task : ${tasks}"
+            th:text="${task.name}"
+            th:value="${task.name}"
+    ></option>
+</datalist>

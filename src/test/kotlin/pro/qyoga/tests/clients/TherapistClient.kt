@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus
 import pro.qyoga.tests.clients.api.TherapistClientJournalApi
 import pro.qyoga.tests.clients.api.TherapistClientsApi
 import pro.qyoga.tests.clients.api.TherapistExercisesApi
+import pro.qyoga.tests.clients.api.TherapistTherapeuticTasksApi
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_LOGIN
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_PASSWORD
 
@@ -20,6 +21,7 @@ class TherapistClient(val authCookie: Cookie) {
     val clients = TherapistClientsApi(authCookie)
     val clientJournal = TherapistClientJournalApi(authCookie)
     val exercises = TherapistExercisesApi(authCookie)
+    val therapeuticTasks = TherapistTherapeuticTasksApi(authCookie)
 
     fun getIndexPage(): Document {
         return Given {

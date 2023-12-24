@@ -11,20 +11,24 @@ class QueryBuilder {
 
     private val criteria: List<Criteria> = arrayListOf()
 
-    infix fun <T : Any> KProperty1<*, T>.isEqual(value: T) {
-        criteria.addLast(Criteria.where(this.name).isEqual(value))
-    }
-
     infix fun <T> KProperty1<*, T>.isEqualIfNotNull(value: T?) {
         if (value != null) {
             criteria.addLast(Criteria.where(this.name).isEqual(value))
         }
     }
 
+    infix fun <T : Any> KProperty1<*, T>.isEqual(value: T) {
+        criteria.addLast(Criteria.where(this.name).isEqual(value))
+    }
+
     infix fun KProperty1<*, String?>.isILikeIfNotNull(value: String?) {
         if (value != null) {
-            criteria.addLast(Criteria.where(this.name).like("%$value%").ignoreCase(true))
+            isILike(value)
         }
+    }
+
+    infix fun KProperty1<*, String?>.isILike(value: String) {
+        criteria.addLast(Criteria.where(this.name).like("%$value%").ignoreCase(true))
     }
 
     infix fun KProperty1<*, LocalDate>.isLessThanIfNotNull(value: LocalDate?) {

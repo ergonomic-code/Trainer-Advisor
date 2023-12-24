@@ -2,8 +2,8 @@ package pro.qyoga.tests.cases.app.therapist.clients.journal
 
 import io.kotest.inspectors.forAny
 import org.junit.jupiter.api.Test
-import pro.qyoga.app.therapist.clients.journal.JournalPageController
 import pro.qyoga.app.therapist.clients.journal.edit_entry.create.CreateJournalEntryPageController
+import pro.qyoga.app.therapist.clients.journal.list.JournalPageController
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.fixture.clients.JournalEntriesObjectMother
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
