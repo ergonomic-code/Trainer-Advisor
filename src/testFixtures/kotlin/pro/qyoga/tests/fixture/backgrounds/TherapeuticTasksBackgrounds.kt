@@ -16,4 +16,9 @@ class TherapeuticTasksBackgrounds(
         return therapeuticTasksService.getOrCreate(therapistId, taskName)
     }
 
+    @Transactional
+    fun createTherapeuticTasks(theTherapistId: Long, taskNames: List<String>): List<TherapeuticTask> {
+        return taskNames.map { createTherapeuticTask(theTherapistId, it) }
+    }
+
 }

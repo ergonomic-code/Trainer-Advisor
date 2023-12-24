@@ -36,10 +36,16 @@
             <div class="mb-3 col">
                 <label class="form-label" for="task-input">Терапевтическая задача</label>
                 <input class="form-control"
+                       hx-get="/therapist/therapeutic-tasks/search"
                        id="task-input" minlength="3" name="therapeuticTaskName" required
+                       hx-swap="outerHTML"
+                       hx-target="#therapeuticTasks"
+                       hx-trigger="beforeinput[inputType != 'insertReplacementText'] delay:0.3s"
+                       list="therapeuticTasks"
                        th:value="${entry?.therapeuticTask?.entity?.name ?: ''}"
                        type="text"
                 >
+                <datalist id="therapeuticTasks"></datalist>
             </div>
         </div>
         <div class="mb-3">
