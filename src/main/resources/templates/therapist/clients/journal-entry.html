@@ -40,7 +40,7 @@
                        id="task-input" minlength="3" name="therapeuticTaskName" required
                        hx-swap="outerHTML"
                        hx-target="#therapeuticTasks"
-                       hx-trigger="beforeinput[inputType != 'insertReplacementText'] delay:0.3s"
+                       hx-trigger="input[inputType != 'insertReplacementText' && target.value.length > 2] delay:0.3s"
                        list="therapeuticTasks"
                        th:value="${entry?.therapeuticTask?.entity?.name ?: ''}"
                        type="text"
