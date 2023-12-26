@@ -14,7 +14,7 @@ private val therapeuticTaskListPage = Pageable.ofSize(10)
     .withSortBy(TherapeuticTask::name)
 
 @Controller
-@RequestMapping("/therapist/therapeutic-tasks/list")
+@RequestMapping("/therapist/therapeutic-tasks")
 class TherapeuticTasksListsPageController(
     private val therapeuticTasksRepo: TherapeuticTasksRepo
 ) {

@@ -10,8 +10,7 @@ import pro.qyoga.tests.infra.html.*
 
 object TherapeuticTasksListPage : QYogaPage {
 
-    val basePath = "/therapist/therapeutic-tasks"
-    override val path = "$basePath/list"
+    override val path = "/therapist/therapeutic-tasks"
 
     override val title = "Терапевтические задачи"
 
@@ -24,7 +23,7 @@ object TherapeuticTasksListPage : QYogaPage {
 
     }
 
-    object AddTaskForm : QYogaForm("addTaskForm", FormAction.hxPost(basePath)) {
+    object AddTaskForm : QYogaForm("addTaskForm", FormAction.hxPost(path)) {
 
         override val components = listOf(
             Input.text("taskName", true),
@@ -33,7 +32,7 @@ object TherapeuticTasksListPage : QYogaPage {
 
     }
 
-    object EditTaskForm : QYogaForm("", FormAction.hxPut(basePath)) {
+    object EditTaskForm : QYogaForm("", FormAction.hxPut(path)) {
 
         val taskNameInput = Input.text("taskName", true)
 
