@@ -1,8 +1,9 @@
 package pro.qyoga.tests.cases.app.therapist.fragments
 
 import org.junit.jupiter.api.Test
-import pro.qyoga.tests.assertions.shouldHaveValidLink
+import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.clients.TherapistClient
+import pro.qyoga.tests.clients.pages.therapist.fragments.LeftNavBarFragment
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 
 
@@ -17,12 +18,7 @@ class NavBarLinksTest : QYogaAppIntegrationBaseTest() {
         val document = therapist.clients.getClientsListPage()
 
         // Then
-
-        // left nav bar
-        document.shouldHaveValidLink("Клиенты", therapist.authCookie)
-        document.shouldHaveValidLink("Упражнения", therapist.authCookie)
-
-        document.shouldHaveValidLink("Выйти", therapist.authCookie)
+        document shouldHave LeftNavBarFragment
     }
 
 }
