@@ -7,6 +7,4 @@ interface TherapeuticTasksService {
 
     fun findAllById(ids: List<Long>): Map<Long, TherapeuticTask>
 
-    fun findByNameContaining(searchKey: String): Iterable<TherapeuticTask>
-
 }

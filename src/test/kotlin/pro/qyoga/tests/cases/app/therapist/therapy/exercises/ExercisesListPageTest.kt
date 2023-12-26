@@ -10,9 +10,9 @@ import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.clients.pages.therapist.therapy.exercises.ExercisesListPage
-import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother.createExerciseRequest
-import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother.createExerciseRequests
-import pro.qyoga.tests.fixture.therapy.exercises.toDto
+import pro.qyoga.tests.fixture.therapy.therapeutic_tasks.ExercisesObjectMother.createExerciseRequest
+import pro.qyoga.tests.fixture.therapy.therapeutic_tasks.ExercisesObjectMother.createExerciseRequests
+import pro.qyoga.tests.fixture.therapy.therapeutic_tasks.toDto
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 
 

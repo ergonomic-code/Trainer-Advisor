@@ -34,9 +34,9 @@ class TherapeuticTasksRepo(
         return persistedTask
     }
 
-    fun findByNameContaining(searchKey: String, page: Pageable): Iterable<TherapeuticTask> {
+    fun findByNameContaining(searchKey: String?, page: Pageable): Iterable<TherapeuticTask> {
         return jdbcAggregateTemplate.findAllBy<TherapeuticTask>(page) {
-            TherapeuticTask::name isILike searchKey
+            TherapeuticTask::name isILikeIfNotNull searchKey
         }
     }
 

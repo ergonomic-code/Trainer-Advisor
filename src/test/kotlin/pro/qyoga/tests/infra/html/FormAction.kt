@@ -25,6 +25,9 @@ data class FormAction(
         fun hxPost(url: String): FormAction =
             FormAction("hx-post", url)
 
+        fun hxPut(url: String): FormAction =
+            FormAction("hx-put", url)
+
     }
 
     override fun match(element: Element) {
