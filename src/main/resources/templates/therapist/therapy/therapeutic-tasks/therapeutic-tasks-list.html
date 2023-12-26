@@ -18,16 +18,17 @@
             <div class="container px-3 px-sm-5">
                 <h1 class="mt-4 mb-3">Терапевтические задачи</h1>
                 <div class="mb-4">
-                    <form class="input-group" hx-get="/therapist/therapeutic-tasks" id="searchTasksForm">
+                    <form class="input-group" hx-get="/therapist/therapeutic-tasks/search"
+                          hx-swap="outerHTML"
+                          hx-target="#tasksList"
+                          hx-trigger="input[target.value.length == 0 || target.value.length > 2] delay:0.3s"
+                          id="searchTasksForm">
                         <input class="form-control"
                                id="searchName"
                                name="searchKey"
                                placeholder="Поиск по имени"
-                               required
+                               autocomplete="off"
                                type="text">
-                        <button class="input-group-text" name="searchTasksButton">
-                            <i class="fas fa-search"></i>
-                        </button>
                     </form>
                 </div>
 
@@ -45,18 +46,20 @@
                     </form>
                 </div>
 
-                <div class="taskRow mb-3"
-                     th:each="task : ${tasks}">
-                    <form class="input-group">
-                        <input class="form-control" name="taskName" placeholder="Имя" th:value="${task.name}"
-                               type="text">
-                        <span class="input-group-text">
+                <div id="tasksList" th:fragment="tasks-list">
+                    <div class="mb-3 taskRow"
+                         th:each="task : ${tasks}">
+                        <form class="input-group">
+                            <input class="form-control" name="taskName" placeholder="Имя" th:value="${task.name}"
+                                   type="text">
+                            <span class="input-group-text">
                             <i class="fas fa-save"></i>
                         </span>
-                        <span class="input-group-text">
+                            <span class="input-group-text">
                             <i class="fas fa-trash-alt"></i>
                         </span>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </main>

@@ -11,11 +11,10 @@ import pro.qyoga.core.therapy.therapeutic_tasks.internal.TherapeuticTasksRepo
 import pro.qyoga.platform.spring.mvc.modelAndView
 import pro.qyoga.platform.spring.sdj.withSortBy
 
-private val therapeuticTaskAutocompletionPage = Pageable.ofSize(5)
-    .withSortBy(TherapeuticTask::name)
+private val therapeuticTaskAutocompletionPage = Pageable.ofSize(5).withSortBy(TherapeuticTask::name)
 
 @Controller
-@RequestMapping("/therapist/therapeutic-tasks/search")
+@RequestMapping("/therapist/therapeutic-tasks/autocomplete-search")
 class SearchTherapeuticTasksController(
     private val therapeuticTasksRepo: TherapeuticTasksRepo
 ) {

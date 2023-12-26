@@ -6,9 +6,9 @@ import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.clients.pages.therapist.therapy.exercises.CreateExercisePage
-import pro.qyoga.tests.fixture.therapy.therapeutic_tasks.ExercisesObjectMother
-import pro.qyoga.tests.fixture.therapy.therapeutic_tasks.ExercisesObjectMother.createExerciseRequest
-import pro.qyoga.tests.fixture.therapy.therapeutic_tasks.ExercisesObjectMother.exerciseStepDto
+import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother
+import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother.createExerciseRequest
+import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother.exerciseStepDto
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import java.time.Duration
 

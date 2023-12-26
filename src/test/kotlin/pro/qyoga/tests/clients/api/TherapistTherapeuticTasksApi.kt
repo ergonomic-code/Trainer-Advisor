@@ -17,6 +17,19 @@ class TherapistTherapeuticTasksApi(override val authCookie: Cookie) : Authorized
     fun search(searchKey: String): Document {
         return Given {
             authorized()
+            queryParams(TherapeuticTasksListPage.SearchTasksForm.searchKey.name, searchKey)
+        } When {
+            get(TherapeuticTasksListPage.SearchTasksForm.action.url)
+        } Then {
+            statusCode(HttpStatus.OK.value())
+        } Extract {
+            Jsoup.parse(body().asString())
+        }
+    }
+
+    fun autocompleteSearch(searchKey: String): Document {
+        return Given {
+            authorized()
             queryParams(CreateJournalEntryForm.therapeuticTaskNameInput.name, searchKey)
         } When {
             get(TherapeuticTasksSearchResult.PATH)

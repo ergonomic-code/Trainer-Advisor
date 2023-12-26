@@ -1,4 +1,4 @@
-package pro.qyoga.tests.fixture.therapy.therapeutic_tasks
+package pro.qyoga.tests.fixture.therapy.exercises
 
 import pro.qyoga.core.therapy.exercises.api.*
 import pro.qyoga.platform.java.time.toDecimalMinutes

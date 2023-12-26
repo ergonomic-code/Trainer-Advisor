@@ -9,7 +9,7 @@ import pro.qyoga.tests.assertions.PageMatcher
 
 object TherapeuticTasksSearchResult {
 
-    const val PATH = "/therapist/therapeutic-tasks/search"
+    const val PATH = "/therapist/therapeutic-tasks/autocomplete-search"
 
     fun componentFor(expectedSearchResult: List<TherapeuticTask>): PageMatcher = object : PageMatcher {
 
