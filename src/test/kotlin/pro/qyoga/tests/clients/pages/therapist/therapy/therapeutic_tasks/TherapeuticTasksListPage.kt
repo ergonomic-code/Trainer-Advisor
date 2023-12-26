@@ -1,5 +1,6 @@
 package pro.qyoga.tests.clients.pages.therapist.therapy.therapeutic_tasks
 
+import io.kotest.inspectors.forAll
 import io.kotest.inspectors.forAny
 import io.kotest.matchers.shouldBe
 import org.jsoup.nodes.Element
@@ -14,11 +15,12 @@ object TherapeuticTasksListPage : QYogaPage {
 
     override val title = "Терапевтические задачи"
 
-    object SearchTasksForm : QYogaForm("searchTasksForm", FormAction.hxGet(path)) {
+    object SearchTasksForm : QYogaForm("searchTasksForm", FormAction.hxGet("$path/search")) {
+
+        val searchKey = Input.text("searchKey", required = false)
 
         override val components = listOf(
-            Input.text("searchKey", true),
-            Button("searchTasksButton", "")
+            searchKey,
         )
 
     }
@@ -44,6 +46,8 @@ object TherapeuticTasksListPage : QYogaPage {
 
     }
 
+    const val taskRow = "div.taskRow"
+
     override fun match(element: Element) {
         element shouldHaveComponent SearchTasksForm
         element shouldHaveComponent AddTaskForm
@@ -51,11 +55,26 @@ object TherapeuticTasksListPage : QYogaPage {
 
     fun rowFor(task: TherapeuticTask): PageMatcher = object : PageMatcher {
         override fun match(element: Element) {
-            val rows = element.select(".taskRow")
+            val rows = element.select(taskRow)
             rows.forAny {
-                it.select(EditTaskForm.taskNameInput.selector()).`val`() shouldBe task.name
+                it shouldBeRowFor task
             }
         }
+    }
+
+    fun rowsFor(expectedSearchResult: List<TherapeuticTask>): PageMatcher = object : PageMatcher {
+        override fun match(element: Element) {
+            val elements = element.select(taskRow)
+
+            elements.zip(expectedSearchResult).forAll { (el, task) ->
+                el shouldBeRowFor task
+            }
+        }
+
+    }
+
+    infix fun Element.shouldBeRowFor(task: TherapeuticTask) {
+        this.select(EditTaskForm.taskNameInput.selector()).`val`() shouldBe task.name
     }
 
 }

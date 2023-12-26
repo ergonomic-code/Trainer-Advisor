@@ -36,7 +36,7 @@
             <div class="mb-3 col">
                 <label class="form-label" for="task-input">Терапевтическая задача</label>
                 <input class="form-control"
-                       hx-get="/therapist/therapeutic-tasks/search"
+                       hx-get="/therapist/therapeutic-tasks/autocomplete-search"
                        id="task-input" minlength="3" name="therapeuticTaskName" required
                        hx-swap="outerHTML"
                        hx-target="#therapeuticTasks"

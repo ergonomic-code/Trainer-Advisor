@@ -6,6 +6,7 @@ import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.clients.pages.therapist.therapy.therapeutic_tasks.TherapeuticTasksListPage
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
+import pro.qyoga.tests.fixture.therapy.therapeutic_tasks.SearchTherapeuticTasksFixture
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 
 
@@ -35,6 +36,27 @@ class TherapeuticTasksPageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         document shouldHave TherapeuticTasksListPage.rowFor(task)
+    }
+
+    @Test
+    fun `Therapist tasks search endpoint should return tasks containing search keyword in any place and register`() {
+        // Given
+        val therapeuticTasks = backgrounds.therapeuticTasks.createTherapeuticTasks(
+            THE_THERAPIST_ID,
+            SearchTherapeuticTasksFixture.matchingTaskNames + SearchTherapeuticTasksFixture.notMatchingTaskNames
+        )
+        val expectedSearchResult = SearchTherapeuticTasksFixture.getExpectedSearchResult(
+            therapeuticTasks,
+            SearchTherapeuticTasksFixture.searchKey, 5
+        )
+
+        val therapist = TherapistClient.loginAsTheTherapist()
+
+        // When
+        val document = therapist.therapeuticTasks.search(SearchTherapeuticTasksFixture.searchKey)
+
+        // Then
+        document shouldBe TherapeuticTasksListPage.rowsFor(expectedSearchResult)
     }
 
 }
