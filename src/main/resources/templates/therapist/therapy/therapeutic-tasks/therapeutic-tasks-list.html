@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div th:replace="~{fragments/header.html}"></div>
+    <title>Терапевтические задачи</title>
+</head>
+
+<body class="sb-nav-fixed">
+
+<div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
+
+<div id="layoutSidenav">
+
+    <div th:replace="~{fragments/leftNavPanel :: leftNavPanel}"></div>
+
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-sm px-4">
+                <h1 class="mt-4 mb-3">Терапевтические задачи</h1>
+                <div class="mb-4">
+                    <form class="input-group" hx-get="/therapist/therapeutic-tasks/list" id="searchTasksForm">
+                        <input class="form-control"
+                               id="searchName"
+                               name="searchKey"
+                               placeholder="Поиск по имени"
+                               required
+                               type="text">
+                        <button class="input-group-text" name="searchTasksButton">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="mb-3">
+                    <form class="input-group" hx-post="/therapist/therapeutic-tasks" id="addTaskForm">
+                        <input class="form-control"
+                               id="newTaskName"
+                               name="taskName"
+                               placeholder="Новая задача"
+                               required
+                               type="text">
+                        <button class="input-group-text" name="addTaskButton">
+                            <i class="fas fa-add"></i>
+                        </button>
+                    </form>
+                </div>
+
+                <div class="taskRow mb-3"
+                     th:each="task : ${tasks}">
+                    <form class="input-group">
+                        <input class="form-control" name="taskName" placeholder="Имя" th:value="${task.name}"
+                               type="text">
+                        <span class="input-group-text">
+                            <i class="fas fa-save"></i>
+                        </span>
+                        <span class="input-group-text">
+                            <i class="fas fa-trash-alt"></i>
+                        </span>
+                    </form>
+                </div>
+            </div>
+        </main>
+        <footer class="py-4 bg-light mt-auto" th:insert="~{fragments/footer.html :: footer}"></footer>
+    </div>
+</div>
+
+</body>
+</html>

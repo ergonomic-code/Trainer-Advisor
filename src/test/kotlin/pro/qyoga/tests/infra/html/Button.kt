@@ -11,7 +11,12 @@ data class Button(
 ) : Component {
 
     override fun selector(): String =
-        "button[name=$name]:contains($text)"
+        buildString {
+            append("button[name=$name]")
+            if (text.isNotEmpty()) {
+                append(":contains($text)")
+            }
+        }
 
     override fun match(element: Element) {
         element.tag() shouldBe Tag.valueOf("button")
