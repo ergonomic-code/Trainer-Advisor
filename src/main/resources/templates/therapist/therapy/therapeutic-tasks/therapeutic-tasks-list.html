@@ -32,33 +32,41 @@
                     </form>
                 </div>
 
-                <div class="mb-3">
-                    <form class="input-group" hx-post="/therapist/therapeutic-tasks" id="addTaskForm">
-                        <input class="form-control"
-                               id="newTaskName"
-                               name="taskName"
-                               placeholder="Новая задача"
-                               required
-                               type="text">
-                        <button class="input-group-text" name="addTaskButton">
-                            <i class="fas fa-add"></i>
-                        </button>
-                    </form>
-                </div>
-
                 <div id="tasksList" th:fragment="tasks-list">
-                    <div class="mb-3 taskRow"
-                         th:each="task : ${tasks}">
-                        <form class="input-group">
-                            <input class="form-control" name="taskName" placeholder="Имя" th:value="${task.name}"
+                    <div class="mb-3">
+                        <form class="input-group"
+                              hx-on:submit="document.getElementById('newTaskName').value = ''; return true"
+                              hx-post="/therapist/therapeutic-tasks"
+                              hx-select=".taskRow"
+                              hx-swap="afterbegin"
+                              hx-target="#tasksListData"
+                              id="addTaskForm">
+                            <input class="form-control"
+                                   id="newTaskName"
+                                   name="taskName"
+                                   placeholder="Новая задача"
+                                   required
                                    type="text">
-                            <span class="input-group-text">
+                            <button class="input-group-text" name="addTaskButton">
+                                <i class="fas fa-add"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                    <div id="tasksListData" th:fragment="tasks-list-data">
+                        <div class="mb-3 taskRow"
+                             th:each="task : ${tasks}">
+                            <form class="input-group">
+                                <input class="form-control" name="taskName" placeholder="Имя" th:value="${task.name}"
+                                       type="text">
+                                <span class="input-group-text">
                             <i class="fas fa-save"></i>
                         </span>
-                            <span class="input-group-text">
+                                <span class="input-group-text">
                             <i class="fas fa-trash-alt"></i>
                         </span>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
