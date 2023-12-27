@@ -31,7 +31,10 @@ data class FormAction(
     }
 
     override fun match(element: Element) {
-        withClue("Form doesn't has attribute '$attr'") {
+        withClue(element) {
+            element.tag().name shouldBe "form"
+        }
+        withClue("Form $element doesn't has attribute '$attr'") {
             element.hasAttr(attr) shouldBe true
         }
 

@@ -27,8 +27,10 @@ object TherapeuticTasksListPage : QYogaPage {
 
     object AddTaskForm : QYogaForm("addTaskForm", FormAction.hxPost(path)) {
 
+        val taskName = Input.text("taskName", true)
+
         override val components = listOf(
-            Input.text("taskName", true),
+            taskName,
             Button("addTaskButton", "")
         )
 
