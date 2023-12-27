@@ -22,6 +22,8 @@ private val therapeuticTaskListPage = Pageable.ofSize(10)
 
 private const val TASKS = "tasks"
 
+const val DUPLICATED_TASK_NAME = "duplicatedTaskName"
+
 @Controller
 @RequestMapping("/therapist/therapeutic-tasks")
 class TherapeuticTasksListsPageController(
@@ -58,7 +60,7 @@ class TherapeuticTasksListsPageController(
         if (res.isFailureOf<DuplicatedTherapeuticTaskName>()) {
             return modelAndView("therapist/therapy/therapeutic-tasks/therapeutic-tasks-list :: tasks-list") {
                 "task" bindTo task
-                "duplicatedTaskName" bindTo true
+                DUPLICATED_TASK_NAME bindTo true
             }
         }
 
