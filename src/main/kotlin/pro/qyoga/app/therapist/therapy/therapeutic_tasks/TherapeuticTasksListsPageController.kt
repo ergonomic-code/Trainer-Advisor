@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.servlet.ModelAndView
+import pro.qyoga.core.therapy.therapeutic_tasks.api.DuplicatedTherapeuticTaskName
 import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTask
 import pro.qyoga.core.therapy.therapeutic_tasks.internal.TherapeuticTasksRepo
 import pro.qyoga.core.users.internal.QyogaUserDetails
+import pro.qyoga.platform.kotlin.isFailureOf
 import pro.qyoga.platform.spring.mvc.modelAndView
 import pro.qyoga.platform.spring.sdj.withSortBy
 
@@ -48,14 +50,22 @@ class TherapeuticTasksListsPageController(
         @RequestParam taskName: String,
         @AuthenticationPrincipal principal: QyogaUserDetails
     ): ModelAndView {
+        val task = TherapeuticTask(AggregateReference.to(principal.id), taskName)
         val res = runCatching {
-            therapeuticTasksRepo.save(TherapeuticTask(AggregateReference.to(principal.id), taskName))
+            therapeuticTasksRepo.save(task)
         }
 
-        val task = res.getOrThrow()
+        if (res.isFailureOf<DuplicatedTherapeuticTaskName>()) {
+            return modelAndView("therapist/therapy/therapeutic-tasks/therapeutic-tasks-list :: tasks-list") {
+                "task" bindTo task
+                "duplicatedTaskName" bindTo true
+            }
+        }
+
+        val persistedTask = res.getOrThrow()
 
         return modelAndView("therapist/therapy/therapeutic-tasks/therapeutic-tasks-list :: tasks-list") {
-            TASKS bindTo listOf(task)
+            TASKS bindTo listOf(persistedTask)
         }
     }
 

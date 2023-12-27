@@ -27,6 +27,8 @@ object TherapeuticTasksListPage : QYogaPage {
 
     object AddTaskForm : QYogaForm("addTaskForm", FormAction.hxPost(path)) {
 
+        const val duplicatedNameMessage = "#duplicatedTaskName"
+
         val taskName = Input.text("taskName", true)
 
         override val components = listOf(
