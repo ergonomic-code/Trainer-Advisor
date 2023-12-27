@@ -40,16 +40,23 @@
                               hx-select=".taskRow"
                               hx-swap="afterbegin"
                               hx-target="#tasksListData"
+                              hx-swap-oob="true"
                               id="addTaskForm">
                             <input class="form-control"
                                    id="newTaskName"
                                    name="taskName"
+                                   th:classappend="${duplicatedTaskName} ? 'is-invalid' : ''"
+                                   th:value="${task?.name ?: ''}"
                                    placeholder="Новая задача"
                                    required
                                    type="text">
                             <button class="input-group-text" name="addTaskButton">
                                 <i class="fas fa-add"></i>
                             </button>
+                            <div class="invalid-feedback" id="duplicatedTaskName">
+                                Терапевтическая задача с именем "<span th:text="${task?.name ?: ''}"></span>" уже
+                                существует.
+                            </div>
                         </form>
                     </div>
 

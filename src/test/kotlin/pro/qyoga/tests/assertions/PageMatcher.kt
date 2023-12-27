@@ -39,4 +39,11 @@ infix fun Element.shouldNotHave(component: Component) {
     }
 }
 
+infix fun Element.shouldNotHave(selector: String) {
+    val element = this.select(selector)
+    withClue("Tag is found by selector $selector") {
+        element shouldHaveSize 0
+    }
+}
+
 infix fun Element.shouldHaveAttr(pageMatcher: PageMatcher) = pageMatcher.match(this)

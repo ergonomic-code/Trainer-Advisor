@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test
 import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.assertions.shouldHaveComponent
+import pro.qyoga.tests.assertions.shouldNotHave
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.clients.pages.therapist.therapy.therapeutic_tasks.TherapeuticTasksListPage
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
@@ -62,7 +63,7 @@ class TherapeuticTasksPageTest : QYogaAppIntegrationBaseTest() {
     }
 
     @Test
-    fun `Creation of therapeutic task should be peristent`() {
+    fun `Creation of therapeutic task should be persistent`() {
         // Given
         val task = therapeuticTask()
         val therapist = TherapistClient.loginAsTheTherapist()
@@ -73,6 +74,22 @@ class TherapeuticTasksPageTest : QYogaAppIntegrationBaseTest() {
         // Then
         document shouldHaveComponent TherapeuticTasksListPage.AddTaskForm
         document shouldHave TherapeuticTasksListPage.rowFor(task)
+    }
+
+    @Test
+    fun `When user creates new therapeutic task with exiting name form with error message should be returned`() {
+        // Given
+        val task = therapeuticTask()
+        val therapist = TherapistClient.loginAsTheTherapist()
+        backgrounds.therapeuticTasks.createTherapeuticTask(THE_THERAPIST_ID, task.name)
+
+        // When
+        val document = therapist.therapeuticTasks.create(task)
+
+        // Then
+        document shouldHaveComponent TherapeuticTasksListPage.AddTaskForm
+        document shouldHave TherapeuticTasksListPage.AddTaskForm.duplicatedNameMessage
+        document shouldNotHave TherapeuticTasksListPage.taskRow
     }
 
 }
