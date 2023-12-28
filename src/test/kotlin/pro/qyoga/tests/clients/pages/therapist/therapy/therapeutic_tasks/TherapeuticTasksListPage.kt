@@ -27,7 +27,7 @@ object TherapeuticTasksListPage : QYogaPage {
 
     object AddTaskForm : QYogaForm("addTaskForm", FormAction.hxPost(path)) {
 
-        const val duplicatedNameMessage = "#duplicatedTaskName"
+        const val DUPLICATED_NAME_MESSAGE = "#duplicatedNewTaskName"
 
         val taskName = Input.text("taskName", true)
 
@@ -38,9 +38,14 @@ object TherapeuticTasksListPage : QYogaPage {
 
     }
 
-    object EditTaskForm : QYogaForm("", FormAction.hxPut(path)) {
+
+    object EditTaskForm : QYogaForm("", FormAction.hxPut("$path/{taskId}"), "editTaskForm") {
 
         val taskNameInput = Input.text("taskName", true)
+
+        const val SUCCESS_MESSAGE = "#editSuccessMessage"
+
+        const val DUPLICATED_EDITED_NAME_MESSAGE = "input[name=taskName].is-invalid"
 
         override val components = listOf(
             taskNameInput,
@@ -78,6 +83,7 @@ object TherapeuticTasksListPage : QYogaPage {
     }
 
     infix fun Element.shouldBeRowFor(task: TherapeuticTask) {
+        this shouldHaveComponent EditTaskForm
         this.select(EditTaskForm.taskNameInput.selector()).`val`() shouldBe task.name
     }
 

@@ -11,6 +11,7 @@ import pro.qyoga.tests.assertions.shouldHaveAttr
 abstract class QYogaForm(
     val id: String,
     val action: FormAction,
+    private val elementClass: String? = null
 ) : Component {
 
     abstract val components: List<Component>
@@ -29,6 +30,12 @@ abstract class QYogaForm(
     }
 
     override fun selector(): String =
-        "form#$id"
+        if (id.isNotBlank()) {
+            "form#$id"
+        } else if (!elementClass.isNullOrEmpty()) {
+            "form.$elementClass"
+        } else {
+            error("Now selector for $this")
+        }
 
 }

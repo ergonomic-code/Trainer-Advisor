@@ -2,7 +2,7 @@ package pro.qyoga.tests.cases.app.therapist.therapy.therapeutic_tasks
 
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
-import pro.qyoga.app.therapist.therapy.therapeutic_tasks.DUPLICATED_TASK_NAME
+import pro.qyoga.app.therapist.therapy.therapeutic_tasks.DUPLICATED_NEW_TASK_NAME
 import pro.qyoga.app.therapist.therapy.therapeutic_tasks.TherapeuticTasksListsPageController
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
 import pro.qyoga.tests.fixture.therapists.theTherapistUserDetails
@@ -22,7 +22,7 @@ class TherapeuticTasksListPageControllerTest : QYogaAppIntegrationBaseTest() {
             getBean<TherapeuticTasksListsPageController>().create(duplicateWithDifferentCase, theTherapistUserDetails)
 
         // Then
-        res.model[DUPLICATED_TASK_NAME] shouldBe true
+        res.model[DUPLICATED_NEW_TASK_NAME] shouldBe true
     }
 
 }

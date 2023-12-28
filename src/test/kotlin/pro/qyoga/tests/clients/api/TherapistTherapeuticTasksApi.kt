@@ -66,4 +66,18 @@ class TherapistTherapeuticTasksApi(override val authCookie: Cookie) : Authorized
         }
     }
 
+    fun edit(task: TherapeuticTask): Document {
+        return Given {
+            authorized()
+            formParam(TherapeuticTasksListPage.EditTaskForm.taskNameInput.name, task.name)
+            pathParam("taskId", task.id)
+        } When {
+            put(TherapeuticTasksListPage.EditTaskForm.action.url)
+        } Then {
+            statusCode(HttpStatus.OK.value())
+        } Extract {
+            Jsoup.parse(body().asString())
+        }
+    }
+
 }

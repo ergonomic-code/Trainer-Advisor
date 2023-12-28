@@ -24,4 +24,12 @@ data class TherapeuticTask(
     val lastModifiedAt: Instant? = null,
     @Version
     val version: Long = 0,
-) : Identifiable<Long>
+) : Identifiable<Long> {
+
+    constructor(owner: Long, taskName: String) : this(AggregateReference.to(owner), taskName)
+
+    fun withName(newName: String): TherapeuticTask {
+        return copy(name = newName)
+    }
+
+}

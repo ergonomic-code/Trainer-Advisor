@@ -45,7 +45,7 @@
                             <input class="form-control"
                                    id="newTaskName"
                                    name="taskName"
-                                   th:classappend="${duplicatedTaskName} ? 'is-invalid' : ''"
+                                   th:classappend="${duplicatedNewTaskName} ? 'is-invalid' : ''"
                                    th:value="${task?.name ?: ''}"
                                    placeholder="Новая задача"
                                    required
@@ -53,7 +53,7 @@
                             <button class="input-group-text" name="addTaskButton">
                                 <i class="fas fa-add"></i>
                             </button>
-                            <div class="invalid-feedback" id="duplicatedTaskName">
+                            <div class="invalid-feedback ms-3" id="duplicatedNewTaskName">
                                 Терапевтическая задача с именем "<span th:text="${task?.name ?: ''}"></span>" уже
                                 существует.
                             </div>
@@ -61,17 +61,36 @@
                     </div>
 
                     <div id="tasksListData" th:fragment="tasks-list-data">
-                        <div class="mb-3 taskRow"
+                        <div class="mb-3 taskRow row"
                              th:each="task : ${tasks}">
-                            <form class="input-group">
-                                <input class="form-control" name="taskName" placeholder="Имя" th:value="${task.name}"
-                                       type="text">
-                                <span class="input-group-text">
-                            <i class="fas fa-save"></i>
-                        </span>
-                                <span class="input-group-text">
-                            <i class="fas fa-trash-alt"></i>
-                        </span>
+                            <form class="editTaskForm input-group col-12"
+                                  hx-select=".taskRow"
+                                  hx-swap="outerHTML"
+                                  hx-target="closest .taskRow"
+                                  th:hx-put="${'/therapist/therapeutic-tasks/' + task.id}">
+                                <input class="form-control"
+                                       name="taskName"
+                                       placeholder="Имя"
+                                       required
+                                       th:classappend="${duplicatedEditedTaskName} ? 'is-invalid' : ''"
+                                       th:value="${task.name}"
+                                       type="text"
+                                >
+                                <button class="input-group-text" name="editTaskButton">
+                                    <i class="fas fa-save"></i>
+                                </button>
+                                <button class="input-group-text" name="deleteTaskButton">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                                <div class="col-12 text-success ms-3 fade-in-out" id="editSuccessMessage"
+                                     th:if="${updateSuccess}">
+                                    <small>Запись обновлена</small>
+                                </div>
+
+                                <div class="invalid-feedback ms-3 fade-in-out" id="duplicatedEditedTaskName">
+                                    Терапевтическая задача с именем "<span th:text="${task?.name ?: ''}"></span>" уже
+                                    существует.
+                                </div>
                             </form>
                         </div>
                     </div>
