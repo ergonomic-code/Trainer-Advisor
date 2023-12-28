@@ -79,7 +79,11 @@
                                 <button class="input-group-text" name="editTaskButton">
                                     <i class="fas fa-save"></i>
                                 </button>
-                                <button class="input-group-text" name="deleteTaskButton">
+                                <button
+                                        class="input-group-text"
+                                        hx-swap="outerHTML swap:0.5s"
+                                        name="deleteTaskButton"
+                                        th:hx-delete="${'/therapist/therapeutic-tasks/' + task.id}">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                                 <div class="col-12 text-success ms-3 fade-in-out" id="editSuccessMessage"

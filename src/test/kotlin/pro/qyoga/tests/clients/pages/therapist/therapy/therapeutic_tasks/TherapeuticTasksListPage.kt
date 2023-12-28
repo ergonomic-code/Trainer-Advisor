@@ -50,7 +50,7 @@ object TherapeuticTasksListPage : QYogaPage {
         override val components = listOf(
             taskNameInput,
             Button("editTaskButton", ""),
-            Button("deleteTaskButton", "")
+            Button("deleteTaskButton", "", FormAction.hxDelete(action.url))
         )
 
     }
