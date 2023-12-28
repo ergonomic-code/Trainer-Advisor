@@ -9,7 +9,7 @@ import org.hamcrest.Matchers
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
-import pro.qyoga.app.therapist.clients.journal.edit_entry.edit.EditJournalEntryRequest
+import pro.qyoga.core.clients.journals.api.EditJournalEntryRequest
 import pro.qyoga.tests.clients.pages.therapist.clients.journal.entry.CreateJournalEntryForm
 import pro.qyoga.tests.clients.pages.therapist.clients.journal.entry.CreateJournalEntryPage
 import pro.qyoga.tests.clients.pages.therapist.clients.journal.entry.EditJournalEntryPage

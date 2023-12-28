@@ -4,11 +4,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.stereotype.Component
 import pro.qyoga.app.therapist.clients.journal.edit_entry.create.CreateJournalEntryWorkflow
-import pro.qyoga.app.therapist.clients.journal.edit_entry.edit.EditJournalEntryRequest
-import pro.qyoga.core.clients.journals.api.JournalEntry
-import pro.qyoga.core.clients.journals.api.JournalPageRequest
-import pro.qyoga.core.clients.journals.api.JournalsService
-import pro.qyoga.core.clients.journals.api.hydrate
+import pro.qyoga.core.clients.journals.api.*
 import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTasksService
 import pro.qyoga.core.users.internal.QyogaUserDetails
 import pro.qyoga.tests.fixture.clients.JournalEntriesObjectMother
