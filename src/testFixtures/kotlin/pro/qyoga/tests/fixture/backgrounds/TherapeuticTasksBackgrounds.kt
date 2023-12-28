@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional
 import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTask
 import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTasksService
 import pro.qyoga.core.therapy.therapeutic_tasks.internal.TherapeuticTasksRepo
+import pro.qyoga.tests.fixture.data.randomCyrillicWord
 
 
 @Component
@@ -15,7 +16,7 @@ class TherapeuticTasksBackgrounds(
 ) {
 
     @Transactional
-    fun createTherapeuticTask(therapistId: Long, taskName: String): TherapeuticTask {
+    fun createTherapeuticTask(therapistId: Long, taskName: String = randomCyrillicWord()): TherapeuticTask {
         return therapeuticTasksService.getOrCreate(therapistId, taskName)
     }
 

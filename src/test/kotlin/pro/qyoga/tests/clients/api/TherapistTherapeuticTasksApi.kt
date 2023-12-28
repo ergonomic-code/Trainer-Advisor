@@ -80,4 +80,15 @@ class TherapistTherapeuticTasksApi(override val authCookie: Cookie) : Authorized
         }
     }
 
+    fun delete(taskId: Long) {
+        Given {
+            authorized()
+            pathParam("taskId", taskId)
+        } When {
+            delete(TherapeuticTasksListPage.EditTaskForm.action.url)
+        } Then {
+            statusCode(HttpStatus.OK.value())
+        }
+    }
+
 }

@@ -16,6 +16,8 @@ interface PageMatcher {
 
 infix fun Document.shouldBe(pageMatcher: PageMatcher) = pageMatcher.match(this)
 
+infix fun Document.shouldBePage(pageMatcher: PageMatcher) = pageMatcher.match(this)
+
 infix fun Element.shouldBeElement(pageMatcher: PageMatcher) = pageMatcher.match(this)
 
 infix fun Element.shouldHaveComponent(component: Component) {

@@ -1,5 +1,6 @@
 package pro.qyoga.tests.cases.app.therapist.therapy.therapeutic_tasks
 
+import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import pro.qyoga.tests.assertions.*
 import pro.qyoga.tests.clients.TherapistClient
@@ -22,7 +23,7 @@ class TherapeuticTasksPageTest : QYogaAppIntegrationBaseTest() {
         val document = therapist.therapeuticTasks.getTasksListPage()
 
         // Then
-        document shouldBe TherapeuticTasksListPage
+        document shouldBePage TherapeuticTasksListPage
     }
 
     @Test
@@ -57,7 +58,7 @@ class TherapeuticTasksPageTest : QYogaAppIntegrationBaseTest() {
         val document = therapist.therapeuticTasks.search(SearchTherapeuticTasksFixture.searchKey)
 
         // Then
-        document shouldBe TherapeuticTasksListPage.rowsFor(expectedSearchResult)
+        document shouldBeElement TherapeuticTasksListPage.rowsFor(expectedSearchResult)
     }
 
     @Test
@@ -126,6 +127,20 @@ class TherapeuticTasksPageTest : QYogaAppIntegrationBaseTest() {
         document shouldHaveComponent TherapeuticTasksListPage.EditTaskForm
         document shouldHave TherapeuticTasksListPage.EditTaskForm.DUPLICATED_EDITED_NAME_MESSAGE
         backgrounds.therapeuticTasks.findById(task2.id) shouldMatch task2
+    }
+
+    @Test
+    fun `Deletion of therapeutic task should be persistent`() {
+        // Given
+        val task = backgrounds.therapeuticTasks.createTherapeuticTask(THE_THERAPIST_ID)
+        val therapist = TherapistClient.loginAsTheTherapist()
+
+        // When
+        therapist.therapeuticTasks.delete(task.id)
+
+        // Then
+        val deletedTask = backgrounds.therapeuticTasks.findById(task.id)
+        deletedTask shouldBe null
     }
 
 }

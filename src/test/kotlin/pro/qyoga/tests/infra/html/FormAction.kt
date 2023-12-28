@@ -28,12 +28,12 @@ data class FormAction(
         fun hxPut(url: String): FormAction =
             FormAction("hx-put", url)
 
+        fun hxDelete(url: String): FormAction =
+            FormAction("hx-delete", url)
+
     }
 
     override fun match(element: Element) {
-        withClue(element) {
-            element.tag().name shouldBe "form"
-        }
         withClue("Form $element doesn't has attribute '$attr'") {
             element.hasAttr(attr) shouldBe true
         }

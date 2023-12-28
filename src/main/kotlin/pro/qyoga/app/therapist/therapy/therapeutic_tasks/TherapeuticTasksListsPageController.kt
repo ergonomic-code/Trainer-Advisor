@@ -1,6 +1,7 @@
 package pro.qyoga.app.therapist.therapy.therapeutic_tasks
 
 import org.springframework.data.domain.Pageable
+import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
@@ -25,6 +26,7 @@ const val DUPLICATED_EDITED_TASK_NAME = "duplicatedEditedTaskName"
 @RequestMapping("/therapist/therapeutic-tasks")
 class TherapeuticTasksListsPageController(
     private val therapeuticTasksRepo: TherapeuticTasksRepo,
+    private val deleteTherapeuticTaskWorkflow: DeleteTherapeuticTaskWorkflow
 ) {
 
     @GetMapping
@@ -94,6 +96,22 @@ class TherapeuticTasksListsPageController(
             TASKS bindTo listOf(persistedTask)
             "updateSuccess" bindTo true
         }
+    }
+
+    @DeleteMapping("/{taskId}")
+    fun delete(
+        @PathVariable taskId: Long,
+    ): Any {
+        val res = runCatching {
+            deleteTherapeuticTaskWorkflow(taskId)
+        }
+
+        when (val ex = res.exceptionOrNull()) {
+            else ->
+                res.getOrThrow()
+        }
+
+        return ResponseEntity.ok(null)
     }
 
 }
