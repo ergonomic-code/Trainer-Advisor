@@ -6,7 +6,6 @@ import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.annotation.Version
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.Table
-import pro.qyoga.app.therapist.clients.journal.edit_entry.edit.EditJournalEntryRequest
 import pro.qyoga.core.clients.cards.api.Client
 import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTask
 import pro.qyoga.platform.spring.sdj.AggregateReferenceTarget

@@ -1,6 +1,6 @@
 package pro.qyoga.tests.fixture.clients
 
-import pro.qyoga.app.therapist.clients.journal.edit_entry.edit.EditJournalEntryRequest
+import pro.qyoga.core.clients.journals.api.EditJournalEntryRequest
 import pro.qyoga.tests.fixture.data.randomRecentLocalDate
 import pro.qyoga.tests.fixture.data.randomSentence
 import java.time.LocalDate

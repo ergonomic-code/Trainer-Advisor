@@ -1,4 +1,4 @@
-package pro.qyoga.app.therapist.clients.journal.edit_entry.edit
+package pro.qyoga.core.clients.journals.api
 
 import org.springframework.format.annotation.DateTimeFormat
 import pro.qyoga.core.formats.RUSSIAN_DATE_FORMAT_PATTERN

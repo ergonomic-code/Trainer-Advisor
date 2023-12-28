@@ -1,7 +1,7 @@
 package pro.qyoga.tests.assertions
 
 import io.kotest.matchers.shouldBe
-import pro.qyoga.app.therapist.clients.journal.edit_entry.edit.EditJournalEntryRequest
+import pro.qyoga.core.clients.journals.api.EditJournalEntryRequest
 import pro.qyoga.core.clients.journals.api.JournalEntry
 import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTask
 import pro.qyoga.platform.spring.sdj.AggregateReferenceTarget
