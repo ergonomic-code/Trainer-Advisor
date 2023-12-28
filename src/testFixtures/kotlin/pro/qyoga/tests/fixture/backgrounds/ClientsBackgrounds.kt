@@ -8,14 +8,17 @@ import pro.qyoga.app.therapist.clients.ClientsListPageController
 import pro.qyoga.core.clients.cards.api.Client
 import pro.qyoga.core.clients.cards.api.ClientCardDto
 import pro.qyoga.core.clients.cards.api.ClientsService
+import pro.qyoga.core.clients.journals.api.JournalEntry
 import pro.qyoga.tests.fixture.clients.ClientsObjectMother
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
+import pro.qyoga.tests.fixture.therapists.idOnlyUserDetails
 import pro.qyoga.tests.fixture.therapists.theTherapistUserDetails
 
 @Component
 class ClientsBackgrounds(
     private val clientsService: ClientsService,
-    private val clientsListPageController: ClientsListPageController
+    private val clientsListPageController: ClientsListPageController,
+    private val journalBackgrounds: ClientJournalBackgrounds
 ) {
 
     fun createClients(clients: List<ClientCardDto>, therapistId: Long = THE_THERAPIST_ID): Iterable<Client> {
@@ -30,6 +33,12 @@ class ClientsBackgrounds(
         val model = ExtendedModelMap()
         clientsListPageController.getClients(theTherapistUserDetails, Pageable.ofSize(Int.MAX_VALUE), model)
         return ClientsListPageController.getClients(model)
+    }
+
+    fun createClientWithJournalEntry(therapistId: Long = THE_THERAPIST_ID): Pair<Client, JournalEntry> {
+        val client = createClients(1, therapistId).single()
+        val entry = journalBackgrounds.createEntries(client.id, idOnlyUserDetails(therapistId), 1).single()
+        return client to entry
     }
 
 }

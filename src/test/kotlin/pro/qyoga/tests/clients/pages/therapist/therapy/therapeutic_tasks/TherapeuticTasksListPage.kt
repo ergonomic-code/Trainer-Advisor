@@ -47,6 +47,8 @@ object TherapeuticTasksListPage : QYogaPage {
 
         const val DUPLICATED_EDITED_NAME_MESSAGE = "input[name=taskName].is-invalid"
 
+        const val TASK_HAS_REFERENCES_ERROR_MESSAGE = "#taskHasReferencesMessage"
+
         override val components = listOf(
             taskNameInput,
             Button("editTaskButton", ""),

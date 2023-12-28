@@ -72,8 +72,9 @@
                                        name="taskName"
                                        placeholder="Имя"
                                        required
-                                       th:classappend="${duplicatedEditedTaskName} ? 'is-invalid' : ''"
+                                       onblur="document.getElementsByName('taskName').forEach((e) => e.classList.remove('is-invalid'))"
                                        th:value="${task.name}"
+                                       th:classappend="${(duplicatedEditedTaskName ?: false) || (taskHasReferencesError ?: false)} ? 'is-invalid' : ''"
                                        type="text"
                                 >
                                 <button class="input-group-text" name="editTaskButton">
@@ -81,9 +82,13 @@
                                 </button>
                                 <button
                                         class="input-group-text"
-                                        hx-swap="outerHTML swap:0.5s"
+                                        hx-select=".taskRow"
+                                        hx-swap="outerHTML"
+                                        hx-target="closest .taskRow"
                                         name="deleteTaskButton"
-                                        th:hx-delete="${'/therapist/therapeutic-tasks/' + task.id}">
+                                        th:hx-confirm="'Удалить терапевтическую задачу ' + ${task.name} + '?'"
+                                        th:hx-delete="${'/therapist/therapeutic-tasks/' + task.id}"
+                                >
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                                 <div class="col-12 text-success ms-3 fade-in-out" id="editSuccessMessage"
@@ -91,9 +96,22 @@
                                     <small>Запись обновлена</small>
                                 </div>
 
-                                <div class="invalid-feedback ms-3 fade-in-out" id="duplicatedEditedTaskName">
-                                    Терапевтическая задача с именем "<span th:text="${task?.name ?: ''}"></span>" уже
-                                    существует.
+                                <div class="invalid-feedback ms-3">
+                                    <div class="" id="duplicatedEditedTaskName" th:if="${duplicatedEditedTaskName}">
+                                        Терапевтическая задача с именем "<span th:text="${task?.name ?: ''}"></span>"
+                                        уже
+                                        существует.
+                                    </div>
+                                    <div id="taskHasReferencesMessage" th:if="${taskHasReferencesError}">
+                                        Терапевтическая задача используется в записях журналов клиентов:
+                                        <ul>
+                                            <li
+                                                    class="text-danger"
+                                                    th:each="entry : ${references}"
+                                                    th:text="${entry.client.entity.fullName() + ' - ' + #temporals.format(entry.date, T(pro.qyoga.core.formats.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN)}">
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </form>
                         </div>
