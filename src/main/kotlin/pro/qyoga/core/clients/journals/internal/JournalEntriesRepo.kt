@@ -48,4 +48,16 @@ class JournalEntriesRepo(
             .orElse(null)
     }
 
+    fun findByTherapeuticTask(taskId: Long, pageRequest: PageRequest): Page<JournalEntry> {
+        val query = query {
+            JournalEntry::therapeuticTask isEqual AggregateReference.to(taskId)
+        }
+
+        return jdbcAggregateTemplate.findAll(
+            query,
+            JournalEntry::class.java,
+            pageRequest
+        )
+    }
+
 }

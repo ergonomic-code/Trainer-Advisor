@@ -34,4 +34,8 @@ class ClientsRepo(
         return jdbcAggregateTemplate.findAll(query, Client::class.java, pageRequest)
     }
 
+    fun findMapById(ids: List<Long>): Map<Long, Client> =
+        findAllById(ids)
+            .associateBy { it.id }
+
 }

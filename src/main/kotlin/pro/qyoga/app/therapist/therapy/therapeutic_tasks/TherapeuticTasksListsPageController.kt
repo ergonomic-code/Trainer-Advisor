@@ -11,6 +11,7 @@ import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTask
 import pro.qyoga.core.therapy.therapeutic_tasks.internal.TherapeuticTasksRepo
 import pro.qyoga.core.users.internal.QyogaUserDetails
 import pro.qyoga.platform.spring.mvc.modelAndView
+import pro.qyoga.platform.spring.sdj.AggregateReferenceTarget
 import pro.qyoga.platform.spring.sdj.withSortBy
 
 private val therapeuticTaskListPage = Pageable.ofSize(10)
@@ -107,6 +108,12 @@ class TherapeuticTasksListsPageController(
         }
 
         when (val ex = res.exceptionOrNull()) {
+            is TherapeuticTaskHasReferences ->
+                return modelAndView("therapist/therapy/therapeutic-tasks/therapeutic-tasks-list :: tasks-list") {
+                    TASKS bindTo listOf((ex.task as AggregateReferenceTarget).entity)
+                    "taskHasReferencesError" bindTo true
+                    "references" bindTo ex.references
+                }
             else ->
                 res.getOrThrow()
         }

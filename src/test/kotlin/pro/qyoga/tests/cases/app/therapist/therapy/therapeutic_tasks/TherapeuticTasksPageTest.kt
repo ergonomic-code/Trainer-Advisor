@@ -2,6 +2,7 @@ package pro.qyoga.tests.cases.app.therapist.therapy.therapeutic_tasks
 
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
+import pro.qyoga.platform.spring.sdj.AggregateReferenceTarget
 import pro.qyoga.tests.assertions.*
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.clients.pages.therapist.therapy.therapeutic_tasks.TherapeuticTasksListPage
@@ -141,6 +142,21 @@ class TherapeuticTasksPageTest : QYogaAppIntegrationBaseTest() {
         // Then
         val deletedTask = backgrounds.therapeuticTasks.findById(task.id)
         deletedTask shouldBe null
+    }
+
+    @Test
+    fun `When user tries to delete referenced therapeutic task error message should be returned and task should remain persistent`() {
+        // Given
+        val (_, entry) = backgrounds.clients.createClientWithJournalEntry()
+        val therapist = TherapistClient.loginAsTheTherapist()
+        val therapeuticTask = (entry.therapeuticTask as AggregateReferenceTarget).entity
+
+        // When
+        val document = therapist.therapeuticTasks.delete(therapeuticTask.id)
+
+        // Then
+        document shouldHave TherapeuticTasksListPage.EditTaskForm.TASK_HAS_REFERENCES_ERROR_MESSAGE
+        backgrounds.therapeuticTasks.findById(therapeuticTask.id) shouldMatch therapeuticTask
     }
 
 }

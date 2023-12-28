@@ -36,12 +36,19 @@ data class JournalEntry(
 
 }
 
-fun List<JournalEntry>.hydrate(fetchTherapeuticTasks: (List<Long>) -> Map<Long, TherapeuticTask>): List<JournalEntry> {
-    val tasks = fetchTherapeuticTasks(this.map { it.therapeuticTask.id!! })
+fun List<JournalEntry>.hydrate(
+    fetchTherapeuticTasks: ((List<Long>) -> Map<Long, TherapeuticTask>)? = null,
+    fetchClients: ((List<Long>) -> Map<Long, Client>)? = null
+): List<JournalEntry> {
+    val tasks = fetchTherapeuticTasks?.let { it(this.map { it.therapeuticTask.id!! }) }
+    val clients = fetchClients?.let { it(this.map { it.client.id!! }) }
+    check(tasks != null || clients != null) { "Hydration without any fetches" }
     return map {
-        val task = tasks[it.therapeuticTask.id!!]
-        checkNotNull(task) { "Reference to not existing task by ${it.therapeuticTask.id}" }
-        it.copy(therapeuticTask = AggregateReferenceTarget(task))
+        val task: AggregateReference<TherapeuticTask, Long> =
+            tasks?.get(it.therapeuticTask.id!!)?.let(::AggregateReferenceTarget) ?: it.therapeuticTask
+        val client: AggregateReference<Client, Long> =
+            clients?.get(it.client.id!!)?.let(::AggregateReferenceTarget) ?: it.client
+        it.copy(therapeuticTask = task, client = client)
     }
 }
 
