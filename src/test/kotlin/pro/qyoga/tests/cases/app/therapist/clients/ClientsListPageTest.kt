@@ -81,7 +81,7 @@ class ClientsListPageTest : QYogaAppIntegrationBaseTest() {
             )
         )
 
-        val searchForm = ClientSearchDto(firstName, lastName, midddleName, phonePart)
+        val searchForm = ClientSearchDto(firstName, lastName, midddleName)
 
         val therapist = TherapistClient.loginAsTheTherapist()
 

@@ -122,7 +122,6 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
             authorized()
             formParam(ClientsListPage.ClientSearchForm.firstName.name, searchForm.firstName)
             formParam(ClientsListPage.ClientSearchForm.lastName.name, searchForm.lastName)
-            formParam(ClientsListPage.ClientSearchForm.middleName.name, searchForm.middleName)
             formParam(ClientsListPage.ClientSearchForm.phoneNumber.name, searchForm.phoneNumber)
         } When {
             get(ClientsListPage.ClientSearchForm.action.url)
