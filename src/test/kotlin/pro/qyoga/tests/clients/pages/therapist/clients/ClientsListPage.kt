@@ -25,13 +25,11 @@ object ClientsListPage : QYogaPage {
 
         val lastName = text("lastName", false)
         val firstName = text("firstName", false)
-        val middleName = text("middleName", false)
         val phoneNumber = text("phoneNumber", false)
 
         override val components: List<Input> = listOf(
             lastName,
             firstName,
-            middleName,
             phoneNumber
         )
 
@@ -43,8 +41,7 @@ object ClientsListPage : QYogaPage {
     val deleteAction = "$path/delete/{id}"
     val deleteActionPattern = deleteAction.replace("{id}", "(\\d+)").toRegex()
 
-    private val addLink = Link("createClientLink", CreateClientPage, "Добавить клиента")
-    private val addButton = Button("addClient", "Добавить клиента")
+    private val addLink = Link("createClientLink", CreateClientPage, "Добавить")
 
     private const val CLIENT_ROW = "tbody tr"
 
@@ -54,7 +51,6 @@ object ClientsListPage : QYogaPage {
         element.getElementById(ClientSearchForm.id)!! shouldBeElement ClientSearchForm
 
         element shouldHaveComponent addLink
-        element shouldHaveComponent addButton
     }
 
     fun clientId(document: Document, rowIdx: Int): Long {

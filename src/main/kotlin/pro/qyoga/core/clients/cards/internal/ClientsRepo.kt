@@ -27,7 +27,6 @@ class ClientsRepo(
             Client::therapistId isEqualIfNotNull therapistId
             Client::firstName isILikeIfNotNull clientSearchDto.firstName
             Client::lastName isILikeIfNotNull clientSearchDto.lastName
-            Client::middleName isILikeIfNotNull clientSearchDto.middleName
             Client::phoneNumber isILikeIfNotNull clientSearchDto.phoneNumber
         }
 
