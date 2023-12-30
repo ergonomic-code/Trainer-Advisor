@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div th:replace="~{fragments/header.html}"></div>
+    <title>Список упражнений</title>
+</head>
+
+<body class="sb-nav-fixed">
+
+<div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
+
+<div id="layoutSidenav">
+
+    <div th:replace="~{fragments/leftNavPanel.html :: leftNavPanel}"></div>
+
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container px-4">
+                <h1 class="mt-4">Упражнения</h1>
+
+                <form class="row mt-3 mb-3" hx-get="/therapist/exercises/search"
+                      hx-target="#tablePagination"
+                      hx-trigger="submit"
+                      id="exercisesSearch"
+                      th:object="${searchDto}">
+
+                    <div class="col-12 col-sm-5 mb-2" id="titleFilter">
+                        <input aria-describedby="basic-addon2"
+                               class="form-control"
+                               placeholder="Название"
+                               th:field="${searchDto.title}"
+                               type="text">
+                    </div>
+
+                    <div class="col-12 col-sm-4 mb-2" id="exerciseTypeFilter">
+                        <select class="form-select"
+                                id="inputGroupSelect01"
+                                th:field="${searchDto.exerciseType}">
+                            <option selected th:value="null">Тип упражнения</option>
+                            <option th:each="type : ${types}" th:text="${type.label}"
+                                    th:value="${type}"></option>
+                        </select>
+                    </div>
+
+                    <div class="col-12 col-sm-1 mb-3">
+                        <button class="btn btn-outline-secondary w-100 d-sm-none" type="submit">
+                            Поиск
+                        </button>
+                        <button class="btn btn-outline-secondary w-100 d-none d-sm-block" type="submit">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+
+                    <div class="col-12 col-sm-2">
+                        <a class="btn btn-outline-success w-100" href="/therapist/exercises/create"
+                           id="createClientLink">
+                            Добавить
+                        </a>
+                    </div>
+
+                </form>
+
+                <div id="tablePagination" th:fragment="exercises">
+
+                    <table class="table table-hover" id="exercisesTable">
+                        <tbody id="exercises-list">
+                        <tr th:each="exercise : ${exercises.content}">
+                            <td th:text="${exercise.title}"></td>
+
+                            <td class="text-end">
+                                <a class="deleteClientLink btn btn-outline-danger text">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div id="pagination">
+
+                        <ul class="pagination justify-content-center">
+                            <div class="pagination">
+                                <li class="page-item"
+                                    th:classappend="${(exercises.number == 0) ? 'disabled' : ''}">
+                                    <a class="page-link"
+                                       hx-target="#tablePagination"
+                                       hx-trigger="click"
+                                       style="cursor: pointer"
+                                       th:attr="hx-get=@{/therapist/exercises/search(pageNumber=${exercises.number}, searchDto=${searchDto})}"
+                                       th:if="${exercises.number >= 1}"
+                                    >Назад</a>
+                                </li>
+                            </div>
+
+                            <div class="pagination"
+                                 th:each="pageNumber : ${#numbers.sequence(1, exercises.getTotalPages(), 1)}"
+                                 th:if="${exercises.totalPages > 0}">
+                                <li class="page-item"
+                                    th:classappend="${pageNumber == (exercises.number + 1)} ? 'active' : ''">
+                                    <a class="page-link"
+                                       hx-target="#tablePagination"
+                                       hx-trigger="click"
+                                       style="cursor: pointer"
+                                       th:attr="hx-get=@{/therapist/exercises/search(pageNumber=${pageNumber}, searchDto=${searchDto})}"
+                                       th:text="${pageNumber}"></a>
+                                </li>
+                            </div>
+
+                            <div class="pagination">
+                                <li class="page-item"
+                                    th:classappend="${!(exercises.number < exercises.totalPages) ? 'disabled' : ''}">
+                                    <a class="page-link"
+                                       hx-target="#tablePagination"
+                                       hx-trigger="click"
+                                       style="cursor: pointer"
+                                       th:attr="hx-get=@{/therapist/exercises/search(pageNumber=${exercises.getPageable().pageNumber + 2}, searchDto=${searchDto})}"
+                                       th:if="${exercises.number < exercises.totalPages - 1}"
+                                    >Вперед</a>
+                                </li>
+                            </div>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <footer th:insert="~{fragments/footer.html :: footer}"></footer>
+    </div>
+</div>
+
+</body>
+</html>
