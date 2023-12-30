@@ -1,5 +1,5 @@
 <div class="client__container" id="clientCardTab">
-    <div class="client__form">
+    <div class="p-2 p-sm-4">
         <form class="form__client-card" id="createClientForm" method="post" th:action="${formAction}">
             <label class="form-label" for="ClientFirstName">Клиент</label>
             <div class="input__container mb-4">
@@ -78,7 +78,7 @@
                               placeholder="Введите данные" rows="1"></textarea>
                 </div>
             </div>
-            <div class="from-group row g-0 input-group">
+            <div class="from-group row g-0 input-group mb-3">
                 <label class="form-label" for="distributionSourceType">Как вы о нас узнали?</label>
                 <div class="col me-md-4 me-xl-4 me-xxl-4">
                     <select class="form-control w-100 q-input form-select mb-2"
@@ -100,9 +100,9 @@
                 </div>
             </div>
 
-            <div class="mt-5 row g-0 float-end">
+            <div class="mb-3 row g-0 float-end">
                 <div class="col">
-                    <button class="btn btn-success">Сохранить</button>
+                    <button class="btn btn-outline-success">Сохранить</button>
                 </div>
             </div>
         </form>
