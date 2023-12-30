@@ -27,7 +27,7 @@ class ExercisesListPageController(
     ): String {
         val exercises = exercisesService.findExercises(ExerciseSearchDto.ALL, page)
         model.addAllAttributes(toModelAttributes(exercises))
-        return "therapist/exercises/exercise-search"
+        return "therapist/exercises/exercises-list"
     }
 
     @GetMapping("/search")
@@ -38,7 +38,7 @@ class ExercisesListPageController(
     ): String {
         val exercises = exercisesService.findExercises(searchDto, page)
         model.addAllAttributes(toModelAttributes(exercises))
-        return "therapist/exercises/exercise-search :: exercises"
+        return "therapist/exercises/exercises-list :: exercises"
     }
 
     fun toModelAttributes(exercises: Page<ExerciseDto>): Map<String, Any> =
