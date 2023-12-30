@@ -56,32 +56,28 @@ class ClientsListPageTest : QYogaAppIntegrationBaseTest() {
         // Given
         val firstName = "Иван"
         val lastName = "Иванов"
-        val midddleName = "Иванович"
         val birthDate = LocalDate.of(2000, 1, 12)
         val phonePart = "923-111"
 
         val fullMatch1 =
-            createClientCardDto(firstName, lastName, midddleName, birthDate, "+7-$phonePart-22-44")
+            createClientCardDto(firstName, lastName, birthDate = birthDate, phone = "+7-$phonePart-22-44")
         val fullMatch2 =
-            createClientCardDto(firstName, lastName + "ский", midddleName, birthDate, "+7-$phonePart-22-33")
+            createClientCardDto(firstName, lastName + "ский", birthDate = birthDate, phone = "+7-$phonePart-22-33")
         val nonMatchByLastName =
             createClientCardDto(firstName, lastName = lastName.reversed())
-        val nonMatchByMiddleName =
-            createClientCardDto(firstName, lastName, middleName = midddleName.reversed())
         val nonMatchByPhone =
-            createClientCardDto(firstName, lastName, midddleName, birthDate, phone = phonePart.reversed())
+            createClientCardDto(firstName, lastName, birthDate = birthDate, phone = phonePart.reversed())
 
         backgrounds.clients.createClients(
             listOf(
                 fullMatch1,
                 fullMatch2,
                 nonMatchByLastName,
-                nonMatchByMiddleName,
                 nonMatchByPhone
             )
         )
 
-        val searchForm = ClientSearchDto(firstName, lastName, midddleName)
+        val searchForm = ClientSearchDto(firstName, lastName, phonePart)
 
         val therapist = TherapistClient.loginAsTheTherapist()
 

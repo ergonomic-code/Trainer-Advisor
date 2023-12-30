@@ -12,14 +12,14 @@
 
 <div id="layoutSidenav">
 
-    <div th:replace="~{fragments/leftNavPanel :: leftNavPanel}"></div>
+    <div th:replace="~{fragments/leftNavPanel :: leftNavPanel (activeLink='clients')}"></div>
 
     <div id="layoutSidenav_content">
         <main>
 
             <section class="container px-4">
                 <h1 class="mt-4 pb-2 mb-3 border-bottom">Новый клиент</h1>
-                <div th:replace="therapist/clients/client-card-fragment.html :: leftNavPanel(activeLink='clients')"></div>
+                <div th:replace="therapist/clients/client-card-fragment.html"></div>
             </section>
         </main>
         <footer th:insert="~{fragments/footer.html :: footer}"></footer>

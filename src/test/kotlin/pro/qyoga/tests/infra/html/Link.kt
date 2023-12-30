@@ -16,7 +16,7 @@ class Link(
     constructor(id: String, page: QYogaPage, text: String) : this(id, page.path, text)
 
     override fun selector(): String =
-        "a#$id:contains($text)"
+        "a[id*=$id]:contains($text)"
 
     override fun match(element: Element) {
         withClue("Invalid link URL") {
