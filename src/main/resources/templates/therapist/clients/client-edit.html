@@ -23,34 +23,70 @@
         <main class="h-100">
 
             <section class="container px-4">
-                <h1 class="mt-4" th:text="${client?.fullName() ?: 'ФИО'}">Новый клиент</h1>
-                <div class="row g-0 w-100">
-                    <ul class="mt-4 nav nav-pills text-center align-content-center container g-0 border-bottom  mb-4 pb-1"
-                        id="cardTabs">
-                        <li class="nav-item col-4 col-xl-2 col-xxl-2">
-                            <a class="nav-link pill small" id="journalLink"
+                <h1 class="mt-4 mb-3" th:text="${client?.fullName() ?: 'ФИО'}">Новый клиент</h1>
+
+                <div class="row g-0 w-100 mb-4 d-none d-sm-flex">
+                    <ul class="nav nav-tabs" id="cardTabs">
+                        <li class="nav-item">
+                            <a class="nav-link " id="journalLinkSm"
                                th:classappend="${activeTab == 'journal'} ? 'active'"
                                th:href="@{/therapist/clients/{id}/journal(id=${client.id})}">Журнал</a>
                         </li>
-                        <li class="nav-item col-4 col-xl-2 col-xxl-2">
-                            <a class="nav-link pill disabled small" href="#">Особенности</a>
+                        <li class="nav-item">
+                            <a class="nav-link disabled " href="#">Особенности</a>
                         </li>
-                        <li class="nav-item col-4 col-xl-2 col-xxl-2">
-                            <a aria-current="page" class="nav-link pill small" id="cardLink"
+                        <li class="nav-item">
+                            <a aria-current="page" class="nav-link " id="cardLinkSm"
                                th:classappend="${activeTab == 'card'} ? 'active'"
                                th:href="@{/therapist/clients/{id}/card(id=${client.id})}">Карточка</a>
                         </li>
-                        <li class="nav-item col-4 col-xl-2 col-xxl-2">
-                            <a class="nav-link pill disabled text-wrap small" href="#">Объём<br/>движений</a>
+                        <li class="nav-item">
+                            <a class="nav-link  disabled" href="#">Объём движений</a>
                         </li>
-                        <li class="nav-item col-4 col-xl-2 col-xxl-2">
-                            <a class="nav-link pill disabled small" href="#">Файлы</a>
+                        <li class="nav-item">
+                            <a class="nav-link  disabled" href="#">Файлы</a>
                         </li>
-                        <li class="nav-item col-4 col-xl-2 col-xxl-2">
-                            <a class="nav-link pill disabled small" href="#">Программы</a>
+                        <li class="nav-item">
+                            <a class="nav-link  disabled" href="#">Программы</a>
                         </li>
                     </ul>
                 </div>
+
+                <div class="row d-flex d-sm-none pb-3 mb-4 border-bottom">
+                    <div class="btn-group">
+                        <button aria-expanded="false" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown"
+                                type="button">
+                            <span th:if="${activeTab == 'journal'}">Журнал</span>
+                            <span th:if="${activeTab == 'card'}">Карточка</span>
+                        </button>
+
+                        <ul class="dropdown-menu dropdown-menu-start">
+                            <li>
+                                <a class="dropdown-item " id="journalLink"
+                                   th:classappend="${activeTab == 'journal'} ? 'active'"
+                                   th:href="@{/therapist/clients/{id}/journal(id=${client.id})}">Журнал</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item disabled " href="#">Особенности</a>
+                            </li>
+                            <li>
+                                <a aria-current="page" class="dropdown-item " id="cardLink"
+                                   th:classappend="${activeTab == 'card'} ? 'active'"
+                                   th:href="@{/therapist/clients/{id}/card(id=${client.id})}">Карточка</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item  disabled" href="#">Объём движений</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item  disabled" href="#">Файлы</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item  disabled" href="#">Программы</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
                 <div id="tabContent"
                      th:insert="@{'therapist/clients/client-' + ${activeTab.toLowerCase()} + '-fragment.html'}"></div>
             </section>
