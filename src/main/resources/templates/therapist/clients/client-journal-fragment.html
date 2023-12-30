@@ -15,9 +15,9 @@
 
     <div th:unless="${journal.content.size() == 0}">
 
-        <div class="row d-flex mb-4">
-            <div class="col d-flex justify-content-end">
-                <a class="btn btn-outline-success link-opacity-100" href="#"
+        <div class="row d-flex mb-4 flex-row-reverse">
+            <div class="col col-sm-3 d-flex justify-content-end">
+                <a class="btn btn-outline-success link-opacity-100 w-100" href="#"
                    hx-target="#tabContent"
                    id="addEntryLink"
                    th:hx-get="@{/therapist/clients/{id}/journal/create(id=${client.id})}">
@@ -33,8 +33,10 @@
                         th:text="${#temporals.format(entry.date, T(pro.qyoga.core.formats.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN)}"></h6>
                 </div>
                 <div class="col-12 col-sm-9 d-flex align-items-end mb-sm-0 ms-2 ms-sm-0 card-subtitle text-muted">
-                    <h6 class="entryTherapeuticTask mb-0"
-                        th:text="${'Задача: ' + entry.therapeuticTask.entity.name}"></h6>
+                    <h6 class="entryTherapeuticTask mb-0 text-truncate">
+                        <span class="d-none d-sm-inline">Задача: </span>
+                        <span th:text="${entry.therapeuticTask.entity.name}"></span>
+                    </h6>
                 </div>
             </div>
             <div class="card-body">
