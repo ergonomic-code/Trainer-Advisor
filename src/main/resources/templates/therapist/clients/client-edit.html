@@ -24,32 +24,33 @@
 
             <section class="client__card container">
                 <h1 class="mt-4" th:text="${client?.fullName() ?: 'ФИО'}">Новый клиент</h1>
-                <ul class="mt-4 nav nav-pills text-center align-content-center container g-0" id="cardTabs">
-                    <div class="row g-0 w-100">
-                        <li class="nav-item mb-3 col-4 col-xl-2 col-xxl-2">
+                <div class="row g-0 w-100">
+                    <ul class="mt-4 nav nav-pills text-center align-content-center container g-0 border-bottom  mb-4 pb-1"
+                        id="cardTabs">
+                        <li class="nav-item col-4 col-xl-2 col-xxl-2">
                             <a class="nav-link pill small" id="journalLink"
                                th:classappend="${activeTab == 'journal'} ? 'active'"
                                th:href="@{/therapist/clients/{id}/journal(id=${client.id})}">Журнал</a>
                         </li>
-                        <li class="nav-item mb-3 col-4 col-xl-2 col-xxl-2">
+                        <li class="nav-item col-4 col-xl-2 col-xxl-2">
                             <a class="nav-link pill disabled small" href="#">Особенности</a>
                         </li>
-                        <li class="nav-item mb-3 col-4 col-xl-2 col-xxl-2">
+                        <li class="nav-item col-4 col-xl-2 col-xxl-2">
                             <a aria-current="page" class="nav-link pill small" id="cardLink"
                                th:classappend="${activeTab == 'card'} ? 'active'"
                                th:href="@{/therapist/clients/{id}/card(id=${client.id})}">Карточка</a>
                         </li>
-                        <li class="nav-item mb-3 col-4 col-xl-2 col-xxl-2">
+                        <li class="nav-item col-4 col-xl-2 col-xxl-2">
                             <a class="nav-link pill disabled text-wrap small" href="#">Объём<br/>движений</a>
                         </li>
-                        <li class="nav-item mb-3 col-4 col-xl-2 col-xxl-2">
+                        <li class="nav-item col-4 col-xl-2 col-xxl-2">
                             <a class="nav-link pill disabled small" href="#">Файлы</a>
                         </li>
-                        <li class="nav-item mb-3 col-4 col-xl-2 col-xxl-2">
+                        <li class="nav-item col-4 col-xl-2 col-xxl-2">
                             <a class="nav-link pill disabled small" href="#">Программы</a>
                         </li>
-                    </div>
-                </ul>
+                    </ul>
+                </div>
                 <div id="tabContent"
                      th:insert="@{'therapist/clients/client-' + ${activeTab.toLowerCase()} + '-fragment.html'}"></div>
             </section>

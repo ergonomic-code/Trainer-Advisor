@@ -17,7 +17,7 @@
 
         <div class="row d-flex mb-4">
             <div class="col d-flex justify-content-end">
-                <a class="btn btn-success link-opacity-100" href="#"
+                <a class="btn btn-outline-success link-opacity-100" href="#"
                    hx-target="#tabContent"
                    id="addEntryLink"
                    th:hx-get="@{/therapist/clients/{id}/journal/create(id=${client.id})}">
@@ -46,12 +46,12 @@
 
                 <div class="row">
                     <div class="col-12 d-flex justify-content-end">
-                        <a class="editEntryLink btn btn-success me-3"
+                        <a class="editEntryLink btn btn-outline-success me-3"
                            hx-target=" #tabContent"
                            th:hx-get="@{/therapist/clients/{clientId}/journal/{entryId}(clientId=${client.id},entryId=${entry.id})}">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <a class="deleteEntryLink btn btn-gray"
+                        <a class="deleteEntryLink btn btn-outline-danger"
                            hx-swap="outerHTML swap:0.2s"
                            hx-target="closest div.journalEntry"
                            th:hx-confirm="'Удалить запись за ' + ${entryDate} + '?'"
