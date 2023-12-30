@@ -1,8 +1,8 @@
-<div id="layoutSidenav_nav" th:fragment="leftNavPanel">
+<div id="layoutSidenav_nav" th:fragment="leftNavPanel (activeLink)">
     <nav class="sb-sidenav accordion sb-sidenav-light d-flex flex-column flex-shrink-0 ps-3 pe-3 bg-body-tertiary"
          id="sidenavAccordion">
 
-        <ul class="nav nav-pills flex-column mb-auto mt-3">
+        <ul class="nav nav-underline flex-column mb-auto mt-3">
 
             <li>
                 <div class="navbar-text bold">
@@ -15,13 +15,43 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link link-body-emphasis" href="/therapist/clients" id="clientsPageLink">
+                <a
+                        class="nav-link"
+                        href="/therapist/clients"
+                        id="clientsPageLink"
+                        th:classappend="${activeLink == 'clients'} ? 'active' : ''">
                     <div class="row">
                         <div class="col-1">
                             <i class="fas fa-users me-2 icon"></i>
                         </div>
                         <div class="col">
                             Клиенты
+                        </div>
+                    </div>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link disabled">
+                    <div class="row">
+                        <div class="col-1">
+                            <i class="fas fa-calendar me-2 icon"></i>
+                        </div>
+                        <div class="col">
+                            Расписание
+                        </div>
+                    </div>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link disabled">
+                    <div class="row">
+                        <div class="col-1">
+                            <i class="fas fa-file-lines me-2 icon"></i>
+                        </div>
+                        <div class="col">
+                            Программы
                         </div>
                     </div>
                 </a>
@@ -38,8 +68,10 @@
             </li>
 
             <li>
-                <a class="nav-link link-body-emphasis" href="/therapist/therapeutic-tasks"
-                   id="therapeuticTasksPageLink">
+                <a class="nav-link"
+                   href="/therapist/therapeutic-tasks"
+                   id="therapeuticTasksPageLink"
+                   th:classappend="${activeLink == 'therapeuticTasks'} ? 'active' : ''">
                     <div class="row">
                         <div class="col-1">
                             <i class="fas fa-bullseye me-2 icon"></i>
@@ -51,13 +83,68 @@
                 </a>
             </li>
             <li>
-                <a class="nav-link link-body-emphasis" href="/therapist/exercises" id="exercisesPageLink">
+                <a class="nav-link"
+                   href="/therapist/exercises"
+                   id="exercisesPageLink"
+                   th:classappend="${activeLink == 'exercises'} ? 'active' : ''">
                     <div class="row">
                         <div class="col-1">
                             <i class="fas fa-pray me-2 icon"></i>
                         </div>
                         <div class="col">
                             Упражнения
+                        </div>
+                    </div>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link disabled">
+                    <div class="row">
+                        <div class="col-1">
+                            <i class="fas fa-star me-2 icon"></i>
+                        </div>
+                        <div class="col">
+                            Особенности
+                        </div>
+                    </div>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link disabled">
+                    <div class="row">
+                        <div class="col-1">
+                            <i class="fas fa-bolt me-2 icon"></i>
+                        </div>
+                        <div class="col">
+                            Эффекты
+                        </div>
+                    </div>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link disabled">
+                    <div class="row">
+                        <div class="col-1">
+                            <i class="fas fa-hand me-2 icon"></i>
+                        </div>
+                        <div class="col">
+                            Манипуляции
+                        </div>
+                    </div>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link disabled">
+                    <div class="row">
+                        <div class="col-1">
+                            <i class="fas fa-list-check me-2 icon"></i>
+                        </div>
+                        <div class="col">
+                            Опросники
                         </div>
                     </div>
                 </a>
@@ -73,8 +160,21 @@
                 </div>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link disabled">
+                    <div class="row">
+                        <div class="col-1">
+                            <i class="fas fa-gear me-2 icon"></i>
+                        </div>
+                        <div class="col">
+                            Настройки
+                        </div>
+                    </div>
+                </a>
+            </li>
+
             <li>
-                <a class="nav-link link-body-emphasis" href="/logout" id="logoutLink">
+                <a class="nav-link" href="/logout" id="logoutLink">
                     <div class="row">
                         <div class="col-1">
                             <i class="fas fa-sign-out me-2 icon"></i>
