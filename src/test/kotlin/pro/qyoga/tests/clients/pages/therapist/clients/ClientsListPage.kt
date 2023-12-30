@@ -21,7 +21,7 @@ object ClientsListPage : QYogaPage {
 
     override val title = "Список клиентов"
 
-    object ClientSearchForm : QYogaForm("clientSearch", FormAction.hxGet("$path/search")) {
+    object ClientSearchForm : QYogaForm("searchClientsFilterForm", FormAction.hxGet("$path/search")) {
 
         val lastName = text("lastName", false)
         val firstName = text("firstName", false)

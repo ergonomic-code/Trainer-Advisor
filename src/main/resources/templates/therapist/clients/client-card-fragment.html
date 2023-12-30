@@ -94,7 +94,7 @@
         <div class="row g-2 justify-content-end">
             <div class="col-6 col-sm-auto text-center">
                 <a class="btn btn-outline-danger" style="min-width: 110px;"
-                   th:href="@{/therapist/clients/{id}/journal(id=${client.id})}">
+                   th:href="${ '/therapist/clients' + (client?.id != null ? '/' + client.id + '/journal' : '')}">
                     Отмена
                 </a>
             </div>

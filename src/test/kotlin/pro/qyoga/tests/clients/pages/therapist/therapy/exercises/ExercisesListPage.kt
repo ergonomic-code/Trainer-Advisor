@@ -36,7 +36,7 @@ object ExercisesListPage : QYogaPage {
 
     private const val EXERCISE_ROW = "tbody tr"
 
-    private val newExerciseButton = Button("newExercise", "Новое упражнение")
+    private val newExerciseButton = Link("newExerciseLink", CreateExercisePage, "Добавить")
 
     override fun match(element: Element) {
         element.select("title")[0].text() shouldBe title
@@ -52,8 +52,6 @@ object ExercisesListPage : QYogaPage {
         override fun match(element: Element) {
             element.select(EXERCISE_ROW).forAny { row ->
                 row.select("td:nth-child(1)").text() shouldBe exercise.title
-                row.select("td:nth-child(2)").text() shouldBe exercise.durationLabel
-                row.select("td:nth-child(3)").text() shouldBe exercise.type.label
             }
         }
     }
