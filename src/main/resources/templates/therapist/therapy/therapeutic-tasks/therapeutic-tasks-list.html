@@ -26,7 +26,7 @@
                         <input class="form-control"
                                id="searchName"
                                name="searchKey"
-                               placeholder="Поиск по имени"
+                               placeholder="Название"
                                autocomplete="off"
                                type="text">
                     </form>
@@ -50,7 +50,7 @@
                                    placeholder="Новая задача"
                                    required
                                    type="text">
-                            <button class="input-group-text" name="addTaskButton">
+                            <button class="btn btn-outline-success rounded-end" name="addTaskButton">
                                 <i class="fas fa-add"></i>
                             </button>
                             <div class="invalid-feedback ms-3" id="duplicatedNewTaskName">
@@ -77,11 +77,11 @@
                                        th:classappend="${(duplicatedEditedTaskName ?: false) || (taskHasReferencesError ?: false)} ? 'is-invalid' : ''"
                                        type="text"
                                 >
-                                <button class="input-group-text" name="editTaskButton">
+                                <button class="input-group-text btn btn-outline-secondary" name="editTaskButton">
                                     <i class="fas fa-save"></i>
                                 </button>
                                 <button
-                                        class="input-group-text"
+                                        class="input-group-text btn btn-outline-danger rounded-end"
                                         hx-select=".taskRow"
                                         hx-swap="outerHTML"
                                         hx-target="closest .taskRow"
