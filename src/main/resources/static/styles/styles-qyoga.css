@@ -55,3 +55,19 @@ tr.htmx-swapping {
     background-color: white;
     color: var(--bs-pagination-active-border-color)
 }
+
+.nav-underline {
+    --bs-nav-underline-gap: 0;
+}
+
+.nav-underline .nav-link.active {
+    font-weight: normal;
+}
+
+.nav-link {
+    color: #36772c;
+}
+
+.nav-link:hover {
+    color: #36772c;
+}

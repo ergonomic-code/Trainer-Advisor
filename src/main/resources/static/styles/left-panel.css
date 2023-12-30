@@ -93,6 +93,7 @@
     flex-direction: column;
     height: 100%;
     flex-wrap: nowrap;
+    overflow-y: scroll;
 }
 
 .sb-nav-fixed #layoutSidenav #layoutSidenav_content {
