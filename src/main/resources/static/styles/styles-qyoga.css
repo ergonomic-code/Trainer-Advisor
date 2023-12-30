@@ -1,13 +1,3 @@
-.btn-gray {
-    color: #fff;
-    background-color: #667085;
-}
-
-.btn-gray:hover {
-    color: #fff;
-    background-color: #5a6273;
-}
-
 .nav-pills .nav-link.active {
     color: #fff;
     background-color: #198754;
@@ -59,4 +49,9 @@ tr.htmx-swapping {
         opacity: 0;
         height: 0;
     }
+}
+
+.active > .page-link {
+    background-color: white;
+    color: var(--bs-pagination-active-border-color)
 }

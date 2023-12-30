@@ -21,7 +21,7 @@ VALUES ((SELECT id FROM clients WHERE last_name = 'Бортник'),
 
        ((SELECT id FROM clients WHERE last_name = 'Королёва'),
         '2023-12-26',
-        (SELECT id FROM therapeutic_tasks WHERE name = 'Укрепление МТД'),
+        (SELECT id FROM therapeutic_tasks WHERE name = 'Укреление МТД'),
         'Работа с мтд:
 • сидя
 • сидя в z-сете
