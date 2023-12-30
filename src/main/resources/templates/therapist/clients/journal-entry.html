@@ -55,15 +55,16 @@
                       th:text="${entry?.entryText ?: ''}"
             ></textarea>
         </div>
+
         <div class="row g-2 justify-content-end">
-            <div class="col-auto">
-                <a class="btn btn-danger" style="min-width: 110px;"
+            <div class="col-6 col-sm-auto text-center">
+                <a class="btn btn-outline-danger" style="min-width: 110px;"
                    th:href="@{/therapist/clients/{id}/journal(id=${client.id})}">
                     Отмена
                 </a>
             </div>
-            <div class="col-auto">
-                <button class="btn btn-success" name="confirmButton" style="min-width: 110px;">
+            <div class="col-6 col-sm-auto text-center">
+                <button class="btn btn-outline-success" name="confirmButton" style="min-width: 110px;">
                     Сохранить
                 </button>
             </div>
