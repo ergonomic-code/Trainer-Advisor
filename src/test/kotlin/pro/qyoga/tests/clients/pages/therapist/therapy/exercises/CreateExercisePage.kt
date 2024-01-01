@@ -30,7 +30,7 @@ object CreateExercisePage : QYogaPage {
         val stepDescription = TextArea("`steps[\${idx}].description`", true, alpineJs = true)
         fun stepsDescription(idx: Int): String = "steps[$idx].description"
 
-        val deleteStep = button("deleteStep", "Удалить шаг")
+        val deleteStep = Button("deleteStep", "")
         val addStep = button("addStep", "Добавить шаг")
         val save = submit("save", value = "Сохранить")
 

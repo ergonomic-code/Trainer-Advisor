@@ -19,7 +19,7 @@ class CreateExercisePageController(
 
     @GetMapping
     fun getCreateExercisePage(): String {
-        return "therapist/exercises/exercise-create"
+        return "therapist/therapy/exercises/exercise-create"
     }
 
     @PostMapping

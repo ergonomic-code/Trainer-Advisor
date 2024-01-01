@@ -1,11 +1,10 @@
 .overlay {
     position: relative;
-    top: 40px;
-    left: 102px;
     background: rgb(0, 0, 0);
     background: rgba(0, 0, 0, 0.5); /* Black see-through */
     transition: .5s ease;
-    opacity: 0;
+    opacity: 1;
+    display: inline-block;
     color: white;
     font-size: 20px;
     text-align: center;
