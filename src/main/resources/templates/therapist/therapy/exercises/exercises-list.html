@@ -86,7 +86,7 @@
                                        hx-target="#tablePagination"
                                        hx-trigger="click"
                                        style="cursor: pointer"
-                                       th:attr="hx-get=@{/therapist/exercises/search(pageNumber=${exercises.number}, searchDto=${searchDto})}"
+                                       th:attr="hx-get=@{/therapist/exercises/search(page=${exercises.number - 1}, searchDto=${searchDto})}"
                                        th:if="${exercises.number >= 1}"
                                     >Назад</a>
                                 </li>
@@ -101,7 +101,7 @@
                                        hx-target="#tablePagination"
                                        hx-trigger="click"
                                        style="cursor: pointer"
-                                       th:attr="hx-get=@{/therapist/exercises/search(pageNumber=${pageNumber}, searchDto=${searchDto})}"
+                                       th:attr="hx-get=@{/therapist/exercises/search(page=${pageNumber - 1}, searchDto=${searchDto})}"
                                        th:text="${pageNumber}"></a>
                                 </li>
                             </div>
@@ -113,7 +113,7 @@
                                        hx-target="#tablePagination"
                                        hx-trigger="click"
                                        style="cursor: pointer"
-                                       th:attr="hx-get=@{/therapist/exercises/search(pageNumber=${exercises.getPageable().pageNumber + 2}, searchDto=${searchDto})}"
+                                       th:attr="hx-get=@{/therapist/exercises/search(page=${exercises.getPageable().pageNumber + 1}, searchDto=${searchDto})}"
                                        th:if="${exercises.number < exercises.totalPages - 1}"
                                     >Вперед</a>
                                 </li>

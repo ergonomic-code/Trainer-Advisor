@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div th:replace="~{fragments/header.html}"></div>
+    <title>Новое упражнение</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="/styles/therapist/create-exercise.css" rel="stylesheet"/>
+</head>
+<body class="sb-nav-fixed">
+
+<div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
+
+<div id="layoutSidenav">
+
+    <div th:replace="~{fragments/leftNavPanel.html :: leftNavPanel (activeLink='exercises')}"></div>
+
+    <div id="layoutSidenav_content">
+        <main>
+            <section class="container px-4">
+                <h1 class="mt-4 pb-2 mb-3 border-bottom">Новое упражнение</h1>
+                <form class="mt-4"
+                      enctype="multipart/form-data"
+                      hx-post="/therapist/exercises/create"
+                      id="createExercise">
+
+                    <div class="row">
+                        <div class="col-12 mb-3 col-sm-5 form-floating gx-2">
+                            <input class="form-control "
+                                   id="title"
+                                   name="title"
+                                   placeholder="Название упражнения"
+                                   required
+                                   type="text">
+                            <label for="title">Название упражнения</label>
+                        </div>
+
+                        <div class="col-12 mb-3 col-sm-5 form-floating gx-2">
+                            <select class="form-select"
+                                    id="type"
+                                    name="exerciseType"
+                                    required>
+                                <option value="WARM_UP">Разминка</option>
+                                <option value="MOBILISATION">Мобилизация</option>
+                                <option value="STRENGTHENING">Укрепление</option>
+                                <option value="STRETCHING">Вытяжение</option>
+                                <option value="RELAXATION">Расслабление</option>
+                                <option value="TRACTION">Тракция</option>
+                            </select>
+                            <label for="type">Тип</label>
+                        </div>
+
+                        <div class="col-12 mb-3 col-sm-2 form-floating gx-2">
+                            <input class="form-control"
+                                   id="duration"
+                                   max="180"
+                                   min="0"
+                                   name="duration"
+                                   required
+                                   step="0.5"
+                                   type="number"
+                                   value="1">
+                            <label for="duration">Длительность</label>
+                        </div>
+
+                    </div>
+
+                    <div class="row mb-5">
+                        <div class="col form-floating gx-2">
+
+                            <textarea class="form-control"
+                                      id="description"
+                                      name="description"
+                                      placeholder="Глубоко вдохните..."
+                                      style="height: 15rem"
+                                      required
+                                      rows="10"></textarea>
+                            <label for="description">Описание упражнения</label>
+                        </div>
+                    </div>
+
+                    <div class="border-1">
+                        <ul class="nav nav-tabs mb-3">
+                            <li class="nav-item">
+                                <a class="nav-link active"
+                                   href="#">Шаги</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link disabled " href="#">Манипуляции</a>
+                            </li>
+                        </ul>
+
+                        <div class="row">
+                            <script>
+                                function fileToDataUrl(event, callback) {
+                                    if (!event.target.files.length) return
+
+                                    let file = event.target.files[0],
+                                        reader = new FileReader()
+
+                                    reader.readAsDataURL(file)
+                                    reader.onload = e => callback(e.target.result)
+                                }
+
+                                const noImage = "/img/no-image.png";
+
+                                function exerciseStep() {
+                                    return {
+                                        description: "",
+                                        imageUrl: noImage,
+                                        fileName: null,
+                                        fileChosen(event) {
+                                            fileToDataUrl(event, src => this.imageUrl = src)
+                                        },
+                                        removeImage() {
+
+                                            this.imageUrl = noImage
+                                            this.fileName = null
+                                        }
+                                    }
+                                }
+                            </script>
+                            <div id="steps"
+                                 x-data="{steps: [exerciseStep()]}">
+                                <template x-for="(step, idx) in steps">
+                                    <div class="card mb-3">
+                                        <div class="mb-3 p  py-2 px-3 bg-light d-flex align-items-end rounded">
+                                            <div class="col-9 col-sm-10 ">
+                                                <h5 class="" x-text="`Шаг ${idx + 1}`"></h5>
+                                            </div>
+
+                                            <div class="col-3 col-sm-2 text-end">
+                                                <button @click.prevent="if (window.confirm('Вы уверены, что хотите удалить шаг?')) { steps.splice(idx, 1) }"
+                                                        class="btn btn-outline-danger text-center bg-white"
+                                                        name="deleteStep">
+                                                    <span>
+                                                        <i class="fas fa-trash"></i>
+                                                    </span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="row align-items-center px-3 mb-3" x-data="step">
+                                            <div class="col-sm-2 mb-3 text-center mx-auto">
+                                                <label :for="`stepImageInput${idx}`" class="align-items-center">
+                                                    <div class="row h-100">
+                                                        <div class="col image-container text-end">
+                                                            <span @click.prevent="removeImage"
+                                                                  x-bind:class="imageUrl == '/img/no-image.png' ? 'invisible' : ''">
+                                                                <i aria-hidden="true"
+                                                                   class="fas fa-xmark overlay"
+                                                                >
+                                                                </i>
+                                                            </span>
+                                                            <img :id="`stepImage${idx}`" :src="step.imageUrl"
+                                                                 class="mw-100 d-block"
+                                                                 style="max-height: 15rem; margin-top: -43px">
+                                                        </div>
+                                                    </div>
+                                                </label>
+
+                                                <input :name="`steps[${idx}].id`" type="hidden">
+                                                <input :name="`steps[${idx}].imageId`" type="hidden">
+                                                <input :id="`stepImageInput${idx}`" :name="`stepImage${idx}`"
+                                                       @change="fileChosen"
+                                                       accept="image/*" class="form-control d-none"
+                                                       type="file"
+                                                       x-model="fileName"
+                                                />
+                                            </div>
+                                            <div class="col-sm-10 form-floating gx-2">
+                                                <textarea :name="`steps[${idx}].description`"
+                                                          class="form-control"
+                                                          placeholder="Глубоко вдохните..."
+                                                          required
+                                                          style="height: 15rem"
+                                                          x-model="step.description">
+                                                </textarea>
+                                                <label :for="`steps[${idx}].description`">Описание шага</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                                <div class="row flex-row-reverse">
+                                    <div class="col-12 col-sm-2 text-end">
+                                        <input @click="steps.push(exerciseStep())"
+                                               class="btn btn-outline-secondary mb-5 w-100"
+                                               name="addStep"
+                                               type="button"
+                                               value="Добавить шаг">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row g-2 justify-content-end">
+                        <div class="col-6 col-sm-auto text-center">
+                            <a class="btn btn-outline-danger" style="min-width: 110px;"
+                               href="/therapist/exercises"
+                               onclick="if (!window.confirm('Вы уверены, что хотите отменить все изменения и выйти?')) {event.preventDefault(); return false}">
+                                Отмена
+                            </a>
+                        </div>
+                        <div class="col-6 col-sm-auto text-center">
+                            <button class="btn btn-outline-success" name="save" style="min-width: 110px;" type="submit">
+                                Сохранить
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+            </section>
+        </main>
+        <footer th:insert="~{fragments/footer.html}"></footer>
+
+    </div>
+</div>
+
+</body>
+</html>

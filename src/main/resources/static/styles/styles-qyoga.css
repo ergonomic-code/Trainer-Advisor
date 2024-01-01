@@ -71,3 +71,8 @@ tr.htmx-swapping {
 .nav-link:hover {
     color: #36772c;
 }
+
+.btn-outline-danger.bg-white:hover, .btn-outline-danger.bg-white:focus-visible {
+    color: var(--bs-danger) !important;
+    background-color: #f8d7da !important;
+}
