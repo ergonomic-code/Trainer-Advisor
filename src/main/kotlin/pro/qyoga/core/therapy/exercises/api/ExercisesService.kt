@@ -2,7 +2,7 @@ package pro.qyoga.core.therapy.exercises.api
 
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-import pro.qyoga.infra.images.api.Image
+import pro.qyoga.platform.images.api.Image
 
 interface ExercisesService {
 
