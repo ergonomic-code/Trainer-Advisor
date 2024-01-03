@@ -1,8 +1,8 @@
-package pro.qyoga.platform.images.internal
+package pro.qyoga.platform.file_storage.internal
 
 import org.springframework.stereotype.Service
-import pro.qyoga.platform.images.api.Image
-import pro.qyoga.platform.images.api.ImagesService
+import pro.qyoga.platform.file_storage.api.Image
+import pro.qyoga.platform.file_storage.api.ImagesService
 
 @Service
 class ImagesServiceImpl(

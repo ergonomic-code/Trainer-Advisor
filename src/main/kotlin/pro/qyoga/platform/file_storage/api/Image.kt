@@ -1,4 +1,4 @@
-package pro.qyoga.platform.images.api
+package pro.qyoga.platform.file_storage.api
 
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
