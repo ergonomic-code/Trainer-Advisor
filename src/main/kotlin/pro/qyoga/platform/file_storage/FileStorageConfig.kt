@@ -8,4 +8,4 @@ import pro.qyoga.infra.db.SdjConfig
 @Import(SdjConfig::class)
 @ComponentScan
 @Configuration
-class ImagesConfig
+class FileStorageConfig
