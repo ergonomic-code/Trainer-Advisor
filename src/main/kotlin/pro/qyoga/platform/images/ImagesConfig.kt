@@ -1,4 +1,4 @@
-package pro.qyoga.infra.images
+package pro.qyoga.platform.images
 
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration

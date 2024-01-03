@@ -1,6 +1,6 @@
 package pro.qyoga.tests.fixture
 
-import pro.qyoga.infra.images.api.Image
+import pro.qyoga.platform.images.api.Image
 import pro.qyoga.tests.fixture.data.imageExtensions
 import pro.qyoga.tests.fixture.data.randomFileName
 import kotlin.random.Random
