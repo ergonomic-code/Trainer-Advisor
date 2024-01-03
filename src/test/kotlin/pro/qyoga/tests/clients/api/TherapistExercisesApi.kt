@@ -10,7 +10,7 @@ import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
 import pro.qyoga.core.therapy.exercises.api.CreateExerciseRequest
 import pro.qyoga.core.therapy.exercises.api.ExerciseSearchDto
-import pro.qyoga.platform.file_storage.api.Image
+import pro.qyoga.platform.file_storage.api.File
 import pro.qyoga.tests.clients.pages.therapist.therapy.exercises.CreateExercisePage
 import pro.qyoga.tests.clients.pages.therapist.therapy.exercises.ExercisesListPage
 
@@ -30,7 +30,7 @@ class TherapistExercisesApi(override val authCookie: Cookie) : AuthorizedApi {
 
     }
 
-    fun createExercise(exercise: CreateExerciseRequest, images: Map<Long, Image>) {
+    fun createExercise(exercise: CreateExerciseRequest, images: Map<Long, File>) {
         Given {
             contentType("multipart/form-data; charset=UTF-8")
             authorized()

@@ -43,8 +43,8 @@ class CreateExercisePageTest : QYogaAppIntegrationBaseTest() {
         }
 
         val images = mapOf(
-            step1.idx to pro.qyoga.tests.fixture.ImagesObjectMother.image(),
-            step2.idx to pro.qyoga.tests.fixture.ImagesObjectMother.image()
+            step1.idx to pro.qyoga.tests.fixture.FilesObjectMother.image(),
+            step2.idx to pro.qyoga.tests.fixture.FilesObjectMother.image()
         )
 
         // When

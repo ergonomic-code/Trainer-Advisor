@@ -7,23 +7,23 @@ import pro.qyoga.core.therapy.exercises.api.CreateExerciseRequest
 import pro.qyoga.core.therapy.exercises.api.ExerciseDto
 import pro.qyoga.core.therapy.exercises.api.ExerciseSearchDto
 import pro.qyoga.core.therapy.exercises.api.ExercisesService
-import pro.qyoga.platform.file_storage.api.Image
-import pro.qyoga.platform.file_storage.api.ImagesService
+import pro.qyoga.platform.file_storage.api.File
+import pro.qyoga.platform.file_storage.api.FilesStorage
 
 
 @Service
 class ExercisesServiceImpl(
     private val exercisesRepo: ExercisesRepo,
-    private val imagesService: ImagesService
+    private val filesStorage: FilesStorage
 ) : ExercisesService {
 
     override fun addExercise(
         createExerciseRequest: CreateExerciseRequest,
-        stepImages: Map<Int, Image>,
+        stepImages: Map<Int, File>,
         therapistId: Long
     ) {
         val persistedImages = stepImages
-            .map { it.key to imagesService.uploadImage(it.value) }
+            .map { it.key to filesStorage.uploadFile(it.value) }
             .toMap()
 
         val exercise = Exercise.of(createExerciseRequest, persistedImages, therapistId)
@@ -36,7 +36,7 @@ class ExercisesServiceImpl(
     }
 
     override fun addExercises(
-        createExerciseRequests: List<Pair<CreateExerciseRequest, Map<Int, Image>>>,
+        createExerciseRequests: List<Pair<CreateExerciseRequest, Map<Int, File>>>,
         therapistId: Long
     ): List<ExerciseDto> {
         val exercises = createExerciseRequests.map { Exercise.of(it.first, emptyMap(), therapistId) }
