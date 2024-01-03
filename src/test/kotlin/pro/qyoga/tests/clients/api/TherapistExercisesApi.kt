@@ -10,7 +10,7 @@ import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
 import pro.qyoga.core.therapy.exercises.api.CreateExerciseRequest
 import pro.qyoga.core.therapy.exercises.api.ExerciseSearchDto
-import pro.qyoga.platform.images.api.Image
+import pro.qyoga.platform.file_storage.api.Image
 import pro.qyoga.tests.clients.pages.therapist.therapy.exercises.CreateExercisePage
 import pro.qyoga.tests.clients.pages.therapist.therapy.exercises.ExercisesListPage
 

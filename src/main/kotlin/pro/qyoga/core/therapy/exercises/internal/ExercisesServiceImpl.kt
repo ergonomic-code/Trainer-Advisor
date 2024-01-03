@@ -7,8 +7,8 @@ import pro.qyoga.core.therapy.exercises.api.CreateExerciseRequest
 import pro.qyoga.core.therapy.exercises.api.ExerciseDto
 import pro.qyoga.core.therapy.exercises.api.ExerciseSearchDto
 import pro.qyoga.core.therapy.exercises.api.ExercisesService
-import pro.qyoga.platform.images.api.Image
-import pro.qyoga.platform.images.api.ImagesService
+import pro.qyoga.platform.file_storage.api.Image
+import pro.qyoga.platform.file_storage.api.ImagesService
 
 
 @Service
