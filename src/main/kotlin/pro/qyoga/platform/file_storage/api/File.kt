@@ -14,6 +14,8 @@ data class File(
     val size: Long,
     val data: ByteArray,
 
+    val bucket: String = "",
+
     @Id
     val id: Long = 0,
     @CreatedDate
@@ -23,6 +25,8 @@ data class File(
     @Version
     val version: Long = 0
 ) {
+
+    fun atBucket(bucket: String) = copy(bucket = bucket)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

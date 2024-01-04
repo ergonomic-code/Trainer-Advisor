@@ -28,7 +28,7 @@ fun randomLatinWord(minLength: Int = 1, maxLength: Int = 12) =
 fun randomSentence(minWords: Int = 3, maxWords: Int = 20): String {
     val length = Random.nextInt(minWords, maxWords)
     val sentence = (1..length).joinToString(". ") {
-        randomCyrillicWord()
+        randomCyrillicWord(minLength = 3)
     }
     check(sentence.isNotEmpty())
     return sentence

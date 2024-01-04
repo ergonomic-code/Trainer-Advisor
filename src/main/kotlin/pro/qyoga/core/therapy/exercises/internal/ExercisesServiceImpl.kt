@@ -3,6 +3,7 @@ package pro.qyoga.core.therapy.exercises.internal
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import pro.qyoga.core.therapy.exercises.api.CreateExerciseRequest
 import pro.qyoga.core.therapy.exercises.api.ExerciseDto
 import pro.qyoga.core.therapy.exercises.api.ExerciseSearchDto
@@ -14,19 +15,20 @@ import pro.qyoga.platform.file_storage.api.FilesStorage
 @Service
 class ExercisesServiceImpl(
     private val exercisesRepo: ExercisesRepo,
-    private val filesStorage: FilesStorage
+    private val exerciseStepsImagesStorage: FilesStorage
 ) : ExercisesService {
 
+    @Transactional
     override fun addExercise(
         createExerciseRequest: CreateExerciseRequest,
         stepImages: Map<Int, File>,
         therapistId: Long
     ) {
-        val persistedImages = stepImages
-            .map { it.key to filesStorage.uploadFile(it.value) }
+        val stepIdxToStepImageId: Map<Int, Long> = stepImages
+            .map { (stepIdx, image) -> stepIdx to exerciseStepsImagesStorage.uploadFile(image) }
             .toMap()
 
-        val exercise = Exercise.of(createExerciseRequest, persistedImages, therapistId)
+        val exercise = Exercise.of(createExerciseRequest, stepIdxToStepImageId, therapistId)
 
         exercisesRepo.save(exercise)
     }
@@ -35,6 +37,7 @@ class ExercisesServiceImpl(
         return exercisesRepo.findExercises(searchDto, page)
     }
 
+    @Transactional
     override fun addExercises(
         createExerciseRequests: List<Pair<CreateExerciseRequest, Map<Int, File>>>,
         therapistId: Long
