@@ -12,4 +12,8 @@ class FilesStorageImpl(
         return filesRepo.save(file.atBucket(bucket)).id
     }
 
+    override fun uploadAll(files: Iterable<File>): Iterable<File> {
+        return filesRepo.saveAll(files)
+    }
+
 }
