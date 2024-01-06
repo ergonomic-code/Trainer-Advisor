@@ -10,6 +10,7 @@ import pro.qyoga.core.therapy.exercises.api.ExerciseSearchDto
 import pro.qyoga.core.therapy.exercises.api.ExercisesService
 import pro.qyoga.platform.file_storage.api.File
 import pro.qyoga.platform.file_storage.api.FilesStorage
+import pro.qyoga.platform.kotlin.unzip
 
 
 @Service
@@ -24,9 +25,8 @@ class ExercisesServiceImpl(
         stepImages: Map<Int, File>,
         therapistId: Long
     ) {
-        val stepIdxToStepImageId: Map<Int, Long> = stepImages
-            .map { (stepIdx, image) -> stepIdx to exerciseStepsImagesStorage.uploadFile(image) }
-            .toMap()
+        val stepIdxToStepImageId = exerciseStepsImagesStorage.uploadAllStepImages(stepImages)
+            .mapValues { it.value.id }
 
         val exercise = Exercise.of(createExerciseRequest, stepIdxToStepImageId, therapistId)
 
@@ -46,4 +46,15 @@ class ExercisesServiceImpl(
         return exercisesRepo.saveAll(exercises).map { it.toDto() }
     }
 
+}
+
+fun FilesStorage.uploadAllStepImages(stepImages: Map<Int, File>): Map<Int, File> {
+    val (stepIndexes, stepImageFiles) = stepImages.unzip()
+
+    val persistedImages = uploadAll(stepImageFiles)
+
+    val stepIdxToStepImage: Map<Int, File> = stepIndexes.zip(persistedImages)
+        .associate { (stepIdx, persistedImage) -> stepIdx to persistedImage }
+
+    return stepIdxToStepImage
 }

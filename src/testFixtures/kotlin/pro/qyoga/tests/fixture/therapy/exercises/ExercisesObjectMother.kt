@@ -1,5 +1,7 @@
 package pro.qyoga.tests.fixture.therapy.exercises
 
+import org.springframework.web.multipart.MultipartFile
+import pro.qyoga.app.therapist.therapy.exercises.toStepIdx
 import pro.qyoga.core.therapy.exercises.api.*
 import pro.qyoga.platform.java.time.toDecimalMinutes
 import pro.qyoga.platform.java.time.toDurationMinutes
@@ -8,6 +10,7 @@ import pro.qyoga.tests.fixture.data.randomListIndexed
 import pro.qyoga.tests.fixture.data.randomMinutesDuration
 import pro.qyoga.tests.fixture.data.randomSentence
 import java.time.Duration
+import kotlin.random.Random
 
 
 object ExercisesObjectMother {
@@ -17,7 +20,7 @@ object ExercisesObjectMother {
         description: String = randomSentence(),
         duration: Duration = randomExerciseDuration(),
         exerciseType: ExerciseType = randomExerciseTypeId(),
-        steps: () -> List<ExerciseStepDto> = { randomListIndexed(1, 5) { idx -> exerciseStepDto(idx) } }
+        steps: () -> List<ExerciseStepDto> = { exerciseStepDtos(Random.nextInt(1, 5)) }
     ) = CreateExerciseRequest(
         title,
         description,
@@ -34,6 +37,11 @@ object ExercisesObjectMother {
 
     fun createExerciseRequests(count: Int): List<CreateExerciseRequest> =
         (1..count).map { createExerciseRequest() }
+
+    fun exerciseStepDtos(count: Int) = randomListIndexed(min = count, max = count) { exerciseStepDto(it) }
+
+    fun exerciseImages(vararg images: Pair<Int, MultipartFile>): Map<String, MultipartFile> =
+        images.associate { it.first.toStepIdx() to it.second }
 
 }
 

@@ -38,6 +38,8 @@ class CreateExercisePageController(
         return hxRedirect("/therapist/exercises")
     }
 
-    private fun String.toStepIdx() = substring("stepImage".length).toInt()
-
 }
+
+private fun String.toStepIdx() = substring("stepImage".length).toInt()
+
+fun Int.toStepIdx() = "stepImage$this"

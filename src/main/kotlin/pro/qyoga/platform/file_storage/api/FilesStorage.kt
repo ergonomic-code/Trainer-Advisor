@@ -5,4 +5,6 @@ interface FilesStorage {
 
     fun uploadFile(file: File): Long
 
+    fun uploadAll(files: Iterable<File>): Iterable<File>
+
 }
