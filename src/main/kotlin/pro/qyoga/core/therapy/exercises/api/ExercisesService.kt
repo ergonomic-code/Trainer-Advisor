@@ -8,12 +8,11 @@ interface ExercisesService {
 
     fun addExercise(createExerciseRequest: CreateExerciseRequest, stepImages: Map<Int, StoredFile>, therapistId: Long)
 
-    fun findExercises(searchDto: ExerciseSearchDto, page: Pageable): Page<ExerciseDto>
-
+    fun findExerciseSummaries(searchDto: ExerciseSearchDto, page: Pageable): Page<ExerciseSummaryDto>
 
     fun addExercises(
         createExerciseRequests: List<Pair<CreateExerciseRequest, Map<Int, StoredFile>>>,
         therapistId: Long
-    ): List<ExerciseDto>
+    ): List<ExerciseSummaryDto>
 
 }

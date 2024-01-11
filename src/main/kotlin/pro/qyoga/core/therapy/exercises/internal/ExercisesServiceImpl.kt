@@ -5,8 +5,8 @@ import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import pro.qyoga.core.therapy.exercises.api.CreateExerciseRequest
-import pro.qyoga.core.therapy.exercises.api.ExerciseDto
 import pro.qyoga.core.therapy.exercises.api.ExerciseSearchDto
+import pro.qyoga.core.therapy.exercises.api.ExerciseSummaryDto
 import pro.qyoga.core.therapy.exercises.api.ExercisesService
 import pro.qyoga.platform.file_storage.api.FileMetaData
 import pro.qyoga.platform.file_storage.api.FilesStorage
@@ -34,15 +34,15 @@ class ExercisesServiceImpl(
         exercisesRepo.save(exercise)
     }
 
-    override fun findExercises(searchDto: ExerciseSearchDto, page: Pageable): Page<ExerciseDto> {
-        return exercisesRepo.findExercises(searchDto, page)
+    override fun findExerciseSummaries(searchDto: ExerciseSearchDto, page: Pageable): Page<ExerciseSummaryDto> {
+        return exercisesRepo.findExerciseSummaries(searchDto, page)
     }
 
     @Transactional
     override fun addExercises(
         createExerciseRequests: List<Pair<CreateExerciseRequest, Map<Int, StoredFile>>>,
         therapistId: Long
-    ): List<ExerciseDto> {
+    ): List<ExerciseSummaryDto> {
         val exercises = createExerciseRequests.map { Exercise.of(it.first, emptyMap(), therapistId) }
         return exercisesRepo.saveAll(exercises).map { it.toDto() }
     }
