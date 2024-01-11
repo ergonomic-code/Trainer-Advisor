@@ -4,6 +4,7 @@ import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.annotation.Version
+import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
 import pro.qyoga.core.therapy.exercises.api.CreateExerciseRequest
@@ -44,7 +45,7 @@ data class Exercise(
             therapistId: Long
         ): Exercise {
             val exerciseSteps = createExerciseRequest.steps.mapIndexed { idx, dto ->
-                ExerciseStep(dto.description, persistedImages[idx])
+                ExerciseStep(dto.description, persistedImages[idx]?.let { AggregateReference.to(it) })
             }
 
             return Exercise(
