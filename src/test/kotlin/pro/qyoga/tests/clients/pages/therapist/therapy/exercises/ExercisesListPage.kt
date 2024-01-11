@@ -5,7 +5,7 @@ import io.kotest.matchers.shouldBe
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
-import pro.qyoga.core.therapy.exercises.api.ExerciseDto
+import pro.qyoga.core.therapy.exercises.api.ExerciseSummaryDto
 import pro.qyoga.core.therapy.exercises.api.ExerciseType
 import pro.qyoga.tests.assertions.PageMatcher
 import pro.qyoga.tests.assertions.shouldHaveComponent
@@ -48,7 +48,7 @@ object ExercisesListPage : QYogaPage {
     fun exercisesRows(document: Document): Elements =
         document.select(EXERCISE_ROW)
 
-    fun exerciseRow(exercise: ExerciseDto): PageMatcher = object : PageMatcher {
+    fun exerciseRow(exercise: ExerciseSummaryDto): PageMatcher = object : PageMatcher {
         override fun match(element: Element) {
             element.select(EXERCISE_ROW).forAny { row ->
                 row.select("td:nth-child(1)").text() shouldBe exercise.title

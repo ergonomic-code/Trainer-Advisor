@@ -10,8 +10,8 @@ import org.springframework.data.jdbc.repository.support.SimpleJdbcRepository
 import org.springframework.data.mapping.model.BasicPersistentEntity
 import org.springframework.data.util.TypeInformation
 import org.springframework.stereotype.Repository
-import pro.qyoga.core.therapy.exercises.api.ExerciseDto
 import pro.qyoga.core.therapy.exercises.api.ExerciseSearchDto
+import pro.qyoga.core.therapy.exercises.api.ExerciseSummaryDto
 import pro.qyoga.platform.spring.sdj.example
 import pro.qyoga.platform.spring.sdj.probeFrom
 import pro.qyoga.platform.spring.sdj.sortBy
@@ -27,14 +27,14 @@ class ExercisesRepo(
     jdbcConverter
 ) {
 
-    fun findExercises(exercisesSearchDto: ExerciseSearchDto, page: Pageable): Page<ExerciseDto> {
+    fun findExerciseSummaries(exercisesSearchDto: ExerciseSearchDto, page: Pageable): Page<ExerciseSummaryDto> {
         val example = example<Exercise>(probeFrom(exercisesSearchDto)) {
             withMatcher(exercisesSearchDto::title, GenericPropertyMatcher().contains().ignoreCase())
             withMatcher(exercisesSearchDto::exerciseType, GenericPropertyMatcher().contains().ignoreCase())
         }
 
         return findAll(example, PageRequest.of(page.pageNumber, page.pageSize, sortBy(Exercise::title))).map {
-            ExerciseDto(it.id, it.title, it.description, it.duration, it.exerciseType)
+            ExerciseSummaryDto(it.id, it.title, it.description, it.duration, it.exerciseType)
         }
     }
 

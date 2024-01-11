@@ -7,7 +7,7 @@ import org.springframework.data.annotation.Version
 import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
 import pro.qyoga.core.therapy.exercises.api.CreateExerciseRequest
-import pro.qyoga.core.therapy.exercises.api.ExerciseDto
+import pro.qyoga.core.therapy.exercises.api.ExerciseSummaryDto
 import pro.qyoga.core.therapy.exercises.api.ExerciseType
 import pro.qyoga.platform.java.time.toDurationMinutes
 import java.time.Duration
@@ -34,7 +34,7 @@ data class Exercise(
 ) {
 
     fun toDto() =
-        ExerciseDto(id, title, description, duration, exerciseType)
+        ExerciseSummaryDto(id, title, description, duration, exerciseType)
 
     companion object {
 

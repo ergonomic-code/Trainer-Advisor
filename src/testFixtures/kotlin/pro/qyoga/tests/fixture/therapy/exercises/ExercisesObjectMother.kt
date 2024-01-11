@@ -46,7 +46,7 @@ object ExercisesObjectMother {
 }
 
 fun CreateExerciseRequest.toDto() =
-    ExerciseDto(0, title, description, duration.toDurationMinutes(), exerciseType)
+    ExerciseSummaryDto(0, title, description, duration.toDurationMinutes(), exerciseType)
 
 fun randomExerciseDuration(): Duration = randomMinutesDuration(4, 30)
 

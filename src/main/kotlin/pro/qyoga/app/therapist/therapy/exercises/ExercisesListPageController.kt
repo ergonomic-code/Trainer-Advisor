@@ -7,8 +7,8 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import pro.qyoga.core.therapy.exercises.api.ExerciseDto
 import pro.qyoga.core.therapy.exercises.api.ExerciseSearchDto
+import pro.qyoga.core.therapy.exercises.api.ExerciseSummaryDto
 import pro.qyoga.core.therapy.exercises.api.ExerciseType
 import pro.qyoga.core.therapy.exercises.api.ExercisesService
 
@@ -25,7 +25,7 @@ class ExercisesListPageController(
         @PageableDefault(value = 10, page = 0) page: Pageable,
         model: Model
     ): String {
-        val exercises = exercisesService.findExercises(ExerciseSearchDto.ALL, page)
+        val exercises = exercisesService.findExerciseSummaries(ExerciseSearchDto.ALL, page)
         model.addAllAttributes(toModelAttributes(exercises))
         return "therapist/therapy/exercises/exercises-list"
     }
@@ -36,12 +36,12 @@ class ExercisesListPageController(
         @PageableDefault(value = 10, page = 0) page: Pageable,
         model: Model
     ): String {
-        val exercises = exercisesService.findExercises(searchDto, page)
+        val exercises = exercisesService.findExerciseSummaries(searchDto, page)
         model.addAllAttributes(toModelAttributes(exercises))
         return "therapist/therapy/exercises/exercises-list :: exercises"
     }
 
-    fun toModelAttributes(exercises: Page<ExerciseDto>): Map<String, Any> =
+    fun toModelAttributes(exercises: Page<ExerciseSummaryDto>): Map<String, Any> =
         mapOf(
             "searchDto" to ExerciseSearchDto(),
             "types" to ExerciseType.entries,
@@ -52,7 +52,8 @@ class ExercisesListPageController(
     companion object {
 
         @Suppress("UNCHECKED_CAST")
-        fun getExercises(model: Model): Page<ExerciseDto> = model.getAttribute(EXERCISES) as Page<ExerciseDto>
+        fun getExercises(model: Model): Page<ExerciseSummaryDto> =
+            model.getAttribute(EXERCISES) as Page<ExerciseSummaryDto>
 
     }
 
