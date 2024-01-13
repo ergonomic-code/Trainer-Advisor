@@ -2,16 +2,15 @@ package pro.qyoga.core.therapy.exercises.internal
 
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import pro.qyoga.core.therapy.exercises.api.CreateExerciseRequest
-import pro.qyoga.core.therapy.exercises.api.ExerciseSearchDto
-import pro.qyoga.core.therapy.exercises.api.ExerciseSummaryDto
-import pro.qyoga.core.therapy.exercises.api.ExercisesService
+import pro.qyoga.core.therapy.exercises.api.*
 import pro.qyoga.platform.file_storage.api.FileMetaData
 import pro.qyoga.platform.file_storage.api.FilesStorage
 import pro.qyoga.platform.file_storage.api.StoredFile
 import pro.qyoga.platform.kotlin.unzip
+import java.io.InputStream
 
 
 @Service
@@ -45,6 +44,20 @@ class ExercisesServiceImpl(
     ): List<ExerciseSummaryDto> {
         val exercises = createExerciseRequests.map { Exercise.of(it.first, emptyMap(), therapistId) }
         return exercisesRepo.saveAll(exercises).map { it.toDto() }
+    }
+
+    override fun getStepImage(exerciseId: Long, stepIdx: Int): InputStream? {
+        val exercise = exercisesRepo.findByIdOrNull(exerciseId)
+            ?: throw ExerciseNotFound(exerciseId)
+
+        if (stepIdx > exercise.steps.size) {
+            throw ExerciseStepNotFound(exerciseId, stepIdx, exercise.steps.size)
+        }
+
+        val imageId = exercise.steps[stepIdx].imageId
+            ?: return null
+
+        return exerciseStepsImagesStorage.findByIdOrNull(imageId.id!!)
     }
 
 }

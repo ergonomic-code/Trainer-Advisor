@@ -1,13 +1,11 @@
 package pro.qyoga.platform.file_storage.internal
 
-import io.minio.BucketExistsArgs
-import io.minio.MakeBucketArgs
-import io.minio.MinioClient
-import io.minio.PutObjectArgs
+import io.minio.*
 import jakarta.annotation.PostConstruct
 import pro.qyoga.platform.file_storage.api.FileMetaData
 import pro.qyoga.platform.file_storage.api.FilesStorage
 import pro.qyoga.platform.file_storage.api.StoredFile
+import java.io.InputStream
 
 class MinioFilesStorage(
     private val filesMetaDataRepo: FilesMetaDataRepo,
@@ -23,20 +21,30 @@ class MinioFilesStorage(
     }
 
     override fun uploadFile(file: StoredFile): FileMetaData {
+        val storedFile = filesMetaDataRepo.save(file.metaData.atBucket(bucket))
         val putCommand = PutObjectArgs.builder()
             .bucket(bucket)
-            .`object`(file.metaData.name)
+            .`object`(storedFile.id.toString())
             .contentType(file.metaData.mediaType)
             .stream(file.content.inputStream(), file.metaData.size, -1)
             .build()
 
         minioClient.putObject(putCommand)
 
-        return filesMetaDataRepo.save(file.metaData.atBucket(bucket))
+        return storedFile
     }
 
     override fun uploadAll(files: Iterable<StoredFile>): Iterable<FileMetaData> {
         return files.map { uploadFile(it) }
+    }
+
+    override fun findByIdOrNull(fileId: Long): InputStream? {
+        val getCommand = GetObjectArgs.builder()
+            .bucket(bucket)
+            .`object`(fileId.toString())
+            .build()
+
+        return minioClient.getObject(getCommand)
     }
 
 }

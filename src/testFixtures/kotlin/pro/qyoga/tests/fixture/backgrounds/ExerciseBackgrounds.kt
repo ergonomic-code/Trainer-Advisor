@@ -28,4 +28,8 @@ class ExerciseBackgrounds(
         return page.content.firstOrNull()
     }
 
+    fun getExerciseStepImage(exerciseId: Long, stepIdx: Int): ByteArray? {
+        return exercisesService.getStepImage(exerciseId, stepIdx)?.use { it.readAllBytes() }
+    }
+
 }
