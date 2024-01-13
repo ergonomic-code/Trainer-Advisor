@@ -3,7 +3,6 @@ package pro.qyoga.tests.infra.db
 import io.minio.MinioClient
 import org.testcontainers.containers.MinIOContainer
 import org.testcontainers.containers.PostgreSQLContainer
-import pro.qyoga.infra.db.dropBuckets
 
 val pgContainer: PostgreSQLContainer<*> by lazy {
     PostgreSQLContainer("postgres:15.2")

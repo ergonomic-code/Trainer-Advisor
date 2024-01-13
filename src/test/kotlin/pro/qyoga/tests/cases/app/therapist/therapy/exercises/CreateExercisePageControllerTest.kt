@@ -1,10 +1,11 @@
 package pro.qyoga.tests.cases.app.therapist.therapy.exercises
 
+import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import pro.qyoga.app.therapist.therapy.exercises.CreateExercisePageController
 import pro.qyoga.core.therapy.exercises.api.ExerciseSearchDto
 import pro.qyoga.tests.assertions.shouldMatch
-import pro.qyoga.tests.fixture.FilesObjectMother
+import pro.qyoga.tests.fixture.FilesObjectMother.randomImageAsMultipartFile
 import pro.qyoga.tests.fixture.therapists.theTherapistUserDetails
 import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
@@ -25,13 +26,15 @@ class CreateExercisePageControllerTest : QYogaAppIntegrationBaseTest() {
     }
 
     @Test
-    fun `Exercise for images for even steps should be correctly persisted`() {
+    fun `Exercise with images for even steps should be correctly persisted`() {
         // Given
         val exercise = ExercisesObjectMother.createExerciseRequest { ExercisesObjectMother.exerciseStepDtos(4) }
-        val img1 = FilesObjectMother.imageAsMultipartFile()
-        val img2 = FilesObjectMother.imageAsMultipartFile()
+        val img1 = randomImageAsMultipartFile()
+        val img2 = randomImageAsMultipartFile()
+        val zeroStepIdx = 0
+        val secondStepIdx = 2
         val images = ExercisesObjectMother.exerciseImages(
-            0 to img1,
+            zeroStepIdx to img1,
             2 to img2
         )
 
@@ -41,18 +44,23 @@ class CreateExercisePageControllerTest : QYogaAppIntegrationBaseTest() {
         // Then
         val persistedExercise = backgrounds.exercises.findExercise(ExerciseSearchDto.ALL)
         persistedExercise!! shouldMatch exercise
-        // TODO: проверка файлов после появления АПИ их получения
+        val loadedImg1 = backgrounds.exercises.getExerciseStepImage(persistedExercise.id, zeroStepIdx)
+        loadedImg1 shouldBe img1.bytes
+        val loadedImg2 = backgrounds.exercises.getExerciseStepImage(persistedExercise.id, secondStepIdx)
+        loadedImg2 shouldBe img2.bytes
     }
 
     @Test
-    fun `Exercise for images for odd steps should be correctly persisted`() {
+    fun `Exercise with images for odd steps should be correctly persisted`() {
         // Given
+        val firstStepIdx = 1
+        val thirdStepIdx = 3
         val exercise = ExercisesObjectMother.createExerciseRequest { ExercisesObjectMother.exerciseStepDtos(4) }
-        val img1 = FilesObjectMother.imageAsMultipartFile()
-        val img2 = FilesObjectMother.imageAsMultipartFile()
+        val img1 = randomImageAsMultipartFile()
+        val img2 = randomImageAsMultipartFile()
         val images = ExercisesObjectMother.exerciseImages(
-            1 to img1,
-            3 to img2
+            firstStepIdx to img1,
+            thirdStepIdx to img2
         )
 
         // When
@@ -61,7 +69,37 @@ class CreateExercisePageControllerTest : QYogaAppIntegrationBaseTest() {
         // Then
         val persistedExercise = backgrounds.exercises.findExercise(ExerciseSearchDto.ALL)
         persistedExercise!! shouldMatch exercise
-        // TODO: проверка файлов после появления АПИ их получения
+        val loadedImg1 = backgrounds.exercises.getExerciseStepImage(persistedExercise.id, firstStepIdx)
+        loadedImg1 shouldBe img1.bytes
+        val loadedImg2 = backgrounds.exercises.getExerciseStepImage(persistedExercise.id, thirdStepIdx)
+        loadedImg2 shouldBe img2.bytes
+    }
+
+    @Test
+    fun `When therapist creates exercise with two images with same name they both should be stored`() {
+        // Given
+        val imgBaseName = "img"
+        val format = "png"
+        val exercise = ExercisesObjectMother.createExerciseRequest { ExercisesObjectMother.exerciseStepDtos(2) }
+        val img1 = randomImageAsMultipartFile(imgBaseName, format)
+        val img2 = randomImageAsMultipartFile(imgBaseName, format)
+        val zeroStepIdx = 0
+        val firstStepIdx = 1
+        val images = ExercisesObjectMother.exerciseImages(
+            zeroStepIdx to img1,
+            firstStepIdx to img2
+        )
+
+        // When
+        getBean<CreateExercisePageController>().createExercise(exercise, images, theTherapistUserDetails)
+
+        // Then
+        val persistedExercise = backgrounds.exercises.findExercise(ExerciseSearchDto.ALL)
+        persistedExercise!! shouldMatch exercise
+        val loadedImg1 = backgrounds.exercises.getExerciseStepImage(persistedExercise.id, zeroStepIdx)
+        loadedImg1 shouldBe img1.bytes
+        val loadedImg2 = backgrounds.exercises.getExerciseStepImage(persistedExercise.id, firstStepIdx)
+        loadedImg2 shouldBe img2.bytes
     }
 
 }

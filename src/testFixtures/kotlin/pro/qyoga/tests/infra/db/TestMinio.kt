@@ -1,10 +1,9 @@
-package pro.qyoga.infra.db
+package pro.qyoga.tests.infra.db
 
 import io.minio.ListObjectsArgs
 import io.minio.MinioClient
 import io.minio.RemoveObjectArgs
 import org.slf4j.LoggerFactory
-import pro.qyoga.tests.infra.db.minioContainer
 import java.net.ConnectException
 
 const val MINIO_URL = "http://localhost:50001"
@@ -35,7 +34,7 @@ val minioUrl: String by lazy {
     }
 }
 
-val testMinioClient by lazy {
+val testMinioClient: MinioClient by lazy {
     MinioClient.builder()
         .endpoint(minioUrl)
         .credentials(MINIO_USER, MINIO_PASSWORD)

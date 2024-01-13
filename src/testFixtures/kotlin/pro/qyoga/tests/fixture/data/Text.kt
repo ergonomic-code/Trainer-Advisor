@@ -8,8 +8,6 @@ val cyrillicLetters = lowerCaseCyrillicLetters + upperCaseCyrillicLetters
 
 val lowerCaseLatinLetters = ('a'..'z').toList()
 
-val imageExtensions = listOf("png", "jpeg", "gif")
-
 fun randomWord(letters: List<Char>, minLength: Int = 1, maxLength: Int = 12) =
     buildString {
         val length = Random.nextInt(minLength, maxLength)
@@ -42,9 +40,5 @@ fun randomEmail(): String =
         append(".")
         append(randomWord(lowerCaseLatinLetters, 2, 3))
     }
-
-
-fun randomFileName(extension: () -> String = { randomLatinWord(1, 3) }) =
-    randomLatinWord(3, 9) + "." + extension()
 
 fun randomPassword() = randomLatinWord(minLength = 8)
