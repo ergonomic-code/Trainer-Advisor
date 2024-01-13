@@ -3,6 +3,7 @@
         /* For medium screens and larger */
         @media (min-width: 768px) {
             #text-input {
+                overflow-y: scroll;
                 height: 25rem;
             }
         }
@@ -10,7 +11,9 @@
         /* For small screens */
         @media (max-width: 767px) {
             #text-input {
-                height: 10rem;
+                overflow-y: scroll;
+                height: calc(100vh - 56px - 60px);
+                max-height: calc(100vh - 56px - 60px);
             }
         }
     </style>
@@ -50,7 +53,7 @@
         </div>
         <div class="mb-3">
             <label class="form-label" for="text-input">Запись</label>
-            <textarea class="form-control"
+            <textarea class="form-control full-height"
                       id="text-input" name="journalEntryText" required rows="12"
                       th:text="${entry?.entryText ?: ''}"
             ></textarea>
