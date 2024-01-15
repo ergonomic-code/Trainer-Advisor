@@ -8,10 +8,10 @@ import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.clients.pages.therapist.therapy.exercises.CreateExercisePage
-import pro.qyoga.tests.fixture.FilesObjectMother.image
+import pro.qyoga.tests.fixture.FilesObjectMother.randomImage
 import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother
 import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother.createExerciseRequest
-import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother.exerciseStep
+import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother.exerciseSteps
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import java.time.Duration
 
@@ -38,8 +38,8 @@ class CreateExercisePageTest : QYogaAppIntegrationBaseTest() {
         val title = "Just added exercise"
         val description = "Description of just added exercise"
         val duration = Duration.ofMinutes(2)
-        val step1 = exerciseStep("Take a deep breath")
-        val step2 = exerciseStep("And exhale")
+        val step1 = exerciseSteps("Take a deep breath")
+        val step2 = exerciseSteps("And exhale")
         val firstStepIdx = 0
         val secondStepIdx = 1
 
@@ -48,8 +48,8 @@ class CreateExercisePageTest : QYogaAppIntegrationBaseTest() {
         }
 
         val images = mapOf(
-            firstStepIdx.toLong() to image(),
-            secondStepIdx.toLong() to image()
+            firstStepIdx.toLong() to randomImage(),
+            secondStepIdx.toLong() to randomImage()
         )
 
         // When

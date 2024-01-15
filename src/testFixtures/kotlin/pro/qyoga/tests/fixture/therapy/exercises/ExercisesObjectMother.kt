@@ -23,14 +23,14 @@ object ExercisesObjectMother {
         description: String = randomSentence(),
         duration: Duration = randomExerciseDuration(),
         exerciseType: ExerciseType = randomExerciseTypeId(),
-        steps: () -> List<ExerciseStep> = { exerciseStepDtos(Random.nextInt(1, 5)) }
+        steps: () -> List<ExerciseStep> = { exerciseSteps(Random.nextInt(1, 5)) }
     ) = CreateExerciseRequest(
         exerciseSummary(title, description, duration, exerciseType),
         steps()
     )
 
 
-    fun exerciseStep(description: String = randomSentence()) =
+    fun exerciseSteps(description: String = randomSentence()) =
         ExerciseStep(description, AggregateReference.to(0L))
 
     fun exerciseSearchDto(title: String) = ExerciseSearchDto(title = title)
@@ -38,7 +38,7 @@ object ExercisesObjectMother {
     fun createExerciseRequests(count: Int): List<CreateExerciseRequest> =
         (1..count).map { createExerciseRequest() }
 
-    fun exerciseStepDtos(count: Int) = randomListIndexed(min = count, max = count) { exerciseStep() }
+    fun exerciseSteps(count: Int) = randomListIndexed(min = count, max = count) { exerciseSteps() }
 
     fun exerciseImages(vararg images: Pair<Int, MultipartFile>): Map<String, MultipartFile> =
         images.associate { it.first.toStepIdx() to it.second }

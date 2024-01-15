@@ -9,4 +9,6 @@ interface FilesStorage {
 
     fun findByIdOrNull(fileId: Long): StoredFileInputStream?
 
+    fun deleteAllById(fileIds: List<Long>)
+
 }

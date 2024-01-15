@@ -39,8 +39,12 @@ object ExercisesListPage : QYogaPage {
 
     private val newExerciseButton = Link("newExerciseLink", CreateExercisePage, "Добавить")
 
-    val updateAction = "$path/{id}"
-    val updateActionPattern = updateAction.replace("{id}", "(\\d+)").toRegex()
+    val exercisePath = "$path/{exerciseId}"
+    val updateAction = exercisePath
+    val updateActionPattern = updateAction.replace("{exerciseId}", "(\\d+)").toRegex()
+
+    val deleteAction = exercisePath
+    val deleteActionPattern = updateAction.replace("{exerciseId}", "(\\d+)").toRegex()
 
     override fun match(element: Element) {
         element.select("title")[0].text() shouldBe title
@@ -57,6 +61,7 @@ object ExercisesListPage : QYogaPage {
             element.select(EXERCISE_ROW).forAny { row ->
                 row.select("td:nth-child(1)").text() shouldBe exercise.title
                 row.select("td a.updateLink").attr("href") shouldMatch updateActionPattern
+                row.select("td button.deleteButton").attr("hx-delete") shouldMatch deleteActionPattern
             }
         }
     }

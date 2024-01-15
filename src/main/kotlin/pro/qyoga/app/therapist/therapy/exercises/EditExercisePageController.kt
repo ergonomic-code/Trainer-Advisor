@@ -21,17 +21,8 @@ class EditExercisePageController(
 
     @GetMapping
     fun getEditExercisePage(@PathVariable exerciseId: Long): ModelAndView {
-        val res = runCatching {
-            exercisesService.findById(exerciseId)
-        }
-
-        val exercise = when (val ex = res.exceptionOrNull()) {
-            is ExerciseNotFound ->
-                return notFound
-
-            else ->
-                res.getOrThrow()
-        }
+        val exercise = exercisesService.findById(exerciseId)
+            ?: return notFound
 
         return modelAndView("therapist/therapy/exercises/exercise-create") {
             "exercise" bindTo exercise

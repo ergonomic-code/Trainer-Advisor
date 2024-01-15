@@ -15,7 +15,7 @@ class CreateExercisePageControllerTest : QYogaAppIntegrationBaseTest() {
     @Test
     fun `Exercise without images should be correctly persisted`() {
         // Given
-        val exercise = ExercisesObjectMother.createExerciseRequest { ExercisesObjectMother.exerciseStepDtos(3) }
+        val exercise = ExercisesObjectMother.createExerciseRequest { ExercisesObjectMother.exerciseSteps(3) }
 
         // When
         getBean<CreateExercisePageController>().createExercise(exercise, emptyMap(), theTherapistUserDetails)
@@ -28,7 +28,7 @@ class CreateExercisePageControllerTest : QYogaAppIntegrationBaseTest() {
     @Test
     fun `Exercise with images for even steps should be correctly persisted`() {
         // Given
-        val exercise = ExercisesObjectMother.createExerciseRequest { ExercisesObjectMother.exerciseStepDtos(4) }
+        val exercise = ExercisesObjectMother.createExerciseRequest { ExercisesObjectMother.exerciseSteps(4) }
         val img1 = randomImageAsMultipartFile()
         val img2 = randomImageAsMultipartFile()
         val zeroStepIdx = 0
@@ -55,7 +55,7 @@ class CreateExercisePageControllerTest : QYogaAppIntegrationBaseTest() {
         // Given
         val firstStepIdx = 1
         val thirdStepIdx = 3
-        val exercise = ExercisesObjectMother.createExerciseRequest { ExercisesObjectMother.exerciseStepDtos(4) }
+        val exercise = ExercisesObjectMother.createExerciseRequest { ExercisesObjectMother.exerciseSteps(4) }
         val img1 = randomImageAsMultipartFile()
         val img2 = randomImageAsMultipartFile()
         val images = ExercisesObjectMother.exerciseImages(
@@ -80,7 +80,7 @@ class CreateExercisePageControllerTest : QYogaAppIntegrationBaseTest() {
         // Given
         val imgBaseName = "img"
         val format = "png"
-        val exercise = ExercisesObjectMother.createExerciseRequest { ExercisesObjectMother.exerciseStepDtos(2) }
+        val exercise = ExercisesObjectMother.createExerciseRequest { ExercisesObjectMother.exerciseSteps(2) }
         val img1 = randomImageAsMultipartFile(imgBaseName, format)
         val img2 = randomImageAsMultipartFile(imgBaseName, format)
         val zeroStepIdx = 0

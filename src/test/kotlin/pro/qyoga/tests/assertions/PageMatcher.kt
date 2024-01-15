@@ -2,6 +2,7 @@ package pro.qyoga.tests.assertions
 
 import io.kotest.assertions.withClue
 import io.kotest.matchers.collections.shouldHaveSize
+import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import pro.qyoga.tests.infra.html.Component
@@ -17,6 +18,8 @@ interface PageMatcher {
 infix fun Document.shouldBe(pageMatcher: PageMatcher) = pageMatcher.match(this)
 
 infix fun Document.shouldBePage(pageMatcher: PageMatcher) = pageMatcher.match(this)
+
+infix fun ByteArray.shouldBePage(pageMatcher: PageMatcher) = pageMatcher.match(Jsoup.parse(String(this)))
 
 infix fun Element.shouldBeElement(pageMatcher: PageMatcher) = pageMatcher.match(this)
 

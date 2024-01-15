@@ -73,9 +73,13 @@
                             </td>
 
                             <td class="text-end">
-                                <a class="deleteClientLink btn btn-outline-danger text">
+                                <button class="deleteButton btn btn-outline-danger text"
+                                        hx-swap="outerHTML swap:0.2s"
+                                        hx-target="closest tr"
+                                        th:attr="hx-delete=@{/therapist/exercises/{id} (id=${exercise.id})}"
+                                        th:hx-confirm="'Удалить упражнение ' + ${exercise.title} + '?'">
                                     <i class="fas fa-trash"></i>
-                                </a>
+                                </button>
                             </td>
                         </tr>
                         </tbody>
