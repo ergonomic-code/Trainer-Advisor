@@ -40,6 +40,11 @@ abstract class ClientForm(action: FormAction) : QYogaForm("createClientForm", ac
         distributionSourceComment,
     )
 
+}
+
+object CreateClientForm : ClientForm(FormAction.classicPost("/therapist/clients/create"))
+
+object EditClientForm : ClientForm(FormAction.classicPost("/therapist/clients/{id}")) {
 
     fun clientForm(client: Client): PageMatcher = object : PageMatcher {
 
@@ -60,7 +65,3 @@ abstract class ClientForm(action: FormAction) : QYogaForm("createClientForm", ac
     }
 
 }
-
-object CreateClientForm : ClientForm(FormAction.classicPost("/therapist/clients/create"))
-
-object EditClientForm : ClientForm(FormAction.classicPost("/therapist/clients/{id}"))

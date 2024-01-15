@@ -3,16 +3,14 @@ package pro.qyoga.tests.cases.app.therapist.therapy.exercises
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.shouldHaveSize
 import org.junit.jupiter.api.Test
-import pro.qyoga.core.therapy.exercises.api.CreateExerciseRequest
-import pro.qyoga.core.therapy.exercises.api.ExerciseSearchDto
-import pro.qyoga.core.therapy.exercises.api.ExerciseType
+import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSearchDto
+import pro.qyoga.core.therapy.exercises.api.model.ExerciseType
 import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.clients.pages.therapist.therapy.exercises.ExercisesListPage
 import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother.createExerciseRequest
 import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother.createExerciseRequests
-import pro.qyoga.tests.fixture.therapy.exercises.toDto
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 
 
@@ -37,9 +35,8 @@ class ExercisesListPageTest : QYogaAppIntegrationBaseTest() {
         val therapist = TherapistClient.loginAsTheTherapist()
         val pageSize = 10
         val exercises = createExerciseRequests(pageSize + 1)
-        val firstPage = exercises.sortedBy { it.title.lowercase() }
+        val firstPage = exercises.sortedBy { it.summary.title.lowercase() }
             .take(pageSize)
-            .map(CreateExerciseRequest::toDto)
         backgrounds.exercises.createExercises(exercises)
 
 
@@ -50,7 +47,7 @@ class ExercisesListPageTest : QYogaAppIntegrationBaseTest() {
         document shouldBe ExercisesListPage
         ExercisesListPage.exercisesRows(document) shouldHaveSize pageSize
         firstPage.forAll {
-            document shouldHave ExercisesListPage.exerciseRow(it)
+            document shouldHave ExercisesListPage.exerciseRow(it.summary)
         }
     }
 
@@ -75,8 +72,8 @@ class ExercisesListPageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         ExercisesListPage.exercisesRows(document) shouldHaveSize 2
-        document shouldHave ExercisesListPage.exerciseRow(fullMatch1.toDto())
-        document shouldHave ExercisesListPage.exerciseRow(fullMatch2.toDto())
+        document shouldHave ExercisesListPage.exerciseRow(fullMatch1.summary)
+        document shouldHave ExercisesListPage.exerciseRow(fullMatch2.summary)
     }
 
 }

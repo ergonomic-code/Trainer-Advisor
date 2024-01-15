@@ -17,11 +17,14 @@
     <div id="layoutSidenav_content">
         <main>
             <section class="container px-4">
-                <h1 class="mt-4 pb-2 mb-3 border-bottom">Новое упражнение</h1>
+                <h1 class="mt-4 pb-2 mb-3 border-bottom" th:text="${exercise?.title ?: 'Новое упражнение'}">Новое
+                    упражнение</h1>
                 <form class="mt-4"
+                      hx-post=""
                       enctype="multipart/form-data"
-                      hx-post="/therapist/exercises/create"
-                      id="createExercise">
+                      id="exerciseForm"
+                      th:attr="hx-post=${exercise == null ? '/therapist/exercises/create' : null},hx-put=${exercise != null ? '/therapist/exercises/' + exercise.id : null}"
+                >
 
                     <div class="row">
                         <div class="col-12 mb-3 col-sm-5 form-floating gx-2">
@@ -30,21 +33,22 @@
                                    name="title"
                                    placeholder="Название упражнения"
                                    required
-                                   type="text">
+                                   th:value="${exercise?.title ?: ''}"
+                                   type="text"
+                            >
                             <label for="title">Название упражнения</label>
                         </div>
 
                         <div class="col-12 mb-3 col-sm-5 form-floating gx-2">
                             <select class="form-select"
+                                    name="type"
                                     id="type"
-                                    name="exerciseType"
-                                    required>
-                                <option value="WARM_UP">Разминка</option>
-                                <option value="MOBILISATION">Мобилизация</option>
-                                <option value="STRENGTHENING">Укрепление</option>
-                                <option value="STRETCHING">Вытяжение</option>
-                                <option value="RELAXATION">Расслабление</option>
-                                <option value="TRACTION">Тракция</option>
+                                    required
+                                    th:value="${exercise?.exerciseType}">
+                                <option th:each="value : ${T(pro.qyoga.core.therapy.exercises.api.model.ExerciseType).entries}"
+                                        th:selected="${exercise?.exerciseType == value}"
+                                        th:text="${value.label}" th:value="${value.name}">
+                                </option>
                             </select>
                             <label for="type">Тип</label>
                         </div>
@@ -58,7 +62,8 @@
                                    required
                                    step="0.5"
                                    type="number"
-                                   value="1">
+                                   th:value="${T(pro.qyoga.platform.java.time.DurationExtKt).toDecimalMinutes(exercise?.duration) ?: '1'}"
+                            >
                             <label for="duration">Длительность</label>
                         </div>
 
@@ -68,12 +73,18 @@
                         <div class="col form-floating gx-2">
 
                             <textarea class="form-control"
-                                      id="description"
                                       name="description"
-                                      placeholder="Глубоко вдохните..."
-                                      style="height: 15rem"
+                                      id="description"
+
                                       required
-                                      rows="10"></textarea>
+
+                                      rows="10"
+                                      style="height: 15rem"
+                                      placeholder="Глубоко вдохните..."
+                                      th:text="${exercise?.description ?: ''}"
+                            >
+
+                            </textarea>
                             <label for="description">Описание упражнения</label>
                         </div>
                     </div>
@@ -89,8 +100,24 @@
                             </li>
                         </ul>
 
+                        <div
+                                class="alert alert-warning w-100"
+                                role="alert"
+                                th:if="${exercise != null}">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            Редактирование шагов на данный момент невозможно.
+                        </div>
+
                         <div class="row">
-                            <script>
+                            <script th:inline="javascript">
+                                const noImage = "/img/no-image.png";
+
+                                var initialStepsData = /*[[${exercise?.steps}]]*/ [];
+                                if (initialStepsData == null) {
+                                    initialStepsData = [{"description": "", imageUrl: noImage, fileName: null}];
+                                }
+                                let initialSteps = initialStepsData.map(exerciseStep);
+
                                 function fileToDataUrl(event, callback) {
                                     if (!event.target.files.length) return
 
@@ -101,12 +128,14 @@
                                     reader.onload = e => callback(e.target.result)
                                 }
 
-                                const noImage = "/img/no-image.png";
 
-                                function exerciseStep() {
+                                function exerciseStep(step, idx) {
+                                    let exerciseId = /*[[${exercise?.id}]]*/ 0;
+                                    let imageUrl = step?.imageId != null ? `/therapist/exercises/${exerciseId}/step-images/${idx}` : noImage;
+                                    console.log(imageUrl)
                                     return {
-                                        description: "",
-                                        imageUrl: noImage,
+                                        description: step?.description,
+                                        imageUrl: step ? imageUrl : noImage,
                                         fileName: null,
                                         fileChosen(event) {
                                             fileToDataUrl(event, src => this.imageUrl = src)
@@ -120,7 +149,7 @@
                                 }
                             </script>
                             <div id="steps"
-                                 x-data="{steps: [exerciseStep()]}">
+                                 x-data="{steps: initialSteps}">
                                 <template x-for="(step, idx) in steps">
                                     <div class="card mb-3">
                                         <div class="mb-3 p  py-2 px-3 bg-light d-flex align-items-end rounded">
@@ -131,7 +160,9 @@
                                             <div class="col-3 col-sm-2 text-end">
                                                 <button @click.prevent="if (window.confirm('Вы уверены, что хотите удалить шаг?')) { steps.splice(idx, 1) }"
                                                         class="btn btn-outline-danger text-center bg-white"
-                                                        name="deleteStep">
+                                                        name="deleteStep"
+                                                        th:disabled="${exercise != null}"
+                                                >
                                                     <span>
                                                         <i class="fas fa-trash"></i>
                                                     </span>
@@ -144,7 +175,8 @@
                                                     <div class="row h-100">
                                                         <div class="col image-container text-end">
                                                             <span @click.prevent="removeImage"
-                                                                  x-bind:class="imageUrl == '/img/no-image.png' ? 'invisible' : ''">
+                                                                  th:classappend="${exercise != null} ? 'invisible' : ''"
+                                                                  x-bind:class="imageUrl == '/img/no-image.png'? 'invisible' : ''">
                                                                 <i aria-hidden="true"
                                                                    class="fas fa-xmark overlay"
                                                                 >
@@ -157,9 +189,8 @@
                                                     </div>
                                                 </label>
 
-                                                <input :name="`steps[${idx}].id`" type="hidden">
-                                                <input :name="`steps[${idx}].imageId`" type="hidden">
                                                 <input :id="`stepImageInput${idx}`" :name="`stepImage${idx}`"
+                                                       th:disabled="${exercise != null}"
                                                        @change="fileChosen"
                                                        accept="image/*" class="form-control d-none"
                                                        type="file"
@@ -172,7 +203,9 @@
                                                           placeholder="Глубоко вдохните..."
                                                           required
                                                           style="height: 15rem"
-                                                          x-model="step.description">
+                                                          th:disabled="${exercise != null}"
+                                                          x-model="step.description"
+                                                >
                                                 </textarea>
                                                 <label :for="`steps[${idx}].description`">Описание шага</label>
                                             </div>
@@ -185,6 +218,7 @@
                                                class="btn btn-outline-secondary mb-5 w-100"
                                                name="addStep"
                                                type="button"
+                                               th:disabled="${exercise != null}"
                                                value="Добавить шаг">
                                     </div>
                                 </div>

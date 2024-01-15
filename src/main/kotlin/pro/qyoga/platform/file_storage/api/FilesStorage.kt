@@ -1,7 +1,5 @@
 package pro.qyoga.platform.file_storage.api
 
-import java.io.InputStream
-
 
 interface FilesStorage {
 
@@ -9,6 +7,6 @@ interface FilesStorage {
 
     fun uploadAll(files: Iterable<StoredFile>): Iterable<FileMetaData>
 
-    fun findByIdOrNull(fileId: Long): InputStream?
+    fun findByIdOrNull(fileId: Long): StoredFileInputStream?
 
 }

@@ -6,12 +6,13 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.data.jdbc.core.convert.JdbcConverter
-import org.springframework.data.jdbc.repository.support.SimpleJdbcRepository
 import org.springframework.data.mapping.model.BasicPersistentEntity
 import org.springframework.data.util.TypeInformation
 import org.springframework.stereotype.Repository
-import pro.qyoga.core.therapy.exercises.api.ExerciseSearchDto
-import pro.qyoga.core.therapy.exercises.api.ExerciseSummaryDto
+import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSearchDto
+import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSummaryDto
+import pro.qyoga.core.therapy.exercises.api.model.Exercise
+import pro.qyoga.platform.spring.sdj.erpo.ErgoRepository
 import pro.qyoga.platform.spring.sdj.example
 import pro.qyoga.platform.spring.sdj.probeFrom
 import pro.qyoga.platform.spring.sdj.sortBy
@@ -21,7 +22,7 @@ import pro.qyoga.platform.spring.sdj.sortBy
 class ExercisesRepo(
     jdbcAggregateTemplate: JdbcAggregateOperations,
     jdbcConverter: JdbcConverter
-) : SimpleJdbcRepository<Exercise, Long>(
+) : ErgoRepository<Exercise, Long>(
     jdbcAggregateTemplate,
     BasicPersistentEntity(TypeInformation.of(Exercise::class.java)),
     jdbcConverter
@@ -34,7 +35,7 @@ class ExercisesRepo(
         }
 
         return findAll(example, PageRequest.of(page.pageNumber, page.pageSize, sortBy(Exercise::title))).map {
-            ExerciseSummaryDto(it.id, it.title, it.description, it.duration, it.exerciseType)
+            it.toSummaryDto()
         }
     }
 

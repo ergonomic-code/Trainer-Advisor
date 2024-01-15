@@ -2,11 +2,12 @@ package pro.qyoga.tests.clients.pages.therapist.therapy.exercises
 
 import io.kotest.inspectors.forAny
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldMatch
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
-import pro.qyoga.core.therapy.exercises.api.ExerciseSummaryDto
-import pro.qyoga.core.therapy.exercises.api.ExerciseType
+import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSummaryDto
+import pro.qyoga.core.therapy.exercises.api.model.ExerciseType
 import pro.qyoga.tests.assertions.PageMatcher
 import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.infra.html.*
@@ -38,6 +39,9 @@ object ExercisesListPage : QYogaPage {
 
     private val newExerciseButton = Link("newExerciseLink", CreateExercisePage, "Добавить")
 
+    val updateAction = "$path/{id}"
+    val updateActionPattern = updateAction.replace("{id}", "(\\d+)").toRegex()
+
     override fun match(element: Element) {
         element.select("title")[0].text() shouldBe title
 
@@ -52,6 +56,7 @@ object ExercisesListPage : QYogaPage {
         override fun match(element: Element) {
             element.select(EXERCISE_ROW).forAny { row ->
                 row.select("td:nth-child(1)").text() shouldBe exercise.title
+                row.select("td a.updateLink").attr("href") shouldMatch updateActionPattern
             }
         }
     }

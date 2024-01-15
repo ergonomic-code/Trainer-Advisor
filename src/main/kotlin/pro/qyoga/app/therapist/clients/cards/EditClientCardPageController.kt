@@ -6,8 +6,11 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.servlet.ModelAndView
+import pro.qyoga.app.common.notFound
 import pro.qyoga.core.clients.cards.api.ClientCardDto
 import pro.qyoga.core.clients.cards.api.ClientsService
+import pro.qyoga.platform.spring.mvc.modelAndView
 
 
 @Controller
@@ -20,19 +23,15 @@ class EditClientCardPageController(
     fun getEditClientCardPage(
         @PathVariable id: Long,
         model: Model
-    ): String {
+    ): ModelAndView {
         val client = clientsService.findClient(id)
-            ?: return "forward:error/404"
+            ?: return notFound
 
-        model.addAllAttributes(
-            mapOf(
-                "client" to client,
-                "formAction" to "/therapist/clients/${client.id}/card",
-                "activeTab" to "card"
-            )
-        )
-
-        return "therapist/clients/client-edit"
+        return modelAndView("therapist/clients/client-edit") {
+            "client" bindTo client
+            "formAction" bindTo "/therapist/clients/${client.id}/card"
+            "activeTab" bindTo "card"
+        }
     }
 
     @PostMapping

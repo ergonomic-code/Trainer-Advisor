@@ -1,4 +1,4 @@
-package pro.qyoga.core.therapy.exercises.api
+package pro.qyoga.core.therapy.exercises.api.errors
 
 import pro.qyoga.platform.errors.DomainError
 

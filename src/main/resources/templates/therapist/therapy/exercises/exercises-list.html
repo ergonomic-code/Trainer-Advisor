@@ -65,7 +65,12 @@
                     <table class="table table-hover" id="exercisesTable">
                         <tbody id="exercises-list">
                         <tr th:each="exercise : ${exercises.content}">
-                            <td th:text="${exercise.title}"></td>
+                            <td>
+                                <a
+                                        class="updateLink"
+                                        th:attr="href=@{/therapist/exercises/{id} (id=${exercise.id})}"
+                                        th:text="${exercise.title}"></a>
+                            </td>
 
                             <td class="text-end">
                                 <a class="deleteClientLink btn btn-outline-danger text">

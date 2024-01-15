@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.web.servlet.error.ErrorMvcAutoConf
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import org.springframework.data.web.config.SpringDataWebConfiguration
+import org.springframework.web.method.support.HandlerMethodArgumentResolver
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 
 
 @ImportAutoConfiguration(
@@ -22,4 +24,14 @@ import org.springframework.data.web.config.SpringDataWebConfiguration
 )
 @Import(ThymeleafConfig::class)
 @Configuration
-class WebConfig
+class WebConfig(
+    private val handlerMethodArgumentResolvers: List<HandlerMethodArgumentResolver>
+) : WebMvcConfigurer {
+
+    override fun addArgumentResolvers(argumentResolvers: MutableList<HandlerMethodArgumentResolver?>) {
+        handlerMethodArgumentResolvers.forEach {
+            argumentResolvers.add(it)
+        }
+    }
+
+}
