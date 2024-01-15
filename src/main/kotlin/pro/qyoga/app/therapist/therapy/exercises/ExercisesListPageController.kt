@@ -3,13 +3,15 @@ package pro.qyoga.app.therapist.therapy.exercises
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.*
+import pro.qyoga.app.common.notFound
 import pro.qyoga.core.therapy.exercises.api.ExercisesService
 import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSearchDto
 import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSummaryDto
+import pro.qyoga.core.therapy.exercises.api.errors.ExerciseNotFound
 import pro.qyoga.core.therapy.exercises.api.model.ExerciseType
 
 private const val EXERCISES = "exercises"
@@ -39,6 +41,26 @@ class ExercisesListPageController(
         val exercises = exercisesService.findExerciseSummaries(searchDto, page)
         model.addAllAttributes(toModelAttributes(exercises))
         return "therapist/therapy/exercises/exercises-list :: exercises"
+    }
+
+    @DeleteMapping("{exerciseId}")
+    @ResponseBody
+    fun deleteExercise(
+        @PathVariable exerciseId: Long
+    ): Any {
+        val result = runCatching {
+            exercisesService.deleteById(exerciseId)
+        }
+
+        when (result.exceptionOrNull()) {
+            is ExerciseNotFound ->
+                return notFound
+
+            else ->
+                result.getOrThrow()
+        }
+
+        return ResponseEntity.ok(null)
     }
 
     fun toModelAttributes(exercises: Page<ExerciseSummaryDto>): Map<String, Any> =

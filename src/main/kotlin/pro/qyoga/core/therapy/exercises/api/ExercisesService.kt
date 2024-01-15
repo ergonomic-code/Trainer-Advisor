@@ -11,9 +11,13 @@ import pro.qyoga.platform.file_storage.api.StoredFileInputStream
 
 interface ExercisesService {
 
-    fun addExercise(createExerciseRequest: CreateExerciseRequest, stepImages: Map<Int, StoredFile>, therapistId: Long)
+    fun addExercise(
+        createExerciseRequest: CreateExerciseRequest,
+        stepImages: Map<Int, StoredFile>,
+        therapistId: Long
+    ): Exercise
 
-    fun findById(exerciseId: Long): Exercise
+    fun findById(exerciseId: Long): Exercise?
 
     fun findExerciseSummaries(searchDto: ExerciseSearchDto, page: Pageable): Page<ExerciseSummaryDto>
 
@@ -25,5 +29,7 @@ interface ExercisesService {
     ): Iterable<Exercise>
 
     fun getStepImage(exerciseId: Long, stepIdx: Int): StoredFileInputStream?
+
+    fun deleteById(exerciseId: Long)
 
 }

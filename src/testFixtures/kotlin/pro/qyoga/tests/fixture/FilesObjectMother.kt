@@ -12,7 +12,7 @@ import kotlin.random.Random
 
 object FilesObjectMother {
 
-    fun image(
+    fun randomImage(
         name: String = randomFileBaseName(),
         format: String = randomImageExtension()
     ): StoredFile {
@@ -31,7 +31,7 @@ object FilesObjectMother {
         name: String = randomFileBaseName(),
         format: String = randomImageExtension()
     ): MultipartFile {
-        val img = image(name, format)
+        val img = randomImage(name, format)
         return MockMultipartFile(img.metaData.name, img.metaData.name, img.metaData.mediaType, img.content)
     }
 

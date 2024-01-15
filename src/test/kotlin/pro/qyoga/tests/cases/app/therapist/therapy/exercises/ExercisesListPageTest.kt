@@ -2,13 +2,18 @@ package pro.qyoga.tests.cases.app.therapist.therapy.exercises
 
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
+import org.springframework.http.HttpStatus
 import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSearchDto
 import pro.qyoga.core.therapy.exercises.api.model.ExerciseType
 import pro.qyoga.tests.assertions.shouldBe
+import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.clients.TherapistClient
+import pro.qyoga.tests.clients.pages.publc.NotFoundErrorPage
 import pro.qyoga.tests.clients.pages.therapist.therapy.exercises.ExercisesListPage
+import pro.qyoga.tests.fixture.backgrounds.exercises.AllSteps
 import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother.createExerciseRequest
 import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother.createExerciseRequests
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
@@ -74,6 +79,32 @@ class ExercisesListPageTest : QYogaAppIntegrationBaseTest() {
         ExercisesListPage.exercisesRows(document) shouldHaveSize 2
         document shouldHave ExercisesListPage.exerciseRow(fullMatch1.summary)
         document shouldHave ExercisesListPage.exerciseRow(fullMatch2.summary)
+    }
+
+    @Test
+    fun `When user clicks exercise delete button the exercise should be removed`() {
+        // Given
+        val exercise = backgrounds.exercises.createExercise(2, imagesGenerationMode = AllSteps)
+        val therapist = TherapistClient.loginAsTheTherapist()
+
+        // When
+        val response = therapist.exercises.deleteExercise(exercise.id)
+
+        // Then
+        response.size shouldBe 0
+    }
+
+
+    @Test
+    fun `On request of deletion of not existing exercise 404 error page should be returned`() {
+        // Given
+        val therapist = TherapistClient.loginAsTheTherapist()
+
+        // When
+        val response = therapist.exercises.deleteExercise(-1, HttpStatus.NOT_FOUND)
+
+        // Then
+        response shouldBePage NotFoundErrorPage
     }
 
 }

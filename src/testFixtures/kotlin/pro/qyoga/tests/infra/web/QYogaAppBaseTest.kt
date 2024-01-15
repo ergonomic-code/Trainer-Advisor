@@ -17,7 +17,6 @@ open class QYogaAppBaseTest {
 
     protected val backgrounds: Backgrounds = context.getBean(Backgrounds::class.java)
 
-
     inline fun <reified T> getBean(): T =
         context.getBean(T::class.java)
 

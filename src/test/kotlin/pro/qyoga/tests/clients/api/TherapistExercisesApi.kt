@@ -14,7 +14,6 @@ import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSummaryDto
 import pro.qyoga.platform.file_storage.api.StoredFile
 import pro.qyoga.platform.java.time.toDecimalMinutes
 import pro.qyoga.tests.clients.pages.therapist.therapy.exercises.*
-import pro.qyoga.tests.infra.rest_assured.addResponseLogging
 
 
 class TherapistExercisesApi(override val authCookie: Cookie) : AuthorizedApi {
@@ -126,12 +125,25 @@ class TherapistExercisesApi(override val authCookie: Cookie) : AuthorizedApi {
     fun getStepImage(exerciseId: Long, stepIdx: Int, expectedStatus: HttpStatus = HttpStatus.OK): ByteArray {
         return Given {
             authorized()
-            addResponseLogging()
 
             pathParam("exerciseId", exerciseId)
             pathParam("stepIdx", stepIdx)
         } When {
             get(EditExerciseForm.IMAGE_PATH)
+        } Then {
+            statusCode(expectedStatus.value())
+        } Extract {
+            asByteArray()
+        }
+    }
+
+    fun deleteExercise(exerciseId: Long, expectedStatus: HttpStatus = HttpStatus.OK): ByteArray {
+        return Given {
+            authorized()
+
+            pathParam("exerciseId", exerciseId)
+        } When {
+            delete(ExercisesListPage.deleteAction)
         } Then {
             statusCode(expectedStatus.value())
         } Extract {

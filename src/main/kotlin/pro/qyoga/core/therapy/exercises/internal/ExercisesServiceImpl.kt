@@ -1,10 +1,12 @@
 package pro.qyoga.core.therapy.exercises.internal
 
+import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import org.springframework.transaction.support.TransactionTemplate
 import pro.qyoga.core.therapy.exercises.api.ExercisesService
 import pro.qyoga.core.therapy.exercises.api.dtos.CreateExerciseRequest
 import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSearchDto
@@ -17,31 +19,34 @@ import pro.qyoga.platform.file_storage.api.FilesStorage
 import pro.qyoga.platform.file_storage.api.StoredFile
 import pro.qyoga.platform.file_storage.api.StoredFileInputStream
 import pro.qyoga.platform.kotlin.unzip
+import pro.qyoga.platform.spring.tx.TransactionalService
 
 
 @Service
 class ExercisesServiceImpl(
     private val exercisesRepo: ExercisesRepo,
-    private val exerciseStepsImagesStorage: FilesStorage
-) : ExercisesService {
+    private val exerciseStepsImagesStorage: FilesStorage,
+    override val transactionTemplate: TransactionTemplate
+) : ExercisesService, TransactionalService {
+
+    private val log = LoggerFactory.getLogger(javaClass)
 
     @Transactional
     override fun addExercise(
         createExerciseRequest: CreateExerciseRequest,
         stepImages: Map<Int, StoredFile>,
         therapistId: Long
-    ) {
+    ): Exercise {
         val stepIdxToStepImageId = exerciseStepsImagesStorage.uploadAllStepImages(stepImages)
             .mapValues { it.value.id }
 
         val exercise = Exercise.of(createExerciseRequest, stepIdxToStepImageId, therapistId)
 
-        exercisesRepo.save(exercise)
+        return exercisesRepo.save(exercise)
     }
 
-    override fun findById(exerciseId: Long): Exercise =
+    override fun findById(exerciseId: Long): Exercise? =
         exercisesRepo.findByIdOrNull(exerciseId)
-            ?: throw ExerciseNotFound(exerciseId)
 
     override fun findExerciseSummaries(searchDto: ExerciseSearchDto, page: Pageable): Page<ExerciseSummaryDto> {
         return exercisesRepo.findExerciseSummaries(searchDto, page)
@@ -78,6 +83,22 @@ class ExercisesServiceImpl(
             ?: return null
 
         return exerciseStepsImagesStorage.findByIdOrNull(imageId.id!!)
+    }
+
+    override fun deleteById(exerciseId: Long) {
+        val exercise = transaction {
+            val exercise = findById(exerciseId)
+                ?: throw ExerciseNotFound(exerciseId)
+            exercisesRepo.deleteById(exercise.id)
+            exercise
+        }
+
+        try {
+            val stepImageIds = exercise.steps.mapNotNull { it.imageId?.id }
+            exerciseStepsImagesStorage.deleteAllById(stepImageIds)
+        } catch (ex: Exception) {
+            log.warn("Exercise images deletion failed", ex)
+        }
     }
 
 }

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSearchDto
 import pro.qyoga.tests.assertions.shouldBe
+import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.clients.pages.publc.NotFoundErrorPage
@@ -60,10 +61,11 @@ class EditExercisePageTest : QYogaAppIntegrationBaseTest() {
     fun `When exercise step image is requested correct file should be returned`() {
         // Given
         val therapist = TherapistClient.loginAsTheTherapist()
-        val exercise = ExercisesObjectMother.createExerciseRequest { ExercisesObjectMother.exerciseStepDtos(1) }
-        val img = FilesObjectMother.image()
+        val exercise = ExercisesObjectMother.createExerciseRequest { ExercisesObjectMother.exerciseSteps(1) }
+        val img = FilesObjectMother.randomImage()
         val stepIdx = 0
-        val exerciseId = backgrounds.exercises.createExercises(listOf(exercise), mapOf(stepIdx to img)).single().id
+        val exerciseId =
+            backgrounds.exercises.createExercises(listOf(exercise), listOf(mapOf(stepIdx to img))).single().id
 
         // When
         val loadedImg = therapist.exercises.getStepImage(exerciseId, stepIdx)
@@ -90,14 +92,14 @@ class EditExercisePageTest : QYogaAppIntegrationBaseTest() {
         val therapist = TherapistClient.loginAsTheTherapist()
         val stepsCount = 1
         val exercise =
-            ExercisesObjectMother.createExerciseRequest { ExercisesObjectMother.exerciseStepDtos(stepsCount) }
-        val exerciseId = backgrounds.exercises.createExercises(listOf(exercise), emptyMap()).single().id
+            ExercisesObjectMother.createExerciseRequest { ExercisesObjectMother.exerciseSteps(stepsCount) }
+        val exerciseId = backgrounds.exercises.createExercises(listOf(exercise)).single().id
 
         // When
         val response = therapist.exercises.getStepImage(exerciseId, stepIdx = stepsCount, HttpStatus.NOT_FOUND)
 
         // Then
-        Jsoup.parse(String(response)) shouldBe NotFoundErrorPage
+        response shouldBePage NotFoundErrorPage
     }
 
 }
