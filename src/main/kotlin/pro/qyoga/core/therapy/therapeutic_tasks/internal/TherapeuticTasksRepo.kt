@@ -4,16 +4,13 @@ import org.springframework.dao.DuplicateKeyException
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.data.jdbc.core.convert.JdbcConverter
-import org.springframework.data.jdbc.repository.support.SimpleJdbcRepository
 import org.springframework.data.mapping.model.BasicPersistentEntity
 import org.springframework.data.relational.core.conversion.DbActionExecutionException
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.data.util.TypeInformation
 import org.springframework.stereotype.Repository
-import org.springframework.transaction.annotation.Transactional
 import pro.qyoga.core.therapy.therapeutic_tasks.api.DuplicatedTherapeuticTaskName
 import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTask
-import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTaskNotFound
+import pro.qyoga.platform.spring.sdj.erpo.ErgoRepository
 import pro.qyoga.platform.spring.sdj.findAllBy
 import pro.qyoga.platform.spring.sdj.findOneBy
 
@@ -22,7 +19,7 @@ import pro.qyoga.platform.spring.sdj.findOneBy
 class TherapeuticTasksRepo(
     private val jdbcAggregateTemplate: JdbcAggregateOperations,
     jdbcConverter: JdbcConverter
-) : SimpleJdbcRepository<TherapeuticTask, Long>(
+) : ErgoRepository<TherapeuticTask, Long>(
     jdbcAggregateTemplate,
     BasicPersistentEntity(TypeInformation.of(TherapeuticTask::class.java)),
     jdbcConverter
@@ -54,15 +51,6 @@ class TherapeuticTasksRepo(
         return jdbcAggregateTemplate.findAllBy<TherapeuticTask>(page) {
             TherapeuticTask::name isILikeIfNotNull searchKey
         }
-    }
-
-    @Transactional
-    fun update(taskId: Long, update: (TherapeuticTask) -> TherapeuticTask): TherapeuticTask {
-        val task = findByIdOrNull(taskId)
-            ?: throw TherapeuticTaskNotFound(taskId)
-
-        val updatedTask = update(task)
-        return save(updatedTask)
     }
 
 }

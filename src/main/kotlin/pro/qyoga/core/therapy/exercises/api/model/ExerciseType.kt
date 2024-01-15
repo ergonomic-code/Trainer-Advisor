@@ -1,7 +1,9 @@
-package pro.qyoga.core.therapy.exercises.api
+package pro.qyoga.core.therapy.exercises.api.model
+
+import pro.qyoga.platform.kotlin.LabeledEnum
 
 
-enum class ExerciseType(val label: String) {
+enum class ExerciseType(override val label: String) : LabeledEnum {
 
     WARM_UP("Разминка"),
     MOBILISATION("Мобилизация"),

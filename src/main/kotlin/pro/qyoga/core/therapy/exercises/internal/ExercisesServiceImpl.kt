@@ -5,12 +5,18 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import pro.qyoga.core.therapy.exercises.api.*
+import pro.qyoga.core.therapy.exercises.api.ExercisesService
+import pro.qyoga.core.therapy.exercises.api.dtos.CreateExerciseRequest
+import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSearchDto
+import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSummaryDto
+import pro.qyoga.core.therapy.exercises.api.errors.ExerciseNotFound
+import pro.qyoga.core.therapy.exercises.api.errors.ExerciseStepNotFound
+import pro.qyoga.core.therapy.exercises.api.model.Exercise
 import pro.qyoga.platform.file_storage.api.FileMetaData
 import pro.qyoga.platform.file_storage.api.FilesStorage
 import pro.qyoga.platform.file_storage.api.StoredFile
+import pro.qyoga.platform.file_storage.api.StoredFileInputStream
 import pro.qyoga.platform.kotlin.unzip
-import java.io.InputStream
 
 
 @Service
@@ -33,24 +39,38 @@ class ExercisesServiceImpl(
         exercisesRepo.save(exercise)
     }
 
+    override fun findById(exerciseId: Long): Exercise =
+        exercisesRepo.findByIdOrNull(exerciseId)
+            ?: throw ExerciseNotFound(exerciseId)
+
     override fun findExerciseSummaries(searchDto: ExerciseSearchDto, page: Pageable): Page<ExerciseSummaryDto> {
         return exercisesRepo.findExerciseSummaries(searchDto, page)
+    }
+
+    override fun updateExercise(exerciseId: Long, exerciseSummaryDto: ExerciseSummaryDto) {
+        exercisesRepo.update(exerciseId) {
+            it.patchBy(exerciseSummaryDto)
+        }
     }
 
     @Transactional
     override fun addExercises(
         createExerciseRequests: List<Pair<CreateExerciseRequest, Map<Int, StoredFile>>>,
         therapistId: Long
-    ): List<ExerciseSummaryDto> {
-        val exercises = createExerciseRequests.map { Exercise.of(it.first, emptyMap(), therapistId) }
-        return exercisesRepo.saveAll(exercises).map { it.toDto() }
+    ): Iterable<Exercise> {
+        val exercises = createExerciseRequests.map { (request, images) ->
+            val storedImages = exerciseStepsImagesStorage.uploadAllStepImages(images)
+                .mapValues { it.value.id }
+            Exercise.of(request, storedImages, therapistId)
+        }
+        return exercisesRepo.saveAll(exercises)
     }
 
-    override fun getStepImage(exerciseId: Long, stepIdx: Int): InputStream? {
+    override fun getStepImage(exerciseId: Long, stepIdx: Int): StoredFileInputStream? {
         val exercise = exercisesRepo.findByIdOrNull(exerciseId)
             ?: throw ExerciseNotFound(exerciseId)
 
-        if (stepIdx > exercise.steps.size) {
+        if (stepIdx >= exercise.steps.size) {
             throw ExerciseStepNotFound(exerciseId, stepIdx, exercise.steps.size)
         }
 

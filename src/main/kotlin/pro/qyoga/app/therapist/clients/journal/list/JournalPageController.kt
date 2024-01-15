@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.servlet.ModelAndView
+import pro.qyoga.app.common.notFound
 import pro.qyoga.core.clients.journals.api.JournalEntry
 import pro.qyoga.core.clients.journals.api.JournalPageRequest
 import pro.qyoga.platform.spring.mvc.modelAndView
@@ -23,10 +24,9 @@ class JournalPageController(
     fun getJournalPage(
         @PathVariable id: Long
     ): ModelAndView {
-        val result = getJournalPageWorkflow.getJournalPage(JournalPageRequest.firstPage(id))
-        return when (result) {
+        return when (val result = getJournalPageWorkflow.getJournalPage(JournalPageRequest.firstPage(id))) {
             is GetJournalPageResult.ClientNotFound ->
-                ModelAndView("forward:error/404")
+                notFound
 
             is GetJournalPageResult.Success -> {
                 modelAndView("therapist/clients/client-edit") {

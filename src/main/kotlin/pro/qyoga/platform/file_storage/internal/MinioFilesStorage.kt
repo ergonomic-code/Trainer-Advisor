@@ -2,10 +2,11 @@ package pro.qyoga.platform.file_storage.internal
 
 import io.minio.*
 import jakarta.annotation.PostConstruct
+import org.springframework.data.repository.findByIdOrNull
 import pro.qyoga.platform.file_storage.api.FileMetaData
 import pro.qyoga.platform.file_storage.api.FilesStorage
 import pro.qyoga.platform.file_storage.api.StoredFile
-import java.io.InputStream
+import pro.qyoga.platform.file_storage.api.StoredFileInputStream
 
 class MinioFilesStorage(
     private val filesMetaDataRepo: FilesMetaDataRepo,
@@ -38,13 +39,16 @@ class MinioFilesStorage(
         return files.map { uploadFile(it) }
     }
 
-    override fun findByIdOrNull(fileId: Long): InputStream? {
+    override fun findByIdOrNull(fileId: Long): StoredFileInputStream? {
+        val metadata = filesMetaDataRepo.findByIdOrNull(fileId)
+            ?: return null
+
         val getCommand = GetObjectArgs.builder()
             .bucket(bucket)
             .`object`(fileId.toString())
             .build()
 
-        return minioClient.getObject(getCommand)
+        return StoredFileInputStream(metadata, minioClient.getObject(getCommand))
     }
 
 }

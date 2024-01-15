@@ -1,14 +1,17 @@
 package pro.qyoga.tests.cases.app.therapist.therapy.exercises
 
+import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import org.junit.jupiter.api.Test
 import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.clients.pages.therapist.therapy.exercises.CreateExercisePage
+import pro.qyoga.tests.fixture.FilesObjectMother.image
 import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother
 import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother.createExerciseRequest
-import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother.exerciseStepDto
+import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother.exerciseStep
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import java.time.Duration
 
@@ -35,25 +38,39 @@ class CreateExercisePageTest : QYogaAppIntegrationBaseTest() {
         val title = "Just added exercise"
         val description = "Description of just added exercise"
         val duration = Duration.ofMinutes(2)
-        val step1 = exerciseStepDto(0, "Take a deep breath")
-        val step2 = exerciseStepDto(1, "And exhale")
+        val step1 = exerciseStep("Take a deep breath")
+        val step2 = exerciseStep("And exhale")
+        val firstStepIdx = 0
+        val secondStepIdx = 1
 
         val createExerciseRequest = createExerciseRequest(title, description, duration) {
             listOf(step1, step2)
         }
 
         val images = mapOf(
-            step1.idx to pro.qyoga.tests.fixture.FilesObjectMother.image(),
-            step2.idx to pro.qyoga.tests.fixture.FilesObjectMother.image()
+            firstStepIdx.toLong() to image(),
+            secondStepIdx.toLong() to image()
         )
 
         // When
         therapist.exercises.createExercise(createExerciseRequest, images)
 
         // Then
-        val exercise = backgrounds.exercises.findExercise(ExercisesObjectMother.exerciseSearchDto(title))
-        exercise shouldNotBe null
-        exercise!! shouldMatch createExerciseRequest
+        val exerciseSummary = backgrounds.exercises.findExerciseSummary(ExercisesObjectMother.exerciseSearchDto(title))
+        exerciseSummary shouldNotBe null
+        exerciseSummary!! shouldMatch createExerciseRequest.summary
+
+        // And then
+        val exercise = backgrounds.exercises.findExercise(exerciseSummary.id)
+        exercise.steps shouldHaveSize createExerciseRequest.steps.size
+        exercise.steps[firstStepIdx].description shouldBe step1.description
+        exercise.steps[secondStepIdx].description shouldBe step2.description
+
+        val img1 = backgrounds.exercises.getExerciseStepImage(exerciseSummary.id, firstStepIdx)
+        img1 shouldBe images[firstStepIdx.toLong()]!!.content
+
+        val img2 = backgrounds.exercises.getExerciseStepImage(exerciseSummary.id, secondStepIdx)
+        img2 shouldBe images[secondStepIdx.toLong()]!!.content
     }
 
 }

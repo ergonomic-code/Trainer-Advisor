@@ -3,7 +3,7 @@ package pro.qyoga.tests.cases.app.therapist.therapy.exercises
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import pro.qyoga.app.therapist.therapy.exercises.CreateExercisePageController
-import pro.qyoga.core.therapy.exercises.api.ExerciseSearchDto
+import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSearchDto
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.fixture.FilesObjectMother.randomImageAsMultipartFile
 import pro.qyoga.tests.fixture.therapists.theTherapistUserDetails
@@ -21,8 +21,8 @@ class CreateExercisePageControllerTest : QYogaAppIntegrationBaseTest() {
         getBean<CreateExercisePageController>().createExercise(exercise, emptyMap(), theTherapistUserDetails)
 
         // Then
-        val persistedExercise = backgrounds.exercises.findExercise(ExerciseSearchDto.ALL)
-        persistedExercise!! shouldMatch exercise
+        val persistedExercise = backgrounds.exercises.findExerciseSummary(ExerciseSearchDto.ALL)
+        persistedExercise!! shouldMatch exercise.summary
     }
 
     @Test
@@ -42,8 +42,8 @@ class CreateExercisePageControllerTest : QYogaAppIntegrationBaseTest() {
         getBean<CreateExercisePageController>().createExercise(exercise, images, theTherapistUserDetails)
 
         // Then
-        val persistedExercise = backgrounds.exercises.findExercise(ExerciseSearchDto.ALL)
-        persistedExercise!! shouldMatch exercise
+        val persistedExercise = backgrounds.exercises.findExerciseSummary(ExerciseSearchDto.ALL)
+        persistedExercise!! shouldMatch exercise.summary
         val loadedImg1 = backgrounds.exercises.getExerciseStepImage(persistedExercise.id, zeroStepIdx)
         loadedImg1 shouldBe img1.bytes
         val loadedImg2 = backgrounds.exercises.getExerciseStepImage(persistedExercise.id, secondStepIdx)
@@ -67,8 +67,8 @@ class CreateExercisePageControllerTest : QYogaAppIntegrationBaseTest() {
         getBean<CreateExercisePageController>().createExercise(exercise, images, theTherapistUserDetails)
 
         // Then
-        val persistedExercise = backgrounds.exercises.findExercise(ExerciseSearchDto.ALL)
-        persistedExercise!! shouldMatch exercise
+        val persistedExercise = backgrounds.exercises.findExerciseSummary(ExerciseSearchDto.ALL)
+        persistedExercise!! shouldMatch exercise.summary
         val loadedImg1 = backgrounds.exercises.getExerciseStepImage(persistedExercise.id, firstStepIdx)
         loadedImg1 shouldBe img1.bytes
         val loadedImg2 = backgrounds.exercises.getExerciseStepImage(persistedExercise.id, thirdStepIdx)
@@ -94,8 +94,8 @@ class CreateExercisePageControllerTest : QYogaAppIntegrationBaseTest() {
         getBean<CreateExercisePageController>().createExercise(exercise, images, theTherapistUserDetails)
 
         // Then
-        val persistedExercise = backgrounds.exercises.findExercise(ExerciseSearchDto.ALL)
-        persistedExercise!! shouldMatch exercise
+        val persistedExercise = backgrounds.exercises.findExerciseSummary(ExerciseSearchDto.ALL)
+        persistedExercise!! shouldMatch exercise.summary
         val loadedImg1 = backgrounds.exercises.getExerciseStepImage(persistedExercise.id, zeroStepIdx)
         loadedImg1 shouldBe img1.bytes
         val loadedImg2 = backgrounds.exercises.getExerciseStepImage(persistedExercise.id, firstStepIdx)

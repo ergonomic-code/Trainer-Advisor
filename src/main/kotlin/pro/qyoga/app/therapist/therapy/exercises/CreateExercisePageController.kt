@@ -3,10 +3,13 @@ package pro.qyoga.app.therapist.therapy.exercises
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.multipart.MultipartFile
-import pro.qyoga.core.therapy.exercises.api.CreateExerciseRequest
 import pro.qyoga.core.therapy.exercises.api.ExercisesService
+import pro.qyoga.core.therapy.exercises.api.dtos.CreateExerciseRequest
 import pro.qyoga.core.users.internal.QyogaUserDetails
 import pro.qyoga.platform.file_storage.api.FileMetaData
 import pro.qyoga.platform.file_storage.api.StoredFile
@@ -25,7 +28,7 @@ class CreateExercisePageController(
 
     @PostMapping
     fun createExercise(
-        @ModelAttribute createExerciseRequest: CreateExerciseRequest,
+        createExerciseRequest: CreateExerciseRequest,
         @RequestParam imagesMap: Map<String, MultipartFile>,
         @AuthenticationPrincipal principal: QyogaUserDetails,
     ): ResponseEntity<Unit> {

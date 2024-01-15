@@ -7,10 +7,10 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import pro.qyoga.core.therapy.exercises.api.ExerciseSearchDto
-import pro.qyoga.core.therapy.exercises.api.ExerciseSummaryDto
-import pro.qyoga.core.therapy.exercises.api.ExerciseType
 import pro.qyoga.core.therapy.exercises.api.ExercisesService
+import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSearchDto
+import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSummaryDto
+import pro.qyoga.core.therapy.exercises.api.model.ExerciseType
 
 private const val EXERCISES = "exercises"
 

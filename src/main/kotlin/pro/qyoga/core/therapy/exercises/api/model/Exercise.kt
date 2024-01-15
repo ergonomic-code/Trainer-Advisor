@@ -1,4 +1,4 @@
-package pro.qyoga.core.therapy.exercises.internal
+package pro.qyoga.core.therapy.exercises.api.model
 
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
@@ -7,10 +7,8 @@ import org.springframework.data.annotation.Version
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
-import pro.qyoga.core.therapy.exercises.api.CreateExerciseRequest
-import pro.qyoga.core.therapy.exercises.api.ExerciseSummaryDto
-import pro.qyoga.core.therapy.exercises.api.ExerciseType
-import pro.qyoga.platform.java.time.toDurationMinutes
+import pro.qyoga.core.therapy.exercises.api.dtos.CreateExerciseRequest
+import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSummaryDto
 import java.time.Duration
 import java.time.Instant
 
@@ -34,8 +32,16 @@ data class Exercise(
     val version: Long = 0
 ) {
 
-    fun toDto() =
-        ExerciseSummaryDto(id, title, description, duration, exerciseType)
+    fun toSummaryDto() =
+        ExerciseSummaryDto(title, description, duration, exerciseType, id)
+
+    fun patchBy(exerciseSummaryDto: ExerciseSummaryDto): Exercise =
+        copy(
+            title = exerciseSummaryDto.title,
+            description = exerciseSummaryDto.description,
+            duration = exerciseSummaryDto.duration,
+            exerciseType = exerciseSummaryDto.type,
+        )
 
     companion object {
 
@@ -44,17 +50,17 @@ data class Exercise(
             persistedImages: Map<Int, Long>,
             therapistId: Long
         ): Exercise {
-            val exerciseSteps = createExerciseRequest.steps.mapIndexed { idx, dto ->
-                ExerciseStep(dto.description, persistedImages[idx]?.let { AggregateReference.to(it) })
+            val stepsWithRefs = createExerciseRequest.steps.mapIndexed { idx, dto ->
+                dto.withImage(persistedImages[idx]?.let { AggregateReference.to(it) })
             }
 
             return Exercise(
-                createExerciseRequest.title,
-                createExerciseRequest.description,
-                createExerciseRequest.duration.toDurationMinutes(),
-                createExerciseRequest.exerciseType,
+                createExerciseRequest.summary.title,
+                createExerciseRequest.summary.description,
+                createExerciseRequest.summary.duration,
+                createExerciseRequest.summary.type,
                 therapistId,
-                exerciseSteps
+                stepsWithRefs
             )
         }
     }

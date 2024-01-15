@@ -4,6 +4,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
+import pro.qyoga.app.common.notFound
 import pro.qyoga.app.therapist.clients.journal.edit_entry.shared.JOURNAL_ENTRY_VIEW_NAME
 import pro.qyoga.core.clients.cards.api.ClientsService
 import pro.qyoga.core.clients.journals.api.DuplicatedDate
@@ -27,7 +28,7 @@ class CreateJournalEntryPageController(
         @PathVariable clientId: Long
     ): ModelAndView {
         val client = clientsService.findClient(clientId)
-            ?: return ModelAndView("forward:error/404")
+            ?: return notFound
 
         return modelAndView(JOURNAL_ENTRY_VIEW_NAME) {
             "client" bindTo client
