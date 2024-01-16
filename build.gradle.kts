@@ -56,10 +56,7 @@ dependencies {
 
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 
-	testFixturesImplementation("org.springframework.boot:spring-boot-starter-test") {
-		// Когда этот jar есть в класспасе, спринг инициализирует Мокито, что добавляет 0.5 секунды ко времени теста
-		exclude(group = "org.mockito")
-	}
+	testFixturesImplementation("org.springframework.boot:spring-boot-starter-test")
 	testFixturesApi("org.springframework.boot:spring-boot-testcontainers")
 	testFixturesImplementation("org.testcontainers:junit-jupiter")
 	testFixturesImplementation("org.testcontainers:postgresql")
@@ -73,6 +70,7 @@ dependencies {
 	testImplementation("org.jsoup:jsoup:1.16.2")
 	testImplementation("io.github.ulfs:assertj-jsoup:0.1.4")
 	testImplementation("com.icegreen:greenmail-junit5:2.0.0")
+	implementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
 
 	modules {
 		module("org.codehaus.groovy:groovy") {
