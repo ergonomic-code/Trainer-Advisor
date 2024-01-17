@@ -2,6 +2,13 @@ spring:
   flyway:
     out-of-order: true
 
+  thymeleaf: # Thymeleaf
+    cache: false
+    prefix: file:src/main/resources/templates/
+  web:
+    resources:
+      static-locations: file:src/main/resources/static/
+
   docker:
     compose:
       file: ./deploy/qyoga/docker-compose-infra-dev.yml
