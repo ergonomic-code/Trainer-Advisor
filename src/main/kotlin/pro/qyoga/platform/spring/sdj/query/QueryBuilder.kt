@@ -1,4 +1,4 @@
-package pro.qyoga.platform.spring.sdj
+package pro.qyoga.platform.spring.sdj.query
 
 import org.springframework.data.relational.core.query.Criteria
 import org.springframework.data.relational.core.query.CriteriaDefinition
@@ -29,6 +29,12 @@ class QueryBuilder {
 
     infix fun KProperty1<*, String?>.isILike(value: String) {
         criteria.addLast(Criteria.where(this.name).like("%$value%").ignoreCase(true))
+    }
+
+    infix fun KProperty1<*, String?>.containsIfNotNull(value: String?) {
+        if (value != null) {
+            isILike(value)
+        }
     }
 
     infix fun KProperty1<*, LocalDate>.isLessThanIfNotNull(value: LocalDate?) {

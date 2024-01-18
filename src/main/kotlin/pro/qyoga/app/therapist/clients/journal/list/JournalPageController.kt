@@ -24,7 +24,8 @@ class JournalPageController(
     fun getJournalPage(
         @PathVariable id: Long
     ): ModelAndView {
-        return when (val result = getJournalPageWorkflow.getJournalPage(JournalPageRequest.firstPage(id))) {
+        val firstPage = JournalPageRequest.firstPage(id, fetch = listOf(JournalEntry::therapeuticTask))
+        return when (val result = getJournalPageWorkflow(firstPage)) {
             is GetJournalPageResult.ClientNotFound ->
                 notFound
 

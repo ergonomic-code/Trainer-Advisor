@@ -9,7 +9,7 @@ import pro.qyoga.core.clients.journals.api.JournalEntry
 import pro.qyoga.core.clients.journals.api.JournalsService
 import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTasksService
 import pro.qyoga.core.users.internal.QyogaUserDetails
-import pro.qyoga.platform.spring.sdj.ref
+import pro.qyoga.platform.spring.sdj.erpo.hydration.ref
 
 @Component
 class CreateJournalEntryWorkflow(

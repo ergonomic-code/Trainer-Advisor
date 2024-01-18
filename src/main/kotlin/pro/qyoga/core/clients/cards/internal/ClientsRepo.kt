@@ -10,7 +10,7 @@ import org.springframework.data.util.TypeInformation
 import org.springframework.stereotype.Repository
 import pro.qyoga.core.clients.cards.api.Client
 import pro.qyoga.core.clients.cards.api.ClientSearchDto
-import pro.qyoga.platform.spring.sdj.query
+import pro.qyoga.platform.spring.sdj.query.query
 
 @Repository
 class ClientsRepo(
@@ -32,9 +32,5 @@ class ClientsRepo(
 
         return jdbcAggregateTemplate.findAll(query, Client::class.java, pageRequest)
     }
-
-    fun findMapById(ids: List<Long>): Map<Long, Client> =
-        findAllById(ids)
-            .associateBy { it.id }
 
 }

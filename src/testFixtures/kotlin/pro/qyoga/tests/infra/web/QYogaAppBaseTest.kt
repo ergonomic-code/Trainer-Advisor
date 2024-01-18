@@ -3,7 +3,7 @@ package pro.qyoga.tests.infra.web
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.boot.autoconfigure.web.ServerProperties
 import pro.qyoga.tests.fixture.backgrounds.Backgrounds
-import pro.qyoga.tests.infra.db.DbInitializer
+import pro.qyoga.tests.infra.db.setupDb
 import pro.qyoga.tests.infra.test_config.spring.context
 import javax.sql.DataSource
 
@@ -22,7 +22,7 @@ open class QYogaAppBaseTest {
 
     @BeforeEach
     fun setupTestData() {
-        DbInitializer(dataSource).executeScripts("/db/shared-fixture.sql")
+        dataSource.setupDb()
     }
 
 }

@@ -9,7 +9,7 @@ import org.springframework.data.relational.core.conversion.DbActionExecutionExce
 import org.springframework.data.util.TypeInformation
 import org.springframework.stereotype.Repository
 import pro.qyoga.core.users.api.User
-import pro.qyoga.platform.spring.sdj.query
+import pro.qyoga.platform.spring.sdj.query.query
 
 
 @Repository

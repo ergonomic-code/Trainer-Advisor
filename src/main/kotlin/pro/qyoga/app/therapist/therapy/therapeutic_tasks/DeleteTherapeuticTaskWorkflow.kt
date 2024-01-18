@@ -1,35 +1,43 @@
 package pro.qyoga.app.therapist.therapy.therapeutic_tasks
 
 import org.springframework.data.domain.Pageable
+import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
-import pro.qyoga.core.clients.cards.internal.ClientsRepo
 import pro.qyoga.core.clients.journals.api.JournalEntry
-import pro.qyoga.core.clients.journals.api.hydrate
 import pro.qyoga.core.clients.journals.internal.JournalEntriesRepo
 import pro.qyoga.core.therapy.therapeutic_tasks.internal.TherapeuticTasksRepo
-import pro.qyoga.platform.spring.sdj.ref
+import pro.qyoga.platform.spring.sdj.erpo.hydration.ref
+import pro.qyoga.platform.spring.sdj.query.QueryBuilder
 import pro.qyoga.platform.spring.sdj.withSortBy
 
+private val referencesPageRequest = Pageable.ofSize(4).withSortBy(JournalEntry::createdAt)
 
 @Component
 class DeleteTherapeuticTaskWorkflow(
     private val therapeuticTasksRepo: TherapeuticTasksRepo,
     private val journalEntriesRepo: JournalEntriesRepo,
-    private val clientsRepo: ClientsRepo
 ) : (Long) -> Unit {
 
     override fun invoke(taskId: Long) {
-        val references =
-            journalEntriesRepo.findByTherapeuticTask(taskId, Pageable.ofSize(4).withSortBy(JournalEntry::createdAt))
-        if (!references.isEmpty) {
-            val referencingEntries = references.content.hydrate(fetchClients = clientsRepo::findMapById)
-            val task = therapeuticTasksRepo.findByIdOrNull(taskId)
-                ?: error("References to not existing task")
-            throw TherapeuticTaskHasReferences(task.ref(), referencingEntries)
-        }
-
+        ensureNoReferencesExists(taskId)
         therapeuticTasksRepo.deleteById(taskId)
+    }
+
+    private fun ensureNoReferencesExists(taskId: Long) {
+        val referencesQuery: QueryBuilder.() -> Unit = {
+            JournalEntry::therapeuticTask isEqual AggregateReference.to(taskId)
+        }
+        val referencesExists = journalEntriesRepo.exists(referencesQuery)
+
+        if (referencesExists) {
+            val references =
+                journalEntriesRepo.findAll(referencesPageRequest, fetch = listOf(JournalEntry::client), referencesQuery)
+                    .content
+            val task = therapeuticTasksRepo.findByIdOrNull(taskId)
+                ?: error("References $references to not existing task with id=$taskId")
+            throw TherapeuticTaskHasReferences(task.ref(), references)
+        }
     }
 
 }

@@ -7,7 +7,7 @@ import org.springframework.data.annotation.Version
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.Table
 import pro.qyoga.core.users.api.Therapist
-import pro.qyoga.platform.spring.sdj.Identifiable
+import pro.qyoga.platform.spring.sdj.erpo.hydration.Identifiable
 import java.time.Instant
 
 
