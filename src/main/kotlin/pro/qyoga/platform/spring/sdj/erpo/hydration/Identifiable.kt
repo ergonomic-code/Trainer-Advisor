@@ -1,4 +1,4 @@
-package pro.qyoga.platform.spring.sdj
+package pro.qyoga.platform.spring.sdj.erpo.hydration
 
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 

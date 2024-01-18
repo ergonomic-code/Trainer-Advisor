@@ -1,12 +1,16 @@
 package pro.qyoga.tests.fixture.backgrounds
 
 import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageImpl
+import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.stereotype.Component
 import pro.qyoga.app.therapist.clients.journal.edit_entry.create.CreateJournalEntryWorkflow
-import pro.qyoga.core.clients.journals.api.*
-import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTasksService
+import pro.qyoga.core.clients.journals.api.EditJournalEntryRequest
+import pro.qyoga.core.clients.journals.api.JournalEntry
+import pro.qyoga.core.clients.journals.api.JournalPageRequest
+import pro.qyoga.core.clients.journals.api.JournalsService
 import pro.qyoga.core.users.internal.QyogaUserDetails
+import pro.qyoga.platform.spring.sdj.erpo.hydration.FetchSpec
+import pro.qyoga.platform.spring.sdj.erpo.hydration.hydrate
 import pro.qyoga.tests.fixture.clients.JournalEntriesObjectMother
 import pro.qyoga.tests.fixture.data.randomRecentLocalDate
 
@@ -15,7 +19,7 @@ import pro.qyoga.tests.fixture.data.randomRecentLocalDate
 class ClientJournalBackgrounds(
     private val createJournalEntryWorkflow: CreateJournalEntryWorkflow,
     private val journalsService: JournalsService,
-    private val therapeuticTasksService: TherapeuticTasksService
+    private val jdbcAggregateOperations: JdbcAggregateOperations
 ) {
 
     fun createJournalEntry(
@@ -36,18 +40,15 @@ class ClientJournalBackgrounds(
     }
 
     fun hydrate(journalEntries: List<JournalEntry>): List<JournalEntry> =
-        journalEntries.hydrate(therapeuticTasksService::findAllById)
+        jdbcAggregateOperations.hydrate(journalEntries, FetchSpec(JournalEntry::therapeuticTask))
 
     fun getWholeJournal(clientId: Long): Page<JournalEntry> {
-        var journal = journalsService.getJournalPage(JournalPageRequest.wholeJournal(clientId))
-
-        journal = PageImpl(
-            journal.content.hydrate(therapeuticTasksService::findAllById),
-            journal.pageable,
-            journal.totalElements
+        return journalsService.getJournalPage(
+            JournalPageRequest.wholeJournal(
+                clientId,
+                fetch = listOf(JournalEntry::therapeuticTask)
+            )
         )
-
-        return journal
     }
 
 }

@@ -5,59 +5,45 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.data.jdbc.core.convert.JdbcConverter
 import org.springframework.data.jdbc.core.mapping.AggregateReference
-import org.springframework.data.jdbc.repository.support.SimpleJdbcRepository
 import org.springframework.data.mapping.model.BasicPersistentEntity
 import org.springframework.data.util.TypeInformation
 import org.springframework.stereotype.Repository
 import pro.qyoga.core.clients.journals.api.JournalEntry
 import pro.qyoga.core.clients.journals.api.JournalPageRequest
-import pro.qyoga.platform.spring.sdj.query
+import pro.qyoga.platform.spring.sdj.erpo.ErgoRepository
 import pro.qyoga.platform.spring.sdj.sortBy
+import kotlin.reflect.KProperty1
 
 
 @Repository
 class JournalEntriesRepo(
-    private val jdbcAggregateTemplate: JdbcAggregateOperations,
+    override val jdbcAggregateTemplate: JdbcAggregateOperations,
     jdbcConverter: JdbcConverter
-) : SimpleJdbcRepository<JournalEntry, Long>(
+) : ErgoRepository<JournalEntry, Long>(
     jdbcAggregateTemplate,
     BasicPersistentEntity(TypeInformation.of(JournalEntry::class.java)),
     jdbcConverter
 ) {
 
     fun getJournalPage(journalPageRequest: JournalPageRequest): Page<JournalEntry> {
-        val query = query {
+        return findAll(
+            pageRequest = PageRequest.of(0, journalPageRequest.pageSize, sortBy(JournalEntry::date).descending()),
+            fetch = journalPageRequest.fetch,
+        ) {
             JournalEntry::client isEqual AggregateReference.to(journalPageRequest.clientId)
             JournalEntry::date isLessThanIfNotNull journalPageRequest.date
         }
-
-        return jdbcAggregateTemplate.findAll(
-            query,
-            JournalEntry::class.java,
-            PageRequest.of(0, journalPageRequest.pageSize, sortBy(JournalEntry::date).descending())
-        )
     }
 
-    fun getEntry(clientId: Long, entryId: Long): JournalEntry? {
-        val query = query {
+    fun getEntry(
+        clientId: Long,
+        entryId: Long,
+        fetch: Iterable<KProperty1<JournalEntry, *>> = emptySet()
+    ): JournalEntry? {
+        return findOne(fetch) {
             JournalEntry::client isEqual AggregateReference.to(clientId)
             JournalEntry::id isEqual entryId
         }
-
-        return jdbcAggregateTemplate.findOne(query, JournalEntry::class.java)
-            .orElse(null)
-    }
-
-    fun findByTherapeuticTask(taskId: Long, pageRequest: PageRequest): Page<JournalEntry> {
-        val query = query {
-            JournalEntry::therapeuticTask isEqual AggregateReference.to(taskId)
-        }
-
-        return jdbcAggregateTemplate.findAll(
-            query,
-            JournalEntry::class.java,
-            pageRequest
-        )
     }
 
 }

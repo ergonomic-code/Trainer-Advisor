@@ -7,6 +7,6 @@ import pro.qyoga.platform.errors.DomainError
 
 
 class TherapeuticTaskHasReferences(
-    val task: AggregateReference<TherapeuticTask, Long>,
+    val taskRef: AggregateReference<TherapeuticTask, Long>,
     val references: List<JournalEntry>
-) : DomainError("Therapeutic task ${task.id} has ${references.size} references to it")
+) : DomainError("Therapeutic task ${taskRef.id} has ${references.size} references to it")

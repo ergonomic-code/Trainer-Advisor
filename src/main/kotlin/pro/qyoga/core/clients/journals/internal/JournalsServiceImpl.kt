@@ -26,7 +26,7 @@ class JournalsServiceImpl(
     }
 
     override fun getJournalEntry(clientId: Long, entryId: Long): JournalEntry? {
-        return journalEntriesRepo.getEntry(clientId, entryId)
+        return journalEntriesRepo.getEntry(clientId, entryId, fetch = listOf(JournalEntry::therapeuticTask))
     }
 
     override fun deleteEntry(clientId: Long, entryId: Long) {

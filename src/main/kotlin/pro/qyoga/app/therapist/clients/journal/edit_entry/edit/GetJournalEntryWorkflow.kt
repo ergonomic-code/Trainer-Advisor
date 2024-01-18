@@ -6,14 +6,11 @@ import pro.qyoga.core.clients.cards.api.ClientsService
 import pro.qyoga.core.clients.journals.api.EntryNotFound
 import pro.qyoga.core.clients.journals.api.JournalEntry
 import pro.qyoga.core.clients.journals.api.JournalsService
-import pro.qyoga.core.clients.journals.api.hydrate
-import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTasksService
 
 @Component
 class GetJournalEntryWorkflow(
     private val clientsService: ClientsService,
-    private val journalsService: JournalsService,
-    private val therapeuticTasksService: TherapeuticTasksService
+    private val journalsService: JournalsService
 ) {
 
     fun getJournalEntry(clientId: Long, entryId: Long): JournalEntry {
@@ -22,7 +19,6 @@ class GetJournalEntryWorkflow(
         }
 
         return journalsService.getJournalEntry(clientId, entryId)
-            ?.hydrate(therapeuticTasksService::findAllById)
             ?: throw EntryNotFound(clientId, entryId)
     }
 

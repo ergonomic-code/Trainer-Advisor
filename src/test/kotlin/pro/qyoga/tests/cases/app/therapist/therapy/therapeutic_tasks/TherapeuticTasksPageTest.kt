@@ -2,7 +2,7 @@ package pro.qyoga.tests.cases.app.therapist.therapy.therapeutic_tasks
 
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
-import pro.qyoga.platform.spring.sdj.AggregateReferenceTarget
+import pro.qyoga.platform.spring.sdj.erpo.hydration.resolveOrThrow
 import pro.qyoga.tests.assertions.*
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.clients.pages.therapist.therapy.therapeutic_tasks.TherapeuticTasksListPage
@@ -149,7 +149,7 @@ class TherapeuticTasksPageTest : QYogaAppIntegrationBaseTest() {
         // Given
         val (_, entry) = backgrounds.clients.createClientWithJournalEntry()
         val therapist = TherapistClient.loginAsTheTherapist()
-        val therapeuticTask = (entry.therapeuticTask as AggregateReferenceTarget).entity
+        val therapeuticTask = entry.therapeuticTask.resolveOrThrow()
 
         // When
         val document = therapist.therapeuticTasks.delete(therapeuticTask.id)

@@ -1,6 +1,5 @@
 package pro.qyoga.core.therapy.exercises.internal
 
-import org.springframework.data.domain.ExampleMatcher.GenericPropertyMatcher
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
@@ -13,8 +12,6 @@ import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSearchDto
 import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSummaryDto
 import pro.qyoga.core.therapy.exercises.api.model.Exercise
 import pro.qyoga.platform.spring.sdj.erpo.ErgoRepository
-import pro.qyoga.platform.spring.sdj.example
-import pro.qyoga.platform.spring.sdj.probeFrom
 import pro.qyoga.platform.spring.sdj.sortBy
 
 
@@ -29,14 +26,14 @@ class ExercisesRepo(
 ) {
 
     fun findExerciseSummaries(exercisesSearchDto: ExerciseSearchDto, page: Pageable): Page<ExerciseSummaryDto> {
-        val example = example<Exercise>(probeFrom(exercisesSearchDto)) {
-            withMatcher(exercisesSearchDto::title, GenericPropertyMatcher().contains().ignoreCase())
-            withMatcher(exercisesSearchDto::exerciseType, GenericPropertyMatcher().contains().ignoreCase())
+        val entitiesPage = findAll(PageRequest.of(page.pageNumber, page.pageSize, sortBy(Exercise::title))) {
+            Exercise::title containsIfNotNull exercisesSearchDto.title
+            Exercise::exerciseType isEqualIfNotNull exercisesSearchDto.exerciseType
         }
-
-        return findAll(example, PageRequest.of(page.pageNumber, page.pageSize, sortBy(Exercise::title))).map {
+        return entitiesPage.map {
             it.toSummaryDto()
         }
     }
 
 }
+

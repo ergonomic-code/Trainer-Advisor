@@ -7,7 +7,7 @@ import io.kotest.matchers.string.shouldContain
 import org.jsoup.nodes.Element
 import pro.qyoga.core.clients.journals.api.JournalEntry
 import pro.qyoga.core.formats.russianDateFormat
-import pro.qyoga.platform.spring.sdj.AggregateReferenceTarget
+import pro.qyoga.platform.spring.sdj.erpo.hydration.resolveOrThrow
 import pro.qyoga.tests.assertions.PageMatcher
 import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.clients.pages.therapist.clients.journal.entry.CreateJournalEntryPage
@@ -42,8 +42,7 @@ object ClientJournalFragment {
                 el.select(".deleteEntryLink").attr(deleteEntryLink.targetAttr) shouldBe expectedDeleteLink
 
                 el.select(".entryDate").text() shouldBe russianDateFormat.format(entry.date)
-                el.select(".entryTherapeuticTask")
-                    .text() shouldContain (entry.therapeuticTask as AggregateReferenceTarget).entity.name
+                el.select(".entryTherapeuticTask").text() shouldContain entry.therapeuticTask.resolveOrThrow().name
                 el.select(".entryText").text() shouldBe entry.entryText
             }
         }

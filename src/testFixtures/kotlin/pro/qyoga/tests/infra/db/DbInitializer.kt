@@ -17,3 +17,7 @@ class DbInitializer(
     }
 
 }
+
+fun DataSource.setupDb() {
+    DbInitializer(this).executeScripts("/db/shared-fixture.sql")
+}

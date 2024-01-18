@@ -17,7 +17,7 @@ import pro.qyoga.platform.spring.sdj.findOneBy
 
 @Repository
 class TherapeuticTasksRepo(
-    private val jdbcAggregateTemplate: JdbcAggregateOperations,
+    override val jdbcAggregateTemplate: JdbcAggregateOperations,
     jdbcConverter: JdbcConverter
 ) : ErgoRepository<TherapeuticTask, Long>(
     jdbcAggregateTemplate,

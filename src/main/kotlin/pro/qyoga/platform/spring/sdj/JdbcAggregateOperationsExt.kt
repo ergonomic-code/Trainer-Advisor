@@ -2,6 +2,8 @@ package pro.qyoga.platform.spring.sdj
 
 import org.springframework.data.domain.Pageable
 import org.springframework.data.jdbc.core.JdbcAggregateOperations
+import pro.qyoga.platform.spring.sdj.query.QueryBuilder
+import pro.qyoga.platform.spring.sdj.query.query
 
 
 inline fun <reified T> JdbcAggregateOperations.findOneBy(noinline body: QueryBuilder.() -> Unit): T? {
