@@ -46,5 +46,5 @@ fun ClientFilesRepo.findFile(
 ): ClientFile? =
     this.findOne {
         ClientFile::clientRef isEqual clientId
-        ClientFile::fileRef isEqual clientFileId
+        ClientFile::id isEqual clientFileId
     }
