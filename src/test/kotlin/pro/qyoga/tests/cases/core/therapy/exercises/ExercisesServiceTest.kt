@@ -42,7 +42,7 @@ class ExercisesServiceTest : QYogaAppIntegrationBaseTest() {
             on { deleteAllById(any()) } doAnswer { throw Exception("Это ожидаемое в тесте исключение") }
         }
         val exerciseId = backgrounds.exercises.createExercise(stepsCount = 1, AllSteps).id
-        val exercisesService = backgrounds.spring.createExercisesService(filesStorage = filesStorage)
+        val exercisesService = backgrounds.spring.createExercisesService(exerciseStepsImagesStorage = filesStorage)
 
         // When
         val result = runCatching {

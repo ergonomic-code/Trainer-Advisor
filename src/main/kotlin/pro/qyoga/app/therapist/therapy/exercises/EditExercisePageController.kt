@@ -1,10 +1,10 @@
 package pro.qyoga.app.therapist.therapy.exercises
 
-import org.springframework.core.io.InputStreamResource
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
+import pro.qyoga.app.common.ResponseEntityExt
 import pro.qyoga.app.common.notFound
 import pro.qyoga.core.therapy.exercises.api.ExercisesService
 import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSummaryDto
@@ -57,10 +57,7 @@ class EditExercisePageController(
                 res.getOrThrow()!!
         }
 
-        return ResponseEntity.ok()
-            .header("Content-Type", imageStream.metaData.mediaType)
-            .header("Content-Length", imageStream.metaData.size.toString())
-            .body(InputStreamResource(imageStream.inputStream))
+        return ResponseEntityExt.ok(imageStream)
     }
 
 }

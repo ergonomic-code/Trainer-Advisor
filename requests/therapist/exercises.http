@@ -1,0 +1,48 @@
+POST http://192.168.86.6:8080/therapist/exercises/create
+Content-Type: multipart/form-data; boundary=---------------------------190115359835356857873625278389
+
+-----------------------------190115359835356857873625278389
+Content-Disposition: form-data; name="title"
+
+test
+-----------------------------190115359835356857873625278389
+Content-Disposition: form-data; name="exerciseType"
+
+WARM_UP
+-----------------------------190115359835356857873625278389
+Content-Disposition: form-data; name="duration"
+
+1
+-----------------------------190115359835356857873625278389
+Content-Disposition: form-data; name="description"
+
+test
+-----------------------------190115359835356857873625278389
+Content-Disposition: form-data; name="steps.id"
+
+
+-----------------------------190115359835356857873625278389
+Content-Disposition: form-data; name="steps.imageId"
+
+
+-----------------------------190115359835356857873625278389
+Content-Disposition: form-data; name="steps.description"
+
+test
+-----------------------------190115359835356857873625278389
+Content-Disposition: form-data; name="steps.id"
+
+
+-----------------------------190115359835356857873625278389
+Content-Disposition: form-data; name="steps.imageId"
+
+
+-----------------------------190115359835356857873625278389
+Content-Disposition: form-data; name="steps.description"
+
+test
+-----------------------------190115359835356857873625278389
+Content-Disposition: form-data; name="save"
+
+
+-----------------------------190115359835356857873625278389--

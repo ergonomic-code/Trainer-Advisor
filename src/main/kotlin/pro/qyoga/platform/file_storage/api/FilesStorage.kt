@@ -11,4 +11,8 @@ interface FilesStorage {
 
     fun deleteAllById(fileIds: List<Long>)
 
+    fun deleteById(fileId: Long) {
+        deleteAllById(listOf(fileId))
+    }
+
 }

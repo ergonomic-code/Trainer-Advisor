@@ -8,6 +8,7 @@ import pro.qyoga.tests.fixture.backgrounds.exercises.ExerciseBackgrounds
 data class Backgrounds(
     val clients: ClientsBackgrounds,
     val clientJournal: ClientJournalBackgrounds,
+    val clientFiles: ClientFilesBackgrounds,
     val exercises: ExerciseBackgrounds,
     val therapeuticTasks: TherapeuticTasksBackgrounds,
     val users: UsersBackgrounds,

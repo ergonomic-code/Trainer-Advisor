@@ -1,2 +1,8 @@
-GET http://localhost:8080
-X-Forwarded-Proto: https
+POST http://192.168.86.6:8080/login
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8
+Content-Type: application/x-www-form-urlencoded
+
+username = therapist%40trainer-advisor.pro &
+password = password
+
+###
