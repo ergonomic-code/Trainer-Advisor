@@ -3,4 +3,4 @@ EXPOSE 8080
 
 WORKDIR /app
 
-ENTRYPOINT ["./gradlew", "bootRun", "--args='--spring.profiles.active=local-dev,local-front-dev'", "--no-daemon"]
+ENTRYPOINT ["./gradlew", "bootRun", "--args='--spring.profiles.active=local-dev,demo,local-front-dev'", "--no-daemon"]
