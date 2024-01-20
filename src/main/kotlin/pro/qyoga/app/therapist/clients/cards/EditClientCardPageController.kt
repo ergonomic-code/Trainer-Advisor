@@ -8,9 +8,10 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.servlet.ModelAndView
 import pro.qyoga.app.common.notFound
+import pro.qyoga.app.therapist.clients.ClientPageTab
+import pro.qyoga.app.therapist.clients.clientPageModel
 import pro.qyoga.core.clients.cards.api.ClientCardDto
 import pro.qyoga.core.clients.cards.api.ClientsService
-import pro.qyoga.platform.spring.mvc.modelAndView
 
 
 @Controller
@@ -27,10 +28,8 @@ class EditClientCardPageController(
         val client = clientsService.findClient(id)
             ?: return notFound
 
-        return modelAndView("therapist/clients/client-edit") {
-            "client" bindTo client
+        return clientPageModel(client, ClientPageTab.CARD) {
             "formAction" bindTo "/therapist/clients/${client.id}/card"
-            "activeTab" bindTo "card"
         }
     }
 

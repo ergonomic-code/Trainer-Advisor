@@ -20,16 +20,19 @@ class SpringBackgrounds(
 
     fun createExercisesService(
         exercisesRepo: ExercisesRepo? = null,
-        filesStorage: FilesStorage? = null
+        exerciseStepsImagesStorage: FilesStorage? = null
     ): ExercisesService {
-        val key = "mockExerciseService($filesStorage, $exercisesRepo)"
+        val key = "mockExerciseService($exerciseStepsImagesStorage, $exercisesRepo)"
         val bean = beansCache.getOrPut(key) {
             val bd = GenericBeanDefinition().apply {
                 setBeanClass(ExercisesService::class.java)
                 setInstanceSupplier {
                     ExercisesServiceImpl(
                         exercisesRepo ?: context.getBean(),
-                        filesStorage ?: context.getBean(),
+                        exerciseStepsImagesStorage ?: context.getBean(
+                            "exerciseStepsImagesStorage",
+                            FilesStorage::class.java
+                        ),
                         context.getBean()
                     )
                 }

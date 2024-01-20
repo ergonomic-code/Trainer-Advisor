@@ -11,7 +11,7 @@ class Link(
     val targetAttr: String = "href"
 ) : Component {
 
-    private val urlRegex = urlPattern.replace("\\{.*}".toRegex(), ".*")
+    private val urlRegex = urlPattern.replace("\\{.*?}".toRegex(), ".*")
 
     constructor(id: String, page: QYogaPage, text: String) : this(id, page.path, text)
 

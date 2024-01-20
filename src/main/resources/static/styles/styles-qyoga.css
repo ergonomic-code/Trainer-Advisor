@@ -80,3 +80,11 @@ tr.htmx-swapping {
     color: var(--bs-danger) !important;
     background-color: #f8d7da !important;
 }
+
+.h-lines-3 {
+    height: calc(var(--bs-body-font-size) * 3)
+}
+
+.h-lines-4 {
+    height: calc(var(--bs-body-font-size) * 4)
+}

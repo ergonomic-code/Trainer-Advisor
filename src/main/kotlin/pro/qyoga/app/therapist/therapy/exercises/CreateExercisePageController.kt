@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.multipart.MultipartFile
+import pro.qyoga.app.common.toStoredFile
 import pro.qyoga.core.therapy.exercises.api.ExercisesService
 import pro.qyoga.core.therapy.exercises.api.dtos.CreateExerciseRequest
 import pro.qyoga.core.users.internal.QyogaUserDetails
-import pro.qyoga.platform.file_storage.api.FileMetaData
 import pro.qyoga.platform.file_storage.api.StoredFile
 import pro.qyoga.platform.spring.http.hxRedirect
 
@@ -44,9 +44,6 @@ class CreateExercisePageController(
     }
 
 }
-
-private fun MultipartFile.toStoredFile() =
-    StoredFile(FileMetaData(this.originalFilename!!, this.contentType!!, this.size), this.bytes)
 
 private fun String.toStepIdx() = substring("stepImage".length).toInt()
 

@@ -1,0 +1,115 @@
+<div class="h-100 w-100 align-middle ">
+
+    <div id="clientFilesList" th:fragment="client-files-list">
+        <div class="row d-flex mb-4 flex-row-reverse">
+            <div class="col col-sm-3 d-flex justify-content-end">
+                <form
+                        class="w-100"
+                        id="addFileForm"
+                        enctype="multipart/form-data"
+                        hx-select=".fileRow"
+                        hx-swap="afterbegin"
+                        hx-swap-oob="true"
+                        hx-target="#clientFilesListData"
+                        hx-trigger="change from:#newFile"
+                        th:hx-post='@{/therapist/clients/{id}/files(id=${client.id})}'>
+
+                    <button class="btn btn-outline-success w-100"
+                            id="uploadFileBtn"
+                            onclick="document.getElementById('newFile').click()"
+                            type="button">
+                        <input class="form-control d-none"
+                               hx-encoding='multipart/form-data'
+                               id="newFile"
+                               name="newFile"
+                               required
+                               type="file">
+                        Загрузить новый файл
+                    </button>
+                    <progress class="invisible w-100" id='progress'
+                              max='100' value='0'>
+                    </progress>
+
+                    <script>
+                        htmx.on('#newFile', 'htmx:validation:validate', function (evt) {
+                            let input = evt.detail.elt;
+                            let file = input.files[0];
+                            if (!file) {
+                                return;
+                            }
+
+                            // Лимит на размер payload-а в Томкете учитывает, заголовки, которые включают имя файла
+                            // с переменной длинной, поэтому просто отнимаем килобайт, в надежде что заголовки в него в лезут
+                            if (file.size > 1024 * 1024 * 10 - 1024) {
+                                let msg = "Размер файла не должен превышать 10 мегабайт";
+                                this.setCustomValidity(msg);
+                                alert(msg);
+                            } else {
+                                this.setCustomValidity('');
+                            }
+                        });
+
+                        htmx.on('#addFileForm', 'htmx:xhr:progress', function (evt) {
+                            let progressEl = document.getElementById('progress');
+                            progressEl.classList.remove("invisible");
+                            let curValue = progressEl.getAttribute('value')
+                            progressEl.setAttribute('value', Math.max(curValue, evt.detail.loaded / evt.detail.total * 100))
+
+                            let buttonEl = document.getElementById('uploadFileBtn')
+                            buttonEl.classList.add("disabled");
+                            document.activeElement = null;
+                        });
+
+                        htmx.on('#addFileForm', 'htmx:afterRequest', function (evt) {
+                            let progressEl = document.getElementById('progress');
+                            progressEl.classList.add("invisible");
+                            progressEl.setAttribute('value', '0');
+                            if (evt.detail.xhr.status === 413 || evt.detail.xhr.status === 0) {
+                                alert("Файл слишком большой, максимальнй размер файла составляет 10 мегабайт")
+                            }
+
+                            let buttonEl = document.getElementById('uploadFileBtn')
+                            buttonEl.classList.remove("disabled");
+                        });
+                    </script>
+
+                </form>
+            </div>
+        </div>
+
+        <div id="clientFilesListData" th:fragment="client-files-list-data">
+            <div class="mb-4 fileRow row align-items-center"
+                 th:each="clientFile : ${clientFiles}"
+                 th:fragment="client-files-list-row">
+
+                <div class="col-9 h-lines-3 text-truncate">
+                    <a class=""
+                       target="_blank"
+                       th:href="@{/therapist/clients/{clientId}/files/{fileId}(clientId=${clientFile.clientRef.id},fileId=${clientFile.id})}"
+                       th:id="${'downloadFile' + clientFile.id}"
+                       th:text="${clientFile.fileRef.entity.name}">
+                        МРТ.pdf
+                    </a>
+                    <br>
+                    <small class="text-muted"
+                           th:text="${'Загружен ' + #temporals.format(clientFile.createdAt, T(pro.qyoga.core.formats.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN)}">
+                        Загружен 19.01.2024
+                    </small>
+                </div>
+
+                <div class="col-3 text-end">
+                    <button
+                            class="input-group-text btn btn-outline-danger rounded-end"
+                            hx-swap="outerHTML swap:0.2s"
+                            hx-target="closest .fileRow"
+                            th:hx-confirm="'Удалить файл ' + ${ clientFile.fileRef.entity.name} + '?'"
+                            th:hx-delete="@{/therapist/clients/{clientId}/files/{fileId}(clientId=${clientFile.clientRef.id},fileId=${clientFile.id})}"
+                            th:name="${'deleteClientFile' + clientFile.id}">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -7,9 +7,10 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.servlet.ModelAndView
 import pro.qyoga.app.common.notFound
+import pro.qyoga.app.therapist.clients.ClientPageTab
+import pro.qyoga.app.therapist.clients.clientPageModel
 import pro.qyoga.core.clients.journals.api.JournalEntry
 import pro.qyoga.core.clients.journals.api.JournalPageRequest
-import pro.qyoga.platform.spring.mvc.modelAndView
 
 
 private const val JOURNAL = "journal"
@@ -30,10 +31,8 @@ class JournalPageController(
                 notFound
 
             is GetJournalPageResult.Success -> {
-                modelAndView("therapist/clients/client-edit") {
-                    "client" bindTo result.client
+                clientPageModel(result.client, ClientPageTab.JOURNAL) {
                     JOURNAL bindTo result.page
-                    "activeTab" bindTo JOURNAL
                 }
             }
         }
