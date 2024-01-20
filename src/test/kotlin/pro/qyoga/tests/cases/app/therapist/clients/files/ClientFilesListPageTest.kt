@@ -18,6 +18,7 @@ import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.clients.pages.publc.NotFoundErrorPage
 import pro.qyoga.tests.clients.pages.therapist.clients.files.ClientFilesPage
 import pro.qyoga.tests.fixture.FilesObjectMother
+import pro.qyoga.tests.fixture.backgrounds.exercises.AllSteps
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 
@@ -190,6 +191,27 @@ class ClientFilesListPageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         document shouldBe null
+    }
+
+    @Test
+    fun `Existence of exercise image should not affect client file downloading`() {
+        // Given
+        val therapist = TherapistClient.loginAsTheTherapist()
+        backgrounds.exercises.createExercise(1, AllSteps)
+        val client = backgrounds.clients.createClients(1).single()
+        val file = FilesObjectMother.randomFile()
+        val clientFile = backgrounds.clientFiles.createFile(1, file)
+
+        // When
+        val result = therapist.clientFiles.download(client.id, clientFile.id)
+
+        // Then
+        result.Then {
+            statusCode(HttpStatus.OK.value())
+        } Extract {
+            val body = asByteArray()
+            body shouldBe file.content
+        }
     }
 
 }
