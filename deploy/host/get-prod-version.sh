@@ -1,0 +1,2 @@
+source ./secrets.sh
+echo -en "$(docker --context qyoga-prod exec qyoga-app-1 sh -c "wget -q -O /dev/stdout http://admin@qyoga.pro:$TA_ADMIN_PASS@localhost:8080/ops/actuator/info" | python -m json.tool | grep -A15 -m1 "commit")"
