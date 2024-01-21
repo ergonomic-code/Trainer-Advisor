@@ -4,9 +4,11 @@ import com.tngtech.archunit.core.domain.JavaClasses
 import com.tngtech.archunit.core.importer.ClassFileImporter
 import com.tngtech.archunit.core.importer.ImportOption
 import com.tngtech.archunit.library.Architectures
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
+import pro.qyoga.tests.infra.junit.SLOW_TEST
 
-
+@Tag(SLOW_TEST)
 class ArchTest {
 
     private val qyogaClasses: JavaClasses = ClassFileImporter()

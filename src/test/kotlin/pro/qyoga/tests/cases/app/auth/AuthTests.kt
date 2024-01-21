@@ -71,4 +71,19 @@ class AuthTests : QYogaAppIntegrationBaseTest() {
         }
     }
 
+    @Test
+    fun `TA should prohibit unauthenticated access to root endpoints that aren't opened explicitly`() {
+        Given {
+            // no auth
+            this
+        } When {
+            get("it-isnt-opened")
+        } Then {
+            statusCode(HttpStatus.OK.value())
+        } Extract {
+            val document = Jsoup.parse(body().asString())
+            document shouldBePage LoginPage
+        }
+    }
+
 }

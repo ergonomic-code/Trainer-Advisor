@@ -30,7 +30,7 @@ object PublicClient {
         return Given {
             this
         } When {
-            get("/fail")
+            get("/test/fail")
         } Then {
             statusCode(HttpStatus.INTERNAL_SERVER_ERROR.value())
         } Extract {
@@ -42,7 +42,7 @@ object PublicClient {
         return Given {
             this
         } When {
-            get("/not-found")
+            get("/test/not-found")
         } Then {
             statusCode(HttpStatus.NOT_FOUND.value())
         } Extract {
