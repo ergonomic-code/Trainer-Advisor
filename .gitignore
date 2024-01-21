@@ -16,3 +16,4 @@ out/
 /build/
 
 src/main/resources/application-prod-secrets.yaml
+/deploy/host/secrets.sh
