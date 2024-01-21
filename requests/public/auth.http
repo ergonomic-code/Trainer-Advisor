@@ -7,3 +7,9 @@ username = therapist%40trainer-advisor.pro &
 password = password
 
 ###
+
+### Произвольный корневой эндпоинт без аутентификации
+// @no-cookie-jar
+# @no-redirect
+POST http://localhost:8080/it-isnt-opened
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8

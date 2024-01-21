@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping
 @Controller
 class FailingController {
 
-    @GetMapping("/fail")
+    @GetMapping("/test/fail")
     fun fail() {
         error("Test error handling")
     }

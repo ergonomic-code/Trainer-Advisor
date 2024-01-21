@@ -32,9 +32,17 @@ class WebSecurityConfig(
             .csrf { it.disable() }
             .authorizeHttpRequests { requests ->
                 requests
+                    // Therapist
                     .requestMatchers("/therapist/**").hasAnyAuthority(Role.ROLE_THERAPIST.toString())
-                    .requestMatchers("/**").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/styles/**", "/img/**", "/js/**").permitAll()
+
+                    // Public
+                    .requestMatchers(HttpMethod.GET, "/", "/register", "/styles/**", "/img/**", "/js/**", "/test/*")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.POST, "/login", "/register", "/error-p").permitAll()
+                    .requestMatchers("/error").permitAll()
+
+                    .requestMatchers("/**").denyAll()
+
                     .anyRequest().authenticated()
             }
             .formLogin { form: FormLoginConfigurer<HttpSecurity?> ->
