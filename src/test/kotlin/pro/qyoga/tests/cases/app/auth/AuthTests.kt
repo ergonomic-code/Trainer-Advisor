@@ -2,14 +2,20 @@ package pro.qyoga.tests.cases.app.auth
 
 import io.restassured.http.Cookie
 import io.restassured.matcher.RestAssuredMatchers.detailedCookie
+import io.restassured.module.kotlin.extensions.Extract
+import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
+import io.restassured.module.kotlin.extensions.When
 import org.hamcrest.Matchers.greaterThanOrEqualTo
+import org.jsoup.Jsoup
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import pro.qyoga.tests.assertions.shouldBe
+import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.clients.PublicClient
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.clients.pages.publc.LoginPage
+import pro.qyoga.tests.clients.pages.therapist.clients.ClientsListPage
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_LOGIN
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_PASSWORD
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
@@ -48,6 +54,20 @@ class AuthTests : QYogaAppIntegrationBaseTest() {
                 detailedCookie()
                     .expiryDate(greaterThanOrEqualTo(Date(now.plus(9, ChronoUnit.DAYS).toEpochMilli())))
             )
+        }
+    }
+
+    @Test
+    fun `TA should allow access with credentials provided via basic authentication`() {
+        Given {
+            auth().preemptive().basic(THE_THERAPIST_LOGIN, THE_THERAPIST_PASSWORD)
+        } When {
+            get(ClientsListPage.path)
+        } Then {
+            statusCode(HttpStatus.OK.value())
+        } Extract {
+            val document = Jsoup.parse(body().asString())
+            document shouldBePage ClientsListPage
         }
     }
 
