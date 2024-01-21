@@ -14,3 +14,7 @@ spring:
       file: ./deploy/qyoga/docker-compose-infra-dev.yml
       enabled: true
       lifecycle-management: start_only
+
+logging:
+  level:
+    org.springframework.jdbc.core.JdbcTemplate: TRACE
