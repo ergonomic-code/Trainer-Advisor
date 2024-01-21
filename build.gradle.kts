@@ -7,6 +7,7 @@ plugins {
 	kotlin("plugin.spring") version "1.9.21"
 	id("org.jetbrains.kotlinx.kover") version "0.6.1"
 	id("java-test-fixtures")
+	id("com.gorylenko.gradle-git-properties") version "2.4.1"
 }
 
 group = "pro.qyoga"

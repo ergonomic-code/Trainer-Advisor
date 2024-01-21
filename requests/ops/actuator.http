@@ -1,18 +1,21 @@
 ### Actuator discover
-GET {{ servie }} /ops/actuator
+GET {{ service }} /ops/actuator
 Authorization: Basic admin@ta.pro password
 
 ### Actuator env
-GET {{ servie }} /ops/actuator/env
+GET {{ service }} /ops/actuator/env
 Authorization: Basic admin@ta.pro password
 
 ### Actuator get logger info
-GET {{ servie }} /ops/actuator/loggers/org.springframework.jdbc.core.JdbcTemplate
+GET {{ service }} /ops/actuator/loggers/org.springframework.jdbc.core.JdbcTemplate
 Authorization: Basic admin@ta.pro password
 
+### Actuator info
+GET {{ service }} /ops/actuator/info
+Authorization: Basic admin@ta.pro password
 
 ### Actuator set logger level
-POST {{ servie }} /ops/actuator/loggers/org.springframework.jdbc.core.JdbcTemplate
+POST {{ service }} /ops/actuator/loggers/org.springframework.jdbc.core.JdbcTemplate
 Content-Type: application/json; charset=utf-8
 Authorization: Basic admin@ta.pro password
 
