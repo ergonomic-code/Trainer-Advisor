@@ -3,6 +3,7 @@ package pro.qyoga.platform.file_storage.internal
 import io.minio.*
 import io.minio.messages.DeleteObject
 import jakarta.annotation.PostConstruct
+import org.slf4j.LoggerFactory
 import org.springframework.data.repository.findByIdOrNull
 import pro.qyoga.platform.file_storage.api.FileMetaData
 import pro.qyoga.platform.file_storage.api.FilesStorage
@@ -14,6 +15,8 @@ open class MinioFilesStorage(
     private val minioClient: MinioClient,
     private val bucket: String
 ) : FilesStorage {
+
+    private val log = LoggerFactory.getLogger(javaClass)
 
     @PostConstruct
     fun init() {
@@ -53,6 +56,7 @@ open class MinioFilesStorage(
     }
 
     override fun deleteAllById(fileIds: List<Long>) {
+        log.info("Deleting files by ids: $fileIds in bucket $bucket")
         filesMetaDataRepo.deleteAllById(fileIds)
 
         val objects = fileIds.map { DeleteObject(it.toString()) }
@@ -60,7 +64,9 @@ open class MinioFilesStorage(
             .bucket(bucket)
             .objects(objects)
             .build()
+
         minioClient.removeObjects(removeCommand)
+        log.info("Files deleted")
     }
 
 }
