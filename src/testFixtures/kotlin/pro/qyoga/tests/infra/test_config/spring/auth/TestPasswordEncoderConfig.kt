@@ -4,16 +4,13 @@ package pro.qyoga.tests.infra.test_config.spring.auth
 
 import org.springframework.boot.test.context.TestConfiguration
 import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Import
 import org.springframework.context.annotation.Primary
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.password.NoOpPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
-import pro.qyoga.core.users.UsersConfig
 
 
-@Import(UsersConfig::class)
 @TestConfiguration
 class TestPasswordEncoderConfig(
     private val userDetailsService: UserDetailsService

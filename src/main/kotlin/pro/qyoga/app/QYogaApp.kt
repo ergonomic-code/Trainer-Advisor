@@ -1,28 +1,41 @@
 package pro.qyoga.app
 
+import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
-import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import pro.qyoga.app.common.WebAppsCommonConfig
 import pro.qyoga.app.publc.PublicAppConfig
 import pro.qyoga.app.therapist.TherapistWebAppConfig
+import pro.qyoga.core.clients.ClientsConfig
+import pro.qyoga.core.therapy.TherapyConfig
 import pro.qyoga.core.users.UsersConfig
+import pro.qyoga.infra.auth.AuthConfig
 import pro.qyoga.infra.db.SdjConfig
+import pro.qyoga.infra.email.EmailsConfig
 import pro.qyoga.infra.minio.MinioConfig
 import pro.qyoga.infra.web.WebConfig
+import pro.qyoga.platform.file_storage.FilesStorageConfig
 
 @Import(
+    // Apps
     WebAppsCommonConfig::class,
     PublicAppConfig::class,
     TherapistWebAppConfig::class,
 
+    // Core
+    ClientsConfig::class,
+    TherapyConfig::class,
     UsersConfig::class,
 
+    // Infra
+    AuthConfig::class,
     WebConfig::class,
     SdjConfig::class,
-    MinioConfig::class
+    MinioConfig::class,
+    FilesStorageConfig::class,
+    EmailsConfig::class
 )
-@Configuration
+@SpringBootApplication
 class QYogaApp
 
 fun main(args: Array<String>) {
