@@ -15,6 +15,12 @@ spring:
       enabled: true
       lifecycle-management: start_only
 
+management:
+  health:
+    mail:
+      # При локальной разработке подключение к почтовому серверу не настроено
+      enabled: false
+
 logging:
   level:
     org.springframework.jdbc.core.JdbcTemplate: TRACE

@@ -31,6 +31,9 @@ class WebSecurityConfig(
                     // Therapist
                     .requestMatchers("/therapist/**").hasAnyAuthority(Role.ROLE_THERAPIST.toString())
 
+                    // Ops
+                    .requestMatchers("/ops/**").hasAuthority(Role.ROLE_ADMIN.toString())
+
                     // Public
                     .requestMatchers(HttpMethod.GET, "/", "/register", "/styles/**", "/img/**", "/js/**", "/test/*")
                     .permitAll()

@@ -41,6 +41,10 @@ server {
     ssl_prefer_server_ciphers on;
     ssl_session_cache shared:SSL:10m;
 
+    location /ops {
+      return 404;
+    }
+
     location / {
        if ($request_method = 'OPTIONS') {
           add_header 'Access-Control-Allow-Origin' '$header_origin';
