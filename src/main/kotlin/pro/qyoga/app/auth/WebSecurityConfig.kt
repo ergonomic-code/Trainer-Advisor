@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Import
 import org.springframework.http.HttpMethod
+import org.springframework.security.config.Customizer.withDefaults
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer
@@ -43,6 +44,7 @@ class WebSecurityConfig(
                     .failureForwardUrl("/error-p")
                     .permitAll()
             }
+            .httpBasic(withDefaults())
             .logout { logout: LogoutConfigurer<HttpSecurity?> -> logout.permitAll() }
             .rememberMe { rememberMeConfigurer ->
                 rememberMeConfigurer
