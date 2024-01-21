@@ -1,7 +1,8 @@
 package pro.qyoga.tests.infra.db
 
+import com.zaxxer.hikari.HikariConfig
+import com.zaxxer.hikari.HikariDataSource
 import org.flywaydb.core.Flyway
-import org.postgresql.ds.PGSimpleDataSource
 import org.slf4j.LoggerFactory
 import java.sql.DriverManager
 import java.sql.SQLException
@@ -40,11 +41,12 @@ val jdbcUrl: String by lazy {
 
 val testDataSource by lazy {
     migrateSchema(jdbcUrl)
-    PGSimpleDataSource().apply {
-        this.setUrl(jdbcUrl)
-        this.user = DB_USER
+    val config = HikariConfig().apply {
+        this.jdbcUrl = pro.qyoga.tests.infra.db.jdbcUrl
+        this.username = DB_USER
         this.password = DB_PASSWORD
     }
+    HikariDataSource(config)
 }
 
 fun migrateSchema(jdbcUrl: String) {

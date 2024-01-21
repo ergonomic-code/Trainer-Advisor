@@ -5,12 +5,9 @@ VALUES ('Разминка для шеи', '', '00:10:00', 'WARM_UP', 2, now(), 1
        ('Укрепление глубоких сгибателей шеи', '', '00:04:00', 'STRENGTHENING', 2, now(), 1),
        ('Тракция и расслабление шеи в шавасане', '', '00:15:00', 'TRACTION', 2, now(), 1);
 
-WITH exercise_id as
-         (SELECT id
-          FROM exercises)
 INSERT
 INTO exercise_steps(exercise_id, step_index, description)
-VALUES ((SELECT id FROM exercises WHERE title LIKE 'Р%'),
+VALUES ((SELECT id FROM exercises WHERE title LIKE 'Разминка для шеи'),
         0,
         'Встаньте ровно, прижмите пятки к полу, потянитесь макушкой к потолку, почувствуйте как вытягивается позвоночник.'),
        ((SELECT id FROM exercises WHERE title LIKE 'Р%'),
