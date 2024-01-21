@@ -25,6 +25,22 @@ spring:
           starttls:
             enable: true
 
+management:
+  endpoints:
+    web:
+      base-path: /ops/actuator
+
+      exposure:
+        include: configprops,loggers,env
+
+  endpoint:
+    configprops:
+      show-values: when_authorized
+      enabled: true
+    env:
+      enabled: true
+      show-values: when_authorized
+
 server:
   tomcat:
     remoteip:

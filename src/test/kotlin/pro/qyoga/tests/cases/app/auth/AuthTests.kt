@@ -1,5 +1,8 @@
 package pro.qyoga.tests.cases.app.auth
 
+import com.fasterxml.jackson.databind.JsonNode
+import io.kotest.matchers.shouldNotBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import io.restassured.http.Cookie
 import io.restassured.matcher.RestAssuredMatchers.detailedCookie
 import io.restassured.module.kotlin.extensions.Extract
@@ -12,10 +15,14 @@ import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.assertions.shouldBePage
+import pro.qyoga.tests.clients.OpsClient
 import pro.qyoga.tests.clients.PublicClient
 import pro.qyoga.tests.clients.TherapistClient
+import pro.qyoga.tests.clients.actuatorPath
 import pro.qyoga.tests.clients.pages.publc.LoginPage
 import pro.qyoga.tests.clients.pages.therapist.clients.ClientsListPage
+import pro.qyoga.tests.fixture.therapists.THE_ADMIN_LOGIN
+import pro.qyoga.tests.fixture.therapists.THE_ADMIN_PASSWORD
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_LOGIN
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_PASSWORD
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
@@ -84,6 +91,47 @@ class AuthTests : QYogaAppIntegrationBaseTest() {
             val document = Jsoup.parse(body().asString())
             document shouldBePage LoginPage
         }
+    }
+
+    @Test
+    fun `TA should prohibit access to actuator without authentication`() {
+        Given {
+            // no auth
+            this
+        } When {
+            get(actuatorPath)
+        } Then {
+            statusCode(HttpStatus.OK.value())
+        } Extract {
+            val document = Jsoup.parse(body().asString())
+            document shouldBePage LoginPage
+        }
+    }
+
+    @Test
+    fun `TA should prohibit access to actuator with therapist credentials`() {
+        Given {
+            auth()
+                .preemptive()
+                .basic(THE_THERAPIST_LOGIN, THE_THERAPIST_LOGIN)
+        } When {
+            get(actuatorPath)
+        } Then {
+            statusCode(HttpStatus.UNAUTHORIZED.value())
+        }
+    }
+
+    @Test
+    fun `TA should allow access to actuator with admin credentials`() {
+        // Given
+        val admin = OpsClient(THE_ADMIN_LOGIN, THE_ADMIN_PASSWORD)
+
+        // When
+        val resp = admin.getActuatorEntryPoint()
+
+        // Then
+        resp shouldNotBe null
+        resp!!["_links"]["env"].shouldBeInstanceOf<JsonNode>()
     }
 
 }
