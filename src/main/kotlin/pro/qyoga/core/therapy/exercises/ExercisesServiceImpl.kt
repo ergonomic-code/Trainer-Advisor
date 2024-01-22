@@ -10,8 +10,6 @@ import org.springframework.transaction.support.TransactionTemplate
 import pro.qyoga.core.therapy.exercises.dtos.CreateExerciseRequest
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSearchDto
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
-import pro.qyoga.core.therapy.exercises.errors.ExerciseNotFound
-import pro.qyoga.core.therapy.exercises.errors.ExerciseStepNotFound
 import pro.qyoga.core.therapy.exercises.impl.ExercisesRepo
 import pro.qyoga.core.therapy.exercises.model.Exercise
 import pro.qyoga.platform.file_storage.api.FileMetaData
@@ -73,10 +71,10 @@ class ExercisesService(
 
     fun getStepImage(exerciseId: Long, stepIdx: Int): StoredFileInputStream? {
         val exercise = exercisesRepo.findByIdOrNull(exerciseId)
-            ?: throw ExerciseNotFound(exerciseId)
+            ?: return null
 
         if (stepIdx >= exercise.steps.size) {
-            throw ExerciseStepNotFound(exerciseId, stepIdx, exercise.steps.size)
+            return null
         }
 
         val imageId = exercise.steps[stepIdx].imageId
@@ -88,9 +86,14 @@ class ExercisesService(
     fun deleteById(exerciseId: Long) {
         val exercise = transaction {
             val exercise = findById(exerciseId)
-                ?: throw ExerciseNotFound(exerciseId)
+                ?: return@transaction null
+
             exercisesRepo.deleteById(exercise.id)
-            exercise
+            return@transaction exercise
+        }
+
+        if (exercise == null) {
+            return
         }
 
         try {

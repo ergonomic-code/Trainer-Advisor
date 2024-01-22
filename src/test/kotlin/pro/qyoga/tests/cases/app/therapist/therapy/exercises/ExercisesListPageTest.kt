@@ -8,10 +8,8 @@ import org.springframework.http.HttpStatus
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSearchDto
 import pro.qyoga.core.therapy.exercises.model.ExerciseType
 import pro.qyoga.tests.assertions.shouldBe
-import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.clients.TherapistClient
-import pro.qyoga.tests.clients.pages.publc.NotFoundErrorPage
 import pro.qyoga.tests.clients.pages.therapist.therapy.exercises.ExercisesListPage
 import pro.qyoga.tests.fixture.backgrounds.exercises.AllSteps
 import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother.createExerciseRequest
@@ -96,15 +94,15 @@ class ExercisesListPageTest : QYogaAppIntegrationBaseTest() {
 
 
     @Test
-    fun `On request of deletion of not existing exercise 404 error page should be returned`() {
+    fun `On request of deletion of not existing exercise 200 status code should be returned`() {
         // Given
         val therapist = TherapistClient.loginAsTheTherapist()
 
         // When
-        val response = therapist.exercises.deleteExercise(-1, HttpStatus.NOT_FOUND)
+        val response = therapist.exercises.deleteExercise(-1, HttpStatus.OK)
 
         // Then
-        response shouldBePage NotFoundErrorPage
+        response shouldBe byteArrayOf()
     }
 
 }
