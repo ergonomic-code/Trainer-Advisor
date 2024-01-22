@@ -7,11 +7,9 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
-import pro.qyoga.app.common.notFound
 import pro.qyoga.core.therapy.exercises.ExercisesService
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSearchDto
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
-import pro.qyoga.core.therapy.exercises.errors.ExerciseNotFound
 import pro.qyoga.core.therapy.exercises.model.ExerciseType
 
 private const val EXERCISES = "exercises"
@@ -48,18 +46,7 @@ class ExercisesListPageController(
     fun deleteExercise(
         @PathVariable exerciseId: Long
     ): Any {
-        val result = runCatching {
-            exercisesService.deleteById(exerciseId)
-        }
-
-        when (result.exceptionOrNull()) {
-            is ExerciseNotFound ->
-                return notFound
-
-            else ->
-                result.getOrThrow()
-        }
-
+        exercisesService.deleteById(exerciseId)
         return ResponseEntity.ok(null)
     }
 

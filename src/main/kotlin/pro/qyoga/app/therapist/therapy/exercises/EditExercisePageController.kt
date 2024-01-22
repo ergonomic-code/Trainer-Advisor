@@ -8,8 +8,6 @@ import pro.qyoga.app.common.ResponseEntityExt
 import pro.qyoga.app.common.notFound
 import pro.qyoga.core.therapy.exercises.ExercisesService
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
-import pro.qyoga.core.therapy.exercises.errors.ExerciseNotFound
-import pro.qyoga.core.therapy.exercises.errors.ExerciseStepNotFound
 import pro.qyoga.platform.spring.http.hxRedirect
 import pro.qyoga.platform.spring.mvc.modelAndView
 
@@ -45,17 +43,8 @@ class EditExercisePageController(
         @PathVariable exerciseId: Long,
         @PathVariable stepIdx: Int
     ): Any {
-        val res = runCatching {
-            exercisesService.getStepImage(exerciseId, stepIdx)
-        }
-
-        val imageStream = when (res.exceptionOrNull()) {
-            is ExerciseNotFound, is ExerciseStepNotFound ->
-                return notFound
-
-            else ->
-                res.getOrThrow()!!
-        }
+        val imageStream = exercisesService.getStepImage(exerciseId, stepIdx)
+            ?: return notFound
 
         return ResponseEntityExt.ok(imageStream)
     }
