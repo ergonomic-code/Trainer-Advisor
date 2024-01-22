@@ -15,7 +15,7 @@ class UserDetailsServiceImpl(
 ) : UserDetailsService {
 
     override fun loadUserByUsername(username: String): UserDetails {
-        val user = usersRepo.findByUsername(username)
+        val user = usersRepo.findByEmail(username)
             ?: throw BadCredentialsException("Cannot find user by $username")
         return QyogaUserDetails.of(user)
     }

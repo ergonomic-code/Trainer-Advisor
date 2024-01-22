@@ -6,6 +6,7 @@ import io.kotest.matchers.shouldNotBe
 import io.restassured.module.kotlin.extensions.Extract
 import io.restassured.module.kotlin.extensions.Then
 import org.jsoup.Jsoup
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.springframework.http.ContentDisposition
 import org.springframework.http.HttpStatus
@@ -20,10 +21,11 @@ import pro.qyoga.tests.clients.pages.therapist.clients.files.ClientFilesPage
 import pro.qyoga.tests.fixture.FilesObjectMother
 import pro.qyoga.tests.fixture.backgrounds.exercises.AllSteps
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
+import pro.qyoga.tests.infra.junit.SLOW_TEST
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 
 
-class ClientFilesListPageTest : QYogaAppIntegrationBaseTest() {
+class ClientFilesPageTest : QYogaAppIntegrationBaseTest() {
 
     @Test
     fun `Request of client files page for not existing client should return 404`() {
@@ -164,6 +166,7 @@ class ClientFilesListPageTest : QYogaAppIntegrationBaseTest() {
 
     }
 
+    @Tag(SLOW_TEST)
     @Test
     fun `Uploading of file of 10 MB should complete successfully`() {
         // Given
@@ -179,6 +182,7 @@ class ClientFilesListPageTest : QYogaAppIntegrationBaseTest() {
         document shouldBeElement ClientFilesPage.rowFor(persistedFile.fileRef.resolveOrThrow())
     }
 
+    @Tag(SLOW_TEST)
     @Test
     fun `Uploading of file of 10 MB + 1 byte should fail with 413 status code`() {
         // Given
