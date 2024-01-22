@@ -1,4 +1,4 @@
-package pro.qyoga.core.therapy.exercises.internal
+package pro.qyoga.core.therapy.exercises.impl
 
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -8,9 +8,9 @@ import org.springframework.data.jdbc.core.convert.JdbcConverter
 import org.springframework.data.mapping.model.BasicPersistentEntity
 import org.springframework.data.util.TypeInformation
 import org.springframework.stereotype.Repository
-import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSearchDto
-import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSummaryDto
-import pro.qyoga.core.therapy.exercises.api.model.Exercise
+import pro.qyoga.core.therapy.exercises.dtos.ExerciseSearchDto
+import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
+import pro.qyoga.core.therapy.exercises.model.Exercise
 import pro.qyoga.platform.spring.sdj.erpo.ErgoRepository
 import pro.qyoga.platform.spring.sdj.sortBy
 

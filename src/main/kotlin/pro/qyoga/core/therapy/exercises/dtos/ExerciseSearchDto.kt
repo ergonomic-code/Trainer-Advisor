@@ -1,6 +1,6 @@
-package pro.qyoga.core.therapy.exercises.api.dtos
+package pro.qyoga.core.therapy.exercises.dtos
 
-import pro.qyoga.core.therapy.exercises.api.model.ExerciseType
+import pro.qyoga.core.therapy.exercises.model.ExerciseType
 
 data class ExerciseSearchDto(
     val title: String? = null,

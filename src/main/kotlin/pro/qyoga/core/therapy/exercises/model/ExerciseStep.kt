@@ -1,4 +1,4 @@
-package pro.qyoga.core.therapy.exercises.api.model
+package pro.qyoga.core.therapy.exercises.model
 
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.Table

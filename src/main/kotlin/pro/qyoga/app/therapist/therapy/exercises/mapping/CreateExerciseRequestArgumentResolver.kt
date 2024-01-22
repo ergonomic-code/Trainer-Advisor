@@ -6,10 +6,10 @@ import org.springframework.web.bind.support.WebDataBinderFactory
 import org.springframework.web.context.request.NativeWebRequest
 import org.springframework.web.method.support.HandlerMethodArgumentResolver
 import org.springframework.web.method.support.ModelAndViewContainer
-import pro.qyoga.core.therapy.exercises.api.dtos.CreateExerciseRequest
-import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSummaryDto
-import pro.qyoga.core.therapy.exercises.api.model.ExerciseStep
-import pro.qyoga.core.therapy.exercises.api.model.ExerciseType
+import pro.qyoga.core.therapy.exercises.dtos.CreateExerciseRequest
+import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
+import pro.qyoga.core.therapy.exercises.model.ExerciseStep
+import pro.qyoga.core.therapy.exercises.model.ExerciseType
 import pro.qyoga.platform.java.time.toDurationMinutes
 
 

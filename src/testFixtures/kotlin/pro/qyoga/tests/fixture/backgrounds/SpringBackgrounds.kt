@@ -3,9 +3,8 @@ package pro.qyoga.tests.fixture.backgrounds
 import org.springframework.beans.factory.support.GenericBeanDefinition
 import org.springframework.context.support.GenericApplicationContext
 import org.springframework.stereotype.Component
-import pro.qyoga.core.therapy.exercises.api.ExercisesService
-import pro.qyoga.core.therapy.exercises.internal.ExercisesRepo
-import pro.qyoga.core.therapy.exercises.internal.ExercisesServiceImpl
+import pro.qyoga.core.therapy.exercises.ExercisesService
+import pro.qyoga.core.therapy.exercises.impl.ExercisesRepo
 import pro.qyoga.platform.file_storage.api.FilesStorage
 import pro.qyoga.tests.platform.spring.context.getBean
 import java.util.concurrent.ConcurrentHashMap
@@ -27,7 +26,7 @@ class SpringBackgrounds(
             val bd = GenericBeanDefinition().apply {
                 setBeanClass(ExercisesService::class.java)
                 setInstanceSupplier {
-                    ExercisesServiceImpl(
+                    ExercisesService(
                         exercisesRepo ?: context.getBean(),
                         exerciseStepsImagesStorage ?: context.getBean(
                             "exerciseStepsImagesStorage",

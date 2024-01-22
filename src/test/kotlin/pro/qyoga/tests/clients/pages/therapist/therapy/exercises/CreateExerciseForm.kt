@@ -2,7 +2,7 @@ package pro.qyoga.tests.clients.pages.therapist.therapy.exercises
 
 import io.kotest.matchers.shouldBe
 import org.jsoup.nodes.Element
-import pro.qyoga.core.therapy.exercises.api.model.Exercise
+import pro.qyoga.core.therapy.exercises.model.Exercise
 import pro.qyoga.platform.java.time.toDecimalMinutes
 import pro.qyoga.tests.assertions.PageMatcher
 import pro.qyoga.tests.assertions.shouldBeElement

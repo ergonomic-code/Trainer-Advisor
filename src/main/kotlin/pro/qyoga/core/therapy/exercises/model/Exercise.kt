@@ -1,4 +1,4 @@
-package pro.qyoga.core.therapy.exercises.api.model
+package pro.qyoga.core.therapy.exercises.model
 
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
@@ -7,8 +7,8 @@ import org.springframework.data.annotation.Version
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
-import pro.qyoga.core.therapy.exercises.api.dtos.CreateExerciseRequest
-import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSummaryDto
+import pro.qyoga.core.therapy.exercises.dtos.CreateExerciseRequest
+import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
 import java.time.Duration
 import java.time.Instant
 
