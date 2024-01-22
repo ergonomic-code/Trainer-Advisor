@@ -3,20 +3,19 @@ package pro.qyoga.core.users.internal
 import org.springframework.dao.DuplicateKeyException
 import org.springframework.data.jdbc.core.JdbcAggregateTemplate
 import org.springframework.data.jdbc.core.convert.JdbcConverter
-import org.springframework.data.jdbc.repository.support.SimpleJdbcRepository
 import org.springframework.data.mapping.model.BasicPersistentEntity
 import org.springframework.data.relational.core.conversion.DbActionExecutionException
 import org.springframework.data.util.TypeInformation
 import org.springframework.stereotype.Repository
 import pro.qyoga.core.users.api.User
-import pro.qyoga.platform.spring.sdj.query.query
+import pro.qyoga.platform.spring.sdj.erpo.ErgoRepository
 
 
 @Repository
 class UsersRepo(
-    private val jdbcAggregateTemplate: JdbcAggregateTemplate,
+    override val jdbcAggregateTemplate: JdbcAggregateTemplate,
     jdbcConverter: JdbcConverter
-) : SimpleJdbcRepository<User, Long>(
+) : ErgoRepository<User, Long>(
     jdbcAggregateTemplate,
     BasicPersistentEntity(TypeInformation.of(User::class.java)),
     jdbcConverter
@@ -35,11 +34,10 @@ class UsersRepo(
         }
     }
 
-    fun findByUsername(username: String): User? {
-        val query = query {
-            User::email isEqual username
+    fun findByEmail(email: String): User? {
+        return findOne {
+            User::email isEqual email
         }
-        return jdbcAggregateTemplate.findOne(query, User::class.java).orElse(null)
     }
 
 }
