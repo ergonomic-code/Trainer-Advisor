@@ -98,7 +98,7 @@
                 </div>
 
                 <div id="tabContent"
-                     th:insert="@{'therapist/clients/client-' + ${activeTab.name.toLowerCase()} + '-fragment.html'}"></div>
+                     th:insert="~{'therapist/clients/client-' + ${activeTab.name.toLowerCase()} + '-fragment.html'}"></div>
             </section>
         </main>
         <footer th:insert="~{fragments/footer.html :: footer}"></footer>
