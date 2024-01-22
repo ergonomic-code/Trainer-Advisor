@@ -8,9 +8,9 @@ import io.restassured.module.kotlin.extensions.When
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
-import pro.qyoga.core.therapy.exercises.api.dtos.CreateExerciseRequest
-import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSearchDto
-import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSummaryDto
+import pro.qyoga.core.therapy.exercises.dtos.CreateExerciseRequest
+import pro.qyoga.core.therapy.exercises.dtos.ExerciseSearchDto
+import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
 import pro.qyoga.platform.file_storage.api.StoredFile
 import pro.qyoga.platform.java.time.toDecimalMinutes
 import pro.qyoga.tests.clients.pages.therapist.therapy.exercises.*

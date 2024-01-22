@@ -9,7 +9,7 @@ import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.mock
 import org.springframework.jdbc.CannotGetJdbcConnectionException
-import pro.qyoga.core.therapy.exercises.internal.ExercisesRepo
+import pro.qyoga.core.therapy.exercises.impl.ExercisesRepo
 import pro.qyoga.platform.file_storage.api.FilesStorage
 import pro.qyoga.tests.fixture.backgrounds.exercises.AllSteps
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest

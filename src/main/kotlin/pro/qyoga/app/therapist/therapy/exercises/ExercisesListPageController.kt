@@ -8,11 +8,11 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import pro.qyoga.app.common.notFound
-import pro.qyoga.core.therapy.exercises.api.ExercisesService
-import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSearchDto
-import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSummaryDto
-import pro.qyoga.core.therapy.exercises.api.errors.ExerciseNotFound
-import pro.qyoga.core.therapy.exercises.api.model.ExerciseType
+import pro.qyoga.core.therapy.exercises.ExercisesService
+import pro.qyoga.core.therapy.exercises.dtos.ExerciseSearchDto
+import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
+import pro.qyoga.core.therapy.exercises.errors.ExerciseNotFound
+import pro.qyoga.core.therapy.exercises.model.ExerciseType
 
 private const val EXERCISES = "exercises"
 

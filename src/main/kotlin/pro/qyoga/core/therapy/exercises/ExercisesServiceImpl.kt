@@ -1,4 +1,4 @@
-package pro.qyoga.core.therapy.exercises.internal
+package pro.qyoga.core.therapy.exercises
 
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.Page
@@ -7,13 +7,13 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.transaction.support.TransactionTemplate
-import pro.qyoga.core.therapy.exercises.api.ExercisesService
-import pro.qyoga.core.therapy.exercises.api.dtos.CreateExerciseRequest
-import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSearchDto
-import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSummaryDto
-import pro.qyoga.core.therapy.exercises.api.errors.ExerciseNotFound
-import pro.qyoga.core.therapy.exercises.api.errors.ExerciseStepNotFound
-import pro.qyoga.core.therapy.exercises.api.model.Exercise
+import pro.qyoga.core.therapy.exercises.dtos.CreateExerciseRequest
+import pro.qyoga.core.therapy.exercises.dtos.ExerciseSearchDto
+import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
+import pro.qyoga.core.therapy.exercises.errors.ExerciseNotFound
+import pro.qyoga.core.therapy.exercises.errors.ExerciseStepNotFound
+import pro.qyoga.core.therapy.exercises.impl.ExercisesRepo
+import pro.qyoga.core.therapy.exercises.model.Exercise
 import pro.qyoga.platform.file_storage.api.FileMetaData
 import pro.qyoga.platform.file_storage.api.FilesStorage
 import pro.qyoga.platform.file_storage.api.StoredFile
@@ -23,16 +23,16 @@ import pro.qyoga.platform.spring.tx.TransactionalService
 
 
 @Service
-class ExercisesServiceImpl(
+class ExercisesService(
     private val exercisesRepo: ExercisesRepo,
     private val exerciseStepsImagesStorage: FilesStorage,
     override val transactionTemplate: TransactionTemplate
-) : ExercisesService, TransactionalService {
+) : TransactionalService {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
     @Transactional
-    override fun addExercise(
+    fun addExercise(
         createExerciseRequest: CreateExerciseRequest,
         stepImages: Map<Int, StoredFile>,
         therapistId: Long
@@ -45,21 +45,21 @@ class ExercisesServiceImpl(
         return exercisesRepo.save(exercise)
     }
 
-    override fun findById(exerciseId: Long): Exercise? =
+    fun findById(exerciseId: Long): Exercise? =
         exercisesRepo.findByIdOrNull(exerciseId)
 
-    override fun findExerciseSummaries(searchDto: ExerciseSearchDto, page: Pageable): Page<ExerciseSummaryDto> {
+    fun findExerciseSummaries(searchDto: ExerciseSearchDto, page: Pageable): Page<ExerciseSummaryDto> {
         return exercisesRepo.findExerciseSummaries(searchDto, page)
     }
 
-    override fun updateExercise(exerciseId: Long, exerciseSummaryDto: ExerciseSummaryDto) {
+    fun updateExercise(exerciseId: Long, exerciseSummaryDto: ExerciseSummaryDto) {
         exercisesRepo.update(exerciseId) {
             it.patchBy(exerciseSummaryDto)
         }
     }
 
     @Transactional
-    override fun addExercises(
+    fun addExercises(
         createExerciseRequests: List<Pair<CreateExerciseRequest, Map<Int, StoredFile>>>,
         therapistId: Long
     ): Iterable<Exercise> {
@@ -71,7 +71,7 @@ class ExercisesServiceImpl(
         return exercisesRepo.saveAll(exercises)
     }
 
-    override fun getStepImage(exerciseId: Long, stepIdx: Int): StoredFileInputStream? {
+    fun getStepImage(exerciseId: Long, stepIdx: Int): StoredFileInputStream? {
         val exercise = exercisesRepo.findByIdOrNull(exerciseId)
             ?: throw ExerciseNotFound(exerciseId)
 
@@ -85,7 +85,7 @@ class ExercisesServiceImpl(
         return exerciseStepsImagesStorage.findByIdOrNull(imageId.id!!)
     }
 
-    override fun deleteById(exerciseId: Long) {
+    fun deleteById(exerciseId: Long) {
         val exercise = transaction {
             val exercise = findById(exerciseId)
                 ?: throw ExerciseNotFound(exerciseId)

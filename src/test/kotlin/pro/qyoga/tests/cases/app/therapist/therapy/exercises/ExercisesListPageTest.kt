@@ -5,8 +5,8 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
-import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSearchDto
-import pro.qyoga.core.therapy.exercises.api.model.ExerciseType
+import pro.qyoga.core.therapy.exercises.dtos.ExerciseSearchDto
+import pro.qyoga.core.therapy.exercises.model.ExerciseType
 import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.assertions.shouldHave

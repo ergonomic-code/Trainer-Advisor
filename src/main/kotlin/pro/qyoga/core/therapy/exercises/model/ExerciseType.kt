@@ -1,4 +1,4 @@
-package pro.qyoga.core.therapy.exercises.api.model
+package pro.qyoga.core.therapy.exercises.model
 
 import pro.qyoga.platform.kotlin.LabeledEnum
 

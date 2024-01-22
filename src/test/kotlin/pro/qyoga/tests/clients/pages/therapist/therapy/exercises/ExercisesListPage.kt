@@ -6,8 +6,8 @@ import io.kotest.matchers.string.shouldMatch
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
-import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSummaryDto
-import pro.qyoga.core.therapy.exercises.api.model.ExerciseType
+import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
+import pro.qyoga.core.therapy.exercises.model.ExerciseType
 import pro.qyoga.tests.assertions.PageMatcher
 import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.infra.html.*

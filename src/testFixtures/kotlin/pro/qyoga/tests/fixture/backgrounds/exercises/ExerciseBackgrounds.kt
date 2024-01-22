@@ -4,11 +4,11 @@ import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Component
 import org.springframework.ui.ExtendedModelMap
 import pro.qyoga.app.therapist.therapy.exercises.ExercisesListPageController
-import pro.qyoga.core.therapy.exercises.api.ExercisesService
-import pro.qyoga.core.therapy.exercises.api.dtos.CreateExerciseRequest
-import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSearchDto
-import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSummaryDto
-import pro.qyoga.core.therapy.exercises.api.model.Exercise
+import pro.qyoga.core.therapy.exercises.ExercisesService
+import pro.qyoga.core.therapy.exercises.dtos.CreateExerciseRequest
+import pro.qyoga.core.therapy.exercises.dtos.ExerciseSearchDto
+import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
+import pro.qyoga.core.therapy.exercises.model.Exercise
 import pro.qyoga.platform.file_storage.api.StoredFile
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
 import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother

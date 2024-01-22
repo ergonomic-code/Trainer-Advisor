@@ -3,11 +3,11 @@ package pro.qyoga.tests.fixture.therapy.exercises
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.web.multipart.MultipartFile
 import pro.qyoga.app.therapist.therapy.exercises.toStepIdx
-import pro.qyoga.core.therapy.exercises.api.dtos.CreateExerciseRequest
-import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSearchDto
-import pro.qyoga.core.therapy.exercises.api.dtos.ExerciseSummaryDto
-import pro.qyoga.core.therapy.exercises.api.model.ExerciseStep
-import pro.qyoga.core.therapy.exercises.api.model.ExerciseType
+import pro.qyoga.core.therapy.exercises.dtos.CreateExerciseRequest
+import pro.qyoga.core.therapy.exercises.dtos.ExerciseSearchDto
+import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
+import pro.qyoga.core.therapy.exercises.model.ExerciseStep
+import pro.qyoga.core.therapy.exercises.model.ExerciseType
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
 import pro.qyoga.tests.fixture.data.randomListIndexed
 import pro.qyoga.tests.fixture.data.randomMinutesDuration
