@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div th:replace="~{fragments/header.html}"></div>
+    <title>Новая программа</title>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+<body class="sb-nav-fixed">
+
+<div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
+
+<div id="layoutSidenav">
+
+    <div th:replace="~{fragments/leftNavPanel.html :: leftNavPanel (activeLink='programs')}"></div>
+
+    <div id="layoutSidenav_content">
+        <main>
+            <section class="container px-4">
+                <h1 class="mt-4 pb-2 mb-3 border-bottom" th:text="${program?.title ?: 'Новая программа'}">
+                    Новая программа
+                </h1>
+
+                <script th:inline="javascript">
+                    let initialExercises =/*[[${exercises ?: new java.util.ArrayList()}]]*/ [];
+
+                    function createExercisesList() {
+                        return {
+                            exercises: initialExercises,
+
+                            remove(idx) {
+                                this.exercises.splice(idx, 1);
+                            },
+
+                            moveUp(idx) {
+                                let prevIdx = (idx > 0) ? idx - 1 : this.exercises.length - 1;
+                                let tmp = this.exercises[prevIdx];
+                                this.exercises[prevIdx] = this.exercises[idx];
+                                this.exercises[idx] = tmp;
+                            },
+
+                            moveDown(idx) {
+                                let nextIdx = (idx < this.exercises.length - 1) ? idx + 1 : 0;
+                                let tmp = this.exercises[nextIdx];
+                                this.exercises[nextIdx] = this.exercises[idx];
+                                this.exercises[idx] = tmp;
+                            },
+
+                            addExercise(exc) {
+                                this.exercises.push(exc);
+                            },
+
+                            totalDuration() {
+                                return this.exercises.length > 0 ? this.exercises.map(e => e.duration).reduce((a, b) => a + b) : 0;
+                            }
+                        }
+                    }
+
+                    function createExercisesSearch() {
+
+                        return {
+                            searchKey: null,
+
+                            showDroplist: false,
+
+                            show() {
+                                if (this.searchResult.length > 0) {
+                                    this.showDroplist = true
+                                }
+                            },
+
+                            hide() {
+                                this.showDroplist = false;
+                                console.log("hide")
+                                return true;
+                            },
+
+                            searchResult: [],
+
+                            async search() {
+                                if (this.searchKey.length === 0) {
+                                    return;
+                                }
+                                let response = await fetch(`/therapist/programs/create/search-exercises?searchKey=${encodeURIComponent(this.searchKey)}`);
+                                if (!response.ok) {
+                                    console.log(`Request failed: ${response.status} - ${response.statusText}`)
+                                    alert("При обработке вашего запроса приозошла ошибка, попробуйте позднее.")
+                                }
+                                let responseJson = await response.json();
+                                this.searchResult = responseJson.content.filter(fe => this.$data.exercises.find(e => e.id === fe.id) === undefined);
+                                this.show();
+                            },
+
+                            selectExercise(idx) {
+                                console.log("select")
+                                let el = this.searchResult.splice(idx, 1)[0];
+                                this.showDroplist = false;
+                                return el;
+                            }
+                        }
+
+                    }
+
+                </script>
+
+                <form class="mt-4"
+                      id="programForm"
+                      th:attr="hx-post=${program == null ? '/therapist/programs/create' : null},hx-put=${program != null ? '/therapist/programs/' + program.id : null}"
+                      x-data="createExercisesList()"
+                >
+
+                    <div class="mb-3">
+                        <fieldset>
+                            <legend class="border-bottom">Общая информация</legend>
+                        </fieldset>
+                        <div class="form-floating mb-3">
+                            <input class="form-control "
+                                   id="title"
+                                   maxlength="512"
+                                   minlength="2"
+                                   name="title"
+                                   placeholder="Название программы"
+                                   required
+                                   th:value="${program?.title ?: ''}"
+                                   type="text"
+                            >
+                            <label for="title">Название программы</label>
+                        </div>
+
+                        <div class="form-floating">
+                            <input autocomplete="off"
+                                   class="form-control"
+                                   hx-get="/therapist/therapeutic-tasks/autocomplete-search"
+                                   hx-swap="outerHTML"
+                                   hx-target="#therapeuticTasks"
+
+                                   hx-trigger="input[inputType != 'insertReplacementText' && target.value.length > 2] delay:0.3s"
+                                   id="therapeuticTaskName"
+                                   list="therapeuticTasks"
+                                   minlength="3"
+
+                                   name="therapeuticTaskName"
+                                   placeholder="Терапевтическая задача"
+                                   required
+                                   th:value="${program?.therapeuticTask?.entity?.name ?: null}"
+
+                                   type="text"
+                            >
+                            <label for="therapeuticTaskName">Терапевтическая задача</label>
+                            <datalist id="therapeuticTasks"></datalist>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <span x-text="`Длительность: ${totalDuration()} мин.`"></span>
+                    </div>
+
+                    <fieldset class="mb-2">
+                        <legend class="border-bottom">Упражнения</legend>
+                    </fieldset>
+
+                    <div class="dropdown" x-data="createExercisesSearch()">
+                        <div class="form-floating mb-3">
+                            <input @blur="hide()"
+                                   @focus="show()"
+                                   @input.debounce="search"
+
+                                   autocomplete="off"
+                                   class="form-control"
+                                   id="exerciseSearchInput"
+
+                                   minlength="3"
+                                   name="searchKey"
+                                   type="text"
+                                   x-model="searchKey"
+                            >
+
+                            <label for="exerciseSearchInput">Поиск упражнения</label>
+                        </div>
+                        <ul :class="showDroplist ? 'show' : ''"
+                            class="dropdown-menu w-100"
+                            id="exercisesSearchResult"
+                            onblur=" "
+                            style="margin-top: -0.5rem"
+                            th:fragment="exercisesSearchResult"
+                        >
+                            <template x-for="(foundExercise, idx) in searchResult">
+                                <li>
+                                    <button
+                                            @mousedown="$data.addExercise(selectExercise(idx))"
+                                            class="dropdown-item"
+                                            type="button">
+
+                                        <div class="overflow-y-hidden text-truncate" x-text="foundExercise.title">
+                                            Разминка для шеи
+                                        </div>
+                                        <small class="text-muted"
+                                               x-text="foundExercise.type.label + ', ' + foundExercise.duration + ' мин'">
+                                            Разминка, 10 мин
+                                        </small>
+                                    </button>
+                                </li>
+                            </template>
+                        </ul>
+                    </div>
+
+                    <ul class="list-group list-group-flush g-0">
+                        <template :key="exercise.id" x-for="(exercise, idx) in exercises">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <input
+                                        :value="exercise.id"
+                                        name="exerciseIds"
+                                        type="hidden">
+                                <div class="col-8">
+                                    <div class="text-truncate" x-text="exercise.title">
+                                        Разминка для шеи
+                                    </div>
+                                    <small class="text-muted"
+                                           x-text="`${exercise.type.label}, ${exercise.duration} мин.`">
+                                        Разминка, 10 мин
+                                    </small>
+                                </div>
+                                <div class="btn-group h-fit-content ">
+                                    <button @click="moveUp(idx)" class="btn btn-sm btn-outline-secondary"
+                                            type="button">
+                                        <i class="fas fa-chevron-up"></i>
+                                    </button>
+                                    <button @click="moveDown(idx)" class="btn btn-sm btn-outline-secondary"
+                                            type="button">
+                                        <i class="fas fa-chevron-down"></i>
+                                    </button>
+                                    <button @click="remove(idx)" class="btn btn-sm btn-outline-danger"
+                                            type="button">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </div>
+                            </li>
+                        </template>
+                    </ul>
+
+                    <div class="row g-2 justify-content-end">
+                        <div class="col-6 col-sm-auto text-center">
+                            <a class="btn btn-outline-danger" href="/therapist/programs"
+                               onclick="if (!window.confirm('Вы уверены, что хотите отменить все изменения и выйти?')) {event.preventDefault(); return false}"
+                               style="min-width: 110px;">
+                                Отмена
+                            </a>
+                        </div>
+                        <div class="col-6 col-sm-auto text-center">
+                            <button class="btn btn-outline-success" name="save" style="min-width: 110px;"
+                                    type="submit">
+                                Сохранить
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+            </section>
+        </main>
+        <footer th:insert="~{fragments/footer.html}"></footer>
+
+    </div>
+</div>
+
+</body>
+</html>

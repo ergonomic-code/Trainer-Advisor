@@ -7,6 +7,7 @@ import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTask
 import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTasksService
 import pro.qyoga.core.therapy.therapeutic_tasks.internal.TherapeuticTasksRepo
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
+import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
 
 
 @Component
@@ -16,7 +17,10 @@ class TherapeuticTasksBackgrounds(
 ) {
 
     @Transactional
-    fun createTherapeuticTask(therapistId: Long, taskName: String = randomCyrillicWord()): TherapeuticTask {
+    fun createTherapeuticTask(
+        therapistId: Long = THE_THERAPIST_ID,
+        taskName: String = randomCyrillicWord()
+    ): TherapeuticTask {
         return therapeuticTasksService.getOrCreate(therapistId, taskName)
     }
 

@@ -16,3 +16,9 @@ data object AllSteps : ImagesGenerationMode {
         (1..steps).associateWith { FilesObjectMother.randomImage() }
 
 }
+
+data object None : ImagesGenerationMode {
+
+    override fun generateImages(steps: Int): Map<Int, StoredFile> = emptyMap()
+
+}

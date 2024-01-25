@@ -8,6 +8,7 @@ import org.springframework.data.jdbc.repository.support.SimpleJdbcRepository
 import org.springframework.data.mapping.PersistentEntity
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.transaction.annotation.Transactional
+import pro.qyoga.platform.spring.sdj.ALL
 import pro.qyoga.platform.spring.sdj.erpo.hydration.FetchSpec
 import pro.qyoga.platform.spring.sdj.erpo.hydration.hydrate
 import pro.qyoga.platform.spring.sdj.mapContent
@@ -31,6 +32,14 @@ class ErgoRepository<T : Any, ID : Any>(
         return save(updatedTask)
     }
 
+    fun findById(
+        id: ID,
+        fetch: Iterable<KProperty1<T, *>> = emptySet(),
+    ): T? {
+        return findByIdOrNull(id)
+            ?.let { jdbcAggregateTemplate.hydrate(listOf(it), FetchSpec(fetch)).single() }
+    }
+
     fun findOne(
         fetch: Iterable<KProperty1<T, *>> = emptySet(),
         queryBuilder: QueryBuilder.() -> Unit
@@ -49,9 +58,9 @@ class ErgoRepository<T : Any, ID : Any>(
     }
 
     fun findAll(
-        pageRequest: PageRequest,
+        pageRequest: PageRequest = ALL,
         fetch: Iterable<KProperty1<T, *>> = emptySet(),
-        queryBuilder: QueryBuilder.() -> Unit
+        queryBuilder: QueryBuilder.() -> Unit = {}
     ): Page<T> {
         val query = query(queryBuilder)
         val res = jdbcAggregateTemplate.findAll(query, entity.type, pageRequest)

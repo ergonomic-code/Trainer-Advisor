@@ -12,4 +12,9 @@ object ContentDispositionExt {
             .filename(fileMetaData.name, Charset.defaultCharset())
             .build()
 
+    fun inline(fileName: String): ContentDisposition =
+        ContentDisposition.inline()
+            .filename(fileName, Charset.defaultCharset())
+            .build()
+
 }
