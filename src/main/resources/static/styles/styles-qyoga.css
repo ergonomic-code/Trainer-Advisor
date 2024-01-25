@@ -88,3 +88,15 @@ tr.htmx-swapping {
 .h-lines-4 {
     height: calc(var(--bs-body-font-size) * 4)
 }
+
+.h-lines-5 {
+    height: calc(var(--bs-body-font-size) * 5)
+}
+
+.h-fit-content {
+    height: fit-content;
+}
+
+.text-transparent {
+    color: #00000000;
+}

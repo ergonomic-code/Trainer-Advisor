@@ -54,3 +54,8 @@ class TherapeuticTasksRepo(
     }
 
 }
+
+fun TherapeuticTasksRepo.findByName(name: String): TherapeuticTask? =
+    findOne {
+        TherapeuticTask::name isEqual name
+    }

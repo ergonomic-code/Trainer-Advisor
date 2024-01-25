@@ -54,6 +54,14 @@ class ExerciseBackgrounds(
     fun findExercise(exerciseId: Long): Exercise =
         exercisesService.findById(exerciseId)!!
 
+    fun createExercises(
+        count: Int,
+        eachExerciseStepsCount: Int,
+        imagesGenerationMode: ImagesGenerationMode
+    ): Iterable<Exercise> {
+        return (1..count).map { createExercise(eachExerciseStepsCount, imagesGenerationMode) }
+    }
+
     fun createExercise(stepsCount: Int, imagesGenerationMode: ImagesGenerationMode): Exercise {
         val steps = ExercisesObjectMother.exerciseSteps(stepsCount)
         val createExerciseRequest = ExercisesObjectMother.createExerciseRequest { steps }

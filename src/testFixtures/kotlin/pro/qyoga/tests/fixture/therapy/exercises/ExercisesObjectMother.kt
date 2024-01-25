@@ -6,12 +6,16 @@ import pro.qyoga.app.therapist.therapy.exercises.toStepIdx
 import pro.qyoga.core.therapy.exercises.dtos.CreateExerciseRequest
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSearchDto
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
+import pro.qyoga.core.therapy.exercises.model.Exercise
 import pro.qyoga.core.therapy.exercises.model.ExerciseStep
 import pro.qyoga.core.therapy.exercises.model.ExerciseType
+import pro.qyoga.platform.file_storage.api.StoredFile
+import pro.qyoga.tests.fixture.backgrounds.exercises.ImagesGenerationMode
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
 import pro.qyoga.tests.fixture.data.randomListIndexed
 import pro.qyoga.tests.fixture.data.randomMinutesDuration
 import pro.qyoga.tests.fixture.data.randomSentence
+import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
 import java.time.Duration
 import kotlin.random.Random
 
@@ -55,6 +59,44 @@ object ExercisesObjectMother {
             duration,
             exerciseType
         )
+
+    fun randomExercise(
+        stepsCount: Int,
+        imagesGenerationMode: ImagesGenerationMode,
+        therapistId: Long = THE_THERAPIST_ID,
+        id: Long = 0
+    ): Pair<Exercise, Map<Int, StoredFile>> {
+        val exercise = Exercise(
+            randomCyrillicWord(),
+            randomSentence(),
+            randomExerciseDuration(),
+            ExerciseType.entries.random(),
+            therapistId,
+            steps = exerciseSteps(stepsCount),
+            id = id
+        )
+        val images = imagesGenerationMode.generateImages(stepsCount)
+        return exercise to images
+    }
+
+    fun randomExercises(
+        count: Int,
+        eachExerciseStepsCount: Int,
+        imagesGenerationMode: ImagesGenerationMode,
+        therapistId: Long = THE_THERAPIST_ID,
+        generateIds: Boolean = false
+    ): List<Pair<Exercise, Map<Int, StoredFile>>> {
+        var id = 0L
+        return (1..count).map {
+            randomExercise(
+                eachExerciseStepsCount,
+                imagesGenerationMode,
+                therapistId,
+                if (generateIds) ++id else 0
+            )
+        }
+    }
+
 }
 
 fun randomExerciseDuration(): Duration = randomMinutesDuration(4, 30)

@@ -9,6 +9,7 @@ data class Backgrounds(
     val clients: ClientsBackgrounds,
     val clientJournal: ClientJournalBackgrounds,
     val clientFiles: ClientFilesBackgrounds,
+    val programs: ProgramsBackgrounds,
     val exercises: ExerciseBackgrounds,
     val therapeuticTasks: TherapeuticTasksBackgrounds,
     val users: UsersBackgrounds,

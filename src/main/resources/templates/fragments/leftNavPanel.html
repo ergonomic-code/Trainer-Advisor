@@ -45,7 +45,11 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link disabled">
+                <a
+                        class="nav-link"
+                        href="/therapist/programs"
+                        id="programsPageLink"
+                        th:classappend="${activeLink == 'programs'} ? 'active' : ''">
                     <div class="row">
                         <div class="col-1">
                             <i class="fas fa-file-lines me-2 icon"></i>

@@ -15,10 +15,14 @@ import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_PASSWORD
 
 class TherapistClient(val authCookie: Cookie) {
 
+    // Work
     val clients = TherapistClientsApi(authCookie)
     val clientJournal = TherapistClientJournalApi(authCookie)
     val clientFiles = TherapistClientFilesApi(authCookie)
 
+    val programs = TherapistProgramsApi(authCookie)
+
+    // Dictionaries
     val exercises = TherapistExercisesApi(authCookie)
     val therapeuticTasks = TherapistTherapeuticTasksApi(authCookie)
 

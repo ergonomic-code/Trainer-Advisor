@@ -45,7 +45,7 @@
                                     id="type"
                                     required
                                     th:value="${exercise?.exerciseType}">
-                                <option th:each="value : ${T(pro.qyoga.core.therapy.exercises.api.model.ExerciseType).entries}"
+                                <option th:each="value : ${T(pro.qyoga.core.therapy.exercises.model.ExerciseType).entries}"
                                         th:selected="${exercise?.exerciseType == value}"
                                         th:text="${value.label}" th:value="${value.name}">
                                 </option>

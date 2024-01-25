@@ -9,6 +9,7 @@ import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
 import pro.qyoga.core.therapy.exercises.dtos.CreateExerciseRequest
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
+import pro.qyoga.platform.spring.sdj.erpo.hydration.Identifiable
 import java.time.Duration
 import java.time.Instant
 
@@ -23,14 +24,14 @@ data class Exercise(
     val steps: List<ExerciseStep>,
 
     @Id
-    val id: Long = 0,
+    override val id: Long = 0,
     @CreatedDate
     val createdAt: Instant = Instant.now(),
     @LastModifiedDate
     val modifiedAt: Instant? = null,
     @Version
     val version: Long = 0
-) {
+) : Identifiable<Long> {
 
     fun toSummaryDto() =
         ExerciseSummaryDto(title, description, duration, exerciseType, id)

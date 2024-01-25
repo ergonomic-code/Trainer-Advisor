@@ -55,6 +55,8 @@ dependencies {
 	implementation("org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.4.RELEASE")
 	implementation("org.postgresql:postgresql:42.6.0")
 	implementation("io.minio:minio:8.5.7")
+	implementation("org.apache.poi:poi-ooxml:5.2.5")
+	implementation("org.apache.poi:poi-ooxml-lite:5.2.5")
 
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 
