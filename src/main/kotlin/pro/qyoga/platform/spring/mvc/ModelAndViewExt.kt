@@ -6,7 +6,7 @@ class ModelAndViewBuilder(
     val modelAndView: ModelAndView
 ) {
 
-    infix fun String.bindTo(value: Any) {
+    infix fun String.bindTo(value: Any?) {
         modelAndView.addObject(this, value)
     }
 

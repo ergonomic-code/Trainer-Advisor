@@ -1,4 +1,4 @@
-package pro.qyoga.app.therapist.therapy.programs
+package pro.qyoga.app.therapist.therapy.programs.list
 
 import org.springframework.core.io.InputStreamResource
 import org.springframework.http.ResponseEntity

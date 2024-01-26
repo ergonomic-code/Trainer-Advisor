@@ -1,6 +1,8 @@
 package pro.qyoga.core.therapy.exercises.model
 
+import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonFormat
+import com.fasterxml.jackson.annotation.JsonProperty
 import pro.qyoga.platform.kotlin.LabeledEnum
 
 
@@ -12,6 +14,16 @@ enum class ExerciseType(override val label: String) : LabeledEnum {
     STRENGTHENING("Укрепление"),
     STRETCHING("Растяжка"),
     RELAXATION("Расслабление"),
-    TRACTION("Тракция")
+    TRACTION("Тракция");
+
+    companion object {
+
+        @JsonCreator
+        @JvmStatic
+        fun ofName(@JsonProperty("name") name: String?): ExerciseType? {
+            return entries.find { it.name == name }
+        }
+
+    }
 
 }

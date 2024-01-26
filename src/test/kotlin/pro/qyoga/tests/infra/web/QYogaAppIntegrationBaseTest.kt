@@ -6,14 +6,11 @@ import io.restassured.config.LogConfig
 import io.restassured.config.RestAssuredConfig
 import io.restassured.http.ContentType
 import org.junit.jupiter.api.BeforeEach
-import pro.qyoga.tests.clients.TherapistClient
 
 
 open class QYogaAppIntegrationBaseTest : QYogaAppBaseTest() {
 
     protected val baseUri = "http://localhost:$port"
-
-    protected val theTherapist by lazy { TherapistClient.loginAsTheTherapist() }
 
     @BeforeEach
     fun setupRestAssured() {

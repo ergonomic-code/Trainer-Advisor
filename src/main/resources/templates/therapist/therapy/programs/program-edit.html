@@ -20,7 +20,7 @@
                     Новая программа
                 </h1>
 
-                <script th:inline="javascript">
+                <script id="programFormScript" th:inline="javascript">
                     let initialExercises =/*[[${exercises ?: new java.util.ArrayList()}]]*/ [];
 
                     function createExercisesList() {
@@ -104,8 +104,9 @@
 
                 <form class="mt-4"
                       id="programForm"
-                      th:attr="hx-post=${program == null ? '/therapist/programs/create' : null},hx-put=${program != null ? '/therapist/programs/' + program.id : null}"
+                      th:attr="hx-post=${pageMode == 'CREATE' ? '/therapist/programs/create' : null},hx-put=${pageMode == 'EDIT' ? '/therapist/programs/' + program.id : null}"
                       x-data="createExercisesList()"
+                      th:fragment="programForm"
                 >
 
                     <div class="mb-3">
@@ -129,23 +130,28 @@
                         <div class="form-floating">
                             <input autocomplete="off"
                                    class="form-control"
+                                   id="therapeuticTaskName"
+
                                    hx-get="/therapist/therapeutic-tasks/autocomplete-search"
                                    hx-swap="outerHTML"
                                    hx-target="#therapeuticTasks"
-
                                    hx-trigger="input[inputType != 'insertReplacementText' && target.value.length > 2] delay:0.3s"
-                                   id="therapeuticTaskName"
+
                                    list="therapeuticTasks"
+                                   th:classappend="${notExistingTherapeuticTask} ? 'is-invalid' : ''"
                                    minlength="3"
 
                                    name="therapeuticTaskName"
                                    placeholder="Терапевтическая задача"
                                    required
-                                   th:value="${program?.therapeuticTask?.entity?.name ?: null}"
+                                   th:value="${program?.therapeuticTaskRef?.entity?.name ?: null}"
 
                                    type="text"
                             >
                             <label for="therapeuticTaskName">Терапевтическая задача</label>
+                            <div class="invalid-feedback" id="notExistingTherapeuticTaskMessage">
+                                Терапевтической задачи с таким названием не существует
+                            </div>
                             <datalist id="therapeuticTasks"></datalist>
                         </div>
                     </div>
@@ -168,7 +174,6 @@
                                    class="form-control"
                                    id="exerciseSearchInput"
 
-                                   minlength="3"
                                    name="searchKey"
                                    type="text"
                                    x-model="searchKey"

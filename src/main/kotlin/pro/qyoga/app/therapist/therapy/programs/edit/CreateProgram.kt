@@ -1,4 +1,4 @@
-package pro.qyoga.app.therapist.therapy.programs
+package pro.qyoga.app.therapist.therapy.programs.edit
 
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.stereotype.Component

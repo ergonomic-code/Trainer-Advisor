@@ -1,0 +1,22 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="Tests - Programs" type="JUnit" factoryName="JUnit">
+        <module name="QYoga.test"/>
+        <extension name="coverage">
+            <pattern>
+                <option name="PATTERN" value="pro.qyoga.tests.cases.app.therapist.clients.*"/>
+                <option name="ENABLED" value="true"/>
+            </pattern>
+        </extension>
+        <option name="PACKAGE_NAME" value="pro.qyoga.tests.cases.app.therapist.clients"/>
+        <option name="MAIN_CLASS_NAME" value=""/>
+        <option name="METHOD_NAME" value=""/>
+        <option name="TEST_OBJECT" value="pattern"/>
+        <patterns>
+            <pattern
+                    testClass="^(pro\.qyoga\.tests\.cases\.app\.therapist\.therapy\.programs).*|(pro\.qyoga\.tests\.cases\.core\.therapy\.programs).*$"/>
+        </patterns>
+        <method v="2">
+            <option name="Make" enabled="true"/>
+        </method>
+    </configuration>
+</component>
