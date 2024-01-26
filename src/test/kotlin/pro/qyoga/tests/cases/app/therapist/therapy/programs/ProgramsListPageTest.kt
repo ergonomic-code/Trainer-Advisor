@@ -1,5 +1,6 @@
 package pro.qyoga.tests.cases.app.therapist.therapy.programs
 
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.result.shouldBeSuccess
 import io.kotest.matchers.shouldBe
 import org.apache.poi.xwpf.usermodel.XWPFDocument
@@ -67,6 +68,20 @@ class ProgramsListPageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         docxFile shouldBe byteArrayOf()
+    }
+
+    @Test
+    fun `Program deletion should be persistent`() {
+        // Given
+        val program = backgrounds.programs.createRandomProgram()
+        val therapist = TherapistClient.loginAsTheTherapist()
+
+        // When
+        val response = therapist.programs.deleteProgram(program.id)
+
+        // Then
+        response.statusCode() shouldBe HttpStatus.OK.value()
+        backgrounds.programs.findAll().toList() shouldHaveSize 0
     }
 
 }

@@ -25,7 +25,7 @@ class ProgramsBackgrounds(
         return programsRepo.saveAll(programs)
     }
 
-    fun createRandomProgram(exercisesCount: Int, stepsInEachExercise: Int): Program {
+    fun createRandomProgram(exercisesCount: Int = 1, stepsInEachExercise: Int = 0): Program {
         val task = therapeuticTasksBackgrounds.createTherapeuticTask()
         val exercises = exercisesBackgrounds.createExercises(exercisesCount, stepsInEachExercise, None)
         return programsRepo.save(ProgramsObjectMother.randomProgram(task.ref(), exercises = exercises))

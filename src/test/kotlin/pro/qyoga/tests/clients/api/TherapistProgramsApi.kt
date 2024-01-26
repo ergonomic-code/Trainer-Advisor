@@ -106,4 +106,14 @@ class TherapistProgramsApi(override val authCookie: Cookie) : AuthorizedApi {
         }
     }
 
+    fun deleteProgram(programId: Long): Response {
+        return Given {
+            authorized()
+
+            pathParam("programId", programId)
+        } When {
+            delete(ProgramsListPage.programPath)
+        }
+    }
+
 }
