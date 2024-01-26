@@ -1,4 +1,4 @@
-package pro.qyoga.app.therapist.therapy.programs
+package pro.qyoga.app.therapist.therapy.programs.edit
 
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.jdbc.core.mapping.AggregateReference
@@ -14,7 +14,6 @@ import pro.qyoga.core.therapy.programs.model.Program
 import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTask
 import pro.qyoga.core.users.internal.QyogaUserDetails
 import pro.qyoga.platform.spring.http.hxRedirect
-import pro.qyoga.platform.spring.mvc.modelAndView
 import pro.qyoga.platform.spring.sdj.erpo.hydration.AggregateReferenceTarget
 
 
@@ -27,7 +26,7 @@ class CreateProgramPageController(
 
     @GetMapping
     fun getCreateProgramPage(): ModelAndView {
-        return modelAndView("/therapist/therapy/programs/program-edit.html") {}
+        return programPageModel(ProgramPageMode.CREATE)
     }
 
     @PostMapping
@@ -37,17 +36,27 @@ class CreateProgramPageController(
         @AuthenticationPrincipal therapist: QyogaUserDetails
     ): Any = when (createProgram(createProgramRequest, therapeuticTaskName, therapist.id)) {
         is CreateProgramResult.InvalidTherapeuticTaskName ->
-            modelAndView("/therapist/therapy/programs/program-edit.html :: editForm") {
-                "program" bindTo Program.of(
-                    createProgramRequest,
-                    AggregateReferenceTarget(TherapeuticTask(therapist.id, therapeuticTaskName)),
-                    AggregateReference.to(therapist.id)
-                )
+            programPageModel(
+                pageMode = ProgramPageMode.CREATE,
+                program = fakeProgramOf(createProgramRequest, therapist, therapeuticTaskName),
+                fragment = "programForm"
+            ) {
+                "notExistingTherapeuticTask" bindTo true
             }
 
         is CreateProgramResult.Success ->
             hxRedirect("/therapist/programs")
     }
+
+    private fun fakeProgramOf(
+        createProgramRequest: CreateProgramRequest,
+        therapist: QyogaUserDetails,
+        therapeuticTaskName: String
+    ) = Program.of(
+        createProgramRequest,
+        AggregateReferenceTarget(TherapeuticTask(therapist.id, therapeuticTaskName)),
+        AggregateReference.to(therapist.id)
+    )
 
     @GetMapping("/search-exercises")
     @ResponseBody

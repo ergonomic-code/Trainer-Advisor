@@ -1,11 +1,16 @@
 package pro.qyoga.tests.cases.app.therapist.therapy.programs
 
+import io.kotest.matchers.result.shouldBeSuccess
+import io.kotest.matchers.shouldBe
+import org.apache.poi.xwpf.usermodel.XWPFDocument
 import org.junit.jupiter.api.Test
+import org.springframework.http.HttpStatus
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.clients.pages.therapist.therapy.programs.ProgramsListPage
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
+import java.io.ByteArrayInputStream
 
 
 class ProgramsListPageTest : QYogaAppIntegrationBaseTest() {
@@ -42,9 +47,26 @@ class ProgramsListPageTest : QYogaAppIntegrationBaseTest() {
     fun `Program docx downloading link should return valid docx file`() {
         // Given
         val program = backgrounds.programs.createRandomProgram(exercisesCount = 3, stepsInEachExercise = 3)
+        val therapist = TherapistClient.loginAsTheTherapist()
 
         // When
-        val docxFile = theTherapist.programs.downloadDocx(program.id)
+        val docxFile = therapist.programs.downloadDocx(program.id)
+
+        // Then
+        val openResult = runCatching { XWPFDocument(ByteArrayInputStream(docxFile)) }
+        openResult.shouldBeSuccess()
+    }
+
+    @Test
+    fun `Program docx downloading link should return 404 error on request for not existing program`() {
+        // Given
+        val therapist = TherapistClient.loginAsTheTherapist()
+
+        // When
+        val docxFile = therapist.programs.downloadDocx(-1, expectedStatus = HttpStatus.NOT_FOUND)
+
+        // Then
+        docxFile shouldBe byteArrayOf()
     }
 
 }

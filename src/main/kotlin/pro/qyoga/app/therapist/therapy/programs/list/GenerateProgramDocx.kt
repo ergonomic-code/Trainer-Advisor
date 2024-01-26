@@ -1,4 +1,4 @@
-package pro.qyoga.app.therapist.therapy.programs
+package pro.qyoga.app.therapist.therapy.programs.list
 
 import org.springframework.data.jdbc.core.JdbcAggregateTemplate
 import org.springframework.data.repository.findByIdOrNull
