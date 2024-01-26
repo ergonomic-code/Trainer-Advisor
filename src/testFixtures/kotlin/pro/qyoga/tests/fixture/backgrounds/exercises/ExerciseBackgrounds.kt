@@ -62,7 +62,7 @@ class ExerciseBackgrounds(
         return (1..count).map { createExercise(eachExerciseStepsCount, imagesGenerationMode) }
     }
 
-    fun createExercise(stepsCount: Int, imagesGenerationMode: ImagesGenerationMode): Exercise {
+    fun createExercise(stepsCount: Int = 0, imagesGenerationMode: ImagesGenerationMode = None): Exercise {
         val steps = ExercisesObjectMother.exerciseSteps(stepsCount)
         val createExerciseRequest = ExercisesObjectMother.createExerciseRequest { steps }
         val images = imagesGenerationMode.generateImages(stepsCount)

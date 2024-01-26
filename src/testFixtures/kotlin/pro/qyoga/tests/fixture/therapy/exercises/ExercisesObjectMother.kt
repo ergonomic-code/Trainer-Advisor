@@ -11,6 +11,7 @@ import pro.qyoga.core.therapy.exercises.model.ExerciseStep
 import pro.qyoga.core.therapy.exercises.model.ExerciseType
 import pro.qyoga.platform.file_storage.api.StoredFile
 import pro.qyoga.tests.fixture.backgrounds.exercises.ImagesGenerationMode
+import pro.qyoga.tests.fixture.backgrounds.exercises.None
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
 import pro.qyoga.tests.fixture.data.randomListIndexed
 import pro.qyoga.tests.fixture.data.randomMinutesDuration
@@ -61,8 +62,8 @@ object ExercisesObjectMother {
         )
 
     fun randomExercise(
-        stepsCount: Int,
-        imagesGenerationMode: ImagesGenerationMode,
+        stepsCount: Int = 0,
+        imagesGenerationMode: ImagesGenerationMode = None,
         therapistId: Long = THE_THERAPIST_ID,
         id: Long = 0
     ): Pair<Exercise, Map<Int, StoredFile>> {

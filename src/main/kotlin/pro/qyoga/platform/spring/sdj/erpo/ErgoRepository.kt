@@ -24,9 +24,9 @@ class ErgoRepository<T : Any, ID : Any>(
 ) : SimpleJdbcRepository<T, ID>(jdbcAggregateTemplate, entity, jdbcConverter) {
 
     @Transactional
-    fun update(id: ID, func: (T) -> T): T {
+    fun update(id: ID, func: (T) -> T): T? {
         val task = findByIdOrNull(id)
-            ?: throw AggregateNotFound(id, entity.type.kotlin)
+            ?: return null
 
         val updatedTask = func(task)
         return save(updatedTask)

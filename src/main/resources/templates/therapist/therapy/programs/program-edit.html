@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <div th:replace="~{fragments/header.html}"></div>
-    <title>Новая программа</title>
+    <title th:text="${program?.title ?: 'Новая программа'}">Новая программа</title>
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body class="sb-nav-fixed">
@@ -20,11 +20,12 @@
                     Новая программа
                 </h1>
 
-                <script id="programFormScript" th:inline="javascript">
-                    let initialExercises =/*[[${exercises ?: new java.util.ArrayList()}]]*/ [];
 
-                    function createExercisesList() {
-                        return {
+                <script id="programFormScript" th:inline="javascript">
+                    let initialExercises = /*[[${program?.exercises ?: new java.util.ArrayList()}]]*/ [];
+
+                    document.addEventListener('alpine:init', () => {
+                        Alpine.data('programForm', () => ({
                             exercises: initialExercises,
 
                             remove(idx) {
@@ -47,11 +48,27 @@
 
                             addExercise(exc) {
                                 this.exercises.push(exc);
+                                let searchInputEl = document.getElementById('exerciseSearchInput');
+                                searchInputEl.setCustomValidity('');
                             },
 
                             totalDuration() {
                                 return this.exercises.length > 0 ? this.exercises.map(e => e.duration).reduce((a, b) => a + b) : 0;
                             }
+
+                        }))
+                    })
+
+                    function validate(event) {
+                        let searchInputEl = document.getElementById('exerciseSearchInput');
+                        let exerciseRowEls = document.getElementsByName("exerciseIds");
+                        if (exerciseRowEls.length === 0) {
+                            searchInputEl.setCustomValidity('Выберите хотя бы одно упражнение');
+                            searchInputEl.reportValidity();
+                            return false;
+                        } else {
+                            searchInputEl.setCustomValidity('');
+                            return true;
                         }
                     }
 
@@ -70,7 +87,6 @@
 
                             hide() {
                                 this.showDroplist = false;
-                                console.log("hide")
                                 return true;
                             },
 
@@ -91,7 +107,6 @@
                             },
 
                             selectExercise(idx) {
-                                console.log("select")
                                 let el = this.searchResult.splice(idx, 1)[0];
                                 this.showDroplist = false;
                                 return el;
@@ -105,9 +120,11 @@
                 <form class="mt-4"
                       id="programForm"
                       th:attr="hx-post=${pageMode == 'CREATE' ? '/therapist/programs/create' : null},hx-put=${pageMode == 'EDIT' ? '/therapist/programs/' + program.id : null}"
-                      x-data="createExercisesList()"
+                      hx-on:htmx:validation:validate="validate(event)"
+                      x-data="programForm"
                       th:fragment="programForm"
                 >
+
 
                     <div class="mb-3">
                         <fieldset>
@@ -144,7 +161,7 @@
                                    name="therapeuticTaskName"
                                    placeholder="Терапевтическая задача"
                                    required
-                                   th:value="${program?.therapeuticTaskRef?.entity?.name ?: null}"
+                                   th:value="${program?.therapeuticTaskName ?: null}"
 
                                    type="text"
                             >
@@ -211,10 +228,9 @@
                     <ul class="list-group list-group-flush g-0">
                         <template :key="exercise.id" x-for="(exercise, idx) in exercises">
                             <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <input
-                                        :value="exercise.id"
-                                        name="exerciseIds"
-                                        type="hidden">
+                                <input :value="exercise.id"
+                                       name="exerciseIds"
+                                       type="hidden">
                                 <div class="col-8">
                                     <div class="text-truncate" x-text="exercise.title">
                                         Разминка для шеи

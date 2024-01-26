@@ -31,7 +31,11 @@ class CreateProgram(
         val therapeuticTask = therapeuticTasksRepo.findByName(therapeuticTaskName)
             ?: return CreateProgramResult.InvalidTherapeuticTaskName(therapeuticTaskName)
 
-        val program = Program.of(createExerciseRequest, therapeuticTask.ref(), AggregateReference.to(therapistId))
+        val program = Program.of(
+            createExerciseRequest,
+            therapeuticTask.ref(),
+            AggregateReference.to(therapistId),
+        )
 
         return CreateProgramResult.Success(programsRepo.save(program))
     }

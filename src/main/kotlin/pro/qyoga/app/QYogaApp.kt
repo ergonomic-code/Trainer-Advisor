@@ -13,8 +13,10 @@ import pro.qyoga.infra.auth.AuthConfig
 import pro.qyoga.infra.db.SdjConfig
 import pro.qyoga.infra.email.EmailsConfig
 import pro.qyoga.infra.minio.MinioConfig
+import pro.qyoga.infra.web.ThymeleafConfig
 import pro.qyoga.infra.web.WebConfig
 import pro.qyoga.platform.file_storage.FilesStorageConfig
+import pro.qyoga.platform.spring.sdj.ErgoSdjConfig
 
 @Import(
     // Apps
@@ -30,7 +32,9 @@ import pro.qyoga.platform.file_storage.FilesStorageConfig
     // Infra
     AuthConfig::class,
     WebConfig::class,
+    ThymeleafConfig::class,
     SdjConfig::class,
+    ErgoSdjConfig::class,
     MinioConfig::class,
     FilesStorageConfig::class,
     EmailsConfig::class
