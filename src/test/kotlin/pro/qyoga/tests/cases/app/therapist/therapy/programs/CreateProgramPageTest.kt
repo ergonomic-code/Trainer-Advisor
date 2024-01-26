@@ -11,6 +11,7 @@ import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
+import pro.qyoga.tests.clients.pages.therapist.therapy.programs.CreateProgramForm
 import pro.qyoga.tests.clients.pages.therapist.therapy.programs.CreateProgramPage
 import pro.qyoga.tests.clients.pages.therapist.therapy.programs.ProgramsListPage
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
@@ -67,10 +68,10 @@ class CreateProgramPageTest : QYogaAppIntegrationBaseTest() {
         val document = therapist.programs.createProgramForError(createProgramRequest, notExistingTherapeuticTask)
 
         // Then
-        document shouldHaveComponent CreateProgramPage.CreateProgramForm
-        CreateProgramPage.CreateProgramForm.titleInput.value(document) shouldBe createProgramRequest.title
-        CreateProgramPage.CreateProgramForm.therapeuticTaskInput.value(document) shouldBe notExistingTherapeuticTask
-        document shouldHave CreateProgramPage.CreateProgramForm.NOT_EXISTING_THERAPEUTIC_TASK_MESSAGE
+        document shouldHaveComponent CreateProgramForm
+        CreateProgramForm.titleInput.value(document) shouldBe createProgramRequest.title
+        CreateProgramForm.therapeuticTaskInput.value(document) shouldBe notExistingTherapeuticTask
+        document shouldHave CreateProgramForm.notExistingTherapeuticTaskMessage
     }
 
     @Test

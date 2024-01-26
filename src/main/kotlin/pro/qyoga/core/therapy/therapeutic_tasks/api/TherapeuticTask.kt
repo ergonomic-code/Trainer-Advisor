@@ -10,6 +10,7 @@ import pro.qyoga.core.users.api.Therapist
 import pro.qyoga.platform.spring.sdj.erpo.hydration.Identifiable
 import java.time.Instant
 
+typealias TherapeuticTaskRef = AggregateReference<TherapeuticTask, Long>
 
 @Table("therapeutic_tasks")
 data class TherapeuticTask(

@@ -10,13 +10,16 @@ import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
 import io.restassured.response.Response
+import io.restassured.specification.RequestSpecification
 import org.hamcrest.CoreMatchers
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
 import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
+import pro.qyoga.tests.clients.pages.therapist.therapy.programs.CreateProgramForm
 import pro.qyoga.tests.clients.pages.therapist.therapy.programs.CreateProgramPage
+import pro.qyoga.tests.clients.pages.therapist.therapy.programs.EditProgramPage
 import pro.qyoga.tests.clients.pages.therapist.therapy.programs.ProgramsListPage
 import pro.qyoga.tests.infra.test_config.spring.context
 
@@ -52,18 +55,12 @@ class TherapistProgramsApi(override val authCookie: Cookie) : AuthorizedApi {
         return Given {
             authorized()
 
-            formParam(CreateProgramPage.CreateProgramForm.titleInput.name, createProgramRequest.title)
-            formParam(CreateProgramPage.CreateProgramForm.therapeuticTaskInput.name, therapeuticTaskName)
-
-            createProgramRequest.exerciseIds.forEach {
-                formParams(CreateProgramPage.CreateProgramForm.EXERCISE_IDS_INPUT_NAME, it.toString())
-            }
-
-            this
+            fillProgramFormParams(createProgramRequest, therapeuticTaskName)
         } When {
             post(CreateProgramPage.path)
         }
     }
+
 
     fun downloadDocx(programId: Long, expectedStatus: HttpStatus = HttpStatus.OK): ByteArray {
         return Given {
@@ -95,9 +92,9 @@ class TherapistProgramsApi(override val authCookie: Cookie) : AuthorizedApi {
             authorized()
             accept(ContentType.JSON)
 
-            queryParam(CreateProgramPage.SEARCH_KEY, keyword)
+            queryParam(CreateProgramPage.searchKey, keyword)
         } When {
-            get(CreateProgramPage.SEARCH_EXERCISE_PATH)
+            get(CreateProgramPage.searchExercisePath)
         } Then {
             statusCode(HttpStatus.OK.value())
         } Extract {
@@ -114,6 +111,63 @@ class TherapistProgramsApi(override val authCookie: Cookie) : AuthorizedApi {
         } When {
             delete(ProgramsListPage.programPath)
         }
+    }
+
+    fun getProgramEditPage(programId: Long, expectedStatus: HttpStatus = HttpStatus.OK): Document {
+        return Given {
+            authorized()
+
+            pathParam("programId", programId)
+        } When {
+            get(ProgramsListPage.programPath)
+        } Then {
+            statusCode(expectedStatus.value())
+        } Extract {
+            Jsoup.parse(body().asString())
+        }
+    }
+
+    fun updateProgram(
+        programId: Long,
+        updateProgramRequest: CreateProgramRequest,
+        therapeuticTaskName: String
+    ): Response {
+        return Given {
+            authorized()
+
+            pathParam("programId", programId)
+            fillProgramFormParams(updateProgramRequest, therapeuticTaskName)
+        } When {
+            put(EditProgramPage.path)
+        }
+    }
+
+    fun updateProgramForError(
+        programId: Long,
+        updateProgramRequest: CreateProgramRequest,
+        therapeuticTaskName: String,
+        expectedStatus: HttpStatus = HttpStatus.OK
+    ): Document {
+        return updateProgram(programId, updateProgramRequest, therapeuticTaskName)
+            .Then {
+                statusCode(expectedStatus.value())
+            } Extract {
+            Jsoup.parse(body().asString())
+        }
+    }
+
+    private fun RequestSpecification.fillProgramFormParams(
+        createProgramRequest: CreateProgramRequest,
+        therapeuticTaskName: String
+    ): RequestSpecification {
+        formParam(CreateProgramForm.titleInput.name, createProgramRequest.title)
+        formParam(CreateProgramForm.therapeuticTaskInput.name, therapeuticTaskName)
+
+        createProgramRequest.exerciseIds.forEach {
+            formParams(CreateProgramForm.exerciseIdsInputName, it.toString())
+        }
+
+        return this
     }
 
 }
