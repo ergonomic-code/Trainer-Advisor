@@ -45,7 +45,7 @@ fun programPageModelAndView(
     additionalModel: ModelAndViewBuilder.() -> Unit = {}
 ): ModelAndView {
     val modelAndView =
-        modelAndView("/therapist/therapy/programs/program-edit.html${fragment?.let { " :: $it" } ?: ""}") {
+        modelAndView("therapist/therapy/programs/program-edit.html${fragment?.let { " :: $it" } ?: ""}") {
             "program" bindTo program
             "pageMode" bindTo pageMode.name
             additionalModel()

@@ -13,7 +13,7 @@ import pro.qyoga.core.therapy.programs.findAllMatching
 import pro.qyoga.platform.spring.mvc.modelAndView
 
 
-private const val PROGRAMS_LIST_VIEW = "/therapist/therapy/programs/programs-list.html"
+private const val PROGRAMS_LIST_VIEW = "therapist/therapy/programs/programs-list.html"
 
 private const val PROGRAMMS_ATTR = "programs"
 
