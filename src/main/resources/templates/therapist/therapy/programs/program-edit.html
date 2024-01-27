@@ -80,7 +80,7 @@
                             showDroplist: false,
 
                             show() {
-                                if (this.searchResult.length > 0) {
+                                if (this.searchKey.length > 0) {
                                     this.showDroplist = true
                                 }
                             },
@@ -201,10 +201,14 @@
                         <ul :class="showDroplist ? 'show' : ''"
                             class="dropdown-menu w-100"
                             id="exercisesSearchResult"
-                            onblur=" "
                             style="margin-top: -0.5rem"
-                            th:fragment="exercisesSearchResult"
-                        >
+                            th:fragment="exercisesSearchResult">
+
+                            <li class="dropdown-item disabled"
+                                x-show="searchResult.length == 0">
+                                <small class="text-muted">Ничего не найдено</small>
+                            </li>
+
                             <template x-for="(foundExercise, idx) in searchResult">
                                 <li>
                                     <button
