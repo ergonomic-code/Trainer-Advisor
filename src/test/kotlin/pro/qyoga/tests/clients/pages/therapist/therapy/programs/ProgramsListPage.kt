@@ -2,16 +2,11 @@ package pro.qyoga.tests.clients.pages.therapist.therapy.programs
 
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
-import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
-import org.jsoup.select.Elements
 import pro.qyoga.core.therapy.programs.model.Program
 import pro.qyoga.tests.assertions.PageMatcher
 import pro.qyoga.tests.assertions.shouldHaveComponent
-import pro.qyoga.tests.infra.html.Button
-import pro.qyoga.tests.infra.html.FormAction
-import pro.qyoga.tests.infra.html.Link
-import pro.qyoga.tests.infra.html.QYogaPage
+import pro.qyoga.tests.infra.html.*
 
 
 object ProgramsListPage : QYogaPage {
@@ -22,12 +17,27 @@ object ProgramsListPage : QYogaPage {
 
     val programDocxPath = "$programPath/docx"
 
+    val programsSearchPath = "$path/search"
+
     override val title = "Программы"
 
     private val createProgramLink = Link("createProgramLink", CreateProgramPage, "Создать новую")
 
-    fun editProgramLink(program: Program) = Link("editProgram${program.id}", programPath, program.title)
+    object SearchForm : QYogaForm("programSearchForm", FormAction.hxGet(programsSearchPath)) {
 
+        val titleKeywordInput = Input.text("titleKeyword", false)
+        val therapeuticTaskKeywordInput = Input.text("therapeuticTaskKeyword", false)
+        val searchButton = Button("searchButton", "")
+
+        override val components = listOf(
+            titleKeywordInput,
+            therapeuticTaskKeywordInput,
+            searchButton
+        )
+
+    }
+
+    fun editProgramLink(program: Program) = Link("editProgram${program.id}", programPath, program.title)
 
     fun downloadProgramDocxButton(programId: Long) = Link("downloadProgramDocx${programId}", programDocxPath, "")
 
@@ -39,11 +49,8 @@ object ProgramsListPage : QYogaPage {
     override fun match(element: Element) {
         element.select("title").text() shouldBe title
 
+        element shouldHaveComponent SearchForm
         element shouldHaveComponent createProgramLink
-    }
-
-    fun programRows(document: Document): Elements {
-        return document.select(PROGRAM_ROW)
     }
 
     fun rowsFor(programs: Iterable<Program>): PageMatcher = object : PageMatcher {

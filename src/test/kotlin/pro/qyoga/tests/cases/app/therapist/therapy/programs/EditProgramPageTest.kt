@@ -24,7 +24,7 @@ class EditProgramPageTest : QYogaAppIntegrationBaseTest() {
     @Test
     fun `Program edit page should be rendered correctly`() {
         // Given
-        val program = backgrounds.programs.createRandomProgram(3)
+        val program = backgrounds.programs.createRandomProgram(exercisesCount = 3)
 
         val therapist = TherapistClient.loginAsTheTherapist()
 
@@ -38,7 +38,7 @@ class EditProgramPageTest : QYogaAppIntegrationBaseTest() {
     @Test
     fun `Program edition should be persistent`() {
         // Given
-        val program = backgrounds.programs.createRandomProgram(3)
+        val program = backgrounds.programs.createRandomProgram(exercisesCount = 3)
 
         val newTherapeuticTask = backgrounds.therapeuticTasks.createTherapeuticTask()
         val newTitle = randomCyrillicWord()

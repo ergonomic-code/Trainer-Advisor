@@ -31,7 +31,9 @@ class ProgramDocxGeneratorTest {
             imagesGenerationMode = None,
             generateIds = true
         )
-        val program = ProgramsObjectMother.randomProgram(task.ref(), exercises = exercisesWithImages.map { it.first })
+        val program = ProgramsObjectMother.randomProgram(
+            therapeuticTask = task.ref(),
+            exercises = exercisesWithImages.map { it.first })
         val imagesMap = getExerciseStepImagesSource(exercisesWithImages)
 
         // When

@@ -8,8 +8,14 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
 import pro.qyoga.app.common.ResponseEntityExt
 import pro.qyoga.core.therapy.programs.ProgramsRepo
+import pro.qyoga.core.therapy.programs.dtos.ProgramsSearchFilter
+import pro.qyoga.core.therapy.programs.findAllMatching
 import pro.qyoga.platform.spring.mvc.modelAndView
 
+
+private const val PROGRAMS_LIST_VIEW = "/therapist/therapy/programs/programs-list.html"
+
+private const val PROGRAMMS_ATTR = "programs"
 
 @Controller
 @RequestMapping("/therapist/programs")
@@ -20,8 +26,10 @@ class ProgramsListPageController(
 
     @GetMapping
     fun getProgramsListPage(): ModelAndView {
-        return modelAndView("/therapist/therapy/programs/programs-list.html") {
-            "programs" bindTo programsRepo.findAll(ProgramsRepo.Page.firstTenByTitle)
+        val firstPage = programsRepo.findAll(ProgramsRepo.Page.firstTenByTitle)
+
+        return modelAndView(PROGRAMS_LIST_VIEW) {
+            PROGRAMMS_ATTR bindTo firstPage
         }
     }
 
@@ -37,6 +45,17 @@ class ProgramsListPageController(
     @ResponseStatus(HttpStatus.OK)
     fun deleteProgram(@PathVariable programId: Long) {
         programsRepo.deleteById(programId)
+    }
+
+    @GetMapping("/search")
+    fun searchPrograms(
+        @ModelAttribute programsSearchFilter: ProgramsSearchFilter
+    ): ModelAndView {
+        val searchResult = programsRepo.findAllMatching(programsSearchFilter, ProgramsRepo.Page.firstTenByTitle)
+
+        return modelAndView("$PROGRAMS_LIST_VIEW :: programsTable") {
+            PROGRAMMS_ATTR bindTo searchResult
+        }
     }
 
 }

@@ -35,6 +35,10 @@ fun <T : Any> JdbcAggregateOperations.hydrate(
                 property to fetchPropertyRefs(entities, it)
             }
 
+    if (refs.isEmpty()) {
+        return entities.toList()
+    }
+
     return entities.map {
         hydrateEntity(it, refs)
     }
@@ -55,10 +59,12 @@ private fun <T : Any> JdbcAggregateOperations.fetchPropertyRefs(
 private fun <T : Any> fetchIds(
     entities: Iterable<T>,
     property: KProperty1<T, Any?>
-) = when (detectRefType(property)) {
+): Set<Any?> = when (detectRefType(property)) {
 
     RefType.SCALAR ->
-        entities.map { (property.getter.invoke(it) as AggregateReference<*, *>).id }
+        entities
+            .map { (property.getter.invoke(it) as AggregateReference<*, *>).id }
+            .toSet()
 
     else -> error("Unsupported property type: $property")
 }

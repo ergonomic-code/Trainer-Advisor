@@ -6,6 +6,7 @@ import io.kotest.matchers.shouldBe
 import org.apache.poi.xwpf.usermodel.XWPFDocument
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
+import pro.qyoga.core.therapy.programs.dtos.ProgramsSearchFilter
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.clients.TherapistClient
@@ -82,6 +83,62 @@ class ProgramsListPageTest : QYogaAppIntegrationBaseTest() {
         // Then
         response.statusCode() shouldBe HttpStatus.OK.value()
         backgrounds.programs.findAll().toList() shouldHaveSize 0
+    }
+
+    @Test
+    fun `Search for programs without parameters should return up 10 least programs in alphabetical order`() {
+        // Given
+        val pageSize = 10
+        val programs = backgrounds.programs.createPrograms(pageSize + 1)
+        val firstPage = programs.sortedBy { it.title.lowercase() }
+            .take(pageSize)
+        val therapist = TherapistClient.loginAsTheTherapist()
+
+        // When
+        val document = therapist.programs.searchPrograms(ProgramsSearchFilter())
+
+        // Then
+        document shouldHave ProgramsListPage.rowsFor(firstPage)
+    }
+
+    @Test
+    fun `Result of search programs with therapeutic task name should contain all matching programs and only matching programs`() {
+        // Given
+        val keyword = "Коррекция"
+        val task1 = backgrounds.therapeuticTasks.createTherapeuticTask(taskName = "Де$keyword гиперлордоза")
+        val task2 = backgrounds.therapeuticTasks.createTherapeuticTask(taskName = "$keyword гипокифоза")
+        val matchingPrograms =
+            (backgrounds.programs.createPrograms(1, task1) + backgrounds.programs.createPrograms(1, task2))
+                .sortedBy { it.title.lowercase() }
+        backgrounds.programs.createPrograms(3)
+
+        val therapist = TherapistClient.loginAsTheTherapist()
+
+        // When
+        val document = therapist.programs.searchPrograms(ProgramsSearchFilter(therapeuticTaskKeyword = keyword))
+
+        // Then
+        document shouldHave ProgramsListPage.rowsFor(matchingPrograms)
+    }
+
+    @Test
+    fun `Result of search programs with program title should contain all matching programs and only matching programs`() {
+        // Given
+        val keyword = "Коррекция"
+        val matchingPrograms =
+            (listOf(backgrounds.programs.createRandomProgram(title = "$keyword гиполардоза")) + backgrounds.programs.createRandomProgram(
+                title = "Де$keyword гиперкифоза"
+            ))
+                .sortedBy { it.title.lowercase() }
+        backgrounds.programs.createPrograms(3)
+
+        val therapist = TherapistClient.loginAsTheTherapist()
+
+        // When
+        val document = therapist.programs.searchPrograms(ProgramsSearchFilter(titleKeyword = keyword))
+
+        // Then
+        document shouldHave ProgramsListPage.rowsFor(matchingPrograms)
     }
 
 }

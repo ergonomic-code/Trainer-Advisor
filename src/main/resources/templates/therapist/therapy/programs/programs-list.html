@@ -18,22 +18,22 @@
             <div class="container px-4">
                 <h1 class="mt-4 mb-3 pb-2 mb-3 border-bottom">Программы</h1>
 
-                <form class="row mt-3 mb-3" hx-get="/therapist/clients/search"
-                      hx-target="#tablePagination"
+                <form class="row mt-3 mb-3" hx-get="/therapist/programs/search"
+                      hx-target="#programsTable"
                       hx-trigger="submit"
-                      id="searchClientsFilterForm"
+                      id="programSearchForm"
                 >
-                    <div class="col-12 col-sm-4 mb-2" id="lastnameFilter">
+                    <div class="col-12 col-sm-4 mb-2" id="titleKeyword">
                         <input class="form-control"
-                               name="title"
+                               name="titleKeyword"
                                placeholder="Название"
                                th:value="${searchDto?.title}"
                                type="text">
                     </div>
 
-                    <div class="col-12 col-sm-4 mb-2" id="firstnameFilter">
+                    <div class="col-12 col-sm-4 mb-2" id="therapeuticTaskKeyword">
                         <input class="form-control"
-                               name="therapeuticTask"
+                               name="therapeuticTaskKeyword"
                                placeholder="Терапевтичская задача"
                                th:value="${searchDto?.therapeuticTask}"
                                type="text">
@@ -41,11 +41,13 @@
 
                     <div class="col-12 col-sm-1 mb-3">
                         <button class="btn btn-outline-secondary w-100 d-sm-none"
+                                name="searchButton"
                                 title="Найти программу по названию или задаче"
                                 type="submit">
                             Поиск
                         </button>
                         <button class="btn btn-outline-secondary w-100 d-none d-sm-block"
+                                name="searchButtonSm"
                                 title="Найти программу по названию или задаче"
                                 type="submit">
                             <i class="fas fa-search"></i>
@@ -61,17 +63,17 @@
 
                 </form>
 
-                <table class="table table-hover" id="programsTable">
+                <table class="table table-hover" id="programsTable" th:fragment="programsTable">
                     <tbody id="programsList">
                     <tr th:each="program : ${programs.content}">
-                        <td class="align-middle">
-                            <a class="disabled editLink"
+                        <td class="align-middle text-truncate" style="max-width: 60vw">
+                            <a class="editLink"
                                th:href="@{/therapist/programs/{programId}(programId=${program.id})}"
                                th:id="${'editProgram' + program.id}"
                                th:text="${program.title}"></a>
                         </td>
 
-                        <td class="text-end">
+                        <td class="text-end text-nowrap">
                             <a class="text-transparent"
                                th:download="${program.title + '.docx'}"
                                th:href="@{/therapist/programs/{programId}/docx(programId=${program.id})}"

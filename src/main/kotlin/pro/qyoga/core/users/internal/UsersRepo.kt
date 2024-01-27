@@ -5,7 +5,9 @@ import org.springframework.data.jdbc.core.JdbcAggregateTemplate
 import org.springframework.data.jdbc.core.convert.JdbcConverter
 import org.springframework.data.mapping.model.BasicPersistentEntity
 import org.springframework.data.relational.core.conversion.DbActionExecutionException
+import org.springframework.data.relational.core.mapping.RelationalMappingContext
 import org.springframework.data.util.TypeInformation
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
 import pro.qyoga.core.users.api.User
 import pro.qyoga.platform.spring.sdj.erpo.ErgoRepository
@@ -13,12 +15,16 @@ import pro.qyoga.platform.spring.sdj.erpo.ErgoRepository
 
 @Repository
 class UsersRepo(
-    override val jdbcAggregateTemplate: JdbcAggregateTemplate,
-    jdbcConverter: JdbcConverter
+    jdbcAggregateTemplate: JdbcAggregateTemplate,
+    namedParameterJdbcOperations: NamedParameterJdbcOperations,
+    jdbcConverter: JdbcConverter,
+    relationalMappingContext: RelationalMappingContext
 ) : ErgoRepository<User, Long>(
     jdbcAggregateTemplate,
+    namedParameterJdbcOperations,
     BasicPersistentEntity(TypeInformation.of(User::class.java)),
-    jdbcConverter
+    jdbcConverter,
+    relationalMappingContext
 ) {
 
     fun save(instance: User): User? {
