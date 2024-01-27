@@ -6,13 +6,14 @@ import pro.qyoga.core.clients.journals.api.EditJournalEntryRequest
 import pro.qyoga.core.clients.journals.api.EntryNotFound
 import pro.qyoga.core.clients.journals.api.JournalEntry
 import pro.qyoga.core.clients.journals.api.JournalsService
-import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTasksService
+import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTask
+import pro.qyoga.core.therapy.therapeutic_tasks.internal.TherapeuticTasksRepo
 import pro.qyoga.core.users.internal.QyogaUserDetails
 
 @Component
 class EditJournalEntryWorkflow(
     private val journalsService: JournalsService,
-    private val therapeuticTasksService: TherapeuticTasksService
+    private val therapeuticTasksRepo: TherapeuticTasksRepo
 ) {
 
     @Transactional
@@ -25,9 +26,8 @@ class EditJournalEntryWorkflow(
         var entry = journalsService.getJournalEntry(clientId, entryId)
             ?: throw EntryNotFound(clientId, entryId)
 
-        val therapeuticTask = therapeuticTasksService.getOrCreate(
-            principal.id,
-            editJournalEntryRequest.therapeuticTaskName
+        val therapeuticTask = therapeuticTasksRepo.getOrCreate(
+            TherapeuticTask(principal.id, editJournalEntryRequest.therapeuticTaskName)
         )
 
         entry = entry.updateBy(editJournalEntryRequest, therapeuticTask)
