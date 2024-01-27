@@ -20,14 +20,17 @@ object ProgramsObjectMother {
     ) = CreateProgramRequest(title, exercises.map { it.id })
 
     fun randomProgram(
+        title: String = randomCyrillicWord(),
         therapeuticTask: AggregateReference<TherapeuticTask, Long>,
         exercises: Iterable<Exercise> = emptyList(),
         owner: AggregateReference<Therapist, Long> = THE_THERAPIST_REF,
-    ): Program = Program(
-        randomCyrillicWord(),
-        therapeuticTask,
-        owner,
-        exercises.map { ProgramExercise(it.ref()) }
-    )
+    ): Program {
+        return Program(
+            title,
+            therapeuticTask,
+            owner,
+            exercises.map { ProgramExercise(it.ref()) }
+        )
+    }
 
 }

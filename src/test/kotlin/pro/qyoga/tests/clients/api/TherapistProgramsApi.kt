@@ -17,6 +17,7 @@ import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
 import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
+import pro.qyoga.core.therapy.programs.dtos.ProgramsSearchFilter
 import pro.qyoga.tests.clients.pages.therapist.therapy.programs.CreateProgramForm
 import pro.qyoga.tests.clients.pages.therapist.therapy.programs.CreateProgramPage
 import pro.qyoga.tests.clients.pages.therapist.therapy.programs.EditProgramPage
@@ -168,6 +169,24 @@ class TherapistProgramsApi(override val authCookie: Cookie) : AuthorizedApi {
         }
 
         return this
+    }
+
+    fun searchPrograms(programsSearchFilter: ProgramsSearchFilter): Document {
+        return Given {
+            authorized()
+
+            formParam(ProgramsListPage.SearchForm.titleKeywordInput.name, programsSearchFilter.titleKeyword)
+            formParam(
+                ProgramsListPage.SearchForm.therapeuticTaskKeywordInput.name,
+                programsSearchFilter.therapeuticTaskKeyword
+            )
+        } When {
+            get(ProgramsListPage.SearchForm.action.url)
+        } Then {
+            statusCode(HttpStatus.OK.value())
+        } Extract {
+            Jsoup.parse(body().asString())
+        }
     }
 
 }

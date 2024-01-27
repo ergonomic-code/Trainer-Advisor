@@ -63,7 +63,7 @@
                         let searchInputEl = document.getElementById('exerciseSearchInput');
                         let exerciseRowEls = document.getElementsByName("exerciseIds");
                         if (exerciseRowEls.length === 0) {
-                            searchInputEl.setCustomValidity('Выберите хотя бы одно упражнение');
+                            searchInputEl.setCustomValidity('Добавьте хотя бы одно упражнение');
                             searchInputEl.reportValidity();
                             return false;
                         } else {

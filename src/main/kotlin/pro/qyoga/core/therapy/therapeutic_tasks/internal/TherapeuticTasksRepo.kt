@@ -6,25 +6,31 @@ import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.data.jdbc.core.convert.JdbcConverter
 import org.springframework.data.mapping.model.BasicPersistentEntity
 import org.springframework.data.relational.core.conversion.DbActionExecutionException
+import org.springframework.data.relational.core.mapping.RelationalMappingContext
 import org.springframework.data.util.TypeInformation
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Transactional
 import pro.qyoga.core.therapy.therapeutic_tasks.api.DuplicatedTherapeuticTaskName
 import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTask
 import pro.qyoga.platform.spring.sdj.erpo.ErgoRepository
-import pro.qyoga.platform.spring.sdj.findAllBy
-import pro.qyoga.platform.spring.sdj.findOneBy
 
 
 @Repository
 class TherapeuticTasksRepo(
-    override val jdbcAggregateTemplate: JdbcAggregateOperations,
-    jdbcConverter: JdbcConverter
+    jdbcAggregateTemplate: JdbcAggregateOperations,
+    namedParameterJdbcOperations: NamedParameterJdbcOperations,
+    jdbcConverter: JdbcConverter,
+    relationalMappingContext: RelationalMappingContext,
 ) : ErgoRepository<TherapeuticTask, Long>(
     jdbcAggregateTemplate,
+    namedParameterJdbcOperations,
     BasicPersistentEntity(TypeInformation.of(TherapeuticTask::class.java)),
-    jdbcConverter
+    jdbcConverter,
+    relationalMappingContext
 ) {
 
+    @Transactional
     override fun <S : TherapeuticTask?> save(instance: S & Any): S & Any {
         val result = runCatching { super.save(instance) }
         val ex = result.exceptionOrNull()
@@ -35,20 +41,21 @@ class TherapeuticTasksRepo(
         return result.getOrThrow()
     }
 
+    @Transactional
     fun getOrCreate(therapeuticTask: TherapeuticTask): TherapeuticTask {
-        var persistedTask = jdbcAggregateTemplate.findOneBy<TherapeuticTask> {
+        var persistedTask = findOne {
             TherapeuticTask::name isEqual therapeuticTask.name
         }
 
         if (persistedTask == null) {
-            persistedTask = jdbcAggregateTemplate.save(therapeuticTask)
+            persistedTask = save(therapeuticTask)
         }
 
         return persistedTask
     }
 
     fun findByNameContaining(searchKey: String?, page: Pageable): Iterable<TherapeuticTask> {
-        return jdbcAggregateTemplate.findAllBy<TherapeuticTask>(page) {
+        return findAll(page) {
             TherapeuticTask::name isILikeIfNotNull searchKey
         }
     }

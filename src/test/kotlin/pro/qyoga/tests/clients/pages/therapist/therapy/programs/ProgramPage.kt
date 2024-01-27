@@ -2,6 +2,7 @@ package pro.qyoga.tests.clients.pages.therapist.therapy.programs
 
 import com.fasterxml.jackson.core.type.TypeReference
 import io.kotest.inspectors.forAll
+import io.kotest.matchers.collections.shouldBeSameSizeAs
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import org.jsoup.nodes.Element
@@ -88,6 +89,7 @@ object EditProgramPage : ProgramPage(EditProgramForm.action.url, "", EditProgram
                 ProgramFormScript.initialExercises.value(
                     scriptElement!!,
                     object : TypeReference<List<ExerciseSummaryDto>>() {})
+            formExercises shouldBeSameSizeAs program.exercises
             (formExercises zip program.exercises).forAll { (actual, e) ->
                 actual shouldBe e.exerciseRef.resolveOrThrow().toSummaryDto()
             }
