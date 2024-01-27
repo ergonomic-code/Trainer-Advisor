@@ -6,9 +6,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
-import pro.qyoga.core.therapy.therapeutic_tasks.api.DuplicatedTherapeuticTaskName
-import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTask
-import pro.qyoga.core.therapy.therapeutic_tasks.internal.TherapeuticTasksRepo
+import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo
+import pro.qyoga.core.therapy.therapeutic_tasks.errors.DuplicatedTherapeuticTaskName
+import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
 import pro.qyoga.core.users.internal.QyogaUserDetails
 import pro.qyoga.platform.spring.mvc.modelAndView
 import pro.qyoga.platform.spring.sdj.erpo.hydration.resolveOrThrow

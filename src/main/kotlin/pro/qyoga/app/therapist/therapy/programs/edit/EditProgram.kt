@@ -4,8 +4,8 @@ import org.springframework.stereotype.Component
 import pro.qyoga.core.therapy.programs.ProgramsRepo
 import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
 import pro.qyoga.core.therapy.programs.model.Program
-import pro.qyoga.core.therapy.therapeutic_tasks.internal.TherapeuticTasksRepo
-import pro.qyoga.core.therapy.therapeutic_tasks.internal.findByName
+import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo
+import pro.qyoga.core.therapy.therapeutic_tasks.findByName
 import pro.qyoga.platform.spring.sdj.erpo.hydration.ref
 
 sealed interface EditProgramResult {

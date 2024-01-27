@@ -6,8 +6,8 @@ import pro.qyoga.core.clients.journals.api.EditJournalEntryRequest
 import pro.qyoga.core.clients.journals.api.EntryNotFound
 import pro.qyoga.core.clients.journals.api.JournalEntry
 import pro.qyoga.core.clients.journals.api.JournalsService
-import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTask
-import pro.qyoga.core.therapy.therapeutic_tasks.internal.TherapeuticTasksRepo
+import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo
+import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
 import pro.qyoga.core.users.internal.QyogaUserDetails
 
 @Component

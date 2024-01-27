@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.servlet.ModelAndView
-import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTask
-import pro.qyoga.core.therapy.therapeutic_tasks.internal.TherapeuticTasksRepo
+import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo
+import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
 import pro.qyoga.platform.spring.mvc.modelAndView
 import pro.qyoga.platform.spring.sdj.withSortBy
 

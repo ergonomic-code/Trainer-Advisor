@@ -1,6 +1,6 @@
 package pro.qyoga.tests.fixture.therapy.therapeutic_tasks
 
-import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTask
+import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
 import java.text.Collator
 import java.util.*
 

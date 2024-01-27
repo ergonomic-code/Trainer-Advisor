@@ -1,4 +1,4 @@
-package pro.qyoga.core.therapy.therapeutic_tasks.api
+package pro.qyoga.core.therapy.therapeutic_tasks.model
 
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id

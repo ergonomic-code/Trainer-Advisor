@@ -3,8 +3,8 @@ package pro.qyoga.tests.fixture.backgrounds
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
-import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTask
-import pro.qyoga.core.therapy.therapeutic_tasks.internal.TherapeuticTasksRepo
+import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo
+import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
 

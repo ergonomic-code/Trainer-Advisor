@@ -1,5 +1,6 @@
-package pro.qyoga.core.therapy.therapeutic_tasks.api
+package pro.qyoga.core.therapy.therapeutic_tasks.errors
 
+import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
 import pro.qyoga.platform.errors.DomainError
 
 

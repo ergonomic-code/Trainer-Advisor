@@ -6,8 +6,7 @@ import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
 import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
-import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTask
-import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTaskRef
+import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
 import pro.qyoga.core.users.api.Therapist
 import pro.qyoga.platform.spring.sdj.erpo.hydration.FetchSpec
 import pro.qyoga.platform.spring.sdj.erpo.hydration.hydrate
@@ -17,7 +16,7 @@ import java.time.Instant
 @Table("programs")
 data class Program(
     val title: String,
-    val therapeuticTaskRef: AggregateReference<TherapeuticTask, Long>,
+    val therapeuticTaskRef: TherapeuticTaskRef,
     val ownerRef: AggregateReference<Therapist, Long>,
     @MappedCollection(idColumn = "program_id", keyColumn = "exercise_index")
     val exercises: List<ProgramExercise>,
