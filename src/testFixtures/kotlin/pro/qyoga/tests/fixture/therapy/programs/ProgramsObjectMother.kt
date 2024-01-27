@@ -5,7 +5,7 @@ import pro.qyoga.core.therapy.exercises.model.Exercise
 import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
 import pro.qyoga.core.therapy.programs.model.Program
 import pro.qyoga.core.therapy.programs.model.ProgramExercise
-import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTask
+import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
 import pro.qyoga.core.users.api.Therapist
 import pro.qyoga.platform.spring.sdj.erpo.hydration.ref
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
@@ -21,7 +21,7 @@ object ProgramsObjectMother {
 
     fun randomProgram(
         title: String = randomCyrillicWord(),
-        therapeuticTask: AggregateReference<TherapeuticTask, Long>,
+        therapeuticTask: TherapeuticTaskRef,
         exercises: Iterable<Exercise> = emptyList(),
         owner: AggregateReference<Therapist, Long> = THE_THERAPIST_REF,
     ): Program {

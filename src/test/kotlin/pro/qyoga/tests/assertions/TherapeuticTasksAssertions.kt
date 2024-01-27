@@ -4,7 +4,7 @@ import io.kotest.matchers.date.shouldBeCloseTo
 import io.kotest.matchers.equality.FieldsEqualityCheckConfig
 import io.kotest.matchers.equality.shouldBeEqualToComparingFields
 import io.kotest.matchers.shouldNotBe
-import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTask
+import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
 import kotlin.time.Duration.Companion.milliseconds
 
 

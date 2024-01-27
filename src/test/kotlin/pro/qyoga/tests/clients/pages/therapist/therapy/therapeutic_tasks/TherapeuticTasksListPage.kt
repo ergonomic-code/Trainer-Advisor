@@ -4,7 +4,7 @@ import io.kotest.inspectors.forAll
 import io.kotest.inspectors.forAny
 import io.kotest.matchers.shouldBe
 import org.jsoup.nodes.Element
-import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTask
+import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
 import pro.qyoga.tests.assertions.PageMatcher
 import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.infra.html.*

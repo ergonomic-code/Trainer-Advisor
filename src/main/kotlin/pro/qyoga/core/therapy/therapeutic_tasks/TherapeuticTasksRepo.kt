@@ -1,4 +1,4 @@
-package pro.qyoga.core.therapy.therapeutic_tasks.internal
+package pro.qyoga.core.therapy.therapeutic_tasks
 
 import org.springframework.dao.DuplicateKeyException
 import org.springframework.data.domain.Pageable
@@ -11,8 +11,8 @@ import org.springframework.data.util.TypeInformation
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
-import pro.qyoga.core.therapy.therapeutic_tasks.api.DuplicatedTherapeuticTaskName
-import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTask
+import pro.qyoga.core.therapy.therapeutic_tasks.errors.DuplicatedTherapeuticTaskName
+import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
 import pro.qyoga.platform.spring.sdj.erpo.ErgoRepository
 
 

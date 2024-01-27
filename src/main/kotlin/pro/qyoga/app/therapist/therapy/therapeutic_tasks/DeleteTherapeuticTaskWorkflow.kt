@@ -6,7 +6,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import pro.qyoga.core.clients.journals.api.JournalEntry
 import pro.qyoga.core.clients.journals.internal.JournalEntriesRepo
-import pro.qyoga.core.therapy.therapeutic_tasks.internal.TherapeuticTasksRepo
+import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo
 import pro.qyoga.platform.spring.sdj.erpo.hydration.ref
 import pro.qyoga.platform.spring.sdj.query.QueryBuilder
 import pro.qyoga.platform.spring.sdj.withSortBy

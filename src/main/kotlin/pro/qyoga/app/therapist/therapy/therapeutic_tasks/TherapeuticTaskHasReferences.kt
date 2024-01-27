@@ -1,12 +1,11 @@
 package pro.qyoga.app.therapist.therapy.therapeutic_tasks
 
-import org.springframework.data.jdbc.core.mapping.AggregateReference
 import pro.qyoga.core.clients.journals.api.JournalEntry
-import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTask
+import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
 import pro.qyoga.platform.errors.DomainError
 
 
 class TherapeuticTaskHasReferences(
-    val taskRef: AggregateReference<TherapeuticTask, Long>,
+    val taskRef: TherapeuticTaskRef,
     val references: List<JournalEntry>
 ) : DomainError("Therapeutic task ${taskRef.id} has ${references.size} references to it")

@@ -3,7 +3,7 @@ package pro.qyoga.tests.clients.pages.therapist.clients.journal.entry
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import org.jsoup.nodes.Element
-import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTask
+import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
 import pro.qyoga.tests.assertions.PageMatcher
 
 
