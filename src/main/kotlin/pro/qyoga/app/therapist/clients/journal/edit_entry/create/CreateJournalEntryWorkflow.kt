@@ -7,7 +7,8 @@ import pro.qyoga.core.clients.cards.api.ClientsService
 import pro.qyoga.core.clients.journals.api.EditJournalEntryRequest
 import pro.qyoga.core.clients.journals.api.JournalEntry
 import pro.qyoga.core.clients.journals.api.JournalsService
-import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTasksService
+import pro.qyoga.core.therapy.therapeutic_tasks.api.TherapeuticTask
+import pro.qyoga.core.therapy.therapeutic_tasks.internal.TherapeuticTasksRepo
 import pro.qyoga.core.users.internal.QyogaUserDetails
 import pro.qyoga.platform.spring.sdj.erpo.hydration.ref
 
@@ -15,7 +16,7 @@ import pro.qyoga.platform.spring.sdj.erpo.hydration.ref
 class CreateJournalEntryWorkflow(
     private val clientsService: ClientsService,
     private val journalsService: JournalsService,
-    private val therapeuticTasksService: TherapeuticTasksService
+    private val therapeuticTasksRepo: TherapeuticTasksRepo
 ) {
 
     @Transactional
@@ -27,9 +28,8 @@ class CreateJournalEntryWorkflow(
         val client = clientsService.findClient(clientId)
             ?: throw ClientNotFound(clientId)
 
-        val therapeuticTask = therapeuticTasksService.getOrCreate(
-            principal.id,
-            editJournalEntryRequest.therapeuticTaskName
+        val therapeuticTask = therapeuticTasksRepo.getOrCreate(
+            TherapeuticTask(principal.id, editJournalEntryRequest.therapeuticTaskName)
         )
         val newEntry = JournalEntry(
             client.ref(),
