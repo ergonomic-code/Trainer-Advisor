@@ -1,7 +1,10 @@
 package pro.qyoga.tests.clients.pages.therapist.fragments
 
+import io.kotest.matchers.Matcher
+import io.kotest.matchers.compose.all
 import org.jsoup.nodes.Element
-import pro.qyoga.tests.assertions.shouldHaveComponent
+import pro.qyoga.tests.assertions.haveComponent
+import pro.qyoga.tests.clients.pages.therapist.appointments.SchedulePage
 import pro.qyoga.tests.clients.pages.therapist.clients.ClientsListPage
 import pro.qyoga.tests.clients.pages.therapist.therapy.exercises.ExercisesListPage
 import pro.qyoga.tests.clients.pages.therapist.therapy.programs.ProgramsListPage
@@ -25,14 +28,15 @@ object LeftNavBarFragment : Component {
     // Account
     private val logoutLink = Link("logoutLink", "/logout", "Выйти")
 
-    override fun match(element: Element) {
-        element shouldHaveComponent clientsLink
-        element shouldHaveComponent programsLink
+    override fun matcher(): Matcher<Element> =
+        Matcher.all(
+            haveComponent(clientsLink),
+            haveComponent(programsLink),
 
-        element shouldHaveComponent exercisesLink
-        element shouldHaveComponent therapeuticTasksLink
+            haveComponent(exercisesLink),
+            haveComponent(therapeuticTasksLink),
 
-        element shouldHaveComponent logoutLink
-    }
+            haveComponent(logoutLink)
+        )
 
 }

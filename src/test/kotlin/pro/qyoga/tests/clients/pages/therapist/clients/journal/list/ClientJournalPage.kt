@@ -23,8 +23,6 @@ abstract class ClientJournalPage : QYogaPage {
 object EmptyClientJournalPage : ClientJournalPage() {
 
     override fun match(element: Element) {
-        super.match(element)
-
         element shouldHaveComponent EmptyClientJournalFragment
     }
 
@@ -33,8 +31,6 @@ object EmptyClientJournalPage : ClientJournalPage() {
 class NonEmptyClientJournalPage(private val entries: List<JournalEntry>) : ClientJournalPage() {
 
     override fun match(element: Element) {
-        super.match(element)
-
         element shouldHave ClientJournalFragment.fragmentFor(entries)
     }
 

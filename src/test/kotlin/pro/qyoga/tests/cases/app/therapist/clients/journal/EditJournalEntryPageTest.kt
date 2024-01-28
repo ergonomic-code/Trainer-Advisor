@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import pro.qyoga.core.formats.russianDateFormat
 import pro.qyoga.tests.assertions.shouldBe
+import pro.qyoga.tests.assertions.shouldBeComponent
 import pro.qyoga.tests.assertions.shouldBeElement
 import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.assertions.shouldMatch
@@ -83,7 +84,7 @@ class EditJournalEntryPageTest : QYogaAppIntegrationBaseTest() {
         )
 
         // Then
-        document.select("body form").single() shouldBeElement EditJournalEntryForm
+        document.select("body form").single() shouldBeComponent EditJournalEntryForm
         EditJournalEntryForm.dateInput.value(document) shouldBe russianDateFormat.format(firstEntryDate)
         EditJournalEntryForm.therapeuticTaskNameInput.value(document) shouldBe editJournalEntryRequest.therapeuticTaskName
         EditJournalEntryForm.entryTextInput.value(document) shouldBe editJournalEntryRequest.journalEntryText

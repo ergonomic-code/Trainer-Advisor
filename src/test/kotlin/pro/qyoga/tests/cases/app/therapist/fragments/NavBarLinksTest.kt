@@ -1,7 +1,7 @@
 package pro.qyoga.tests.cases.app.therapist.fragments
 
 import org.junit.jupiter.api.Test
-import pro.qyoga.tests.assertions.shouldHave
+import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.clients.pages.therapist.fragments.LeftNavBarFragment
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
@@ -18,7 +18,7 @@ class NavBarLinksTest : QYogaAppIntegrationBaseTest() {
         val document = therapist.clients.getClientsListPage()
 
         // Then
-        document shouldHave LeftNavBarFragment
+        document shouldHaveComponent LeftNavBarFragment
     }
 
 }

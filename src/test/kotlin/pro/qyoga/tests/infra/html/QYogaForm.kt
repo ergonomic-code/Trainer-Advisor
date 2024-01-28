@@ -1,11 +1,9 @@
 package pro.qyoga.tests.infra.html
 
-import io.kotest.assertions.withClue
-import io.kotest.inspectors.forAll
-import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.Matcher
+import io.kotest.matchers.compose.all
 import org.jsoup.nodes.Element
-import pro.qyoga.tests.assertions.shouldBeElement
-import pro.qyoga.tests.assertions.shouldHaveAttr
+import pro.qyoga.tests.assertions.haveComponent
 
 
 abstract class QYogaForm(
@@ -16,19 +14,6 @@ abstract class QYogaForm(
 
     abstract val components: List<Component>
 
-    override fun match(element: Element) {
-        withClue("Invalid form action") {
-            element shouldHaveAttr action
-        }
-
-        components.forAll {
-            withClue("Cannot find component ${it.name} by selector ${it.selector()} in $element") {
-                element.select(it.selector()) shouldHaveSize 1
-            }
-            element.select(it.selector())[0] shouldBeElement it
-        }
-    }
-
     override fun selector(): String =
         if (id.isNotBlank()) {
             "form#$id"
@@ -37,5 +22,13 @@ abstract class QYogaForm(
         } else {
             error("Now selector for $this")
         }
+
+    override fun matcher(): Matcher<Element> {
+        val componentMatchers = components.map { haveComponent(it) }
+        return Matcher.all(
+            action.matcher(),
+            *componentMatchers.toTypedArray()
+        )
+    }
 
 }

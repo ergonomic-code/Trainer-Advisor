@@ -1,12 +1,14 @@
 package pro.qyoga.tests.infra.html
 
-import io.kotest.assertions.withClue
-import io.kotest.inspectors.forAll
-import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.Matcher
+import io.kotest.matchers.MatcherResult
+import io.kotest.matchers.compose.all
 import org.jsoup.nodes.Element
-import org.jsoup.parser.Tag
+import org.jsoup.select.Elements
 import pro.qyoga.platform.kotlin.LabeledEnum
+import pro.qyoga.tests.assertions.descr
+import pro.qyoga.tests.assertions.haveAttributeValue
+import pro.qyoga.tests.assertions.isTag
 
 data class Option(
     val value: String,
@@ -28,16 +30,52 @@ data class Select(
     val options: List<Option>? = null
 ) : InputBase {
 
-    override fun match(element: Element) {
-        element.tag() shouldBe Tag.valueOf("select")
-        element.attr("name") shouldBe name
-        matchRequired(element)
+    fun haveOptions(options: List<Option>): Matcher<Element> = Matcher { element: Element ->
+        val elements = element.children()
 
-        options?.forAll {
-            withClue("Cannot find option $it") {
-                element.select("option[value=${it.value}]:contains(${it.title})") shouldHaveSize 1
+        val optionsMatchers: List<Matcher<Elements>> =
+            options.map { o ->
+                object : Matcher<Elements> {
+                    override fun test(value: Elements): MatcherResult {
+                        val optionElement = elements.find { o.value == it.`val`() }
+                        if (optionElement == null) {
+                            return MatcherResult(
+                                false,
+                                { "HTML have no element with value ${o.value}" },
+                                { "HTML should not have element with value ${o.value}" }
+                            )
+                        }
+
+                        return MatcherResult(
+                            optionElement.text() == o.title,
+                            { "Option ${optionElement.descr} have title [${optionElement.text()}] but [${o.title}] expected" },
+                            { "Option ${optionElement.descr} should not have title [${optionElement.text()}]" }
+                        )
+                    }
+                }
+            }
+
+        val results = optionsMatchers.map { it.test(elements) }
+
+        MatcherResult(
+            results.all { it.passed() },
+            { results.filterNot { it.passed() }.joinToString(separator = "\n") { it.failureMessage() } },
+            { results.filter { it.passed() }.joinToString(separator = "\n") { it.negatedFailureMessage() } },
+        )
+    }
+
+    override fun matcher(): Matcher<Element> = Matcher { element: Element ->
+        val matchers = buildList {
+            add(isTag("select"))
+            add(haveAttributeValue("name", name))
+            add(requiredMatcher())
+
+            if (options != null) {
+                add(haveOptions(options))
             }
         }
+
+        Matcher.all(*matchers.toTypedArray()).test(element)
     }
 
     override fun value(element: Element): String =
