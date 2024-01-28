@@ -7,8 +7,9 @@ import org.springframework.http.HttpStatus
 import pro.qyoga.app.therapist.clients.journal.list.JournalPageController
 import pro.qyoga.core.formats.russianDateFormat
 import pro.qyoga.tests.assertions.shouldBe
-import pro.qyoga.tests.assertions.shouldBeElement
+import pro.qyoga.tests.assertions.shouldBeComponent
 import pro.qyoga.tests.assertions.shouldHave
+import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.clients.pages.publc.GenericErrorPage
@@ -35,7 +36,7 @@ class CreateJournalEntryPageTest : QYogaAppIntegrationBaseTest() {
         val document = therapist.clientJournal.getCreateJournalEntryPage(client.id)
 
         // Then
-        document shouldBe CreateJournalEntryPage
+        document shouldHaveComponent CreateJournalEntryPage
     }
 
     @Test
@@ -82,7 +83,7 @@ class CreateJournalEntryPageTest : QYogaAppIntegrationBaseTest() {
         val document = therapist.clientJournal.createJournalEntryForError(client.id, createJournalEntryRequest)
 
         // Then
-        document.select("body form").single() shouldBeElement CreateJournalEntryForm
+        document.select("body form").single() shouldBeComponent CreateJournalEntryForm
         CreateJournalEntryForm.dateInput.value(document) shouldBe russianDateFormat.format(LocalDate.now())
         CreateJournalEntryForm.therapeuticTaskNameInput.value(document) shouldBe createJournalEntryRequest.therapeuticTaskName
         CreateJournalEntryForm.entryTextInput.value(document) shouldBe createJournalEntryRequest.journalEntryText

@@ -1,7 +1,8 @@
 package pro.qyoga.tests.clients.pages.therapist.clients
 
-import org.jsoup.nodes.Element
-import pro.qyoga.tests.assertions.shouldHaveComponent
+import io.kotest.matchers.Matcher
+import io.kotest.matchers.compose.all
+import pro.qyoga.tests.assertions.haveComponent
 import pro.qyoga.tests.clients.pages.therapist.clients.card.EditClientPage
 import pro.qyoga.tests.clients.pages.therapist.clients.files.ClientFilesPage
 import pro.qyoga.tests.clients.pages.therapist.clients.journal.list.EmptyClientJournalPage
@@ -19,10 +20,10 @@ object ClientPageTabsFragment : Component {
 
     override fun selector() = "#cardTabs"
 
-    override fun match(element: Element) {
-        element shouldHaveComponent journalLink
-        element shouldHaveComponent cardLink
-        element shouldHaveComponent filesLink
-    }
+    override fun matcher() = Matcher.all(
+        haveComponent(journalLink),
+        haveComponent(cardLink),
+        haveComponent(filesLink)
+    )
 
 }

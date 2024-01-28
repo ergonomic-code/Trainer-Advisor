@@ -11,6 +11,7 @@ import org.springframework.core.env.Environment
 import org.springframework.core.env.get
 import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.assertions.shouldHave
+import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.PublicClient
 import pro.qyoga.tests.clients.TherapistClient
@@ -50,7 +51,7 @@ class RegistrationPageTest : QYogaAppIntegrationBaseTest() {
         val document = PublicClient.authApi.registerTherapist(registerTherapistRequest)
 
         // Then
-        document shouldBe RegistrationSuccessFragment
+        document shouldHaveComponent RegistrationSuccessFragment
 
         // And then
         val receivedMessages = greenMail.getReceivedMessagesForDomain(adminEmail)

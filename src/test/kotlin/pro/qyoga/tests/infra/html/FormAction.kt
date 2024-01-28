@@ -1,11 +1,16 @@
 package pro.qyoga.tests.infra.html
 
 import io.kotest.assertions.withClue
+import io.kotest.matchers.Matcher
+import io.kotest.matchers.compose.all
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldBeEqualIgnoringCase
 import io.kotest.matchers.string.shouldMatch
 import org.jsoup.nodes.Element
 import pro.qyoga.tests.assertions.PageMatcher
+import pro.qyoga.tests.assertions.haveAttribute
+import pro.qyoga.tests.assertions.haveAttributeValue
+import pro.qyoga.tests.assertions.haveAttributeValueMatching
 
 
 data class FormAction(
@@ -31,6 +36,17 @@ data class FormAction(
         fun hxDelete(url: String): FormAction =
             FormAction("hx-delete", url)
 
+    }
+
+    fun matcher(): Matcher<Element> {
+        val matchers = buildList {
+            add(haveAttribute(attr))
+            add(haveAttributeValueMatching(attr, url.replace("\\{.*}".toRegex(), ".*").toRegex()))
+            if (method != null) {
+                add(haveAttributeValue("method", method, ignoreCase = true))
+            }
+        }
+        return Matcher.all(*matchers.toTypedArray())
     }
 
     override fun match(element: Element) {

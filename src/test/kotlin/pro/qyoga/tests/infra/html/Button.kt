@@ -1,9 +1,10 @@
 package pro.qyoga.tests.infra.html
 
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.Matcher
+import io.kotest.matchers.compose.all
 import org.jsoup.nodes.Element
-import org.jsoup.parser.Tag
-import pro.qyoga.tests.assertions.shouldHave
+import pro.qyoga.tests.assertions.haveAttributeValueMatching
+import pro.qyoga.tests.assertions.isTag
 
 
 data class Button(
@@ -20,12 +21,16 @@ data class Button(
             }
         }
 
-    override fun match(element: Element) {
-        element.tag() shouldBe Tag.valueOf("button")
-        element.attr("name") shouldBe name
-        if (action != null) {
-            element shouldHave action
+    override fun matcher(): Matcher<Element> {
+        val matchers = buildList {
+            add(isTag("button"))
+            add(haveAttributeValueMatching("name", name.toRegex()))
+            if (action != null) {
+                add(action.matcher())
+            }
         }
+        return Matcher.all(
+            *matchers.toTypedArray()
+        )
     }
-
 }

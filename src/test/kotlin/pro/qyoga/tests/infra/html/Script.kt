@@ -2,9 +2,10 @@ package pro.qyoga.tests.infra.html
 
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.kotest.inspectors.forAll
-import io.kotest.matchers.string.shouldMatch
+import io.kotest.matchers.Matcher
+import io.kotest.matchers.compose.all
 import org.jsoup.nodes.Element
+import pro.qyoga.tests.assertions.htmlMatch
 import pro.qyoga.tests.infra.test_config.spring.context
 
 
@@ -31,12 +32,9 @@ abstract class Script(
 
     abstract val vars: List<Variable>
 
-    override fun match(element: Element) {
-        super.match(element)
-        val scriptElement = element.getElementById(id)!!
 
-        vars.forAll {
-            scriptElement.html() shouldMatch it.regex()
-        }
+    override fun matcher(): Matcher<Element> {
+        val varMatchers = vars.map { htmlMatch(it.regex()) }
+        return Matcher.all(*varMatchers.toTypedArray())
     }
 }

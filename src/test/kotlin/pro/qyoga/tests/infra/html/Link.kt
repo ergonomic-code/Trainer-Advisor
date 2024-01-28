@@ -1,8 +1,11 @@
 package pro.qyoga.tests.infra.html
 
-import io.kotest.assertions.withClue
-import io.kotest.matchers.string.shouldMatch
+import io.kotest.matchers.Matcher
+import io.kotest.matchers.compose.all
 import org.jsoup.nodes.Element
+import pro.qyoga.tests.assertions.haveAttribute
+import pro.qyoga.tests.assertions.haveAttributeValueMatching
+import pro.qyoga.tests.assertions.isTag
 
 class Link(
     val id: String,
@@ -23,10 +26,12 @@ class Link(
             }
         }
 
-    override fun match(element: Element) {
-        withClue("Invalid link URL") {
-            element.attr(targetAttr) shouldMatch urlRegex
-        }
+    override fun matcher(): Matcher<Element> {
+        return Matcher.all(
+            isTag("a"),
+            haveAttribute(targetAttr),
+            haveAttributeValueMatching(targetAttr, urlRegex.toRegex())
+        )
     }
 
     companion object {

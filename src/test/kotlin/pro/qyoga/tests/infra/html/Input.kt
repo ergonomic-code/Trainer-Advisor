@@ -1,8 +1,10 @@
 package pro.qyoga.tests.infra.html
 
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.Matcher
+import io.kotest.matchers.compose.all
 import org.jsoup.nodes.Element
-import org.jsoup.parser.Tag
+import pro.qyoga.tests.assertions.haveAttributeValue
+import pro.qyoga.tests.assertions.isTag
 
 data class Input(
     override val name: String,
@@ -16,14 +18,17 @@ data class Input(
 
     override fun selector() = "input[$nameAttrName=$name][type=$type]"
 
-    override fun match(element: Element) {
-        element.tag() shouldBe Tag.valueOf("input")
-        element.attr(nameAttrName) shouldBe name
-        element.attr("type") shouldBe type
-        if (value != null) {
-            element.attr("value") shouldBe value
+    override fun matcher(): Matcher<Element> {
+        val matchers = buildList {
+            add(isTag("input"))
+            add(haveAttributeValue(nameAttrName, name))
+            add(haveAttributeValue("type", type))
+            if (value != null) {
+                add(haveAttributeValue("value", value))
+            }
+            add(requiredMatcher())
         }
-        matchRequired(element)
+        return Matcher.all(*matchers.toTypedArray())
     }
 
     override fun value(element: Element): String =

@@ -5,7 +5,7 @@ import org.jsoup.nodes.Element
 import pro.qyoga.core.therapy.exercises.model.Exercise
 import pro.qyoga.platform.java.time.toDecimalMinutes
 import pro.qyoga.tests.assertions.PageMatcher
-import pro.qyoga.tests.assertions.shouldBeElement
+import pro.qyoga.tests.assertions.shouldBeComponent
 import pro.qyoga.tests.infra.html.*
 
 abstract class ExerciseForm(action: FormAction) : QYogaForm("exerciseForm", action) {
@@ -51,7 +51,7 @@ object EditExerciseForm : ExerciseForm(FormAction.hxPut(EditExercisePage.PATH)) 
     fun exerciseForm(exercise: Exercise): PageMatcher = object : PageMatcher {
 
         override fun match(element: Element) {
-            element shouldBeElement EditExerciseForm
+            element shouldBeComponent EditExerciseForm
             element.select(title.selector()).`val`() shouldBe exercise.title
             element.select(type.selector()).`val`() shouldBe exercise.exerciseType.name
             element.select(duration.selector()).`val`() shouldBe exercise.duration.toDecimalMinutes().toString()

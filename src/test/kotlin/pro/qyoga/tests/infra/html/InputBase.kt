@@ -1,18 +1,16 @@
 package pro.qyoga.tests.infra.html
 
-import io.kotest.assertions.withClue
-import io.kotest.matchers.shouldBe
 import org.jsoup.nodes.Element
+import pro.qyoga.tests.assertions.haveAttribute
 
 interface InputBase : Component {
 
     val required: Boolean
 
-    fun matchRequired(element: Element) {
-        val actualRequired = element.hasAttr("required")
-        withClue("Unexpected required value") {
-            actualRequired shouldBe required
-        }
+    fun requiredMatcher() = if (required) {
+        haveAttribute("required")
+    } else {
+        haveAttribute("required").invert()
     }
 
     fun value(element: Element): String

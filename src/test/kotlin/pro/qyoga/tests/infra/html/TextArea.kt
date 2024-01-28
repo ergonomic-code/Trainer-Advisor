@@ -1,8 +1,10 @@
 package pro.qyoga.tests.infra.html
 
-import io.kotest.matchers.shouldBe
+import io.kotest.matchers.Matcher
+import io.kotest.matchers.compose.all
 import org.jsoup.nodes.Element
-import org.jsoup.parser.Tag
+import pro.qyoga.tests.assertions.haveAttributeValue
+import pro.qyoga.tests.assertions.isTag
 
 
 data class TextArea(
@@ -13,10 +15,12 @@ data class TextArea(
 
     private val nameAttrName = if (alpineJs) ":name" else "name"
 
-    override fun match(element: Element) {
-        element.tag() shouldBe Tag.valueOf("textarea")
-        element.attr(nameAttrName) shouldBe name
-        matchRequired(element)
+    override fun matcher(): Matcher<Element> {
+        return Matcher.all(
+            isTag("textarea"),
+            haveAttributeValue(nameAttrName, name),
+            requiredMatcher()
+        )
     }
 
     override fun selector(): String = "textarea[$nameAttrName=$name]"

@@ -2,8 +2,9 @@ package pro.qyoga.tests.clients.pages.publc
 
 import io.kotest.assertions.withClue
 import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.should
 import org.jsoup.nodes.Element
-import pro.qyoga.tests.assertions.shouldBeElement
+import pro.qyoga.tests.assertions.shouldBeComponent
 import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.assertions.shouldHaveTitle
@@ -43,8 +44,8 @@ object LoginPage : QYogaPage {
             element.select(LoginForm.selector()) shouldHaveSize 1
         }
         withClue("Login form has invalid structure") {
-            element.select(LoginForm.selector())[0] shouldBeElement LoginForm
-            element.select(LoginForm.selector())[0] shouldBeElement LoginForm.action
+            element.select(LoginForm.selector())[0] shouldBeComponent LoginForm
+            element.select(LoginForm.selector())[0] should LoginForm.action.matcher()
         }
 
         element shouldHave LOGIN_ERROR_MESSAGE

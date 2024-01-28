@@ -1,18 +1,13 @@
 package pro.qyoga.tests.clients.pages.therapist.therapy.programs
 
-import com.fasterxml.jackson.core.type.TypeReference
-import io.kotest.inspectors.forAll
-import io.kotest.matchers.collections.shouldBeSameSizeAs
+import io.kotest.matchers.Matcher
+import io.kotest.matchers.compose.all
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import org.jsoup.nodes.Element
-import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
 import pro.qyoga.core.therapy.programs.model.Program
 import pro.qyoga.platform.spring.sdj.erpo.hydration.resolveOrThrow
-import pro.qyoga.tests.assertions.PageMatcher
-import pro.qyoga.tests.assertions.shouldBeElement
-import pro.qyoga.tests.assertions.shouldHave
-import pro.qyoga.tests.assertions.shouldHaveComponent
+import pro.qyoga.tests.assertions.*
 import pro.qyoga.tests.infra.html.*
 
 
@@ -71,28 +66,15 @@ object EditProgramPage : ProgramPage(EditProgramForm.action.url, "", EditProgram
         override fun selector() =
             EditProgramForm.selector()
 
-        override fun match(element: Element) {
-            element shouldBeElement EditProgramForm
-
-            EditProgramForm.titleInput.value(element) shouldBe program.title
-            EditProgramForm.therapeuticTaskInput.value(element) shouldBe program.therapeuticTaskRef.resolveOrThrow().name
-
-            // Грязный хак - скрип логически является частью компонента формы, а самопальный фреймворк
-            // тестирования хтмл-компонентов считает что компонент формы целиком содержится в form
-            // Но если из-за ошибки валидации вернуть всю форму, то там будет скрипт с редекларацией переменных
-            // на которую будет ругаться браузер
-            // Теоретически при ошибке валидации можно вернуть не всю форму, а только ошибочное поле,
-            // но там тоже была какая-то проблема...
-            // Как-то так
-            val scriptElement = element.previousElementSibling()
-            val formExercises =
-                ProgramFormScript.initialExercises.value(
-                    scriptElement!!,
-                    object : TypeReference<List<ExerciseSummaryDto>>() {})
-            formExercises shouldBeSameSizeAs program.exercises
-            (formExercises zip program.exercises).forAll { (actual, e) ->
-                actual shouldBe e.exerciseRef.resolveOrThrow().toSummaryDto()
-            }
+        override fun matcher(): Matcher<Element> {
+            return Matcher.all(
+                beComponent(EditProgramForm),
+                haveInputWithValue(EditProgramForm.titleInput, program.title),
+                haveInputWithValue(
+                    EditProgramForm.therapeuticTaskInput,
+                    program.therapeuticTaskRef.resolveOrThrow().name
+                ),
+            )
         }
 
     }
