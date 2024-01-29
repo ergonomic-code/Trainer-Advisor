@@ -3,7 +3,7 @@
 <head>
     <div th:replace="~{fragments/header.html}"></div>
     <title th:text="${program?.title ?: 'Новая программа'}">Новая программа</title>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script th:replace="~{fragments/alpinejs.html}"></script>
 </head>
 <body class="sb-nav-fixed">
 
@@ -80,7 +80,7 @@
                             showDroplist: false,
 
                             show() {
-                                if (this.searchKey.length > 0) {
+                                if (this.searchKey?.length > 0) {
                                     this.showDroplist = true
                                 }
                             },
