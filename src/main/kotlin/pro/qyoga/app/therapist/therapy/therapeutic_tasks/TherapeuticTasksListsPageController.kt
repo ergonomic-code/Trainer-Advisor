@@ -1,6 +1,5 @@
 package pro.qyoga.app.therapist.therapy.therapeutic_tasks
 
-import org.springframework.data.domain.Pageable
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
@@ -8,14 +7,11 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
 import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo
 import pro.qyoga.core.therapy.therapeutic_tasks.errors.DuplicatedTherapeuticTaskName
+import pro.qyoga.core.therapy.therapeutic_tasks.findByNameContaining
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
 import pro.qyoga.core.users.internal.QyogaUserDetails
 import pro.qyoga.platform.spring.mvc.modelAndView
 import pro.qyoga.platform.spring.sdj.erpo.hydration.resolveOrThrow
-import pro.qyoga.platform.spring.sdj.withSortBy
-
-private val therapeuticTaskListPage = Pageable.ofSize(10)
-    .withSortBy(TherapeuticTask::name)
 
 private const val TASKS = "tasks"
 
@@ -31,17 +27,25 @@ class TherapeuticTasksListsPageController(
 ) {
 
     @GetMapping
-    fun getTherapeuticTasksList(): ModelAndView {
+    fun getTherapeuticTasksList(
+        @AuthenticationPrincipal principal: QyogaUserDetails
+    ): ModelAndView {
         return modelAndView("therapist/therapy/therapeutic-tasks/therapeutic-tasks-list") {
-            TASKS bindTo therapeuticTasksRepo.findByNameContaining(null, therapeuticTaskListPage)
+            TASKS bindTo therapeuticTasksRepo.findByNameContaining(
+                principal.id,
+                null,
+                TherapeuticTasksRepo.Page.topTenByName
+            )
         }
     }
 
     @GetMapping("/search")
     fun search(
-        @RequestParam searchKey: String?
+        @RequestParam searchKey: String?,
+        @AuthenticationPrincipal principal: QyogaUserDetails
     ): ModelAndView {
-        val tasks = therapeuticTasksRepo.findByNameContaining(searchKey, therapeuticTaskListPage)
+        val tasks =
+            therapeuticTasksRepo.findByNameContaining(principal.id, searchKey, TherapeuticTasksRepo.Page.topTenByName)
         return modelAndView("therapist/therapy/therapeutic-tasks/therapeutic-tasks-list :: tasks-list-data") {
             TASKS bindTo tasks
         }

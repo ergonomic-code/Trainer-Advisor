@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div th:replace="~{fragments/header.html}"></div>
+    <title th:text="${appointment?.title ?: 'Новый приём'}">Новый приём</title>
+    <script th:replace="~{fragments/alpinejs.html}"></script>
+</head>
+<body class="sb-nav-fixed">
+
+<div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
+
+<div id="layoutSidenav">
+
+    <div th:replace="~{fragments/leftNavPanel.html :: leftNavPanel (activeLink='schedule')}"></div>
+
+    <div id="layoutSidenav_content">
+        <main>
+            <section class="container px-4">
+                <h1 class="mt-4 pb-2 mb-3 border-bottom" th:text="${appointment?.title ?: 'Новый приём'}">
+                    Новый приём
+                </h1>
+
+                <form class="mt-4"
+                      id="editAppointmentForm"
+                      th:attr="hx-post=${pageMode == 'CREATE' ? '/therapist/appointments/new' : null},hx-put=${pageMode == 'EDIT' ? '/therapist/appointments/' + appointment?.id : null}"
+                      th:fragment="editAppointmentForm"
+                >
+
+                    <fieldset class="mb-4">
+                        <legend class="mb-4 border-bottom">Приём</legend>
+
+                        <div class="row justify-content-around mb-3">
+                            <div class="col-12 col-sm-4 mb-3 mb-sm-0">
+
+                                <combo-box-fragment id="client"
+                                                    th:replace="~{components/combo-box.html :: comboBox(
+                                                    name='client', fetchUrl='/therapist/clients/autocomplete-search',
+                                                    value=${appointment?.clientRef?.resolveOrThrow()?.id}, valueName=${appointment?.clientRef?.resolveOrThrow()?.fullName},
+                                                    placeholderView=~{:: #clientPlaceholder}, minlength=2, maxlength=100, required=true)}">
+                                    <label id="clientPlaceholder">Клиент <span class="text-danger">*</span></label>
+                                </combo-box-fragment>
+                                <div class="form-text">Начните вводить имя или телефон для поиска</div>
+
+                            </div>
+
+                            <div class="col-12 mb-3 mb-sm-0 col-sm-4">
+                                <combo-box-fragment id="appointmentType"
+                                                    th:replace="~{components/combo-box.html :: comboBox(
+                                                    name='appointmentType', fetchUrl='/therapist/appointments/types/autocomplete-search',
+                                                    value=${appointment?.typeRef?.resolveOrThrow()?.id}, valueName=${appointment?.typeRef?.resolveOrThrow()?.name},
+                                                    placeholderView=~{:: #typePlaceholder}, minlength=2, maxlength=50, required=true, selectOnly = false)}">
+                                    <label id="typePlaceholder">Тип приёма <span class="text-danger">*</span></label>
+                                </combo-box-fragment>
+                                <div class="form-text">Начните вводить название для поиска</div>
+
+                            </div>
+
+                            <div class="col-12 col-sm-4">
+                                <combo-box-fragment id="therapeuticTask"
+                                                    th:replace="~{components/combo-box.html :: comboBox(
+                                                    name='therapeuticTask', fetchUrl='/therapist/therapeutic-tasks/autocomplete-search-combo-box',
+                                                    value=${appointment?.therapeuticTaskRef?.resolveOrThrow()?.id}, valueName=${appointment?.therapeuticTaskRef?.resolveOrThrow()?.name},
+                                                    placeholderView=~{:: #therapeuticTaskPlaceholder}, minlength=2, maxlength=50)}">
+                                    <label id="therapeuticTaskPlaceholder">Терапевтическая задача</label>
+                                </combo-box-fragment>
+                                <div class="form-text">Начните вводить название для поиска</div>
+
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="mb-4">
+                        <legend class="border-bottom mb-4">Время и место</legend>
+
+                        <div class="row mb-3">
+                            <div class="col-12 col-sm-3 mb-3 mb-sm-0">
+                                <div class="form-floating ">
+                                    <input class="form-control"
+                                           id="dateTime"
+                                           max="2100-01-01"
+                                           min="2000-01-01"
+                                           name="dateTime"
+                                           required
+                                           th:value="${appointment?.dateTime}"
+                                           type="datetime-local">
+                                    <label for="dateTime">Дата и время <span class="text-danger">*</span></label>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-3 mb-3 mb-sm-0">
+                                <combo-box-fragment id="timeZone"
+                                                    th:replace="~{components/combo-box.html :: comboBox(
+                                                    name='timeZone', fetchUrl='/components/time-zone/autocomplete-search',
+                                                    value=${appointment?.zoneId?.id}, valueName=${appointment?.displayName()?.id},
+                                                    placeholderView=~{:: #timeZonePlaceholder}, required=true, minlength=2, maxlength=50)}">
+                                    <label id="timeZonePlaceholder">Часововй пояс <span
+                                            class="text-danger">*</span></label>
+                                </combo-box-fragment>
+                                <script th:inline="javascript">
+                                    let allTimeZones = /*[[${allAvailableTimeZones}]]*/ [];
+                                    let localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                                    let localTimeZoneInfo = allTimeZones.find((tz) => tz.id === localTimeZone);
+                                    let localTimeZoneName = localTimeZoneInfo ? localTimeZoneInfo.title : '';
+
+                                    document.querySelector("input[name='timeZone']").value = localTimeZone.toString();
+                                    document.querySelector("#timeZoneTitle").value = localTimeZoneName;
+                                </script>
+                            </div>
+                            <div class="col-12 col-sm-5">
+                                <div class="form-floating ">
+                                    <input class="form-control"
+                                           id="place"
+                                           maxlength="512"
+                                           minlength="2"
+                                           name="place"
+                                           placeholder="Место"
+                                           type="text"
+                                    >
+                                    <label for="place">Место</label>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="mb-4">
+                        <legend class="border-bottom mb-4">Оплата</legend>
+
+                        <div class="row align-items-center">
+                            <div class="col-8 col-sm-3 ">
+                                <div class="input-group">
+                                    <div class="form-floating">
+                                        <input class="form-control"
+                                               id="cost"
+                                               max="100000"
+                                               min="0"
+                                               name="cost"
+                                               placeholder="Стоимость"
+                                               step="100"
+                                               th:value="${appointment?.therapeuticTaskRef?.resolveOrThrow()?.title ?: ''}"
+                                               type="number">
+                                        <label for="cost">Стоимость</label>
+                                    </div>
+                                    <span class="input-group-text">
+                                         &nbsp; ₽ &nbsp;
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="col-3 col-sm-2">
+                                <div class="form-check">
+                                    <input class="form-check-input" id="payed" name="payed" type="checkbox" value="">
+                                    <label class="form-check-label" for="payed">
+                                        Оплачено
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="mb-4">
+                        <legend class="border-bottom mb-4">Комментарий</legend>
+                        <textarea class="form-control" name="comment" rows="10"></textarea>
+                    </fieldset>
+
+                    <div class="row g-2 justify-content-end">
+                        <div class="col-6 col-sm-auto text-center">
+                            <a class="btn btn-outline-danger" href="/therapist/schedule"
+                               onclick="if (!window.confirm('Вы уверены, что хотите отменить все изменения и выйти?')) {event.preventDefault(); return false}"
+                               style="min-width: 110px;">
+                                Отмена
+                            </a>
+                        </div>
+                        <div class="col-6 col-sm-auto text-center">
+                            <button class="btn btn-outline-success" name="save" style="min-width: 110px;"
+                                    type="submit">
+                                Сохранить
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+            </section>
+        </main>
+        <footer th:insert="~{fragments/footer.html}"></footer>
+
+    </div>
+</div>
+
+</body>
+</html>

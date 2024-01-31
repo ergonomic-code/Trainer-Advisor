@@ -7,9 +7,16 @@ import org.springframework.data.relational.core.query.isEqual
 import java.time.LocalDate
 import kotlin.reflect.KProperty1
 
+enum class BuildMode {
+    AND,
+    OR
+}
+
 class QueryBuilder {
 
-    private val criteria: List<Criteria> = arrayListOf()
+    private val criteria: List<CriteriaDefinition> = arrayListOf()
+
+    var mode = BuildMode.AND
 
     infix fun <T> KProperty1<*, T>.isEqualIfNotNull(value: T?) {
         if (value != null) {
@@ -43,7 +50,20 @@ class QueryBuilder {
         }
     }
 
-    fun build() = Query.query(CriteriaDefinition.from(criteria))
+    fun build() = Query.query(toCriteriaDefinition())
+
+    private fun toCriteriaDefinition() =
+        if (mode == BuildMode.AND) {
+            CriteriaDefinition.from(criteria)
+        } else {
+            criteria.fold(Criteria.empty()) { acc, c -> acc.or(c) }
+        }
+
+    fun and(subExpression: QueryBuilder.() -> Unit) {
+        val subQueryBuilder = QueryBuilder()
+        subQueryBuilder.subExpression()
+        criteria.addLast(subQueryBuilder.toCriteriaDefinition())
+    }
 
 }
 

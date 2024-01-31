@@ -17,6 +17,7 @@ object LeftNavBarFragment : Component {
     override fun selector() = "#layoutSidenav_nav"
 
     // Work
+    private val scheduleLink = Link("schedulePageLink", SchedulePage, "Расписание")
     private val clientsLink = Link("clientsPageLink", ClientsListPage, "Клиенты")
     private val programsLink = Link("programsPageLink", ProgramsListPage, "Программы")
 
@@ -30,6 +31,7 @@ object LeftNavBarFragment : Component {
 
     override fun matcher(): Matcher<Element> =
         Matcher.all(
+            haveComponent(scheduleLink),
             haveComponent(clientsLink),
             haveComponent(programsLink),
 

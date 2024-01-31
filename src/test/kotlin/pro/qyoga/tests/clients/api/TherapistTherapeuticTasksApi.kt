@@ -8,6 +8,7 @@ import io.restassured.module.kotlin.extensions.When
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
+import pro.qyoga.app.therapist.therapy.therapeutic_tasks.components.TherapeuticTasksComboBoxController
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
 import pro.qyoga.tests.clients.pages.therapist.clients.journal.entry.CreateJournalEntryForm
 import pro.qyoga.tests.clients.pages.therapist.clients.journal.entry.TherapeuticTasksSearchResult
@@ -34,6 +35,22 @@ class TherapistTherapeuticTasksApi(override val authCookie: Cookie) : Authorized
             queryParams(CreateJournalEntryForm.therapeuticTaskNameInput.name, searchKey)
         } When {
             get(TherapeuticTasksSearchResult.PATH)
+        } Then {
+            statusCode(HttpStatus.OK.value())
+        } Extract {
+            Jsoup.parse(body().asString())
+        }
+    }
+
+    fun autocompleteSearch2(searchKey: String?): Document {
+        return Given {
+            authorized()
+            if (searchKey != null) {
+                queryParams("therapeuticTaskTitle", searchKey)
+            }
+            this
+        } When {
+            get(TherapeuticTasksComboBoxController.PATH)
         } Then {
             statusCode(HttpStatus.OK.value())
         } Extract {

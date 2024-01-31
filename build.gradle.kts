@@ -59,6 +59,7 @@ dependencies {
 	implementation("org.apache.poi:poi-ooxml-lite:5.2.5")
 
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
 	testFixturesImplementation("org.springframework.boot:spring-boot-starter-test")
 	testFixturesApi("org.springframework.boot:spring-boot-testcontainers")

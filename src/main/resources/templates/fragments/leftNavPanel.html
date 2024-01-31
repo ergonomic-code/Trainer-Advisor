@@ -15,6 +15,23 @@
             </li>
 
             <li class="nav-item">
+                <a class="nav-link"
+                   href="/therapist/schedule"
+                   id="schedulePageLink"
+                   th:classappend="${activeLink == 'schedule'} ? 'active' : ''">
+                    <div class="row">
+                        <div class="col-1">
+                            <i class="fas fa-calendar me-2 icon"></i>
+                        </div>
+                        <div class="col">
+                            Расписание
+                        </div>
+                    </div>
+                </a>
+            </li>
+
+
+            <li class="nav-item">
                 <a
                         class="nav-link"
                         href="/therapist/clients"
@@ -26,19 +43,6 @@
                         </div>
                         <div class="col">
                             Клиенты
-                        </div>
-                    </div>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link disabled">
-                    <div class="row">
-                        <div class="col-1">
-                            <i class="fas fa-calendar me-2 icon"></i>
-                        </div>
-                        <div class="col">
-                            Расписание
                         </div>
                     </div>
                 </a>

@@ -6,6 +6,8 @@ import pro.qyoga.tests.fixture.backgrounds.exercises.ExerciseBackgrounds
 
 @Component
 data class Backgrounds(
+    val appointments: AppointmentsBackgrounds,
+    val appointmentTypes: AppointmentTypesBackgrounds,
     val clients: ClientsBackgrounds,
     val clientJournal: ClientJournalBackgrounds,
     val clientFiles: ClientFilesBackgrounds,

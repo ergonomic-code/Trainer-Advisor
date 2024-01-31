@@ -7,9 +7,10 @@ import io.kotest.matchers.should
 import io.kotest.matchers.shouldNot
 import org.jsoup.nodes.Element
 import pro.qyoga.tests.infra.html.Component
+import pro.qyoga.tests.infra.html.HtmlPage
 import pro.qyoga.tests.infra.html.Input
 
-infix fun Element.shouldBeElement(pageMatcher: PageMatcher) = pageMatcher.match(this)
+
 fun beComponent(component: Component) = Matcher<Element> { element ->
     val matchingElement = element.select(component.selector()).first()
 
@@ -108,6 +109,24 @@ fun beTagWithText(tag: String, text: String) = Matcher.all(
 )
 
 fun beTitle(text: String) = beTagWithText("title", text)
+
+fun haveTitle(title: String): Matcher<Element> =
+    Matcher.all(haveComponent(SelectorOnlyComponent("title")),
+        Matcher { element: Element ->
+            val titleElement = element.getElementsByTag("title").single()
+            MatcherResult(
+                titleElement.text() == title,
+                { "Element ${titleElement.descr} have title [${element.text()}] but [$title] expected" },
+                { "Element ${titleElement.descr} should not have title [${element.text()}]" },
+            )
+        }
+    )
+
+infix fun Element.shouldHaveTitle(title: String): Element {
+    this should haveTitle(title)
+    return this
+}
+
 fun haveInputWithValue(input: Input, value: String) = Matcher { element: Element ->
     val isComponent = haveComponent(input).test(element)
     if (!isComponent.passed()) {
@@ -121,12 +140,6 @@ fun haveInputWithValue(input: Input, value: String) = Matcher { element: Element
         { "Input ${inputElement.descr} have value `$actualValue` but `$value` expected" },
         { "Input ${inputElement.descr} should not have value `$value`" }
     )
-}
-
-infix fun Element.shouldHaveTitle(title: String): Element {
-    val titleElement = this.getElementsByTag("title").single()
-    titleElement should beTitle(title)
-    return this
 }
 
 val Element.descr
@@ -154,8 +167,43 @@ infix fun Element.shouldNotHave(selector: String) {
     this shouldNot haveComponent(SelectorOnlyComponent(selector))
 }
 
+fun bePage(page: HtmlPage) = Matcher.all(
+    Matcher { element: Element ->
+        MatcherResult(element.root() == element,
+            { "Element ${element.descr} should be root element but it isn't" },
+            { "Element ${element.descr} should not be root element" }
+        )
+    },
+    page.matcher
+)
+
+infix fun Element.shouldBePage(page: HtmlPage): Element {
+    this should bePage(page)
+    return this
+}
+
 fun alwaysSuccess(): Matcher<Element> = Matcher { element ->
     MatcherResult(true, { "" }, { "" })
+}
+
+fun haveComponent(selector: String) = haveComponent(SelectorOnlyComponent(selector))
+
+fun haveElements(selector: String, count: Int): Matcher<Element> = Matcher { element ->
+    val elements = element.select(selector)
+    val actualCount = elements.size
+    MatcherResult(
+        actualCount == count,
+        {
+            "Element ${element.descr} have ${actualCount} elements matching $selector but $count is expected.\nElements: ${elements.map { it.descr }}"
+        },
+        { "Element ${element.descr} should not have ${actualCount} elements matching $selector.\nElements: ${elements.map { it.descr }}" }
+    )
+
+}
+
+fun Element.shouldHaveElements(selector: String, count: Int): Element {
+    this should haveElements(selector, count)
+    return this
 }
 
 data class SelectorOnlyComponent(val selector: String) : Component {

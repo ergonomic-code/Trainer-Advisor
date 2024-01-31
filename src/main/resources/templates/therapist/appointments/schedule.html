@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div th:replace="~{fragments/header.html}"></div>
+    <title>Расписание</title>
+</head>
+
+<body class="sb-nav-fixed">
+
+<div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
+
+<div id="layoutSidenav">
+
+    <div th:replace="~{fragments/leftNavPanel :: leftNavPanel (activeLink='schedule')}"></div>
+
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container px-4">
+                <h1 class="mt-4 mb-3 pb-2 mb-3 border-bottom">Расписание</h1>
+
+                <div class="d-flex justify-content-end">
+                    <a class="btn btn-outline-success" href="/therapist/appointments/new"
+                       id="addTrainingSessionLink">
+                        Запланировать приём
+                    </a>
+                </div>
+            </div>
+
+        </main>
+        <footer th:insert="~{fragments/footer.html :: footer}"></footer>
+    </div>
+</div>
+
+</body>
+</html>

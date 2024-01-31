@@ -12,6 +12,7 @@ import pro.qyoga.platform.spring.sdj.erpo.hydration.Identifiable
 import java.time.Instant
 import java.time.LocalDate
 
+typealias ClientRef = AggregateReference<Client, Long>
 
 @Table("clients")
 data class Client(

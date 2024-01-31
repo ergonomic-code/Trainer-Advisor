@@ -1,6 +1,7 @@
 package pro.qyoga.app.therapist.therapy.programs.edit
 
 import org.springframework.web.servlet.ModelAndView
+import pro.qyoga.app.common.EntityPageMode
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
 import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
 import pro.qyoga.core.therapy.programs.model.Program
@@ -10,11 +11,6 @@ import pro.qyoga.platform.spring.sdj.erpo.hydration.resolveOrNull
 import pro.qyoga.platform.spring.sdj.erpo.hydration.resolveOrThrow
 
 const val NOT_EXISTING_THERAPEUTIC_TASK = "notExistingTherapeuticTask"
-
-enum class ProgramPageMode {
-    CREATE,
-    EDIT
-}
 
 data class ProgramPageModel(
     val id: Long,
@@ -39,7 +35,7 @@ data class ProgramPageModel(
 }
 
 fun programPageModelAndView(
-    pageMode: ProgramPageMode,
+    pageMode: EntityPageMode,
     program: ProgramPageModel? = null,
     fragment: String? = null,
     additionalModel: ModelAndViewBuilder.() -> Unit = {}

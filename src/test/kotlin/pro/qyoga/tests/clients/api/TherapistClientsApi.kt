@@ -9,6 +9,7 @@ import org.hamcrest.CoreMatchers.endsWith
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
+import pro.qyoga.app.therapist.clients.components.ClientsComboBoxController
 import pro.qyoga.core.clients.cards.api.ClientCardDto
 import pro.qyoga.core.clients.cards.api.ClientSearchDto
 import pro.qyoga.tests.clients.pages.therapist.clients.ClientsListPage
@@ -140,6 +141,22 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
             delete(ClientsListPage.deleteAction)
         } Then {
             statusCode(HttpStatus.OK.value())
+        }
+    }
+
+    fun autocompleteClients(searchKey: String?): Document {
+        return Given {
+            authorized()
+            if (searchKey != null) {
+                queryParam("clientTitle", searchKey)
+            }
+            this
+        } When {
+            get(ClientsComboBoxController.PATH)
+        } Then {
+            statusCode(HttpStatus.OK.value())
+        } Extract {
+            Jsoup.parse(body().asString())
         }
     }
 

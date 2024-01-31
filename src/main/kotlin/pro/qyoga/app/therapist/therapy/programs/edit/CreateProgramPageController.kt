@@ -5,6 +5,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
+import pro.qyoga.app.common.EntityPageMode
 import pro.qyoga.core.therapy.exercises.ExercisesService
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSearchDto
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
@@ -22,7 +23,7 @@ class CreateProgramPageController(
 
     @GetMapping
     fun getCreateProgramPage(): ModelAndView {
-        return programPageModelAndView(ProgramPageMode.CREATE)
+        return programPageModelAndView(EntityPageMode.CREATE)
     }
 
     @PostMapping
@@ -33,7 +34,7 @@ class CreateProgramPageController(
     ): Any = when (createProgram(createProgramRequest, therapeuticTaskName, therapist.id)) {
         is CreateProgramResult.InvalidTherapeuticTaskName ->
             programPageModelAndView(
-                pageMode = ProgramPageMode.CREATE,
+                pageMode = EntityPageMode.CREATE,
                 program = ProgramPageModel(createProgramRequest, therapeuticTaskName),
                 fragment = "programForm"
             ) {
