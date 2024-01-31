@@ -3,6 +3,7 @@ package pro.qyoga.tests.cases.app.auth
 import com.fasterxml.jackson.databind.JsonNode
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.types.shouldBeInstanceOf
+import io.restassured.http.ContentType
 import io.restassured.http.Cookie
 import io.restassured.matcher.RestAssuredMatchers.detailedCookie
 import io.restassured.module.kotlin.extensions.Extract
@@ -132,6 +133,19 @@ class AuthTests : QYogaAppIntegrationBaseTest() {
         // Then
         resp shouldNotBe null
         resp!!["_links"]["env"].shouldBeInstanceOf<JsonNode>()
+    }
+
+    @Test
+    fun `TA should allow access to fonts endpoints without authentication`() {
+        Given {
+            // no auth
+            accept(ContentType.ANY)
+            this
+        } When {
+            get("/fonts/inter/Inter-Regular.woff2")
+        } Then {
+            statusCode(HttpStatus.OK.value())
+        }
     }
 
 }
