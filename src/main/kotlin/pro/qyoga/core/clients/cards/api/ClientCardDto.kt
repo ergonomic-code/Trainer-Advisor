@@ -13,7 +13,7 @@ data class ClientCardDto(
     val phoneNumber: String,
     val email: String?,
     val address: String?,
-    val complaints: String,
+    val complaints: String?,
     val anamnesis: String?,
     val distributionSourceType: DistributionSourceType?,
     val distributionSourceComment: String?,

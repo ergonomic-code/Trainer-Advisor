@@ -80,7 +80,7 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
             formParam(CreateClientForm.email.name, request.email ?: "")
             formParam(CreateClientForm.phoneNumber.name, request.phoneNumber)
             formParam(CreateClientForm.address.name, request.address ?: "")
-            formParam(CreateClientForm.complaints.name, request.complaints)
+            formParam(CreateClientForm.complaints.name, request.complaints ?: "")
             formParam(CreateClientForm.anamnesis.name, request.anamnesis ?: "")
             formParam(CreateClientForm.distributionSourceType.name, request.distributionSourceType ?: "")
             formParam(CreateClientForm.distributionSourceComment.name, request.distributionSourceComment ?: "")
