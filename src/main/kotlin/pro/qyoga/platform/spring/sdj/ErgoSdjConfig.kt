@@ -16,4 +16,8 @@ class ErgoSdjConfig {
         }
     }
 
+    @Bean
+    fun aggregateReferenceBindingAdvice() =
+        AggregateReferenceBindingAdvice()
+
 }

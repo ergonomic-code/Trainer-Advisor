@@ -24,3 +24,4 @@ infix fun Element.shouldHave(pageMatcher: PageMatcher) {
 
 infix fun Document.shouldHave(pageMatcher: PageMatcher) = pageMatcher.match(this)
 
+infix fun Element.shouldBeElement(pageMatcher: PageMatcher) = pageMatcher.match(this)

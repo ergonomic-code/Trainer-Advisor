@@ -16,7 +16,7 @@ class Link(
 
     private val urlRegex = urlPattern.replace("\\{.*?}".toRegex(), ".*")
 
-    constructor(id: String, page: QYogaPage, text: String) : this(id, page.path, text)
+    constructor(id: String, page: HtmlPageCompat, text: String) : this(id, page.path, text)
 
     override fun selector(): String =
         buildString {

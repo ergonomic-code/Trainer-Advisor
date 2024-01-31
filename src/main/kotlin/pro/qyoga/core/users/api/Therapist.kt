@@ -4,10 +4,12 @@ import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.annotation.Version
+import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.Table
 import pro.qyoga.platform.spring.sdj.erpo.hydration.Identifiable
 import java.time.Instant
 
+typealias TherapistRef = AggregateReference<Therapist, Long>
 
 @Table("therapists")
 data class Therapist(

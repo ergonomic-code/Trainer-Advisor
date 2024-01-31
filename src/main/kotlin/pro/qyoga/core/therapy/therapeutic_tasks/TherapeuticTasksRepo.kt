@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional
 import pro.qyoga.core.therapy.therapeutic_tasks.errors.DuplicatedTherapeuticTaskName
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
 import pro.qyoga.platform.spring.sdj.erpo.ErgoRepository
+import pro.qyoga.platform.spring.sdj.withSortBy
 
 
 @Repository
@@ -29,6 +30,11 @@ class TherapeuticTasksRepo(
     jdbcConverter,
     relationalMappingContext
 ) {
+
+    object Page {
+        val topFiveByName = Pageable.ofSize(5).withSortBy(TherapeuticTask::name)
+        val topTenByName = Pageable.ofSize(10).withSortBy(TherapeuticTask::name)
+    }
 
     @Transactional
     override fun <S : TherapeuticTask?> save(instance: S & Any): S & Any {
@@ -54,12 +60,17 @@ class TherapeuticTasksRepo(
         return persistedTask
     }
 
-    fun findByNameContaining(searchKey: String?, page: Pageable): Iterable<TherapeuticTask> {
-        return findAll(page) {
-            TherapeuticTask::name isILikeIfNotNull searchKey
-        }
-    }
+}
 
+fun TherapeuticTasksRepo.findByNameContaining(
+    therapistId: Long,
+    searchKey: String?,
+    page: Pageable
+): Iterable<TherapeuticTask> {
+    return findAll(page) {
+        TherapeuticTask::owner isEqual therapistId
+        TherapeuticTask::name isILikeIfNotNull searchKey
+    }
 }
 
 fun TherapeuticTasksRepo.findByName(name: String): TherapeuticTask? =

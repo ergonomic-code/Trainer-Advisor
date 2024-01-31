@@ -15,7 +15,9 @@ import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_PASSWORD
 
 class TherapistClient(val authCookie: Cookie) {
 
+
     // Work
+    val appointments = TherapistAppointmentsApi(authCookie)
     val clients = TherapistClientsApi(authCookie)
     val clientJournal = TherapistClientJournalApi(authCookie)
     val clientFiles = TherapistClientFilesApi(authCookie)
@@ -25,6 +27,7 @@ class TherapistClient(val authCookie: Cookie) {
     // Dictionaries
     val exercises = TherapistExercisesApi(authCookie)
     val therapeuticTasks = TherapistTherapeuticTasksApi(authCookie)
+    val appointmentTypes = TherapistAppointmentTypesApi(authCookie)
 
     fun getIndexPage(): Document {
         return Given {

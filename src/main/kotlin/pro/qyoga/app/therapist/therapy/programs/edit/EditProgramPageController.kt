@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.servlet.ModelAndView
+import pro.qyoga.app.common.EntityPageMode
 import pro.qyoga.app.common.notFound
 import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
 import pro.qyoga.platform.spring.http.hxRedirect
@@ -22,7 +23,7 @@ class EditProgramPageController(
     fun getEditProgramPage(@PathVariable programId: Long): ModelAndView {
         val program = getProgram(programId)
             ?: return notFound
-        return programPageModelAndView(ProgramPageMode.EDIT, ProgramPageModel(program))
+        return programPageModelAndView(EntityPageMode.EDIT, ProgramPageModel(program))
     }
 
     @PutMapping
@@ -34,7 +35,7 @@ class EditProgramPageController(
         when (this.editProgram(programId, updateProgramRequest, therapeuticTaskName)) {
             is EditProgramResult.InvalidTherapeuticTaskName ->
                 programPageModelAndView(
-                    pageMode = ProgramPageMode.EDIT,
+                    pageMode = EntityPageMode.EDIT,
                     program = ProgramPageModel(updateProgramRequest, therapeuticTaskName, programId),
                     fragment = "programForm"
                 ) {

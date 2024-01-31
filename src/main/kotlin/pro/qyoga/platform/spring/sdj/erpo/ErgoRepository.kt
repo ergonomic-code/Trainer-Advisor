@@ -82,6 +82,17 @@ class ErgoRepository<T : Any, ID : Any>(
         return res.mapContent { jdbcAggregateTemplate.hydrate(res, FetchSpec(fetch)) }
     }
 
+    fun findSlice(
+        pageRequest: Pageable = ALL,
+        fetch: Iterable<KProperty1<T, *>> = emptySet(),
+        queryBuilder: QueryBuilder.() -> Unit = {}
+    ): Iterable<T> {
+        val query = query(queryBuilder)
+        val res = jdbcAggregateTemplate.findAll(query, entity.type, pageRequest)
+            .content
+        return res.let { jdbcAggregateTemplate.hydrate(res, FetchSpec(fetch)) }
+    }
+
     fun findPage(
         query: String,
         paramMap: Map<String, Any>,

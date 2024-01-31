@@ -1,8 +1,10 @@
 package pro.qyoga.core.users.internal
 
+import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
+import pro.qyoga.core.users.api.TherapistRef
 import pro.qyoga.core.users.api.User
 
 data class QyogaUserDetails(
@@ -11,6 +13,8 @@ data class QyogaUserDetails(
     private val password: String,
     private val roles: Collection<GrantedAuthority>
 ) : UserDetails {
+
+    val ref: TherapistRef = AggregateReference.to(id)
 
     override fun getAuthorities(): Collection<GrantedAuthority> = this.roles
 

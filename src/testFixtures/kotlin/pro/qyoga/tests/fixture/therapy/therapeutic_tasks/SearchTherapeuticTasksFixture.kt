@@ -1,8 +1,7 @@
 package pro.qyoga.tests.fixture.therapy.therapeutic_tasks
 
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
-import java.text.Collator
-import java.util.*
+import pro.qyoga.l10n.systemCollator
 
 object SearchTherapeuticTasksFixture {
 
@@ -24,8 +23,6 @@ object SearchTherapeuticTasksFixture {
         "Терапия ГЭРБ"
     )
 
-    private val collator = Collator.getInstance(Locale.of("ru", "RU"))
-
     fun getExpectedSearchResult(
         allTasks: List<TherapeuticTask>,
         searchKey: String,
@@ -33,6 +30,6 @@ object SearchTherapeuticTasksFixture {
     ) =
         allTasks
             .filter { it.name.lowercase().contains(searchKey.lowercase()) }
-            .sortedWith { o1, o2 -> collator.compare(o1.name, o2.name) }
+            .sortedWith { o1, o2 -> systemCollator.compare(o1.name, o2.name) }
             .take(pageSize)
 }

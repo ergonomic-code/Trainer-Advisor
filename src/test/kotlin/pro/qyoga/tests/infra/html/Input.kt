@@ -11,12 +11,13 @@ data class Input(
     override val required: Boolean,
     val type: String,
     val alpineJs: Boolean = false,
-    val value: String? = null
+    val value: String? = null,
+    val id: String? = null
 ) : InputBase {
 
     private val nameAttrName = if (alpineJs) ":name" else "name"
 
-    override fun selector() = "input[$nameAttrName=$name][type=$type]"
+    override fun selector() = if (id != null) "#$id" else "input[$nameAttrName=$name][type=$type]"
 
     override fun matcher(): Matcher<Element> {
         val matchers = buildList {
@@ -36,8 +37,8 @@ data class Input(
 
     companion object {
 
-        fun text(name: String, required: Boolean, value: String? = null) =
-            Input(name, required, "text", value = value)
+        fun text(name: String, required: Boolean, value: String? = null, id: String? = null) =
+            Input(name, required, "text", value = value, id = id)
 
         fun email(name: String, required: Boolean) =
             Input(name, required, "email")
@@ -50,6 +51,12 @@ data class Input(
 
         fun date(name: String, required: Boolean) =
             Input(name, required, "date")
+
+        fun dateTimeLocal(name: String, required: Boolean) =
+            Input(name, required, "datetime-local")
+
+        fun checkbox(name: String, required: Boolean) =
+            Input(name, required, "checkbox")
 
         fun tel(name: String, required: Boolean) =
             Input(name, required, "tel")

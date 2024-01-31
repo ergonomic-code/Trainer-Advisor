@@ -39,6 +39,7 @@ class WebSecurityConfig(
                         HttpMethod.GET,
                         "/",
                         "/register",
+                        "/components/**",
                         "/styles/**",
                         "/img/**",
                         "/js/**",
