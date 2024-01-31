@@ -49,7 +49,7 @@ object ClientsObjectMother {
         phone: String = randomPhoneNumber(),
         email: String? = null,
         address: String? = null,
-        complains: String = randomCyrillicWord(),
+        complains: String? = null,
         anamnesis: String? = null,
         distributionSource: DistributionSource? = null
     ): ClientCardDto = ClientCardDto(

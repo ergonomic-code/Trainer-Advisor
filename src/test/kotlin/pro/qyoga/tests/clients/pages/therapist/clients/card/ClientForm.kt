@@ -20,7 +20,7 @@ abstract class ClientForm(action: FormAction) : QYogaForm("createClientForm", ac
     val phoneNumber = tel("phoneNumber", true)
     val email = email("email", false)
     val address = text("address", false)
-    val complaints = TextArea("complaints", true)
+    val complaints = TextArea("complaints", false)
     val anamnesis = TextArea("anamnesis", false)
     val distributionSourceType =
         Select("distributionSourceType", false, DistributionSourceType.entries.map { Option.of(it) })

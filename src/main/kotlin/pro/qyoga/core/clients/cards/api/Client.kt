@@ -22,7 +22,7 @@ data class Client(
     val phoneNumber: String,
     val email: String?,
     val address: String?,
-    val complaints: String,
+    val complaints: String?,
     val anamnesis: String?,
     @Embedded(onEmpty = Embedded.OnEmpty.USE_NULL, prefix = "distribution_source_")
     val distributionSource: DistributionSource?,
