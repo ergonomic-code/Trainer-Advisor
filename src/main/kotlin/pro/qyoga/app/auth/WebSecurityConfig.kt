@@ -35,7 +35,16 @@ class WebSecurityConfig(
                     .requestMatchers("/ops/**").hasAuthority(Role.ROLE_ADMIN.toString())
 
                     // Public
-                    .requestMatchers(HttpMethod.GET, "/", "/register", "/styles/**", "/img/**", "/js/**", "/test/*")
+                    .requestMatchers(
+                        HttpMethod.GET,
+                        "/",
+                        "/register",
+                        "/styles/**",
+                        "/img/**",
+                        "/js/**",
+                        "/fonts/**",
+                        "/test/*"
+                    )
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, "/login", "/register", "/error-p").permitAll()
                     .requestMatchers("/error").permitAll()
