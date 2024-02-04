@@ -9,7 +9,7 @@ import pro.qyoga.core.appointments.core.dtos.EditAppointmentRequest
 import pro.qyoga.core.appointments.types.model.AppointmentTypeRef
 import pro.qyoga.core.clients.cards.api.ClientRef
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
-import pro.qyoga.core.users.api.TherapistRef
+import pro.qyoga.core.users.therapists.TherapistRef
 import java.time.Instant
 import java.time.ZoneId
 

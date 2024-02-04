@@ -1,4 +1,4 @@
-package pro.qyoga.core.users.api
+package pro.qyoga.core.users.therapists
 
 
 data class RegisterTherapistRequest(

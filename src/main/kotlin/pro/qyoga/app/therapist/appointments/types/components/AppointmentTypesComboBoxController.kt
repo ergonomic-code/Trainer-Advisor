@@ -9,7 +9,8 @@ import pro.qyoga.app.components.combobox.ComboBoxItem
 import pro.qyoga.app.components.combobox.ComboBoxModelAndView
 import pro.qyoga.core.appointments.types.AppointmentTypesRepo
 import pro.qyoga.core.appointments.types.findByNameContaining
-import pro.qyoga.core.users.internal.QyogaUserDetails
+import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
+import pro.qyoga.core.users.therapists.ref
 
 
 @Controller

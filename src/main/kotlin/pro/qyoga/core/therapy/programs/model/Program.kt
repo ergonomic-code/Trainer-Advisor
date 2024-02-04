@@ -7,7 +7,7 @@ import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
 import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
-import pro.qyoga.core.users.api.Therapist
+import pro.qyoga.core.users.therapists.Therapist
 import pro.qyoga.platform.spring.sdj.erpo.hydration.FetchSpec
 import pro.qyoga.platform.spring.sdj.erpo.hydration.hydrate
 import java.time.Instant

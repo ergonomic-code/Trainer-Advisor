@@ -6,7 +6,7 @@ import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
 import pro.qyoga.core.therapy.programs.model.Program
 import pro.qyoga.core.therapy.programs.model.ProgramExercise
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
-import pro.qyoga.core.users.api.Therapist
+import pro.qyoga.core.users.therapists.Therapist
 import pro.qyoga.platform.spring.sdj.erpo.hydration.ref
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_REF

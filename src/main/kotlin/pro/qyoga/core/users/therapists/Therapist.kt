@@ -1,4 +1,4 @@
-package pro.qyoga.core.users.api
+package pro.qyoga.core.users.therapists
 
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
@@ -6,6 +6,7 @@ import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.annotation.Version
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.Table
+import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.platform.spring.sdj.erpo.hydration.Identifiable
 import java.time.Instant
 
@@ -25,3 +26,6 @@ data class Therapist(
     @Version
     val version: Long = 0
 ) : Identifiable<Long>
+
+val QyogaUserDetails.ref: TherapistRef
+    get() = AggregateReference.to(id)

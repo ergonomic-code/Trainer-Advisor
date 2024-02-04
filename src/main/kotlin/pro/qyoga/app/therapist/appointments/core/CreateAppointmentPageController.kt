@@ -11,7 +11,8 @@ import pro.azhidkov.timezones.TimeZones
 import pro.qyoga.app.common.EntityPageMode
 import pro.qyoga.app.components.toComboBoxItem
 import pro.qyoga.core.appointments.core.dtos.EditAppointmentRequest
-import pro.qyoga.core.users.internal.QyogaUserDetails
+import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
+import pro.qyoga.core.users.therapists.ref
 import pro.qyoga.platform.spring.http.hxRedirect
 
 

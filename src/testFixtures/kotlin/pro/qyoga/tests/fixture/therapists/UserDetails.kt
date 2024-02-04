@@ -1,8 +1,8 @@
 package pro.qyoga.tests.fixture.therapists
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority
-import pro.qyoga.core.users.api.Role
-import pro.qyoga.core.users.internal.QyogaUserDetails
+import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
+import pro.qyoga.core.users.auth.model.Role
 
 val theTherapistUserDetails = QyogaUserDetails(
     THE_THERAPIST_ID,
