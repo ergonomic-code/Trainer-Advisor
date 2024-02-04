@@ -19,9 +19,8 @@ class CreateAppointment(
     override fun invoke(therapistRef: TherapistRef, editAppointmentRequest: EditAppointmentRequest): Appointment {
         var typeRef = editAppointmentRequest.appointmentType
         if (typeRef == null) {
-            typeRef =
-                appointmentTypesRepo.save(AppointmentType(therapistRef, editAppointmentRequest.appointmentTypeTitle))
-                    .ref()
+            val appointmentType = AppointmentType(therapistRef, editAppointmentRequest.appointmentTypeTitle)
+            typeRef = appointmentTypesRepo.save(appointmentType).ref()
         }
 
         return appointmentsRepo.save(Appointment(therapistRef, editAppointmentRequest, typeRef))

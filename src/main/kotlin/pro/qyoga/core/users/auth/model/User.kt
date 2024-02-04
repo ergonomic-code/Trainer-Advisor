@@ -4,8 +4,11 @@ import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.annotation.Version
+import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.Table
 import java.time.Instant
+
+typealias UserRef = AggregateReference<User, Long>
 
 @Table("users")
 data class User(
