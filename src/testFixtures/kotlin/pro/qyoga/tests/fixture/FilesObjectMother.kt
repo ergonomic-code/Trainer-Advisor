@@ -2,8 +2,8 @@ package pro.qyoga.tests.fixture
 
 import org.springframework.mock.web.MockMultipartFile
 import org.springframework.web.multipart.MultipartFile
-import pro.qyoga.platform.file_storage.api.FileMetaData
-import pro.qyoga.platform.file_storage.api.StoredFile
+import pro.azhidkov.platform.file_storage.api.FileMetaData
+import pro.azhidkov.platform.file_storage.api.StoredFile
 import pro.qyoga.tests.fixture.data.*
 import java.nio.file.Files
 import java.nio.file.Path

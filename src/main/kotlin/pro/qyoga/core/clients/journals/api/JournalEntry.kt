@@ -6,10 +6,10 @@ import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.annotation.Version
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.Table
+import pro.azhidkov.platform.spring.sdj.erpo.hydration.ref
 import pro.qyoga.core.clients.cards.api.Client
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
-import pro.qyoga.platform.spring.sdj.erpo.hydration.ref
 import java.time.Instant
 import java.time.LocalDate
 

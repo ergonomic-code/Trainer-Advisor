@@ -3,7 +3,7 @@ package pro.qyoga.tests.cases.app.therapist.appointments.core
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
-import pro.qyoga.platform.spring.sdj.erpo.hydration.ref
+import pro.azhidkov.platform.spring.sdj.erpo.hydration.ref
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient

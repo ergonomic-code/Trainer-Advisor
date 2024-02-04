@@ -1,9 +1,9 @@
 package pro.qyoga.app.therapist.appointments.core
 
 import org.springframework.web.servlet.ModelAndView
+import pro.azhidkov.platform.spring.mvc.modelAndView
 import pro.qyoga.app.common.EntityPageMode
 import pro.qyoga.app.components.combobox.ComboBoxItem
-import pro.qyoga.platform.spring.mvc.modelAndView
 
 
 fun appointmentPageModelAndView(

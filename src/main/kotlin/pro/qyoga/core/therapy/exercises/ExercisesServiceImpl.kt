@@ -7,17 +7,17 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.transaction.support.TransactionTemplate
+import pro.azhidkov.platform.file_storage.api.FileMetaData
+import pro.azhidkov.platform.file_storage.api.FilesStorage
+import pro.azhidkov.platform.file_storage.api.StoredFile
+import pro.azhidkov.platform.file_storage.api.StoredFileInputStream
+import pro.azhidkov.platform.kotlin.unzip
+import pro.azhidkov.platform.spring.tx.TransactionalService
 import pro.qyoga.core.therapy.exercises.dtos.CreateExerciseRequest
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSearchDto
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
 import pro.qyoga.core.therapy.exercises.impl.ExercisesRepo
 import pro.qyoga.core.therapy.exercises.model.Exercise
-import pro.qyoga.platform.file_storage.api.FileMetaData
-import pro.qyoga.platform.file_storage.api.FilesStorage
-import pro.qyoga.platform.file_storage.api.StoredFile
-import pro.qyoga.platform.file_storage.api.StoredFileInputStream
-import pro.qyoga.platform.kotlin.unzip
-import pro.qyoga.platform.spring.tx.TransactionalService
 
 
 @Service

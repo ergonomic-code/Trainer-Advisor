@@ -5,13 +5,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
+import pro.azhidkov.platform.spring.http.hxRedirect
 import pro.qyoga.app.common.EntityPageMode
 import pro.qyoga.core.therapy.exercises.ExercisesService
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSearchDto
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
 import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
-import pro.qyoga.platform.spring.http.hxRedirect
 
 
 @Controller

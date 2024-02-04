@@ -1,6 +1,6 @@
 package pro.qyoga.core.clients.cards.api
 
-import pro.qyoga.platform.kotlin.LabeledEnum
+import pro.azhidkov.platform.kotlin.LabeledEnum
 
 enum class DistributionSourceType(override val label: String) : LabeledEnum {
     SOCIAL_NETWORKS("Социальные сети"),

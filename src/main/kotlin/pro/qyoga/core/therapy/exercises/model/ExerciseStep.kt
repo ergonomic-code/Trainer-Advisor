@@ -2,7 +2,7 @@ package pro.qyoga.core.therapy.exercises.model
 
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.Table
-import pro.qyoga.platform.file_storage.api.FileMetaData
+import pro.azhidkov.platform.file_storage.api.FileMetaData
 
 
 @Table("exercise_steps")

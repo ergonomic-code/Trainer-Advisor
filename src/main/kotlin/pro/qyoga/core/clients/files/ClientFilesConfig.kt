@@ -3,8 +3,8 @@ package pro.qyoga.core.clients.files
 import io.minio.MinioClient
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import pro.qyoga.platform.file_storage.internal.FilesMetaDataRepo
-import pro.qyoga.platform.file_storage.internal.MinioFilesStorage
+import pro.azhidkov.platform.file_storage.internal.FilesMetaDataRepo
+import pro.azhidkov.platform.file_storage.internal.MinioFilesStorage
 
 
 @Configuration

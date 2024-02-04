@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.multipart.MultipartFile
+import pro.azhidkov.platform.file_storage.api.StoredFile
+import pro.azhidkov.platform.spring.http.hxRedirect
 import pro.qyoga.app.common.toStoredFile
 import pro.qyoga.core.therapy.exercises.ExercisesService
 import pro.qyoga.core.therapy.exercises.dtos.CreateExerciseRequest
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
-import pro.qyoga.platform.file_storage.api.StoredFile
-import pro.qyoga.platform.spring.http.hxRedirect
 
 @Controller
 @RequestMapping("/therapist/exercises/create")

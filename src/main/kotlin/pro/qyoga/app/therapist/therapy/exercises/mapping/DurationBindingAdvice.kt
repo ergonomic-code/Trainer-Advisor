@@ -3,7 +3,7 @@ package pro.qyoga.app.therapist.therapy.exercises.mapping
 import org.springframework.web.bind.WebDataBinder
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.InitBinder
-import pro.qyoga.platform.java.time.toDurationMinutes
+import pro.azhidkov.platform.java.time.toDurationMinutes
 import java.beans.PropertyEditorSupport
 import java.time.Duration
 

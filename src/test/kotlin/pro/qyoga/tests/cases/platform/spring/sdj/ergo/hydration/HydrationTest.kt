@@ -7,11 +7,11 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.data.jdbc.core.mapping.AggregateReference
+import pro.azhidkov.platform.spring.sdj.erpo.hydration.*
 import pro.qyoga.core.clients.journals.api.JournalEntry
 import pro.qyoga.core.therapy.exercises.model.ExerciseStep
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
 import pro.qyoga.core.users.therapists.Therapist
-import pro.qyoga.platform.spring.sdj.erpo.hydration.*
 import pro.qyoga.tests.fixture.FilesObjectMother
 import pro.qyoga.tests.fixture.backgrounds.Backgrounds
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_FIRST_NAME
@@ -41,7 +41,16 @@ class HydrationTest {
 
         // When
         val hydrated =
-            jdbcAggregateOperations.hydrate(aggs, FetchSpec(listOf(PropertyFetchSpec(ExerciseStep::imageId))))
+            jdbcAggregateOperations.hydrate(
+                aggs,
+                FetchSpec(
+                    listOf(
+                        PropertyFetchSpec(
+                            ExerciseStep::imageId
+                        )
+                    )
+                )
+            )
 
         // Then
         (refs zip hydrated).forAll { (origin, fetched) ->
@@ -62,7 +71,10 @@ class HydrationTest {
         // When
         val hydrated = jdbcAggregateOperations.hydrate(
             listOf(entry),
-            FetchSpec(JournalEntry::client, JournalEntry::therapeuticTask)
+            FetchSpec(
+                JournalEntry::client,
+                JournalEntry::therapeuticTask
+            )
         ).first()
 
         // Then
@@ -83,12 +95,18 @@ class HydrationTest {
             JournalEntry::therapeuticTask,
             FetchSpec(TherapeuticTask::owner)
         )
-        val entryClientFetchSpec = PropertyFetchSpec(JournalEntry::client)
+        val entryClientFetchSpec =
+            PropertyFetchSpec(JournalEntry::client)
 
         // When
         val hydrated = jdbcAggregateOperations.hydrate(
             listOf(entry),
-            FetchSpec(listOf(entryTaskFetchSpec, entryClientFetchSpec))
+            FetchSpec(
+                listOf(
+                    entryTaskFetchSpec,
+                    entryClientFetchSpec
+                )
+            )
         ).first()
 
         // Then

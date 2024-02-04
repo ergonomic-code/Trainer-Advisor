@@ -1,6 +1,6 @@
 package pro.qyoga.tests.fixture.backgrounds.exercises
 
-import pro.qyoga.platform.file_storage.api.StoredFile
+import pro.azhidkov.platform.file_storage.api.StoredFile
 import pro.qyoga.tests.fixture.FilesObjectMother
 
 

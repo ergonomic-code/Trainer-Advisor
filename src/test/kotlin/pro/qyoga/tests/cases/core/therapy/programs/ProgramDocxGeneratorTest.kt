@@ -3,12 +3,12 @@ package pro.qyoga.tests.cases.core.therapy.programs
 import io.kotest.matchers.result.shouldBeSuccess
 import org.apache.poi.xwpf.usermodel.XWPFDocument
 import org.junit.jupiter.api.Test
+import pro.azhidkov.platform.file_storage.api.StoredFile
+import pro.azhidkov.platform.file_storage.api.StoredFileInputStream
+import pro.azhidkov.platform.spring.sdj.erpo.hydration.ref
 import pro.qyoga.core.therapy.exercises.model.Exercise
 import pro.qyoga.core.therapy.programs.ProgramDocxGenerator
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
-import pro.qyoga.platform.file_storage.api.StoredFile
-import pro.qyoga.platform.file_storage.api.StoredFileInputStream
-import pro.qyoga.platform.spring.sdj.erpo.hydration.ref
 import pro.qyoga.tests.fixture.backgrounds.exercises.None
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID

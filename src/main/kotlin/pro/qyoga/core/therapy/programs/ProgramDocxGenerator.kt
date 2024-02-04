@@ -8,9 +8,9 @@ import org.openxmlformats.schemas.drawingml.x2006.wordprocessingDrawing.CTAnchor
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTDrawing
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTPageMar.*
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSectPr
+import pro.azhidkov.platform.file_storage.api.StoredFileInputStream
+import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
 import pro.qyoga.core.therapy.programs.model.Program
-import pro.qyoga.platform.file_storage.api.StoredFileInputStream
-import pro.qyoga.platform.spring.sdj.erpo.hydration.resolveOrThrow
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream

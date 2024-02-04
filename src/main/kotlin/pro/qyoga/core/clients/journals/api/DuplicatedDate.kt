@@ -1,7 +1,7 @@
 package pro.qyoga.core.clients.journals.api
 
 import org.springframework.dao.DuplicateKeyException
-import pro.qyoga.platform.errors.DomainError
+import pro.azhidkov.platform.errors.DomainError
 
 class DuplicatedDate(
     val duplicatedEntry: JournalEntry,

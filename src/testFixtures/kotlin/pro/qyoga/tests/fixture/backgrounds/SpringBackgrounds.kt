@@ -3,9 +3,9 @@ package pro.qyoga.tests.fixture.backgrounds
 import org.springframework.beans.factory.support.GenericBeanDefinition
 import org.springframework.context.support.GenericApplicationContext
 import org.springframework.stereotype.Component
+import pro.azhidkov.platform.file_storage.api.FilesStorage
 import pro.qyoga.core.therapy.exercises.ExercisesService
 import pro.qyoga.core.therapy.exercises.impl.ExercisesRepo
-import pro.qyoga.platform.file_storage.api.FilesStorage
 import pro.qyoga.tests.platform.spring.context.getBean
 import java.util.concurrent.ConcurrentHashMap
 

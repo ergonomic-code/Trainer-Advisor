@@ -10,9 +10,9 @@ import org.springframework.data.relational.core.mapping.RelationalMappingContext
 import org.springframework.data.util.TypeInformation
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
+import pro.azhidkov.platform.spring.sdj.erpo.ErgoRepository
+import pro.azhidkov.platform.spring.sdj.sortBy
 import pro.qyoga.core.clients.files.model.ClientFile
-import pro.qyoga.platform.spring.sdj.erpo.ErgoRepository
-import pro.qyoga.platform.spring.sdj.sortBy
 import kotlin.reflect.KProperty1
 
 

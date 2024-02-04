@@ -26,7 +26,7 @@ class ArchTest {
             .layer("App").definedBy("pro.qyoga.app..")
             .layer("Core").definedBy("pro.qyoga.core..")
             .layer("Infra").definedBy("pro.qyoga.infra..")
-            .layer("Platform").definedBy("pro.qyoga.platform..")
+            .layer("Platform").definedBy("pro.azhidkov.platform..")
 
             .whereLayer("App").mayOnlyBeAccessedByLayers(testsAbstractionLayer)
             .whereLayer("Core").mayOnlyBeAccessedByLayers("App", testsAbstractionLayer)

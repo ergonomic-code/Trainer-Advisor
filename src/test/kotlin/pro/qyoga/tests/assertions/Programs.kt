@@ -3,9 +3,9 @@ package pro.qyoga.tests.assertions
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
+import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
 import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
 import pro.qyoga.core.therapy.programs.model.Program
-import pro.qyoga.platform.spring.sdj.erpo.hydration.resolveOrThrow
 
 
 infix fun Program.shouldMatch(request: Pair<CreateProgramRequest, String>) {

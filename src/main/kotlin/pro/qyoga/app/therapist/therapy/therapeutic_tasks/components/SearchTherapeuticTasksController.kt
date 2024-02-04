@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.servlet.ModelAndView
+import pro.azhidkov.platform.spring.mvc.modelAndView
 import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo
 import pro.qyoga.core.therapy.therapeutic_tasks.findByNameContaining
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
-import pro.qyoga.platform.spring.mvc.modelAndView
 
 @Controller
 @RequestMapping("/therapist/therapeutic-tasks/autocomplete-search")

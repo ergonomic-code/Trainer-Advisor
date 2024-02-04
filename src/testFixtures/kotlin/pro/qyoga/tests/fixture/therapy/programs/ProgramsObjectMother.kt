@@ -1,13 +1,13 @@
 package pro.qyoga.tests.fixture.therapy.programs
 
 import org.springframework.data.jdbc.core.mapping.AggregateReference
+import pro.azhidkov.platform.spring.sdj.erpo.hydration.ref
 import pro.qyoga.core.therapy.exercises.model.Exercise
 import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
 import pro.qyoga.core.therapy.programs.model.Program
 import pro.qyoga.core.therapy.programs.model.ProgramExercise
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
 import pro.qyoga.core.users.therapists.Therapist
-import pro.qyoga.platform.spring.sdj.erpo.hydration.ref
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_REF
 

@@ -5,8 +5,8 @@ import io.kotest.matchers.compose.all
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import org.jsoup.nodes.Element
+import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
 import pro.qyoga.core.therapy.programs.model.Program
-import pro.qyoga.platform.spring.sdj.erpo.hydration.resolveOrThrow
 import pro.qyoga.tests.assertions.*
 import pro.qyoga.tests.infra.html.*
 

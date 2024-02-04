@@ -3,14 +3,14 @@ package pro.qyoga.tests.fixture.backgrounds
 import org.springframework.data.domain.Page
 import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.stereotype.Component
+import pro.azhidkov.platform.spring.sdj.erpo.hydration.FetchSpec
+import pro.azhidkov.platform.spring.sdj.erpo.hydration.hydrate
 import pro.qyoga.app.therapist.clients.journal.edit_entry.create.CreateJournalEntryWorkflow
 import pro.qyoga.core.clients.journals.api.EditJournalEntryRequest
 import pro.qyoga.core.clients.journals.api.JournalEntry
 import pro.qyoga.core.clients.journals.api.JournalPageRequest
 import pro.qyoga.core.clients.journals.api.JournalsService
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
-import pro.qyoga.platform.spring.sdj.erpo.hydration.FetchSpec
-import pro.qyoga.platform.spring.sdj.erpo.hydration.hydrate
 import pro.qyoga.tests.fixture.clients.JournalEntriesObjectMother
 import pro.qyoga.tests.fixture.data.randomRecentLocalDate
 
@@ -40,7 +40,10 @@ class ClientJournalBackgrounds(
     }
 
     fun hydrate(journalEntries: List<JournalEntry>): List<JournalEntry> =
-        jdbcAggregateOperations.hydrate(journalEntries, FetchSpec(JournalEntry::therapeuticTask))
+        jdbcAggregateOperations.hydrate(
+            journalEntries,
+            FetchSpec(JournalEntry::therapeuticTask)
+        )
 
     fun getWholeJournal(clientId: Long): Page<JournalEntry> {
         return journalsService.getJournalPage(
