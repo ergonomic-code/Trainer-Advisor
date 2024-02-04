@@ -12,7 +12,7 @@ class UsersBackgrounds(
 ) {
 
     fun registerNewTherapist(): Therapist {
-        return createTherapistUser(TherapistsObjectMother.registerTherapistRequest(), randomPassword())!!
+        return createTherapistUser(TherapistsObjectMother.registerTherapistRequest(), randomPassword())
     }
 
 }
