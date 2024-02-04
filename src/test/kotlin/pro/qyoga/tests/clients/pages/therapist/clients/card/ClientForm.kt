@@ -4,7 +4,7 @@ import io.kotest.matchers.shouldBe
 import org.jsoup.nodes.Element
 import pro.qyoga.core.clients.cards.api.Client
 import pro.qyoga.core.clients.cards.api.DistributionSourceType
-import pro.qyoga.core.formats.russianDateFormat
+import pro.qyoga.l10n.russianDateFormat
 import pro.qyoga.tests.assertions.PageMatcher
 import pro.qyoga.tests.infra.html.*
 import pro.qyoga.tests.infra.html.Input.Companion.email

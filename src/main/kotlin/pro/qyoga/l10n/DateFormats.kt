@@ -1,4 +1,4 @@
-package pro.qyoga.core.formats
+package pro.qyoga.l10n
 
 import java.time.format.DateTimeFormatter
 

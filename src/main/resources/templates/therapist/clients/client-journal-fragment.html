@@ -30,7 +30,7 @@
             <div class="row g-0 card-header">
                 <div class="col-12 col-sm-1 d-flex align-items-end mb-3 mt-1 mb-sm-0 card-title me-3 ms-2">
                     <h6 class="entryDate mb-0"
-                        th:text="${#temporals.format(entry.date, T(pro.qyoga.core.formats.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN)}"></h6>
+                        th:text="${#temporals.format(entry.date, T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN)}"></h6>
                 </div>
                 <div class="col-12 col-sm-9 d-flex align-items-end mb-sm-0 ms-2 ms-sm-0 card-subtitle text-muted">
                     <h6 class="entryTherapeuticTask mb-0 text-truncate">
@@ -58,7 +58,7 @@
                            hx-target="closest div.journalEntry"
                            th:hx-confirm="'Удалить запись за ' + ${entryDate} + '?'"
                            th:hx-delete="@{/therapist/clients/{clientId}/journal/{entryId}(clientId=${client.id},entryId=${entry.id})}"
-                           th:with="entryDate=${#temporals.format(entry.date, T(pro.qyoga.core.formats.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN)}">
+                           th:with="entryDate=${#temporals.format(entry.date, T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN)}">
                             <i class="fas fa-trash"></i>
                         </a>
                     </div>

@@ -5,7 +5,7 @@ import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import pro.qyoga.app.therapist.clients.journal.list.JournalPageController
-import pro.qyoga.core.formats.russianDateFormat
+import pro.qyoga.l10n.russianDateFormat
 import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.assertions.shouldBeComponent
 import pro.qyoga.tests.assertions.shouldHave
