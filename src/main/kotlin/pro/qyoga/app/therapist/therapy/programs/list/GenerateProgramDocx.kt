@@ -3,12 +3,12 @@ package pro.qyoga.app.therapist.therapy.programs.list
 import org.springframework.data.jdbc.core.JdbcAggregateTemplate
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
+import pro.azhidkov.platform.file_storage.api.FileMetaData
+import pro.azhidkov.platform.file_storage.api.StoredFileInputStream
 import pro.qyoga.core.therapy.exercises.ExercisesService
 import pro.qyoga.core.therapy.programs.ProgramDocxGenerator
 import pro.qyoga.core.therapy.programs.ProgramsRepo
 import pro.qyoga.core.therapy.programs.model.fetchExercises
-import pro.qyoga.platform.file_storage.api.FileMetaData
-import pro.qyoga.platform.file_storage.api.StoredFileInputStream
 
 
 @Component

@@ -4,7 +4,7 @@ import org.springframework.core.io.InputStreamResource
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.servlet.ModelAndView
-import pro.qyoga.platform.file_storage.api.StoredFileInputStream
+import pro.azhidkov.platform.file_storage.api.StoredFileInputStream
 
 
 val notFound = ModelAndView("forward:error/404")

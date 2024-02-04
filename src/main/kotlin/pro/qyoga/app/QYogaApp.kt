@@ -3,6 +3,8 @@ package pro.qyoga.app
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Import
+import pro.azhidkov.platform.file_storage.FilesStorageConfig
+import pro.azhidkov.platform.spring.sdj.ErgoSdjConfig
 import pro.qyoga.app.common.WebAppsCommonConfig
 import pro.qyoga.app.components.QYogaComponetsConfig
 import pro.qyoga.app.publc.PublicAppConfig
@@ -18,8 +20,6 @@ import pro.qyoga.infra.minio.MinioConfig
 import pro.qyoga.infra.timezones.TimeZonesConfig
 import pro.qyoga.infra.web.ThymeleafConfig
 import pro.qyoga.infra.web.WebConfig
-import pro.qyoga.platform.file_storage.FilesStorageConfig
-import pro.qyoga.platform.spring.sdj.ErgoSdjConfig
 
 @Import(
     // Apps

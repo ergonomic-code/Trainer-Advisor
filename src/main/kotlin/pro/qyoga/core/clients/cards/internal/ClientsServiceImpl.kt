@@ -5,11 +5,11 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import pro.azhidkov.platform.spring.sdj.withSortBy
 import pro.qyoga.core.clients.cards.api.Client
 import pro.qyoga.core.clients.cards.api.ClientCardDto
 import pro.qyoga.core.clients.cards.api.ClientSearchDto
 import pro.qyoga.core.clients.cards.api.ClientsService
-import pro.qyoga.platform.spring.sdj.withSortBy
 
 
 @Service

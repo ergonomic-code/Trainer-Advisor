@@ -4,12 +4,12 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
+import pro.azhidkov.platform.spring.http.hxRedirect
+import pro.azhidkov.platform.spring.mvc.modelAndView
 import pro.qyoga.app.common.ResponseEntityExt
 import pro.qyoga.app.common.notFound
 import pro.qyoga.core.therapy.exercises.ExercisesService
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
-import pro.qyoga.platform.spring.http.hxRedirect
-import pro.qyoga.platform.spring.mvc.modelAndView
 
 @Controller
 @RequestMapping("/therapist/exercises/{exerciseId}")

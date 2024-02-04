@@ -6,10 +6,10 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.servlet.ModelAndView
+import pro.azhidkov.platform.spring.http.hxRedirect
 import pro.qyoga.app.common.EntityPageMode
 import pro.qyoga.app.common.notFound
 import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
-import pro.qyoga.platform.spring.http.hxRedirect
 
 
 @Controller

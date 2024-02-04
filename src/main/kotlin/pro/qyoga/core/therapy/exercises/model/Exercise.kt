@@ -7,9 +7,9 @@ import org.springframework.data.annotation.Version
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
+import pro.azhidkov.platform.spring.sdj.erpo.hydration.Identifiable
 import pro.qyoga.core.therapy.exercises.dtos.CreateExerciseRequest
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
-import pro.qyoga.platform.spring.sdj.erpo.hydration.Identifiable
 import java.time.Duration
 import java.time.Instant
 

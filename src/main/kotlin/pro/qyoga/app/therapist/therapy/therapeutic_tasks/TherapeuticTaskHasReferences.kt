@@ -1,8 +1,8 @@
 package pro.qyoga.app.therapist.therapy.therapeutic_tasks
 
+import pro.azhidkov.platform.errors.DomainError
 import pro.qyoga.core.clients.journals.api.JournalEntry
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
-import pro.qyoga.platform.errors.DomainError
 
 
 class TherapeuticTaskHasReferences(

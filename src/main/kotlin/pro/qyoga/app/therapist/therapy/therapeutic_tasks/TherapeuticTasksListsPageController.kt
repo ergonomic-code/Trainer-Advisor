@@ -5,13 +5,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
+import pro.azhidkov.platform.spring.mvc.modelAndView
+import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
 import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo
 import pro.qyoga.core.therapy.therapeutic_tasks.errors.DuplicatedTherapeuticTaskName
 import pro.qyoga.core.therapy.therapeutic_tasks.findByNameContaining
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
-import pro.qyoga.platform.spring.mvc.modelAndView
-import pro.qyoga.platform.spring.sdj.erpo.hydration.resolveOrThrow
 
 private const val TASKS = "tasks"
 

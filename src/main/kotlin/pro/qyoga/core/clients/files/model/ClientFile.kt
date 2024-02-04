@@ -6,9 +6,9 @@ import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.annotation.Version
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.Table
+import pro.azhidkov.platform.file_storage.api.FileMetaData
 import pro.qyoga.core.clients.cards.api.Client
 import pro.qyoga.core.clients.journals.api.JournalEntry
-import pro.qyoga.platform.file_storage.api.FileMetaData
 import java.time.Instant
 
 

@@ -6,8 +6,8 @@ import io.kotest.matchers.shouldNotBe
 import org.junit.jupiter.api.Test
 import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.data.jdbc.core.convert.JdbcConverter
-import pro.qyoga.platform.file_storage.internal.FilesMetaDataRepo
-import pro.qyoga.platform.file_storage.internal.MinioFilesStorage
+import pro.azhidkov.platform.file_storage.internal.FilesMetaDataRepo
+import pro.azhidkov.platform.file_storage.internal.MinioFilesStorage
 import pro.qyoga.tests.fixture.FilesObjectMother
 import pro.qyoga.tests.infra.db.testMinioClient
 import pro.qyoga.tests.infra.test_config.spring.context

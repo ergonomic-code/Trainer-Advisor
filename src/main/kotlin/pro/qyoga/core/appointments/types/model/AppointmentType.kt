@@ -6,8 +6,8 @@ import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.annotation.Version
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.Table
+import pro.azhidkov.platform.spring.sdj.erpo.hydration.Identifiable
 import pro.qyoga.core.users.therapists.TherapistRef
-import pro.qyoga.platform.spring.sdj.erpo.hydration.Identifiable
 import java.time.Instant
 
 

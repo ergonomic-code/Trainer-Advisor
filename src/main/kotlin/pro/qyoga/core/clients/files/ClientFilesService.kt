@@ -6,15 +6,15 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import pro.azhidkov.platform.file_storage.api.FilesStorage
+import pro.azhidkov.platform.file_storage.api.StoredFile
+import pro.azhidkov.platform.file_storage.api.StoredFileInputStream
+import pro.azhidkov.platform.spring.sdj.erpo.hydration.AggregateReferenceTarget
 import pro.qyoga.core.clients.cards.api.Client
 import pro.qyoga.core.clients.files.impl.ClientFilesRepo
 import pro.qyoga.core.clients.files.impl.findClientFilesPage
 import pro.qyoga.core.clients.files.impl.findFile
 import pro.qyoga.core.clients.files.model.ClientFile
-import pro.qyoga.platform.file_storage.api.FilesStorage
-import pro.qyoga.platform.file_storage.api.StoredFile
-import pro.qyoga.platform.file_storage.api.StoredFileInputStream
-import pro.qyoga.platform.spring.sdj.erpo.hydration.AggregateReferenceTarget
 
 
 @Service

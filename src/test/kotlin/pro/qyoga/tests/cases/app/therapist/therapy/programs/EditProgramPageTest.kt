@@ -3,8 +3,8 @@ package pro.qyoga.tests.cases.app.therapist.therapy.programs
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
+import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
 import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
-import pro.qyoga.platform.spring.sdj.erpo.hydration.resolveOrThrow
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.assertions.shouldMatch

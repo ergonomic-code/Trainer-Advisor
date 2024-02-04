@@ -2,6 +2,7 @@ package pro.qyoga.tests.fixture.therapy.exercises
 
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.web.multipart.MultipartFile
+import pro.azhidkov.platform.file_storage.api.StoredFile
 import pro.qyoga.app.therapist.therapy.exercises.toStepIdx
 import pro.qyoga.core.therapy.exercises.dtos.CreateExerciseRequest
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSearchDto
@@ -9,7 +10,6 @@ import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
 import pro.qyoga.core.therapy.exercises.model.Exercise
 import pro.qyoga.core.therapy.exercises.model.ExerciseStep
 import pro.qyoga.core.therapy.exercises.model.ExerciseType
-import pro.qyoga.platform.file_storage.api.StoredFile
 import pro.qyoga.tests.fixture.backgrounds.exercises.ImagesGenerationMode
 import pro.qyoga.tests.fixture.backgrounds.exercises.None
 import pro.qyoga.tests.fixture.data.randomCyrillicWord

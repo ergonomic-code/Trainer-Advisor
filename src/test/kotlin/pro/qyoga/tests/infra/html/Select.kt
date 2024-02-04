@@ -5,7 +5,7 @@ import io.kotest.matchers.MatcherResult
 import io.kotest.matchers.compose.all
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
-import pro.qyoga.platform.kotlin.LabeledEnum
+import pro.azhidkov.platform.kotlin.LabeledEnum
 import pro.qyoga.tests.assertions.descr
 import pro.qyoga.tests.assertions.haveAttributeValue
 import pro.qyoga.tests.assertions.isTag

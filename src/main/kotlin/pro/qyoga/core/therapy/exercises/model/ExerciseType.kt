@@ -3,7 +3,7 @@ package pro.qyoga.core.therapy.exercises.model
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonFormat
 import com.fasterxml.jackson.annotation.JsonProperty
-import pro.qyoga.platform.kotlin.LabeledEnum
+import pro.azhidkov.platform.kotlin.LabeledEnum
 
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)

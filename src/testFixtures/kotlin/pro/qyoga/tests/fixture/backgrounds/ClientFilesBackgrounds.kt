@@ -3,12 +3,12 @@ package pro.qyoga.tests.fixture.backgrounds
 import org.springframework.data.domain.Page
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.stereotype.Component
+import pro.azhidkov.platform.file_storage.api.StoredFile
+import pro.azhidkov.platform.spring.sdj.ALL
+import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
 import pro.qyoga.core.clients.cards.api.Client
 import pro.qyoga.core.clients.files.ClientFilesService
 import pro.qyoga.core.clients.files.model.ClientFile
-import pro.qyoga.platform.file_storage.api.StoredFile
-import pro.qyoga.platform.spring.sdj.ALL
-import pro.qyoga.platform.spring.sdj.erpo.hydration.resolveOrThrow
 import pro.qyoga.tests.fixture.FilesObjectMother
 
 @Component

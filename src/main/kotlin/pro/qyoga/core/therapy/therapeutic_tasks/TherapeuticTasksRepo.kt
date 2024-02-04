@@ -11,10 +11,10 @@ import org.springframework.data.util.TypeInformation
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
+import pro.azhidkov.platform.spring.sdj.erpo.ErgoRepository
+import pro.azhidkov.platform.spring.sdj.withSortBy
 import pro.qyoga.core.therapy.therapeutic_tasks.errors.DuplicatedTherapeuticTaskName
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
-import pro.qyoga.platform.spring.sdj.erpo.ErgoRepository
-import pro.qyoga.platform.spring.sdj.withSortBy
 
 
 @Repository

@@ -1,9 +1,9 @@
 package pro.qyoga.app.therapist.clients
 
 import org.springframework.web.servlet.ModelAndView
+import pro.azhidkov.platform.spring.mvc.ModelAndViewBuilder
+import pro.azhidkov.platform.spring.mvc.modelAndView
 import pro.qyoga.core.clients.cards.api.Client
-import pro.qyoga.platform.spring.mvc.ModelAndViewBuilder
-import pro.qyoga.platform.spring.mvc.modelAndView
 
 
 enum class ClientPageTab {

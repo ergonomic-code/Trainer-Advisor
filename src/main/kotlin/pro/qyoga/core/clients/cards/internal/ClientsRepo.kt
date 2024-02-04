@@ -10,11 +10,11 @@ import org.springframework.data.relational.core.mapping.RelationalMappingContext
 import org.springframework.data.util.TypeInformation
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
+import pro.azhidkov.platform.spring.sdj.erpo.ErgoRepository
+import pro.azhidkov.platform.spring.sdj.query.BuildMode
+import pro.azhidkov.platform.spring.sdj.sortBy
 import pro.qyoga.core.clients.cards.api.Client
 import pro.qyoga.core.clients.cards.api.ClientSearchDto
-import pro.qyoga.platform.spring.sdj.erpo.ErgoRepository
-import pro.qyoga.platform.spring.sdj.query.BuildMode
-import pro.qyoga.platform.spring.sdj.sortBy
 
 @Repository
 class ClientsRepo(
