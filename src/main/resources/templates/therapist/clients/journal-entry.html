@@ -29,7 +29,7 @@
                        id="date-input"
                        name="date" pattern="\d{2}\.\d{2}\.\d{4}" required
                        th:classappend="${duplicatedDate} ? 'is-invalid' : ''"
-                       th:value="${#temporals.format((entry?.date ?: entryDate), T(pro.qyoga.core.formats.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN)}"
+                       th:value="${#temporals.format((entry?.date ?: entryDate), T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN)}"
                        type="text"
                 >
                 <div class="invalid-feedback" id="duplicatedDateMessage">

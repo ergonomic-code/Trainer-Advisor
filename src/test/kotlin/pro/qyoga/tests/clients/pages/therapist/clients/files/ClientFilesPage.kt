@@ -5,7 +5,7 @@ import org.jsoup.nodes.Element
 import pro.azhidkov.platform.file_storage.api.FileMetaData
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
 import pro.qyoga.core.clients.files.model.ClientFile
-import pro.qyoga.core.formats.russianDateFormat
+import pro.qyoga.l10n.russianDateFormat
 import pro.qyoga.tests.assertions.PageMatcher
 import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.assertions.shouldHaveComponent

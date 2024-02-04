@@ -38,7 +38,7 @@
                 <div class="col">
                     <input class="form-control q-input mt-2 w-100" id="ClientDate" name="birthDate"
                            pattern="\d{2}\.\d{2}\.\d{4}" placeholder="дд.мм.гггг"
-                           th:value="${client?.birthDate != null} ? ${#temporals.format(client.birthDate, T(pro.qyoga.core.formats.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN)}"
+                           th:value="${client?.birthDate != null} ? ${#temporals.format(client.birthDate, T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN)}"
                            type="text">
 
                 </div>

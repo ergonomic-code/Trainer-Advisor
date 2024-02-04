@@ -1,7 +1,7 @@
 package pro.qyoga.core.clients.cards.api
 
 import org.springframework.format.annotation.DateTimeFormat
-import pro.qyoga.core.formats.RUSSIAN_DATE_FORMAT_PATTERN
+import pro.qyoga.l10n.RUSSIAN_DATE_FORMAT_PATTERN
 import java.time.LocalDate
 
 data class ClientCardDto(
