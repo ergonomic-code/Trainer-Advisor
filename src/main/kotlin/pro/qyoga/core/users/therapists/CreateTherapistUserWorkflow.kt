@@ -12,16 +12,15 @@ class CreateTherapistUserWorkflow(
     private val usersRepo: UsersRepo,
     private val therapistsRepo: TherapistsRepo,
     private val usersFactory: UsersFactory
-) : (RegisterTherapistRequest, CharSequence) -> Therapist? {
+) : (RegisterTherapistRequest, CharSequence) -> Therapist {
 
     @Transactional
     override fun invoke(
         registerTherapistRequest: RegisterTherapistRequest,
         password: CharSequence
-    ): Therapist? {
+    ): Therapist {
         var user = usersFactory.createUser(registerTherapistRequest.email, password, setOf(Role.ROLE_THERAPIST))
         user = usersRepo.save(user)
-            ?: return null
 
         var therapist = Therapist(registerTherapistRequest.firstName, registerTherapistRequest.lastName, user.id)
         therapist = therapistsRepo.save(therapist)

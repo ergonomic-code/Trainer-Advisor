@@ -13,12 +13,11 @@ import kotlin.random.Random
 class RegisterTherapistWorkflow(
     private val createTherapistUser: CreateTherapistUserWorkflow,
     private val qyogaEmailsService: QyogaEmailsService
-) : (RegisterTherapistRequest) -> Therapist? {
+) : (RegisterTherapistRequest) -> Therapist {
 
-    override fun invoke(registerTherapistRequest: RegisterTherapistRequest): Therapist? {
+    override fun invoke(registerTherapistRequest: RegisterTherapistRequest): Therapist {
         val password = randomPassword()
         val therapist = createTherapistUser(registerTherapistRequest, password)
-            ?: return null
 
         val registeredUserNotification =
             RegisteredUserNotification(registerTherapistRequest.fullName, registerTherapistRequest.email, password)

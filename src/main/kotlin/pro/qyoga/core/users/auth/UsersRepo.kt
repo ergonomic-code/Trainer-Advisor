@@ -1,10 +1,8 @@
 package pro.qyoga.core.users.auth
 
-import org.springframework.dao.DuplicateKeyException
 import org.springframework.data.jdbc.core.JdbcAggregateTemplate
 import org.springframework.data.jdbc.core.convert.JdbcConverter
 import org.springframework.data.mapping.model.BasicPersistentEntity
-import org.springframework.data.relational.core.conversion.DbActionExecutionException
 import org.springframework.data.relational.core.mapping.RelationalMappingContext
 import org.springframework.data.util.TypeInformation
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
@@ -26,19 +24,6 @@ class UsersRepo(
     jdbcConverter,
     relationalMappingContext
 ) {
-
-    fun save(instance: User): User? {
-        val insertResult = runCatching {
-            super.save(instance)
-        }
-
-        val ex = insertResult.exceptionOrNull()
-        return when {
-            ex == null -> insertResult.getOrThrow()
-            ex is DbActionExecutionException && ex.cause is DuplicateKeyException -> null
-            else -> throw ex
-        }
-    }
 
     fun findByEmail(email: String): User? {
         return findOne {

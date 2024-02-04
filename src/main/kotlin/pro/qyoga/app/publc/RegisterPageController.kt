@@ -1,6 +1,8 @@
 package pro.qyoga.app.publc
 
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.dao.DuplicateKeyException
+import org.springframework.data.relational.core.conversion.DbActionExecutionException
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -21,16 +23,20 @@ class RegisterPageController(
 
     @PostMapping("/register")
     fun register(registerTherapistRequest: RegisterTherapistRequest, model: Model): String {
-        val therapist = registerTherapist(registerTherapistRequest)
+        try {
+            registerTherapist(registerTherapistRequest)
+            return "public/register-success-fragment"
+        } catch (ex: DbActionExecutionException) {
+            if (ex.cause is DuplicateKeyException) {
+                model.addAttribute("userAlreadyExists", true)
+                model.addAttribute("adminEmail", adminEmail)
+                model.addAttribute("requestForm", registerTherapistRequest)
+                return "public/register :: registerForm"
+            }
 
-        if (therapist == null) {
-            model.addAttribute("userAlreadyExists", true)
-            model.addAttribute("adminEmail", adminEmail)
-            model.addAttribute("requestForm", registerTherapistRequest)
-            return "public/register :: registerForm"
+            throw ex
         }
 
-        return "public/register-success-fragment"
     }
 
 }
