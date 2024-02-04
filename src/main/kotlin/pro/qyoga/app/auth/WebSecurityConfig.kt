@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.web.configurers.LogoutConf
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository
-import pro.qyoga.core.users.api.Role
+import pro.qyoga.core.users.auth.model.Role
 import java.time.Duration
 import javax.sql.DataSource
 

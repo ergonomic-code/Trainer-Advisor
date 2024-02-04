@@ -5,11 +5,11 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
-import pro.qyoga.core.users.api.RegisterTherapistRequest
+import pro.qyoga.core.users.therapists.RegisterTherapistRequest
 
 @Controller
 class RegisterPageController(
-    private val registerTherapistWorkflow: RegisterTherapistWorkflow,
+    private val registerTherapist: RegisterTherapistWorkflow,
     @Value("\${qyoga.admin.email}") private val adminEmail: String
 ) {
 
@@ -21,7 +21,7 @@ class RegisterPageController(
 
     @PostMapping("/register")
     fun register(registerTherapistRequest: RegisterTherapistRequest, model: Model): String {
-        val therapist = registerTherapistWorkflow.registerNewTherapist(registerTherapistRequest)
+        val therapist = registerTherapist(registerTherapistRequest)
 
         if (therapist == null) {
             model.addAttribute("userAlreadyExists", true)

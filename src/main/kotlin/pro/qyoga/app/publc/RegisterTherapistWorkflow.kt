@@ -1,9 +1,9 @@
 package pro.qyoga.app.publc
 
 import org.springframework.stereotype.Component
-import pro.qyoga.core.users.api.RegisterTherapistRequest
-import pro.qyoga.core.users.api.Therapist
-import pro.qyoga.core.users.api.UsersService
+import pro.qyoga.core.users.therapists.CreateTherapistUserWorkflow
+import pro.qyoga.core.users.therapists.RegisterTherapistRequest
+import pro.qyoga.core.users.therapists.Therapist
 import pro.qyoga.infra.email.api.QyogaEmailsService
 import pro.qyoga.infra.email.api.RegisteredUserNotification
 import kotlin.random.Random
@@ -11,13 +11,13 @@ import kotlin.random.Random
 
 @Component
 class RegisterTherapistWorkflow(
-    private val usersService: UsersService,
+    private val createTherapistUser: CreateTherapistUserWorkflow,
     private val qyogaEmailsService: QyogaEmailsService
-) {
+) : (RegisterTherapistRequest) -> Therapist? {
 
-    fun registerNewTherapist(registerTherapistRequest: RegisterTherapistRequest): Therapist? {
+    override fun invoke(registerTherapistRequest: RegisterTherapistRequest): Therapist? {
         val password = randomPassword()
-        val therapist = usersService.registerNewTherapist(registerTherapistRequest, password)
+        val therapist = createTherapistUser(registerTherapistRequest, password)
             ?: return null
 
         val registeredUserNotification =

@@ -8,7 +8,7 @@ import pro.qyoga.core.clients.journals.api.EditJournalEntryRequest
 import pro.qyoga.core.clients.journals.api.JournalEntry
 import pro.qyoga.core.clients.journals.api.JournalPageRequest
 import pro.qyoga.core.clients.journals.api.JournalsService
-import pro.qyoga.core.users.internal.QyogaUserDetails
+import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.platform.spring.sdj.erpo.hydration.FetchSpec
 import pro.qyoga.platform.spring.sdj.erpo.hydration.hydrate
 import pro.qyoga.tests.fixture.clients.JournalEntriesObjectMother

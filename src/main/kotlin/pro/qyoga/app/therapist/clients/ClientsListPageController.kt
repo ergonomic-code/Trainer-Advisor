@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*
 import pro.qyoga.core.clients.cards.api.Client
 import pro.qyoga.core.clients.cards.api.ClientSearchDto
 import pro.qyoga.core.clients.cards.api.ClientsService
-import pro.qyoga.core.users.internal.QyogaUserDetails
+import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 
 private const val CLIENTS = "clients"
 

@@ -10,7 +10,7 @@ import org.springframework.data.util.TypeInformation
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
 import pro.qyoga.core.appointments.types.model.AppointmentType
-import pro.qyoga.core.users.api.TherapistRef
+import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.platform.spring.sdj.erpo.ErgoRepository
 import pro.qyoga.platform.spring.sdj.sortBy
 

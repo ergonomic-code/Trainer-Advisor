@@ -3,7 +3,7 @@ package pro.qyoga.tests.assertions
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldMatch
 import jakarta.mail.internet.MimeMessage
-import pro.qyoga.core.users.api.RegisterTherapistRequest
+import pro.qyoga.core.users.therapists.RegisterTherapistRequest
 
 val newRegistrationEmailPattern = ".*Имя: (.*), Email: (.*), пароль: (.*)\\..*".toRegex()
 

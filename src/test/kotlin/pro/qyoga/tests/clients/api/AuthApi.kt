@@ -9,7 +9,7 @@ import io.restassured.response.Response
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
-import pro.qyoga.core.users.api.RegisterTherapistRequest
+import pro.qyoga.core.users.therapists.RegisterTherapistRequest
 import pro.qyoga.tests.clients.pages.publc.LoginPage
 import pro.qyoga.tests.clients.pages.publc.RegisterPage
 

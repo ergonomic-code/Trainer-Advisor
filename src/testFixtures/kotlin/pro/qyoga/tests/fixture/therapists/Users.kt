@@ -1,7 +1,7 @@
 package pro.qyoga.tests.fixture.therapists
 
 import org.springframework.data.jdbc.core.mapping.AggregateReference
-import pro.qyoga.core.users.api.Therapist
+import pro.qyoga.core.users.therapists.Therapist
 
 // Therapist
 const val THE_THERAPIST_ID = 1L

@@ -10,7 +10,7 @@ import org.springframework.data.jdbc.core.mapping.AggregateReference
 import pro.qyoga.core.clients.journals.api.JournalEntry
 import pro.qyoga.core.therapy.exercises.model.ExerciseStep
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
-import pro.qyoga.core.users.api.Therapist
+import pro.qyoga.core.users.therapists.Therapist
 import pro.qyoga.platform.spring.sdj.erpo.hydration.*
 import pro.qyoga.tests.fixture.FilesObjectMother
 import pro.qyoga.tests.fixture.backgrounds.Backgrounds

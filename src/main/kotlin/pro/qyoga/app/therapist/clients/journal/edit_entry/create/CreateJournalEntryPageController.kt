@@ -9,7 +9,7 @@ import pro.qyoga.app.therapist.clients.journal.edit_entry.shared.JOURNAL_ENTRY_V
 import pro.qyoga.core.clients.cards.api.ClientsService
 import pro.qyoga.core.clients.journals.api.DuplicatedDate
 import pro.qyoga.core.clients.journals.api.EditJournalEntryRequest
-import pro.qyoga.core.users.internal.QyogaUserDetails
+import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.platform.kotlin.isFailureOf
 import pro.qyoga.platform.spring.http.hxRedirect
 import pro.qyoga.platform.spring.mvc.modelAndView

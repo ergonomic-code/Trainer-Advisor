@@ -10,7 +10,7 @@ import pro.qyoga.app.components.combobox.ComboBoxItem
 import pro.qyoga.app.components.combobox.ComboBoxModelAndView
 import pro.qyoga.core.clients.cards.internal.ClientsRepo
 import pro.qyoga.core.clients.cards.internal.findPageBy
-import pro.qyoga.core.users.internal.QyogaUserDetails
+import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 
 
 @Controller

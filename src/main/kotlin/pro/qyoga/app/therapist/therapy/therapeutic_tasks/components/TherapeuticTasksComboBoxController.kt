@@ -11,7 +11,7 @@ import pro.qyoga.app.components.combobox.ComboBoxModelAndView
 import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo
 import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo.Page.topFiveByName
 import pro.qyoga.core.therapy.therapeutic_tasks.findByNameContaining
-import pro.qyoga.core.users.internal.QyogaUserDetails
+import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 
 
 @Controller
