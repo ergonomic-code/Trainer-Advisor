@@ -8,6 +8,7 @@ import pro.qyoga.tests.fixture.data.*
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.ZoneId
 import kotlin.random.Random
 
 object AppointmentsObjectMother {
@@ -17,6 +18,7 @@ object AppointmentsObjectMother {
         typeId: AppointmentTypeRef? = null,
         typeTitle: String = randomCyrillicWord(),
         therapeuticTask: TherapeuticTaskRef,
+        timeZone: ZoneId = randomTimeZone(),
         place: String? = null,
         cost: Int? = null,
         payed: Boolean? = null,
@@ -28,7 +30,7 @@ object AppointmentsObjectMother {
             typeTitle,
             therapeuticTask,
             randomAppointmentDate(),
-            randomTimeZone(),
+            timeZone,
             place,
             cost,
             payed,
