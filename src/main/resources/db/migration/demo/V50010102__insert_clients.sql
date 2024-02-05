@@ -1,4 +1,4 @@
-insert into clients (first_name, middle_name, last_name, birth_date, phone_number, email, distribution_source_type,
+INSERT INTO clients (first_name, middle_name, last_name, birth_date, phone_number, email, distribution_source_type,
                      distribution_source_comment,
                      complaints, therapist_id, created_at, version)
 VALUES ('Яна', null, 'Бортник', '1990.01.01', '+79231233445', 'bortnik@ya.ru', 'SOCIAL_NETWORKS', null,
@@ -20,3 +20,12 @@ VALUES ('Яна', null, 'Бортник', '1990.01.01', '+79231233445', 'bortnik
 Натяжение нервов по задней поверхности ног.
 Астеничное телосложение.', 2,
         now(), 1);
+
+CREATE OR REPLACE FUNCTION client(client_last_name varchar) RETURNS BIGINT
+AS
+'SELECT id
+ FROM clients
+ WHERE last_name = client_last_name'
+    LANGUAGE SQL
+    IMMUTABLE
+    RETURNS NULL ON NULL INPUT;

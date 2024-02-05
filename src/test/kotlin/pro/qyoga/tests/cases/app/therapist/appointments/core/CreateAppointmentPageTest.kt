@@ -44,7 +44,7 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         response.statusCode() shouldBe HttpStatus.OK.value()
-        response.header("HX-Redirect") shouldBe SchedulePage.path
+        response.header("HX-Redirect") shouldBe SchedulePage.PATH
 
         val storedAppointment = backgrounds.appointments.findAll().single()
         storedAppointment shouldMatch editAppointmentRequest
@@ -67,7 +67,7 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         response.statusCode() shouldBe HttpStatus.OK.value()
-        response.header("HX-Redirect") shouldBe SchedulePage.path
+        response.header("HX-Redirect") shouldBe SchedulePage.PATH
 
         val storedAppointment = backgrounds.appointments.findAll().single()
         storedAppointment shouldMatch editAppointmentRequest

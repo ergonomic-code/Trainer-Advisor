@@ -22,3 +22,5 @@ abstract class AppointmentForm(action: FormAction) : QYogaForm("editAppointmentF
 }
 
 object CreateAppointmentForm : AppointmentForm(FormAction.hxPost("$PATH/new"))
+
+object EditAppointmentForm : AppointmentForm(FormAction.hxPost("$PATH/{appointmentId}"))

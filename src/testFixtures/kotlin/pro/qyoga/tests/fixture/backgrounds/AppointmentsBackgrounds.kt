@@ -8,9 +8,11 @@ import pro.qyoga.core.appointments.core.dtos.EditAppointmentRequest
 import pro.qyoga.core.appointments.core.model.Appointment
 import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.tests.fixture.appointments.AppointmentsObjectMother
+import pro.qyoga.tests.fixture.appointments.randomAppointmentDate
 import pro.qyoga.tests.fixture.data.randomTimeZone
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_REF
+import java.time.LocalDateTime
 import java.time.ZoneId
 
 @Component
@@ -25,7 +27,11 @@ class AppointmentsBackgrounds(
         return appointmentsRepo.findAll()
     }
 
-    fun create(timeZone: ZoneId = randomTimeZone(), therapist: TherapistRef = THE_THERAPIST_REF): Appointment {
+    fun create(
+        dateTime: LocalDateTime = randomAppointmentDate(),
+        timeZone: ZoneId = randomTimeZone(),
+        therapist: TherapistRef = THE_THERAPIST_REF
+    ): Appointment {
         val clientRef = clientsBackgrounds.createClients(1, therapist.id!!).single().ref()
         val therapeuticTaskRef = therapeuticTasksBackgrounds.createTherapeuticTask(therapist.id!!).ref()
         return createAppointment(
@@ -33,6 +39,7 @@ class AppointmentsBackgrounds(
             AppointmentsObjectMother.randomEditAppointmentRequest(
                 client = clientRef,
                 therapeuticTask = therapeuticTaskRef,
+                dateTime = dateTime,
                 timeZone = timeZone
             )
         )

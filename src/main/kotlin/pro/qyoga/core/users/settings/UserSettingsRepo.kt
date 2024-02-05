@@ -19,14 +19,16 @@ class UserSettingsRepo(
         val query = """
             SELECT time_zone FROM appointments
             WHERE therapist_ref = :therapistId
+            ORDER BY created_at
+            LIMIT 1
         """.trimIndent()
 
-        val lastAppointmentTimeZone = this.namedParameterJdbcOperations.queryForObject(
+        val lastAppointmentTimeZone = this.namedParameterJdbcOperations.queryForList(
             query,
             mapOf("therapistId" to userRef.id),
             ZoneId::class.java
         )
-        return lastAppointmentTimeZone ?: defaultTimeZone
+        return lastAppointmentTimeZone.firstOrNull() ?: defaultTimeZone
     }
 
 }

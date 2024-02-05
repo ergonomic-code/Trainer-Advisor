@@ -14,17 +14,42 @@
     <div th:replace="~{fragments/leftNavPanel :: leftNavPanel (activeLink='schedule')}"></div>
 
     <div id="layoutSidenav_content">
-        <main>
-            <div class="container px-4">
-                <h1 class="mt-4 mb-3 pb-2 mb-3 border-bottom">Расписание</h1>
+        <main class="container px-4">
+            <h1 class="mt-4 mb-3 pb-2 mb-3 border-bottom">Расписание</h1>
 
-                <div class="d-flex justify-content-end">
-                    <a class="btn btn-outline-success" href="/therapist/appointments/new"
-                       id="addTrainingSessionLink">
+            <div class="row mb-3 justify-content-end">
+                <div class="col col-sm-3">
+                    <a class="btn btn-outline-success w-100" href="/therapist/appointments/new"
+                       id="addAppointmentLink">
                         Запланировать приём
                     </a>
                 </div>
             </div>
+
+            <div class="row mb-5">
+                <ul class="nav nav-tabs" id="scheduleTabs">
+                    <li class="nav-item">
+                        <a class="nav-link "
+                           href="/therapist/schedule"
+                           id="futureAppointmentsLink"
+                           th:classappend="${activeTab == 'future'} ? 'active'">
+                            Предстоящие
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           href="/therapist/schedule?past=true"
+                           id="pastAppointmentsLink"
+                           th:classappend="${activeTab == 'past'} ? 'active'">
+                            Прошедшие
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <section th:replace="~{'therapist/appointments/schedule-tab-' + ${activeTab} + '.html'}">
+            </section>
+
 
         </main>
         <footer th:insert="~{fragments/footer.html :: footer}"></footer>

@@ -20,7 +20,7 @@ class TherapistAppointmentsApi(override val authCookie: Cookie) : AuthorizedApi 
         return Given {
             authorized()
         } When {
-            get(SchedulePage.path)
+            get(SchedulePage.PATH)
         } Then {
             statusCode(HttpStatus.OK.value())
         } Extract {
