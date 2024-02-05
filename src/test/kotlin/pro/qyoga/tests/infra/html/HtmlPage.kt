@@ -6,7 +6,7 @@ import org.jsoup.nodes.Element
 
 interface HtmlPageCompat {
     val path: String
-    val title: String
+    val title: String?
 }
 
 interface HtmlPage : HtmlPageCompat {

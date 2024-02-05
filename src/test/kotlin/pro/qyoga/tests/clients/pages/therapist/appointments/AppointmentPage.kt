@@ -1,23 +1,27 @@
 package pro.qyoga.tests.clients.pages.therapist.appointments
 
-import io.kotest.matchers.Matcher
-import io.kotest.matchers.compose.all
 import pro.qyoga.tests.assertions.haveComponent
 import pro.qyoga.tests.assertions.haveTitle
 import pro.qyoga.tests.infra.html.HtmlPage
+import pro.qyoga.tests.infra.kotest.buildAllOfMatcher
 
 
 abstract class AppointmentsPage(
-    final override val title: String,
-    override val path: String,
-    val editAppointmentForm: AppointmentForm
+    val editAppointmentForm: AppointmentForm,
+    final override val title: String? = null,
 ) : HtmlPage {
 
-    override val matcher = Matcher.all(
-        haveTitle(title),
-        haveComponent(editAppointmentForm)
-    )
+    override val path = editAppointmentForm.action.url
+
+    override val matcher = buildAllOfMatcher {
+        if (title != null) {
+            add(haveTitle(title))
+        }
+        add(haveComponent(editAppointmentForm))
+    }
 
 }
 
-object CreateAppointmentPage : AppointmentsPage("Новый приём", CreateAppointmentForm.action.url, CreateAppointmentForm)
+object CreateAppointmentPage : AppointmentsPage(CreateAppointmentForm, "Новый приём")
+
+object EditAppointmentPage : AppointmentsPage(EditAppointmentForm)

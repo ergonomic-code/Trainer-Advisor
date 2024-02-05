@@ -6,9 +6,12 @@ import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.annotation.Version
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.Table
+import pro.qyoga.core.users.therapists.TherapistRef
 import java.time.Instant
 
 typealias UserRef = AggregateReference<User, Long>
+
+fun UserRef(therapistRef: TherapistRef): UserRef = AggregateReference.to(therapistRef.id!!)
 
 @Table("users")
 data class User(

@@ -115,7 +115,7 @@ class ErgoRepository<T : Any, ID : Any>(
 
     fun findPage(
         query: String,
-        paramMap: Map<String, Any>,
+        paramMap: Map<String, Any?>,
         pageRequest: Pageable = ALL,
         fetch: Iterable<KProperty1<T, *>> = emptySet(),
     ): Page<T> {
@@ -128,6 +128,20 @@ class ErgoRepository<T : Any, ID : Any>(
                 FetchSpec(fetch)
             )
         }
+    }
+
+    fun findAll(
+        query: String,
+        paramMap: Map<String, Any?>,
+        fetch: Iterable<KProperty1<T, *>> = emptySet(),
+    ): Collection<T> {
+
+        val rows = namedParameterJdbcOperations.query(query, paramMap, rowMapper)
+
+        return jdbcAggregateTemplate.hydrate(
+            rows,
+            FetchSpec(fetch)
+        )
     }
 
 }

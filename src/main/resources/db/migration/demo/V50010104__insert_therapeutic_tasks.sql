@@ -17,3 +17,12 @@ VALUES ('Мобилизация ПОП', 2, now(), 1),
        ('Укреление МТД', 2, now(), 1),
        ('ЙТ боли в пояснице', 2, now(), 1)
 ;
+
+CREATE OR REPLACE FUNCTION thrp_task(task_name varchar) RETURNS BIGINT
+AS
+'SELECT id
+ FROM therapeutic_tasks
+ WHERE name = task_name'
+    LANGUAGE SQL
+    IMMUTABLE
+    RETURNS NULL ON NULL INPUT;

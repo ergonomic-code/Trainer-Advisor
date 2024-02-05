@@ -14,7 +14,7 @@ infix fun Appointment.shouldMatch(editAppointmentRequest: EditAppointmentRequest
         be(editAppointmentRequest.appointmentType?.id),
         be(editAppointmentRequest.appointmentTypeTitle)
     ).test(this)
-    this.therapeuticTaskRef.id shouldBe editAppointmentRequest.therapeuticTask.id
+    this.therapeuticTaskRef?.id shouldBe editAppointmentRequest.therapeuticTask.id
     this.dateTime.atZone(this.timeZone).toLocalDateTime() shouldBe editAppointmentRequest.dateTime
     this.timeZone shouldBe editAppointmentRequest.timeZone
     this.place shouldBe editAppointmentRequest.place

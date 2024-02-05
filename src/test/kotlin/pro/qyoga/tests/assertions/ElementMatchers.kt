@@ -95,20 +95,10 @@ fun haveText(text: String) = Matcher { element: Element ->
     )
 }
 
-fun matchSelector(selector: String) = Matcher { element: Element ->
-    MatcherResult(
-        element.select(selector).first() == element,
-        { "Element ${element.descr} doesn't matches selector $selector" },
-        { "Element ${element.descr} should not match selector $selector" },
-    )
-}
-
 fun beTagWithText(tag: String, text: String) = Matcher.all(
     isTag(tag),
     haveText(text)
 )
-
-fun beTitle(text: String) = beTagWithText("title", text)
 
 fun haveTitle(title: String): Matcher<Element> =
     Matcher.all(haveComponent(SelectorOnlyComponent("title")),
@@ -193,9 +183,7 @@ fun haveElements(selector: String, count: Int): Matcher<Element> = Matcher { ele
     val actualCount = elements.size
     MatcherResult(
         actualCount == count,
-        {
-            "Element ${element.descr} have ${actualCount} elements matching $selector but $count is expected.\nElements: ${elements.map { it.descr }}"
-        },
+        { "Element ${element.descr} have ${actualCount} elements matching $selector but $count is expected.\nElements: ${elements.map { it.descr }}" },
         { "Element ${element.descr} should not have ${actualCount} elements matching $selector.\nElements: ${elements.map { it.descr }}" }
     )
 
