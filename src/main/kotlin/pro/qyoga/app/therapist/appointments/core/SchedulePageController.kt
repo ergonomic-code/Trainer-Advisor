@@ -18,17 +18,29 @@ enum class ScheduleTabs {
 @Controller
 @RequestMapping(SchedulePageController.PATH)
 class SchedulePageController(
-    private val getFutureAppointmentsWorkflow: GetFutureAppointmentsWorkflow
+    private val getFutureAppointmentsWorkflow: GetFutureAppointmentsWorkflow,
+    private val getPastAppointmentsWorkflow: GetPastAppointmentsWorkflow
 ) {
 
     @GetMapping
-    fun getSchedulePage(
+    fun getFutureSchedulePage(
         @AuthenticationPrincipal therapist: QyogaUserDetails
     ): ModelAndView {
         val futureAppointments = getFutureAppointmentsWorkflow(therapist.ref)
         return modelAndView("therapist/appointments/schedule.html") {
             "activeTab" bindTo ScheduleTabs.FUTURE.name.lowercase()
             "futureAppointments" bindTo futureAppointments
+        }
+    }
+
+    @GetMapping(params = ["past=true"])
+    fun getPastSchedulePage(
+        @AuthenticationPrincipal therapist: QyogaUserDetails
+    ): ModelAndView {
+        val pastAppointments = getPastAppointmentsWorkflow(therapist.ref)
+        return modelAndView("therapist/appointments/schedule.html") {
+            "activeTab" bindTo ScheduleTabs.PAST.name.lowercase()
+            "pastAppointments" bindTo pastAppointments
         }
     }
 

@@ -17,6 +17,14 @@ INSERT INTO appointments
 (therapist_ref, client_ref, type_ref, therapeutic_task_ref, date_time, time_zone, place, cost, payed, comment,
  created_at, modified_at, version)
 VALUES (2, client('Бортник'), appnt_type('Тренировка'), thrp_task('Мобилизация ПОП'),
+        current_date - '6 days 9 hours 30 minutes'::INTERVAL, current_setting('TIMEZONE'), 'Freedom Yoga', 2000, false,
+        null,
+        now(), null, 0),
+       (2, client('Королёва'), appnt_type('Консультация'), thrp_task('ЙТ гастрита'),
+        current_date - '6 days 11 hours 15 minutes'::INTERVAL, current_setting('TIMEZONE'), 'Онлайн', 18000, true, null,
+        now(), null, 0),
+
+       (2, client('Бортник'), appnt_type('Тренировка'), thrp_task('Мобилизация ПОП'),
         current_date + '9 hours 30 minutes'::INTERVAL, current_setting('TIMEZONE'), 'Freedom Yoga', 2000, false, null,
         now(), null, 0),
        (2, client('Королёва'), appnt_type('Консультация'), thrp_task('ЙТ гастрита'),

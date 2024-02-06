@@ -16,9 +16,22 @@ import java.time.format.DateTimeFormatter
 
 class TherapistAppointmentsApi(override val authCookie: Cookie) : AuthorizedApi {
 
-    fun getTrainingSchedulePage(): Document {
+    fun getFutureAppointmentsSchedule(): Document {
         return Given {
             authorized()
+        } When {
+            get(SchedulePage.PATH)
+        } Then {
+            statusCode(HttpStatus.OK.value())
+        } Extract {
+            Jsoup.parse(body().asString())
+        }
+    }
+
+    fun getPastAppointmentsSchedule(): Document {
+        return Given {
+            authorized()
+            queryParam("past", true)
         } When {
             get(SchedulePage.PATH)
         } Then {

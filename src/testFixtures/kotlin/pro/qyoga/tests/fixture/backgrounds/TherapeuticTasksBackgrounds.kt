@@ -17,7 +17,7 @@ class TherapeuticTasksBackgrounds(
     @Transactional
     fun createTherapeuticTask(
         therapistId: Long = THE_THERAPIST_ID,
-        taskName: String = randomCyrillicWord()
+        taskName: String = randomCyrillicWord(minLength = 4)
     ): TherapeuticTask {
         return therapeuticTasksRepo.getOrCreate(TherapeuticTask(therapistId, taskName))
     }

@@ -1,3 +1,25 @@
 <section th:fragment="pastSchedule">
-
+    <div id="pastAppointments">
+        <div class=" pb-3 mb-4 d-flex justify-content-between align-items-center appointment-row px-3"
+             th:each="appointment: ${pastAppointments}">
+            <div>
+                <a th:href="@{/therapist/appointments/{appointmentId}(appointmentId=${appointment.id})}"
+                   th:id="${'editAppointmentLink' + appointment.id}"
+                >
+                    <span th:text="${#temporals.format(appointment.wallClockDateTime, T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_DATE_TIME_PATTERN)}"></span>
+                    <br/>
+                    <span th:text="${appointment.clientRef.entity.fullName()}"></span>
+                </a>
+                <br>
+                <small class="text-muted"
+                       th:text="${appointment.typeRef.entity.name + (appointment.place != null ? ', ' + appointment.place : '')}"></small>
+            </div>
+            <div>
+                <button class="deleteButton btn btn-outline-danger text"
+                        title="Удалить приём">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    </div>
 </section>

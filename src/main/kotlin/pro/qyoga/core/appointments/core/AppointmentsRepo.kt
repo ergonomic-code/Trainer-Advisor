@@ -1,5 +1,6 @@
 package pro.qyoga.core.appointments.core
 
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.data.jdbc.core.convert.JdbcConverter
 import org.springframework.data.mapping.model.BasicPersistentEntity
@@ -8,6 +9,7 @@ import org.springframework.data.util.TypeInformation
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
 import pro.azhidkov.platform.spring.sdj.erpo.ErgoRepository
+import pro.azhidkov.platform.spring.sdj.sortBy
 import pro.qyoga.core.appointments.core.model.Appointment
 import pro.qyoga.core.users.therapists.TherapistRef
 import java.sql.Timestamp
@@ -16,8 +18,8 @@ import java.time.ZoneId
 
 @Repository
 class AppointmentsRepo(
-    internal val jdbcAggregateTemplate: JdbcAggregateOperations,
-    internal val namedParameterJdbcOperations: NamedParameterJdbcOperations,
+    jdbcAggregateTemplate: JdbcAggregateOperations,
+    namedParameterJdbcOperations: NamedParameterJdbcOperations,
     jdbcConverter: JdbcConverter,
     relationalMappingContext: RelationalMappingContext,
 ) : ErgoRepository<Appointment, Long>(
@@ -26,13 +28,19 @@ class AppointmentsRepo(
     BasicPersistentEntity(TypeInformation.of(Appointment::class.java)),
     jdbcConverter,
     relationalMappingContext
-)
+) {
+
+    object Page {
+        val lastTenByDate = PageRequest.of(0, 10, sortBy(Appointment::dateTime).descending())
+    }
+
+}
 
 fun AppointmentsRepo.findAllFutureAppointments(
     therapist: TherapistRef,
     now: Instant,
     currentUserTimeZone: ZoneId
-): Iterable<Appointment> {
+): Collection<Appointment> {
     val query = """
         SELECT *
         FROM appointments
@@ -47,5 +55,26 @@ fun AppointmentsRepo.findAllFutureAppointments(
         "now" to Timestamp.from(now),
         "currentUserTimeZone" to currentUserTimeZone.id
     )
-    return this.findAll(query, params, listOf(Appointment::clientRef, Appointment::typeRef))
+    return this.findAll(query, params, Appointment.Fetch.summaryRefs)
+}
+
+fun AppointmentsRepo.findPastAppointmentsSlice(
+    therapist: TherapistRef,
+    now: Instant,
+    currentUserTimeZone: ZoneId
+): Collection<Appointment> {
+    val query = """
+        SELECT *
+        FROM appointments
+        WHERE
+            therapist_ref = :therapist AND
+            date_trunc('day', date_time AT TIME ZONE :currentUserTimeZone) < date_trunc('day', :now AT TIME ZONE :currentUserTimeZone)
+    """.trimIndent()
+
+    val params: Map<String, Any?> = mapOf(
+        "therapist" to therapist.id,
+        "now" to Timestamp.from(now),
+        "currentUserTimeZone" to currentUserTimeZone.id
+    )
+    return this.findSlice(query, params, AppointmentsRepo.Page.lastTenByDate, Appointment.Fetch.summaryRefs)
 }
