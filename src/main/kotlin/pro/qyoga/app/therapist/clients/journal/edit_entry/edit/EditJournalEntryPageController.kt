@@ -1,13 +1,13 @@
 package pro.qyoga.app.therapist.clients.journal.edit_entry.edit
 
-import org.springframework.http.ResponseEntity
+import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
-import pro.azhidkov.platform.kotlin.isFailureOf
 import pro.azhidkov.platform.spring.http.hxRedirect
 import pro.azhidkov.platform.spring.mvc.modelAndView
+import pro.qyoga.app.common.notFound
 import pro.qyoga.app.therapist.clients.journal.edit_entry.shared.JOURNAL_ENTRY_VIEW_NAME
 import pro.qyoga.core.clients.journals.JournalsService
 import pro.qyoga.core.clients.journals.errors.DuplicatedDate
@@ -29,6 +29,7 @@ class EditJournalEntryPageController(
         @PathVariable entryId: Long
     ): ModelAndView {
         val result = getJournalEntryWorkflow.getJournalEntry(clientId, entryId)
+            ?: return notFound
 
         return modelAndView(JOURNAL_ENTRY_VIEW_NAME) {
             "client" bindTo result.client
@@ -46,45 +47,26 @@ class EditJournalEntryPageController(
         @ModelAttribute editJournalEntryRequest: EditJournalEntryRequest,
         @AuthenticationPrincipal principal: QyogaUserDetails,
     ): Any {
-        val result = runCatching {
+        try {
             editJournalEntryWorkflow.editJournalEntry(clientId, entryId, editJournalEntryRequest, principal)
-        }
-
-        return when {
-            result.isSuccess ->
-                hxRedirect("/therapist/clients/$clientId/journal")
-
-            result.isFailureOf<DuplicatedDate>() -> {
-                val ex = result.exceptionOrNull() as DuplicatedDate
-                modelAndView("$JOURNAL_ENTRY_VIEW_NAME :: journalEntryFrom") {
-                    "client" bindTo ex.duplicatedEntry.client
-                    "entry" bindTo ex.duplicatedEntry
-                    "entryDate" bindTo ex.duplicatedEntry.date
-                    "duplicatedDate" bindTo true
-                    "formAction" bindTo editFormAction(clientId, entryId)
-                }
+            return hxRedirect("/therapist/clients/$clientId/journal")
+        } catch (ex: DuplicatedDate) {
+            return modelAndView("$JOURNAL_ENTRY_VIEW_NAME :: journalEntryFrom") {
+                "client" bindTo ex.duplicatedEntry.client
+                "entry" bindTo ex.duplicatedEntry
+                "duplicatedDate" bindTo true
+                "formAction" bindTo editFormAction(clientId, entryId)
             }
-
-            else ->
-                result.getOrThrow()
         }
     }
 
     @DeleteMapping
+    @ResponseStatus(HttpStatus.OK)
     fun deleteJournalEntry(
         @PathVariable clientId: Long,
         @PathVariable entryId: Long,
-    ): ResponseEntity<Unit> {
-        val result = runCatching {
-            journalsService.deleteEntry(clientId, entryId)
-        }
-
-        result.onFailure {
-            throw it
-        }
-
-        return ResponseEntity.ok()
-            .build()
+    ) {
+        journalsService.deleteEntry(clientId, entryId)
     }
 
 }

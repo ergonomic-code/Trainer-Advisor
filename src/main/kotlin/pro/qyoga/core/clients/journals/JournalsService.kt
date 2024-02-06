@@ -6,7 +6,6 @@ import org.springframework.data.relational.core.conversion.DbActionExecutionExce
 import org.springframework.stereotype.Service
 import pro.qyoga.core.clients.journals.dtos.JournalPageRequest
 import pro.qyoga.core.clients.journals.errors.DuplicatedDate
-import pro.qyoga.core.clients.journals.errors.EntryNotFound
 import pro.qyoga.core.clients.journals.internal.JournalEntriesRepo
 import pro.qyoga.core.clients.journals.model.JournalEntry
 
@@ -34,9 +33,6 @@ class JournalsService(
     }
 
     fun deleteEntry(clientId: Long, entryId: Long) {
-        if (!journalEntriesRepo.existsById(entryId)) {
-            throw EntryNotFound(clientId, entryId)
-        }
         journalEntriesRepo.deleteById(entryId)
     }
 
