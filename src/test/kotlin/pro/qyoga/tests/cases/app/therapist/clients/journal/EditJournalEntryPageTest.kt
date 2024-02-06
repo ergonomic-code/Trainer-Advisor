@@ -6,13 +6,11 @@ import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import pro.qyoga.l10n.russianDateFormat
+import pro.qyoga.tests.assertions.*
 import pro.qyoga.tests.assertions.shouldBe
-import pro.qyoga.tests.assertions.shouldBeComponent
-import pro.qyoga.tests.assertions.shouldBeElement
-import pro.qyoga.tests.assertions.shouldHave
-import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.clients.pages.publc.GenericErrorPage
+import pro.qyoga.tests.clients.pages.publc.NotFoundErrorPage
 import pro.qyoga.tests.clients.pages.therapist.clients.journal.entry.EditJournalEntryForm
 import pro.qyoga.tests.clients.pages.therapist.clients.journal.entry.EditJournalEntryPage
 import pro.qyoga.tests.clients.pages.therapist.clients.journal.entry.JournalEntryFrom
@@ -109,6 +107,19 @@ class EditJournalEntryPageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         document shouldBe GenericErrorPage
+    }
+
+    @Test
+    fun `When edit page of not existing entry is requested, generic 404 error page should be returned`() {
+        // Given
+        val client = backgrounds.clients.createClients(1).single()
+        val therapist = TherapistClient.loginAsTheTherapist()
+
+        // When
+        val document = therapist.clientJournal.getEditJournalEntryPage(client.id, -1, HttpStatus.NOT_FOUND)
+
+        // Then
+        document shouldBePage NotFoundErrorPage
     }
 
 }

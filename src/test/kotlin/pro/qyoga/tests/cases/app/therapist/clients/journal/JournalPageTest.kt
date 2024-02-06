@@ -46,17 +46,17 @@ class JournalPageTest : QYogaAppIntegrationBaseTest() {
     }
 
     @Test
-    fun `When not existing journal entry is deleted response with 500 status should be returned`() {
+    fun `When not existing journal entry is deleted response with 200 status should be returned`() {
         // Given
         val therapist = TherapistClient.loginAsTheTherapist()
         val notExistingClientId = -1L
         val notExistingEntryId = -1L
 
-        // When|Then
+        // When/Then
         therapist.clientJournal.deleteEntry(
             notExistingClientId,
             notExistingEntryId,
-            expectedStatus = HttpStatus.INTERNAL_SERVER_ERROR
+            expectedStatus = HttpStatus.OK
         )
     }
 
