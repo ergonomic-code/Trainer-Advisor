@@ -30,11 +30,13 @@ data class FutureAppointments(
 
             val later = appointments.filter { it.wallClockDateTime.toLocalDate() >= today.plusWeeks(1) }
 
-            check(todayAppointments.size + nextWeekSchedule.values.sumOf { it.size } + later.size == appointments.size) {
+            val futureAppointments = FutureAppointments(baseDateTime, todayAppointments, nextWeekSchedule, later)
+
+            check(futureAppointments.size == appointments.size) {
                 "Sum of appointment groups sizes should be equal to source collection size"
             }
 
-            return FutureAppointments(baseDateTime, todayAppointments, nextWeekSchedule, later)
+            return futureAppointments
         }
 
     }

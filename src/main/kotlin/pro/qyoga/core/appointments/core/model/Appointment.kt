@@ -36,6 +36,9 @@ data class Appointment(
     val version: Long = 0
 ) {
 
+    @Transient
+    val wallClockDateTime: ZonedDateTime = dateTime.atZone(timeZone)
+
     constructor(
         therapist: TherapistRef,
         editAppointmentRequest: EditAppointmentRequest,
@@ -57,7 +60,8 @@ data class Appointment(
         require(cost == null || cost > 0) { "Cost should be non-negative" }
     }
 
-    @Transient
-    val wallClockDateTime: ZonedDateTime = dateTime.atZone(timeZone)
+    object Fetch {
+        val summaryRefs = listOf(Appointment::clientRef, Appointment::typeRef)
+    }
 
 }

@@ -6,6 +6,7 @@ import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.clients.pages.therapist.appointments.EmptyFutureSchedulePage
 import pro.qyoga.tests.clients.pages.therapist.appointments.FutureSchedulePage
+import pro.qyoga.tests.clients.pages.therapist.appointments.PastSchedulePage
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import java.time.LocalDate
 import java.time.LocalTime
@@ -21,7 +22,7 @@ class SchedulePageTest : QYogaAppIntegrationBaseTest() {
         val therapist = TherapistClient.loginAsTheTherapist()
 
         // When
-        val document = therapist.appointments.getTrainingSchedulePage()
+        val document = therapist.appointments.getFutureAppointmentsSchedule()
 
         // Then
         document shouldBePage EmptyFutureSchedulePage
@@ -56,7 +57,7 @@ class SchedulePageTest : QYogaAppIntegrationBaseTest() {
         val therapist = TherapistClient.loginAsTheTherapist()
 
         // When
-        val document = therapist.appointments.getTrainingSchedulePage()
+        val document = therapist.appointments.getFutureAppointmentsSchedule()
 
         // Then
         document shouldBePage FutureSchedulePage
@@ -64,5 +65,42 @@ class SchedulePageTest : QYogaAppIntegrationBaseTest() {
         FutureSchedulePage.nextWeek(document) shouldHave FutureSchedulePage.rowsFor(nextWeekAppointments)
         FutureSchedulePage.later(document) shouldHave FutureSchedulePage.rowsFor(laterAppointments)
     }
+
+    @Test
+    fun `Past schedule page should be rendered correctly when no appointments exist`() {
+        // Given
+        val therapist = TherapistClient.loginAsTheTherapist()
+
+        // When
+        val document = therapist.appointments.getPastAppointmentsSchedule()
+
+        // Then
+        document shouldBePage PastSchedulePage
+    }
+
+    @Test
+    fun `Past schedule page should contain 10 latest appointments`() {
+        // Given
+        val page = 10
+        val today = LocalDate.now()
+        val appointmentDates = generateSequence(today) { it.minusDays(1) }
+            .drop(1)
+            .take(page + 1)
+
+        val appointments = appointmentDates
+            .map { backgrounds.appointments.create(dateTime = it.atTime(9, 30)) }
+            .toList()
+        val appointmentsPage = appointments.take(page)
+
+        val therapist = TherapistClient.loginAsTheTherapist()
+
+        // When
+        val document = therapist.appointments.getPastAppointmentsSchedule()
+
+        // Then
+        document shouldBePage PastSchedulePage
+        document shouldHave PastSchedulePage.rowsFor(appointmentsPage)
+    }
+
 
 }

@@ -7,6 +7,7 @@ import org.jsoup.nodes.Element
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
 import pro.qyoga.core.appointments.core.model.Appointment
 import pro.qyoga.l10n.russianTimeFormat
+import pro.qyoga.tests.assertions.alwaysSuccess
 import pro.qyoga.tests.assertions.haveComponent
 import pro.qyoga.tests.assertions.haveElements
 import pro.qyoga.tests.assertions.haveTitle
@@ -14,10 +15,9 @@ import pro.qyoga.tests.infra.html.Component
 import pro.qyoga.tests.infra.html.HtmlPage
 import pro.qyoga.tests.infra.html.Link
 
+private const val BASE_PATH = "/therapist/schedule"
 
-abstract class SchedulePage(val content: Component) : HtmlPage {
-
-    override val path = PATH
+abstract class SchedulePage(val content: Component, override val path: String = BASE_PATH) : HtmlPage {
 
     final override val title = "Расписание"
 
@@ -27,11 +27,12 @@ abstract class SchedulePage(val content: Component) : HtmlPage {
     override val matcher = Matcher.all(
         haveTitle(title),
         haveComponent(addAppointmentLink),
+        haveComponent(SchedulePageTabs),
         haveComponent(content)
     )
 
     companion object {
-        const val PATH = "/therapist/schedule"
+        const val PATH = BASE_PATH
     }
 
 }
@@ -72,6 +73,16 @@ object FutureSchedulePageTab : Component {
 
 }
 
+object PastSchedulePageTab : Component {
+
+    override fun selector() = "#pastAppointments"
+
+    override fun matcher(): Matcher<Element> {
+        return alwaysSuccess()
+    }
+
+}
+
 object FutureSchedulePage : SchedulePage(FutureSchedulePageTab) {
 
     fun today(document: Document): Element = document.getElementById(FutureSchedulePageTab.TODAY_APPOINTMENTS_ID)
@@ -83,8 +94,28 @@ object FutureSchedulePage : SchedulePage(FutureSchedulePageTab) {
     fun later(document: Document): Element = document.getElementById(FutureSchedulePageTab.LATER_APPOINTMENTS_ID)
         ?: error("Cannot find today appointments by ${FutureSchedulePageTab.LATER_APPOINTMENTS_ID}")
 
-    fun rowsFor(todayAppointments: List<Appointment>): Matcher<Element> {
-        val matchers = todayAppointments.map {
+    fun rowsFor(appointments: List<Appointment>): Matcher<Element> {
+        val matchers = appointments.map {
+            Matcher.all(
+                haveComponent(
+                    Link(
+                        "editAppointmentLink",
+                        EditAppointmentPage,
+                        russianTimeFormat.format(it.wallClockDateTime) + " " + it.clientRef.resolveOrThrow().fullName()
+                    )
+                )
+            )
+        }
+
+        return Matcher.all(*matchers.toTypedArray())
+    }
+
+}
+
+object PastSchedulePage : SchedulePage(PastSchedulePageTab, "$BASE_PATH?past=true") {
+
+    fun rowsFor(appointments: List<Appointment>): Matcher<Element> {
+        val matchers = appointments.map {
             Matcher.all(
                 haveComponent(
                     Link(

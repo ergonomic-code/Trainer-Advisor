@@ -2,6 +2,7 @@ package pro.azhidkov.platform.spring.sdj.erpo
 
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
 import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.data.jdbc.core.convert.EntityRowMapper
 import org.springframework.data.jdbc.core.convert.JdbcConverter
@@ -9,6 +10,7 @@ import org.springframework.data.jdbc.repository.support.SimpleJdbcRepository
 import org.springframework.data.mapping.PersistentEntity
 import org.springframework.data.relational.core.mapping.RelationalMappingContext
 import org.springframework.data.relational.core.mapping.RelationalPersistentEntity
+import org.springframework.data.relational.core.sql.SqlIdentifier
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.transaction.annotation.Transactional
@@ -30,13 +32,11 @@ class ErgoRepository<T : Any, ID : Any>(
     relationalMappingContext: RelationalMappingContext,
 ) : SimpleJdbcRepository<T, ID>(jdbcAggregateTemplate, entity, jdbcConverter) {
 
-
     @Suppress("UNCHECKED_CAST")
-    val rowMapper =
-        EntityRowMapper(
-            relationalMappingContext.getRequiredPersistentEntity(entity.type) as RelationalPersistentEntity<T>,
-            jdbcConverter
-        )
+    private final val relationalPersistentEntity =
+        relationalMappingContext.getRequiredPersistentEntity(entity.type) as RelationalPersistentEntity<T>
+
+    protected val rowMapper = EntityRowMapper(relationalPersistentEntity, jdbcConverter)
 
     @Transactional
     fun update(id: ID, func: (T) -> T): T? {
@@ -119,15 +119,8 @@ class ErgoRepository<T : Any, ID : Any>(
         pageRequest: Pageable = ALL,
         fetch: Iterable<KProperty1<T, *>> = emptySet(),
     ): Page<T> {
-
         val page = namedParameterJdbcOperations.queryForPage(query, paramMap, pageRequest, rowMapper)
-
-        return page.mapContent {
-            jdbcAggregateTemplate.hydrate(
-                it,
-                FetchSpec(fetch)
-            )
-        }
+        return page.mapContent { jdbcAggregateTemplate.hydrate(it, FetchSpec(fetch)) }
     }
 
     fun findAll(
@@ -135,13 +128,36 @@ class ErgoRepository<T : Any, ID : Any>(
         paramMap: Map<String, Any?>,
         fetch: Iterable<KProperty1<T, *>> = emptySet(),
     ): Collection<T> {
-
         val rows = namedParameterJdbcOperations.query(query, paramMap, rowMapper)
+        return jdbcAggregateTemplate.hydrate(rows, FetchSpec(fetch))
+    }
+
+    fun findSlice(
+        query: String,
+        paramMap: Map<String, Any?>,
+        pageRequest: Pageable,
+        fetch: Iterable<KProperty1<T, *>> = emptySet(),
+    ): Collection<T> {
+        val sortOrders =
+            pageRequest.sort.map { "${getColumnNameToSortBy(it).reference} ${it.direction.name}" }.joinToString(", ")
+        val sliceQuery =
+            """SELECT * from ($query) AS data ORDER BY $sortOrders OFFSET ${pageRequest.offset} LIMIT ${pageRequest.pageSize}"""
+        val rows = namedParameterJdbcOperations.query(sliceQuery, paramMap, rowMapper)
 
         return jdbcAggregateTemplate.hydrate(
             rows,
             FetchSpec(fetch)
         )
+    }
+
+
+    private fun getColumnNameToSortBy(order: Sort.Order): SqlIdentifier {
+        val propertyToSortBy = relationalPersistentEntity.getPersistentProperty(order.property)
+        if (propertyToSortBy != null) {
+            return propertyToSortBy.columnName
+        }
+
+        TODO("Implement embedded (?) property to column resolution")
     }
 
 }
