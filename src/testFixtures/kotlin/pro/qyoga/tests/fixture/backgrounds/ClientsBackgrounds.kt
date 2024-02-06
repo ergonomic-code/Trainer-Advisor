@@ -8,7 +8,7 @@ import pro.qyoga.app.therapist.clients.ClientsListPageController
 import pro.qyoga.core.clients.cards.api.Client
 import pro.qyoga.core.clients.cards.api.ClientCardDto
 import pro.qyoga.core.clients.cards.api.ClientsService
-import pro.qyoga.core.clients.journals.api.JournalEntry
+import pro.qyoga.core.clients.journals.model.JournalEntry
 import pro.qyoga.tests.fixture.clients.ClientsObjectMother
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
 import pro.qyoga.tests.fixture.therapists.idOnlyUserDetails

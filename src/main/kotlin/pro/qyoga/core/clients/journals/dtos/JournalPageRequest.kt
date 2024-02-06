@@ -1,5 +1,6 @@
-package pro.qyoga.core.clients.journals.api
+package pro.qyoga.core.clients.journals.dtos
 
+import pro.qyoga.core.clients.journals.model.JournalEntry
 import java.time.LocalDate
 import kotlin.reflect.KProperty1
 

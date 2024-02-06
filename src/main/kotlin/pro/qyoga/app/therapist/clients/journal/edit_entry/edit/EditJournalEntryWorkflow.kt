@@ -2,10 +2,10 @@ package pro.qyoga.app.therapist.clients.journal.edit_entry.edit
 
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
-import pro.qyoga.core.clients.journals.api.EditJournalEntryRequest
-import pro.qyoga.core.clients.journals.api.EntryNotFound
-import pro.qyoga.core.clients.journals.api.JournalEntry
-import pro.qyoga.core.clients.journals.api.JournalsService
+import pro.qyoga.core.clients.journals.JournalsService
+import pro.qyoga.core.clients.journals.errors.EntryNotFound
+import pro.qyoga.core.clients.journals.model.EditJournalEntryRequest
+import pro.qyoga.core.clients.journals.model.JournalEntry
 import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails

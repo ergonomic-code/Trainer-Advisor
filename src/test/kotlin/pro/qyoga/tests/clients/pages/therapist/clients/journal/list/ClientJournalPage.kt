@@ -1,7 +1,7 @@
 package pro.qyoga.tests.clients.pages.therapist.clients.journal.list
 
 import org.jsoup.nodes.Element
-import pro.qyoga.core.clients.journals.api.JournalEntry
+import pro.qyoga.core.clients.journals.model.JournalEntry
 import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.clients.pages.therapist.clients.ClientPageTabsFragment

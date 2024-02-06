@@ -5,9 +5,9 @@ import org.springframework.transaction.annotation.Transactional
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.ref
 import pro.qyoga.app.therapist.clients.journal.edit_entry.shared.ClientNotFound
 import pro.qyoga.core.clients.cards.api.ClientsService
-import pro.qyoga.core.clients.journals.api.EditJournalEntryRequest
-import pro.qyoga.core.clients.journals.api.JournalEntry
-import pro.qyoga.core.clients.journals.api.JournalsService
+import pro.qyoga.core.clients.journals.JournalsService
+import pro.qyoga.core.clients.journals.model.EditJournalEntryRequest
+import pro.qyoga.core.clients.journals.model.JournalEntry
 import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails

@@ -1,17 +1,21 @@
-package pro.qyoga.core.clients.journals.internal
+package pro.qyoga.core.clients.journals
 
 import org.springframework.dao.DuplicateKeyException
 import org.springframework.data.domain.Page
 import org.springframework.data.relational.core.conversion.DbActionExecutionException
 import org.springframework.stereotype.Service
-import pro.qyoga.core.clients.journals.api.*
+import pro.qyoga.core.clients.journals.dtos.JournalPageRequest
+import pro.qyoga.core.clients.journals.errors.DuplicatedDate
+import pro.qyoga.core.clients.journals.errors.EntryNotFound
+import pro.qyoga.core.clients.journals.internal.JournalEntriesRepo
+import pro.qyoga.core.clients.journals.model.JournalEntry
 
 @Service
-class JournalsServiceImpl(
+class JournalsService(
     private val journalEntriesRepo: JournalEntriesRepo
-) : JournalsService {
+) {
 
-    override fun createJournalEntry(newEntry: JournalEntry): JournalEntry {
+    fun createJournalEntry(newEntry: JournalEntry): JournalEntry {
         val result = runCatching { journalEntriesRepo.save(newEntry) }
         val ex = result.exceptionOrNull()
         if ((ex as? DbActionExecutionException)?.cause is DuplicateKeyException) {
@@ -21,15 +25,15 @@ class JournalsServiceImpl(
         return result.getOrThrow()
     }
 
-    override fun getJournalPage(journalPageRequest: JournalPageRequest): Page<JournalEntry> {
+    fun getJournalPage(journalPageRequest: JournalPageRequest): Page<JournalEntry> {
         return journalEntriesRepo.getJournalPage(journalPageRequest)
     }
 
-    override fun getJournalEntry(clientId: Long, entryId: Long): JournalEntry? {
+    fun getJournalEntry(clientId: Long, entryId: Long): JournalEntry? {
         return journalEntriesRepo.getEntry(clientId, entryId, fetch = listOf(JournalEntry::therapeuticTask))
     }
 
-    override fun deleteEntry(clientId: Long, entryId: Long) {
+    fun deleteEntry(clientId: Long, entryId: Long) {
         if (!journalEntriesRepo.existsById(entryId)) {
             throw EntryNotFound(clientId, entryId)
         }

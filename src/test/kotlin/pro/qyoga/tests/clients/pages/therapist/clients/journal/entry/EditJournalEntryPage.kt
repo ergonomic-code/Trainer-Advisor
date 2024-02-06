@@ -4,7 +4,7 @@ import io.kotest.matchers.Matcher
 import io.kotest.matchers.shouldBe
 import org.jsoup.nodes.Element
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
-import pro.qyoga.core.clients.journals.api.JournalEntry
+import pro.qyoga.core.clients.journals.model.JournalEntry
 import pro.qyoga.l10n.russianDateFormat
 import pro.qyoga.tests.assertions.PageMatcher
 import pro.qyoga.tests.assertions.alwaysSuccess

@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.ref
 import pro.azhidkov.platform.spring.sdj.query.QueryBuilder
 import pro.azhidkov.platform.spring.sdj.withSortBy
-import pro.qyoga.core.clients.journals.api.JournalEntry
 import pro.qyoga.core.clients.journals.internal.JournalEntriesRepo
+import pro.qyoga.core.clients.journals.model.JournalEntry
 import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo
 
 private val referencesPageRequest = Pageable.ofSize(4).withSortBy(JournalEntry::createdAt)
