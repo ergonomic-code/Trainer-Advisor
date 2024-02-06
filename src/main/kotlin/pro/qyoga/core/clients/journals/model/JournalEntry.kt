@@ -1,4 +1,4 @@
-package pro.qyoga.core.clients.journals.api
+package pro.qyoga.core.clients.journals.model
 
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id

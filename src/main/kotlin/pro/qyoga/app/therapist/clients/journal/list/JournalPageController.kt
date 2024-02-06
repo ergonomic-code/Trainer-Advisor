@@ -9,8 +9,8 @@ import org.springframework.web.servlet.ModelAndView
 import pro.qyoga.app.common.notFound
 import pro.qyoga.app.therapist.clients.ClientPageTab
 import pro.qyoga.app.therapist.clients.clientPageModel
-import pro.qyoga.core.clients.journals.api.JournalEntry
-import pro.qyoga.core.clients.journals.api.JournalPageRequest
+import pro.qyoga.core.clients.journals.dtos.JournalPageRequest
+import pro.qyoga.core.clients.journals.model.JournalEntry
 
 
 private const val JOURNAL = "journal"

@@ -4,9 +4,9 @@ import org.springframework.data.domain.Page
 import org.springframework.stereotype.Component
 import pro.qyoga.core.clients.cards.api.Client
 import pro.qyoga.core.clients.cards.api.ClientsService
-import pro.qyoga.core.clients.journals.api.JournalEntry
-import pro.qyoga.core.clients.journals.api.JournalPageRequest
-import pro.qyoga.core.clients.journals.api.JournalsService
+import pro.qyoga.core.clients.journals.JournalsService
+import pro.qyoga.core.clients.journals.dtos.JournalPageRequest
+import pro.qyoga.core.clients.journals.model.JournalEntry
 
 sealed interface GetJournalPageResult {
     data class Success(val client: Client, val page: Page<JournalEntry>) : GetJournalPageResult

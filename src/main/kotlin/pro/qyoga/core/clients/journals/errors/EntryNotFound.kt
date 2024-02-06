@@ -1,4 +1,4 @@
-package pro.qyoga.core.clients.journals.api
+package pro.qyoga.core.clients.journals.errors
 
 import pro.azhidkov.platform.errors.DomainError
 

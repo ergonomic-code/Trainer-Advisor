@@ -12,8 +12,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
 import pro.azhidkov.platform.spring.sdj.erpo.ErgoRepository
 import pro.azhidkov.platform.spring.sdj.sortBy
-import pro.qyoga.core.clients.journals.api.JournalEntry
-import pro.qyoga.core.clients.journals.api.JournalPageRequest
+import pro.qyoga.core.clients.journals.dtos.JournalPageRequest
+import pro.qyoga.core.clients.journals.model.JournalEntry
 import kotlin.reflect.KProperty1
 
 
