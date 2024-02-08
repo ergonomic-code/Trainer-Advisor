@@ -77,7 +77,7 @@ private fun <T : Any> fetchIds(
 
     RefType.SCALAR ->
         entities
-            .map { (property.getter.invoke(it) as AggregateReference<*, *>).id }
+            .map { (property.getter.invoke(it) as AggregateReference<*, *>?)?.id }
             .toSet()
 
     else -> error("Unsupported property type: $property")
@@ -90,10 +90,14 @@ private fun <T : Any> hydrateEntity(entity: T, refs: Map<KProperty1<*, Aggregate
             entity::class.memberProperties.find { prop -> param.name == prop.name }!! as KProperty1<T, AggregateReference<*, *>?>
         val currentValue: Any? = prop.invoke(entity)
         val newValue = if (prop in refs) {
-            val id = (currentValue as AggregateReference<*, *>).id
-            val ref = refs[prop]!![id] as Identifiable<*>?
-            checkNotNull(ref) { "Aggregate ${prop.returnType.arguments[0]} not found by id=$id" }
-            AggregateReferenceTarget(ref)
+            val id = (currentValue as AggregateReference<*, *>?)?.id
+            if (id != null) {
+                val ref = refs[prop]!![id] as Identifiable<*>?
+                checkNotNull(ref) { "Aggregate ${prop.returnType.arguments[0]} not found by id=$id" }
+                AggregateReferenceTarget(ref)
+            } else {
+                null
+            }
         } else {
             currentValue
         }

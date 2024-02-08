@@ -1,6 +1,8 @@
 package pro.qyoga.tests.fixture.appointments
 
+import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
 import pro.qyoga.core.appointments.core.dtos.EditAppointmentRequest
+import pro.qyoga.core.appointments.core.model.Appointment
 import pro.qyoga.core.appointments.types.model.AppointmentTypeRef
 import pro.qyoga.core.clients.cards.api.ClientRef
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
@@ -17,7 +19,7 @@ object AppointmentsObjectMother {
         client: ClientRef,
         typeId: AppointmentTypeRef? = null,
         typeTitle: String = randomCyrillicWord(),
-        therapeuticTask: TherapeuticTaskRef,
+        therapeuticTask: TherapeuticTaskRef? = null,
         dateTime: LocalDateTime = randomAppointmentDate(),
         timeZone: ZoneId = randomTimeZone(),
         place: String? = null,
@@ -56,6 +58,29 @@ object AppointmentsObjectMother {
         payed = payed,
         comment = comment
     )
+
+    fun appointmentPatchRequest(
+        appointment: Appointment,
+        appointmentType: AppointmentTypeRef?,
+        appointmentTypeTitle: String?,
+        therapeuticTask: TherapeuticTaskRef?,
+        place: String?,
+        cost: Int?,
+        payed: Boolean?,
+        comment: String?
+    ): EditAppointmentRequest =
+        EditAppointmentRequest(
+            appointment.clientRef,
+            appointmentType ?: appointment.typeRef,
+            appointmentTypeTitle ?: appointment.typeRef.resolveOrThrow().name,
+            therapeuticTask ?: appointment.therapeuticTaskRef,
+            appointment.wallClockDateTime,
+            appointment.timeZone,
+            place ?: appointment.place,
+            cost ?: appointment.cost,
+            payed ?: appointment.payed,
+            comment ?: appointment.comment
+        )
 
 }
 

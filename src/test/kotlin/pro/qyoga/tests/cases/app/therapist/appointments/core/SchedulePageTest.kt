@@ -2,6 +2,7 @@ package pro.qyoga.tests.cases.app.therapist.appointments.core
 
 import io.kotest.matchers.shouldHave
 import org.junit.jupiter.api.Test
+import org.slf4j.LoggerFactory
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.clients.pages.therapist.appointments.EmptyFutureSchedulePage
@@ -15,6 +16,8 @@ import java.time.ZonedDateTime
 
 
 class SchedulePageTest : QYogaAppIntegrationBaseTest() {
+
+    private val log = LoggerFactory.getLogger(javaClass)
 
     @Test
     fun `Future schedule page should be rendered correctly when no appointments exist`() {
@@ -88,8 +91,9 @@ class SchedulePageTest : QYogaAppIntegrationBaseTest() {
             .take(page + 1)
 
         val appointments = appointmentDates
-            .map { backgrounds.appointments.create(dateTime = it.atTime(9, 30)) }
+            .map { backgrounds.appointments.create(dateTime = it.atTime(9, 30), timeZone = ZoneId.systemDefault()) }
             .toList()
+        log.info("Appointments:\n{}", appointments.joinToString("\n"))
         val appointmentsPage = appointments.take(page)
 
         val therapist = TherapistClient.loginAsTheTherapist()

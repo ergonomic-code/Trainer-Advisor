@@ -3,6 +3,7 @@ package pro.qyoga.tests.cases.app.therapist.clients
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import pro.qyoga.tests.assertions.shouldBe
+import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.clients.pages.publc.NotFoundErrorPage
 import pro.qyoga.tests.clients.pages.therapist.clients.journal.list.EmptyClientJournalPage
@@ -22,7 +23,7 @@ class ClientViewPageTest : QYogaAppIntegrationBaseTest() {
         val document = therapist.clients.getClientEditPage(notExistingClientId, expectedStatus = HttpStatus.NOT_FOUND)
 
         // Then
-        document shouldBe NotFoundErrorPage
+        document shouldBePage NotFoundErrorPage
     }
 
     @Test

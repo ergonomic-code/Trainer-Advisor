@@ -2,8 +2,7 @@
 <html lang="en">
 <head>
     <div th:replace="~{fragments/header.html}"></div>
-    <title th:text="${appointment?.title ?: 'Новый приём'}">Новый приём</title>
-    <script th:replace="~{fragments/alpinejs.html}"></script>
+    <title th:text="${appointment?.clientRef?.entity?.fullName() ?: 'Новый приём'}">Новый приём</title>
 </head>
 <body class="sb-nav-fixed">
 
@@ -16,11 +15,13 @@
     <div id="layoutSidenav_content">
         <main>
             <section class="container px-4">
-                <h1 class="mt-4 pb-2 mb-3 border-bottom" th:text="${appointment?.title ?: 'Новый приём'}">
+                <h1 class="mt-4 pb-2 mb-3 border-bottom"
+                    th:text="${appointment?.clientRef?.entity?.fullName() ?: 'Новый приём'}">
                     Новый приём
                 </h1>
 
                 <form class="mt-4"
+                      hx-push-url="true" hx-swap="outerHTML" hx-target="body"
                       id="editAppointmentForm"
                       th:attr="hx-post=${pageMode == 'CREATE' ? '/therapist/appointments/new' : null},hx-put=${pageMode == 'EDIT' ? '/therapist/appointments/' + appointment?.id : null}"
                       th:fragment="editAppointmentForm"
@@ -35,7 +36,7 @@
                                 <combo-box-fragment id="client"
                                                     th:replace="~{components/combo-box.html :: comboBox(
                                                     name='client', fetchUrl='/therapist/clients/autocomplete-search',
-                                                    value=${appointment?.clientRef?.resolveOrThrow()?.id}, valueName=${appointment?.clientRef?.resolveOrThrow()?.fullName},
+                                                    value=${appointment?.clientRef?.entity?.id}, valueName=${appointment?.clientRef?.entity?.fullName},
                                                     placeholderView=~{:: #clientPlaceholder}, minlength=2, maxlength=100, required=true)}">
                                     <label id="clientPlaceholder">Клиент <span class="text-danger">*</span></label>
                                 </combo-box-fragment>
@@ -47,7 +48,7 @@
                                 <combo-box-fragment id="appointmentType"
                                                     th:replace="~{components/combo-box.html :: comboBox(
                                                     name='appointmentType', fetchUrl='/therapist/appointments/types/autocomplete-search',
-                                                    value=${appointment?.typeRef?.resolveOrThrow()?.id}, valueName=${appointment?.typeRef?.resolveOrThrow()?.name},
+                                                    value=${appointment?.typeRef?.entity?.id}, valueName=${appointment?.typeRef?.entity?.name},
                                                     placeholderView=~{:: #typePlaceholder}, minlength=2, maxlength=50, required=true, selectOnly = false)}">
                                     <label id="typePlaceholder">Тип приёма <span class="text-danger">*</span></label>
                                 </combo-box-fragment>
@@ -59,7 +60,7 @@
                                 <combo-box-fragment id="therapeuticTask"
                                                     th:replace="~{components/combo-box.html :: comboBox(
                                                     name='therapeuticTask', fetchUrl='/therapist/therapeutic-tasks/autocomplete-search-combo-box',
-                                                    value=${appointment?.therapeuticTaskRef?.resolveOrThrow()?.id}, valueName=${appointment?.therapeuticTaskRef?.resolveOrThrow()?.name},
+                                                    value=${appointment?.therapeuticTaskRef?.entity?.id}, valueName=${appointment?.therapeuticTaskRef?.entity?.name},
                                                     placeholderView=~{:: #therapeuticTaskPlaceholder}, minlength=2, maxlength=50)}">
                                     <label id="therapeuticTaskPlaceholder">Терапевтическая задача</label>
                                 </combo-box-fragment>
@@ -81,7 +82,7 @@
                                            min="2000-01-01"
                                            name="dateTime"
                                            required
-                                           th:value="${appointment?.dateTime}"
+                                           th:value="${appointment?.wallClockDateTime}"
                                            type="datetime-local">
                                     <label for="dateTime">Дата и время <span class="text-danger">*</span></label>
                                 </div>
@@ -91,7 +92,7 @@
                                 <combo-box-fragment id="timeZone"
                                                     th:replace="~{components/combo-box.html :: comboBox(
                                                     name='timeZone', fetchUrl='/components/time-zone/autocomplete-search',
-                                                    value=${appointment?.zoneId?.id}, valueName=${appointment?.displayName()?.id},
+                                                    value=${appointment?.timezone}, valueName=${currentTimeZone?.displayName},
                                                     placeholderView=~{:: #timeZonePlaceholder}, required=true, minlength=2, maxlength=50)}">
                                     <label id="timeZonePlaceholder">Часововй пояс <span
                                             class="text-danger">*</span></label>
@@ -115,6 +116,7 @@
                                            name="place"
                                            placeholder="Место"
                                            type="text"
+                                           th:value="${appointment?.place}"
                                     >
                                     <label for="place">Место</label>
                                 </div>
@@ -136,7 +138,7 @@
                                                name="cost"
                                                placeholder="Стоимость"
                                                step="100"
-                                               th:value="${appointment?.therapeuticTaskRef?.resolveOrThrow()?.title ?: ''}"
+                                               th:value="${appointment?.cost ?: ''}"
                                                type="number">
                                         <label for="cost">Стоимость</label>
                                     </div>
@@ -148,7 +150,8 @@
 
                             <div class="col-3 col-sm-2">
                                 <div class="form-check">
-                                    <input class="form-check-input" id="payed" name="payed" type="checkbox" value="">
+                                    <input class="form-check-input" id="payed" name="payed" th:checked="${appointment?.payed}"
+                                           type="checkbox" value="true">
                                     <label class="form-check-label" for="payed">
                                         Оплачено
                                     </label>
@@ -160,7 +163,8 @@
 
                     <fieldset class="mb-4">
                         <legend class="border-bottom mb-4">Комментарий</legend>
-                        <textarea class="form-control" name="comment" rows="10"></textarea>
+                        <textarea class="form-control" name="comment" rows="10"
+                                  th:text="${appointment?.comment}"></textarea>
                     </fieldset>
 
                     <div class="row g-2 justify-content-end">

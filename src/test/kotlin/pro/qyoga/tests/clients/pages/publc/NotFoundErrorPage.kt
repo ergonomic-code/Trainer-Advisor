@@ -1,15 +1,16 @@
 package pro.qyoga.tests.clients.pages.publc
 
+import io.kotest.matchers.Matcher
+import io.kotest.matchers.compose.all
 import org.jsoup.nodes.Element
-import pro.qyoga.tests.assertions.shouldHave
-import pro.qyoga.tests.assertions.shouldHaveComponent
-import pro.qyoga.tests.assertions.shouldHaveTitle
+import pro.qyoga.tests.assertions.haveComponent
+import pro.qyoga.tests.assertions.haveElements
+import pro.qyoga.tests.assertions.haveTitle
+import pro.qyoga.tests.infra.html.HtmlPage
 import pro.qyoga.tests.infra.html.Link
-import pro.qyoga.tests.infra.html.QYogaPage
 
 
-object NotFoundErrorPage : QYogaPage {
-
+object NotFoundErrorPage : HtmlPage {
 
     override val path = ""
 
@@ -17,10 +18,10 @@ object NotFoundErrorPage : QYogaPage {
 
     private val returnToMainLink = Link("toMainLink", "/", "Вернуться на главную")
 
-    override fun match(element: Element) {
-        element shouldHaveTitle title
-        element shouldHave "#notFoundErrorMessage"
-        element shouldHaveComponent returnToMainLink
-    }
+    override val matcher: Matcher<Element> = Matcher.all(
+        haveTitle(title),
+        haveElements("#notFoundErrorMessage", 1),
+        haveComponent(returnToMainLink)
+    )
 
 }

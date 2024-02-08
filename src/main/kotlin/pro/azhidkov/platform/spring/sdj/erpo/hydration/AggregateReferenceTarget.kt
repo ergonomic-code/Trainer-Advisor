@@ -14,7 +14,7 @@ data class AggregateReferenceTarget<T : Identifiable<ID>, ID : Any>(
 
 }
 
-fun <ID : Any, T : Identifiable<ID>> AggregateReference<T, ID>?.resolveOrThrow(): T =
+fun <R : AggregateReference<T, ID>?, ID : Any, T : Identifiable<ID>> R.resolveOrThrow(): T =
     (this as? AggregateReferenceTarget<T, ID>)?.entity
         ?: error("$this is not instance of AggregateReferenceTarget")
 

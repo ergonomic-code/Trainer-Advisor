@@ -1,6 +1,7 @@
 package pro.qyoga.core.appointments.core.model
 
 import org.springframework.data.annotation.*
+import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.Table
 import pro.qyoga.core.appointments.core.dtos.EditAppointmentRequest
 import pro.qyoga.core.appointments.types.model.AppointmentTypeRef
@@ -8,9 +9,12 @@ import pro.qyoga.core.clients.cards.api.ClientRef
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
 import pro.qyoga.core.users.therapists.TherapistRef
 import java.time.Instant
+import java.time.LocalDateTime
 import java.time.ZoneId
-import java.time.ZonedDateTime
 
+typealias AppointmentRef = AggregateReference<Appointment, Long>
+
+fun AppointmentRef(id: Long): AppointmentRef = AggregateReference.to(id)
 
 @Table("appointments")
 data class Appointment(
@@ -36,8 +40,26 @@ data class Appointment(
     val version: Long = 0
 ) {
 
+    fun patchBy(editAppointmentRequest: EditAppointmentRequest, appointmentType: AppointmentTypeRef): Appointment =
+        Appointment(
+            therapistRef,
+            editAppointmentRequest.client,
+            appointmentType,
+            editAppointmentRequest.therapeuticTask,
+            editAppointmentRequest.instant,
+            editAppointmentRequest.timeZone,
+            editAppointmentRequest.place,
+            editAppointmentRequest.cost,
+            editAppointmentRequest.payed ?: false,
+            editAppointmentRequest.comment,
+            id,
+            createdAt,
+            modifiedAt,
+            version
+        )
+
     @Transient
-    val wallClockDateTime: ZonedDateTime = dateTime.atZone(timeZone)
+    val wallClockDateTime: LocalDateTime = dateTime.atZone(timeZone).toLocalDateTime()
 
     constructor(
         therapist: TherapistRef,
@@ -48,7 +70,7 @@ data class Appointment(
         editAppointmentRequest.client,
         typeRef,
         editAppointmentRequest.therapeuticTask,
-        editAppointmentRequest.dateTime.toInstant(editAppointmentRequest.timeZone.rules.getOffset(Instant.now())),
+        editAppointmentRequest.instant,
         editAppointmentRequest.timeZone,
         editAppointmentRequest.place,
         editAppointmentRequest.cost,
@@ -62,6 +84,7 @@ data class Appointment(
 
     object Fetch {
         val summaryRefs = listOf(Appointment::clientRef, Appointment::typeRef)
+        val editableRefs = summaryRefs + Appointment::therapeuticTaskRef
     }
 
 }

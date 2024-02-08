@@ -8,7 +8,8 @@
             <div class=" pb-3 mb-4 d-flex justify-content-between align-items-center appointment-row px-3"
                  th:each="appointment: ${futureAppointments.today}">
                 <div>
-                    <a th:href="@{/therapist/appointments/{appointmentId}(appointmentId=${appointment.id})}"
+                    <a hx-boost="true"
+                       th:href="@{/therapist/appointments/{appointmentId}(appointmentId=${appointment.id})}"
                        th:id="${'editAppointmentLink' + appointment.id}"
                        th:text="${#temporals.format(appointment.wallClockDateTime, T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_TIME_FORMAT_PATTERN) + ' ' + appointment.clientRef.entity.fullName()}"
                     >
@@ -39,7 +40,8 @@
                          th:if="${weekDayAppointments.value.size > 0}">
 
                         <div>
-                            <a th:href="@{/therapist/appointments/{appointmentId}(appointmentId=${appointment.id})}"
+                            <a hx-boost="true"
+                               th:href="@{/therapist/appointments/{appointmentId}(appointmentId=${appointment.id})}"
                                th:id="${'editAppointmentLink' + appointment.id}"
                                th:text="${#temporals.format(appointment.wallClockDateTime, T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_TIME_FORMAT_PATTERN) + ' ' + appointment.clientRef.entity.fullName()}"
                             ></a>
@@ -68,7 +70,8 @@
             <div class="pb-3 px-3 mb-4 d-flex justify-content-between align-items-center"
                  th:each="appointment: ${futureAppointments.later}">
                 <div>
-                    <a th:href="@{/therapist/appointments/{appointmentId}(appointmentId=${appointment.id})}"
+                    <a hx-boost="true"
+                       th:href="@{/therapist/appointments/{appointmentId}(appointmentId=${appointment.id})}"
                        th:id="${'editAppointmentLink' + appointment.id}"
                     >
                         <span th:text="${#temporals.format(appointment.wallClockDateTime, T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_DATE_TIME_PATTERN)}"></span>

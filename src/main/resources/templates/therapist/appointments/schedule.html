@@ -32,6 +32,7 @@
                         <a class="nav-link "
                            href="/therapist/schedule"
                            id="futureAppointmentsLink"
+                           hx-boost="true"
                            th:classappend="${activeTab == 'future'} ? 'active'">
                             Предстоящие
                         </a>
@@ -40,6 +41,7 @@
                         <a class="nav-link"
                            href="/therapist/schedule?past=true"
                            id="pastAppointmentsLink"
+                           hx-boost="true"
                            th:classappend="${activeTab == 'past'} ? 'active'">
                             Прошедшие
                         </a>

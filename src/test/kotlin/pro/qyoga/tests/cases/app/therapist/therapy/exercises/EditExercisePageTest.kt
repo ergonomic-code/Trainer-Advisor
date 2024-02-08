@@ -1,7 +1,6 @@
 package pro.qyoga.tests.cases.app.therapist.therapy.exercises
 
 import io.kotest.matchers.shouldBe
-import org.jsoup.Jsoup
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSearchDto
@@ -54,7 +53,7 @@ class EditExercisePageTest : QYogaAppIntegrationBaseTest() {
         val document = therapist.exercises.getEditExercisePage(-1, expectedStatus = HttpStatus.NOT_FOUND)
 
         // Then
-        document shouldBe NotFoundErrorPage
+        document shouldBePage NotFoundErrorPage
     }
 
     @Test
@@ -83,7 +82,7 @@ class EditExercisePageTest : QYogaAppIntegrationBaseTest() {
         val response = therapist.exercises.getStepImage(-1, -1, HttpStatus.NOT_FOUND)
 
         // Then
-        Jsoup.parse(String(response)) shouldBe NotFoundErrorPage
+        response shouldBePage NotFoundErrorPage
     }
 
     @Test

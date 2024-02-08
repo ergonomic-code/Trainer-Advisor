@@ -6,11 +6,8 @@ import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import pro.qyoga.app.therapist.clients.journal.list.JournalPageController
 import pro.qyoga.l10n.russianDateFormat
+import pro.qyoga.tests.assertions.*
 import pro.qyoga.tests.assertions.shouldBe
-import pro.qyoga.tests.assertions.shouldBeComponent
-import pro.qyoga.tests.assertions.shouldHave
-import pro.qyoga.tests.assertions.shouldHaveComponent
-import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.clients.pages.publc.GenericErrorPage
 import pro.qyoga.tests.clients.pages.publc.NotFoundErrorPage
@@ -103,7 +100,7 @@ class CreateJournalEntryPageTest : QYogaAppIntegrationBaseTest() {
         )
 
         // Then
-        document shouldBe NotFoundErrorPage
+        document shouldBePage NotFoundErrorPage
     }
 
     @Test

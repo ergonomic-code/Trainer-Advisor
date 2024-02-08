@@ -5,7 +5,7 @@
     <input class="idInput"
            th:id="${name + 'Id'}"
            th:name="${name}"
-           th:value="${value?.id ?: ''}"
+           th:value="${value ?: ''}"
            type="hidden">
 
     <div class="form-floating">
@@ -18,11 +18,12 @@
                hx-target="next .combo-box-search-result"
                hx-swap="outerHTML"
                hx-trigger="load, input[inputType != 'insertReplacementText' && target.value.length > 0] delay:0.3s"
+               hx-push-url="false"
                oninput="
                        let componentRoot = event.target.closest('div.dropdown');
                        let idInput = componentRoot.querySelector('input.idInput');
                        let titleInput = componentRoot.querySelector('input[type=text]');
-                       if (this.dataset.selectOnly === 'true') {
+                       if (this.dataset.selectOnly === 'true' && (titleInput.required || titleInput.value.size > 0)) {
                            titleInput.setCustomValidity('Выберите элемент из списка')
                        }
                        idInput.value = null; "
