@@ -1,13 +1,13 @@
 package pro.qyoga.tests.cases.app.therapist.appointments.core
 
-import io.kotest.matchers.shouldHave
+import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
+import org.springframework.http.HttpStatus
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.clients.TherapistClient
-import pro.qyoga.tests.clients.pages.therapist.appointments.EmptyFutureSchedulePage
-import pro.qyoga.tests.clients.pages.therapist.appointments.FutureSchedulePage
-import pro.qyoga.tests.clients.pages.therapist.appointments.PastSchedulePage
+import pro.qyoga.tests.clients.pages.therapist.appointments.*
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import java.time.LocalDate
 import java.time.LocalTime
@@ -64,9 +64,9 @@ class SchedulePageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         document shouldBePage FutureSchedulePage
-        FutureSchedulePage.today(document) shouldHave FutureSchedulePage.rowsFor(todayAppointments)
-        FutureSchedulePage.nextWeek(document) shouldHave FutureSchedulePage.rowsFor(nextWeekAppointments)
-        FutureSchedulePage.later(document) shouldHave FutureSchedulePage.rowsFor(laterAppointments)
+        document.todayAppointmentsRows() shouldMatch todayAppointments
+        document.nextWeekAppointmentsRows() shouldMatch nextWeekAppointments
+        document.laterAppointmentsRows() shouldMatch laterAppointments
     }
 
     @Test
@@ -103,8 +103,24 @@ class SchedulePageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         document shouldBePage PastSchedulePage
-        document shouldHave PastSchedulePage.rowsFor(appointmentsPage)
+        document.pastAppointmentsRows() shouldMatch appointmentsPage
     }
 
+    @Test
+    fun `Deletion of appointment should be persistent`() {
+        // Given
+        val appointment = backgrounds.appointments.create()
+
+        val therapist = TherapistClient.loginAsTheTherapist()
+
+        // When
+        val response = therapist.appointments.delete(appointment.id)
+
+        // Then
+        response.statusCode() shouldBe HttpStatus.OK.value()
+        response.body().asString() shouldBe ""
+
+        backgrounds.appointments.findAll() shouldHaveSize 0
+    }
 
 }

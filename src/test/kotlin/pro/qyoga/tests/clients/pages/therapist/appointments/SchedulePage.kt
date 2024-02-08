@@ -1,19 +1,17 @@
 package pro.qyoga.tests.clients.pages.therapist.appointments
 
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.Matcher
+import io.kotest.matchers.collections.shouldBeSameSizeAs
 import io.kotest.matchers.compose.all
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
+import org.jsoup.select.Elements
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
 import pro.qyoga.core.appointments.core.model.Appointment
 import pro.qyoga.l10n.russianTimeFormat
-import pro.qyoga.tests.assertions.alwaysSuccess
-import pro.qyoga.tests.assertions.haveComponent
-import pro.qyoga.tests.assertions.haveElements
-import pro.qyoga.tests.assertions.haveTitle
-import pro.qyoga.tests.infra.html.Component
-import pro.qyoga.tests.infra.html.HtmlPage
-import pro.qyoga.tests.infra.html.Link
+import pro.qyoga.tests.assertions.*
+import pro.qyoga.tests.infra.html.*
 
 private const val BASE_PATH = "/therapist/schedule"
 
@@ -32,6 +30,7 @@ abstract class SchedulePage(val content: Component, override val path: String = 
     )
 
     companion object {
+        val deleteButton = Button("deleteAppointmentButton", "", FormAction.hxDelete(EditAppointmentPage.path))
         const val PATH = BASE_PATH
     }
 
@@ -83,51 +82,27 @@ object PastSchedulePageTab : Component {
 
 }
 
-object FutureSchedulePage : SchedulePage(FutureSchedulePageTab) {
+object FutureSchedulePage : SchedulePage(FutureSchedulePageTab)
 
-    fun today(document: Document): Element = document.getElementById(FutureSchedulePageTab.TODAY_APPOINTMENTS_ID)
-        ?: error("Cannot find today appointments by ${FutureSchedulePageTab.TODAY_APPOINTMENTS_ID}")
+object PastSchedulePage : SchedulePage(PastSchedulePageTab, "$BASE_PATH?past=true")
 
-    fun nextWeek(document: Document): Element = document.getElementById(FutureSchedulePageTab.NEXT_WEEK_APPOINTMENTS_ID)
-        ?: error("Cannot find today appointments by ${FutureSchedulePageTab.NEXT_WEEK_APPOINTMENTS_ID}")
+fun Document.todayAppointmentsRows(): Elements = this.select("#todayAppointments > div")
 
-    fun later(document: Document): Element = document.getElementById(FutureSchedulePageTab.LATER_APPOINTMENTS_ID)
-        ?: error("Cannot find today appointments by ${FutureSchedulePageTab.LATER_APPOINTMENTS_ID}")
+fun Document.nextWeekAppointmentsRows(): Elements = this.select("#nextWeekAppointments div.appointment-row")
 
-    fun rowsFor(appointments: List<Appointment>): Matcher<Element> {
-        val matchers = appointments.map {
-            Matcher.all(
-                haveComponent(
-                    Link(
-                        "editAppointmentLink",
-                        EditAppointmentPage,
-                        russianTimeFormat.format(it.wallClockDateTime) + " " + it.clientRef.resolveOrThrow().fullName()
-                    )
-                )
-            )
-        }
+fun Document.laterAppointmentsRows(): Elements = this.select("#laterAppointments > div")
 
-        return Matcher.all(*matchers.toTypedArray())
+fun Document.pastAppointmentsRows(): Elements = this.select("#pastAppointments > div")
+
+infix fun Elements.shouldMatch(appointments: Iterable<Appointment>) {
+    this shouldBeSameSizeAs appointments
+    this.zip(appointments).forAll { (el, app) ->
+        el shouldHaveComponent Link(
+            "editAppointmentLink",
+            EditAppointmentPage,
+            russianTimeFormat.format(app.wallClockDateTime) + " " + app.clientRef.resolveOrThrow().fullName()
+        )
+
+        el shouldHaveComponent SchedulePage.deleteButton
     }
-
-}
-
-object PastSchedulePage : SchedulePage(PastSchedulePageTab, "$BASE_PATH?past=true") {
-
-    fun rowsFor(appointments: List<Appointment>): Matcher<Element> {
-        val matchers = appointments.map {
-            Matcher.all(
-                haveComponent(
-                    Link(
-                        "editAppointmentLink",
-                        EditAppointmentPage,
-                        russianTimeFormat.format(it.wallClockDateTime) + " " + it.clientRef.resolveOrThrow().fullName()
-                    )
-                )
-            )
-        }
-
-        return Matcher.all(*matchers.toTypedArray())
-    }
-
 }
