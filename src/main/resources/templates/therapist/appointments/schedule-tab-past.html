@@ -5,6 +5,7 @@
             <div>
                 <a th:href="@{/therapist/appointments/{appointmentId}(appointmentId=${appointment.id})}"
                    th:id="${'editAppointmentLink' + appointment.id}"
+                   hx-boost="true"
                 >
                     <span th:text="${#temporals.format(appointment.wallClockDateTime, T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_DATE_TIME_PATTERN)}"></span>
                     <br/>

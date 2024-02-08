@@ -5,6 +5,7 @@ import io.kotest.inspectors.forNone
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import pro.qyoga.tests.assertions.shouldBe
+import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.clients.pages.publc.NotFoundErrorPage
@@ -75,7 +76,7 @@ class EditClientCardPageTest : QYogaAppIntegrationBaseTest() {
             therapist.clients.getEditClientCardPage(notExistingClientId, expectedStatus = HttpStatus.NOT_FOUND)
 
         // Then
-        document shouldBe NotFoundErrorPage
+        document shouldBePage NotFoundErrorPage
     }
 
 }

@@ -1,4 +1,4 @@
-package pro.qyoga.app.therapist.appointments.core
+package pro.qyoga.app.therapist.appointments.core.schedule
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
@@ -22,12 +22,13 @@ class SchedulePageController(
     private val getPastAppointmentsWorkflow: GetPastAppointmentsWorkflow
 ) {
 
+
     @GetMapping
     fun getFutureSchedulePage(
         @AuthenticationPrincipal therapist: QyogaUserDetails
     ): ModelAndView {
         val futureAppointments = getFutureAppointmentsWorkflow(therapist.ref)
-        return modelAndView("therapist/appointments/schedule.html") {
+        return modelAndView(SCHEDULE_TEMPLATE) {
             "activeTab" bindTo ScheduleTabs.FUTURE.name.lowercase()
             "futureAppointments" bindTo futureAppointments
         }
@@ -38,7 +39,7 @@ class SchedulePageController(
         @AuthenticationPrincipal therapist: QyogaUserDetails
     ): ModelAndView {
         val pastAppointments = getPastAppointmentsWorkflow(therapist.ref)
-        return modelAndView("therapist/appointments/schedule.html") {
+        return modelAndView(SCHEDULE_TEMPLATE) {
             "activeTab" bindTo ScheduleTabs.PAST.name.lowercase()
             "pastAppointments" bindTo pastAppointments
         }
@@ -46,6 +47,7 @@ class SchedulePageController(
 
     companion object {
         const val PATH = "/therapist/schedule"
+        const val SCHEDULE_TEMPLATE = "therapist/appointments/schedule.html"
     }
 
 }

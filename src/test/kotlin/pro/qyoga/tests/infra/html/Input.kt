@@ -33,7 +33,11 @@ data class Input(
     }
 
     override fun value(element: Element): String =
-        element.select(selector()).`val`()
+        if (type == "checkbox") {
+            (element.select(selector()).attr("checked") != "").toString()
+        } else {
+            element.select(selector()).`val`()
+        }
 
     companion object {
 
@@ -55,8 +59,8 @@ data class Input(
         fun dateTimeLocal(name: String, required: Boolean) =
             Input(name, required, "datetime-local")
 
-        fun checkbox(name: String, required: Boolean) =
-            Input(name, required, "checkbox")
+        fun checkbox(name: String, required: Boolean, value: String? = null) =
+            Input(name, required, "checkbox", value = value)
 
         fun tel(name: String, required: Boolean) =
             Input(name, required, "tel")

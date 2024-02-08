@@ -1,4 +1,4 @@
-package pro.qyoga.app.therapist.appointments.core
+package pro.qyoga.app.therapist.appointments.core.schedule
 
 import org.springframework.stereotype.Component
 import pro.qyoga.core.appointments.core.AppointmentsRepo

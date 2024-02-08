@@ -4,10 +4,13 @@ import org.springframework.core.io.InputStreamResource
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.servlet.ModelAndView
+import org.springframework.web.servlet.view.RedirectView
 import pro.azhidkov.platform.file_storage.api.StoredFileInputStream
 
 
 val notFound = ModelAndView("forward:error/404")
+
+fun seeOther(url: String) = ModelAndView(RedirectView(url, true, false))
 
 object ResponseEntityExt {
 

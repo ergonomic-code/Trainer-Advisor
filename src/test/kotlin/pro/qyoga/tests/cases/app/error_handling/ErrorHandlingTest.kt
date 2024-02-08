@@ -2,6 +2,7 @@ package pro.qyoga.tests.cases.app.error_handling
 
 import org.junit.jupiter.api.Test
 import pro.qyoga.tests.assertions.shouldBe
+import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.clients.PublicClient
 import pro.qyoga.tests.clients.pages.publc.GenericErrorPage
 import pro.qyoga.tests.clients.pages.publc.NotFoundErrorPage
@@ -29,7 +30,7 @@ class ErrorHandlingTest : QYogaAppIntegrationBaseTest() {
         val document = PublicClient.getNotFoundPage()
 
         // Then
-        document shouldBe NotFoundErrorPage
+        document shouldBePage NotFoundErrorPage
     }
 
 }

@@ -40,4 +40,7 @@ class TimeZones(
         return searchResult
     }
 
+    fun findById(zoneId: ZoneId): LocalizedTimeZone? =
+        allTimeZones.find { it.zone == zoneId }
+
 }

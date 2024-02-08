@@ -12,7 +12,7 @@ class ModelAndViewBuilder(
 
 }
 
-fun modelAndView(viewName: String, buildModel: ModelAndViewBuilder.() -> Unit): ModelAndView {
+fun modelAndView(viewName: String, buildModel: ModelAndViewBuilder.() -> Unit = {}): ModelAndView {
     val builder = ModelAndViewBuilder(ModelAndView(viewName))
     builder.buildModel()
     return builder.modelAndView

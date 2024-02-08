@@ -1,6 +1,8 @@
 package pro.qyoga.tests.fixture.clients
 
+import org.springframework.data.jdbc.core.mapping.AggregateReference
 import pro.qyoga.core.clients.cards.api.ClientCardDto
+import pro.qyoga.core.clients.cards.api.ClientRef
 import pro.qyoga.core.clients.cards.api.DistributionSource
 import pro.qyoga.core.clients.cards.api.DistributionSourceType
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
@@ -65,6 +67,8 @@ object ClientsObjectMother {
         distributionSource?.type,
         distributionSource?.comment,
     )
+
+    val fakeClientRef: ClientRef = AggregateReference.to(-1)
 
 }
 
