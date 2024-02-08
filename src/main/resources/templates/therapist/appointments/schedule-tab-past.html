@@ -17,6 +17,17 @@
             </div>
             <div>
                 <button class="deleteButton btn btn-outline-danger text"
+                        hx-swap="outerHTML swap:0.2s"
+                        hx-target="closest .appointment-row"
+                        name="deleteAppointmentButton"
+                        th:hx-confirm="${'Удалить приём ' +  appointmentTitle + '?'}"
+                        th:hx-delete="@{/therapist/appointments/{appointmentId}(appointmentId=${appointment.id})}"
+                        th:with="appointmentTitle=${
+                        appointment.clientRef.entity.fullName() +
+                        ', ' +
+                        #temporals.format(appointment.wallClockDateTime, T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN) +
+                        ' в ' +
+                        #temporals.format(appointment.wallClockDateTime, T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_TIME_FORMAT_PATTERN)}"
                         title="Удалить приём">
                     <i class="fas fa-trash"></i>
                 </button>

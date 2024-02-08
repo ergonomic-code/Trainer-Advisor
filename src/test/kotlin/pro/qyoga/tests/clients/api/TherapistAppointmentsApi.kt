@@ -122,4 +122,13 @@ class TherapistAppointmentsApi(override val authCookie: Cookie) : AuthorizedApi 
         return formParam(CreateAppointmentPage.editAppointmentForm.comment.name, appointment.comment ?: "")
     }
 
+    fun delete(appointmentId: Long): Response {
+        return Given {
+            authorized()
+            pathParam("appointmentId", appointmentId)
+        } When {
+            delete(SchedulePage.deleteButton.action!!.url)
+        }
+    }
+
 }

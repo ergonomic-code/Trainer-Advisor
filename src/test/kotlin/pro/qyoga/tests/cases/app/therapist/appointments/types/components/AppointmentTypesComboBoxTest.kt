@@ -1,8 +1,10 @@
 package pro.qyoga.tests.cases.app.therapist.appointments.types.components
 
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.should
 import org.junit.jupiter.api.Test
 import pro.qyoga.app.components.combobox.ComboBoxItem
+import pro.qyoga.l10n.systemCollator
 import pro.qyoga.tests.assertions.haveElements
 import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.clients.TherapistClient
@@ -30,6 +32,26 @@ class AppointmentTypesComboBoxTest : QYogaAppIntegrationBaseTest() {
         // Then
         document should haveElements("ul li", 1)
         document shouldHaveComponent ComboBox.itemFor(ComboBoxItem(appointmentType.id, appointmentType.name))
+    }
+
+    @Test
+    fun `AppointmentTypesComboBox should return 5 items when no search key provided`() {
+        // Given
+        val pageSize = 5
+        val appointments = backgrounds.appointmentTypes.createAppointmentTypes(pageSize + 1)
+            .sortedWith { o1, o2 -> systemCollator.compare(o1.name, o2.name) }
+            .take(pageSize)
+
+        val therapist = TherapistClient.loginAsTheTherapist()
+
+        // When
+        val document = therapist.appointmentTypes.autocompleteSearch(null)
+
+        // Then
+        document should haveElements("ul li", pageSize)
+        appointments.forAll {
+            document shouldHaveComponent ComboBox.itemFor(ComboBoxItem(it.id, it.name))
+        }
     }
 
 }

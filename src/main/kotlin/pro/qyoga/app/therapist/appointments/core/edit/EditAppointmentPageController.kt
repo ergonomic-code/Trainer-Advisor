@@ -1,11 +1,9 @@
 package pro.qyoga.app.therapist.appointments.core.edit
 
+import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
 import pro.azhidkov.timezones.LocalizedTimeZone
 import pro.azhidkov.timezones.TimeZones
@@ -54,6 +52,14 @@ class EditAppointmentPageController(
             ?: return notFound
 
         return seeOther(SchedulePageController.PATH)
+    }
+
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.OK)
+    fun deleteAppointment(
+        @PathVariable appointmentId: Long
+    ) {
+        appointmentsRepo.deleteById(appointmentId)
     }
 
 }
