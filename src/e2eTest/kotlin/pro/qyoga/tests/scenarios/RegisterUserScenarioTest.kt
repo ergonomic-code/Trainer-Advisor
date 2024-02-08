@@ -50,7 +50,7 @@ class RegisterUserScenarioTest : QYogaE2EBaseTest() {
         `$`("input[name=password]").type(password)
         `$`("#submit").click()
 
-        title() shouldBe ("Список клиентов")
+        title() shouldBe "Расписание"
     }
 
     companion object {
