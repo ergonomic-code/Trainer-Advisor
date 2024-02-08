@@ -95,11 +95,6 @@ fun haveText(text: String) = Matcher { element: Element ->
     )
 }
 
-fun beTagWithText(tag: String, text: String) = Matcher.all(
-    isTag(tag),
-    haveText(text)
-)
-
 fun haveTitle(title: String): Matcher<Element> =
     Matcher.all(haveComponent(SelectorOnlyComponent("title")),
         Matcher { element: Element ->
@@ -136,7 +131,7 @@ val Element.descr
     get() = "<${this.tag().name} id=\"${this.id()}\">" +
             this.text().take(32) +
             ("...".takeIf { this.text().length > 32 } ?: "") +
-            "</${this.tag().name}"
+            "</${this.tag().name}>"
 
 infix fun Element.shouldHaveComponent(component: Component): Element {
     this should haveComponent(component)
