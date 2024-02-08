@@ -21,7 +21,7 @@ class AppointmentTypesComboBoxController(
 
     @GetMapping
     override fun search(
-        @RequestParam("appintmentTypeTitle") searchKey: String?,
+        @RequestParam("appointmentTypeTitle") searchKey: String?,
         currentValue: String?,
         userDetails: QyogaUserDetails
     ): ComboBoxModelAndView {

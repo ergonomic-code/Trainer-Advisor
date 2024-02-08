@@ -133,7 +133,10 @@ fun haveInputWithValue(input: Input, value: String) = Matcher { element: Element
 }
 
 val Element.descr
-    get() = "<${this.tag().name} id=\"${this.id()}\"/>"
+    get() = "<${this.tag().name} id=\"${this.id()}\">" +
+            this.text().take(32) +
+            ("...".takeIf { this.text().length > 32 } ?: "") +
+            "</${this.tag().name}"
 
 infix fun Element.shouldHaveComponent(component: Component): Element {
     this should haveComponent(component)
@@ -183,8 +186,16 @@ fun haveElements(selector: String, count: Int): Matcher<Element> = Matcher { ele
     val actualCount = elements.size
     MatcherResult(
         actualCount == count,
-        { "Element ${element.descr} have ${actualCount} elements matching $selector but $count is expected.\nElements: ${elements.map { it.descr }}" },
-        { "Element ${element.descr} should not have ${actualCount} elements matching $selector.\nElements: ${elements.map { it.descr }}" }
+        {
+            "Element ${element.descr} have ${actualCount} elements matching $selector but $count is expected.\nElements: \n${
+                elements.joinToString("\n") { it.descr }
+            }"
+        },
+        {
+            "Element ${element.descr} should not have ${actualCount} elements matching $selector.\nElements: \n${
+                elements.joinToString("\n") { it.descr }
+            }"
+        }
     )
 
 }

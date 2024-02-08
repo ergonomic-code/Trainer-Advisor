@@ -1,7 +1,9 @@
 package pro.qyoga.tests.cases.app.therapist.appointments.types.components
 
+import io.kotest.matchers.should
 import org.junit.jupiter.api.Test
 import pro.qyoga.app.components.combobox.ComboBoxItem
+import pro.qyoga.tests.assertions.haveElements
 import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.fixture.appointments.AppointmentTypesObjectMother
@@ -26,6 +28,7 @@ class AppointmentTypesComboBoxTest : QYogaAppIntegrationBaseTest() {
         val document = therapist.appointmentTypes.autocompleteSearch(searchKey)
 
         // Then
+        document should haveElements("ul li", 1)
         document shouldHaveComponent ComboBox.itemFor(ComboBoxItem(appointmentType.id, appointmentType.name))
     }
 
