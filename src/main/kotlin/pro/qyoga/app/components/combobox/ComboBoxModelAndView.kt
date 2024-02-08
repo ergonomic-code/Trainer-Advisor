@@ -3,7 +3,7 @@ package pro.qyoga.app.components.combobox
 import org.springframework.web.servlet.ModelAndView
 
 
-class ComboBoxModelAndView(searchResult: Iterable<ComboBoxItem>) :
+class ComboBoxModelAndView(val searchResult: Iterable<ComboBoxItem>) :
     ModelAndView("components/combo-box.html :: comboBoxSearchResult") {
 
     init {
