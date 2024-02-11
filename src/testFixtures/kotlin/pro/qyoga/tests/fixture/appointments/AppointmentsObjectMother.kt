@@ -1,8 +1,8 @@
 package pro.qyoga.tests.fixture.appointments
 
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
-import pro.qyoga.core.appointments.core.dtos.EditAppointmentRequest
-import pro.qyoga.core.appointments.core.model.Appointment
+import pro.qyoga.core.appointments.core.Appointment
+import pro.qyoga.core.appointments.core.EditAppointmentRequest
 import pro.qyoga.core.appointments.types.model.AppointmentTypeRef
 import pro.qyoga.core.clients.cards.api.ClientRef
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef

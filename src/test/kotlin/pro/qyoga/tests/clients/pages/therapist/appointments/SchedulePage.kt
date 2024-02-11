@@ -8,7 +8,7 @@ import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
-import pro.qyoga.core.appointments.core.model.Appointment
+import pro.qyoga.core.appointments.core.Appointment
 import pro.qyoga.l10n.russianTimeFormat
 import pro.qyoga.tests.assertions.*
 import pro.qyoga.tests.infra.html.*

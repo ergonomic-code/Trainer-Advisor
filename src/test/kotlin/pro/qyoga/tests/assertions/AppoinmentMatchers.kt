@@ -4,8 +4,8 @@ import io.kotest.matchers.Matcher
 import io.kotest.matchers.be
 import io.kotest.matchers.compose.any
 import io.kotest.matchers.shouldBe
-import pro.qyoga.core.appointments.core.dtos.EditAppointmentRequest
-import pro.qyoga.core.appointments.core.model.Appointment
+import pro.qyoga.core.appointments.core.Appointment
+import pro.qyoga.core.appointments.core.EditAppointmentRequest
 
 
 infix fun Appointment.shouldMatch(editAppointmentRequest: EditAppointmentRequest) {

@@ -3,9 +3,9 @@ package pro.qyoga.tests.fixture.backgrounds
 import org.springframework.stereotype.Component
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.ref
 import pro.qyoga.app.therapist.appointments.core.edit.CreateAppointmentWorkflow
+import pro.qyoga.core.appointments.core.Appointment
 import pro.qyoga.core.appointments.core.AppointmentsRepo
-import pro.qyoga.core.appointments.core.dtos.EditAppointmentRequest
-import pro.qyoga.core.appointments.core.model.Appointment
+import pro.qyoga.core.appointments.core.EditAppointmentRequest
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
 import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.tests.fixture.appointments.AppointmentsObjectMother

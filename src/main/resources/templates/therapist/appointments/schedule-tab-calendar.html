@@ -1,0 +1,69 @@
+<section th:fragment="calendarSchedule">
+    <style>
+        div.row {
+            height: 2rem;
+            margin-bottom: 1rem;
+        }
+    </style>
+    <div id="futureAppointments" th:if="${futureAppointments.size > 0}">
+        <div class="row border-bottom">
+            <div class="col-2">
+                08:00
+            </div>
+            <div class="col-9">
+                <div class=" p-2" style="height: 5rem; background-color: rgba(var(--bs-success-bg-subtle), 0.8)">
+                    Бортник Светлана
+                    Консультация
+                </div>
+            </div>
+        </div>
+        <div class="row border-bottom">
+            <div class="col-2">
+                08:15
+            </div>
+            <div class="col-9">
+
+            </div>
+        </div>
+        <div class="row border-bottom">
+            <div class="col-2">
+                08:30
+            </div>
+            <div class="col-9">
+
+            </div>
+        </div>
+        <div class="row border-bottom">
+            <div class="col-2">
+                08:45
+            </div>
+            <div class="col-9">
+
+            </div>
+        </div>
+        <div class="row border-bottom">
+            <div class="col-2">
+                09:00
+            </div>
+            <div class="col-9">
+
+            </div>
+        </div>
+        <div class="row border-bottom">
+            <div class="col-2">
+                09:15
+            </div>
+            <div class="col-9">
+
+            </div>
+        </div>
+        <div class="row border-bottom">
+            <div class="col-2">
+                09:30
+            </div>
+            <div class="col-9">
+
+            </div>
+        </div>
+    </div>
+</section>

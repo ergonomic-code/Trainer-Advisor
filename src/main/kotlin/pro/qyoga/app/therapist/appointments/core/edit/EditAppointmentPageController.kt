@@ -12,10 +12,10 @@ import pro.qyoga.app.common.notFound
 import pro.qyoga.app.common.seeOther
 import pro.qyoga.app.components.toComboBoxItem
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
+import pro.qyoga.core.appointments.core.Appointment
+import pro.qyoga.core.appointments.core.AppointmentRef
 import pro.qyoga.core.appointments.core.AppointmentsRepo
-import pro.qyoga.core.appointments.core.dtos.EditAppointmentRequest
-import pro.qyoga.core.appointments.core.model.Appointment
-import pro.qyoga.core.appointments.core.model.AppointmentRef
+import pro.qyoga.core.appointments.core.EditAppointmentRequest
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.ref
 

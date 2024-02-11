@@ -2,8 +2,8 @@ package pro.qyoga.app.therapist.appointments.core.schedule
 
 import org.springframework.stereotype.Component
 import pro.qyoga.core.appointments.core.AppointmentsRepo
+import pro.qyoga.core.appointments.core.FutureAppointments
 import pro.qyoga.core.appointments.core.findAllFutureAppointments
-import pro.qyoga.core.appointments.core.model.FutureAppointments
 import pro.qyoga.core.users.auth.model.UserRef
 import pro.qyoga.core.users.settings.UserSettingsRepo
 import pro.qyoga.core.users.therapists.TherapistRef
