@@ -10,7 +10,7 @@ import io.restassured.specification.RequestSpecification
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
-import pro.qyoga.core.appointments.core.dtos.EditAppointmentRequest
+import pro.qyoga.core.appointments.core.EditAppointmentRequest
 import pro.qyoga.tests.clients.pages.therapist.appointments.CreateAppointmentPage
 import pro.qyoga.tests.clients.pages.therapist.appointments.EditAppointmentPage
 import pro.qyoga.tests.clients.pages.therapist.appointments.SchedulePage

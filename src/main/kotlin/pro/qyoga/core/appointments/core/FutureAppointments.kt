@@ -1,4 +1,4 @@
-package pro.qyoga.core.appointments.core.model
+package pro.qyoga.core.appointments.core
 
 import java.time.LocalDate
 import java.time.ZonedDateTime

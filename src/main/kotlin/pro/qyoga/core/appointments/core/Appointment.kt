@@ -1,9 +1,8 @@
-package pro.qyoga.core.appointments.core.model
+package pro.qyoga.core.appointments.core
 
 import org.springframework.data.annotation.*
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.Table
-import pro.qyoga.core.appointments.core.dtos.EditAppointmentRequest
 import pro.qyoga.core.appointments.types.model.AppointmentTypeRef
 import pro.qyoga.core.clients.cards.api.ClientRef
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
@@ -39,24 +38,6 @@ data class Appointment(
     @Version
     val version: Long = 0
 ) {
-
-    fun patchBy(editAppointmentRequest: EditAppointmentRequest, appointmentType: AppointmentTypeRef): Appointment =
-        Appointment(
-            therapistRef,
-            editAppointmentRequest.client,
-            appointmentType,
-            editAppointmentRequest.therapeuticTask,
-            editAppointmentRequest.instant,
-            editAppointmentRequest.timeZone,
-            editAppointmentRequest.place,
-            editAppointmentRequest.cost,
-            editAppointmentRequest.payed ?: false,
-            editAppointmentRequest.comment,
-            id,
-            createdAt,
-            modifiedAt,
-            version
-        )
 
     @Transient
     val wallClockDateTime: LocalDateTime = dateTime.atZone(timeZone).toLocalDateTime()

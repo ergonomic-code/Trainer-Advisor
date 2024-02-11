@@ -13,7 +13,7 @@ import pro.azhidkov.timezones.TimeZones
 import pro.qyoga.app.common.EntityPageMode
 import pro.qyoga.app.components.toComboBoxItem
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
-import pro.qyoga.core.appointments.core.dtos.EditAppointmentRequest
+import pro.qyoga.core.appointments.core.EditAppointmentRequest
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.ref
 

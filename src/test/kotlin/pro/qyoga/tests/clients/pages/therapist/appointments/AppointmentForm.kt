@@ -2,7 +2,7 @@ package pro.qyoga.tests.clients.pages.therapist.appointments
 
 import io.kotest.matchers.shouldBe
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
-import pro.qyoga.core.appointments.core.model.Appointment
+import pro.qyoga.core.appointments.core.Appointment
 import pro.qyoga.tests.assertions.PageMatcher
 import pro.qyoga.tests.infra.html.*
 
