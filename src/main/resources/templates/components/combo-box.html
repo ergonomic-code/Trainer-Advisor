@@ -23,10 +23,21 @@
                        let componentRoot = event.target.closest('div.dropdown');
                        let idInput = componentRoot.querySelector('input.idInput');
                        let titleInput = componentRoot.querySelector('input[type=text]');
-                       if (this.dataset.selectOnly === 'true' && (titleInput.required || titleInput.value.size > 0)) {
-                           titleInput.setCustomValidity('Выберите элемент из списка')
+
+                       idInput.value = null;
+
+                       titleInput.setCustomValidity('');
+
+                       if (this.dataset.selectOnly === 'true' ) {
+                           if (titleInput.required || titleInput.value.length > 0) {
+                               titleInput.setCustomValidity('Выберите элемент из списка')
+                           }
+                       } else {
+                           if (titleInput.required && titleInput.value.length === 0) {
+                               titleInput.setCustomValidity('Выберите элемент из списка')
+                           }
                        }
-                       idInput.value = null; "
+               "
                placeholder="Placeholder"
 
                th:data-select-only="${selectOnly ?: true}"
