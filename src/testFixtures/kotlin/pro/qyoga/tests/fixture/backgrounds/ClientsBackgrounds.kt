@@ -21,6 +21,10 @@ class ClientsBackgrounds(
     private val journalBackgrounds: ClientJournalBackgrounds
 ) {
 
+    fun aClient(): Client {
+        return createClients(1, THE_THERAPIST_ID).single()
+    }
+
     fun createClients(clients: List<ClientCardDto>, therapistId: Long = THE_THERAPIST_ID): Iterable<Client> {
         return clientsService.createClients(therapistId, clients)
     }

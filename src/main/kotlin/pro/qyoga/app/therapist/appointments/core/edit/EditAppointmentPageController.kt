@@ -12,10 +12,7 @@ import pro.qyoga.app.common.notFound
 import pro.qyoga.app.common.seeOther
 import pro.qyoga.app.components.toComboBoxItem
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
-import pro.qyoga.core.appointments.core.Appointment
-import pro.qyoga.core.appointments.core.AppointmentRef
-import pro.qyoga.core.appointments.core.AppointmentsRepo
-import pro.qyoga.core.appointments.core.EditAppointmentRequest
+import pro.qyoga.core.appointments.core.*
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.ref
 
@@ -25,7 +22,7 @@ import pro.qyoga.core.users.therapists.ref
 class EditAppointmentPageController(
     private val appointmentsRepo: AppointmentsRepo,
     private val timeZones: TimeZones,
-    private val updateAppointmentWorkflow: UpdateAppointmentWorkflow
+    private val updateAppointment: UpdateAppointmentWorkflow
 ) {
 
     @GetMapping
@@ -37,8 +34,8 @@ class EditAppointmentPageController(
             pageMode = EntityPageMode.EDIT,
             allAvailableTimeZones = timeZones.allTimeZones.map(LocalizedTimeZone::toComboBoxItem)
         ) {
-            "appointment" bindTo appointment
-            "currentTimeZone" bindTo timeZones.findById(appointment.timeZone)
+            "appointmentId" bindTo appointmentId
+            "appointment" bindTo appointment.toEditRequest(timeZones::findById)
         }
     }
 
@@ -48,10 +45,21 @@ class EditAppointmentPageController(
         editAppointmentRequest: EditAppointmentRequest,
         @AuthenticationPrincipal therapist: QyogaUserDetails,
     ): ModelAndView {
-        updateAppointmentWorkflow(therapist.ref, AppointmentRef(appointmentId), editAppointmentRequest)
-            ?: return notFound
+        return try {
+            updateAppointment(therapist.ref, AppointmentRef(appointmentId), editAppointmentRequest)
+                ?: return notFound
 
-        return seeOther(SchedulePageController.PATH)
+            seeOther(SchedulePageController.PATH)
+        } catch (ex: AppointmentsIntersectionException) {
+            appointmentPageModelAndView(
+                pageMode = EntityPageMode.EDIT,
+                allAvailableTimeZones = timeZones.allTimeZones.map(LocalizedTimeZone::toComboBoxItem)
+            ) {
+                "appointment" bindTo editAppointmentRequest
+                "appointmentsIntersectionError" bindTo true
+                "existingAppointment" bindTo ex.existingAppointment
+            }
+        }
     }
 
     @DeleteMapping

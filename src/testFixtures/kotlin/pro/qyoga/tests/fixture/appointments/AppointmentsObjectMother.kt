@@ -1,11 +1,13 @@
 package pro.qyoga.tests.fixture.appointments
 
+import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrNull
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
 import pro.qyoga.core.appointments.core.Appointment
 import pro.qyoga.core.appointments.core.EditAppointmentRequest
 import pro.qyoga.core.appointments.types.model.AppointmentTypeRef
 import pro.qyoga.core.clients.cards.api.ClientRef
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
+import pro.qyoga.tests.fixture.clients.ClientsObjectMother
 import pro.qyoga.tests.fixture.data.*
 import java.time.Duration
 import java.time.LocalDate
@@ -16,12 +18,13 @@ import kotlin.random.Random
 object AppointmentsObjectMother {
 
     fun randomEditAppointmentRequest(
-        client: ClientRef,
+        client: ClientRef = ClientsObjectMother.fakeClientRef,
         typeId: AppointmentTypeRef? = null,
         typeTitle: String = randomCyrillicWord(),
         therapeuticTask: TherapeuticTaskRef? = null,
         dateTime: LocalDateTime = randomAppointmentDate(),
         timeZone: ZoneId = randomTimeZone(),
+        duration: Duration = randomAppointmentDuration(),
         place: String? = null,
         cost: Int? = null,
         payed: Boolean? = null,
@@ -29,15 +32,19 @@ object AppointmentsObjectMother {
     ): EditAppointmentRequest {
         return EditAppointmentRequest(
             client,
+            client.resolveOrNull()?.fullName() ?: randomCyrillicWord(),
             typeId,
             typeTitle,
             therapeuticTask,
+            therapeuticTask.resolveOrNull()?.name ?: "",
             dateTime,
             timeZone,
+            timeZone.id,
+            duration,
             place,
             cost,
             payed,
-            comment
+            comment,
         )
     }
 
@@ -71,15 +78,19 @@ object AppointmentsObjectMother {
     ): EditAppointmentRequest =
         EditAppointmentRequest(
             appointment.clientRef,
+            appointment.clientRef.resolveOrNull()?.fullName() ?: "",
             appointmentType ?: appointment.typeRef,
             appointmentTypeTitle ?: appointment.typeRef.resolveOrThrow().name,
             therapeuticTask ?: appointment.therapeuticTaskRef,
+            appointment.therapeuticTaskRef.resolveOrNull()?.name ?: "",
             appointment.wallClockDateTime,
             appointment.timeZone,
+            appointment.timeZone.id,
+            appointment.duration,
             place ?: appointment.place,
             cost ?: appointment.cost,
             payed ?: appointment.payed,
-            comment ?: appointment.comment
+            comment ?: appointment.comment,
         )
 
 }
@@ -89,3 +100,9 @@ fun randomAppointmentDate(): LocalDateTime =
         .atTime(randomWorkingTime())
 
 fun randomAppointmentCost(): Int = Random.nextInt(0, 10_000)
+
+fun randomAppointmentDuration(): Duration {
+    val fraction = 15
+    val fractions = 3L * 60 / 15
+    return Duration.ofMinutes(fraction * Random.nextLong(1, fractions))
+}

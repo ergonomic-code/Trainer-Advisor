@@ -1,5 +1,6 @@
 package pro.qyoga.tests.fixture.backgrounds
 
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.ref
 import pro.qyoga.app.therapist.appointments.core.edit.CreateAppointmentWorkflow
@@ -7,15 +8,20 @@ import pro.qyoga.core.appointments.core.Appointment
 import pro.qyoga.core.appointments.core.AppointmentsRepo
 import pro.qyoga.core.appointments.core.EditAppointmentRequest
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
+import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.tests.fixture.appointments.AppointmentsObjectMother
 import pro.qyoga.tests.fixture.appointments.randomAppointmentCost
 import pro.qyoga.tests.fixture.appointments.randomAppointmentDate
+import pro.qyoga.tests.fixture.appointments.randomAppointmentDuration
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
 import pro.qyoga.tests.fixture.data.randomSentence
 import pro.qyoga.tests.fixture.data.randomTimeZone
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
 import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_REF
+import pro.qyoga.tests.fixture.therapists.theTherapistUserDetails
+import java.time.Duration
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
 import kotlin.random.Random
@@ -32,9 +38,18 @@ class AppointmentsBackgrounds(
         return appointmentsRepo.findAll()
     }
 
+    fun getDaySchedule(
+        date: LocalDate,
+        therapistUserDetails: QyogaUserDetails = theTherapistUserDetails
+    ): Iterable<Appointment> {
+        // Временный костыль до перехода на расписине в виде календара - там надо будет заменить на вызов контроллера
+        return findAll(therapistUserDetails.id).filter { it.wallClockDateTime.toLocalDate() == date }
+    }
+
     fun createFull(
         dateTime: LocalDateTime = randomAppointmentDate(),
         timeZone: ZoneId = randomTimeZone(),
+        duration: Duration = randomAppointmentDuration(),
         place: String? = randomCyrillicWord(),
         cost: Int? = randomAppointmentCost(),
         payed: Boolean? = Random.nextBoolean(),
@@ -43,12 +58,13 @@ class AppointmentsBackgrounds(
         therapeuticTaskRef: TherapeuticTaskRef? = therapeuticTasksBackgrounds.createTherapeuticTask(therapist.id!!)
             .ref(),
     ): Appointment {
-        return create(dateTime, timeZone, place, cost, payed, comment, therapist, therapeuticTaskRef)
+        return create(dateTime, timeZone, duration, place, cost, payed, comment, therapist, therapeuticTaskRef)
     }
 
     fun create(
         dateTime: LocalDateTime = randomAppointmentDate(),
         timeZone: ZoneId = randomTimeZone(),
+        duration: Duration = randomAppointmentDuration(),
         place: String? = null,
         cost: Int? = null,
         payed: Boolean? = null,
@@ -64,6 +80,7 @@ class AppointmentsBackgrounds(
                 therapeuticTask = therapeuticTaskRef,
                 dateTime = dateTime,
                 timeZone = timeZone,
+                duration = duration,
                 place = place,
                 cost = cost,
                 payed = payed,
@@ -78,6 +95,10 @@ class AppointmentsBackgrounds(
         therapist: TherapistRef = THE_THERAPIST_REF
     ): Appointment {
         return createAppointment(therapist, editAppointmentRequest)
+    }
+
+    fun findById(appointmentId: Long): Appointment? {
+        return appointmentsRepo.findByIdOrNull(appointmentId)
     }
 
 }

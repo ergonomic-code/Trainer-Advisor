@@ -1,5 +1,6 @@
 package pro.qyoga.core.appointments.core
 
+import org.intellij.lang.annotations.Language
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.data.jdbc.core.convert.JdbcConverter
@@ -8,10 +9,12 @@ import org.springframework.data.relational.core.mapping.RelationalMappingContext
 import org.springframework.data.util.TypeInformation
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
+import pro.azhidkov.platform.postgresql.toPGInterval
 import pro.azhidkov.platform.spring.sdj.erpo.ErgoRepository
 import pro.azhidkov.platform.spring.sdj.sortBy
 import pro.qyoga.core.users.therapists.TherapistRef
 import java.sql.Timestamp
+import java.time.Duration
 import java.time.Instant
 import java.time.ZoneId
 
@@ -76,4 +79,25 @@ fun AppointmentsRepo.findPastAppointmentsSlice(
         "currentUserTimeZone" to currentUserTimeZone.id
     )
     return this.findSlice(query, params, AppointmentsRepo.Page.lastTenByDate, Appointment.Fetch.summaryRefs)
+}
+
+fun AppointmentsRepo.findIntersectingAppointment(
+    therapist: TherapistRef,
+    startInstant: Instant,
+    duration: Duration
+): Appointment? {
+    @Language("PostgreSQL") val query = """
+        SELECT * FROM appointments
+        WHERE
+            therapist_ref = :therapist AND
+            (date_time, duration) OVERLAPS (:startInstant, :duration)
+    """.trimIndent()
+
+    val params = mapOf(
+        "therapist" to therapist.id,
+        "startInstant" to Timestamp.from(startInstant),
+        "duration" to duration.toPGInterval()
+    )
+
+    return findOne(query, params, Appointment.Fetch.summaryRefs)
 }

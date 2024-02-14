@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <div th:replace="~{fragments/header.html}"></div>
-    <title th:text="${appointment?.clientRef?.entity?.fullName() ?: 'Новый приём'}">Новый приём</title>
+    <title th:text="${pageMode == 'CREATE' ? 'Новый приём' : appointment.clientTitle }">Новый приём</title>
 </head>
 <body class="sb-nav-fixed">
 
@@ -16,14 +16,14 @@
         <main>
             <section class="container px-4">
                 <h1 class="mt-4 pb-2 mb-3 border-bottom"
-                    th:text="${appointment?.clientRef?.entity?.fullName() ?: 'Новый приём'}">
+                    th:text="${appointment?.clientTitle ?: 'Новый приём'}">
                     Новый приём
                 </h1>
 
                 <form class="mt-4"
                       hx-push-url="true" hx-swap="outerHTML" hx-target="body"
                       id="editAppointmentForm"
-                      th:attr="hx-post=${pageMode == 'CREATE' ? '/therapist/appointments/new' : null},hx-put=${pageMode == 'EDIT' ? '/therapist/appointments/' + appointment?.id : null}"
+                      th:attr="hx-post=${pageMode == 'CREATE' ? '/therapist/appointments/new' : null},hx-put=${pageMode == 'EDIT' ? '/therapist/appointments/' + appointmentId : null}"
                       th:fragment="editAppointmentForm"
                 >
 
@@ -36,7 +36,7 @@
                                 <combo-box-fragment id="client"
                                                     th:replace="~{components/combo-box.html :: comboBox(
                                                     name='client', fetchUrl='/therapist/clients/autocomplete-search',
-                                                    value=${appointment?.clientRef?.entity?.id}, valueName=${appointment?.clientRef?.entity?.fullName},
+                                                    value=${appointment?.client?.id}, valueName=${appointment?.clientTitle},
                                                     placeholderView=~{:: #clientPlaceholder}, minlength=2, maxlength=100, required=true)}">
                                     <label id="clientPlaceholder">Клиент <span class="text-danger">*</span></label>
                                 </combo-box-fragment>
@@ -48,7 +48,7 @@
                                 <combo-box-fragment id="appointmentType"
                                                     th:replace="~{components/combo-box.html :: comboBox(
                                                     name='appointmentType', fetchUrl='/therapist/appointments/types/autocomplete-search',
-                                                    value=${appointment?.typeRef?.entity?.id}, valueName=${appointment?.typeRef?.entity?.name},
+                                                    value=${appointment?.appointmentType?.id}, valueName=${appointment?.appointmentTypeTitle},
                                                     placeholderView=~{:: #typePlaceholder}, minlength=2, maxlength=50, required=true, selectOnly = false)}">
                                     <label id="typePlaceholder">Тип приёма <span class="text-danger">*</span></label>
                                 </combo-box-fragment>
@@ -60,7 +60,7 @@
                                 <combo-box-fragment id="therapeuticTask"
                                                     th:replace="~{components/combo-box.html :: comboBox(
                                                     name='therapeuticTask', fetchUrl='/therapist/therapeutic-tasks/autocomplete-search-combo-box',
-                                                    value=${appointment?.therapeuticTaskRef?.entity?.id}, valueName=${appointment?.therapeuticTaskRef?.entity?.name},
+                                                    value=${appointment?.therapeuticTask?.id}, valueName=${appointment?.therapeuticTaskTitle},
                                                     placeholderView=~{:: #therapeuticTaskPlaceholder}, minlength=2, maxlength=50)}">
                                     <label id="therapeuticTaskPlaceholder">Терапевтическая задача</label>
                                 </combo-box-fragment>
@@ -78,13 +78,28 @@
                                 <div class="form-floating ">
                                     <input class="form-control"
                                            id="dateTime"
-                                           max="2100-01-01"
                                            min="2000-01-01"
+                                           max="2100-01-01"
                                            name="dateTime"
                                            required
-                                           th:value="${appointment?.wallClockDateTime}"
+                                           th:classappend="${appointmentsIntersectionError} ? 'is-invalid' : ''"
+                                           th:value="${appointment?.dateTime}"
                                            type="datetime-local">
                                     <label for="dateTime">Дата и время <span class="text-danger">*</span></label>
+                                    <div class="invalid-feedback" id="appointmentsIntersectionErrorMessage">
+                                        Время
+                                        <span th:if="${appointmentsIntersectionError}"
+                                              th:text="${#temporals.format(existingAppointment.wallClockDateTime, T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_DATE_TIME_PATTERN) +
+                                              ' - ' +
+                                              #temporals.format(existingAppointment.endWallClockDateTime, T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_TIME_FORMAT_PATTERN)}">
+                                        </span>
+                                        занято.
+                                        <br/>
+                                        Клиент:
+                                        <span th:if="${appointmentsIntersectionError}"
+                                              th:text="${ existingAppointment.clientRef.entity.fullName()}">
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
 
@@ -92,7 +107,7 @@
                                 <combo-box-fragment id="timeZone"
                                                     th:replace="~{components/combo-box.html :: comboBox(
                                                     name='timeZone', fetchUrl='/components/time-zone/autocomplete-search',
-                                                    value=${appointment?.timezone}, valueName=${currentTimeZone?.displayName},
+                                                    value=${appointment?.timezone}, valueName=${appointment?.timeZoneTitle},
                                                     placeholderView=~{:: #timeZonePlaceholder}, required=true, minlength=2, maxlength=50)}">
                                     <label id="timeZonePlaceholder">Часововй пояс <span
                                             class="text-danger">*</span></label>
@@ -107,7 +122,20 @@
                                     document.querySelector("#timeZoneTitle").value = localTimeZoneName;
                                 </script>
                             </div>
-                            <div class="col-12 col-sm-5">
+
+                            <div class="col-12 col-sm-2 mb-3 mb-sm-0">
+                                <div class="form-floating ">
+                                    <input class="form-control"
+                                           id="duration"
+                                           name="duration"
+                                           required
+                                           th:value="${T(pro.azhidkov.platform.java.time.DurationExtKt).toLocalTimeString(appointment?.duration) ?: '01:00'}"
+                                           type="time">
+                                    <label for="duration">Длительность <span class="text-danger">*</span></label>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-sm-4">
                                 <div class="form-floating ">
                                     <input class="form-control"
                                            id="place"

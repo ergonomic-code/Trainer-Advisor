@@ -1,6 +1,5 @@
 package pro.qyoga.app.therapist.appointments.core.edit
 
-import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
@@ -13,6 +12,7 @@ import pro.azhidkov.timezones.TimeZones
 import pro.qyoga.app.common.EntityPageMode
 import pro.qyoga.app.components.toComboBoxItem
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
+import pro.qyoga.core.appointments.core.AppointmentsIntersectionException
 import pro.qyoga.core.appointments.core.EditAppointmentRequest
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.ref
@@ -21,7 +21,7 @@ import pro.qyoga.core.users.therapists.ref
 @Controller
 @RequestMapping("/therapist/appointments/new")
 class CreateAppointmentPageController(
-    private val createAppointmentWorkflow: CreateAppointmentWorkflow,
+    private val createAppointment: CreateAppointmentWorkflow,
     private val timeZones: TimeZones
 ) {
 
@@ -37,9 +37,20 @@ class CreateAppointmentPageController(
     fun createAppointment(
         editAppointmentRequest: EditAppointmentRequest,
         @AuthenticationPrincipal therapist: QyogaUserDetails
-    ): ResponseEntity<Unit> {
-        createAppointmentWorkflow(therapist.ref, editAppointmentRequest)
-        return hxRedirect(SchedulePageController.PATH)
+    ): Any {
+        return try {
+            createAppointment(therapist.ref, editAppointmentRequest)
+            hxRedirect(SchedulePageController.PATH)
+        } catch (ex: AppointmentsIntersectionException) {
+            appointmentPageModelAndView(
+                pageMode = EntityPageMode.CREATE,
+                allAvailableTimeZones = timeZones.allTimeZones.map(LocalizedTimeZone::toComboBoxItem)
+            ) {
+                "appointment" bindTo editAppointmentRequest
+                "appointmentsIntersectionError" bindTo true
+                "existingAppointment" bindTo ex.existingAppointment
+            }
+        }
     }
 
 }

@@ -195,9 +195,19 @@ fun haveElements(selector: String, count: Int): Matcher<Element> = Matcher { ele
 
 }
 
+infix fun Element.shouldHaveElement(selector: String): Element {
+    this should haveElements(selector, 1)
+    return this
+}
+
 fun Element.shouldHaveElements(selector: String, count: Int): Element {
     this should haveElements(selector, count)
     return this
+}
+
+@Deprecated("Use shouldHaveElements")
+infix fun Element.shouldHave(selector: String) {
+    this should haveElements(selector, 1)
 }
 
 data class SelectorOnlyComponent(val selector: String) : Component {

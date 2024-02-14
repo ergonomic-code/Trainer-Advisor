@@ -9,10 +9,7 @@ import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.clients.pages.therapist.appointments.*
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
-import java.time.LocalDate
-import java.time.LocalTime
-import java.time.ZoneId
-import java.time.ZonedDateTime
+import java.time.*
 
 
 class SchedulePageTest : QYogaAppIntegrationBaseTest() {
@@ -51,6 +48,7 @@ class SchedulePageTest : QYogaAppIntegrationBaseTest() {
         val appointments = dates.map {
             backgrounds.appointments.create(
                 dateTime = it.toLocalDateTime(),
+                duration = Duration.ofHours(1),
                 timeZone = ZoneId.systemDefault()
             )
         }

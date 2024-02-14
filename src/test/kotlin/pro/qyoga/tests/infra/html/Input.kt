@@ -56,6 +56,9 @@ data class Input(
         fun date(name: String, required: Boolean) =
             Input(name, required, "date")
 
+        fun time(name: String, required: Boolean) =
+            Input(name, required, "time")
+
         fun dateTimeLocal(name: String, required: Boolean) =
             Input(name, required, "datetime-local")
 

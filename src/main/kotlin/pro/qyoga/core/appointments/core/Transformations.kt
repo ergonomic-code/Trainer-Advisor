@@ -1,6 +1,9 @@
 package pro.qyoga.core.appointments.core
 
+import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrNull
+import pro.azhidkov.timezones.LocalizedTimeZone
 import pro.qyoga.core.appointments.types.model.AppointmentTypeRef
+import java.time.ZoneId
 
 fun Appointment.patchBy(
     editAppointmentRequest: EditAppointmentRequest,
@@ -13,6 +16,7 @@ fun Appointment.patchBy(
         editAppointmentRequest.therapeuticTask,
         editAppointmentRequest.instant,
         editAppointmentRequest.timeZone,
+        editAppointmentRequest.duration,
         editAppointmentRequest.place,
         editAppointmentRequest.cost,
         editAppointmentRequest.payed ?: false,
@@ -22,3 +26,22 @@ fun Appointment.patchBy(
         modifiedAt,
         version
     )
+
+fun Appointment.toTimeSpanString() = "$wallClockDateTime - ${wallClockDateTime.plus(duration)} ($timeZone)"
+
+fun Appointment.toEditRequest(resolveTimeZone: (ZoneId) -> LocalizedTimeZone?) = EditAppointmentRequest(
+    clientRef,
+    clientRef.resolveOrNull()?.fullName() ?: clientRef.id.toString(),
+    typeRef,
+    typeRef.resolveOrNull()?.name ?: typeRef.id?.toString() ?: "",
+    therapeuticTaskRef,
+    therapeuticTaskRef?.resolveOrNull()?.name ?: therapeuticTaskRef?.id?.toString() ?: "",
+    wallClockDateTime,
+    timeZone,
+    resolveTimeZone(timeZone)?.displayName ?: timeZone.id,
+    duration,
+    place,
+    cost,
+    payed,
+    comment
+)
