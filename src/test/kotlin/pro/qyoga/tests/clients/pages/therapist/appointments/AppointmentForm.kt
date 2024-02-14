@@ -1,8 +1,9 @@
 package pro.qyoga.tests.clients.pages.therapist.appointments
 
 import io.kotest.matchers.shouldBe
+import pro.azhidkov.platform.java.time.toLocalTimeString
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
-import pro.qyoga.core.appointments.core.Appointment
+import pro.qyoga.core.appointments.core.EditAppointmentRequest
 import pro.qyoga.tests.assertions.PageMatcher
 import pro.qyoga.tests.infra.html.*
 
@@ -16,6 +17,7 @@ abstract class AppointmentForm(action: FormAction) : QYogaForm("editAppointmentF
 
     val dateTime by component { Input.dateTimeLocal("dateTime", true) }
     val timeZone by component { ComboBox("timeZone", true) }
+    val duration by component { Input.time("duration", true) }
     val place by component { Input.text("place", false) }
 
     val cost by component { Input.number("cost", false) }
@@ -23,41 +25,47 @@ abstract class AppointmentForm(action: FormAction) : QYogaForm("editAppointmentF
 
     val comment by component { TextArea("comment", false) }
 
+    val appointmentsIntersectionErrorMessage = "#appointmentsIntersectionErrorMessage"
+
 }
 
 object CreateAppointmentForm : AppointmentForm(FormAction.hxPost("$PATH/new"))
 
 object EditAppointmentForm : AppointmentForm(FormAction.hxPut("$PATH/{appointmentId}")) {
 
-    fun formPrefilledWith(appointment: Appointment): PageMatcher = PageMatcher { element ->
+    fun formPrefilledWith(editAppointmentRequest: EditAppointmentRequest): PageMatcher = PageMatcher { element ->
 
         val clientInputEl = element.select(clientInput.selector()).single()
-        clientInput.value(clientInputEl) shouldBe appointment.clientRef.resolveOrThrow().id.toString()
+        clientInput.value(clientInputEl) shouldBe editAppointmentRequest.client.resolveOrThrow().id.toString()
 
         val typeInputEl = element.select(typeInput.selector()).single()
-        typeInput.value(typeInputEl) shouldBe appointment.typeRef.resolveOrThrow().id.toString()
+        typeInput.value(typeInputEl) shouldBe (editAppointmentRequest.appointmentType?.resolveOrThrow()?.id?.toString()
+            ?: "")
 
         val therapeuticTaskEl = element.select(therapeuticTaskInput.selector()).single()
-        therapeuticTaskInput.value(therapeuticTaskEl) shouldBe (appointment.therapeuticTaskRef?.resolveOrThrow()?.id?.toString()
+        therapeuticTaskInput.value(therapeuticTaskEl) shouldBe (editAppointmentRequest.therapeuticTask?.resolveOrThrow()?.id?.toString()
             ?: "")
 
         val dateTimeEl = element.select(dateTime.selector()).single()
-        dateTime.value(dateTimeEl) shouldBe appointment.wallClockDateTime.toString()
+        dateTime.value(dateTimeEl) shouldBe editAppointmentRequest.dateTime.toString()
 
         val timeZoneEl = element.select(timeZone.selector()).single()
-        timeZone.value(timeZoneEl) shouldBe appointment.timeZone.id
+        timeZone.value(timeZoneEl) shouldBe editAppointmentRequest.timeZone.id
+
+        val durationEl = element.select(duration.selector()).single()
+        duration.value(durationEl) shouldBe editAppointmentRequest.duration.toLocalTimeString()
 
         val placeEl = element.select(place.selector()).single()
-        place.value(placeEl) shouldBe (appointment.place ?: "")
+        place.value(placeEl) shouldBe (editAppointmentRequest.place ?: "")
 
         val costEl = element.select(cost.selector()).single()
-        cost.value(costEl) shouldBe (appointment.cost?.toString() ?: "")
+        cost.value(costEl) shouldBe (editAppointmentRequest.cost?.toString() ?: "")
 
         val payedEl = element.select(payed.selector()).single()
-        payed.value(payedEl) shouldBe appointment.payed.toString()
+        payed.value(payedEl) shouldBe (editAppointmentRequest.payed == true).toString()
 
         val commentEl = element.select(comment.selector()).single()
-        comment.value(commentEl) shouldBe (appointment.comment ?: "")
+        comment.value(commentEl) shouldBe (editAppointmentRequest.comment ?: "")
     }
 
 }

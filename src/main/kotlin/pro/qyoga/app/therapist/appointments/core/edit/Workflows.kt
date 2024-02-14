@@ -16,6 +16,19 @@ class CreateAppointmentWorkflow(
 ) : (TherapistRef, EditAppointmentRequest) -> Appointment {
 
     override fun invoke(therapistRef: TherapistRef, editAppointmentRequest: EditAppointmentRequest): Appointment {
+        val intersectingAppointment = appointmentsRepo.findIntersectingAppointment(
+            therapistRef,
+            editAppointmentRequest.instant,
+            editAppointmentRequest.duration
+        )
+
+        if (intersectingAppointment != null) {
+            throw AppointmentsIntersectionException(
+                "There are exist appointment with intersecting time span: ${intersectingAppointment.toTimeSpanString()}",
+                intersectingAppointment
+            )
+        }
+
         val typeRef = appointmentTypesRepo.createTypeIfNew(therapistRef, editAppointmentRequest)
         return appointmentsRepo.save(Appointment(therapistRef, editAppointmentRequest, typeRef))
     }
@@ -33,6 +46,19 @@ class UpdateAppointmentWorkflow(
         appointmentRef: AppointmentRef,
         editAppointmentRequest: EditAppointmentRequest
     ): Appointment? {
+        val intersectingAppointment = appointmentsRepo.findIntersectingAppointment(
+            therapistRef,
+            editAppointmentRequest.instant,
+            editAppointmentRequest.duration
+        )
+
+        if (intersectingAppointment != null && intersectingAppointment.id != appointmentRef.id) {
+            throw AppointmentsIntersectionException(
+                "There are exist appointment with intersecting time span: ${intersectingAppointment.toTimeSpanString()}",
+                intersectingAppointment
+            )
+        }
+
         val typeRef = appointmentTypesRepo.createTypeIfNew(therapistRef, editAppointmentRequest)
 
         return appointmentsRepo.update(appointmentRef.id!!) { appointment ->
@@ -43,7 +69,7 @@ class UpdateAppointmentWorkflow(
 }
 
 
-fun AppointmentTypesRepo.createTypeIfNew(
+private fun AppointmentTypesRepo.createTypeIfNew(
     therapistRef: TherapistRef,
     editAppointmentRequest: EditAppointmentRequest
 ): AppointmentTypeRef {

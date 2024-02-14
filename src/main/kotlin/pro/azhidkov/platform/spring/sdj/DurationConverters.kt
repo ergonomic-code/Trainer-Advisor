@@ -5,13 +5,14 @@ import org.springframework.core.convert.converter.Converter
 import org.springframework.data.convert.ReadingConverter
 import org.springframework.data.convert.WritingConverter
 import pro.azhidkov.platform.postgresql.toDuration
+import pro.azhidkov.platform.postgresql.toPGInterval
 import java.time.Duration
 
 @WritingConverter
 class DurationToPGIntervalConverter : Converter<Duration, PGInterval> {
 
     override fun convert(source: Duration): PGInterval {
-        return PGInterval(source.toString())
+        return source.toPGInterval()
     }
 
 }

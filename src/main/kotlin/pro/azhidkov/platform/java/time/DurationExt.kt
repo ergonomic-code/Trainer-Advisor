@@ -1,6 +1,8 @@
 package pro.azhidkov.platform.java.time
 
 import java.time.Duration
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 import kotlin.math.ceil
 import kotlin.math.roundToLong
 
@@ -18,3 +20,8 @@ fun Double.toDurationMinutes(): Duration {
     val seconds = ((this - minutes) * SECOND_PER_MINUTE).roundToLong()
     return Duration.ofSeconds(minutes * SECOND_PER_MINUTE + seconds)
 }
+
+fun Duration?.toLocalTimeString() =
+    this?.let {
+        DateTimeFormatter.ISO_TIME.format(LocalTime.ofSecondOfDay(toSeconds()))
+    }

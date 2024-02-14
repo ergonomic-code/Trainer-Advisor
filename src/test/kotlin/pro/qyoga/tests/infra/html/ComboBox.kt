@@ -16,7 +16,7 @@ class ComboBox(baseName: String, override val required: Boolean, val items: List
 
     private val valueInput = Input(name, false, "hidden")
 
-    private val titleInput = Input.text(titleInputId, required, id = titleInputId)
+    val titleInput = Input.text(titleInputId, required, id = titleInputId)
 
     companion object {
 

@@ -75,6 +75,18 @@ class ErgoRepository<T : Any, ID : Any>(
             .orElse(null)
     }
 
+    fun findOne(
+        query: String,
+        paramMap: Map<String, Any?>,
+        fetch: Iterable<KProperty1<T, *>> = emptySet(),
+    ): T? {
+        val aggregate = namedParameterJdbcOperations.query(query, paramMap, rowMapper)
+            .firstOrNull()
+            ?: return null
+
+        return jdbcAggregateTemplate.hydrate(listOf(aggregate), FetchSpec(fetch)).single()
+    }
+
     fun exists(
         queryBuilder: QueryBuilder.() -> Unit
     ): Boolean {

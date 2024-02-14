@@ -7,3 +7,5 @@ fun PGInterval.toDuration(): Duration = Duration.ofDays(this.days.toLong())
     .plusHours(this.hours.toLong())
     .plusMinutes(this.minutes.toLong())
     .plusSeconds(this.seconds.toLong())
+
+fun Duration.toPGInterval() = PGInterval(this.toString())
