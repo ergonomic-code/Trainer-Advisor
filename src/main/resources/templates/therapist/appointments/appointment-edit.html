@@ -1,6 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--/*@thymesVar id="appointment" type="pro.qyoga.core.appointments.core.EditAppointmentRequest"*/-->
+<!--/*@thymesVar id="pageMode" type="java.lang.String"*/-->
 <head>
+
     <div th:replace="~{fragments/header.html}"></div>
     <title th:text="${pageMode == 'CREATE' ? 'Новый приём' : appointment.clientTitle }">Новый приём</title>
 </head>
@@ -76,6 +79,8 @@
                         <div class="row mb-3">
                             <div class="col-12 col-sm-3 mb-3 mb-sm-0">
                                 <div class="form-floating ">
+                                    <!--/*@thymesVar id="appointmentsIntersectionError" type="java.lang.String"*/-->
+                                    <!--/*@thymesVar id="existingAppointment" type="pro.qyoga.core.appointments.core.Appointment"*/-->
                                     <input class="form-control"
                                            id="dateTime"
                                            min="2000-01-01"
@@ -107,19 +112,25 @@
                                 <combo-box-fragment id="timeZone"
                                                     th:replace="~{components/combo-box.html :: comboBox(
                                                     name='timeZone', fetchUrl='/components/time-zone/autocomplete-search',
-                                                    value=${appointment?.timezone}, valueName=${appointment?.timeZoneTitle},
+                                                    value=${appointment?.timeZone}, valueName=${appointment?.timeZoneTitle},
                                                     placeholderView=~{:: #timeZonePlaceholder}, required=true, minlength=2, maxlength=50)}">
                                     <label id="timeZonePlaceholder">Часововй пояс <span
                                             class="text-danger">*</span></label>
                                 </combo-box-fragment>
                                 <script th:inline="javascript">
-                                    let allTimeZones = /*[[${allAvailableTimeZones}]]*/ [];
-                                    let localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-                                    let localTimeZoneInfo = allTimeZones.find((tz) => tz.id === localTimeZone);
-                                    let localTimeZoneName = localTimeZoneInfo ? localTimeZoneInfo.title : '';
+                                    (() => {
+                                        // noinspection JSMismatchedCollectionQueryUpdate
+                                        let allTimeZones = /*[[${allAvailableTimeZones}]]*/ [];
 
-                                    document.querySelector("input[name='timeZone']").value = localTimeZone.toString();
-                                    document.querySelector("#timeZoneTitle").value = localTimeZoneName;
+                                        let timeZoneInput = document.querySelector("input[name='timeZone']");
+
+                                        if (timeZoneInput.value === null || timeZoneInput.value === '') {
+                                            let localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                                            let localTimeZoneInfo = allTimeZones.find((tz) => tz.id === localTimeZone);
+                                            timeZoneInput.value = localTimeZoneInfo.zone.id;
+                                            document.querySelector("#timeZoneTitle").value = localTimeZoneInfo ? localTimeZoneInfo.title : '';
+                                        }
+                                    })();
                                 </script>
                             </div>
 
@@ -155,7 +166,7 @@
                     <fieldset class="mb-4">
                         <legend class="border-bottom mb-4">Оплата</legend>
 
-                        <div class="row align-items-center">
+                        <div class="row align-items-center mb-3">
                             <div class="col-8 col-sm-3 ">
                                 <div class="input-group">
                                     <div class="form-floating">
@@ -178,7 +189,8 @@
 
                             <div class="col-3 col-sm-2">
                                 <div class="form-check">
-                                    <input class="form-check-input" id="payed" name="payed" th:checked="${appointment?.payed}"
+                                    <input class="form-check-input" id="payed" name="payed"
+                                           th:checked="${appointment?.payed}"
                                            type="checkbox" value="true">
                                     <label class="form-check-label" for="payed">
                                         Оплачено
@@ -186,6 +198,50 @@
                                 </div>
                             </div>
 
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <span class="me-3">Статус приёма: </span>
+                                <div class="form-check form-check-inline mt-2">
+                                    <input class="form-check-input"
+                                           id="appointmentStatusPending"
+                                           name="appointmentStatus"
+
+                                           required
+                                           th:checked="${appointment == null || appointment.appointmentStatus.name == 'PENDING'}"
+                                           type="radio"
+                                           value="PENDING">
+                                    <label class="form-check-label" for="appointmentStatusPending">
+                                        Ожидается клиент
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input"
+                                           id="appointmentStatusClientCame"
+                                           name="appointmentStatus"
+
+                                           required
+                                           th:checked="${appointment?.appointmentStatus?.name == 'CLIENT_CAME'}"
+                                           type="radio"
+                                           value="CLIENT_CAME">
+                                    <label class="form-check-label" for="appointmentStatusClientCame">
+                                        Клиент пришёл
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input"
+                                           id="appointmentStatusClientNotCame"
+                                           name="appointmentStatus"
+
+                                           required
+                                           th:checked="${appointment?.appointmentStatus?.name == 'CLIENT_DO_NOT_CAME'}"
+                                           type="radio"
+                                           value="CLIENT_DO_NOT_CAME">
+                                    <label class="form-check-label" for="appointmentStatusClientNotCame">
+                                        Клиент не пришёл
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </fieldset>
 
@@ -199,6 +255,7 @@
                         <div class="col-6 col-sm-auto text-center">
                             <a class="btn btn-outline-danger" href="/therapist/schedule"
                                onclick="if (!window.confirm('Вы уверены, что хотите отменить все изменения и выйти?')) {event.preventDefault(); return false}"
+                               hx-boost="true"
                                style="min-width: 110px;">
                                 Отмена
                             </a>

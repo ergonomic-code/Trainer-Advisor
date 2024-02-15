@@ -3,6 +3,7 @@ package pro.qyoga.tests.fixture.appointments
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrNull
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
 import pro.qyoga.core.appointments.core.Appointment
+import pro.qyoga.core.appointments.core.AppointmentStatus
 import pro.qyoga.core.appointments.core.EditAppointmentRequest
 import pro.qyoga.core.appointments.types.model.AppointmentTypeRef
 import pro.qyoga.core.clients.cards.api.ClientRef
@@ -28,6 +29,7 @@ object AppointmentsObjectMother {
         place: String? = null,
         cost: Int? = null,
         payed: Boolean? = null,
+        appointmentStatus: AppointmentStatus = AppointmentStatus.entries.random(),
         comment: String? = null
     ): EditAppointmentRequest {
         return EditAppointmentRequest(
@@ -44,6 +46,7 @@ object AppointmentsObjectMother {
             place,
             cost,
             payed,
+            appointmentStatus,
             comment,
         )
     }
@@ -74,6 +77,7 @@ object AppointmentsObjectMother {
         place: String?,
         cost: Int?,
         payed: Boolean?,
+        appointmentStatus: AppointmentStatus = AppointmentStatus.entries.random(),
         comment: String?
     ): EditAppointmentRequest =
         EditAppointmentRequest(
@@ -90,6 +94,7 @@ object AppointmentsObjectMother {
             place ?: appointment.place,
             cost ?: appointment.cost,
             payed ?: appointment.payed,
+            appointmentStatus,
             comment ?: appointment.comment,
         )
 

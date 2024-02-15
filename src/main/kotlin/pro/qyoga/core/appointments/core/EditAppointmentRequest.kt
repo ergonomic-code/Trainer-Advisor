@@ -23,6 +23,7 @@ data class EditAppointmentRequest(
     val place: String?,
     val cost: Int?,
     val payed: Boolean?,
+    val appointmentStatus: AppointmentStatus,
     val comment: String?
 
 ) {

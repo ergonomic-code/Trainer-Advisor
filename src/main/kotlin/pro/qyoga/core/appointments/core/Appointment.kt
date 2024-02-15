@@ -29,6 +29,7 @@ data class Appointment(
     val place: String?,
     val cost: Int?,
     val payed: Boolean,
+    val status: AppointmentStatus,
     val comment: String?,
 
     @Id
@@ -40,6 +41,7 @@ data class Appointment(
     @Version
     val version: Long = 0
 ) {
+
 
     @Transient
     val wallClockDateTime: LocalDateTime = dateTime.atZone(timeZone).toLocalDateTime()
@@ -62,6 +64,7 @@ data class Appointment(
         editAppointmentRequest.place,
         editAppointmentRequest.cost,
         editAppointmentRequest.payed ?: false,
+        editAppointmentRequest.appointmentStatus,
         editAppointmentRequest.comment,
     )
 

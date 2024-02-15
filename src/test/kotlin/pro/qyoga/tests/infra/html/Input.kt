@@ -17,7 +17,11 @@ data class Input(
 
     private val nameAttrName = if (alpineJs) ":name" else "name"
 
-    override fun selector() = if (id != null) "#$id" else "input[$nameAttrName=$name][type=$type]"
+    override fun selector() =
+        if (id != null)
+            "#$id"
+        else
+            "input[$nameAttrName=$name][type=$type]" + (value?.let { "[value=$it]" } ?: "")
 
     override fun matcher(): Matcher<Element> {
         val matchers = buildList {
@@ -64,6 +68,9 @@ data class Input(
 
         fun checkbox(name: String, required: Boolean, value: String? = null) =
             Input(name, required, "checkbox", value = value)
+
+        fun radio(name: String, required: Boolean, value: String? = null) =
+            Input(name, required, "radio", value = value)
 
         fun tel(name: String, required: Boolean) =
             Input(name, required, "tel")
