@@ -1,4 +1,4 @@
-package pro.qyoga.app.publc
+package pro.qyoga.app.publc.login
 
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model

@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.servlet.ModelAndView
 import pro.azhidkov.platform.spring.mvc.modelAndView
-import pro.qyoga.app.common.ResponseEntityExt
-import pro.qyoga.app.common.notFound
-import pro.qyoga.app.common.toStoredFile
+import pro.qyoga.app.platform.ResponseEntityExt
+import pro.qyoga.app.platform.notFound
+import pro.qyoga.app.platform.toStoredFile
 import pro.qyoga.app.therapist.clients.ClientPageTab
 import pro.qyoga.app.therapist.clients.clientPageModel
 import pro.qyoga.core.clients.cards.api.ClientsService

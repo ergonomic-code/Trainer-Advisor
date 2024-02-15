@@ -1,4 +1,4 @@
-package pro.qyoga.app.auth
+package pro.qyoga.app.infra
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean

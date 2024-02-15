@@ -1,4 +1,4 @@
-package pro.qyoga.app.common
+package pro.qyoga.app.infra
 
 import org.springframework.beans.propertyeditors.StringTrimmerEditor
 import org.springframework.web.bind.WebDataBinder

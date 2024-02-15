@@ -5,9 +5,9 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
-import pro.qyoga.app.components.combobox.ComboBoxController
-import pro.qyoga.app.components.combobox.ComboBoxItem
-import pro.qyoga.app.components.combobox.ComboBoxModelAndView
+import pro.qyoga.app.platform.components.combobox.ComboBoxController
+import pro.qyoga.app.platform.components.combobox.ComboBoxItem
+import pro.qyoga.app.platform.components.combobox.ComboBoxModelAndView
 import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo
 import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo.Page.topFiveByName
 import pro.qyoga.core.therapy.therapeutic_tasks.findByNameContaining

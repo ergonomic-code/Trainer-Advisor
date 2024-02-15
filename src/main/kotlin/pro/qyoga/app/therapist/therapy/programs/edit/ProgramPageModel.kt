@@ -5,7 +5,7 @@ import pro.azhidkov.platform.spring.mvc.ModelAndViewBuilder
 import pro.azhidkov.platform.spring.mvc.modelAndView
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrNull
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
-import pro.qyoga.app.common.EntityPageMode
+import pro.qyoga.app.platform.EntityPageMode
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
 import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
 import pro.qyoga.core.therapy.programs.model.Program

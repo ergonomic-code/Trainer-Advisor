@@ -1,4 +1,4 @@
-package pro.qyoga.app.components.combobox
+package pro.qyoga.app.platform.components.combobox
 
 import org.springframework.web.servlet.ModelAndView
 

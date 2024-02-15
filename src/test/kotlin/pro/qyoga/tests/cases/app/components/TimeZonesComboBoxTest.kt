@@ -11,8 +11,8 @@ import org.jsoup.Jsoup
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import pro.azhidkov.timezones.TimeZones
-import pro.qyoga.app.components.TimeZonesComboBoxController
-import pro.qyoga.app.components.combobox.ComboBoxItem
+import pro.qyoga.app.platform.components.combobox.ComboBoxItem
+import pro.qyoga.app.publc.components.TimeZonesComboBoxController
 import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.infra.html.ComboBox
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest

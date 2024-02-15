@@ -7,7 +7,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
 import pro.azhidkov.platform.spring.mvc.modelAndView
-import pro.qyoga.app.common.ResponseEntityExt
+import pro.qyoga.app.platform.ResponseEntityExt
 import pro.qyoga.core.therapy.programs.ProgramsRepo
 import pro.qyoga.core.therapy.programs.dtos.ProgramsSearchFilter
 import pro.qyoga.core.therapy.programs.findAllMatching

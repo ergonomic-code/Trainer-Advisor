@@ -1,4 +1,4 @@
-package pro.qyoga.app.common
+package pro.qyoga.app.platform
 
 enum class EntityPageMode {
     CREATE,
