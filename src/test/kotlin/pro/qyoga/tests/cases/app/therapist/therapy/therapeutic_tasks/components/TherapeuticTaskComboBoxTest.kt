@@ -4,7 +4,7 @@ import io.kotest.matchers.Matcher
 import io.kotest.matchers.compose.all
 import io.kotest.matchers.should
 import org.junit.jupiter.api.Test
-import pro.qyoga.app.components.combobox.ComboBoxItem
+import pro.qyoga.app.platform.components.combobox.ComboBoxItem
 import pro.qyoga.l10n.systemCollator
 import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.assertions.shouldHaveElements

@@ -3,7 +3,7 @@ package pro.qyoga.tests.infra.html
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.compose.all
 import org.jsoup.nodes.Element
-import pro.qyoga.app.components.combobox.ComboBoxItem
+import pro.qyoga.app.platform.components.combobox.ComboBoxItem
 import pro.qyoga.tests.assertions.haveComponent
 import pro.qyoga.tests.assertions.haveElements
 

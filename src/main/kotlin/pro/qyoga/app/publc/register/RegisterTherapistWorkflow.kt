@@ -1,4 +1,4 @@
-package pro.qyoga.app.publc
+package pro.qyoga.app.publc.register
 
 import org.springframework.stereotype.Component
 import pro.qyoga.core.users.therapists.CreateTherapistUserWorkflow
@@ -7,7 +7,6 @@ import pro.qyoga.core.users.therapists.Therapist
 import pro.qyoga.infra.email.api.QyogaEmailsService
 import pro.qyoga.infra.email.api.RegisteredUserNotification
 import kotlin.random.Random
-
 
 @Component
 class RegisterTherapistWorkflow(

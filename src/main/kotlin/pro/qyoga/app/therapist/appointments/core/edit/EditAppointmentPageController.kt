@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
 import pro.azhidkov.timezones.LocalizedTimeZone
 import pro.azhidkov.timezones.TimeZones
-import pro.qyoga.app.common.EntityPageMode
-import pro.qyoga.app.common.notFound
-import pro.qyoga.app.common.seeOther
-import pro.qyoga.app.components.toComboBoxItem
+import pro.qyoga.app.platform.EntityPageMode
+import pro.qyoga.app.platform.notFound
+import pro.qyoga.app.platform.seeOther
+import pro.qyoga.app.publc.components.toComboBoxItem
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
 import pro.qyoga.core.appointments.core.*
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails

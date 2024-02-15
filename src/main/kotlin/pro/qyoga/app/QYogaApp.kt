@@ -5,8 +5,6 @@ import org.springframework.boot.runApplication
 import org.springframework.context.annotation.Import
 import pro.azhidkov.platform.file_storage.FilesStorageConfig
 import pro.azhidkov.platform.spring.sdj.ErgoSdjConfig
-import pro.qyoga.app.common.WebAppsCommonConfig
-import pro.qyoga.app.components.QYogaComponetsConfig
 import pro.qyoga.app.publc.PublicAppConfig
 import pro.qyoga.app.therapist.TherapistWebAppConfig
 import pro.qyoga.core.appointments.AppointmentsConfig
@@ -23,10 +21,8 @@ import pro.qyoga.infra.web.WebConfig
 
 @Import(
     // Apps
-    WebAppsCommonConfig::class,
     PublicAppConfig::class,
     TherapistWebAppConfig::class,
-    QYogaComponetsConfig::class,
 
     // Core
     AppointmentsConfig::class,

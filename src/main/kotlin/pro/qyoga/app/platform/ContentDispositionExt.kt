@@ -1,4 +1,4 @@
-package pro.qyoga.app.common
+package pro.qyoga.app.platform
 
 import org.springframework.http.ContentDisposition
 import pro.azhidkov.platform.file_storage.api.FileMetaData

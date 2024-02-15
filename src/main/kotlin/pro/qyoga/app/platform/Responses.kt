@@ -1,4 +1,4 @@
-package pro.qyoga.app.common
+package pro.qyoga.app.platform
 
 import org.springframework.core.io.InputStreamResource
 import org.springframework.http.MediaType

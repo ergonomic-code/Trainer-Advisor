@@ -3,7 +3,7 @@ package pro.qyoga.tests.cases.app.therapist.appointments.types.components
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.should
 import org.junit.jupiter.api.Test
-import pro.qyoga.app.components.combobox.ComboBoxItem
+import pro.qyoga.app.platform.components.combobox.ComboBoxItem
 import pro.qyoga.l10n.systemCollator
 import pro.qyoga.tests.assertions.haveElements
 import pro.qyoga.tests.assertions.shouldHaveComponent

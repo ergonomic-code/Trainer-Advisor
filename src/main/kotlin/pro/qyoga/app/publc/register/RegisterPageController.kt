@@ -1,4 +1,4 @@
-package pro.qyoga.app.publc
+package pro.qyoga.app.publc.register
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.dao.DuplicateKeyException

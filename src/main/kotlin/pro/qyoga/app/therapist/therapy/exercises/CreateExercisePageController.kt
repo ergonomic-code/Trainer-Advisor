@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.multipart.MultipartFile
 import pro.azhidkov.platform.file_storage.api.StoredFile
 import pro.azhidkov.platform.spring.http.hxRedirect
-import pro.qyoga.app.common.toStoredFile
+import pro.qyoga.app.platform.toStoredFile
 import pro.qyoga.core.therapy.exercises.ExercisesService
 import pro.qyoga.core.therapy.exercises.dtos.CreateExerciseRequest
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
