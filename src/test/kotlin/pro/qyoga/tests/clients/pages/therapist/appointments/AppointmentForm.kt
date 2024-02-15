@@ -3,6 +3,7 @@ package pro.qyoga.tests.clients.pages.therapist.appointments
 import io.kotest.matchers.shouldBe
 import pro.azhidkov.platform.java.time.toLocalTimeString
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
+import pro.qyoga.core.appointments.core.AppointmentStatus
 import pro.qyoga.core.appointments.core.EditAppointmentRequest
 import pro.qyoga.tests.assertions.PageMatcher
 import pro.qyoga.tests.infra.html.*
@@ -22,6 +23,16 @@ abstract class AppointmentForm(action: FormAction) : QYogaForm("editAppointmentF
 
     val cost by component { Input.number("cost", false) }
     val payed by component { Input.checkbox("payed", false, "true") }
+
+    val statusPending by component {
+        Input.radio("appointmentStatus", true, AppointmentStatus.PENDING.name)
+    }
+    val statusClientCame by component {
+        Input.radio("appointmentStatus", true, AppointmentStatus.CLIENT_CAME.name)
+    }
+    val statusClientNotCame by component {
+        Input.radio("appointmentStatus", true, AppointmentStatus.CLIENT_DO_NOT_CAME.name)
+    }
 
     val comment by component { TextArea("comment", false) }
 

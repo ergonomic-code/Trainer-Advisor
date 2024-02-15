@@ -162,6 +162,7 @@ class TherapistAppointmentsApi(override val authCookie: Cookie) : AuthorizedApi 
         if (appointment.payed == true) {
             formParam(CreateAppointmentPage.editAppointmentForm.payed.name, "true")
         }
+        formParam(CreateAppointmentPage.editAppointmentForm.statusPending.name, appointment.appointmentStatus.name)
 
         return formParam(CreateAppointmentPage.editAppointmentForm.comment.name, appointment.comment ?: "")
     }

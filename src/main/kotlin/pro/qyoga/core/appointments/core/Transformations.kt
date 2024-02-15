@@ -20,6 +20,7 @@ fun Appointment.patchBy(
         editAppointmentRequest.place,
         editAppointmentRequest.cost,
         editAppointmentRequest.payed ?: false,
+        editAppointmentRequest.appointmentStatus,
         editAppointmentRequest.comment,
         id,
         createdAt,
@@ -43,5 +44,6 @@ fun Appointment.toEditRequest(resolveTimeZone: (ZoneId) -> LocalizedTimeZone?) =
     place,
     cost,
     payed,
+    status,
     comment
 )

@@ -21,6 +21,7 @@ infix fun Appointment.shouldMatch(editAppointmentRequest: EditAppointmentRequest
     this.place shouldBe editAppointmentRequest.place
     this.cost shouldBe editAppointmentRequest.cost
     this.payed shouldBe (editAppointmentRequest.payed ?: false)
+    this.status shouldBe editAppointmentRequest.appointmentStatus
     this.comment shouldBe editAppointmentRequest.comment
 }
 
@@ -34,5 +35,6 @@ infix fun Appointment.shouldMatch(another: Appointment) {
     this.place shouldBe another.place
     this.cost shouldBe another.cost
     this.payed shouldBe another.payed
+    this.status shouldBe another.status
     this.comment shouldBe another.comment
 }
