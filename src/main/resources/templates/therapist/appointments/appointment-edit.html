@@ -127,7 +127,7 @@
                                         if (timeZoneInput.value === null || timeZoneInput.value === '') {
                                             let localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
                                             let localTimeZoneInfo = allTimeZones.find((tz) => tz.id === localTimeZone);
-                                            timeZoneInput.value = localTimeZoneInfo.zone.id;
+                                            timeZoneInput.value = localTimeZoneInfo.id;
                                             document.querySelector("#timeZoneTitle").value = localTimeZoneInfo ? localTimeZoneInfo.title : '';
                                         }
                                     })();
