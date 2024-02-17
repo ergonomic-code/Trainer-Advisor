@@ -12,10 +12,14 @@ import org.junit.jupiter.api.extension.RegisterExtension
 import org.springframework.core.env.Environment
 import org.springframework.core.env.get
 import pro.qyoga.tests.assertions.shouldMatch
+import pro.qyoga.tests.clients.pages.publc.LoginPage
+import pro.qyoga.tests.clients.pages.publc.RegisterPage
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
 import pro.qyoga.tests.fixture.data.randomEmail
 import pro.qyoga.tests.fixture.therapists.TherapistsObjectMother.registerTherapistRequest
 import pro.qyoga.tests.infra.QYogaE2EBaseTest
+import pro.qyoga.tests.platform.selenide.`$`
+import pro.qyoga.tests.platform.selenide.fastType
 
 
 class RegisterUserScenarioTest : QYogaE2EBaseTest() {
@@ -31,13 +35,13 @@ class RegisterUserScenarioTest : QYogaE2EBaseTest() {
             randomEmail()
         )
 
-        open("$baseUri/register")
+        open("$baseUri${RegisterPage.path}")
         title() shouldBe ("Заявка на регистрацию")
 
-        `$`("input[name=firstName]").type(registerTherapistRequest.firstName)
-        `$`("input[name=lastName]").type(registerTherapistRequest.lastName)
-        `$`("input[name=email]").type(registerTherapistRequest.email)
-        `$`("input[name=register]").click()
+        `$`(RegisterPage.RegisterForm.firstName).fastType(registerTherapistRequest.firstName)
+        `$`(RegisterPage.RegisterForm.lastName).fastType(registerTherapistRequest.lastName)
+        `$`(RegisterPage.RegisterForm.email).fastType(registerTherapistRequest.email)
+        `$`(RegisterPage.RegisterForm.submit).click()
 
         `$`("div#registrationSuccess").should(Visible())
 
@@ -45,11 +49,10 @@ class RegisterUserScenarioTest : QYogaE2EBaseTest() {
         receivedMessages shouldHaveSize 1
         val (receivedEmail, password) = receivedMessages[0] shouldMatch registerTherapistRequest
 
-        open("$baseUri/login")
-        `$`("input[name=username]").type(receivedEmail)
-        `$`("input[name=password]").type(password)
-        `$`("#submit").click()
-
+        open("$baseUri${LoginPage.path}")
+        `$`(LoginPage.LoginForm.username).fastType(receivedEmail)
+        `$`(LoginPage.LoginForm.password).fastType(password)
+        `$`(LoginPage.LoginForm.submit).click()
         title() shouldBe "Расписание"
     }
 
