@@ -96,7 +96,8 @@ fun haveText(text: String) = Matcher { element: Element ->
 }
 
 fun haveTitle(title: String): Matcher<Element> =
-    Matcher.all(haveComponent(SelectorOnlyComponent("title")),
+    Matcher.all(
+        haveComponent(SelectorOnlyComponent("title")),
         Matcher { element: Element ->
             val titleElement = element.getElementsByTag("title").single()
             MatcherResult(

@@ -5,12 +5,13 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.should
 import org.jsoup.nodes.Element
 import pro.qyoga.tests.assertions.shouldBeComponent
-import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.assertions.shouldHaveComponent
+import pro.qyoga.tests.assertions.shouldHaveElement
 import pro.qyoga.tests.assertions.shouldHaveTitle
 import pro.qyoga.tests.infra.html.FormAction
 import pro.qyoga.tests.infra.html.Input.Companion.email
 import pro.qyoga.tests.infra.html.Input.Companion.password
+import pro.qyoga.tests.infra.html.Input.Companion.submit
 import pro.qyoga.tests.infra.html.Link
 import pro.qyoga.tests.infra.html.QYogaForm
 import pro.qyoga.tests.infra.html.QYogaPage
@@ -48,7 +49,7 @@ object LoginPage : QYogaPage {
             element.select(LoginForm.selector())[0] should LoginForm.action.matcher()
         }
 
-        element shouldHave LOGIN_ERROR_MESSAGE
+        element shouldHaveElement LOGIN_ERROR_MESSAGE
 
         element shouldHaveComponent registerLink
     }

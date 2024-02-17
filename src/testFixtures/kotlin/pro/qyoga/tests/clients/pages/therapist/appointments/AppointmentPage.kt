@@ -3,7 +3,7 @@ package pro.qyoga.tests.clients.pages.therapist.appointments
 import pro.qyoga.tests.assertions.haveComponent
 import pro.qyoga.tests.assertions.haveTitle
 import pro.qyoga.tests.infra.html.HtmlPage
-import pro.qyoga.tests.infra.kotest.buildAllOfMatcher
+import pro.qyoga.tests.platform.kotest.buildAllOfMatcher
 
 
 abstract class AppointmentsPage(

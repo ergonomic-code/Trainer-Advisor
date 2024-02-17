@@ -67,12 +67,12 @@ dependencies {
 	testFixturesImplementation("org.testcontainers:postgresql")
 	testFixturesApi("io.kotest:kotest-assertions-core:5.7.2")
 	testFixturesImplementation("org.testcontainers:minio:1.19.3")
+	testFixturesApi("org.jsoup:jsoup:1.16.2")
 
 	testImplementation(testFixtures(project(":")))
 	testImplementation("io.rest-assured:rest-assured:5.3.2")
 	testImplementation("io.rest-assured:kotlin-extensions:5.3.2")
 	testImplementation("com.tngtech.archunit:archunit:1.1.0")
-	testImplementation("org.jsoup:jsoup:1.16.2")
 	testImplementation("io.github.ulfs:assertj-jsoup:0.1.4")
 	testImplementation("com.icegreen:greenmail-junit5:2.0.0")
 	implementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
