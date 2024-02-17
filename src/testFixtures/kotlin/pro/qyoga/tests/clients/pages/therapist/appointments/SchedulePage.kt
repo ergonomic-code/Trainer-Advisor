@@ -19,8 +19,8 @@ abstract class SchedulePage(val content: Component, override val path: String = 
 
     final override val title = "Расписание"
 
-    private val addAppointmentLink =
-        Link("addAppointmentLink", CreateAppointmentPage, "Запланировать приём")
+    val addAppointmentLink =
+        Link("addAppointmentLink", CreateAppointmentPage, "")
 
     override val matcher = Matcher.all(
         haveTitle(title),
@@ -56,11 +56,13 @@ object EmptyFutureSchedulePage : SchedulePage(EmptyFutureSchedulePageTab)
 
 object FutureSchedulePageTab : Component {
 
-    const val TODAY_APPOINTMENTS_ID = "todayAppointments"
+    private const val TODAY_APPOINTMENTS_ID = "todayAppointments"
 
-    const val NEXT_WEEK_APPOINTMENTS_ID = "nextWeekAppointments"
+    private const val NEXT_WEEK_APPOINTMENTS_ID = "nextWeekAppointments"
 
-    const val LATER_APPOINTMENTS_ID = "laterAppointments"
+    private const val LATER_APPOINTMENTS_ID = "laterAppointments"
+
+    const val TODAY_APPOINTMENT_ROWS = "#todayAppointments > div"
 
     override fun selector() = "#futureAppointments"
 
@@ -86,7 +88,7 @@ object FutureSchedulePage : SchedulePage(FutureSchedulePageTab)
 
 object PastSchedulePage : SchedulePage(PastSchedulePageTab, "$BASE_PATH?past=true")
 
-fun Document.todayAppointmentsRows(): Elements = this.select("#todayAppointments > div")
+fun Document.todayAppointmentsRows(): Elements = this.select(FutureSchedulePageTab.TODAY_APPOINTMENT_ROWS)
 
 fun Document.nextWeekAppointmentsRows(): Elements = this.select("#nextWeekAppointments div.appointment-row")
 

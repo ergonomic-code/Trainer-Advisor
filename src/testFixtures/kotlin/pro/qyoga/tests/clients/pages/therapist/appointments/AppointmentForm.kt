@@ -36,6 +36,8 @@ abstract class AppointmentForm(action: FormAction) : QYogaForm("editAppointmentF
 
     val comment by component { TextArea("comment", false) }
 
+    val submit by component { Button("save", "") }
+
     val appointmentsIntersectionErrorMessage = "#appointmentsIntersectionErrorMessage"
 
 }
