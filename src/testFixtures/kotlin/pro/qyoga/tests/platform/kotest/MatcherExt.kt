@@ -1,4 +1,4 @@
-package pro.qyoga.tests.infra.kotest
+package pro.qyoga.tests.platform.kotest
 
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.compose.all
