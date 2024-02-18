@@ -11,11 +11,11 @@ import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.assertions.shouldHaveElement
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
-import pro.qyoga.tests.clients.pages.therapist.appointments.CreateAppointmentForm
-import pro.qyoga.tests.clients.pages.therapist.appointments.CreateAppointmentPage
-import pro.qyoga.tests.clients.pages.therapist.appointments.EditAppointmentForm
-import pro.qyoga.tests.clients.pages.therapist.appointments.SchedulePage
-import pro.qyoga.tests.fixture.appointments.AppointmentsObjectMother
+import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentForm
+import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentPage
+import pro.qyoga.tests.pages.therapist.appointments.EditAppointmentForm
+import pro.qyoga.tests.pages.therapist.appointments.SchedulePage
+import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentsObjectMother
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import java.time.Duration
 import java.time.LocalDate

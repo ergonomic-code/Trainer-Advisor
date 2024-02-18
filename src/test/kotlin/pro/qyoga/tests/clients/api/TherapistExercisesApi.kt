@@ -13,7 +13,7 @@ import pro.azhidkov.platform.java.time.toDecimalMinutes
 import pro.qyoga.core.therapy.exercises.dtos.CreateExerciseRequest
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSearchDto
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
-import pro.qyoga.tests.clients.pages.therapist.therapy.exercises.*
+import pro.qyoga.tests.pages.therapist.therapy.exercises.*
 
 
 class TherapistExercisesApi(override val authCookie: Cookie) : AuthorizedApi {

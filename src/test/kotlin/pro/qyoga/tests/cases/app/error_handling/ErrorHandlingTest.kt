@@ -4,8 +4,8 @@ import org.junit.jupiter.api.Test
 import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.clients.PublicClient
-import pro.qyoga.tests.clients.pages.publc.GenericErrorPage
-import pro.qyoga.tests.clients.pages.publc.NotFoundErrorPage
+import pro.qyoga.tests.pages.publc.GenericErrorPage
+import pro.qyoga.tests.pages.publc.NotFoundErrorPage
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 
 

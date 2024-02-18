@@ -3,7 +3,7 @@ package pro.qyoga.tests.fixture.backgrounds
 import org.springframework.stereotype.Component
 import pro.qyoga.core.appointments.types.AppointmentTypesRepo
 import pro.qyoga.core.appointments.types.model.AppointmentType
-import pro.qyoga.tests.fixture.appointments.AppointmentTypesObjectMother
+import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentTypesObjectMother
 
 @Component
 class AppointmentTypesBackgrounds(

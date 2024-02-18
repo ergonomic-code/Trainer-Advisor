@@ -16,10 +16,10 @@ import pro.qyoga.tests.assertions.shouldBeElement
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.clients.TherapistClient
-import pro.qyoga.tests.clients.pages.publc.NotFoundErrorPage
-import pro.qyoga.tests.clients.pages.therapist.clients.files.ClientFilesPage
-import pro.qyoga.tests.fixture.FilesObjectMother
-import pro.qyoga.tests.fixture.backgrounds.exercises.AllSteps
+import pro.qyoga.tests.pages.publc.NotFoundErrorPage
+import pro.qyoga.tests.pages.therapist.clients.files.ClientFilesPage
+import pro.qyoga.tests.fixture.object_mothers.FilesObjectMother
+import pro.qyoga.tests.fixture.object_mothers.therapy.exercises.AllSteps
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
 import pro.qyoga.tests.infra.junit.SLOW_TEST
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest

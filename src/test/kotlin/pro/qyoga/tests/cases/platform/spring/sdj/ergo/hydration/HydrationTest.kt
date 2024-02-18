@@ -12,10 +12,10 @@ import pro.qyoga.core.clients.journals.model.JournalEntry
 import pro.qyoga.core.therapy.exercises.model.ExerciseStep
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
 import pro.qyoga.core.users.therapists.Therapist
-import pro.qyoga.tests.fixture.FilesObjectMother
+import pro.qyoga.tests.fixture.object_mothers.FilesObjectMother
 import pro.qyoga.tests.fixture.backgrounds.Backgrounds
-import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_FIRST_NAME
-import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
+import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_FIRST_NAME
+import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
 import pro.qyoga.tests.infra.db.setupDb
 import pro.qyoga.tests.infra.db.testDataSource
 import pro.qyoga.tests.infra.test_config.spring.context

@@ -10,7 +10,7 @@ import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.assertions.shouldHaveElements
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
-import pro.qyoga.tests.infra.html.ComboBox
+import pro.qyoga.tests.platform.html.ComboBox
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 
 

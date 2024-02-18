@@ -9,14 +9,14 @@ import pro.qyoga.l10n.russianDateFormat
 import pro.qyoga.tests.assertions.*
 import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.clients.TherapistClient
-import pro.qyoga.tests.clients.pages.publc.GenericErrorPage
-import pro.qyoga.tests.clients.pages.publc.NotFoundErrorPage
-import pro.qyoga.tests.clients.pages.therapist.clients.journal.entry.EditJournalEntryForm
-import pro.qyoga.tests.clients.pages.therapist.clients.journal.entry.EditJournalEntryPage
-import pro.qyoga.tests.clients.pages.therapist.clients.journal.entry.JournalEntryFrom
-import pro.qyoga.tests.fixture.clients.JournalEntriesObjectMother.journalEntry
-import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
-import pro.qyoga.tests.fixture.therapists.theTherapistUserDetails
+import pro.qyoga.tests.pages.publc.GenericErrorPage
+import pro.qyoga.tests.pages.publc.NotFoundErrorPage
+import pro.qyoga.tests.pages.therapist.clients.journal.entry.EditJournalEntryForm
+import pro.qyoga.tests.pages.therapist.clients.journal.entry.EditJournalEntryPage
+import pro.qyoga.tests.pages.therapist.clients.journal.entry.JournalEntryFrom
+import pro.qyoga.tests.fixture.object_mothers.clients.JournalEntriesObjectMother.journalEntry
+import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
+import pro.qyoga.tests.fixture.object_mothers.therapists.theTherapistUserDetails
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import java.time.LocalDate
 

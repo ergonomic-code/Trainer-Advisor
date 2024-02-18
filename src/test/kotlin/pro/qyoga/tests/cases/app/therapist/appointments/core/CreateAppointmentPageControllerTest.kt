@@ -11,9 +11,9 @@ import pro.azhidkov.platform.spring.sdj.erpo.hydration.ref
 import pro.qyoga.app.therapist.appointments.core.edit.CreateAppointmentPageController
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
 import pro.qyoga.tests.assertions.shouldMatch
-import pro.qyoga.tests.fixture.appointments.AppointmentsObjectMother.randomEditAppointmentRequest
-import pro.qyoga.tests.fixture.clients.ClientsObjectMother
-import pro.qyoga.tests.fixture.therapists.theTherapistUserDetails
+import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentsObjectMother.randomEditAppointmentRequest
+import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
+import pro.qyoga.tests.fixture.object_mothers.therapists.theTherapistUserDetails
 import pro.qyoga.tests.infra.web.QYogaAppBaseTest
 import java.time.Duration
 import java.time.LocalDate

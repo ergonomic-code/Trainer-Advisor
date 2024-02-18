@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test
 import pro.qyoga.app.therapist.clients.journal.edit_entry.create.CreateJournalEntryPageController
 import pro.qyoga.app.therapist.clients.journal.list.JournalPageController
 import pro.qyoga.tests.assertions.shouldMatch
-import pro.qyoga.tests.fixture.clients.JournalEntriesObjectMother
-import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
-import pro.qyoga.tests.fixture.therapists.theTherapistUserDetails
+import pro.qyoga.tests.fixture.object_mothers.clients.JournalEntriesObjectMother
+import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
+import pro.qyoga.tests.fixture.object_mothers.therapists.theTherapistUserDetails
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import java.time.LocalDate
 

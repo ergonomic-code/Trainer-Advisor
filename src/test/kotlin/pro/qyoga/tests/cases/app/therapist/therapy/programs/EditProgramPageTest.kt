@@ -9,13 +9,13 @@ import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
-import pro.qyoga.tests.clients.pages.publc.NotFoundErrorPage
-import pro.qyoga.tests.clients.pages.therapist.therapy.programs.CreateProgramForm
-import pro.qyoga.tests.clients.pages.therapist.therapy.programs.EditProgramPage
-import pro.qyoga.tests.clients.pages.therapist.therapy.programs.ProgramsListPage
+import pro.qyoga.tests.pages.publc.NotFoundErrorPage
+import pro.qyoga.tests.pages.therapist.therapy.programs.CreateProgramForm
+import pro.qyoga.tests.pages.therapist.therapy.programs.EditProgramPage
+import pro.qyoga.tests.pages.therapist.therapy.programs.ProgramsListPage
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
-import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother
-import pro.qyoga.tests.fixture.therapy.programs.ProgramsObjectMother.randomCreateProgramRequest
+import pro.qyoga.tests.fixture.object_mothers.therapy.exercises.ExercisesObjectMother
+import pro.qyoga.tests.fixture.object_mothers.therapy.programs.ProgramsObjectMother.randomCreateProgramRequest
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 
 

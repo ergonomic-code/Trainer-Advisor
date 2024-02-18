@@ -8,11 +8,11 @@ import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
-import pro.qyoga.tests.clients.pages.publc.NotFoundErrorPage
-import pro.qyoga.tests.clients.pages.therapist.therapy.exercises.EditExercisePage
-import pro.qyoga.tests.fixture.FilesObjectMother
-import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother
-import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother.createExerciseRequests
+import pro.qyoga.tests.pages.publc.NotFoundErrorPage
+import pro.qyoga.tests.pages.therapist.therapy.exercises.EditExercisePage
+import pro.qyoga.tests.fixture.object_mothers.FilesObjectMother
+import pro.qyoga.tests.fixture.object_mothers.therapy.exercises.ExercisesObjectMother
+import pro.qyoga.tests.fixture.object_mothers.therapy.exercises.ExercisesObjectMother.createExerciseRequests
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 
 class EditExercisePageTest : QYogaAppIntegrationBaseTest() {

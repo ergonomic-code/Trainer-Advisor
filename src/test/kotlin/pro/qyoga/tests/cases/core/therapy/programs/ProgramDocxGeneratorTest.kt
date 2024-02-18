@@ -9,11 +9,11 @@ import pro.azhidkov.platform.spring.sdj.erpo.hydration.ref
 import pro.qyoga.core.therapy.exercises.model.Exercise
 import pro.qyoga.core.therapy.programs.ProgramDocxGenerator
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
-import pro.qyoga.tests.fixture.backgrounds.exercises.None
+import pro.qyoga.tests.fixture.object_mothers.therapy.exercises.None
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
-import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
-import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother
-import pro.qyoga.tests.fixture.therapy.programs.ProgramsObjectMother
+import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
+import pro.qyoga.tests.fixture.object_mothers.therapy.exercises.ExercisesObjectMother
+import pro.qyoga.tests.fixture.object_mothers.therapy.programs.ProgramsObjectMother
 import pro.qyoga.tests.platform.storeArtifact
 import java.io.ByteArrayInputStream
 import java.nio.file.Path

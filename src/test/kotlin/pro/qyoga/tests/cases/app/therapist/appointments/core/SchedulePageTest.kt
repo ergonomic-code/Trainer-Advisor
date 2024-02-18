@@ -7,8 +7,8 @@ import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.clients.TherapistClient
-import pro.qyoga.tests.clients.pages.therapist.appointments.*
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
+import pro.qyoga.tests.pages.therapist.appointments.*
 import java.time.*
 
 

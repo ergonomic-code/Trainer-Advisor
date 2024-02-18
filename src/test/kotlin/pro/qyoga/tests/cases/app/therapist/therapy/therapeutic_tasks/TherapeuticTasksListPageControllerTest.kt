@@ -4,8 +4,8 @@ import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import pro.qyoga.app.therapist.therapy.therapeutic_tasks.DUPLICATED_NEW_TASK_NAME
 import pro.qyoga.app.therapist.therapy.therapeutic_tasks.TherapeuticTasksListsPageController
-import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
-import pro.qyoga.tests.fixture.therapists.theTherapistUserDetails
+import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
+import pro.qyoga.tests.fixture.object_mothers.therapists.theTherapistUserDetails
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 
 class TherapeuticTasksListPageControllerTest : QYogaAppIntegrationBaseTest() {

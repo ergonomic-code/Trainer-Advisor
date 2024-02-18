@@ -10,9 +10,9 @@ import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
 import pro.qyoga.app.therapist.therapy.therapeutic_tasks.components.TherapeuticTasksComboBoxController
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
-import pro.qyoga.tests.clients.pages.therapist.clients.journal.entry.CreateJournalEntryForm
-import pro.qyoga.tests.clients.pages.therapist.clients.journal.entry.TherapeuticTasksSearchResult
-import pro.qyoga.tests.clients.pages.therapist.therapy.therapeutic_tasks.TherapeuticTasksListPage
+import pro.qyoga.tests.pages.therapist.clients.journal.entry.CreateJournalEntryForm
+import pro.qyoga.tests.pages.therapist.clients.journal.entry.TherapeuticTasksSearchResult
+import pro.qyoga.tests.pages.therapist.therapy.therapeutic_tasks.TherapeuticTasksListPage
 
 class TherapistTherapeuticTasksApi(override val authCookie: Cookie) : AuthorizedApi {
 

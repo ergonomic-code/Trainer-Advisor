@@ -22,7 +22,7 @@ class ArchTest {
         val testsAbstractionLayer = "Tests abstraction layer"
         Architectures.layeredArchitecture()
             .consideringAllDependencies()
-            .layer(testsAbstractionLayer).definedBy("pro.qyoga.tests.(assertions|fixture|clients|infra)..")
+            .layer(testsAbstractionLayer).definedBy("pro.qyoga.tests.(assertions|clients|fixture|infra|pages|platform)..")
             .layer("App").definedBy("pro.qyoga.app..")
             .layer("Core").definedBy("pro.qyoga.core..")
             .layer("Infra").definedBy("pro.qyoga.infra..")

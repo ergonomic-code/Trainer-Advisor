@@ -32,11 +32,5 @@ val minioContainer: MinIOContainer by lazy {
         .withCommand("server")
         .apply {
             start()
-            dropBuckets(
-                MinioClient.builder()
-                    .endpoint(s3URL)
-                    .credentials(userName, password)
-                    .build()
-            )
         }
 }

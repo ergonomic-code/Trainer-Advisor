@@ -5,11 +5,11 @@ import org.junit.jupiter.api.Test
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
 import pro.qyoga.tests.assertions.*
 import pro.qyoga.tests.clients.TherapistClient
-import pro.qyoga.tests.clients.pages.therapist.therapy.therapeutic_tasks.TherapeuticTasksListPage
+import pro.qyoga.tests.pages.therapist.therapy.therapeutic_tasks.TherapeuticTasksListPage
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
-import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
-import pro.qyoga.tests.fixture.therapy.therapeutic_tasks.SearchTherapeuticTasksFixture
-import pro.qyoga.tests.fixture.therapy.therapeutic_tasks.TherapeuticTasksObjectMother.therapeuticTask
+import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
+import pro.qyoga.tests.fixture.object_mothers.therapy.therapeutic_tasks.SearchTherapeuticTasksFixture
+import pro.qyoga.tests.fixture.object_mothers.therapy.therapeutic_tasks.TherapeuticTasksObjectMother.therapeuticTask
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 
 

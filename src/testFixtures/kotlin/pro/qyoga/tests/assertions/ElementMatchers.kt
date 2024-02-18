@@ -6,9 +6,9 @@ import io.kotest.matchers.compose.all
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldNot
 import org.jsoup.nodes.Element
-import pro.qyoga.tests.infra.html.Component
-import pro.qyoga.tests.infra.html.HtmlPage
-import pro.qyoga.tests.infra.html.Input
+import pro.qyoga.tests.platform.html.Component
+import pro.qyoga.tests.platform.html.HtmlPage
+import pro.qyoga.tests.platform.html.Input
 
 
 fun beComponent(component: Component) = Matcher<Element> { element ->

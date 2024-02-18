@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.clients.TherapistClient
-import pro.qyoga.tests.clients.pages.therapist.clients.journal.list.EmptyClientJournalPage
-import pro.qyoga.tests.clients.pages.therapist.clients.journal.list.NonEmptyClientJournalPage
-import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
-import pro.qyoga.tests.fixture.therapists.theTherapistUserDetails
+import pro.qyoga.tests.pages.therapist.clients.journal.list.EmptyClientJournalPage
+import pro.qyoga.tests.pages.therapist.clients.journal.list.NonEmptyClientJournalPage
+import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
+import pro.qyoga.tests.fixture.object_mothers.therapists.theTherapistUserDetails
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 
 

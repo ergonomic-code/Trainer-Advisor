@@ -9,10 +9,10 @@ import pro.qyoga.core.clients.cards.api.Client
 import pro.qyoga.core.clients.cards.api.ClientCardDto
 import pro.qyoga.core.clients.cards.api.ClientsService
 import pro.qyoga.core.clients.journals.model.JournalEntry
-import pro.qyoga.tests.fixture.clients.ClientsObjectMother
-import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
-import pro.qyoga.tests.fixture.therapists.idOnlyUserDetails
-import pro.qyoga.tests.fixture.therapists.theTherapistUserDetails
+import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
+import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
+import pro.qyoga.tests.fixture.object_mothers.therapists.idOnlyUserDetails
+import pro.qyoga.tests.fixture.object_mothers.therapists.theTherapistUserDetails
 
 @Component
 class ClientsBackgrounds(

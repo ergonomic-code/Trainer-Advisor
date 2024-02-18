@@ -10,7 +10,7 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
 import pro.azhidkov.platform.file_storage.api.StoredFile
-import pro.qyoga.tests.clients.pages.therapist.clients.files.ClientFilesPage
+import pro.qyoga.tests.pages.therapist.clients.files.ClientFilesPage
 
 class TherapistClientFilesApi(override val authCookie: Cookie) : AuthorizedApi {
 

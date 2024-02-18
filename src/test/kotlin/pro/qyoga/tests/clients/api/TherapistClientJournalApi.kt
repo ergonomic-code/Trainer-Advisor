@@ -10,10 +10,10 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
 import pro.qyoga.core.clients.journals.model.EditJournalEntryRequest
-import pro.qyoga.tests.clients.pages.therapist.clients.journal.entry.CreateJournalEntryForm
-import pro.qyoga.tests.clients.pages.therapist.clients.journal.entry.CreateJournalEntryPage
-import pro.qyoga.tests.clients.pages.therapist.clients.journal.entry.EditJournalEntryPage
-import pro.qyoga.tests.clients.pages.therapist.clients.journal.list.EmptyClientJournalPage
+import pro.qyoga.tests.pages.therapist.clients.journal.entry.CreateJournalEntryForm
+import pro.qyoga.tests.pages.therapist.clients.journal.entry.CreateJournalEntryPage
+import pro.qyoga.tests.pages.therapist.clients.journal.entry.EditJournalEntryPage
+import pro.qyoga.tests.pages.therapist.clients.journal.list.EmptyClientJournalPage
 import pro.qyoga.tests.platform.pathToRegex
 
 

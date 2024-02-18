@@ -7,8 +7,8 @@ import pro.qyoga.core.clients.cards.api.DistributionSourceType
 import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
-import pro.qyoga.tests.clients.pages.therapist.clients.card.CreateClientPage
-import pro.qyoga.tests.fixture.clients.ClientsObjectMother
+import pro.qyoga.tests.pages.therapist.clients.card.CreateClientPage
+import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 
 class CreateClientPageTest : QYogaAppIntegrationBaseTest() {

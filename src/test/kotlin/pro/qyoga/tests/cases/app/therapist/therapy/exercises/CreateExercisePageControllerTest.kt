@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test
 import pro.qyoga.app.therapist.therapy.exercises.CreateExercisePageController
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSearchDto
 import pro.qyoga.tests.assertions.shouldMatch
-import pro.qyoga.tests.fixture.FilesObjectMother.randomImageAsMultipartFile
-import pro.qyoga.tests.fixture.therapists.theTherapistUserDetails
-import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother
+import pro.qyoga.tests.fixture.object_mothers.FilesObjectMother.randomImageAsMultipartFile
+import pro.qyoga.tests.fixture.object_mothers.therapists.theTherapistUserDetails
+import pro.qyoga.tests.fixture.object_mothers.therapy.exercises.ExercisesObjectMother
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 
 class CreateExercisePageControllerTest : QYogaAppIntegrationBaseTest() {

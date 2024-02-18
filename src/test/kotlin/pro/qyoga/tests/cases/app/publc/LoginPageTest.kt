@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.clients.PublicClient
-import pro.qyoga.tests.clients.pages.publc.LoginPage
-import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_LOGIN
-import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_PASSWORD
+import pro.qyoga.tests.pages.publc.LoginPage
+import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_LOGIN
+import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_PASSWORD
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 
 

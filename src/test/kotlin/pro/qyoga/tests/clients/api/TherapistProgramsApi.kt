@@ -18,10 +18,10 @@ import org.springframework.http.HttpStatus
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
 import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
 import pro.qyoga.core.therapy.programs.dtos.ProgramsSearchFilter
-import pro.qyoga.tests.clients.pages.therapist.therapy.programs.CreateProgramForm
-import pro.qyoga.tests.clients.pages.therapist.therapy.programs.CreateProgramPage
-import pro.qyoga.tests.clients.pages.therapist.therapy.programs.EditProgramPage
-import pro.qyoga.tests.clients.pages.therapist.therapy.programs.ProgramsListPage
+import pro.qyoga.tests.pages.therapist.therapy.programs.CreateProgramForm
+import pro.qyoga.tests.pages.therapist.therapy.programs.CreateProgramPage
+import pro.qyoga.tests.pages.therapist.therapy.programs.EditProgramPage
+import pro.qyoga.tests.pages.therapist.therapy.programs.ProgramsListPage
 import pro.qyoga.tests.infra.test_config.spring.context
 
 class TherapistProgramsApi(override val authCookie: Cookie) : AuthorizedApi {

@@ -4,7 +4,7 @@ import io.kotest.matchers.should
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
-import pro.qyoga.tests.infra.html.HtmlPage
+import pro.qyoga.tests.platform.html.HtmlPage
 
 
 @FunctionalInterface

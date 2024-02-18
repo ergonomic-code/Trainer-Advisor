@@ -10,8 +10,10 @@ import pro.qyoga.core.therapy.exercises.dtos.CreateExerciseRequest
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSearchDto
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
 import pro.qyoga.core.therapy.exercises.model.Exercise
-import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
-import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother
+import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
+import pro.qyoga.tests.fixture.object_mothers.therapy.exercises.ExercisesObjectMother
+import pro.qyoga.tests.fixture.object_mothers.therapy.exercises.ImagesGenerationMode
+import pro.qyoga.tests.fixture.object_mothers.therapy.exercises.None
 
 @Component
 class ExerciseBackgrounds(
