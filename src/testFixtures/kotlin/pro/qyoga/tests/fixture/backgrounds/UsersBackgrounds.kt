@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component
 import pro.qyoga.core.users.therapists.CreateTherapistUserWorkflow
 import pro.qyoga.core.users.therapists.Therapist
 import pro.qyoga.tests.fixture.data.randomPassword
-import pro.qyoga.tests.fixture.therapists.TherapistsObjectMother
+import pro.qyoga.tests.fixture.object_mothers.therapists.TherapistsObjectMother
 
 @Component
 class UsersBackgrounds(

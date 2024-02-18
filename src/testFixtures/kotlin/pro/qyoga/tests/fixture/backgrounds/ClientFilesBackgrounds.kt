@@ -9,7 +9,7 @@ import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
 import pro.qyoga.core.clients.cards.api.Client
 import pro.qyoga.core.clients.files.ClientFilesService
 import pro.qyoga.core.clients.files.model.ClientFile
-import pro.qyoga.tests.fixture.FilesObjectMother
+import pro.qyoga.tests.fixture.object_mothers.FilesObjectMother
 
 @Component
 class ClientFilesBackgrounds(private val clientFilesService: ClientFilesService) {

@@ -15,11 +15,11 @@ import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.PublicClient
 import pro.qyoga.tests.clients.TherapistClient
-import pro.qyoga.tests.clients.pages.publc.RegisterPage
-import pro.qyoga.tests.clients.pages.publc.RegistrationSuccessFragment
-import pro.qyoga.tests.clients.pages.therapist.clients.ClientsListPage
-import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_LOGIN
-import pro.qyoga.tests.fixture.therapists.TherapistsObjectMother.registerTherapistRequest
+import pro.qyoga.tests.pages.publc.RegisterPage
+import pro.qyoga.tests.pages.publc.RegistrationSuccessFragment
+import pro.qyoga.tests.pages.therapist.clients.ClientsListPage
+import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_LOGIN
+import pro.qyoga.tests.fixture.object_mothers.therapists.TherapistsObjectMother.registerTherapistRequest
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 
 

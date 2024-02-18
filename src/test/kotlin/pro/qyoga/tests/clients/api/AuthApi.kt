@@ -10,8 +10,8 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
 import pro.qyoga.core.users.therapists.RegisterTherapistRequest
-import pro.qyoga.tests.clients.pages.publc.LoginPage
-import pro.qyoga.tests.clients.pages.publc.RegisterPage
+import pro.qyoga.tests.pages.publc.LoginPage
+import pro.qyoga.tests.pages.publc.RegisterPage
 
 
 object AuthApi {

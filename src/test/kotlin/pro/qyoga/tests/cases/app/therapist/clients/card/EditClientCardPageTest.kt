@@ -8,10 +8,10 @@ import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
-import pro.qyoga.tests.clients.pages.publc.NotFoundErrorPage
-import pro.qyoga.tests.clients.pages.therapist.clients.card.EditClientPage
-import pro.qyoga.tests.fixture.clients.ClientsObjectMother
-import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
+import pro.qyoga.tests.pages.publc.NotFoundErrorPage
+import pro.qyoga.tests.pages.therapist.clients.card.EditClientPage
+import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
+import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 
 

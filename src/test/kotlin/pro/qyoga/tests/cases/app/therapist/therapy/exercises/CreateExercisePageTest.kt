@@ -7,11 +7,11 @@ import org.junit.jupiter.api.Test
 import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
-import pro.qyoga.tests.clients.pages.therapist.therapy.exercises.CreateExercisePage
-import pro.qyoga.tests.fixture.FilesObjectMother.randomImage
-import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother
-import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother.createExerciseRequest
-import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother.exerciseSteps
+import pro.qyoga.tests.pages.therapist.therapy.exercises.CreateExercisePage
+import pro.qyoga.tests.fixture.object_mothers.FilesObjectMother.randomImage
+import pro.qyoga.tests.fixture.object_mothers.therapy.exercises.ExercisesObjectMother
+import pro.qyoga.tests.fixture.object_mothers.therapy.exercises.ExercisesObjectMother.createExerciseRequest
+import pro.qyoga.tests.fixture.object_mothers.therapy.exercises.ExercisesObjectMother.exerciseSteps
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import java.time.Duration
 

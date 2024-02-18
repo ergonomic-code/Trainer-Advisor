@@ -3,7 +3,7 @@ package pro.qyoga.tests.platform.selenide
 import com.codeborne.selenide.Selenide
 import com.codeborne.selenide.SelenideElement
 import com.codeborne.selenide.TypeOptions
-import pro.qyoga.tests.infra.html.Component
+import pro.qyoga.tests.platform.html.Component
 import java.time.Duration
 
 

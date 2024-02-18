@@ -4,7 +4,7 @@ import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import pro.qyoga.core.users.settings.UserSettingsRepo
-import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
+import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
 import pro.qyoga.tests.infra.web.QYogaAppBaseTest
 import java.time.ZoneId
 

@@ -8,10 +8,10 @@ import pro.qyoga.core.clients.cards.api.ClientSearchDto
 import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.clients.TherapistClient
-import pro.qyoga.tests.clients.pages.therapist.clients.ClientsListPage
-import pro.qyoga.tests.fixture.clients.ClientsObjectMother
-import pro.qyoga.tests.fixture.clients.ClientsObjectMother.createClientCardDto
-import pro.qyoga.tests.fixture.therapists.THE_THERAPIST_ID
+import pro.qyoga.tests.pages.therapist.clients.ClientsListPage
+import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
+import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother.createClientCardDto
+import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import java.time.LocalDate
 

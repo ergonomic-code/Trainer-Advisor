@@ -12,11 +12,11 @@ import org.junit.jupiter.api.extension.RegisterExtension
 import org.springframework.core.env.Environment
 import org.springframework.core.env.get
 import pro.qyoga.tests.assertions.shouldMatch
-import pro.qyoga.tests.clients.pages.publc.LoginPage
-import pro.qyoga.tests.clients.pages.publc.RegisterPage
+import pro.qyoga.tests.pages.publc.LoginPage
+import pro.qyoga.tests.pages.publc.RegisterPage
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
 import pro.qyoga.tests.fixture.data.randomEmail
-import pro.qyoga.tests.fixture.therapists.TherapistsObjectMother.registerTherapistRequest
+import pro.qyoga.tests.fixture.object_mothers.therapists.TherapistsObjectMother.registerTherapistRequest
 import pro.qyoga.tests.infra.QYogaE2EBaseTest
 import pro.qyoga.tests.platform.selenide.`$`
 import pro.qyoga.tests.platform.selenide.fastType

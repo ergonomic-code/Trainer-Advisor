@@ -11,13 +11,13 @@ import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
-import pro.qyoga.tests.clients.pages.therapist.therapy.programs.CreateProgramForm
-import pro.qyoga.tests.clients.pages.therapist.therapy.programs.CreateProgramPage
-import pro.qyoga.tests.clients.pages.therapist.therapy.programs.ProgramsListPage
+import pro.qyoga.tests.pages.therapist.therapy.programs.CreateProgramForm
+import pro.qyoga.tests.pages.therapist.therapy.programs.CreateProgramPage
+import pro.qyoga.tests.pages.therapist.therapy.programs.ProgramsListPage
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
-import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother.createExerciseRequest
-import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother.createExerciseRequests
-import pro.qyoga.tests.fixture.therapy.programs.ProgramsObjectMother.randomCreateProgramRequest
+import pro.qyoga.tests.fixture.object_mothers.therapy.exercises.ExercisesObjectMother.createExerciseRequest
+import pro.qyoga.tests.fixture.object_mothers.therapy.exercises.ExercisesObjectMother.createExerciseRequests
+import pro.qyoga.tests.fixture.object_mothers.therapy.programs.ProgramsObjectMother.randomCreateProgramRequest
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 
 

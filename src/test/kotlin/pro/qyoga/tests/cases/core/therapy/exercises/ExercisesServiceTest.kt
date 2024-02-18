@@ -11,7 +11,7 @@ import org.mockito.kotlin.mock
 import org.springframework.jdbc.CannotGetJdbcConnectionException
 import pro.azhidkov.platform.file_storage.api.FilesStorage
 import pro.qyoga.core.therapy.exercises.impl.ExercisesRepo
-import pro.qyoga.tests.fixture.backgrounds.exercises.AllSteps
+import pro.qyoga.tests.fixture.object_mothers.therapy.exercises.AllSteps
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 
 

@@ -6,9 +6,9 @@ import pro.qyoga.core.therapy.programs.ProgramsRepo
 import pro.qyoga.core.therapy.programs.model.Program
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
 import pro.qyoga.tests.fixture.backgrounds.exercises.ExerciseBackgrounds
-import pro.qyoga.tests.fixture.backgrounds.exercises.None
+import pro.qyoga.tests.fixture.object_mothers.therapy.exercises.None
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
-import pro.qyoga.tests.fixture.therapy.programs.ProgramsObjectMother
+import pro.qyoga.tests.fixture.object_mothers.therapy.programs.ProgramsObjectMother
 
 @Component
 class ProgramsBackgrounds(

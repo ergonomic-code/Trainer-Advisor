@@ -11,8 +11,8 @@ import pro.qyoga.core.clients.journals.dtos.JournalPageRequest
 import pro.qyoga.core.clients.journals.model.EditJournalEntryRequest
 import pro.qyoga.core.clients.journals.model.JournalEntry
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
-import pro.qyoga.tests.fixture.clients.JournalEntriesObjectMother
 import pro.qyoga.tests.fixture.data.randomRecentLocalDate
+import pro.qyoga.tests.fixture.object_mothers.clients.JournalEntriesObjectMother
 
 
 @Component

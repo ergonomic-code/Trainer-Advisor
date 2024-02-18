@@ -13,9 +13,9 @@ import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
 import pro.azhidkov.platform.java.time.toLocalTimeString
 import pro.qyoga.core.appointments.core.EditAppointmentRequest
-import pro.qyoga.tests.clients.pages.therapist.appointments.CreateAppointmentPage
-import pro.qyoga.tests.clients.pages.therapist.appointments.EditAppointmentPage
-import pro.qyoga.tests.clients.pages.therapist.appointments.SchedulePage
+import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentPage
+import pro.qyoga.tests.pages.therapist.appointments.EditAppointmentPage
+import pro.qyoga.tests.pages.therapist.appointments.SchedulePage
 import java.time.format.DateTimeFormatter
 
 class TherapistAppointmentsApi(override val authCookie: Cookie) : AuthorizedApi {

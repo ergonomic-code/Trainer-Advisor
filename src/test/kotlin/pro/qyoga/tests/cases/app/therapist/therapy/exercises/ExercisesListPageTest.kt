@@ -10,10 +10,10 @@ import pro.qyoga.core.therapy.exercises.model.ExerciseType
 import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.clients.TherapistClient
-import pro.qyoga.tests.clients.pages.therapist.therapy.exercises.ExercisesListPage
-import pro.qyoga.tests.fixture.backgrounds.exercises.AllSteps
-import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother.createExerciseRequest
-import pro.qyoga.tests.fixture.therapy.exercises.ExercisesObjectMother.createExerciseRequests
+import pro.qyoga.tests.pages.therapist.therapy.exercises.ExercisesListPage
+import pro.qyoga.tests.fixture.object_mothers.therapy.exercises.AllSteps
+import pro.qyoga.tests.fixture.object_mothers.therapy.exercises.ExercisesObjectMother.createExerciseRequest
+import pro.qyoga.tests.fixture.object_mothers.therapy.exercises.ExercisesObjectMother.createExerciseRequests
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 
 

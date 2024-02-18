@@ -10,7 +10,7 @@ import pro.qyoga.core.therapy.programs.dtos.ProgramsSearchFilter
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.clients.TherapistClient
-import pro.qyoga.tests.clients.pages.therapist.therapy.programs.ProgramsListPage
+import pro.qyoga.tests.pages.therapist.therapy.programs.ProgramsListPage
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import java.io.ByteArrayInputStream
 

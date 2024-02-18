@@ -26,10 +26,21 @@ val minioUrl: String by lazy {
         log.info("Provided minio found, cleaning it")
         dropBuckets(con)
         log.info("Provided minio cleaned")
+
         MINIO_URL
     } catch (e: ConnectException) {
         log.info("minio container not found: ${e.message}")
         log.info("http://" + minioContainer.host + ":" + minioContainer.firstMappedPort)
+
+        log.info("Cleaning testcontainers minio")
+        dropBuckets(
+            MinioClient.builder()
+                .endpoint(minioContainer.s3URL)
+                .credentials(minioContainer.userName, minioContainer.password)
+                .build()
+        )
+        log.info("Minio cleaned")
+
         "http://" + minioContainer.host + ":" + minioContainer.firstMappedPort
     }
 }
