@@ -10,9 +10,8 @@ import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_LOGIN
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_PASSWORD
 import pro.qyoga.tests.infra.QYogaE2EBaseTest
 import pro.qyoga.tests.pages.publc.LoginPage
+import pro.qyoga.tests.pages.therapist.appointments.CalendarPage
 import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentForm
-import pro.qyoga.tests.pages.therapist.appointments.EmptyFutureSchedulePage
-import pro.qyoga.tests.pages.therapist.appointments.FutureSchedulePageTab
 import pro.qyoga.tests.platform.html.ComboBox
 import pro.qyoga.tests.platform.selenide.`$`
 import pro.qyoga.tests.platform.selenide.fastType
@@ -40,7 +39,7 @@ class CreateAppointmentScenarioTest : QYogaE2EBaseTest() {
         `$`(CreateAppointmentForm.submit).click()
 
         // Then
-        `$`(FutureSchedulePageTab.TODAY_APPOINTMENT_ROWS).text() shouldContain aClient.fullName()
+        `$`(CalendarPage.APPOINTMENT_CARD_SELECTOR).text() shouldContain aClient.fullName()
     }
 
     private fun theTherapistIsLoggedIn() {
@@ -52,7 +51,7 @@ class CreateAppointmentScenarioTest : QYogaE2EBaseTest() {
     }
 
     private fun userOnCreateAppointmentPage() {
-        `$`(EmptyFutureSchedulePage.addAppointmentLink).click()
+        `$`(CalendarPage.addAppointmentLink).click()
     }
 
     private fun selectComboBoxItem(comboBox: ComboBox, value: String) {

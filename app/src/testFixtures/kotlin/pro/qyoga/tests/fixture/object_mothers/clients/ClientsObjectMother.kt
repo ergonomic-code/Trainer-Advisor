@@ -5,10 +5,7 @@ import pro.qyoga.core.clients.cards.api.ClientCardDto
 import pro.qyoga.core.clients.cards.api.ClientRef
 import pro.qyoga.core.clients.cards.api.DistributionSource
 import pro.qyoga.core.clients.cards.api.DistributionSourceType
-import pro.qyoga.tests.fixture.data.randomCyrillicWord
-import pro.qyoga.tests.fixture.data.randomEmail
-import pro.qyoga.tests.fixture.data.randomLocalDate
-import pro.qyoga.tests.fixture.data.randomSentence
+import pro.qyoga.tests.fixture.data.*
 import java.time.Duration
 import java.time.LocalDate
 import kotlin.random.Random
@@ -20,9 +17,9 @@ object ClientsObjectMother {
         (1..count).map { createClientCardDto() }
 
     fun createClientCardDto(
-        firstName: String = randomCyrillicWord(),
-        lastName: String = randomCyrillicWord(),
-        middleName: String? = randomCyrillicWord(),
+        firstName: String = faker.name().firstName(),
+        lastName: String = faker.name().lastName(),
+        middleName: String? = faker.name().nameWithMiddle().split(" ")[1],
         birthDate: LocalDate = randomBirthDate(),
         phone: String = randomPhoneNumber(),
         email: String? = randomEmail(),

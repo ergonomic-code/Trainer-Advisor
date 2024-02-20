@@ -19,7 +19,7 @@ import pro.qyoga.core.users.therapists.ref
 
 
 @Controller
-@RequestMapping("/therapist/appointments/new")
+@RequestMapping(CreateAppointmentPageController.PATH)
 class CreateAppointmentPageController(
     private val createAppointment: CreateAppointmentWorkflow,
     private val timeZones: TimeZones
@@ -51,6 +51,12 @@ class CreateAppointmentPageController(
                 "existingAppointment" bindTo ex.existingAppointment
             }
         }
+    }
+
+    companion object {
+        const val PATH = "/therapist/appointments/new"
+        const val DATE = "date"
+        const val ADD_TO_DATE_PATH = "/therapist/appointments/new?$DATE={date}"
     }
 
 }

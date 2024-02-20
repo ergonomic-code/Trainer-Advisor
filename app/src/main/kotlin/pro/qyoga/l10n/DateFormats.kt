@@ -11,3 +11,7 @@ const val RUSSIAN_TIME_FORMAT_PATTERN = "HH:mm"
 val russianTimeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern(RUSSIAN_TIME_FORMAT_PATTERN)
 
 const val RUSSIAN_DATE_TIME_PATTERN = "$RUSSIAN_DATE_FORMAT_PATTERN $RUSSIAN_TIME_FORMAT_PATTERN"
+
+const val RUSSIAN_DAY_OF_MONTH_LONG_FORMAT_PATTERN = "dd MMMM"
+val russianDayOfMonthLongFormat: DateTimeFormatter =
+    DateTimeFormatter.ofPattern(RUSSIAN_DAY_OF_MONTH_LONG_FORMAT_PATTERN, systemLocale)

@@ -16,6 +16,7 @@ import pro.qyoga.core.users.therapists.TherapistRef
 import java.sql.Timestamp
 import java.time.Duration
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneId
 
 @Repository
@@ -100,4 +101,29 @@ fun AppointmentsRepo.findIntersectingAppointment(
     )
 
     return findOne(query, params, Appointment.Fetch.summaryRefs)
+}
+
+fun AppointmentsRepo.findAllByInterval(
+    therapist: TherapistRef,
+    from: LocalDate,
+    to: LocalDate,
+    currentUserTimeZone: ZoneId
+): Collection<Appointment> {
+    @Language("PostgreSQL") val query = """
+        SELECT *
+        FROM appointments
+        WHERE
+            therapist_ref = :therapist AND
+            date_trunc('day', date_time AT TIME ZONE :currentUserTimeZone) >= date_trunc('day', :from AT TIME ZONE :currentUserTimeZone) AND
+            date_trunc('day', date_time AT TIME ZONE :currentUserTimeZone) <= date_trunc('day', :to AT TIME ZONE :currentUserTimeZone)
+        ORDER BY date_time AT TIME ZONE :currentUserTimeZone
+    """.trimIndent()
+
+    val params = mapOf(
+        "therapist" to therapist.id,
+        "from" to from,
+        "to" to to,
+        "currentUserTimeZone" to currentUserTimeZone.id
+    )
+    return findAll(query, params, Appointment.Fetch.summaryRefs)
 }

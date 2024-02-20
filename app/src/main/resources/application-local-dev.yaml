@@ -4,10 +4,10 @@ spring:
 
   thymeleaf: # Thymeleaf
     cache: false
-    prefix: file:src/main/resources/templates/
+    prefix: file:app/src/main/resources/templates/
   web:
     resources:
-      static-locations: file:src/main/resources/static/
+      static-locations: file:app/src/main/resources/static/
 
   docker:
     compose:

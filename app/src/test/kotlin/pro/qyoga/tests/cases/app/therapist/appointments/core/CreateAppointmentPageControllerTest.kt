@@ -91,7 +91,9 @@ class CreateAppointmentPageControllerTest : QYogaAppBaseTest() {
 
         // Then
         result.shouldBeSuccess()
-        backgrounds.appointments.getDaySchedule(aDate).toList().forAny { it shouldMatch createNewAppointmentRequest }
+        backgrounds.appointments.getDaySchedule(aDate).toList().forAny {
+            it shouldMatch createNewAppointmentRequest
+        }
     }
 
     @Test

@@ -55,6 +55,31 @@ fun haveComponent(component: Component) = Matcher<Element> { element ->
     }
 }
 
+fun haveComponents(componentTemplate: Component, count: Int) = Matcher<Element> { element ->
+    val components = element.select(componentTemplate.selector())
+    val componentsCount = components.size
+
+    if (componentsCount != count) {
+        val failureMessage =
+            "Element ${element.descr} has $componentsCount components `${componentTemplate.selector()}` but single component expected"
+        val negatedFailureMessage =
+            "Element ${element.descr} has component `${componentTemplate.selector()}` but no one expected"
+
+        MatcherResult(
+            false,
+            { failureMessage },
+            { negatedFailureMessage }
+        )
+    } else {
+        val results = components.map { componentTemplate.matcher().test(it) }
+        MatcherResult(
+            results.all { it.passed() },
+            { results.filterNot { it.passed() }.joinToString(separator = "\n") { it.failureMessage() } },
+            { results.filter { it.passed() }.joinToString(separator = "\n") { it.negatedFailureMessage() } },
+        )
+    }
+}
+
 fun isTag(tag: String) = Matcher { element: Element ->
     MatcherResult.invoke(
         element.tag().name.equals(tag, ignoreCase = true),
@@ -196,8 +221,28 @@ fun haveElements(selector: String, count: Int): Matcher<Element> = Matcher { ele
 
 }
 
+fun haveAtLeastElements(componentTemplate: Component, count: Int): Matcher<Element> = Matcher { element ->
+    val elements = element.select(componentTemplate.selector())
+    val actualMatchingSelectorCount = elements.size
+    val actualMatchingComponentCount = elements.count { componentTemplate.matcher().test(element).passed() }
+    MatcherResult(
+        actualMatchingSelectorCount >= count,
+        {
+            "Element ${element.descr} have $actualMatchingSelectorCount elements matching selector ${componentTemplate.selector()} and $actualMatchingComponentCount of them matching component $componentTemplate but at least $count is expected.\nElements: \n${
+                elements.joinToString("\n") { it.descr }
+            }"
+        },
+        {
+            "Element ${element.descr} have $actualMatchingSelectorCount elements matching selector ${componentTemplate.selector()} and $actualMatchingComponentCount of them matching component $componentTemplate but at most $count is expected.\nElements: \n${
+                elements.joinToString("\n") { it.descr }
+            }"
+        }
+    )
+
+}
+
 infix fun Element.shouldHaveElement(selector: String): Element {
-    this should haveElements(selector, 1)
+    this should haveElement(selector)
     return this
 }
 
@@ -208,8 +253,10 @@ fun Element.shouldHaveElements(selector: String, count: Int): Element {
 
 @Deprecated("Use shouldHaveElements")
 infix fun Element.shouldHave(selector: String) {
-    this should haveElements(selector, 1)
+    this should haveElement(selector)
 }
+
+fun haveElement(selector: String) = haveElements(selector, 1)
 
 data class SelectorOnlyComponent(val selector: String) : Component {
 
