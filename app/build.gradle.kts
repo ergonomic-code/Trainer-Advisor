@@ -1,9 +1,9 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot") version "3.2.0"
-	id("io.spring.dependency-management") version "1.1.4"
-	kotlin("jvm") version "1.9.21"
+	id("org.springframework.boot")
+	id("io.spring.dependency-management")
+	kotlin("jvm")
 	kotlin("plugin.spring") version "1.9.21"
 	id("org.jetbrains.kotlinx.kover") version "0.6.1"
 	id("java-test-fixtures")
@@ -69,7 +69,7 @@ dependencies {
 	testFixturesImplementation("org.testcontainers:minio:1.19.3")
 	testFixturesApi("org.jsoup:jsoup:1.16.2")
 
-	testImplementation(testFixtures(project(":")))
+	testImplementation(testFixtures(project(":app")))
 	testImplementation("io.rest-assured:rest-assured:5.3.2")
 	testImplementation("io.rest-assured:kotlin-extensions:5.3.2")
 	testImplementation("com.tngtech.archunit:archunit:1.1.0")

@@ -20,13 +20,13 @@ import pro.qyoga.tests.clients.OpsClient
 import pro.qyoga.tests.clients.PublicClient
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.clients.actuatorPath
-import pro.qyoga.tests.pages.publc.LoginPage
-import pro.qyoga.tests.pages.therapist.clients.ClientsListPage
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_ADMIN_LOGIN
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_ADMIN_PASSWORD
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_LOGIN
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_PASSWORD
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
+import pro.qyoga.tests.pages.publc.LoginPage
+import pro.qyoga.tests.pages.therapist.clients.ClientsListPage
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.*
