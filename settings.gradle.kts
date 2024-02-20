@@ -1,3 +1,3 @@
 rootProject.name = "QYoga"
 
-include("app")
+include("app", "e2e-tests")

@@ -6,13 +6,13 @@ import com.codeborne.selenide.SetValueOptions
 import io.kotest.matchers.string.shouldContain
 import io.kotest.matchers.string.shouldNotBeEmpty
 import org.junit.jupiter.api.Test
+import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_LOGIN
+import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_PASSWORD
+import pro.qyoga.tests.infra.QYogaE2EBaseTest
 import pro.qyoga.tests.pages.publc.LoginPage
 import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentForm
 import pro.qyoga.tests.pages.therapist.appointments.EmptyFutureSchedulePage
 import pro.qyoga.tests.pages.therapist.appointments.FutureSchedulePageTab
-import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_LOGIN
-import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_PASSWORD
-import pro.qyoga.tests.infra.QYogaE2EBaseTest
 import pro.qyoga.tests.platform.html.ComboBox
 import pro.qyoga.tests.platform.selenide.`$`
 import pro.qyoga.tests.platform.selenide.fastType

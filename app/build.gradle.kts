@@ -19,24 +19,6 @@ java {
 	}
 }
 
-testing {
-	suites {
-		val e2eTest by registering(JvmTestSuite::class) {
-			testType = "e2e"
-			dependencies {
-				implementation(project())
-				implementation(testFixtures(project()))
-				implementation("com.codeborne:selenide-proxy:7.0.3")
-				implementation("org.testcontainers:selenium:1.19.3")
-				implementation("com.icegreen:greenmail-junit5:2.0.0")
-			}
-			sources {
-				output.dir("e2eTest")
-			}
-		}
-	}
-}
-
 repositories {
 	mavenCentral()
 }
@@ -74,8 +56,8 @@ dependencies {
 	testImplementation("io.rest-assured:kotlin-extensions:5.3.2")
 	testImplementation("com.tngtech.archunit:archunit:1.1.0")
 	testImplementation("io.github.ulfs:assertj-jsoup:0.1.4")
-	testImplementation("com.icegreen:greenmail-junit5:2.0.0")
-	implementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
+	testFixturesApi("com.icegreen:greenmail-junit5:2.0.0")
+	testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
 
 	modules {
 		module("org.codehaus.groovy:groovy") {
@@ -97,12 +79,6 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test> {
 	this.systemProperty("file.encoding", "utf-8")
 	useJUnitPlatform()
-}
-
-tasks {
-	named("e2eTest", Test::class) {
-		systemProperties["selenide.browser"] = "chrome"
-	}
 }
 
 kover {
