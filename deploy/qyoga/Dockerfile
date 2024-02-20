@@ -2,5 +2,5 @@ FROM eclipse-temurin:21-alpine
 EXPOSE 8080
 
 WORKDIR /app
-ADD /build/libs/QYoga-0.0.1-SNAPSHOT.jar /app/QYoga.jar
+ADD /app/build/libs/QYoga-0.0.1-SNAPSHOT.jar /app/QYoga.jar
 ENTRYPOINT ["java", "-jar", "QYoga.jar"]
