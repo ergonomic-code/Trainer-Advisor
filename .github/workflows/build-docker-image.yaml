@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - 'master'
-      - 'qg-166/multi-project-build'
 
 jobs:
   build-docker-image:
