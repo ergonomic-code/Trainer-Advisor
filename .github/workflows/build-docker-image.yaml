@@ -29,8 +29,8 @@ jobs:
 
       - name: Generate application-prod-secrets.yaml
         run: |
-          echo "spring:" > src/main/resources/application-prod-secrets.yaml
-          echo "  mail:" >> src/main/resources/application-prod-secrets.yaml
+          echo "spring:" > app/src/main/resources/application-prod-secrets.yaml
+          echo "  mail:" >> app/src/main/resources/application-prod-secrets.yaml
           echo "    password: ${{ secrets.QYOGA_PRO_APP_PASSWORD }}" >> src/main/resources/application-prod-secrets.yaml
 
       - name: Build with Gradle
