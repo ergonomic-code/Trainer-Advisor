@@ -4,7 +4,7 @@
         <option name="ACTIVE_PROFILES" value="local-dev,demo"/>
         <option name="ENABLE_LAUNCH_OPTIMIZATION" value="false"/>
         <option name="FRAME_DEACTIVATION_UPDATE_POLICY" value="UpdateClassesAndResources"/>
-        <module name="QYoga.main"/>
+        <module name="QYoga.app.main"/>
         <option name="SPRING_BOOT_MAIN_CLASS" value="pro.qyoga.app.QYogaApp"/>
         <extension name="coverage">
             <pattern>
