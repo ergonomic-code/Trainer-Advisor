@@ -18,7 +18,7 @@ import pro.qyoga.core.users.therapists.ref
 
 
 @Controller
-@RequestMapping("/therapist/appointments/{appointmentId}")
+@RequestMapping(EditAppointmentPageController.PATH)
 class EditAppointmentPageController(
     private val appointmentsRepo: AppointmentsRepo,
     private val timeZones: TimeZones,
@@ -68,6 +68,10 @@ class EditAppointmentPageController(
         @PathVariable appointmentId: Long
     ) {
         appointmentsRepo.deleteById(appointmentId)
+    }
+
+    companion object {
+        const val PATH = "/therapist/appointments/{appointmentId}"
     }
 
 }

@@ -18,10 +18,10 @@ import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentsObjectMot
 import pro.qyoga.tests.fixture.object_mothers.appointments.randomAppointmentCost
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import pro.qyoga.tests.pages.publc.NotFoundErrorPage
+import pro.qyoga.tests.pages.therapist.appointments.CalendarPage
 import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentForm
 import pro.qyoga.tests.pages.therapist.appointments.EditAppointmentForm
 import pro.qyoga.tests.pages.therapist.appointments.EditAppointmentPage
-import pro.qyoga.tests.pages.therapist.appointments.FutureSchedulePage
 import pro.qyoga.tests.platform.html.HtmlPage
 import java.time.Duration
 import java.time.LocalDate
@@ -88,7 +88,7 @@ class EditAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         response.statusCode() shouldBe HttpStatus.OK.value()
-        response shouldBePage FutureSchedulePage
+        response shouldBePage CalendarPage
 
         val persistedAppointment =
             backgrounds.appointments.getDaySchedule(editedAppointment.dateTime.toLocalDate()).single()
@@ -118,7 +118,7 @@ class EditAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         response.statusCode() shouldBe HttpStatus.OK.value()
-        response shouldBePage FutureSchedulePage
+        response shouldBePage CalendarPage
 
         val persistedAppointment = backgrounds.appointments.findAll().single()
         persistedAppointment shouldMatch editedAppointment

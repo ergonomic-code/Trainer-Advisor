@@ -1,0 +1,43 @@
+<div class="col-3 border-end border-bottom pe-1 pe-sm-3 g-2"
+     th:fragment="cell(time, day, appointment)"
+     th:style="${'height: 3rem; width: 30%;' + (time.minute != 45 ? 'border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important' : '')}"
+>
+    <div class="rounded-2 appointment-card"
+         th:if="${appointment != null}"
+         th:style="${'margin-top: ' + offset + 'rem; position: relative'}"
+         th:with="offset=${(appointment.wallClockDateTime.minute % 15) / 15.0 * 3},height=${(appointment.duration.toMinutes() / 5.0)}"
+    >
+
+        <a class="link-dark text-decoration-none"
+           hx-boost="true"
+           th:href="@{/therapist/appointments/{appointmentId}(appointmentId=${appointment.id})}"
+           th:id="|editAppointmentLink-${appointment.id}|"
+        >
+            <div class="rounded-top-2 px-1 py-1"
+                 style="background-color: rgba(77, 212, 172, 0.8); height: 2rem">
+                <small>
+                    <span th:text="
+                                    ${#temporals.format(appointment.wallClockDateTime, T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_TIME_FORMAT_PATTERN) +
+                                    ' - ' +
+                                    #temporals.format(appointment.endWallClockDateTime, T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_TIME_FORMAT_PATTERN)}
+                    "></span>
+                </small>
+            </div>
+            <div class="rounded-bottom-2 px-1 py-1"
+                 th:style="${'height: ' + (height - 2) + 'rem; max-height: ' + (height - 2)+ 'rem; background-color: rgba(121, 223, 193, 0.3);'} ">
+                <small>
+                    <span th:text="${appointment.clientRef.entity.fullName()}"></span>
+                    <br/>
+                    <span th:text="${appointment.typeRef.entity.name}"></span>
+                </small>
+            </div>
+        </a>
+    </div>
+    <a class="w-100 h-100 text-decoration-none d-block"
+       hx-boost="true"
+       id="|addAppointmentLink-${date}-${time}|"
+       th:href="@{/therapist/appointments/new?date={date}&time={time}(date=${day},time=${time})}"
+    >
+        &nbsp;
+    </a>
+</div>

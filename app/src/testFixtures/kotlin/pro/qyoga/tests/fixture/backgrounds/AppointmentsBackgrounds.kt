@@ -4,12 +4,14 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.ref
 import pro.qyoga.app.therapist.appointments.core.edit.CreateAppointmentWorkflow
+import pro.qyoga.app.therapist.appointments.core.schedule.GetCalendarAppointmentsWorkflow
 import pro.qyoga.core.appointments.core.Appointment
 import pro.qyoga.core.appointments.core.AppointmentsRepo
 import pro.qyoga.core.appointments.core.EditAppointmentRequest
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.TherapistRef
+import pro.qyoga.core.users.therapists.ref
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
 import pro.qyoga.tests.fixture.data.randomSentence
 import pro.qyoga.tests.fixture.data.randomTimeZone
@@ -30,6 +32,7 @@ import kotlin.random.Random
 class AppointmentsBackgrounds(
     private val appointmentsRepo: AppointmentsRepo,
     private val createAppointment: CreateAppointmentWorkflow,
+    private val getCalendarAppointments: GetCalendarAppointmentsWorkflow,
     private val clientsBackgrounds: ClientsBackgrounds,
     private val therapeuticTasksBackgrounds: TherapeuticTasksBackgrounds,
 ) {
@@ -42,8 +45,7 @@ class AppointmentsBackgrounds(
         date: LocalDate,
         therapistUserDetails: QyogaUserDetails = theTherapistUserDetails
     ): Iterable<Appointment> {
-        // Временный костыль до перехода на расписине в виде календара - там надо будет заменить на вызов контроллера
-        return findAll(therapistUserDetails.id).filter { it.wallClockDateTime.toLocalDate() == date }
+        return getCalendarAppointments(therapistUserDetails.ref, date)
     }
 
     fun createFull(

@@ -12,32 +12,21 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
 import pro.azhidkov.platform.java.time.toLocalTimeString
+import pro.qyoga.app.therapist.appointments.core.edit.EditAppointmentPageController
 import pro.qyoga.core.appointments.core.EditAppointmentRequest
+import pro.qyoga.tests.pages.therapist.appointments.CalendarPage
 import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentPage
 import pro.qyoga.tests.pages.therapist.appointments.EditAppointmentPage
-import pro.qyoga.tests.pages.therapist.appointments.SchedulePage
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class TherapistAppointmentsApi(override val authCookie: Cookie) : AuthorizedApi {
 
-    fun getFutureAppointmentsSchedule(): Document {
+    fun getScheduleForDay(date: LocalDate): Document {
         return Given {
             authorized()
         } When {
-            get(SchedulePage.PATH)
-        } Then {
-            statusCode(HttpStatus.OK.value())
-        } Extract {
-            Jsoup.parse(body().asString())
-        }
-    }
-
-    fun getPastAppointmentsSchedule(): Document {
-        return Given {
-            authorized()
-            queryParam("past", true)
-        } When {
-            get(SchedulePage.PATH)
+            get(CalendarPage.path)
         } Then {
             statusCode(HttpStatus.OK.value())
         } Extract {
@@ -64,7 +53,7 @@ class TherapistAppointmentsApi(override val authCookie: Cookie) : AuthorizedApi 
 
             pathParam("appointmentId", appointmentId)
         } When {
-            get(EditAppointmentPage.path)
+            get(EditAppointmentPageController.PATH)
         } Then {
             statusCode(expectedStatus.value())
         } Extract {
@@ -172,7 +161,7 @@ class TherapistAppointmentsApi(override val authCookie: Cookie) : AuthorizedApi 
             authorized()
             pathParam("appointmentId", appointmentId)
         } When {
-            delete(SchedulePage.deleteButton.action!!.url)
+            delete(EditAppointmentPageController.PATH)
         }
     }
 

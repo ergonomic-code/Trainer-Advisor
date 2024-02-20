@@ -4,7 +4,7 @@ import io.kotest.matchers.Matcher
 import io.kotest.matchers.compose.all
 import org.jsoup.nodes.Element
 import pro.qyoga.tests.assertions.haveComponent
-import pro.qyoga.tests.pages.therapist.appointments.EmptyFutureSchedulePage
+import pro.qyoga.tests.pages.therapist.appointments.CalendarPage
 import pro.qyoga.tests.pages.therapist.clients.ClientsListPage
 import pro.qyoga.tests.pages.therapist.therapy.exercises.ExercisesListPage
 import pro.qyoga.tests.pages.therapist.therapy.programs.ProgramsListPage
@@ -17,7 +17,7 @@ object LeftNavBarFragment : Component {
     override fun selector() = "#layoutSidenav_nav"
 
     // Work
-    private val scheduleLink = Link("schedulePageLink", EmptyFutureSchedulePage, "Расписание")
+    private val scheduleLink = Link("schedulePageLink", CalendarPage, "Расписание")
     private val clientsLink = Link("clientsPageLink", ClientsListPage, "Клиенты")
     private val programsLink = Link("programsPageLink", ProgramsListPage, "Программы")
 
