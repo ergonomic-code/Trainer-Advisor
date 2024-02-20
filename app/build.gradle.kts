@@ -76,6 +76,10 @@ tasks.withType<KotlinCompile> {
 	}
 }
 
+tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
+   this.archiveFileName.set("qyoga.jar")
+}
+
 tasks.withType<Test> {
 	this.systemProperty("file.encoding", "utf-8")
 	useJUnitPlatform()
