@@ -31,7 +31,7 @@ jobs:
         run: |
           echo "spring:" > app/src/main/resources/application-prod-secrets.yaml
           echo "  mail:" >> app/src/main/resources/application-prod-secrets.yaml
-          echo "    password: ${{ secrets.QYOGA_PRO_APP_PASSWORD }}" >> src/main/resources/application-prod-secrets.yaml
+          echo "    password: ${{ secrets.QYOGA_PRO_APP_PASSWORD }}" >> app/src/main/resources/application-prod-secrets.yaml
 
       - name: Build with Gradle
         uses: gradle/gradle-build-action@v2
