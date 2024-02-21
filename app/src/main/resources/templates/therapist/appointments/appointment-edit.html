@@ -18,9 +18,18 @@
     <div id="layoutSidenav_content">
         <main>
             <section class="container px-4">
-                <h1 class="mt-4 pb-2 mb-3 border-bottom"
-                    th:text="${appointment?.clientTitle ?: 'Новый приём'}">
-                    Новый приём
+                <h1 class="mt-4 pb-2 mb-3 border-bottom d-flex justify-content-between align-items-baseline">
+                    <span th:text="${appointment?.clientTitle ?: 'Новый приём'}">
+                        Новый приём
+                    </span>
+
+                    <a class="btn btn-outline-danger text"
+                       id="deleteAppointmentLink"
+                       th:hx-confirm="'Удалить приём для ' + ${appointment.clientTitle} + '?'"
+                       th:hx-delete="@{/therapist/appointments/{id}?returnTo={returnTo} (id=${appointmentId},returnTo=${appointment.dateTime.toLocalDate()})}"
+                       th:if="${pageMode == 'EDIT'}">
+                        <i class="fas fa-trash"></i>
+                    </a>
                 </h1>
 
                 <form class="mt-4"

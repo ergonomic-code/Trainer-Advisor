@@ -1,11 +1,13 @@
 package pro.qyoga.tests.cases.app.therapist.appointments.core
 
+import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.ref
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
 import pro.azhidkov.timezones.TimeZones
+import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
 import pro.qyoga.core.appointments.core.toEditRequest
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.assertions.shouldHave
@@ -189,6 +191,25 @@ class EditAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
         val storedNextAppointment = backgrounds.appointments.findById(nextNotRescheduledAppointment.id)!!
         storedNextAppointment shouldMatch nextNotRescheduledAppointment
+    }
+
+    @Test
+    fun `Deletion of appointment should be persistent and return redirect to specified calendar day`() {
+        // Given
+        val appointment = backgrounds.appointments.create()
+        val therapist = TherapistClient.loginAsTheTherapist()
+
+        // When
+        val response = therapist.appointments.delete(appointment.id, appointment.wallClockDateTime.toLocalDate())
+
+        // Then
+        response.statusCode shouldBe HttpStatus.OK.value()
+        response.header("HX-Location") shouldBe SchedulePageController.DATE_PATH.replace(
+            "{date}",
+            appointment.wallClockDateTime.toLocalDate().toString()
+        )
+
+        backgrounds.appointments.getDaySchedule(appointment.wallClockDateTime.toLocalDate()).shouldBeEmpty()
     }
 
 }
