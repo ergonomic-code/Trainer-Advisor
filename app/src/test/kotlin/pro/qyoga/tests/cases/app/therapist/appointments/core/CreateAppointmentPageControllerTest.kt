@@ -17,21 +17,15 @@ import pro.qyoga.tests.fixture.object_mothers.therapists.theTherapistUserDetails
 import pro.qyoga.tests.infra.web.QYogaAppBaseTest
 import java.time.Duration
 import java.time.LocalDate
-import java.time.LocalTime
 import java.time.ZoneId
 import java.time.temporal.ChronoField
-import java.time.temporal.ChronoUnit
 
 private val asiaNovosibirsk = ZoneId.of("Asia/Novosibirsk")
 private val europeMoscow = ZoneId.of("Europe/Moscow")
 private val timeZonesDiff = 4
 
 private val aDate = LocalDate.now()
-private val aDateTime = aDate.atTime(
-    LocalTime.now()
-        .truncatedTo(ChronoUnit.HOURS)
-        .plusHours(3)
-)
+private val aDateTime = aDate.atTime(15, 0)
 
 class CreateAppointmentPageControllerTest : QYogaAppBaseTest() {
 

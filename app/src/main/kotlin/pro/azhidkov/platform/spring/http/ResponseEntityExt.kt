@@ -9,3 +9,8 @@ fun hxRedirect(path: String): ResponseEntity<Unit> {
         .build()
 }
 
+fun hxClientSideRedirect(path: String): ResponseEntity<Unit> {
+    return ResponseEntity.ok()
+        .header("HX-Location", path)
+        .build()
+}

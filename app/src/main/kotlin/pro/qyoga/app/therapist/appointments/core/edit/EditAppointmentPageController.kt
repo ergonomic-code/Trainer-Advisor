@@ -1,10 +1,11 @@
 package pro.qyoga.app.therapist.appointments.core.edit
 
-import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
+import pro.azhidkov.platform.spring.http.hxClientSideRedirect
 import pro.azhidkov.timezones.LocalizedTimeZone
 import pro.azhidkov.timezones.TimeZones
 import pro.qyoga.app.platform.EntityPageMode
@@ -15,6 +16,7 @@ import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
 import pro.qyoga.core.appointments.core.*
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.ref
+import java.time.LocalDate
 
 
 @Controller
@@ -63,15 +65,18 @@ class EditAppointmentPageController(
     }
 
     @DeleteMapping
-    @ResponseStatus(HttpStatus.OK)
     fun deleteAppointment(
-        @PathVariable appointmentId: Long
-    ) {
+        @PathVariable appointmentId: Long,
+        @RequestParam(RETURN_TO) returnTo: LocalDate
+    ): ResponseEntity<Unit> {
         appointmentsRepo.deleteById(appointmentId)
+        return hxClientSideRedirect(SchedulePageController.calendarForDateUrl(returnTo))
     }
 
     companion object {
         const val PATH = "/therapist/appointments/{appointmentId}"
+        const val RETURN_TO = "returnTo"
+        const val DELETE_PATH = "$PATH?$RETURN_TO={$RETURN_TO}"
     }
 
 }

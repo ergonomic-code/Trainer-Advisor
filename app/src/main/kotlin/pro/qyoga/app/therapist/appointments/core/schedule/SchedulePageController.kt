@@ -29,7 +29,8 @@ class SchedulePageController(
     companion object {
         const val PATH = "/therapist/schedule"
         const val DATE = "date"
-        const val DATE_PATH = "/therapist/schedule?$DATE={date}"
+        const val DATE_PATH = "$PATH?$DATE={$DATE}"
+        fun calendarForDateUrl(date: LocalDate) = DATE_PATH.replace("{$DATE}", date.toString())
     }
 
 }
