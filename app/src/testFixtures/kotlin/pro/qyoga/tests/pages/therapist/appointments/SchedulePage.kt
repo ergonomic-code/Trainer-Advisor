@@ -27,7 +27,7 @@ object CalendarPage : HtmlPage {
 
     private val goToDayLink = Link("goToDayLink-", SchedulePageController.DATE_PATH, "")
 
-    val addAppointmentLink = Link("addAppointmentLink-", CreateAppointmentPageController.ADD_TO_DATE_PATH, "")
+    val addAppointmentLink = Link("addAppointmentLink-", CreateAppointmentPageController.ADD_TO_DATE_TIME_PATH, "")
 
     const val APPOINTMENT_CARD_SELECTOR = ".appointment-card"
 

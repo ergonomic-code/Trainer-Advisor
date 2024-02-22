@@ -224,9 +224,9 @@ fun haveElements(selector: String, count: Int): Matcher<Element> = Matcher { ele
 fun haveAtLeastElements(componentTemplate: Component, count: Int): Matcher<Element> = Matcher { element ->
     val elements = element.select(componentTemplate.selector())
     val actualMatchingSelectorCount = elements.size
-    val actualMatchingComponentCount = elements.count { componentTemplate.matcher().test(element).passed() }
+    val actualMatchingComponentCount = elements.count { componentTemplate.matcher().test(it).passed() }
     MatcherResult(
-        actualMatchingSelectorCount >= count,
+        actualMatchingComponentCount >= count,
         {
             "Element ${element.descr} have $actualMatchingSelectorCount elements matching selector ${componentTemplate.selector()} and $actualMatchingComponentCount of them matching component $componentTemplate but at least $count is expected.\nElements: \n${
                 elements.joinToString("\n") { it.descr }

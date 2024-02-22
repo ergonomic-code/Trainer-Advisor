@@ -36,7 +36,7 @@
     <a class="w-100 h-100 text-decoration-none d-block"
        hx-boost="true"
        id="|addAppointmentLink-${date}-${time}|"
-       th:href="@{/therapist/appointments/new?date={date}&time={time}(date=${day},time=${time})}"
+       th:href="@{/therapist/appointments/new?dateTime={dateTime}(dateTime=${day.atTime(time)})}"
     >
         &nbsp;
     </a>

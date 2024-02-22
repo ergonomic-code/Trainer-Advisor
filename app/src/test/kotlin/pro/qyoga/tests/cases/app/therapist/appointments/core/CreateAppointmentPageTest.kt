@@ -11,6 +11,7 @@ import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.assertions.shouldHaveElement
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
+import pro.qyoga.tests.fixture.data.randomWorkingTime
 import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentsObjectMother
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import pro.qyoga.tests.pages.therapist.appointments.CalendarPage
@@ -41,6 +42,19 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         document shouldBePage CreateAppointmentPage
+    }
+
+    @Test
+    fun `Create training session page should prefill date and time, if provided`() {
+        // Given
+        val aDateTime = LocalDate.now().atTime(randomWorkingTime())
+        val therapist = TherapistClient.loginAsTheTherapist()
+
+        // When
+        val document = therapist.appointments.getCreateAppointmentPage(aDateTime)
+
+        // Then
+        CreateAppointmentForm.dateTime.value(document) shouldBe aDateTime.toString()
     }
 
     @Test
