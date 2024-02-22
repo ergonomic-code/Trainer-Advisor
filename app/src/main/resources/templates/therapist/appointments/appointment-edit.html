@@ -19,7 +19,7 @@
         <main>
             <section class="container px-4">
                 <h1 class="mt-4 pb-2 mb-3 border-bottom d-flex justify-content-between align-items-baseline">
-                    <span th:text="${appointment?.clientTitle ?: 'Новый приём'}">
+                    <span th:text="${pageMode == 'CREATE' ? 'Новый приём' : appointment.clientTitle }">
                         Новый приём
                     </span>
 
@@ -97,7 +97,7 @@
                                            name="dateTime"
                                            required
                                            th:classappend="${appointmentsIntersectionError} ? 'is-invalid' : ''"
-                                           th:value="${appointment?.dateTime}"
+                                           th:value="${appointment?.dateTime ?: dateTime}"
                                            type="datetime-local">
                                     <label for="dateTime">Дата и время <span class="text-danger">*</span></label>
                                     <div class="invalid-feedback" id="appointmentsIntersectionErrorMessage">
