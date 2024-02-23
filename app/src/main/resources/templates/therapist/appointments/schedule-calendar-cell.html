@@ -3,6 +3,7 @@
      th:style="${'height: 3rem; width: 30%;' + (time.minute != 45 ? 'border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important' : '')}"
 >
     <div class="rounded-2 appointment-card"
+         th:id="|appointmentCard-${appointment.id}|"
          th:classappend="${appointment.statusClass}"
          th:if="${appointment != null}"
          th:style="${'margin-top: ' + appointment.timeMarkOffsetPercent + 'rem; position: relative'}"

@@ -29,7 +29,8 @@ import java.time.format.TextStyle
 data class CalendarPageModel(
     val date: LocalDate,
     val timeMarks: List<TimeMark>,
-    val calendarDays: Collection<CalendarDay>
+    val calendarDays: Collection<CalendarDay>,
+    val appointmentId: Long?
 ) : ModelAndView("therapist/appointments/schedule.html") {
 
     init {
@@ -37,14 +38,15 @@ data class CalendarPageModel(
         addObject("timeMarks", timeMarks)
         addObject("calendarDays", calendarDays)
         addObject("selectedDayLabel", date.format(russianDayOfMonthLongFormat))
+        addObject("focusAppointmentId", appointmentId)
     }
 
     companion object {
 
-        fun of(date: LocalDate, appointments: Collection<Appointment>): CalendarPageModel {
+        fun of(date: LocalDate, appointments: Collection<Appointment>, appointment: Long?): CalendarPageModel {
             val timeMarks = generateTimeMarks(appointments, date)
             val weekCalendar = generateDaysAround(date)
-            return CalendarPageModel(date, timeMarks, weekCalendar)
+            return CalendarPageModel(date, timeMarks, weekCalendar, appointment)
         }
 
         private fun generateTimeMarks(
