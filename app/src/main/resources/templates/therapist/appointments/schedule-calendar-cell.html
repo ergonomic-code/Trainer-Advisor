@@ -3,9 +3,9 @@
      th:style="${'height: 3rem; width: 30%;' + (time.minute != 45 ? 'border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important' : '')}"
 >
     <div class="rounded-2 appointment-card"
+         th:classappend="${appointment.statusClass}"
          th:if="${appointment != null}"
-         th:style="${'margin-top: ' + offset + 'rem; position: relative'}"
-         th:with="offset=${(appointment.wallClockDateTime.minute % 15) / 15.0 * 3},height=${(appointment.duration.toMinutes() / 5.0)}"
+         th:style="${'margin-top: ' + appointment.timeMarkOffsetPercent + 'rem; position: relative'}"
     >
 
         <a class="link-dark text-decoration-none"
@@ -13,22 +13,18 @@
            th:href="@{/therapist/appointments/{appointmentId}(appointmentId=${appointment.id})}"
            th:id="|editAppointmentLink-${appointment.id}|"
         >
-            <div class="rounded-top-2 px-1 py-1"
-                 style="background-color: rgba(77, 212, 172, 0.8); height: 2rem">
+            <div class="rounded-top-2 px-1 py-1 header"
+                 style="height: 2rem">
                 <small>
-                    <span th:text="
-                                    ${#temporals.format(appointment.wallClockDateTime, T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_TIME_FORMAT_PATTERN) +
-                                    ' - ' +
-                                    #temporals.format(appointment.endWallClockDateTime, T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_TIME_FORMAT_PATTERN)}
-                    "></span>
+                    <span th:text=" ${appointment.period}"></span>
                 </small>
             </div>
-            <div class="rounded-bottom-2 px-1 py-1"
-                 th:style="${'height: ' + (height - 2) + 'rem; max-height: ' + (height - 2)+ 'rem; background-color: rgba(121, 223, 193, 0.3);'} ">
+            <div class="rounded-bottom-2 px-1 py-1 body"
+                 th:style="${'height: ' + (appointment.timeMarkLengthPercent - 2 - 0.25) + 'rem; max-height: ' + (appointment.timeMarkLengthPercent - 2 - 0.25)+ 'rem; '} ">
                 <small>
-                    <span th:text="${appointment.clientRef.entity.fullName()}"></span>
+                    <span th:text="${appointment.client}"></span>
                     <br/>
-                    <span th:text="${appointment.typeRef.entity.name}"></span>
+                    <span th:text="${appointment.type}"></span>
                 </small>
             </div>
         </a>

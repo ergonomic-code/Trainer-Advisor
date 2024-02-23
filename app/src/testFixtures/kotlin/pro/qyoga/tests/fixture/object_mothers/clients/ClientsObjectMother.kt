@@ -1,11 +1,9 @@
 package pro.qyoga.tests.fixture.object_mothers.clients
 
-import org.springframework.data.jdbc.core.mapping.AggregateReference
-import pro.qyoga.core.clients.cards.api.ClientCardDto
-import pro.qyoga.core.clients.cards.api.ClientRef
-import pro.qyoga.core.clients.cards.api.DistributionSource
-import pro.qyoga.core.clients.cards.api.DistributionSourceType
+import pro.azhidkov.platform.spring.sdj.erpo.hydration.AggregateReferenceTarget
+import pro.qyoga.core.clients.cards.api.*
 import pro.qyoga.tests.fixture.data.*
+import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
 import java.time.Duration
 import java.time.LocalDate
 import kotlin.random.Random
@@ -65,7 +63,9 @@ object ClientsObjectMother {
         distributionSource?.comment,
     )
 
-    val fakeClientRef: ClientRef = AggregateReference.to(-1)
+    val fakeClientRef: ClientRef = AggregateReferenceTarget(
+        Client(THE_THERAPIST_ID, createClientCardDtoMinimal())
+    )
 
 }
 

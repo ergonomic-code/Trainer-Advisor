@@ -1,8 +1,11 @@
 package pro.qyoga.app.therapist.appointments.core.schedule
 
 import org.springframework.web.servlet.ModelAndView
+import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
 import pro.qyoga.core.appointments.core.Appointment
+import pro.qyoga.core.appointments.core.AppointmentStatus
 import pro.qyoga.l10n.russianDayOfMonthLongFormat
+import pro.qyoga.l10n.russianTimeFormat
 import pro.qyoga.l10n.systemLocale
 import java.time.*
 import java.time.format.TextStyle
@@ -65,7 +68,10 @@ data class CalendarPageModel(
 
             val timeMarkRows = timesMarks.map { time ->
                 val timeMarkAppointments = days
-                    .map { day -> day to appointments.find { it.fallsIn(day.atTime(time), TimeMark.length) } }
+                    .map { day ->
+                        val dateTimeAppointment = appointments.find { it.fallsIn(day.atTime(time), TimeMark.length) }
+                        day to dateTimeAppointment?.let { AppointmentCard(it) }
+                    }
                     .toList()
 
                 TimeMark(time, timeMarkAppointments)
@@ -110,12 +116,42 @@ data class CalendarPageModel(
  */
 data class TimeMark(
     val time: LocalTime,
-    val days: List<Pair<LocalDate, Appointment?>>
+    val days: List<Pair<LocalDate, AppointmentCard?>>
 ) {
 
     companion object {
         val length: Duration = Duration.ofMinutes(15)
         val marksPerHour = Duration.ofHours(1).dividedBy(length).toInt()
+    }
+
+}
+
+data class AppointmentCard(
+    val id: Long,
+    val period: String,
+    val client: String,
+    val type: String,
+    val statusClass: String,
+    val timeMarkOffsetPercent: Double,
+    val timeMarkLengthPercent: Double,
+) {
+
+    constructor(app: Appointment) : this(
+        app.id,
+        "${app.wallClockDateTime.format(russianTimeFormat)} - ${app.endWallClockDateTime.format(russianTimeFormat)}",
+        app.clientRef.resolveOrThrow().fullName(),
+        app.typeRef.resolveOrThrow().name,
+        appointmentStatusClasses.getValue(app.status),
+        (app.wallClockDateTime.minute % 15) / 15.0 * 3,
+        (app.duration.toMinutes() / 5.0)
+    )
+
+    companion object {
+        val appointmentStatusClasses = mapOf(
+            AppointmentStatus.PENDING to "pending",
+            AppointmentStatus.CLIENT_CAME to "client-came",
+            AppointmentStatus.CLIENT_DO_NOT_CAME to "client-do-not-came",
+        )
     }
 
 }
