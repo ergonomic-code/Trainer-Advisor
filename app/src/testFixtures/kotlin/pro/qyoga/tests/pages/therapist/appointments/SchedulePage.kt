@@ -8,6 +8,7 @@ import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
 import pro.qyoga.app.therapist.appointments.core.edit.CreateAppointmentPageController
+import pro.qyoga.app.therapist.appointments.core.schedule.AppointmentCard
 import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
 import pro.qyoga.app.therapist.appointments.core.schedule.TimeMark
@@ -64,5 +65,7 @@ infix fun Elements.shouldMatch(appointments: Iterable<Appointment>) {
             russianTimeFormat.format(app.wallClockDateTime) + " - " + russianTimeFormat.format(app.endWallClockDateTime) + " " + app.clientRef.resolveOrThrow()
                 .fullName()
         )
+        el.select("div.appointment-card")
+            .single() shouldHaveClass AppointmentCard.appointmentStatusClasses[app.status]!!
     }
 }

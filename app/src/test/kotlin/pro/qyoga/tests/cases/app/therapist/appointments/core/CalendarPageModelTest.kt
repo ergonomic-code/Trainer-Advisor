@@ -21,7 +21,8 @@ class CalendarPageModelTest {
         val appointments = listOf(
             randomAppointment(
                 dateTime = today.atTime(firstAppointmentStartTime), timeZone = asiaNovosibirskTimeZone
-            ), randomAppointment(
+            ),
+            randomAppointment(
                 dateTime = today.atTime(8, 0), timeZone = asiaNovosibirskTimeZone
             )
         )
@@ -43,7 +44,8 @@ class CalendarPageModelTest {
         val appointments = listOf(
             randomAppointment(
                 dateTime = today.atTime(8, 0), timeZone = asiaNovosibirskTimeZone
-            ), randomAppointment(
+            ),
+            randomAppointment(
                 dateTime = today.atTime(lastAppointmentStartTime),
                 timeZone = asiaNovosibirskTimeZone,
                 duration = lastAppointmentDuration

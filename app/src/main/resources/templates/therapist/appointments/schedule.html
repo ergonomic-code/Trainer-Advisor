@@ -19,6 +19,30 @@
             position: sticky;
             bottom: 2rem;
         }
+
+        div.appointment-card.pending div.header {
+            background-color: rgba(77, 212, 172, 0.8);
+        }
+
+        div.appointment-card.pending div.body {
+            background-color: rgba(121, 223, 193, 0.3);
+        }
+
+        div.appointment-card.client-came div.header {
+            background-color: rgba(61, 139, 253, 0.8);
+        }
+
+        div.appointment-card.client-came div.body {
+            background-color: rgba(110, 168, 254, 0.3);
+        }
+
+        div.appointment-card.client-do-not-came div.header {
+            background-color: rgba(227, 93, 106, 0.8);
+        }
+
+        div.appointment-card.client-do-not-came div.body {
+            background-color: rgba(234, 134, 143, 0.3);
+        }
     </style>
 
     <script defer th:inline="javascript">

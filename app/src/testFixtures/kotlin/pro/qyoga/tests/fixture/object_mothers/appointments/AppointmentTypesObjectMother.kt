@@ -1,6 +1,6 @@
 package pro.qyoga.tests.fixture.object_mothers.appointments
 
-import org.springframework.data.jdbc.core.mapping.AggregateReference
+import pro.azhidkov.platform.spring.sdj.erpo.hydration.AggregateReferenceTarget
 import pro.qyoga.core.appointments.types.model.AppointmentType
 import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
@@ -14,6 +14,8 @@ object AppointmentTypesObjectMother {
         name: String = randomCyrillicWord()
     ) = AppointmentType(therapistRef, name)
 
-    fun fakeAppointmentType() = AggregateReference.to<AppointmentType, Long>(-1)
+    fun fakeAppointmentType() = AggregateReferenceTarget(
+        AppointmentType(THE_THERAPIST_REF, "Тренировка", -1)
+    )
 
 }

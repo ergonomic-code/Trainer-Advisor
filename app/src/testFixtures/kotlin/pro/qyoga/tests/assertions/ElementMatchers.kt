@@ -112,6 +112,19 @@ fun haveAttributeValue(attr: String, value: String, ignoreCase: Boolean = false)
     )
 }
 
+fun haveClass(className: String) = Matcher { element: Element ->
+    MatcherResult(
+        className in element.classNames(),
+        { "Element ${element.descr} do not have class $className in ${element.classNames()} but should" },
+        { "Element ${element.descr} have class $className in ${element.classNames()} but not should" }
+    )
+}
+
+infix fun Element.shouldHaveClass(className: String): Element {
+    this should haveClass(className)
+    return this
+}
+
 fun haveText(text: String) = Matcher { element: Element ->
     MatcherResult(
         element.text() == text,
