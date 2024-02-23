@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.servlet.ModelAndView
-import pro.azhidkov.platform.spring.http.hxRedirect
 import pro.azhidkov.timezones.LocalizedTimeZone
 import pro.azhidkov.timezones.TimeZones
 import pro.qyoga.app.platform.EntityPageMode
+import pro.qyoga.app.platform.seeOther
 import pro.qyoga.app.publc.components.toComboBoxItem
-import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
+import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController.Companion.calendarForDayWithFocus
 import pro.qyoga.core.appointments.core.AppointmentsIntersectionException
 import pro.qyoga.core.appointments.core.EditAppointmentRequest
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
@@ -47,8 +47,8 @@ class CreateAppointmentPageController(
         @AuthenticationPrincipal therapist: QyogaUserDetails
     ): Any {
         return try {
-            createAppointment(therapist.ref, editAppointmentRequest)
-            hxRedirect(SchedulePageController.PATH)
+            val appointment = createAppointment(therapist.ref, editAppointmentRequest)
+            seeOther(calendarForDayWithFocus(editAppointmentRequest.dateTime.toLocalDate(), appointment.id))
         } catch (ex: AppointmentsIntersectionException) {
             appointmentPageModelAndView(
                 pageMode = EntityPageMode.CREATE,
