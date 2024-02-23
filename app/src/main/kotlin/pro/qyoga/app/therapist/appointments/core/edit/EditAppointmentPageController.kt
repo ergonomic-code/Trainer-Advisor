@@ -51,7 +51,12 @@ class EditAppointmentPageController(
             updateAppointment(therapist.ref, AppointmentRef(appointmentId), editAppointmentRequest)
                 ?: return notFound
 
-            seeOther(SchedulePageController.PATH)
+            seeOther(
+                SchedulePageController.calendarForDayWithFocus(
+                    editAppointmentRequest.dateTime.toLocalDate(),
+                    appointmentId
+                )
+            )
         } catch (ex: AppointmentsIntersectionException) {
             appointmentPageModelAndView(
                 pageMode = EntityPageMode.EDIT,

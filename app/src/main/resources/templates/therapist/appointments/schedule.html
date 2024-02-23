@@ -46,10 +46,20 @@
     </style>
 
     <script defer th:inline="javascript">
-        function revealFirstAppointment() {
-            const appCards = document.querySelector(".appointment-card");
-            if (appCards != null) {
-                window.scrollTo(0, appCards.offsetTop - 100);
+
+        function revealAppointment() {
+            const queryParams = new URLSearchParams(window.location.search);
+            let appToFocus = queryParams.get("appointment");
+
+            let appCard;
+            if (appToFocus != null) {
+                appCard = document.querySelector(`#appointmentCard-${appToFocus}`);
+            } else {
+                appCard = document.querySelector(".appointment-card");
+            }
+
+            if (appCard != null) {
+                window.scrollTo(0, appCard.offsetTop - 100);
             } else {
                 window.scrollTo(0, 0);
             }
@@ -58,12 +68,13 @@
         window.addEventListener("load", () => {
             document.body.addEventListener('htmx:afterSwap', function (evt) {
                 if (evt.detail.xhr.status === 200) {
-                    revealFirstAppointment();
+                    revealAppointment();
                 }
             })
 
-            revealFirstAppointment();
+            revealAppointment();
         });
+
     </script>
 
 </head>
