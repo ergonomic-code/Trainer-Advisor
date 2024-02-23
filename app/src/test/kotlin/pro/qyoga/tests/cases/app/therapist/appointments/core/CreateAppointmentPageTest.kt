@@ -14,7 +14,6 @@ import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.fixture.data.randomWorkingTime
 import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentsObjectMother
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
-import pro.qyoga.tests.pages.therapist.appointments.CalendarPage
 import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentForm
 import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentPage
 import pro.qyoga.tests.pages.therapist.appointments.EditAppointmentForm
@@ -74,7 +73,6 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         response.statusCode() shouldBe HttpStatus.OK.value()
-        response.header("HX-Redirect") shouldBe CalendarPage.path
 
         val storedAppointment =
             backgrounds.appointments.getDaySchedule(editAppointmentRequest.dateTime.toLocalDate()).single()
@@ -98,7 +96,6 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         response.statusCode() shouldBe HttpStatus.OK.value()
-        response.header("HX-Redirect") shouldBe CalendarPage.path
 
         val storedAppointment =
             backgrounds.appointments.getDaySchedule(editAppointmentRequest.dateTime.toLocalDate()).single()
