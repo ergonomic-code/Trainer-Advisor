@@ -3,6 +3,7 @@ package pro.qyoga.app.infra
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.annotation.Order
 import org.springframework.http.HttpMethod
 import org.springframework.security.config.Customizer.withDefaults
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -22,8 +23,9 @@ class WebSecurityConfig(
     @Value("\${trainer-advisor.auth.remember-me-time:9d}") private val rememberMeTime: Duration
 ) {
 
+    @Order(1)
     @Bean
-    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
+    fun mainSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .csrf { it.disable() }
             .authorizeHttpRequests { requests ->
@@ -61,7 +63,6 @@ class WebSecurityConfig(
                     .failureForwardUrl("/error-p")
                     .permitAll()
             }
-            .httpBasic(withDefaults())
             .logout { logout: LogoutConfigurer<HttpSecurity?> -> logout.permitAll() }
             .rememberMe { rememberMeConfigurer ->
                 rememberMeConfigurer
@@ -69,6 +70,22 @@ class WebSecurityConfig(
                     .tokenRepository(tokenRepository())
                     .tokenValiditySeconds(rememberMeTime.toSeconds().toInt())
             }
+            .httpBasic(withDefaults())
+        return http.build()
+    }
+
+    @Order(2)
+    @Bean
+    fun opsSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
+        http
+            .csrf { it.disable() }
+            .authorizeHttpRequests { requests ->
+                requests
+
+                    // Ops
+                    .requestMatchers("/ops/**").hasAuthority(Role.ROLE_ADMIN.toString())
+            }
+            .httpBasic(withDefaults())
         return http.build()
     }
 
