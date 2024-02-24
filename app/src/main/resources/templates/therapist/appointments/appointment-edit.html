@@ -37,6 +37,7 @@
                       id="editAppointmentForm"
                       th:attr="hx-post=${pageMode == 'CREATE' ? '/therapist/appointments/new' : null},hx-put=${pageMode == 'EDIT' ? '/therapist/appointments/' + appointmentId : null}"
                       th:fragment="editAppointmentForm"
+                      th:x-data="|{'dateTime': '${appointment?.dateTime ?: dateTime}', 'status': 'PENDING', canChangeStatus() { return Date.parse(this.dateTime) <= new Date() } }|"
                 >
 
                     <fieldset class="mb-4">
@@ -95,6 +96,8 @@
                                            min="2000-01-01"
                                            max="2100-01-01"
                                            name="dateTime"
+                                           @change="if (!$data.canChangeStatus()) { status = 'PENDING'}"
+                                           x-model="dateTime"
                                            required
                                            th:classappend="${appointmentsIntersectionError} ? 'is-invalid' : ''"
                                            th:value="${appointment?.dateTime ?: dateTime}"
@@ -210,8 +213,8 @@
                         </div>
                         <div class="row">
                             <div class="col">
-                                <span class="me-3">Статус приёма: </span>
-                                <div class="form-check form-check-inline mt-2">
+                                <span class="me-3 d-block d-sm-inline">Статус приёма: </span>
+                                <div class="form-check form-check-inline mt-2 w-100 w-sm-auto">
                                     <input class="form-check-input"
                                            id="appointmentStatusPending"
                                            name="appointmentStatus"
@@ -219,32 +222,36 @@
                                            required
                                            th:checked="${appointment == null || appointment.appointmentStatus.name == 'PENDING'}"
                                            type="radio"
+                                           x-model="status"
                                            value="PENDING">
                                     <label class="form-check-label" for="appointmentStatusPending">
                                         Ожидается клиент
                                     </label>
                                 </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input"
+                                <div class="form-check form-check-inline w-100 w-sm-auto">
+                                    <input class="form-check-input "
                                            id="appointmentStatusClientCame"
                                            name="appointmentStatus"
 
                                            required
                                            th:checked="${appointment?.appointmentStatus?.name == 'CLIENT_CAME'}"
                                            type="radio"
+                                           x-bind:disabled="!canChangeStatus()"
+                                           x-model="status"
                                            value="CLIENT_CAME">
                                     <label class="form-check-label" for="appointmentStatusClientCame">
                                         Клиент пришёл
                                     </label>
                                 </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input"
+                                <div class="form-check form-check-inline w-100 w-sm-auto">
+                                    <input class="form-check-input "
                                            id="appointmentStatusClientNotCame"
                                            name="appointmentStatus"
-
                                            required
                                            th:checked="${appointment?.appointmentStatus?.name == 'CLIENT_DO_NOT_CAME'}"
                                            type="radio"
+                                           x-bind:disabled="!canChangeStatus()"
+                                           x-model="status"
                                            value="CLIENT_DO_NOT_CAME">
                                     <label class="form-check-label" for="appointmentStatusClientNotCame">
                                         Клиент не пришёл
