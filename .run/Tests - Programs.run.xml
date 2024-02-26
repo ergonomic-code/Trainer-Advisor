@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
     <configuration default="false" name="Tests - Programs" type="JUnit" factoryName="JUnit">
-        <module name="QYoga.test"/>
+        <module name="QYoga.app.test"/>
         <extension name="coverage">
             <pattern>
                 <option name="PATTERN" value="pro.qyoga.tests.cases.app.therapist.clients.*"/>

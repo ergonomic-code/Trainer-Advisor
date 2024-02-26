@@ -15,5 +15,5 @@ out/
 !**/src/test/**/out/
 /build/
 
-src/main/resources/application-prod-secrets.yaml
+app/src/main/resources/application-prod-secrets.yaml
 /deploy/host/secrets.sh
