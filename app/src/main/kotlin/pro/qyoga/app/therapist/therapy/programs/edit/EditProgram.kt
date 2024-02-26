@@ -2,7 +2,7 @@ package pro.qyoga.app.therapist.therapy.programs.edit
 
 import org.springframework.stereotype.Component
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.ref
-import pro.qyoga.core.therapy.programs.ProgramsRepo
+import pro.qyoga.core.therapy.programs.impl.ProgramsRepo
 import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
 import pro.qyoga.core.therapy.programs.model.Program
 import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo

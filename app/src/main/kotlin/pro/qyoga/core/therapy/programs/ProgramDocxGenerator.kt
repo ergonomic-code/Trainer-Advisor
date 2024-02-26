@@ -9,8 +9,7 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTDrawing
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTPageMar.*
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSectPr
 import pro.azhidkov.platform.file_storage.api.StoredFileInputStream
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
-import pro.qyoga.core.therapy.programs.model.Program
+import pro.qyoga.core.therapy.programs.model.DocxProgram
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
@@ -20,7 +19,7 @@ import kotlin.math.min
 
 object ProgramDocxGenerator {
 
-    fun generateDocx(program: Program, fetchImage: (Pair<Long, Int>) -> StoredFileInputStream?): InputStream {
+    fun generateDocx(program: DocxProgram, fetchImage: (Long?) -> StoredFileInputStream?): InputStream {
         val buff = ByteArrayOutputStream()
         XWPFDocument().use {
             it.document.body.sectPr = CTSectPr.Factory.newInstance().apply {
@@ -38,8 +37,7 @@ object ProgramDocxGenerator {
             }
 
             program.exercises
-                .forEach { programExerciseRef ->
-                    val programExercise = programExerciseRef.exerciseRef.resolveOrThrow()
+                .forEach { programExercise ->
                     with(it.createParagraph()) {
                         addRun(createRun().apply { this.setText(programExercise.title); isBold = true; fontSize = 14; })
                     }
@@ -60,7 +58,7 @@ object ProgramDocxGenerator {
                                     createRow()
                                 }
                                 with(cell.addParagraph()) {
-                                    val file = fetchImage(programExercise.id to stepIdx)
+                                    val file = fetchImage(step.imageId)
                                     val img = file?.inputStream
                                     if (img != null) {
                                         addRun(createRun().apply {
