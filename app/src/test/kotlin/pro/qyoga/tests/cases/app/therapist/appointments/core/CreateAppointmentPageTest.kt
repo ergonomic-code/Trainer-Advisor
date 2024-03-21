@@ -32,7 +32,7 @@ private val aTime = LocalTime.now()
 class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
     @Test
-    fun `Create training session page should be rendered correctly`() {
+    fun `Create appointment page should be rendered correctly`() {
         // Given
         val therapist = TherapistClient.loginAsTheTherapist()
 
@@ -44,7 +44,7 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
     }
 
     @Test
-    fun `Create training session page should prefill date and time, if provided`() {
+    fun `Create appointment page should prefill date and time, if provided`() {
         // Given
         val aDateTime = LocalDate.now().atTime(randomWorkingTime())
         val therapist = TherapistClient.loginAsTheTherapist()
