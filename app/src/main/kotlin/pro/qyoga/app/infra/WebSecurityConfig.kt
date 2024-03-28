@@ -25,6 +25,22 @@ class WebSecurityConfig(
 
     @Order(1)
     @Bean
+    fun opsSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
+        http
+            .securityMatcher("/ops/**")
+            .csrf { it.disable() }
+            .authorizeHttpRequests { requests ->
+                requests
+
+                    // Ops
+                    .requestMatchers("/ops/**").hasAuthority(Role.ROLE_ADMIN.toString())
+            }
+            .httpBasic(withDefaults())
+        return http.build()
+    }
+
+    @Order(2)
+    @Bean
     fun mainSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .csrf { it.disable() }
@@ -32,9 +48,6 @@ class WebSecurityConfig(
                 requests
                     // Therapist
                     .requestMatchers("/therapist/**").hasAnyAuthority(Role.ROLE_THERAPIST.toString())
-
-                    // Ops
-                    .requestMatchers("/ops/**").hasAuthority(Role.ROLE_ADMIN.toString())
 
                     // Public
                     .requestMatchers(
@@ -70,22 +83,6 @@ class WebSecurityConfig(
                     .tokenRepository(tokenRepository())
                     .tokenValiditySeconds(rememberMeTime.toSeconds().toInt())
             }
-            .httpBasic(withDefaults())
-        return http.build()
-    }
-
-    @Order(2)
-    @Bean
-    fun opsSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
-        http
-            .csrf { it.disable() }
-            .authorizeHttpRequests { requests ->
-                requests
-
-                    // Ops
-                    .requestMatchers("/ops/**").hasAuthority(Role.ROLE_ADMIN.toString())
-            }
-            .httpBasic(withDefaults())
         return http.build()
     }
 
