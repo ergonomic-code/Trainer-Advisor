@@ -16,6 +16,7 @@ class Link(
 
     private val urlRegex = urlPattern.replace("\\{.*?}".toRegex(), ".*")
         .replace("?", "\\?")
+        .replace("/", "\\/")
 
     constructor(id: String, page: HtmlPageCompat, text: String) : this(id, page.path, text)
 

@@ -61,7 +61,7 @@ fun haveComponents(componentTemplate: Component, count: Int) = Matcher<Element> 
 
     if (componentsCount != count) {
         val failureMessage =
-            "Element ${element.descr} has $componentsCount components `${componentTemplate.selector()}` but single component expected"
+            "Element ${element.descr} has $componentsCount components `${componentTemplate.selector()}` but $count components expected"
         val negatedFailureMessage =
             "Element ${element.descr} has component `${componentTemplate.selector()}` but no one expected"
 
