@@ -9,6 +9,7 @@ import org.hamcrest.CoreMatchers.endsWith
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
+import pro.qyoga.app.therapist.clients.ClientsListPageController
 import pro.qyoga.app.therapist.clients.components.ClientsComboBoxController
 import pro.qyoga.core.clients.cards.api.ClientCardDto
 import pro.qyoga.core.clients.cards.api.ClientSearchDto
@@ -118,14 +119,15 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
         }
     }
 
-    fun searchClients(searchForm: ClientSearchDto): Document {
+    fun searchClients(searchForm: ClientSearchDto = ClientSearchDto(), page: Int = 1): Document {
         return Given {
             authorized()
             formParam(ClientsListPage.ClientSearchForm.firstName.name, searchForm.firstName)
             formParam(ClientsListPage.ClientSearchForm.lastName.name, searchForm.lastName)
             formParam(ClientsListPage.ClientSearchForm.phoneNumber.name, searchForm.phoneNumber)
+            formParam(ClientsListPageController.SEARCH_PARAM_PAGE, page - 1)
         } When {
-            get(ClientsListPage.ClientSearchForm.action.url)
+            get(ClientsListPageController.SEARCH_PATH)
         } Then {
             statusCode(HttpStatus.OK.value())
         } Extract {
