@@ -14,7 +14,7 @@ class TimeZonesTest {
     fun `Search result should not contain duplicates when a time zone matches both id and title`() {
         // Given
         val timeZoneId = "Asia/Novosibirsk"
-        val timeZoneTitle = "Нововсибирск"
+        val timeZoneTitle = "Новосибирск"
 
         // When
         val searchResult = russianTimeZones.search(timeZoneId, timeZoneTitle)
