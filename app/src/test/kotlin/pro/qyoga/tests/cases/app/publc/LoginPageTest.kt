@@ -7,7 +7,7 @@ import org.hamcrest.Matchers.matchesRegex
 import org.jsoup.Jsoup
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
-import pro.qyoga.tests.assertions.shouldHave
+import pro.qyoga.tests.assertions.shouldHaveElement
 import pro.qyoga.tests.clients.PublicClient
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_LOGIN
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_PASSWORD
@@ -44,8 +44,25 @@ class LoginPageTest : QYogaAppIntegrationBaseTest() {
         }
 
         withClue("Cannot find error message by ${LoginPage.LoginForm.invalidUserName}") {
-            page shouldHave LoginPage.LoginForm.invalidUserName
+            page shouldHaveElement LoginPage.LoginForm.invalidUserName
         }
+    }
+
+    @Test
+    fun `After login with valid credentials of disabled account, user should be redirected to login page with error message`() {
+        // Given
+        backgrounds.users.disable(THE_THERAPIST_LOGIN)
+
+        // When
+        val response = PublicClient.authApi.loginForVerification(THE_THERAPIST_LOGIN, THE_THERAPIST_PASSWORD)
+
+        val page = response.Then {
+            statusCode(HttpStatus.OK.value())
+        } Extract {
+            Jsoup.parse(body().asString())
+        }
+
+        page shouldHaveElement LoginPage.LoginForm.invalidUserName
     }
 
 }

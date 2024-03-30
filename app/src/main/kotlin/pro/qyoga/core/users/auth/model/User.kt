@@ -18,6 +18,7 @@ data class User(
     val email: String,
     val passwordHash: String,
     val roles: Array<Role>,
+    val enabled: Boolean,
 
     @Id
     val id: Long = 0,
@@ -32,6 +33,8 @@ data class User(
     init {
         check(roles.size == roles.toSet().size) { "Duplicated roles: $roles" }
     }
+
+    fun disabled() = copy(enabled = false)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

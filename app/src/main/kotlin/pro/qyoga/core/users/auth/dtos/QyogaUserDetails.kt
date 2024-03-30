@@ -9,7 +9,8 @@ data class QyogaUserDetails(
     val id: Long,
     private val username: String,
     private val password: String,
-    private val roles: Collection<GrantedAuthority>
+    private val roles: Collection<GrantedAuthority>,
+    private val enabled: Boolean
 ) : UserDetails {
 
     override fun getAuthorities(): Collection<GrantedAuthority> = this.roles
@@ -24,7 +25,7 @@ data class QyogaUserDetails(
 
     override fun isCredentialsNonExpired(): Boolean = true
 
-    override fun isEnabled(): Boolean = true
+    override fun isEnabled(): Boolean = enabled
 
     companion object {
 
@@ -35,7 +36,8 @@ data class QyogaUserDetails(
                 user.id,
                 user.email,
                 user.passwordHash,
-                authorities
+                authorities,
+                user.enabled
             )
         }
 
