@@ -18,6 +18,7 @@ private const val DB_PASSWORD = "password"
 
 val jdbcUrl: String by lazy {
     try {
+        log.info("Checking for provided db")
         val con = DriverManager.getConnection(
             PROVIDED_DB_URL.replace("qyoga", DB_USER),
             DB_USER,
@@ -40,7 +41,6 @@ val jdbcUrl: String by lazy {
 }
 
 val testDataSource by lazy {
-    migrateSchema(jdbcUrl)
     val config = HikariConfig().apply {
         this.jdbcUrl = pro.qyoga.tests.infra.db.jdbcUrl
         this.username = DB_USER
