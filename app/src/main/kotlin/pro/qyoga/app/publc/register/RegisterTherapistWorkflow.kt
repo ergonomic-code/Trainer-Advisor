@@ -1,41 +1,64 @@
 package pro.qyoga.app.publc.register
 
-import org.springframework.mail.javamail.JavaMailSender
-import org.springframework.mail.javamail.MimeMessageHelper
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import pro.qyoga.core.users.therapists.CreateTherapistUserWorkflow
 import pro.qyoga.core.users.therapists.RegisterTherapistRequest
 import pro.qyoga.core.users.therapists.Therapist
+import pro.qyoga.i9ns.email.Email
+import pro.qyoga.i9ns.email.EmailSender
 import kotlin.random.Random
 
 @Component
 class RegisterTherapistWorkflow(
     private val createTherapistUser: CreateTherapistUserWorkflow,
-    private val mailSender: JavaMailSender
+    private val emailSender: EmailSender,
+    @Value("\${spring.mail.username}") private val fromEmail: String,
+    @Value("\${trainer-advisor.admin.email}") private val adminEmail: String
 ) : (RegisterTherapistRequest) -> Therapist {
 
     override fun invoke(registerTherapistRequest: RegisterTherapistRequest): Therapist {
         val password = randomPassword()
+
         val therapist = createTherapistUser(registerTherapistRequest, password)
-        sendNewRegistrationNotification(registerTherapistRequest, password)
+
+        emailSender.sendEmail(newTherapistPasswordEmail(to = registerTherapistRequest.email, password))
+        emailSender.sendEmail(
+            newRegistrationNotificationEmail(
+                to = adminEmail,
+                therapistEmail = registerTherapistRequest.email
+            )
+        )
+
         return therapist
     }
 
-    fun sendNewRegistrationNotification(registerRequest: RegisterTherapistRequest, password: String) {
-        val mail = mailSender.createMimeMessage().apply {
-            MimeMessageHelper(this).apply {
-                setFrom("qyogapro@yandex.ru")
-                setTo("ta@azhidkov.pro")
-                setSubject("Новая регистрация в QYoga!")
-                setText(
-                    "Имя: ${registerRequest.fullName}, " +
-                            "Email: ${registerRequest.email}, " +
-                            "пароль: $password."
-                )
-            }
-        }
-        mailSender.send(mail)
-    }
+    private fun newTherapistPasswordEmail(to: String, password: String) =
+        Email(
+            fromEmail,
+            to,
+            "Добро пожаловать в Trainer Advisor",
+            """
+                Здравствуйте!
+                
+                Вы зарегистрировались в Trainer Advisor.
+                Логин от вашего аккаунта: $to. 
+                Пароль от вашего аккаунта: $password.
+                
+                Теперь вы можете войти в систему на странице https://trainer-advisor.pro/login используя email и пароль из этого письма.
+                
+                С уважением, команда Trainer Advisor.
+            """.trimIndent()
+        )
+
+    private fun newRegistrationNotificationEmail(to: String, therapistEmail: String) = Email(
+        fromEmail,
+        to,
+        "Новый терапевт добавлен в систему",
+        """
+                Email: $therapistEmail
+            """.trimIndent()
+    )
 
 }
 
@@ -49,3 +72,4 @@ private fun randomPassword() =
             append(passwordChars[Random.nextInt(passwordChars.size)])
         }
     }
+

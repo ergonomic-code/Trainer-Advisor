@@ -11,6 +11,7 @@ import pro.qyoga.core.appointments.AppointmentsConfig
 import pro.qyoga.core.clients.ClientsConfig
 import pro.qyoga.core.therapy.TherapyConfig
 import pro.qyoga.core.users.UsersConfig
+import pro.qyoga.i9ns.email.EmailsConfig
 import pro.qyoga.infra.auth.AuthConfig
 import pro.qyoga.infra.db.SdjConfig
 import pro.qyoga.infra.minio.MinioConfig
@@ -28,6 +29,9 @@ import pro.qyoga.infra.web.WebConfig
     ClientsConfig::class,
     TherapyConfig::class,
     UsersConfig::class,
+
+    // I9ns
+    EmailsConfig::class,
 
     // Infra
     AuthConfig::class,
