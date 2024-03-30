@@ -18,6 +18,7 @@ private const val MINIO_PASSWORD = "password"
 
 val minioUrl: String by lazy {
     try {
+        log.info("Checking for provided minio")
         val con = MinioClient.builder()
             .endpoint(MINIO_URL)
             .credentials(MINIO_USER, MINIO_PASSWORD)
