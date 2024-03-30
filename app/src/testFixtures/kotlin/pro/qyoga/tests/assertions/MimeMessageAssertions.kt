@@ -5,15 +5,23 @@ import io.kotest.matchers.string.shouldMatch
 import jakarta.mail.internet.MimeMessage
 import pro.qyoga.core.users.therapists.RegisterTherapistRequest
 
-val newRegistrationEmailPattern = ".*Имя: (.*), Email: (.*), пароль: (.*)\\..*".toRegex()
+val passwordEmailPattern = ("[\\s\\S]*Вы зарегистрировались в Trainer Advisor.[\\s\\S]*" +
+        "Логин от вашего аккаунта: (.+)\\.[\\s\\S]*" +
+        "Пароль от вашего аккаунта: (.+)\\.[\\s\\S]*").toRegex()
 
-infix fun MimeMessage.shouldMatch(registerTherapistRequest: RegisterTherapistRequest): Pair<String, String> {
-    (this.content as String) shouldMatch newRegistrationEmailPattern
-    val emailMatcher = newRegistrationEmailPattern.matchEntire(this.content.toString())!!
-    val name = emailMatcher.groupValues[1]
-    name shouldBe registerTherapistRequest.fullName
-    val receivedEmail = emailMatcher.groupValues[2]
+val newRegistrationNotificationEmailPattern = "Email: (.*)".toRegex()
+
+infix fun MimeMessage.shouldBePasswordEmailFor(registerTherapistRequest: RegisterTherapistRequest) {
+    (this.content as String) shouldMatch passwordEmailPattern
+    val emailTextMatcher = passwordEmailPattern.matchEntire(this.content.toString())!!
+    val userEmail = emailTextMatcher.groupValues[1]
+    userEmail shouldBe registerTherapistRequest.email
+}
+
+
+infix fun MimeMessage.shouldMatch(registerTherapistRequest: RegisterTherapistRequest) {
+    (this.content as String) shouldMatch newRegistrationNotificationEmailPattern
+    val emailMatcher = newRegistrationNotificationEmailPattern.matchEntire(this.content.toString())!!
+    val receivedEmail = emailMatcher.groupValues[1]
     receivedEmail shouldBe registerTherapistRequest.email
-    val password = emailMatcher.groupValues[3]
-    return receivedEmail to password
 }

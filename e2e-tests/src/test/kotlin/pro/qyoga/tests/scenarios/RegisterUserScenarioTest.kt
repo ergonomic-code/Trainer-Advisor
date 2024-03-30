@@ -9,9 +9,8 @@ import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
-import org.springframework.core.env.Environment
-import org.springframework.core.env.get
-import pro.qyoga.tests.assertions.shouldMatch
+import pro.qyoga.tests.assertions.passwordEmailPattern
+import pro.qyoga.tests.assertions.shouldBePasswordEmailFor
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
 import pro.qyoga.tests.fixture.data.randomEmail
 import pro.qyoga.tests.fixture.object_mothers.therapists.TherapistsObjectMother.registerTherapistRequest
@@ -23,8 +22,6 @@ import pro.qyoga.tests.platform.selenide.fastType
 
 
 class RegisterUserScenarioTest : QYogaE2EBaseTest() {
-
-    private val adminEmail = getBean<Environment>()["trainer-advisor.admin.email"]
 
     @Test
     fun `Register user scenario`() {
@@ -45,12 +42,13 @@ class RegisterUserScenarioTest : QYogaE2EBaseTest() {
 
         `$`("div#registrationSuccess").should(Visible())
 
-        val receivedMessages = greenMail.getReceivedMessagesForDomain(adminEmail)
+        val receivedMessages = greenMail.getReceivedMessagesForDomain(registerTherapistRequest.email)
         receivedMessages shouldHaveSize 1
-        val (receivedEmail, password) = receivedMessages[0] shouldMatch registerTherapistRequest
+        receivedMessages[0] shouldBePasswordEmailFor registerTherapistRequest
+        val password = passwordEmailPattern.matchEntire(receivedMessages[0].content as String)!!.groupValues[2]
 
         open("$baseUri${LoginPage.path}")
-        `$`(LoginPage.LoginForm.username).fastType(receivedEmail)
+        `$`(LoginPage.LoginForm.username).fastType(registerTherapistRequest.email)
         `$`(LoginPage.LoginForm.password).fastType(password)
         `$`(LoginPage.LoginForm.submit).click()
         title() shouldBe "Расписание"
