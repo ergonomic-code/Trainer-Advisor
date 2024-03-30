@@ -24,7 +24,7 @@ import pro.qyoga.tests.platform.selenide.fastType
 
 class RegisterUserScenarioTest : QYogaE2EBaseTest() {
 
-    private val adminEmail = getBean<Environment>()["qyoga.admin.email"]
+    private val adminEmail = getBean<Environment>()["trainer-advisor.admin.email"]
 
     @Test
     fun `Register user scenario`() {

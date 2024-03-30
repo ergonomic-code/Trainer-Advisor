@@ -25,7 +25,7 @@ import pro.qyoga.tests.pages.therapist.clients.ClientsListPage
 
 class RegistrationPageTest : QYogaAppIntegrationBaseTest() {
 
-    val adminEmail = getBean<Environment>()["qyoga.admin.email"]!!
+    val adminEmail = getBean<Environment>()["trainer-advisor.admin.email"]!!
 
     @Test
     fun `Registration page should be rendered correctly`() {

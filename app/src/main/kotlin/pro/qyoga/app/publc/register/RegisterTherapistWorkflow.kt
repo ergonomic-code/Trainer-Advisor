@@ -25,7 +25,7 @@ class RegisterTherapistWorkflow(
         val mail = mailSender.createMimeMessage().apply {
             MimeMessageHelper(this).apply {
                 setFrom("qyogapro@yandex.ru")
-                setTo("me@azhidkov.pro")
+                setTo("ta@azhidkov.pro")
                 setSubject("Новая регистрация в QYoga!")
                 setText(
                     "Имя: ${registerRequest.fullName}, " +
