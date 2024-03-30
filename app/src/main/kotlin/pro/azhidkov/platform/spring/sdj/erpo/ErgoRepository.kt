@@ -10,6 +10,7 @@ import org.springframework.data.jdbc.repository.support.SimpleJdbcRepository
 import org.springframework.data.mapping.PersistentEntity
 import org.springframework.data.relational.core.mapping.RelationalMappingContext
 import org.springframework.data.relational.core.mapping.RelationalPersistentEntity
+import org.springframework.data.relational.core.query.Query
 import org.springframework.data.relational.core.sql.SqlIdentifier
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
@@ -18,6 +19,7 @@ import pro.azhidkov.platform.spring.jdbc.queryForPage
 import pro.azhidkov.platform.spring.sdj.ALL
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.FetchSpec
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.hydrate
+import pro.azhidkov.platform.spring.sdj.findOneBy
 import pro.azhidkov.platform.spring.sdj.mapContent
 import pro.azhidkov.platform.spring.sdj.query.QueryBuilder
 import pro.azhidkov.platform.spring.sdj.query.query
@@ -40,11 +42,20 @@ class ErgoRepository<T : Any, ID : Any>(
 
     @Transactional
     fun update(id: ID, func: (T) -> T): T? {
-        val task = findByIdOrNull(id)
+        val aggregate = findByIdOrNull(id)
             ?: return null
 
-        val updatedTask = func(task)
-        return save(updatedTask)
+        val updatedAggreate = func(aggregate)
+        return save(updatedAggreate)
+    }
+
+    @Transactional
+    fun updateOne(query: Query, func: (T) -> T): T? {
+        val aggregate = findOne(query)
+            ?: return null
+
+        val updatedAggregate = func(aggregate)
+        return save(updatedAggregate)
     }
 
     fun findById(
@@ -82,6 +93,16 @@ class ErgoRepository<T : Any, ID : Any>(
     ): T? {
         val aggregate = namedParameterJdbcOperations.query(query, paramMap, rowMapper)
             .firstOrNull()
+            ?: return null
+
+        return jdbcAggregateTemplate.hydrate(listOf(aggregate), FetchSpec(fetch)).single()
+    }
+
+    fun findOne(
+        query: Query,
+        fetch: Iterable<KProperty1<T, *>> = emptySet(),
+    ): T? {
+        val aggregate = jdbcAggregateTemplate.findOneBy(query, entity.type)
             ?: return null
 
         return jdbcAggregateTemplate.hydrate(listOf(aggregate), FetchSpec(fetch)).single()

@@ -8,7 +8,8 @@ val theTherapistUserDetails = QyogaUserDetails(
     THE_THERAPIST_ID,
     THE_THERAPIST_LOGIN,
     THE_THERAPIST_PASSWORD,
-    setOf(SimpleGrantedAuthority(Role.ROLE_THERAPIST.name))
+    setOf(SimpleGrantedAuthority(Role.ROLE_THERAPIST.name)),
+    true
 )
 
-fun idOnlyUserDetails(id: Long) = QyogaUserDetails(id, "", "", emptySet())
+fun idOnlyUserDetails(id: Long) = QyogaUserDetails(id, "", "", emptySet(), true)
