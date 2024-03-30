@@ -10,7 +10,7 @@ services:
   app:
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/qyoga
-      - SPRING_PROFILES_ACTIVE=prod,demo,prod-secrets
+      - SPRING_PROFILES_ACTIVE=prod,demo
       - MINIO_ENDPOINT=http://minio:9000
 
     build:

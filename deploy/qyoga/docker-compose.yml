@@ -30,7 +30,7 @@ services:
     image: ghcr.io/d-r-q/qyoga:latest
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/qyoga
-      - SPRING_PROFILES_ACTIVE=prod,prod-secrets
+      - SPRING_PROFILES_ACTIVE=prod
       - SPRING_MAIL_PASSWORD=${SPRING_MAIL_PASSWORD}
       - MINIO_ENDPOINT=http://minio:9000
 
