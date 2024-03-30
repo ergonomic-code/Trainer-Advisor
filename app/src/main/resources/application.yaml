@@ -13,11 +13,11 @@ spring:
       max-file-size: 10MB
 
   mail:
-    username: qyogapro@yandex.ru
+    username: ta@azhidkov.pro
     password: <secret>
-    host: smtp.yandex.ru
-    port: 465
-    protocol: smtps
+    host: smtp.masterhost.ru
+    port: 25
+    protocol: smtp
     properties:
       mail:
         smtp:
@@ -62,8 +62,8 @@ minio:
   password: password
   endpoint: http://localhost:50000
 
-qyoga:
+trainer-advisor:
   admin:
-    email: me@azhidkov.pro
+    email: ta@azhidkov.pro
 
 debug: false

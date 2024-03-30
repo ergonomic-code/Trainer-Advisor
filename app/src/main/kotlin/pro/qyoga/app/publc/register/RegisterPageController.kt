@@ -11,7 +11,7 @@ import pro.qyoga.core.users.therapists.RegisterTherapistRequest
 @Controller
 class RegisterPageController(
     private val registerTherapist: RegisterTherapistWorkflow,
-    @Value("\${qyoga.admin.email}") private val adminEmail: String
+    @Value("\${trainer-advisor.admin.email}") private val adminEmail: String
 ) {
 
     @GetMapping("/register")
