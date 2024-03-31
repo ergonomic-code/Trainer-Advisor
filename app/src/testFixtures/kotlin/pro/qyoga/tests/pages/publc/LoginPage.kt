@@ -36,7 +36,7 @@ object LoginPage : QYogaPage {
 
     private const val LOGIN_ERROR_MESSAGE = "div.invalid-feedback:contains(Неверный логин)"
 
-    private val registerLink = Link("registerLink", RegisterPage, "Оставить заявку на регистрацию")
+    private val registerLink = Link("registerLink", RegisterPage, "Зарегестрироваться")
 
     override fun match(element: Element) {
         element.shouldHaveTitle(title)

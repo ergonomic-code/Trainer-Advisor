@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.servlet.ModelAndView
+import pro.azhidkov.platform.spring.mvc.modelAndView
 import pro.qyoga.core.users.therapists.RegisterTherapistRequest
 
 @Controller
@@ -21,16 +23,18 @@ class RegisterPageController(
     }
 
     @PostMapping("/register")
-    fun register(registerTherapistRequest: RegisterTherapistRequest, model: Model): String {
+    fun register(registerTherapistRequest: RegisterTherapistRequest): ModelAndView {
         try {
             registerTherapist(registerTherapistRequest)
-            return "public/register-success-fragment"
+            return modelAndView("public/register-success-fragment") {
+                "adminEmail" bindTo adminEmail
+            }
         } catch (ex: DuplicateKeyException) {
-            model.addAttribute("userAlreadyExists", true)
-            model.addAttribute("adminEmail", adminEmail)
-            model.addAttribute("requestForm", registerTherapistRequest)
-            return "public/register :: registerForm"
+            return modelAndView("public/register :: registerForm") {
+                "userAlreadyExists" bindTo true
+                "adminEmail" bindTo adminEmail
+                "requestForm" bindTo registerTherapistRequest
+            }
         }
     }
-
 }

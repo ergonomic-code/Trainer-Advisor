@@ -140,8 +140,8 @@ fun haveTitle(title: String): Matcher<Element> =
             val titleElement = element.getElementsByTag("title").single()
             MatcherResult(
                 titleElement.text() == title,
-                { "Element ${titleElement.descr} have title [${element.text()}] but [$title] expected" },
-                { "Element ${titleElement.descr} should not have title [${element.text()}]" },
+                { "Element ${titleElement.descr} have title [${titleElement.text()}] but [$title] expected" },
+                { "Element ${titleElement.descr} should not have title [${titleElement.text()}]" },
             )
         }
     )
