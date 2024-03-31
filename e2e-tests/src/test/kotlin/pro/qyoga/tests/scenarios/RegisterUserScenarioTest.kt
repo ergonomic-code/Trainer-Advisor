@@ -33,7 +33,7 @@ class RegisterUserScenarioTest : QYogaE2EBaseTest() {
         )
 
         open("$baseUri${RegisterPage.path}")
-        title() shouldBe ("Заявка на регистрацию")
+        title() shouldBe (RegisterPage.title)
 
         `$`(RegisterPage.RegisterForm.firstName).fastType(registerTherapistRequest.firstName)
         `$`(RegisterPage.RegisterForm.lastName).fastType(registerTherapistRequest.lastName)
