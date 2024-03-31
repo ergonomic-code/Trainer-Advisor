@@ -1,5 +1,6 @@
 package pro.qyoga.app.publc.register
 
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import pro.qyoga.core.users.therapists.CreateTherapistUserWorkflow
@@ -17,7 +18,10 @@ class RegisterTherapistWorkflow(
     @Value("\${trainer-advisor.admin.email}") private val adminEmail: String
 ) : (RegisterTherapistRequest) -> Therapist {
 
+    private val log = LoggerFactory.getLogger(javaClass)
+
     override fun invoke(registerTherapistRequest: RegisterTherapistRequest): Therapist {
+        log.info("Registering new therapist: {}", registerTherapistRequest)
         val password = randomPassword()
 
         val therapist = createTherapistUser(registerTherapistRequest, password)
@@ -29,6 +33,8 @@ class RegisterTherapistWorkflow(
                 therapistEmail = registerTherapistRequest.email
             )
         )
+
+        log.info("Therapist for {} registered", registerTherapistRequest.email)
 
         return therapist
     }
