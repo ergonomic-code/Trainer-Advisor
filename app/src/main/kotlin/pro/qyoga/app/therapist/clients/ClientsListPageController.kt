@@ -7,9 +7,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
+import pro.azhidkov.platform.spring.sdj.withSortBy
 import pro.qyoga.app.therapist.clients.ClientsListPageController.Companion.PATH
-import pro.qyoga.core.clients.cards.ClientsService
+import pro.qyoga.core.clients.cards.ClientsRepo
 import pro.qyoga.core.clients.cards.dtos.ClientSearchDto
+import pro.qyoga.core.clients.cards.findBy
 import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 
@@ -18,17 +20,18 @@ private const val CLIENTS = "clients"
 @Controller
 @RequestMapping(PATH)
 class ClientsListPageController(
-    private val clientsService: ClientsService
+    private val clientsRepo: ClientsRepo
 ) {
 
     @GetMapping
     fun getClients(
         @AuthenticationPrincipal principal: QyogaUserDetails,
-        @PageableDefault(value = 10, page = 0) pageable: Pageable,
+        @PageableDefault(value = 10, page = 0) pageRequest: Pageable,
         model: Model
     ): String {
         val searchDto = ClientSearchDto.ALL
-        val clients = clientsService.findClients(principal.id, searchDto, pageable)
+        val clients =
+            clientsRepo.findBy(therapistId = principal.id, searchDto, pageRequest.withSortBy(Client::lastName))
         model.addAllAttributes(toModelAttributes(clients, searchDto))
         return "therapist/clients/clients-list"
     }
@@ -37,10 +40,11 @@ class ClientsListPageController(
     fun getClientsFiltered(
         @AuthenticationPrincipal principal: QyogaUserDetails,
         searchDto: ClientSearchDto,
-        @PageableDefault(value = 10, page = 0) pageable: Pageable,
+        @PageableDefault(value = 10, page = 0) pageRequest: Pageable,
         model: Model
     ): String {
-        val clients = clientsService.findClients(principal.id, searchDto, pageable)
+        val clients =
+            clientsRepo.findBy(therapistId = principal.id, searchDto, pageRequest.withSortBy(Client::lastName))
         model.addAllAttributes(toModelAttributes(clients, searchDto))
         return "therapist/clients/clients-list :: clients"
     }
@@ -48,7 +52,7 @@ class ClientsListPageController(
     @DeleteMapping("/delete/{id}")
     @ResponseBody
     fun deleteClient(@PathVariable id: Long) {
-        clientsService.deleteClient(id)
+        clientsRepo.deleteById(id)
     }
 
     fun toModelAttributes(clients: Page<Client>, searchDto: ClientSearchDto): Map<String, *> =

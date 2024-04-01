@@ -6,7 +6,8 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import pro.qyoga.core.clients.cards.ClientsService
+import pro.qyoga.core.clients.cards.Client
+import pro.qyoga.core.clients.cards.ClientsRepo
 import pro.qyoga.core.clients.cards.dtos.ClientCardDto
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 
@@ -14,7 +15,7 @@ import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 @Controller
 @RequestMapping("/therapist/clients")
 class CreateClientCardPageController(
-    private val clientsService: ClientsService
+    private val clientsRepo: ClientsRepo
 ) {
 
     @GetMapping("/create")
@@ -28,7 +29,7 @@ class CreateClientCardPageController(
         clientCardDto: ClientCardDto,
         @AuthenticationPrincipal principal: QyogaUserDetails,
     ): String {
-        clientsService.createClients(principal.id, listOf(clientCardDto))
+        clientsRepo.save(Client(principal.id, clientCardDto))
         return "redirect:/therapist/clients"
     }
 

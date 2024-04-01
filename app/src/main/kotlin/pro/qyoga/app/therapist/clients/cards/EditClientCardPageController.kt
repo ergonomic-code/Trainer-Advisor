@@ -1,5 +1,6 @@
 package pro.qyoga.app.therapist.clients.cards
 
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -10,14 +11,15 @@ import org.springframework.web.servlet.ModelAndView
 import pro.qyoga.app.platform.notFound
 import pro.qyoga.app.therapist.clients.ClientPageTab
 import pro.qyoga.app.therapist.clients.clientPageModel
-import pro.qyoga.core.clients.cards.ClientsService
+import pro.qyoga.core.clients.cards.ClientsRepo
 import pro.qyoga.core.clients.cards.dtos.ClientCardDto
+import pro.qyoga.core.clients.cards.patchedBy
 
 
 @Controller
 @RequestMapping("/therapist/clients/{id}/card")
 class EditClientCardPageController(
-    private val clientsService: ClientsService
+    private val clientsRepo: ClientsRepo
 ) {
 
     @GetMapping
@@ -25,7 +27,7 @@ class EditClientCardPageController(
         @PathVariable id: Long,
         model: Model
     ): ModelAndView {
-        val client = clientsService.findClient(id)
+        val client = clientsRepo.findByIdOrNull(id)
             ?: return notFound
 
         return clientPageModel(client, ClientPageTab.CARD) {
@@ -38,7 +40,7 @@ class EditClientCardPageController(
         clientCardDto: ClientCardDto,
         @PathVariable id: Long
     ): String {
-        clientsService.editClient(id, clientCardDto)
+        clientsRepo.update(id) { client -> client.patchedBy(clientCardDto) }
         return "redirect:/therapist/clients"
     }
 
