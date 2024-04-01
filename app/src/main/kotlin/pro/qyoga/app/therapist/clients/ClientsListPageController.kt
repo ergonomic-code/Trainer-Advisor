@@ -8,9 +8,9 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import pro.qyoga.app.therapist.clients.ClientsListPageController.Companion.PATH
-import pro.qyoga.core.clients.cards.api.Client
-import pro.qyoga.core.clients.cards.api.ClientSearchDto
-import pro.qyoga.core.clients.cards.api.ClientsService
+import pro.qyoga.core.clients.cards.ClientsService
+import pro.qyoga.core.clients.cards.dtos.ClientSearchDto
+import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 
 private const val CLIENTS = "clients"

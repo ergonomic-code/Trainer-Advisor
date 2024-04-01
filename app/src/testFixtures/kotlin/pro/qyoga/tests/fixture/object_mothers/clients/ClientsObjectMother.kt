@@ -1,7 +1,11 @@
 package pro.qyoga.tests.fixture.object_mothers.clients
 
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.AggregateReferenceTarget
-import pro.qyoga.core.clients.cards.api.*
+import pro.qyoga.core.clients.cards.dtos.ClientCardDto
+import pro.qyoga.core.clients.cards.model.Client
+import pro.qyoga.core.clients.cards.model.ClientRef
+import pro.qyoga.core.clients.cards.model.DistributionSource
+import pro.qyoga.core.clients.cards.model.DistributionSourceType
 import pro.qyoga.tests.fixture.data.*
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
 import java.time.Duration

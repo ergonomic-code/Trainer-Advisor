@@ -1,7 +1,7 @@
 package pro.qyoga.core.appointments.core
 
 import pro.qyoga.core.appointments.types.model.AppointmentTypeRef
-import pro.qyoga.core.clients.cards.api.ClientRef
+import pro.qyoga.core.clients.cards.model.ClientRef
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
 import java.time.Duration
 import java.time.Instant

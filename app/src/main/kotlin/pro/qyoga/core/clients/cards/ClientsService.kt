@@ -1,8 +1,10 @@
-package pro.qyoga.core.clients.cards.api
+package pro.qyoga.core.clients.cards
 
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-
+import pro.qyoga.core.clients.cards.dtos.ClientCardDto
+import pro.qyoga.core.clients.cards.dtos.ClientSearchDto
+import pro.qyoga.core.clients.cards.model.Client
 
 interface ClientsService {
 

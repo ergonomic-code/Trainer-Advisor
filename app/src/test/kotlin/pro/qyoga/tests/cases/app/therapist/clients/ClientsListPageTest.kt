@@ -3,8 +3,8 @@ package pro.qyoga.tests.cases.app.therapist.clients
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.shouldHaveSize
 import org.junit.jupiter.api.Test
-import pro.qyoga.core.clients.cards.api.Client
-import pro.qyoga.core.clients.cards.api.ClientSearchDto
+import pro.qyoga.core.clients.cards.dtos.ClientSearchDto
+import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.assertions.shouldHaveComponent

@@ -1,4 +1,4 @@
-package pro.qyoga.core.clients.cards.api
+package pro.qyoga.core.clients.cards.dtos
 
 data class ClientSearchDto(
     val firstName: String? = null,

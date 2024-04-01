@@ -10,7 +10,7 @@ import pro.azhidkov.platform.file_storage.api.FilesStorage
 import pro.azhidkov.platform.file_storage.api.StoredFile
 import pro.azhidkov.platform.file_storage.api.StoredFileInputStream
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.AggregateReferenceTarget
-import pro.qyoga.core.clients.cards.api.Client
+import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.core.clients.files.impl.ClientFilesRepo
 import pro.qyoga.core.clients.files.impl.findClientFilesPage
 import pro.qyoga.core.clients.files.impl.findFile

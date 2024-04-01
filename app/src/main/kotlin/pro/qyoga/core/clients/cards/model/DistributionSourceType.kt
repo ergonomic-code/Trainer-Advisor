@@ -1,4 +1,4 @@
-package pro.qyoga.core.clients.cards.api
+package pro.qyoga.core.clients.cards.model
 
 import pro.azhidkov.platform.kotlin.LabeledEnum
 

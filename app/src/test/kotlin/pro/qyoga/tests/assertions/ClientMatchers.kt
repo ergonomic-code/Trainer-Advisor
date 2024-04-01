@@ -1,8 +1,8 @@
 package pro.qyoga.tests.assertions
 
 import io.kotest.matchers.shouldBe
-import pro.qyoga.core.clients.cards.api.Client
-import pro.qyoga.core.clients.cards.api.ClientCardDto
+import pro.qyoga.core.clients.cards.dtos.ClientCardDto
+import pro.qyoga.core.clients.cards.model.Client
 
 
 infix fun Client.shouldMatch(clientCardDto: ClientCardDto) {

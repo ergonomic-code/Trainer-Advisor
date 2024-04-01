@@ -1,4 +1,4 @@
-package pro.qyoga.core.clients.cards.api
+package pro.qyoga.core.clients.cards.model
 
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
@@ -8,6 +8,7 @@ import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.Embedded
 import org.springframework.data.relational.core.mapping.Table
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.Identifiable
+import pro.qyoga.core.clients.cards.dtos.ClientCardDto
 import pro.qyoga.core.users.therapists.Therapist
 import java.time.Instant
 import java.time.LocalDate

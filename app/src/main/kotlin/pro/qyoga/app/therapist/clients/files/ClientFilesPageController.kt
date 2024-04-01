@@ -12,7 +12,7 @@ import pro.qyoga.app.platform.notFound
 import pro.qyoga.app.platform.toStoredFile
 import pro.qyoga.app.therapist.clients.ClientPageTab
 import pro.qyoga.app.therapist.clients.clientPageModel
-import pro.qyoga.core.clients.cards.api.ClientsService
+import pro.qyoga.core.clients.cards.ClientsService
 import pro.qyoga.core.clients.files.ClientFilesService
 import pro.qyoga.core.clients.files.impl.ClientFilesRepo
 

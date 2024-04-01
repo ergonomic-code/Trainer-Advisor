@@ -1,4 +1,4 @@
-package pro.qyoga.core.clients.cards.internal
+package pro.qyoga.core.clients.cards
 
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -13,8 +13,8 @@ import org.springframework.stereotype.Repository
 import pro.azhidkov.platform.spring.sdj.erpo.ErgoRepository
 import pro.azhidkov.platform.spring.sdj.query.BuildMode
 import pro.azhidkov.platform.spring.sdj.sortBy
-import pro.qyoga.core.clients.cards.api.Client
-import pro.qyoga.core.clients.cards.api.ClientSearchDto
+import pro.qyoga.core.clients.cards.dtos.ClientSearchDto
+import pro.qyoga.core.clients.cards.model.Client
 
 @Repository
 class ClientsRepo(

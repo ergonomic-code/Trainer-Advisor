@@ -1,5 +1,4 @@
-package pro.qyoga.core.clients.cards.api
-
+package pro.qyoga.core.clients.cards.model
 
 data class DistributionSource(
     val type: DistributionSourceType,

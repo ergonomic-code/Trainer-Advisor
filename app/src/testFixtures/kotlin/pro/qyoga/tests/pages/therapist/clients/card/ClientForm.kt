@@ -2,8 +2,8 @@ package pro.qyoga.tests.pages.therapist.clients.card
 
 import io.kotest.matchers.shouldBe
 import org.jsoup.nodes.Element
-import pro.qyoga.core.clients.cards.api.Client
-import pro.qyoga.core.clients.cards.api.DistributionSourceType
+import pro.qyoga.core.clients.cards.model.Client
+import pro.qyoga.core.clients.cards.model.DistributionSourceType
 import pro.qyoga.l10n.russianDateFormat
 import pro.qyoga.tests.assertions.PageMatcher
 import pro.qyoga.tests.platform.html.*
