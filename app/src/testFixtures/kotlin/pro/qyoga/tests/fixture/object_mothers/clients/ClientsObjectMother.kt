@@ -1,6 +1,7 @@
 package pro.qyoga.tests.fixture.object_mothers.clients
 
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.AggregateReferenceTarget
+import pro.qyoga.core.clients.cards.Client
 import pro.qyoga.core.clients.cards.dtos.ClientCardDto
 import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.core.clients.cards.model.ClientRef
@@ -67,8 +68,11 @@ object ClientsObjectMother {
         distributionSource?.comment,
     )
 
+    fun createClient(therapistId: Long, clientCardDto: ClientCardDto): Client =
+        Client(therapistId, clientCardDto)
+
     val fakeClientRef: ClientRef = AggregateReferenceTarget(
-        Client(THE_THERAPIST_ID, createClientCardDtoMinimal())
+        createClient(THE_THERAPIST_ID, createClientCardDtoMinimal())
     )
 
 }
