@@ -2,7 +2,6 @@ package pro.qyoga.tests.infra.db
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import org.flywaydb.core.Flyway
 import org.slf4j.LoggerFactory
 import java.sql.DriverManager
 import java.sql.SQLException
@@ -47,14 +46,4 @@ val testDataSource by lazy {
         this.password = DB_PASSWORD
     }
     HikariDataSource(config)
-}
-
-fun migrateSchema(jdbcUrl: String) {
-    log.info("Migrating schema")
-    Flyway.configure()
-        .dataSource(jdbcUrl, DB_USER, DB_PASSWORD)
-        .locations("classpath:/db/migration/common")
-        .load()
-        .migrate()
-    log.info("Schema migrated")
 }
