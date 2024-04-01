@@ -1,6 +1,7 @@
 package pro.qyoga.app.therapist.clients.files
 
 import org.springframework.data.jdbc.core.mapping.AggregateReference
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
@@ -12,7 +13,7 @@ import pro.qyoga.app.platform.notFound
 import pro.qyoga.app.platform.toStoredFile
 import pro.qyoga.app.therapist.clients.ClientPageTab
 import pro.qyoga.app.therapist.clients.clientPageModel
-import pro.qyoga.core.clients.cards.ClientsService
+import pro.qyoga.core.clients.cards.ClientsRepo
 import pro.qyoga.core.clients.files.ClientFilesService
 import pro.qyoga.core.clients.files.impl.ClientFilesRepo
 
@@ -20,13 +21,13 @@ import pro.qyoga.core.clients.files.impl.ClientFilesRepo
 @Controller
 @RequestMapping("/therapist/clients/{clientId}/files")
 class ClientFilesPageController(
-    private val clientsService: ClientsService,
+    private val clientsRepo: ClientsRepo,
     private val clientFilesService: ClientFilesService
 ) {
 
     @GetMapping
     fun getClientFilesPage(@PathVariable clientId: Long): ModelAndView {
-        val client = clientsService.findClient(clientId)
+        val client = clientsRepo.findByIdOrNull(clientId)
             ?: return notFound
 
         val files = clientFilesService.findFilesPage(clientId, ClientFilesRepo.Page.tenNewest)

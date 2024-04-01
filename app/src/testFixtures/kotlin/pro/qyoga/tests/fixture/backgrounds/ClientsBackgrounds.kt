@@ -5,7 +5,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Component
 import org.springframework.ui.ExtendedModelMap
 import pro.qyoga.app.therapist.clients.ClientsListPageController
-import pro.qyoga.core.clients.cards.ClientsService
+import pro.qyoga.core.clients.cards.ClientsRepo
 import pro.qyoga.core.clients.cards.dtos.ClientCardDto
 import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.core.clients.journals.model.JournalEntry
@@ -16,7 +16,7 @@ import pro.qyoga.tests.fixture.object_mothers.therapists.theTherapistUserDetails
 
 @Component
 class ClientsBackgrounds(
-    private val clientsService: ClientsService,
+    private val clientsRepo: ClientsRepo,
     private val clientsListPageController: ClientsListPageController,
     private val journalBackgrounds: ClientJournalBackgrounds
 ) {
@@ -26,11 +26,11 @@ class ClientsBackgrounds(
     }
 
     fun createClients(clients: List<ClientCardDto>, therapistId: Long = THE_THERAPIST_ID): Iterable<Client> {
-        return clientsService.createClients(therapistId, clients)
+        return clientsRepo.saveAll(clients.map { ClientsObjectMother.createClient(therapistId, it) })
     }
 
     fun createClients(count: Int, therapistId: Long = THE_THERAPIST_ID): Iterable<Client> {
-        return clientsService.createClients(therapistId, ClientsObjectMother.createClientCardDtos(count))
+        return createClients(ClientsObjectMother.createClientCardDtos(count), therapistId)
     }
 
     fun getAllClients(): Page<Client> {

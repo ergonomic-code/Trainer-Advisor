@@ -1,5 +1,6 @@
 package pro.qyoga.app.therapist.clients.journal.edit_entry.create
 
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
@@ -9,7 +10,7 @@ import pro.azhidkov.platform.spring.http.hxRedirect
 import pro.azhidkov.platform.spring.mvc.modelAndView
 import pro.qyoga.app.platform.notFound
 import pro.qyoga.app.therapist.clients.journal.edit_entry.shared.JOURNAL_ENTRY_VIEW_NAME
-import pro.qyoga.core.clients.cards.ClientsService
+import pro.qyoga.core.clients.cards.ClientsRepo
 import pro.qyoga.core.clients.journals.errors.DuplicatedDate
 import pro.qyoga.core.clients.journals.model.EditJournalEntryRequest
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
@@ -19,7 +20,7 @@ import java.time.LocalDate
 @Controller
 @RequestMapping("/therapist/clients/{clientId}/journal")
 class CreateJournalEntryPageController(
-    private val clientsService: ClientsService,
+    private val clientsRepo: ClientsRepo,
     private val createJournalEntryWorkflow: CreateJournalEntryWorkflow
 ) {
 
@@ -27,7 +28,7 @@ class CreateJournalEntryPageController(
     fun getCreateJournalEntryPage(
         @PathVariable clientId: Long
     ): ModelAndView {
-        val client = clientsService.findClient(clientId)
+        val client = clientsRepo.findByIdOrNull(clientId)
             ?: return notFound
 
         return modelAndView(JOURNAL_ENTRY_VIEW_NAME) {

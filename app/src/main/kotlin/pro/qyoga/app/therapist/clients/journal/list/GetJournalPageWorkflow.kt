@@ -1,8 +1,9 @@
 package pro.qyoga.app.therapist.clients.journal.list
 
 import org.springframework.data.domain.Page
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
-import pro.qyoga.core.clients.cards.ClientsService
+import pro.qyoga.core.clients.cards.ClientsRepo
 import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.core.clients.journals.JournalsService
 import pro.qyoga.core.clients.journals.dtos.JournalPageRequest
@@ -15,12 +16,12 @@ sealed interface GetJournalPageResult {
 
 @Component
 class GetJournalPageWorkflow(
-    private val clientsService: ClientsService,
+    private val clientsRepo: ClientsRepo,
     private val journalsService: JournalsService
 ) : (JournalPageRequest) -> GetJournalPageResult {
 
     override fun invoke(journalPageRequest: JournalPageRequest): GetJournalPageResult {
-        val client = clientsService.findClient(journalPageRequest.clientId)
+        val client = clientsRepo.findByIdOrNull(journalPageRequest.clientId)
             ?: return GetJournalPageResult.ClientNotFound
 
         val journal = journalsService.getJournalPage(journalPageRequest)
