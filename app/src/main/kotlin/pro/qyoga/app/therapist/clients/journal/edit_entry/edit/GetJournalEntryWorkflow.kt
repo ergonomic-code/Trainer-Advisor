@@ -2,7 +2,7 @@ package pro.qyoga.app.therapist.clients.journal.edit_entry.edit
 
 import org.springframework.stereotype.Component
 import pro.qyoga.app.therapist.clients.journal.edit_entry.shared.ClientNotFound
-import pro.qyoga.core.clients.cards.api.ClientsService
+import pro.qyoga.core.clients.cards.ClientsService
 import pro.qyoga.core.clients.journals.JournalsService
 import pro.qyoga.core.clients.journals.model.JournalEntry
 

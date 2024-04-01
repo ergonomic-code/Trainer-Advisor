@@ -2,8 +2,8 @@ package pro.qyoga.tests.cases.app.therapist.clients.card
 
 import io.kotest.inspectors.forAny
 import org.junit.jupiter.api.Test
-import pro.qyoga.core.clients.cards.api.DistributionSource
-import pro.qyoga.core.clients.cards.api.DistributionSourceType
+import pro.qyoga.core.clients.cards.model.DistributionSource
+import pro.qyoga.core.clients.cards.model.DistributionSourceType
 import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient

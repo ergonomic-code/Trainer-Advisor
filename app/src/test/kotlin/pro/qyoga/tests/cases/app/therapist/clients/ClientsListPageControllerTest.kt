@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.data.domain.PageRequest
 import org.springframework.ui.ExtendedModelMap
 import pro.qyoga.app.therapist.clients.ClientsListPageController
-import pro.qyoga.core.clients.cards.api.ClientSearchDto
+import pro.qyoga.core.clients.cards.dtos.ClientSearchDto
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
 import pro.qyoga.tests.fixture.object_mothers.therapists.theTherapistUserDetails

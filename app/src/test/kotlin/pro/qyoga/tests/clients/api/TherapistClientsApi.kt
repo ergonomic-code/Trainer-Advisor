@@ -11,8 +11,8 @@ import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
 import pro.qyoga.app.therapist.clients.ClientsListPageController
 import pro.qyoga.app.therapist.clients.components.ClientsComboBoxController
-import pro.qyoga.core.clients.cards.api.ClientCardDto
-import pro.qyoga.core.clients.cards.api.ClientSearchDto
+import pro.qyoga.core.clients.cards.dtos.ClientCardDto
+import pro.qyoga.core.clients.cards.dtos.ClientSearchDto
 import pro.qyoga.tests.pages.therapist.clients.ClientsListPage
 import pro.qyoga.tests.pages.therapist.clients.card.CreateClientForm
 import pro.qyoga.tests.pages.therapist.clients.card.CreateClientPage

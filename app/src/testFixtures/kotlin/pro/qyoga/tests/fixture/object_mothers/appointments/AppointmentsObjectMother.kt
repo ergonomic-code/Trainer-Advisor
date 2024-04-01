@@ -6,7 +6,7 @@ import pro.qyoga.core.appointments.core.Appointment
 import pro.qyoga.core.appointments.core.AppointmentStatus
 import pro.qyoga.core.appointments.core.EditAppointmentRequest
 import pro.qyoga.core.appointments.types.model.AppointmentTypeRef
-import pro.qyoga.core.clients.cards.api.ClientRef
+import pro.qyoga.core.clients.cards.model.ClientRef
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
 import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.tests.fixture.data.*

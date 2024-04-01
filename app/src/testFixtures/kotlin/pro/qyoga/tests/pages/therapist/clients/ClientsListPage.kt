@@ -8,7 +8,7 @@ import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 import pro.qyoga.app.therapist.clients.ClientsListPageController
-import pro.qyoga.core.clients.cards.api.Client
+import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.tests.assertions.*
 import pro.qyoga.tests.pages.therapist.clients.card.CreateClientPage
 import pro.qyoga.tests.platform.html.*

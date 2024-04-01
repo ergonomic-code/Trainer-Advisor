@@ -6,8 +6,8 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import pro.qyoga.core.clients.cards.api.ClientCardDto
-import pro.qyoga.core.clients.cards.api.ClientsService
+import pro.qyoga.core.clients.cards.ClientsService
+import pro.qyoga.core.clients.cards.dtos.ClientCardDto
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 
 

@@ -77,7 +77,7 @@
                         name="distributionSourceType"
                         th:value="${client?.distributionSource?.type}">
                     <option value="">Не указан</option>
-                    <option th:each="value : ${T(pro.qyoga.core.clients.cards.api.DistributionSourceType).entries}"
+                    <option th:each="value : ${T(pro.qyoga.core.clients.cards.model.DistributionSourceType).entries}"
                             th:selected="${client?.distributionSource?.type == value}"
                             th:text="${value.label}" th:value="${value.name}">
                     </option>

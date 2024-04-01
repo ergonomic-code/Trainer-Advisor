@@ -5,9 +5,9 @@ import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Component
 import org.springframework.ui.ExtendedModelMap
 import pro.qyoga.app.therapist.clients.ClientsListPageController
-import pro.qyoga.core.clients.cards.api.Client
-import pro.qyoga.core.clients.cards.api.ClientCardDto
-import pro.qyoga.core.clients.cards.api.ClientsService
+import pro.qyoga.core.clients.cards.ClientsService
+import pro.qyoga.core.clients.cards.dtos.ClientCardDto
+import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.core.clients.journals.model.JournalEntry
 import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
