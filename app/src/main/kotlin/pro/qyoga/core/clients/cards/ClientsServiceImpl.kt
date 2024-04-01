@@ -25,7 +25,7 @@ class ClientsServiceImpl(
     override fun editClient(clientId: Long, clientCardDto: ClientCardDto): Client {
         var client = clientsRepo.findByIdOrNull(clientId)
         checkNotNull(client) { "Клиент $clientId не найде" }
-        client = client.updateBy(clientCardDto)
+        client = client.patchedBy(clientCardDto)
         return clientsRepo.save(client)
     }
 
