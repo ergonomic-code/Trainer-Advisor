@@ -11,7 +11,7 @@ import pro.azhidkov.platform.spring.sdj.withSortBy
 import pro.qyoga.app.therapist.clients.ClientsListPageController.Companion.PATH
 import pro.qyoga.core.clients.cards.ClientsRepo
 import pro.qyoga.core.clients.cards.dtos.ClientSearchDto
-import pro.qyoga.core.clients.cards.findBy
+import pro.qyoga.core.clients.cards.findTherapistClientsPageBySearchForm
 import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 
@@ -31,7 +31,11 @@ class ClientsListPageController(
     ): String {
         val searchDto = ClientSearchDto.ALL
         val clients =
-            clientsRepo.findBy(therapistId = principal.id, searchDto, pageRequest.withSortBy(Client::lastName))
+            clientsRepo.findTherapistClientsPageBySearchForm(
+                therapistId = principal.id,
+                searchDto,
+                pageRequest.withSortBy(Client::lastName)
+            )
         model.addAllAttributes(toModelAttributes(clients, searchDto))
         return "therapist/clients/clients-list"
     }
@@ -44,7 +48,11 @@ class ClientsListPageController(
         model: Model
     ): String {
         val clients =
-            clientsRepo.findBy(therapistId = principal.id, searchDto, pageRequest.withSortBy(Client::lastName))
+            clientsRepo.findTherapistClientsPageBySearchForm(
+                therapistId = principal.id,
+                searchDto,
+                pageRequest.withSortBy(Client::lastName)
+            )
         model.addAllAttributes(toModelAttributes(clients, searchDto))
         return "therapist/clients/clients-list :: clients"
     }

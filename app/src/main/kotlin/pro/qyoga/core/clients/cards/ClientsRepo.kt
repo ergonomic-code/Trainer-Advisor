@@ -3,6 +3,7 @@ package pro.qyoga.core.clients.cards
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Slice
 import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.data.jdbc.core.convert.JdbcConverter
 import org.springframework.data.mapping.model.BasicPersistentEntity
@@ -37,7 +38,11 @@ class ClientsRepo(
 }
 
 
-fun ClientsRepo.findBy(therapistId: Long, clientSearchDto: ClientSearchDto, pageRequest: Pageable): Page<Client> {
+fun ClientsRepo.findTherapistClientsPageBySearchForm(
+    therapistId: Long,
+    clientSearchDto: ClientSearchDto,
+    pageRequest: Pageable
+): Page<Client> {
     return findAll(pageRequest) {
         Client::therapistId isEqual therapistId
         Client::firstName isILikeIfNotNull clientSearchDto.firstName
@@ -46,7 +51,11 @@ fun ClientsRepo.findBy(therapistId: Long, clientSearchDto: ClientSearchDto, page
     }
 }
 
-fun ClientsRepo.findPageBy(therapistId: Long, searchKey: String, page: Pageable): Iterable<Client> {
+fun ClientsRepo.findTherapistClientsSliceBySearchKey(
+    therapistId: Long,
+    searchKey: String,
+    page: Pageable
+): Slice<Client> {
     return findSlice(page) {
         Client::therapistId isEqual therapistId
         and {

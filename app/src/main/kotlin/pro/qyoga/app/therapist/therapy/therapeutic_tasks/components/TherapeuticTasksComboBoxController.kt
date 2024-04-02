@@ -10,7 +10,7 @@ import pro.qyoga.app.platform.components.combobox.ComboBoxItem
 import pro.qyoga.app.platform.components.combobox.ComboBoxModelAndView
 import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo
 import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo.Page.topFiveByName
-import pro.qyoga.core.therapy.therapeutic_tasks.findByNameContaining
+import pro.qyoga.core.therapy.therapeutic_tasks.findTherapistTasksSliceByName
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 
 
@@ -27,10 +27,10 @@ class TherapeuticTasksComboBoxController(
         @AuthenticationPrincipal userDetails: QyogaUserDetails
     ): ComboBoxModelAndView {
         val searchResult =
-            therapeuticTasksRepo.findByNameContaining(userDetails.id, searchKey, topFiveByName)
+            therapeuticTasksRepo.findTherapistTasksSliceByName(userDetails.id, searchKey, topFiveByName)
                 .map { ComboBoxItem(it.id, it.name) }
 
-        return ComboBoxModelAndView((searchResult))
+        return ComboBoxModelAndView(searchResult)
     }
 
     companion object {

@@ -8,7 +8,7 @@ import pro.qyoga.app.platform.components.combobox.ComboBoxController
 import pro.qyoga.app.platform.components.combobox.ComboBoxItem
 import pro.qyoga.app.platform.components.combobox.ComboBoxModelAndView
 import pro.qyoga.core.appointments.types.AppointmentTypesRepo
-import pro.qyoga.core.appointments.types.findByNameContaining
+import pro.qyoga.core.appointments.types.findTherapistAppointmentTypesSliceByName
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.ref
 
@@ -25,7 +25,7 @@ class AppointmentTypesComboBoxController(
         currentValue: String?,
         userDetails: QyogaUserDetails
     ): ComboBoxModelAndView {
-        val searchResult = appointmentTypesRepo.findByNameContaining(
+        val searchResult = appointmentTypesRepo.findTherapistAppointmentTypesSliceByName(
             userDetails.ref,
             searchKey ?: "",
             AppointmentTypesRepo.Page.topFiveByName
