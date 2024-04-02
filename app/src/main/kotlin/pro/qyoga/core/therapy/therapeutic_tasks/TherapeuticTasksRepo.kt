@@ -2,6 +2,7 @@ package pro.qyoga.core.therapy.therapeutic_tasks
 
 import org.springframework.dao.DuplicateKeyException
 import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Slice
 import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.data.jdbc.core.convert.JdbcConverter
 import org.springframework.data.mapping.model.BasicPersistentEntity
@@ -62,18 +63,18 @@ class TherapeuticTasksRepo(
 
 }
 
-fun TherapeuticTasksRepo.findByNameContaining(
+fun TherapeuticTasksRepo.findTherapistTasksSliceByName(
     therapistId: Long,
     searchKey: String?,
     page: Pageable
-): Iterable<TherapeuticTask> {
+): Slice<TherapeuticTask> {
     return findAll(page) {
         TherapeuticTask::owner isEqual therapistId
         TherapeuticTask::name isILikeIfNotNull searchKey
     }
 }
 
-fun TherapeuticTasksRepo.findByName(name: String): TherapeuticTask? =
+fun TherapeuticTasksRepo.findOneByName(name: String): TherapeuticTask? =
     findOne {
         TherapeuticTask::name isEqual name
     }

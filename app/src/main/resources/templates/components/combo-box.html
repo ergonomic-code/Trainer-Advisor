@@ -9,6 +9,7 @@
            type="hidden">
 
     <div class="form-floating">
+        <!--suppress HtmlFormInputWithoutLabel -->
         <input @blur="showComboBox = false"
                @focus="showComboBox = true"
 
@@ -62,12 +63,12 @@
 
     <ul class="dropdown-menu w-100 combo-box-search-result mt-2"
         th:classappend="${searchResult != null ? 'show' : ''}"
-        th:data-has-results="${searchResult?.size() > 0}"
+        th:data-has-results="${searchResult?.hasContent()}"
         th:fragment="comboBoxSearchResult"
         x-show="showComboBox && (searchKey.length > 0 || $el.dataset.hasResults == 'true')">
 
         <li class="dropdown-item disabled "
-            th:if="${searchResult != null && searchResult.size() == 0}">
+            th:if="${!(searchResult?.hasContent() ?: false)}">
             <small class="text-muted">Ничего не найдено</small>
         </li>
 

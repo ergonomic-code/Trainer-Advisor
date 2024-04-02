@@ -10,7 +10,6 @@ import javax.sql.DataSource
 
 open class QYogaAppBaseTest {
 
-
     private val dataSource: DataSource = context.getBean(DataSource::class.java)
 
     protected val port: Int = context.getBean(ServerProperties::class.java).port
