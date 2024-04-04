@@ -4,14 +4,19 @@ import io.kotest.inspectors.forAny
 import io.kotest.inspectors.forNone
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
+import pro.qyoga.core.clients.cards.toDto
 import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.assertions.shouldBePage
+import pro.qyoga.tests.assertions.shouldHaveElement
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
+import pro.qyoga.tests.fixture.data.faker
 import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
+import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother.createClientCardDto
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import pro.qyoga.tests.pages.publc.NotFoundErrorPage
+import pro.qyoga.tests.pages.therapist.clients.card.CreateClientForm
 import pro.qyoga.tests.pages.therapist.clients.card.EditClientPage
 
 
@@ -35,10 +40,10 @@ class EditClientCardPageTest : QYogaAppIntegrationBaseTest() {
         // Given
         val therapist = TherapistClient.loginAsTheTherapist()
 
-        val newClientCardDto = ClientsObjectMother.createClientCardDto()
+        val newClientCardDto = createClientCardDto()
         val client = backgrounds.clients.createClients(listOf(newClientCardDto), THE_THERAPIST_ID).first()
 
-        val editedClientCardDto = ClientsObjectMother.createClientCardDto()
+        val editedClientCardDto = createClientCardDto()
 
         // When
         therapist.clients.editClient(client.id, editedClientCardDto)
@@ -77,6 +82,41 @@ class EditClientCardPageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         document shouldBePage NotFoundErrorPage
+    }
+
+    @Test
+    fun `Edit of not existing client should return 404 error page`() {
+        // Given
+        val therapist = TherapistClient.loginAsTheTherapist()
+        val notExistingClientId: Long = -1
+
+        // When
+        val document =
+            therapist.clients.editClientForError(
+                notExistingClientId,
+                createClientCardDto(),
+                expectedStatus = HttpStatus.NOT_FOUND
+            )
+
+        // Then
+        document shouldBePage NotFoundErrorPage
+    }
+
+    @Test
+    fun `System should return page with duplicated phone error message on posting form with duplicated phone`() {
+        // Given
+        val thePhone = faker.phoneNumber().phoneNumberInternational()
+        backgrounds.clients.createClient(phone = thePhone)
+        val existingClient = backgrounds.clients.createClient()
+        val existingClientDto = existingClient.toDto()
+        val therapist = TherapistClient.loginAsTheTherapist()
+
+        // When
+        val document =
+            therapist.clients.editClientForError(existingClient.id, existingClientDto.copy(phoneNumber = thePhone))
+
+        // Then
+        document shouldHaveElement CreateClientForm.invalidPhoneInput
     }
 
 }

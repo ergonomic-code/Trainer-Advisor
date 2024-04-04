@@ -1,5 +1,6 @@
 <div class="client__container" id="clientCardTab">
-    <form class="form__client-card" id="createClientForm" method="post" th:action="${formAction}">
+    <form class="form__client-card" id="createClientForm" method="post" th:action="${formAction}"
+          th:fragment="createClientForm">
         <label class="form-label" for="ClientFirstName">Клиент</label>
         <div class="input__container mb-4">
             <div class="row g-0 input-group">
@@ -33,6 +34,7 @@
                     <input class="form-control q-input mt-2 w-100" id="ClientPhone"
                            name="phoneNumber"
                            placeholder="+7 (999) 000-0000"
+                           th:classappend="${duplicatedPhone} ? 'is-invalid' : ''"
                            required th:value="${client?.phoneNumber ?: ''}" type="tel">
                 </div>
                 <div class="col">
@@ -94,7 +96,7 @@
         <div class="row g-2 justify-content-end">
             <div class="col-6 col-sm-auto text-center">
                 <a class="btn btn-outline-danger" style="min-width: 110px;"
-                   th:href="${ '/therapist/clients' + (client?.id != null ? '/' + client.id + '/journal' : '')}">
+                   th:href="${'/therapist/clients' + (clientId != null ? '/' + clientId + '/journal' : '')}">
                     Отмена
                 </a>
             </div>

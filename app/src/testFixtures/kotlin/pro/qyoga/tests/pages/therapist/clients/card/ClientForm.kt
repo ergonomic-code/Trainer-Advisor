@@ -18,6 +18,7 @@ abstract class ClientForm(action: FormAction) : QYogaForm("createClientForm", ac
     val middleName = text("middleName", false)
     val birthDate = text("birthDate", false)
     val phoneNumber = tel("phoneNumber", true)
+    val invalidPhoneInput = "${phoneNumber.selector()}.is-invalid"
     val email = email("email", false)
     val address = text("address", false)
     val complaints = TextArea("complaints", false)

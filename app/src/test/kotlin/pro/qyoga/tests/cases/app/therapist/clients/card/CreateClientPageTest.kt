@@ -5,10 +5,13 @@ import org.junit.jupiter.api.Test
 import pro.qyoga.core.clients.cards.model.DistributionSource
 import pro.qyoga.core.clients.cards.model.DistributionSourceType
 import pro.qyoga.tests.assertions.shouldBe
+import pro.qyoga.tests.assertions.shouldHaveElement
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
+import pro.qyoga.tests.fixture.data.faker
 import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
+import pro.qyoga.tests.pages.therapist.clients.card.CreateClientForm
 import pro.qyoga.tests.pages.therapist.clients.card.CreateClientPage
 
 class CreateClientPageTest : QYogaAppIntegrationBaseTest() {
@@ -67,6 +70,21 @@ class CreateClientPageTest : QYogaAppIntegrationBaseTest() {
         // Then
         val clients = backgrounds.clients.getAllClients().content
         clients.forAny { it shouldMatch minimalClient }
+    }
+
+    @Test
+    fun `System should return with duplicated phone error message on posting form with duplicated phone`() {
+        // Given
+        val thePhone = faker.phoneNumber().phoneNumberInternational()
+        backgrounds.clients.createClient(phone = thePhone)
+        val duplicatedClient = ClientsObjectMother.createClientCardDto(phone = thePhone)
+        val therapist = TherapistClient.loginAsTheTherapist()
+
+        // When
+        val document = therapist.clients.createClientForError(duplicatedClient)
+
+        // Then
+        document shouldHaveElement CreateClientForm.invalidPhoneInput
     }
 
 }

@@ -1,11 +1,13 @@
 package pro.azhidkov.platform.spring.sdj.erpo
 
+import org.springframework.dao.DuplicateKeyException
 import org.springframework.data.domain.*
 import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.data.jdbc.core.convert.EntityRowMapper
 import org.springframework.data.jdbc.core.convert.JdbcConverter
 import org.springframework.data.jdbc.repository.support.SimpleJdbcRepository
 import org.springframework.data.mapping.PersistentEntity
+import org.springframework.data.relational.core.conversion.DbActionExecutionException
 import org.springframework.data.relational.core.mapping.RelationalMappingContext
 import org.springframework.data.relational.core.mapping.RelationalPersistentEntity
 import org.springframework.data.relational.core.query.Query
@@ -37,6 +39,16 @@ class ErgoRepository<T : Any, ID : Any>(
         relationalMappingContext.getRequiredPersistentEntity(entity.type) as RelationalPersistentEntity<T>
 
     protected val rowMapper = EntityRowMapper(relationalPersistentEntity, jdbcConverter)
+
+    protected fun <S : T> saveAndMapDuplicatedKey(aggregate: T, map: (DuplicateKeyException) -> Throwable): S {
+        val res = runCatching { super.save(aggregate) }
+        when (val ex = (res.exceptionOrNull() as? DbActionExecutionException)?.cause as? DuplicateKeyException) {
+            is DuplicateKeyException -> throw map(ex)
+        }
+
+        @Suppress("UNCHECKED_CAST")
+        return res.getOrThrow() as S
+    }
 
     @Transactional
     fun update(id: ID, func: (T) -> T): T? {

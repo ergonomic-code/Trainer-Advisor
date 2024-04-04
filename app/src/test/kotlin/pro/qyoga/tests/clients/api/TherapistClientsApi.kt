@@ -94,6 +94,29 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
         }
     }
 
+    fun createClientForError(request: ClientCardDto): Document {
+        return Given {
+            authorized()
+            formParam(CreateClientForm.firstName.name, request.firstName)
+            formParam(CreateClientForm.lastName.name, request.lastName)
+            formParam(CreateClientForm.middleName.name, request.middleName ?: "")
+            formParam(CreateClientForm.birthDate.name, request.birthDate?.toString() ?: "")
+            formParam(CreateClientForm.email.name, request.email ?: "")
+            formParam(CreateClientForm.phoneNumber.name, request.phoneNumber)
+            formParam(CreateClientForm.address.name, request.address ?: "")
+            formParam(CreateClientForm.complaints.name, request.complaints ?: "")
+            formParam(CreateClientForm.anamnesis.name, request.anamnesis ?: "")
+            formParam(CreateClientForm.distributionSourceType.name, request.distributionSourceType ?: "")
+            formParam(CreateClientForm.distributionSourceComment.name, request.distributionSourceComment ?: "")
+        } When {
+            post(CreateClientForm.action.url)
+        } Then {
+            statusCode(HttpStatus.OK.value())
+        } Extract {
+            Jsoup.parse(body().asString())
+        }
+    }
+
     fun editClient(clientId: Long, request: ClientCardDto) {
         Given {
             authorized()
@@ -116,6 +139,36 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
         } Then {
             statusCode(HttpStatus.FOUND.value())
             header("Location", endsWith(ClientsListPage.path))
+        }
+    }
+
+    fun editClientForError(
+        clientId: Long,
+        request: ClientCardDto,
+        expectedStatus: HttpStatus = HttpStatus.OK
+    ): Document {
+        return Given {
+            authorized()
+
+            pathParam("id", clientId)
+
+            formParam(EditClientForm.firstName.name, request.firstName)
+            formParam(EditClientForm.lastName.name, request.lastName)
+            formParam(EditClientForm.middleName.name, request.middleName ?: "")
+            formParam(EditClientForm.birthDate.name, request.birthDate?.toString() ?: "")
+            formParam(EditClientForm.email.name, request.email ?: "")
+            formParam(EditClientForm.phoneNumber.name, request.phoneNumber)
+            formParam(EditClientForm.address.name, request.address ?: "")
+            formParam(EditClientForm.complaints.name, request.complaints)
+            formParam(EditClientForm.anamnesis.name, request.anamnesis ?: "")
+            formParam(EditClientForm.distributionSourceType.name, request.distributionSourceType?.name ?: "")
+            formParam(EditClientForm.distributionSourceComment.name, request.distributionSourceComment ?: "")
+        } When {
+            post(EditClientPage.PATH)
+        } Then {
+            statusCode(expectedStatus.value())
+        } Extract {
+            Jsoup.parse(body().asString())
         }
     }
 
