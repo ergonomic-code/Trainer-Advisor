@@ -87,4 +87,21 @@ class CreateClientPageTest : QYogaAppIntegrationBaseTest() {
         document shouldHaveElement CreateClientForm.invalidPhoneInput
     }
 
+    @Test
+    fun `System should allow to create client with existing phone number for another therapist`() {
+        // Given
+        val thePhone = faker.phoneNumber().phoneNumberInternational()
+        val anotherTherapistId = backgrounds.users.registerNewTherapist().id
+        backgrounds.clients.createClient(phone = thePhone, therapistId = anotherTherapistId)
+        val duplicatedClient = ClientsObjectMother.createClientCardDto(phone = thePhone)
+        val therapist = TherapistClient.loginAsTheTherapist()
+
+        // When
+        therapist.clients.createClient(duplicatedClient)
+
+        // Then
+        val clients = backgrounds.clients.getAllClients().content
+        clients.forAny { it shouldMatch duplicatedClient }
+    }
+
 }

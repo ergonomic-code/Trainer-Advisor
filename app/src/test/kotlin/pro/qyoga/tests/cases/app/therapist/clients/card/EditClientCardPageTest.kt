@@ -119,4 +119,22 @@ class EditClientCardPageTest : QYogaAppIntegrationBaseTest() {
         document shouldHaveElement CreateClientForm.invalidPhoneInput
     }
 
+    @Test
+    fun `System should allow to change client phone to phone number of client of another therapist`() {
+        // Given
+        val thePhone = faker.phoneNumber().phoneNumberInternational()
+        val anotherTherapistId = backgrounds.users.registerNewTherapist().id
+        backgrounds.clients.createClient(phone = thePhone, therapistId = anotherTherapistId)
+        val targetClient = backgrounds.clients.createClient()
+        val updatePhoneDto = targetClient.toDto().copy(phoneNumber = thePhone)
+        val therapist = TherapistClient.loginAsTheTherapist()
+
+        // When
+        therapist.clients.editClient(targetClient.id, updatePhoneDto)
+
+        // Then
+        val clients = backgrounds.clients.getAllClients().content
+        clients.forAny { it shouldMatch updatePhoneDto }
+    }
+
 }
