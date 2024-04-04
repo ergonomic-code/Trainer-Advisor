@@ -8,11 +8,15 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.servlet.ModelAndView
+import pro.azhidkov.platform.kotlin.mapFailure
+import pro.azhidkov.platform.kotlin.mapNull
+import pro.azhidkov.platform.kotlin.mapSuccessOrNull
 import pro.qyoga.app.platform.notFound
 import pro.qyoga.app.therapist.clients.ClientPageTab
 import pro.qyoga.app.therapist.clients.clientPageModel
 import pro.qyoga.core.clients.cards.ClientsRepo
 import pro.qyoga.core.clients.cards.dtos.ClientCardDto
+import pro.qyoga.core.clients.cards.errors.DuplicatedPhoneException
 import pro.qyoga.core.clients.cards.patchedBy
 
 
@@ -39,9 +43,24 @@ class EditClientCardPageController(
     fun editClientCard(
         clientCardDto: ClientCardDto,
         @PathVariable id: Long
-    ): String {
-        clientsRepo.update(id) { client -> client.patchedBy(clientCardDto) }
-        return "redirect:/therapist/clients"
+    ): ModelAndView {
+        val res = runCatching {
+            clientsRepo.update(id) { client -> client.patchedBy(clientCardDto) }
+        }
+
+        val modelAndView = res
+            .mapSuccessOrNull {
+                ModelAndView("redirect:/therapist/clients")
+            }
+            .mapNull {
+                notFound
+            }
+            .mapFailure { _: DuplicatedPhoneException ->
+                editClientFormWithValidationError(clientCardDto)
+            }
+            .getOrThrow()
+
+        return modelAndView
     }
 
 }

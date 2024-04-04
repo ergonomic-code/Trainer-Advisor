@@ -9,6 +9,7 @@ import pro.qyoga.core.clients.cards.ClientsRepo
 import pro.qyoga.core.clients.cards.dtos.ClientCardDto
 import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.core.clients.journals.model.JournalEntry
+import pro.qyoga.tests.fixture.data.faker
 import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
 import pro.qyoga.tests.fixture.object_mothers.therapists.idOnlyUserDetails
@@ -43,6 +44,13 @@ class ClientsBackgrounds(
         val client = createClients(1, therapistId).single()
         val entry = journalBackgrounds.createEntries(client.id, idOnlyUserDetails(therapistId), 1).single()
         return client to entry
+    }
+
+    fun createClient(
+        phone: String = faker.phoneNumber().phoneNumberInternational(),
+        therapistId: Long = THE_THERAPIST_ID
+    ): Client {
+        return createClients(listOf(ClientsObjectMother.createClientCardDto(phone = phone)), therapistId).single()
     }
 
 }

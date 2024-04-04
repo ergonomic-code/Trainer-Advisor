@@ -36,3 +36,17 @@ fun Client.patchedBy(clientCardDto: ClientCardDto): Client = Client(
     id = id,
     version = version
 )
+
+fun Client.toDto(): ClientCardDto = ClientCardDto(
+    firstName = firstName,
+    lastName = lastName,
+    middleName = middleName,
+    birthDate = birthDate,
+    phoneNumber = phoneNumber,
+    email = email,
+    address = address,
+    distributionSourceType = distributionSource?.type,
+    distributionSourceComment = distributionSource?.comment,
+    complaints = complaints,
+    anamnesis = anamnesis,
+)

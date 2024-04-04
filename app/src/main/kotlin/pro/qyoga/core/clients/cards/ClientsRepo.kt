@@ -15,6 +15,7 @@ import pro.azhidkov.platform.spring.sdj.erpo.ErgoRepository
 import pro.azhidkov.platform.spring.sdj.query.BuildMode
 import pro.azhidkov.platform.spring.sdj.sortBy
 import pro.qyoga.core.clients.cards.dtos.ClientSearchDto
+import pro.qyoga.core.clients.cards.errors.DuplicatedPhoneException
 import pro.qyoga.core.clients.cards.model.Client
 
 @Repository
@@ -33,6 +34,10 @@ class ClientsRepo(
 
     object Page {
         val topFiveByLastName = PageRequest.of(0, 5, sortBy(Client::lastName))
+    }
+
+    override fun <S : Client?> save(instance: S & Any): S & Any {
+        return saveAndMapDuplicatedKey(instance) { ex -> DuplicatedPhoneException(instance, ex) }
     }
 
 }
