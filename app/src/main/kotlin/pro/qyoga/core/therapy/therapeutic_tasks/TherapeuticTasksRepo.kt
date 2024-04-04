@@ -1,12 +1,10 @@
 package pro.qyoga.core.therapy.therapeutic_tasks
 
-import org.springframework.dao.DuplicateKeyException
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice
 import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.data.jdbc.core.convert.JdbcConverter
 import org.springframework.data.mapping.model.BasicPersistentEntity
-import org.springframework.data.relational.core.conversion.DbActionExecutionException
 import org.springframework.data.relational.core.mapping.RelationalMappingContext
 import org.springframework.data.util.TypeInformation
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
@@ -39,13 +37,9 @@ class TherapeuticTasksRepo(
 
     @Transactional
     override fun <S : TherapeuticTask?> save(instance: S & Any): S & Any {
-        val result = runCatching { super.save(instance) }
-        val ex = result.exceptionOrNull()
-        if ((ex as? DbActionExecutionException)?.cause is DuplicateKeyException) {
-            throw DuplicatedTherapeuticTaskName(instance, ex.cause as DuplicateKeyException)
+        return saveAndMapDuplicatedKeyException(instance) { ex ->
+            DuplicatedTherapeuticTaskName(instance, ex)
         }
-
-        return result.getOrThrow()
     }
 
     @Transactional

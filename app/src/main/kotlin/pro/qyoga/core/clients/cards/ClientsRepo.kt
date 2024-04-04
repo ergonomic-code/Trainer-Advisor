@@ -37,7 +37,9 @@ class ClientsRepo(
     }
 
     override fun <S : Client?> save(instance: S & Any): S & Any {
-        return saveAndMapDuplicatedKey(instance) { ex -> DuplicatedPhoneException(instance, ex) }
+        return saveAndMapDuplicatedKeyException(instance) { ex ->
+            DuplicatedPhoneException(instance, ex)
+        }
     }
 
 }

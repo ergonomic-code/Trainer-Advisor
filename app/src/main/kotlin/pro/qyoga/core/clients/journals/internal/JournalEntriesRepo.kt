@@ -10,9 +10,11 @@ import org.springframework.data.relational.core.mapping.RelationalMappingContext
 import org.springframework.data.util.TypeInformation
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
+import org.springframework.transaction.annotation.Transactional
 import pro.azhidkov.platform.spring.sdj.erpo.ErgoRepository
 import pro.azhidkov.platform.spring.sdj.sortBy
 import pro.qyoga.core.clients.journals.dtos.JournalPageRequest
+import pro.qyoga.core.clients.journals.errors.DuplicatedDate
 import pro.qyoga.core.clients.journals.model.JournalEntry
 import kotlin.reflect.KProperty1
 
@@ -30,6 +32,13 @@ class JournalEntriesRepo(
     jdbcConverter,
     relationalMappingContext
 ) {
+
+    @Transactional
+    override fun <S : JournalEntry?> save(instance: S & Any): S & Any {
+        return saveAndMapDuplicatedKeyException(instance) { ex ->
+            DuplicatedDate(instance, ex)
+        }
+    }
 
     fun getJournalPage(journalPageRequest: JournalPageRequest): Page<JournalEntry> {
         return findAll(

@@ -40,7 +40,7 @@ class ErgoRepository<T : Any, ID : Any>(
 
     protected val rowMapper = EntityRowMapper(relationalPersistentEntity, jdbcConverter)
 
-    protected fun <S : T> saveAndMapDuplicatedKey(aggregate: T, map: (DuplicateKeyException) -> Throwable): S {
+    protected fun <S : T> saveAndMapDuplicatedKeyException(aggregate: T, map: (DuplicateKeyException) -> Throwable): S {
         val res = runCatching { super.save(aggregate) }
         when (val ex = (res.exceptionOrNull() as? DbActionExecutionException)?.cause as? DuplicateKeyException) {
             is DuplicateKeyException -> throw map(ex)
