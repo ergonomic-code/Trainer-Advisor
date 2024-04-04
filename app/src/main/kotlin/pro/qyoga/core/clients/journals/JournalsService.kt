@@ -1,10 +1,8 @@
 package pro.qyoga.core.clients.journals
 
-import org.springframework.dao.DuplicateKeyException
 import org.springframework.data.domain.Page
 import org.springframework.stereotype.Service
 import pro.qyoga.core.clients.journals.dtos.JournalPageRequest
-import pro.qyoga.core.clients.journals.errors.DuplicatedDate
 import pro.qyoga.core.clients.journals.internal.JournalEntriesRepo
 import pro.qyoga.core.clients.journals.model.JournalEntry
 
@@ -14,11 +12,7 @@ class JournalsService(
 ) {
 
     fun createJournalEntry(newEntry: JournalEntry): JournalEntry {
-        return try {
-            journalEntriesRepo.save(newEntry)
-        } catch (ex: DuplicateKeyException) {
-            throw DuplicatedDate(newEntry, ex)
-        }
+        return journalEntriesRepo.save(newEntry)
     }
 
     fun getJournalPage(journalPageRequest: JournalPageRequest): Page<JournalEntry> {
