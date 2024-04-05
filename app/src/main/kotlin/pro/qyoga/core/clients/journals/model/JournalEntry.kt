@@ -5,9 +5,7 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.annotation.Version
 import org.springframework.data.relational.core.mapping.Table
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.ref
 import pro.qyoga.core.clients.cards.model.ClientRef
-import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
 import java.time.Instant
 import java.time.LocalDate
@@ -26,11 +24,8 @@ data class JournalEntry(
     @Version val version: Long = 0,
 ) {
 
-    fun updateBy(editJournalEntryRequest: EditJournalEntryRequest, therapeuticTask: TherapeuticTask): JournalEntry =
-        copy(
-            date = editJournalEntryRequest.date,
-            therapeuticTask = therapeuticTask.ref(),
-            entryText = editJournalEntryRequest.journalEntryText
-        )
+    object Fetch {
+        val summaryRefs = listOf(JournalEntry::therapeuticTask)
+    }
 
 }

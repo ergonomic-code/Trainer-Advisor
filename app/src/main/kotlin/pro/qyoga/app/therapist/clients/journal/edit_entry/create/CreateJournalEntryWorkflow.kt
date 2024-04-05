@@ -6,8 +6,8 @@ import org.springframework.transaction.annotation.Transactional
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.ref
 import pro.qyoga.app.therapist.clients.journal.edit_entry.shared.ClientNotFound
 import pro.qyoga.core.clients.cards.ClientsRepo
-import pro.qyoga.core.clients.journals.JournalsService
-import pro.qyoga.core.clients.journals.model.EditJournalEntryRequest
+import pro.qyoga.core.clients.journals.JournalEntriesRepo
+import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRequest
 import pro.qyoga.core.clients.journals.model.JournalEntry
 import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
@@ -16,7 +16,7 @@ import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 @Component
 class CreateJournalEntryWorkflow(
     private val clientsRepo: ClientsRepo,
-    private val journalsService: JournalsService,
+    private val journalEntriesRepo: JournalEntriesRepo,
     private val therapeuticTasksRepo: TherapeuticTasksRepo
 ) {
 
@@ -38,7 +38,7 @@ class CreateJournalEntryWorkflow(
             therapeuticTask.ref(),
             editJournalEntryRequest.journalEntryText
         )
-        val persistedEntry = journalsService.createJournalEntry(newEntry)
+        val persistedEntry = journalEntriesRepo.save(newEntry)
 
         return persistedEntry
     }

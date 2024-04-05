@@ -1,4 +1,4 @@
-package pro.qyoga.core.clients.journals.model
+package pro.qyoga.core.clients.journals.dtos
 
 import org.springframework.format.annotation.DateTimeFormat
 import pro.qyoga.l10n.RUSSIAN_DATE_FORMAT_PATTERN

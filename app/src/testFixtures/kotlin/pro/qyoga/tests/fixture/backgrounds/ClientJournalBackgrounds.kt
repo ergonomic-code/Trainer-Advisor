@@ -6,9 +6,9 @@ import org.springframework.stereotype.Component
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.FetchSpec
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.hydrate
 import pro.qyoga.app.therapist.clients.journal.edit_entry.create.CreateJournalEntryWorkflow
-import pro.qyoga.core.clients.journals.JournalsService
+import pro.qyoga.core.clients.journals.JournalEntriesRepo
+import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRequest
 import pro.qyoga.core.clients.journals.dtos.JournalPageRequest
-import pro.qyoga.core.clients.journals.model.EditJournalEntryRequest
 import pro.qyoga.core.clients.journals.model.JournalEntry
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.tests.fixture.data.randomRecentLocalDate
@@ -18,7 +18,7 @@ import pro.qyoga.tests.fixture.object_mothers.clients.JournalEntriesObjectMother
 @Component
 class ClientJournalBackgrounds(
     private val createJournalEntryWorkflow: CreateJournalEntryWorkflow,
-    private val journalsService: JournalsService,
+    private val journalEntriesRepo: JournalEntriesRepo,
     private val jdbcAggregateOperations: JdbcAggregateOperations
 ) {
 
@@ -46,7 +46,7 @@ class ClientJournalBackgrounds(
         )
 
     fun getWholeJournal(clientId: Long): Page<JournalEntry> {
-        return journalsService.getJournalPage(
+        return journalEntriesRepo.getJournalPage(
             JournalPageRequest.wholeJournal(
                 clientId,
                 fetch = listOf(JournalEntry::therapeuticTask)
