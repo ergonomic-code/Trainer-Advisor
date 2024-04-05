@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.ref
 import pro.azhidkov.platform.spring.sdj.query.QueryBuilder
 import pro.azhidkov.platform.spring.sdj.withSortBy
-import pro.qyoga.core.clients.journals.internal.JournalEntriesRepo
+import pro.qyoga.core.clients.journals.JournalEntriesRepo
 import pro.qyoga.core.clients.journals.model.JournalEntry
 import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo
 

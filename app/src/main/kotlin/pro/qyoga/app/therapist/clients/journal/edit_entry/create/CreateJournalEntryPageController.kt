@@ -11,8 +11,8 @@ import pro.azhidkov.platform.spring.mvc.modelAndView
 import pro.qyoga.app.platform.notFound
 import pro.qyoga.app.therapist.clients.journal.edit_entry.shared.JOURNAL_ENTRY_VIEW_NAME
 import pro.qyoga.core.clients.cards.ClientsRepo
+import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRequest
 import pro.qyoga.core.clients.journals.errors.DuplicatedDate
-import pro.qyoga.core.clients.journals.model.EditJournalEntryRequest
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import java.time.LocalDate
 

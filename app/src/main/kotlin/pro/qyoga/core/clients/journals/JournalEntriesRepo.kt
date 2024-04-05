@@ -1,4 +1,4 @@
-package pro.qyoga.core.clients.journals.internal
+package pro.qyoga.core.clients.journals
 
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
