@@ -2,10 +2,10 @@ import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm")
-    id("io.spring.dependency-management")
+    alias(libs.plugins.kotlin)
+    alias(libs.plugins.spring.dependencyManagement)
     // см. https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/htmlsingle/#managing-dependencies.dependency-management-plugin.using-in-isolation
-    id("org.springframework.boot") apply false
+    alias(libs.plugins.spring.boot) apply false
 }
 
 the<DependencyManagementExtension>().apply {
@@ -31,8 +31,8 @@ dependencies {
     testImplementation(kotlin("reflect"))
     testImplementation(project(":app"))
     testImplementation(testFixtures(project(":app")))
-    testImplementation("com.codeborne:selenide-proxy:7.0.3")
-    testImplementation("org.testcontainers:selenium:1.19.3")
+    testImplementation(testLibs.selenide.proxy)
+    testImplementation(testLibs.testcontainers.selenium)
 }
 
 tasks.withType<KotlinCompile> {
