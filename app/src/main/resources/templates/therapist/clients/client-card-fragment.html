@@ -36,6 +36,10 @@
                            placeholder="+7 (999) 000-0000"
                            th:classappend="${duplicatedPhone} ? 'is-invalid' : ''"
                            required th:value="${client?.phoneNumber ?: ''}" type="tel">
+
+                    <div class="invalid-feedback" id="duplicatedPhoneErrorMessage">
+                        К данному номеру телефона уже привязана карточка клиента.
+                    </div>
                 </div>
                 <div class="col">
                     <input class="form-control q-input mt-2 w-100" id="ClientDate" name="birthDate"
