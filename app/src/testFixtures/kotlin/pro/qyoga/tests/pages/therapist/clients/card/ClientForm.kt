@@ -6,6 +6,7 @@ import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.core.clients.cards.model.DistributionSourceType
 import pro.qyoga.l10n.russianDateFormat
 import pro.qyoga.tests.assertions.PageMatcher
+import pro.qyoga.tests.assertions.SelectorOnlyComponent
 import pro.qyoga.tests.platform.html.*
 import pro.qyoga.tests.platform.html.Input.Companion.email
 import pro.qyoga.tests.platform.html.Input.Companion.tel
@@ -19,6 +20,7 @@ abstract class ClientForm(action: FormAction) : QYogaForm("createClientForm", ac
     val birthDate = text("birthDate", false)
     val phoneNumber = tel("phoneNumber", true)
     val invalidPhoneInput = "${phoneNumber.selector()}.is-invalid"
+    val duplicatedPhoneErrorMessage = "#duplicatedPhoneErrorMessage"
     val email = email("email", false)
     val address = text("address", false)
     val complaints = TextArea("complaints", false)
@@ -39,6 +41,7 @@ abstract class ClientForm(action: FormAction) : QYogaForm("createClientForm", ac
         anamnesis,
         distributionSourceType,
         distributionSourceComment,
+        SelectorOnlyComponent(duplicatedPhoneErrorMessage)
     )
 
 }
