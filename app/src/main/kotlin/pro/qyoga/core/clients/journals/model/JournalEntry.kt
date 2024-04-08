@@ -26,6 +26,7 @@ data class JournalEntry(
 
     object Fetch {
         val summaryRefs = listOf(JournalEntry::therapeuticTask)
+        val client = listOf(JournalEntry::client)
     }
 
 }
