@@ -1,6 +1,7 @@
 <div class="client__container" id="clientCardTab">
     <form class="form__client-card" id="createClientForm" method="post" th:action="${formAction}"
-          th:fragment="createClientForm">
+          th:fragment="createClientForm"
+          x-data="{}">
 
         <fieldset class="mb-4">
             <legend>Контактные данные</legend>
@@ -9,27 +10,30 @@
                 <div class="col-12 col-sm-4 mb-3">
                     <div class="form-floating ">
                         <input class="form-control"
+                               maxlength="64"
                                id="firstName"
-                               maxlength="32"
                                minlength="2"
                                name="firstName"
                                placeholder="Имя"
                                required
+                               pattern="^[а-яА-ЯёЁ]{2,64}$"
                                th:value="${client?.firstName ?: ''}"
                                type="text"
                         >
                         <label for="firstName">Имя <span class="text-danger">*</span></label>
                     </div>
+                    <div class="form-text">Только кириллица</div>
                 </div>
                 <div class="col-12 col-sm-4 mb-3">
                     <div class="form-floating">
                         <input class="form-control"
+                               maxlength="64"
                                id="ClientLastName"
-                               maxlength="32"
                                minlength="2"
                                name="lastName"
                                placeholder="Фамилия"
                                required
+                               pattern="^[а-яА-ЯёЁ]{2,64}$"
                                th:value="${client?.lastName ?: ''}"
                                type="text">
                         <label for="ClientLastName">Фамилия <span class="text-danger">*</span></label>
@@ -40,7 +44,10 @@
                         <input class="form-control"
                                id="ClientMiddleName"
                                name="middleName"
+                               minlength="2"
+                               maxlength="64"
                                placeholder="Отчество"
+                               pattern="^[а-яА-ЯёЁ]{2,64}$"
                                th:value="${client?.middleName ?: ''}"
                                type="text">
                         <label for="ClientMiddleName">Отчество</label>
@@ -54,12 +61,15 @@
                         <input class="form-control"
                                id="ClientPhone"
                                name="phoneNumber"
-                               placeholder="+7 (999) 000-0000"
+                               placeholder="+7 (999) 000-00-00"
                                required
                                th:classappend="${duplicatedPhone} ? 'is-invalid' : ''"
                                th:value="${client?.phoneNumber ?: ''}"
-                               type="tel">
+                               type="tel"
+                               x-mask="+7 (999) 999-99-99"
+                        >
                         <label for="ClientPhone">Номер телефона <span class="text-danger">*</span></label>
+                        <div class="form-text">В формате +7 (999) 111-22-33</div>
                         <div class="invalid-feedback" id="duplicatedPhoneErrorMessage">
                             К данному номеру телефона уже привязана карточка клиента.
                         </div>
@@ -79,9 +89,13 @@
                                id="birthDate"
                                name="birthDate"
                                placeholder="дд.мм.гггг"
+                               pattern="[0-3]{1}[0-9]{1}.[0-1]{1}[0-9].[1-2][0-9]{3}"
                                th:value="${client?.birthDate != null} ? ${#temporals.format(client.birthDate, T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN)}"
-                               type="text">
+                               type="text"
+                               x-mask="99.99.9999"
+                        >
                         <label for="birthDate">Дата рождения</label>
+                        <div class="form-text">В формате дд.мм.гггг</div>
                     </div>
                 </div>
             </div>
