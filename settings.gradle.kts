@@ -58,7 +58,7 @@ dependencyResolutionManagement {
             library("restassured-kotlin", "io.rest-assured", "kotlin-extensions").versionRef(restAssuredVersion)
             bundle("restassured", listOf("restassured-core", "restassured-kotlin"))
 
-            library("jsoup", "org.jsoup", "jsoup").version("1.12.2")
+            library("jsoup", "org.jsoup", "jsoup").version("1.17.2")
             library("datafaker", "net.datafaker", "datafaker").version("2.1.0")
             library("greenmail", "com.icegreen", "greenmail-junit5").version("2.0.1")
 

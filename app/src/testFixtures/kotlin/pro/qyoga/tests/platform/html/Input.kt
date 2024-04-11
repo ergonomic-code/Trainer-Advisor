@@ -84,6 +84,9 @@ data class Input(
         fun submit(name: String, value: String? = null) =
             Input(name, false, "submit", value = value)
 
+        fun hidden(name: String, required: Boolean) =
+            Input(name, required, "hidden")
+
     }
 
 }

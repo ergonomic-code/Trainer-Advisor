@@ -24,7 +24,7 @@ object ClientsObjectMother {
         lastName: String = faker.name().lastName(),
         middleName: String? = faker.name().nameWithMiddle().split(" ")[1],
         birthDate: LocalDate = randomBirthDate(),
-        phone: String = randomPhoneNumber(),
+        phone: String = faker.phoneNumber().phoneNumberInternational(),
         email: String? = randomEmail(),
         address: String? = randomCyrillicWord(),
         complains: String = randomCyrillicWord(),
@@ -53,7 +53,8 @@ object ClientsObjectMother {
         address: String? = null,
         complains: String? = null,
         anamnesis: String? = null,
-        distributionSource: DistributionSource? = null
+        distributionSource: DistributionSource? = null,
+        version: Long = Random.nextLong(0, Long.MAX_VALUE)
     ): ClientCardDto = ClientCardDto(
         firstName,
         lastName,
@@ -66,6 +67,7 @@ object ClientsObjectMother {
         anamnesis,
         distributionSource?.type,
         distributionSource?.comment,
+        version
     )
 
     fun createClient(therapistId: Long, clientCardDto: ClientCardDto): Client =

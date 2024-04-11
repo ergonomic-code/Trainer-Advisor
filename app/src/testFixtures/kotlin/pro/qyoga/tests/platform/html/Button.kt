@@ -10,14 +10,15 @@ import pro.qyoga.tests.assertions.isTag
 data class Button(
     override val name: String,
     val text: String,
-    val action: FormAction? = null
+    val action: FormAction? = null,
+    val id: String? = null
 ) : Component {
 
     override fun selector(): String =
         buildString {
             append("button[name=$name]")
-            if (text.isNotEmpty()) {
-                append(":contains($text)")
+            if (id != null) {
+                append("#$id")
             }
         }
 

@@ -36,6 +36,19 @@ class EditClientCardPageTest : QYogaAppIntegrationBaseTest() {
     }
 
     @Test
+    fun `Edit client card page should be rendered correctly for minimal client`() {
+        // Given
+        val therapist = TherapistClient.loginAsTheTherapist()
+        val client = backgrounds.clients.createClients(listOf(ClientsObjectMother.createClientCardDtoMinimal())).first()
+
+        // When
+        val document = therapist.clients.getEditClientCardPage(client.id)
+
+        // Then
+        document shouldBe EditClientPage.pageFor(client)
+    }
+
+    @Test
     fun `Client editing should be persistent`() {
         // Given
         val therapist = TherapistClient.loginAsTheTherapist()
@@ -49,7 +62,7 @@ class EditClientCardPageTest : QYogaAppIntegrationBaseTest() {
         therapist.clients.editClient(client.id, editedClientCardDto)
 
         // Then
-        val clients = backgrounds.clients.getAllClients().content
+        val clients = backgrounds.clients.getAllClients()
         clients.forNone { it shouldMatch newClientCardDto }
         clients.forAny { it shouldMatch editedClientCardDto }
     }
@@ -66,7 +79,7 @@ class EditClientCardPageTest : QYogaAppIntegrationBaseTest() {
         therapist.clients.editClient(minimalClientId, editedMinimalClient)
 
         // Then
-        val clients = backgrounds.clients.getAllClients().content
+        val clients = backgrounds.clients.getAllClients()
         clients.forAny { it shouldMatch editedMinimalClient }
     }
 
@@ -133,7 +146,7 @@ class EditClientCardPageTest : QYogaAppIntegrationBaseTest() {
         therapist.clients.editClient(targetClient.id, updatePhoneDto)
 
         // Then
-        val clients = backgrounds.clients.getAllClients().content
+        val clients = backgrounds.clients.getAllClients()
         clients.forAny { it shouldMatch updatePhoneDto }
     }
 

@@ -1,5 +1,6 @@
 package pro.qyoga.tests.infra
 
+import com.codeborne.selenide.Configuration
 import com.codeborne.selenide.WebDriverRunner
 import com.codeborne.selenide.junit5.ScreenShooterExtension
 import org.junit.jupiter.api.AfterEach
@@ -13,12 +14,13 @@ import pro.qyoga.tests.infra.web.QYogaAppBaseTest
 
 open class QYogaE2EBaseTest : QYogaAppBaseTest() {
 
-    protected val baseUri = "http://host.testcontainers.internal:$port"
+    private val baseUri = "http://host.testcontainers.internal:$port"
 
     @BeforeEach
     fun setUp() {
         Testcontainers.exposeHostPorts(port)
         val url = container.seleniumAddress
+        Configuration.baseUrl = baseUri
         WebDriverRunner.setWebDriver(RemoteWebDriver(url, ChromeOptions()))
     }
 
@@ -29,6 +31,7 @@ open class QYogaE2EBaseTest : QYogaAppBaseTest() {
 
     companion object {
 
+        @Suppress("unused")
         @JvmField
         @RegisterExtension
         val screenshotOnError: ScreenShooterExtension = ScreenShooterExtension(false)
