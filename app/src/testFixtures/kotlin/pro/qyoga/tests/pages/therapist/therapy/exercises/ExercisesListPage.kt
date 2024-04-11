@@ -23,15 +23,15 @@ object ExercisesListPage : QYogaPage {
 
     object ExercisesSearchForm : QYogaForm("exercisesSearch", action = hxGet("$path/search")) {
 
-        val title = text("title", false)
-        val exercisesType = Select("exerciseType", false, ExerciseType.entries.map { Option(it.name, it.label) })
-        val searchButton = Button("search", "Поиск")
+        val title by component { text("title", false) }
+        val exercisesType by component {
+            Select("exerciseType", false, ExerciseType.entries.map { Option(it.name, it.label) })
+        }
 
-        override val components = listOf(
-            title,
-            exercisesType,
-            searchButton
-        )
+        init {
+            withAnonymousComponent(Button("search", "Поиск", id = "searchButtonMobile"))
+            withAnonymousComponent(Button("search", "Поиск", id = "searchButtonDesktop"))
+        }
 
     }
 
@@ -39,8 +39,8 @@ object ExercisesListPage : QYogaPage {
 
     private val newExerciseButton = Link("newExerciseLink", CreateExercisePage, "Добавить")
 
-    val exercisePath = "$path/{exerciseId}"
-    val updateAction = exercisePath
+    private val exercisePath = "$path/{exerciseId}"
+    private val updateAction = exercisePath
     val updateActionPattern = updateAction.replace("{exerciseId}", "(\\d+)").toRegex()
 
     val deleteAction = exercisePath

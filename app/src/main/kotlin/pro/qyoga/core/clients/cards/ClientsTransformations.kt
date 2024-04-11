@@ -49,4 +49,5 @@ fun Client.toDto(): ClientCardDto = ClientCardDto(
     distributionSourceComment = distributionSource?.comment,
     complaints = complaints,
     anamnesis = anamnesis,
+    version = version
 )

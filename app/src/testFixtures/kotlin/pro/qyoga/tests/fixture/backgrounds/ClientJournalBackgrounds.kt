@@ -12,7 +12,7 @@ import pro.qyoga.core.clients.journals.dtos.JournalPageRequest
 import pro.qyoga.core.clients.journals.model.JournalEntry
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.tests.fixture.data.randomRecentLocalDate
-import pro.qyoga.tests.fixture.object_mothers.clients.JournalEntriesObjectMother
+import pro.qyoga.tests.fixture.object_mothers.clients.JournalEntriesObjectMother.journalEntry
 
 
 @Component
@@ -31,12 +31,11 @@ class ClientJournalBackgrounds(
     }
 
     fun createEntries(clientId: Long, therapist: QyogaUserDetails, count: Int): List<JournalEntry> {
-        val uniqueDates = generateSequence { randomRecentLocalDate() }
+        return generateSequence { randomRecentLocalDate() }
             .distinct()
-            .asIterable()
-        return (1..count).zip(uniqueDates).map { (_, date) ->
-            createJournalEntry(clientId, JournalEntriesObjectMother.journalEntry(date = date), therapist)
-        }
+            .take(count)
+            .map { date -> createJournalEntry(clientId, journalEntry(date = date), therapist) }
+            .toList()
     }
 
     fun hydrate(journalEntries: List<JournalEntry>): List<JournalEntry> =

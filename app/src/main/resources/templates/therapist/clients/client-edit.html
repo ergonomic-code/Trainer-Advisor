@@ -30,7 +30,7 @@
                         <li class="nav-item">
                             <a class="nav-link " id="journalLinkSm"
                                th:classappend="${activeTab == 'journal'} ? 'active'"
-                               th:href="@{/therapist/clients/{id}/journal(id=${client.id})}">Журнал</a>
+                               th:href="@{/therapist/clients/{id}/journal(id=${id})}">Журнал</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link disabled " href="#">Особенности</a>
@@ -38,7 +38,7 @@
                         <li class="nav-item">
                             <a class="nav-link " id="cardLinkSm"
                                th:classappend="${activeTab == 'card'} ? 'active'"
-                               th:href="@{/therapist/clients/{id}/card(id=${client.id})}">Карточка</a>
+                               th:href="@{/therapist/clients/{id}/card(id=${id})}">Карточка</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link  disabled" href="#">Объём движений</a>
@@ -47,7 +47,7 @@
                             <a class="nav-link"
                                id=" filesLinkSm"
                                th:classappend="${activeTab == 'card'} ? 'active'"
-                               th:href="@{/therapist/clients/{id}/files(id=${client.id})}">Файлы</a>
+                               th:href="@{/therapist/clients/{id}/files(id=${id})}">Файлы</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link  disabled" href="#">Программы</a>
@@ -70,7 +70,7 @@
                                 <a class="dropdown-item "
                                    id="journalLink"
                                    th:classappend="${activeTab.name.equalsIgnoreCase('journal')} ? 'active'"
-                                   th:href="@{/therapist/clients/{id}/journal(id=${client.id})}">Журнал</a>
+                                   th:href="@{/therapist/clients/{id}/journal(id=${id})}">Журнал</a>
                             </li>
                             <li>
                                 <a class="dropdown-item disabled " href="#">Особенности</a>
@@ -79,7 +79,7 @@
                                 <a class="dropdown-item "
                                    id="cardLink"
                                    th:classappend="${activeTab.name.equalsIgnoreCase('card')} ? 'active'"
-                                   th:href="@{/therapist/clients/{id}/card(id=${client.id})}">Карточка</a>
+                                   th:href="@{/therapist/clients/{id}/card(id=${id})}">Карточка</a>
                             </li>
                             <li>
                                 <a class="dropdown-item  disabled" href="#">Объём движений</a>
@@ -88,7 +88,7 @@
                                 <a class="dropdown-item"
                                    id="filesLink"
                                    th:classappend="${activeTab.name.equalsIgnoreCase('files')} ? 'active'"
-                                   th:href="@{/therapist/clients/{id}/files(id=${client.id})}">Файлы</a>
+                                   th:href="@{/therapist/clients/{id}/files(id=${id})}">Файлы</a>
                             </li>
                             <li>
                                 <a class="dropdown-item  disabled" href="#">Программы</a>

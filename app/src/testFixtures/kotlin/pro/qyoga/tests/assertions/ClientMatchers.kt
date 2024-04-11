@@ -10,7 +10,7 @@ infix fun Client.shouldMatch(clientCardDto: ClientCardDto) {
     lastName shouldBe clientCardDto.lastName
     middleName shouldBe clientCardDto.middleName
     birthDate shouldBe clientCardDto.birthDate
-    phoneNumber shouldBe clientCardDto.phoneNumber
+    phoneNumber.replace("\\D".toRegex(), "") shouldBe clientCardDto.phoneNumber.replace("\\D".toRegex(), "")
     email shouldBe clientCardDto.email
     address shouldBe clientCardDto.address
     distributionSource?.type shouldBe clientCardDto.distributionSourceType

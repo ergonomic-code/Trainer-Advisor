@@ -1,6 +1,5 @@
 package pro.qyoga.tests.fixture.backgrounds
 
-import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Component
 import org.springframework.ui.ExtendedModelMap
@@ -34,10 +33,10 @@ class ClientsBackgrounds(
         return createClients(ClientsObjectMother.createClientCardDtos(count), therapistId)
     }
 
-    fun getAllClients(): Page<Client> {
+    fun getAllClients(): List<Client> {
         val model = ExtendedModelMap()
         clientsListPageController.getClients(theTherapistUserDetails, Pageable.ofSize(Int.MAX_VALUE), model)
-        return ClientsListPageController.getClients(model)
+        return ClientsListPageController.getClients(model).content
     }
 
     fun createClientWithJournalEntry(therapistId: Long = THE_THERAPIST_ID): Pair<Client, JournalEntry> {

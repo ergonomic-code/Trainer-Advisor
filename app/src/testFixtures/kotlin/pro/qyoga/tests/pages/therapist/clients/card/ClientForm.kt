@@ -9,6 +9,7 @@ import pro.qyoga.tests.assertions.PageMatcher
 import pro.qyoga.tests.assertions.SelectorOnlyComponent
 import pro.qyoga.tests.platform.html.*
 import pro.qyoga.tests.platform.html.Input.Companion.email
+import pro.qyoga.tests.platform.html.Input.Companion.hidden
 import pro.qyoga.tests.platform.html.Input.Companion.tel
 import pro.qyoga.tests.platform.html.Input.Companion.text
 
@@ -28,6 +29,8 @@ abstract class ClientForm(action: FormAction) : QYogaForm("createClientForm", ac
     val distributionSourceType =
         Select("distributionSourceType", false, DistributionSourceType.entries.map { Option.of(it) })
     val distributionSourceComment = text("distributionSourceComment", false)
+    val version = hidden("version", false)
+    val submit = Button("confirmButton", "Сохранить")
 
     override val components: List<Component> = listOf(
         firstName,
@@ -41,7 +44,8 @@ abstract class ClientForm(action: FormAction) : QYogaForm("createClientForm", ac
         anamnesis,
         distributionSourceType,
         distributionSourceComment,
-        SelectorOnlyComponent(duplicatedPhoneErrorMessage)
+        SelectorOnlyComponent(duplicatedPhoneErrorMessage),
+        submit
     )
 
 }
@@ -64,7 +68,7 @@ object EditClientForm : ClientForm(FormAction.classicPost("/therapist/clients/{i
                 .`val`() shouldBe (client.distributionSource?.type?.name ?: "")
             element.select(distributionSourceComment.selector())
                 .`val`() shouldBe (client.distributionSource?.comment ?: "")
-            element.select(complaints.selector()).text() shouldBe client.complaints
+            element.select(complaints.selector()).text() shouldBe (client.complaints ?: "")
         }
     }
 

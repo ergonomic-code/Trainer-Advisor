@@ -7,6 +7,7 @@ import com.icegreen.greenmail.junit5.GreenMailExtension
 import com.icegreen.greenmail.util.ServerSetupTest
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import pro.qyoga.tests.assertions.passwordEmailPattern
@@ -17,41 +18,53 @@ import pro.qyoga.tests.fixture.object_mothers.therapists.TherapistsObjectMother.
 import pro.qyoga.tests.infra.QYogaE2EBaseTest
 import pro.qyoga.tests.pages.publc.LoginPage
 import pro.qyoga.tests.pages.publc.RegisterPage
-import pro.qyoga.tests.platform.selenide.`$`
-import pro.qyoga.tests.platform.selenide.fastType
+import pro.qyoga.tests.pages.therapist.appointments.CalendarPage
+import pro.qyoga.tests.platform.selenide.click
+import pro.qyoga.tests.platform.selenide.typeInto
 
 
+@DisplayName("Регистрация терапевта")
 class RegisterUserScenarioTest : QYogaE2EBaseTest() {
 
+    @DisplayName("Успешная регистрация")
     @Test
-    fun `Register user scenario`() {
-        // Given
+    fun successFullUserRegistration() {
+        // Фикстура
         val registerTherapistRequest = registerTherapistRequest(
             randomCyrillicWord(),
             randomCyrillicWord(),
             randomEmail()
         )
 
-        open("$baseUri${RegisterPage.path}")
+        // Пользователь переходит по урлу страницы регистрации
+        open(RegisterPage.path)
+
+        // И видит страницу регистрации
         title() shouldBe (RegisterPage.title)
 
-        `$`(RegisterPage.RegisterForm.firstName).fastType(registerTherapistRequest.firstName)
-        `$`(RegisterPage.RegisterForm.lastName).fastType(registerTherapistRequest.lastName)
-        `$`(RegisterPage.RegisterForm.email).fastType(registerTherapistRequest.email)
-        `$`(RegisterPage.RegisterForm.submit).click()
+        // Затем он заполяет и отправляет форму
+        typeInto(RegisterPage.RegisterForm.firstName, registerTherapistRequest.firstName)
+        typeInto(RegisterPage.RegisterForm.lastName, registerTherapistRequest.lastName)
+        typeInto(RegisterPage.RegisterForm.email, registerTherapistRequest.email)
+        click(RegisterPage.RegisterForm.submit)
 
+        // И видит сообщение об успешной регистрации
         `$`("div#registrationSuccess").should(Visible())
 
+        // И получает письмо с паролем
         val receivedMessages = greenMail.getReceivedMessagesForDomain(registerTherapistRequest.email)
         receivedMessages shouldHaveSize 1
         receivedMessages[0] shouldBePasswordEmailFor registerTherapistRequest
         val password = passwordEmailPattern.matchEntire(receivedMessages[0].content as String)!!.groupValues[2]
 
-        open("$baseUri${LoginPage.path}")
-        `$`(LoginPage.LoginForm.username).fastType(registerTherapistRequest.email)
-        `$`(LoginPage.LoginForm.password).fastType(password)
-        `$`(LoginPage.LoginForm.submit).click()
-        title() shouldBe "Расписание"
+        // Затем пользователь входит
+        open(LoginPage.path)
+        typeInto(LoginPage.LoginForm.username, registerTherapistRequest.email)
+        typeInto(LoginPage.LoginForm.password, password)
+        click(LoginPage.LoginForm.submit)
+
+        // И видит страницу расписания
+        title() shouldBe CalendarPage.title
     }
 
     companion object {

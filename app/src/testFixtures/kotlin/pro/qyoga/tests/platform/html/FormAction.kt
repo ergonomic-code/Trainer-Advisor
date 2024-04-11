@@ -41,7 +41,7 @@ data class FormAction(
     fun matcher(): Matcher<Element> {
         val matchers = buildList {
             add(haveAttribute(attr))
-            add(haveAttributeValueMatching(attr, url.replace("\\{.*}".toRegex(), ".*").toRegex()))
+            add(haveAttributeValueMatching(attr, url.replace("\\{.*}".toRegex(), ".+").toRegex()))
             if (method != null) {
                 add(haveAttributeValue("method", method, ignoreCase = true))
             }

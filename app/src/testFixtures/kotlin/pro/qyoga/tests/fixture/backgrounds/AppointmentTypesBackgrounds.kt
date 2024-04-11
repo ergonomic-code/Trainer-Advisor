@@ -14,7 +14,9 @@ class AppointmentTypesBackgrounds(
         return (1..count).map { createAppointmentType() }
     }
 
-    fun createAppointmentType(appointmentType: AppointmentType = AppointmentTypesObjectMother.randomAppointmentType()): AppointmentType {
+    fun createAppointmentType(
+        appointmentType: AppointmentType = AppointmentTypesObjectMother.randomAppointmentType()
+    ): AppointmentType {
         return appointmentTypesRepo.save(appointmentType)
     }
 

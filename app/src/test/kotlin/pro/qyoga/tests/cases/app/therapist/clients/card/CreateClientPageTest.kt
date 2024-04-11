@@ -39,7 +39,7 @@ class CreateClientPageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         val clients = backgrounds.clients.getAllClients()
-        clients.content.forAny { it shouldMatch newClientRequest }
+        clients.forAny { it shouldMatch newClientRequest }
     }
 
     @Test
@@ -55,7 +55,7 @@ class CreateClientPageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         val clients = backgrounds.clients.getAllClients()
-        clients.content.forAny { it shouldMatch newClientRequest }
+        clients.forAny { it shouldMatch newClientRequest }
     }
 
     @Test
@@ -68,7 +68,7 @@ class CreateClientPageTest : QYogaAppIntegrationBaseTest() {
         therapist.clients.createClient(minimalClient)
 
         // Then
-        val clients = backgrounds.clients.getAllClients().content
+        val clients = backgrounds.clients.getAllClients()
         clients.forAny { it shouldMatch minimalClient }
     }
 
@@ -100,7 +100,7 @@ class CreateClientPageTest : QYogaAppIntegrationBaseTest() {
         therapist.clients.createClient(duplicatedClient)
 
         // Then
-        val clients = backgrounds.clients.getAllClients().content
+        val clients = backgrounds.clients.getAllClients()
         clients.forAny { it shouldMatch duplicatedClient }
     }
 

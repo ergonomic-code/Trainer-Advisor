@@ -12,7 +12,7 @@
                         hx-swap-oob="true"
                         hx-target="#clientFilesListData"
                         hx-trigger="change from:#newFile"
-                        th:hx-post='@{/therapist/clients/{id}/files(id=${client.id})}'>
+                        th:hx-post='@{/therapist/clients/{id}/files(id=${clientId})}'>
 
                     <button class="btn btn-outline-success w-100"
                             id="uploadFileBtn"

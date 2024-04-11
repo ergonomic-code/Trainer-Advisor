@@ -5,6 +5,7 @@ import io.restassured.module.kotlin.extensions.Extract
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
+import io.restassured.specification.RequestSpecification
 import org.hamcrest.CoreMatchers.endsWith
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
@@ -75,17 +76,7 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
     fun createClient(request: ClientCardDto) {
         Given {
             authorized()
-            formParam(CreateClientForm.firstName.name, request.firstName)
-            formParam(CreateClientForm.lastName.name, request.lastName)
-            formParam(CreateClientForm.middleName.name, request.middleName ?: "")
-            formParam(CreateClientForm.birthDate.name, request.birthDate?.toString() ?: "")
-            formParam(CreateClientForm.email.name, request.email ?: "")
-            formParam(CreateClientForm.phoneNumber.name, request.phoneNumber)
-            formParam(CreateClientForm.address.name, request.address ?: "")
-            formParam(CreateClientForm.complaints.name, request.complaints ?: "")
-            formParam(CreateClientForm.anamnesis.name, request.anamnesis ?: "")
-            formParam(CreateClientForm.distributionSourceType.name, request.distributionSourceType ?: "")
-            formParam(CreateClientForm.distributionSourceComment.name, request.distributionSourceComment ?: "")
+            clientCardFormParams(request)
         } When {
             post(CreateClientForm.action.url)
         } Then {
@@ -97,17 +88,7 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
     fun createClientForError(request: ClientCardDto): Document {
         return Given {
             authorized()
-            formParam(CreateClientForm.firstName.name, request.firstName)
-            formParam(CreateClientForm.lastName.name, request.lastName)
-            formParam(CreateClientForm.middleName.name, request.middleName ?: "")
-            formParam(CreateClientForm.birthDate.name, request.birthDate?.toString() ?: "")
-            formParam(CreateClientForm.email.name, request.email ?: "")
-            formParam(CreateClientForm.phoneNumber.name, request.phoneNumber)
-            formParam(CreateClientForm.address.name, request.address ?: "")
-            formParam(CreateClientForm.complaints.name, request.complaints ?: "")
-            formParam(CreateClientForm.anamnesis.name, request.anamnesis ?: "")
-            formParam(CreateClientForm.distributionSourceType.name, request.distributionSourceType ?: "")
-            formParam(CreateClientForm.distributionSourceComment.name, request.distributionSourceComment ?: "")
+            clientCardFormParams(request)
         } When {
             post(CreateClientForm.action.url)
         } Then {
@@ -120,20 +101,8 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
     fun editClient(clientId: Long, request: ClientCardDto) {
         Given {
             authorized()
-
             pathParam("id", clientId)
-
-            formParam(EditClientForm.firstName.name, request.firstName)
-            formParam(EditClientForm.lastName.name, request.lastName)
-            formParam(EditClientForm.middleName.name, request.middleName ?: "")
-            formParam(EditClientForm.birthDate.name, request.birthDate?.toString() ?: "")
-            formParam(EditClientForm.email.name, request.email ?: "")
-            formParam(EditClientForm.phoneNumber.name, request.phoneNumber)
-            formParam(EditClientForm.address.name, request.address ?: "")
-            formParam(EditClientForm.complaints.name, request.complaints)
-            formParam(EditClientForm.anamnesis.name, request.anamnesis ?: "")
-            formParam(EditClientForm.distributionSourceType.name, request.distributionSourceType?.name ?: "")
-            formParam(EditClientForm.distributionSourceComment.name, request.distributionSourceComment ?: "")
+            clientCardFormParams(request)
         } When {
             post(EditClientPage.PATH)
         } Then {
@@ -149,20 +118,8 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
     ): Document {
         return Given {
             authorized()
-
             pathParam("id", clientId)
-
-            formParam(EditClientForm.firstName.name, request.firstName)
-            formParam(EditClientForm.lastName.name, request.lastName)
-            formParam(EditClientForm.middleName.name, request.middleName ?: "")
-            formParam(EditClientForm.birthDate.name, request.birthDate?.toString() ?: "")
-            formParam(EditClientForm.email.name, request.email ?: "")
-            formParam(EditClientForm.phoneNumber.name, request.phoneNumber)
-            formParam(EditClientForm.address.name, request.address ?: "")
-            formParam(EditClientForm.complaints.name, request.complaints)
-            formParam(EditClientForm.anamnesis.name, request.anamnesis ?: "")
-            formParam(EditClientForm.distributionSourceType.name, request.distributionSourceType?.name ?: "")
-            formParam(EditClientForm.distributionSourceComment.name, request.distributionSourceComment ?: "")
+            clientCardFormParams(request)
         } When {
             post(EditClientPage.PATH)
         } Then {
@@ -170,6 +127,21 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
         } Extract {
             Jsoup.parse(body().asString())
         }
+    }
+
+    private fun RequestSpecification.clientCardFormParams(request: ClientCardDto): RequestSpecification {
+        formParam(EditClientForm.firstName.name, request.firstName)
+        formParam(EditClientForm.lastName.name, request.lastName)
+        formParam(EditClientForm.middleName.name, request.middleName ?: "")
+        formParam(EditClientForm.birthDate.name, request.birthDate?.toString() ?: "")
+        formParam(EditClientForm.email.name, request.email ?: "")
+        formParam(EditClientForm.phoneNumber.name, request.phoneNumber)
+        formParam(EditClientForm.address.name, request.address ?: "")
+        formParam(EditClientForm.complaints.name, request.complaints)
+        formParam(EditClientForm.anamnesis.name, request.anamnesis ?: "")
+        formParam(EditClientForm.distributionSourceType.name, request.distributionSourceType?.name ?: "")
+        formParam(EditClientForm.distributionSourceComment.name, request.distributionSourceComment ?: "")
+        return formParam(EditClientForm.version.name, request.version)
     }
 
     fun searchClients(searchForm: ClientSearchDto = ClientSearchDto(), page: Int = 1): Document {

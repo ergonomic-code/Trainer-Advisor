@@ -19,8 +19,13 @@ data class ClientCardDto(
     val anamnesis: String?,
     val distributionSourceType: DistributionSourceType?,
     val distributionSourceComment: String?,
+    val version: Long
 ) {
 
     val distributionSource = distributionSourceType?.let { DistributionSource(it, distributionSourceComment) }
+
+    fun fullName() = listOf(lastName, firstName, middleName)
+        .filter { it?.isNotBlank() ?: false }
+        .joinToString(" ")
 
 }

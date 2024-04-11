@@ -7,7 +7,6 @@ import pro.qyoga.app.therapist.appointments.core.edit.CreateAppointmentWorkflow
 import pro.qyoga.app.therapist.appointments.core.schedule.GetCalendarAppointmentsWorkflow
 import pro.qyoga.core.appointments.core.Appointment
 import pro.qyoga.core.appointments.core.AppointmentsRepo
-import pro.qyoga.core.appointments.core.EditAppointmentRequest
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.TherapistRef
@@ -90,13 +89,6 @@ class AppointmentsBackgrounds(
             )
         )
         return appointmentsRepo.findById(appointment.id, Appointment.Fetch.editableRefs)!!
-    }
-
-    fun create(
-        editAppointmentRequest: EditAppointmentRequest,
-        therapist: TherapistRef = THE_THERAPIST_REF
-    ): Appointment {
-        return createAppointment(therapist, editAppointmentRequest)
     }
 
     fun findById(appointmentId: Long): Appointment? {
