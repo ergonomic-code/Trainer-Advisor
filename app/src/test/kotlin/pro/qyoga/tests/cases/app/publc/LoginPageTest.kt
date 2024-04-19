@@ -26,7 +26,7 @@ class LoginPageTest : QYogaAppIntegrationBaseTest() {
 
         response.Then {
             statusCode(HttpStatus.FOUND.value())
-            header("location", matchesRegex(".*:\\d{4,5}/"))
+            header("location", matchesRegex(".*:\\d{4,5}/therapist"))
         }
     }
 
