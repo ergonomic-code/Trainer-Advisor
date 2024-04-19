@@ -18,7 +18,7 @@ object PublicClient {
         return Given {
             this
         } When {
-            get()
+            get("/")
         } Then {
             statusCode(HttpStatus.OK.value())
         } Extract {

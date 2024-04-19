@@ -25,6 +25,11 @@ spring:
           starttls:
             enable: true
 
+  web:
+    resources:
+      chain:
+        cache: true
+
 management:
   endpoints:
     web:

@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test
 import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.clients.PublicClient
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
-import pro.qyoga.tests.pages.publc.LoginPage
+import pro.qyoga.tests.pages.publc.LandingPage
 
 
 class UnauthorizedMainPageTest : QYogaAppIntegrationBaseTest() {
@@ -17,7 +17,7 @@ class UnauthorizedMainPageTest : QYogaAppIntegrationBaseTest() {
         val document = PublicClient.getIndexPage()
 
         // Then
-        document shouldBe LoginPage
+        document shouldBe LandingPage
     }
 
 }

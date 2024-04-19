@@ -72,7 +72,7 @@ class WebSecurityConfig(
             .formLogin { form: FormLoginConfigurer<HttpSecurity?> ->
                 form
                     .loginPage("/login")
-                    .defaultSuccessUrl("/")
+                    .defaultSuccessUrl("/therapist")
                     .failureForwardUrl("/error-p")
                     .permitAll()
             }

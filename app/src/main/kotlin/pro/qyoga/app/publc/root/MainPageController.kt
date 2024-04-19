@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping
 class MainPageController {
 
     @GetMapping("/")
-    fun getMainPage(): String {
-        return "redirect:/therapist/schedule"
+    fun getLandingPage(): String {
+        return "/public/landing"
     }
 
 }
