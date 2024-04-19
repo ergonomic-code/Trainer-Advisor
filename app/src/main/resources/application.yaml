@@ -27,8 +27,11 @@ spring:
 
   web:
     resources:
-      chain:
-        cache: true
+      strategy:
+        content:
+          enabled=true
+          paths=/**
+
 
 management:
   endpoints:

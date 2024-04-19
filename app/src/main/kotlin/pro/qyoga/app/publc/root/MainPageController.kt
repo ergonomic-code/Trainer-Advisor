@@ -8,7 +8,7 @@ class MainPageController {
 
     @GetMapping("/")
     fun getLandingPage(): String {
-        return "/public/landing"
+        return "public/landing"
     }
 
 }
