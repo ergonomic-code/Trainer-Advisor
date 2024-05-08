@@ -3,9 +3,16 @@ package pro.qyoga.app.publc.register
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
+import pro.azhidkov.platform.extensible_entity.descriptor.CustomFieldType
+import pro.azhidkov.platform.spring.sdj.erpo.hydration.ref
+import pro.qyoga.core.clients.therapeutic_data.descriptors.TherapeuticDataBlock
+import pro.qyoga.core.clients.therapeutic_data.descriptors.TherapeuticDataDescriptor
+import pro.qyoga.core.clients.therapeutic_data.descriptors.TherapeuticDataDescriptorsRepo
+import pro.qyoga.core.clients.therapeutic_data.descriptors.TherapeuticDataField
 import pro.qyoga.core.users.therapists.CreateTherapistUserWorkflow
 import pro.qyoga.core.users.therapists.RegisterTherapistRequest
 import pro.qyoga.core.users.therapists.Therapist
+import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.i9ns.email.Email
 import pro.qyoga.i9ns.email.EmailSender
 import kotlin.random.Random
@@ -14,6 +21,7 @@ import kotlin.random.Random
 class RegisterTherapistWorkflow(
     private val createTherapistUser: CreateTherapistUserWorkflow,
     private val emailSender: EmailSender,
+    private val therapeuticDataDescriptorsRepo: TherapeuticDataDescriptorsRepo,
     @Value("\${spring.mail.username}") private val fromEmail: String,
     @Value("\${trainer-advisor.admin.email}") private val adminEmail: String
 ) : (RegisterTherapistRequest) -> Therapist {
@@ -25,6 +33,8 @@ class RegisterTherapistWorkflow(
         val password = randomPassword()
 
         val therapist = createTherapistUser(registerTherapistRequest, password)
+
+        therapeuticDataDescriptorsRepo.save(createDefaultTherapeuticDataDescriptor(therapist.ref()))
 
         emailSender.sendEmail(newTherapistPasswordEmail(to = registerTherapistRequest.email, password))
         emailSender.sendEmail(
@@ -38,6 +48,42 @@ class RegisterTherapistWorkflow(
 
         return therapist
     }
+
+    private fun createDefaultTherapeuticDataDescriptor(therapistRef: TherapistRef) = TherapeuticDataDescriptor(
+        therapistRef,
+        listOf(
+            TherapeuticDataBlock(
+                "Жалобы",
+                listOf(
+                    TherapeuticDataField(
+                        "Что заставило Вас обратиться к терапевту? Что вас беспокоит?",
+                        CustomFieldType.TEXT,
+                        true
+                    ),
+                    TherapeuticDataField(
+                        "Как давно появились жалобы?",
+                        CustomFieldType.TEXT,
+                        true
+                    ),
+                    TherapeuticDataField(
+                        "Принимаете ли какие-либо лекарства на постоянной основе?",
+                        CustomFieldType.TEXT,
+                        true
+                    )
+                )
+            ),
+            TherapeuticDataBlock(
+                "Анамнез",
+                listOf(
+                    TherapeuticDataField(
+                        "Какие ещё заболевания вы переносили ранее?",
+                        CustomFieldType.TEXT,
+                        true
+                    )
+                ),
+            )
+        )
+    )
 
     private fun newTherapistPasswordEmail(to: String, password: String) =
         Email(

@@ -8,8 +8,12 @@ import pro.qyoga.core.clients.cards.ClientsRepo
 import pro.qyoga.core.clients.cards.dtos.ClientCardDto
 import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.core.clients.journals.model.JournalEntry
+import pro.qyoga.core.clients.therapeutic_data.descriptors.TherapeuticDataDescriptor
+import pro.qyoga.core.clients.therapeutic_data.descriptors.TherapeuticDataDescriptorsRepo
+import pro.qyoga.core.clients.therapeutic_data.descriptors.findByTherapistId
 import pro.qyoga.tests.fixture.data.faker
 import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
+import pro.qyoga.tests.fixture.object_mothers.clients.TherapeuticDataDescriptorsObjectMother
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
 import pro.qyoga.tests.fixture.object_mothers.therapists.idOnlyUserDetails
 import pro.qyoga.tests.fixture.object_mothers.therapists.theTherapistUserDetails
@@ -18,7 +22,8 @@ import pro.qyoga.tests.fixture.object_mothers.therapists.theTherapistUserDetails
 class ClientsBackgrounds(
     private val clientsRepo: ClientsRepo,
     private val clientsListPageController: ClientsListPageController,
-    private val journalBackgrounds: ClientJournalBackgrounds
+    private val journalBackgrounds: ClientJournalBackgrounds,
+    private val therapeuticDataDescriptorsRepo: TherapeuticDataDescriptorsRepo
 ) {
 
     fun aClient(): Client {
@@ -51,5 +56,14 @@ class ClientsBackgrounds(
     ): Client {
         return createClients(listOf(ClientsObjectMother.createClientCardDto(phone = phone)), therapistId).single()
     }
+
+    fun createTherapeuticDataDescriptor(
+        therapeuticDataDescriptor: () -> TherapeuticDataDescriptor = { TherapeuticDataDescriptorsObjectMother.therapeuticDataDescriptor() }
+    ): TherapeuticDataDescriptor {
+        return therapeuticDataDescriptorsRepo.save(therapeuticDataDescriptor())
+    }
+
+    fun getTherapeuticDataDescription(therapistId: Long): TherapeuticDataDescriptor? =
+        therapeuticDataDescriptorsRepo.findByTherapistId(therapistId)
 
 }

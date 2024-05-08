@@ -1,5 +1,10 @@
 TRUNCATE
-    users, clients, therapists, exercises, exercise_steps, therapeutic_tasks, journal_entries, files, client_files, programs, program_exercises, appointments, appointment_types
+    users, clients, therapists,
+    exercises, exercise_steps, therapeutic_tasks,
+    journal_entries, files, client_files,
+    programs, program_exercises,
+    appointments, appointment_types,
+    therapeutic_data_descriptors, therapeutic_data_blocks, therapeutic_data_fields
     RESTART IDENTITY;
 
 INSERT INTO users (email, password_hash, roles, created_at, version)

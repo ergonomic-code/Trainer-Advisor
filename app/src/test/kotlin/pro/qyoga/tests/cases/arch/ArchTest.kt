@@ -19,19 +19,17 @@ class ArchTest {
 
     @Test
     fun `QYoga should conform to ergonomic system architecture`() {
-        val testsAbstractionLayer = "Tests abstraction layer"
         Architectures.layeredArchitecture()
             .consideringAllDependencies()
-            .layer(testsAbstractionLayer).definedBy("pro.qyoga.tests.(assertions|clients|fixture|infra|pages|platform)..")
             .layer("App").definedBy("pro.qyoga.app..")
             .layer("Core").definedBy("pro.qyoga.core..")
             .layer("Infra").definedBy("pro.qyoga.infra..")
             .layer("Platform").definedBy("pro.azhidkov.platform..")
 
-            .whereLayer("App").mayOnlyBeAccessedByLayers(testsAbstractionLayer)
-            .whereLayer("Core").mayOnlyBeAccessedByLayers("App", testsAbstractionLayer)
-            .whereLayer("Infra").mayOnlyBeAccessedByLayers("Core", "App", testsAbstractionLayer)
-            .whereLayer("Platform").mayOnlyBeAccessedByLayers("App", "Core", "Infra", testsAbstractionLayer)
+            .whereLayer("App").mayNotBeAccessedByAnyLayer()
+            .whereLayer("Core").mayOnlyBeAccessedByLayers("App")
+            .whereLayer("Infra").mayOnlyBeAccessedByLayers("Core", "App")
+            .whereLayer("Platform").mayOnlyBeAccessedByLayers("App", "Core", "Infra")
             .check(qyogaClasses)
     }
 
