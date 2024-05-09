@@ -14,7 +14,7 @@ enum class BuildMode {
 
 class QueryBuilder {
 
-    private val criteria: List<CriteriaDefinition> = arrayListOf()
+    private val criteria: MutableList<CriteriaDefinition> = arrayListOf()
 
     var mode = BuildMode.AND
 

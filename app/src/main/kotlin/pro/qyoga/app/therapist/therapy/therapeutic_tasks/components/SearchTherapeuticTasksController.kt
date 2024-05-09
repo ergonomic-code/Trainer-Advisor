@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.servlet.ModelAndView
 import pro.azhidkov.platform.spring.mvc.modelAndView
 import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo
-import pro.qyoga.core.therapy.therapeutic_tasks.findByNameContaining
+import pro.qyoga.core.therapy.therapeutic_tasks.findTherapistTasksSliceByName
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 
 @Controller
@@ -23,7 +23,11 @@ class SearchTherapeuticTasksController(
         @AuthenticationPrincipal therapist: QyogaUserDetails,
     ): ModelAndView {
         val tasks =
-            therapeuticTasksRepo.findByNameContaining(therapist.id, searchKey, TherapeuticTasksRepo.Page.topFiveByName)
+            therapeuticTasksRepo.findTherapistTasksSliceByName(
+                therapist.id,
+                searchKey,
+                TherapeuticTasksRepo.Page.topFiveByName
+            )
         return modelAndView("therapist/therapy/therapeutic-tasks/therapeutic-tasks-search-result") {
             "tasks" bindTo tasks
         }

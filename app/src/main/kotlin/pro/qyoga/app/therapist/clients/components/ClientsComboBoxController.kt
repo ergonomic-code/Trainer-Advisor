@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestParam
 import pro.qyoga.app.platform.components.combobox.ComboBoxController
 import pro.qyoga.app.platform.components.combobox.ComboBoxItem
 import pro.qyoga.app.platform.components.combobox.ComboBoxModelAndView
-import pro.qyoga.core.clients.cards.internal.ClientsRepo
-import pro.qyoga.core.clients.cards.internal.findPageBy
+import pro.qyoga.core.clients.cards.ClientsRepo
+import pro.qyoga.core.clients.cards.findTherapistClientsSliceBySearchKey
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 
 
@@ -26,7 +26,11 @@ class ClientsComboBoxController(
         @AuthenticationPrincipal userDetails: QyogaUserDetails
     ): ComboBoxModelAndView {
         val searchResult =
-            clientsRepo.findPageBy(userDetails.id, searchKey ?: "", page = ClientsRepo.Page.topFiveByLastName)
+            clientsRepo.findTherapistClientsSliceBySearchKey(
+                userDetails.id,
+                searchKey ?: "",
+                page = ClientsRepo.Page.topFiveByLastName
+            )
                 .map { ComboBoxItem(it.id, it.fullName(), it.phoneNumber) }
 
         return ComboBoxModelAndView(searchResult)

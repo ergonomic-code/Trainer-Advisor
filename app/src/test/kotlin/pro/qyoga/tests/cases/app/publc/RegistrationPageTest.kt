@@ -9,10 +9,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.springframework.core.env.Environment
 import org.springframework.core.env.get
-import pro.qyoga.tests.assertions.shouldBe
-import pro.qyoga.tests.assertions.shouldHave
-import pro.qyoga.tests.assertions.shouldHaveComponent
-import pro.qyoga.tests.assertions.shouldMatch
+import pro.qyoga.tests.assertions.*
 import pro.qyoga.tests.clients.PublicClient
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_LOGIN
@@ -25,7 +22,7 @@ import pro.qyoga.tests.pages.therapist.clients.ClientsListPage
 
 class RegistrationPageTest : QYogaAppIntegrationBaseTest() {
 
-    val adminEmail = getBean<Environment>()["qyoga.admin.email"]!!
+    val adminEmail = getBean<Environment>()["trainer-advisor.admin.email"]!!
 
     @Test
     fun `Registration page should be rendered correctly`() {
@@ -41,10 +38,11 @@ class RegistrationPageTest : QYogaAppIntegrationBaseTest() {
     @Test
     fun `After submit of registration form therapist should be created and creds should be sent to admin and success response should be returned`() {
         // Given
+        val userEmail = "new-therapist@trainer-advisor.pro"
         val registerTherapistRequest = registerTherapistRequest(
             "Сергей",
             "Сергеев",
-            "new-therapist@qyoga.pro"
+            userEmail
         )
 
         // When
@@ -54,12 +52,18 @@ class RegistrationPageTest : QYogaAppIntegrationBaseTest() {
         document shouldHaveComponent RegistrationSuccessFragment
 
         // And then
-        val receivedMessages = greenMail.getReceivedMessagesForDomain(adminEmail)
-        receivedMessages shouldHaveSize 1
-        val (receivedTherapistEmail, password) = receivedMessages[0] shouldMatch registerTherapistRequest
+        val userReceivedMessages = greenMail.getReceivedMessagesForDomain(userEmail)
+        userReceivedMessages shouldHaveSize 1
+        userReceivedMessages[0] shouldBePasswordEmailFor registerTherapistRequest
+        val password = passwordEmailPattern.matchEntire(userReceivedMessages[0].content as String)!!.groupValues[2]
+
+        // And then
+        val adminReceivedMessages = greenMail.getReceivedMessagesForDomain(adminEmail)
+        adminReceivedMessages shouldHaveSize 1
+        adminReceivedMessages[0] shouldMatch registerTherapistRequest
 
         // And when
-        val therapist = TherapistClient.login(receivedTherapistEmail, password)
+        val therapist = TherapistClient.login(userEmail, password)
         val getClientsResponse = therapist.clients.getClientsListPage()
 
         // Then

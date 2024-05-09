@@ -47,4 +47,8 @@ abstract class QYogaForm(
 
     }
 
+    fun withAnonymousComponent(comp: Component) {
+        (this@QYogaForm.components as ArrayList).add(comp)
+    }
+
 }

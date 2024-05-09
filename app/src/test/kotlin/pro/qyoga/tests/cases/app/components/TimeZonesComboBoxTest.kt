@@ -54,7 +54,8 @@ class TimeZonesComboBoxTest : QYogaAppIntegrationBaseTest() {
         }
 
         document should Matcher.all(
-            *firstItems.map { ComboBox.itemFor(ComboBoxItem(it.zone, it.displayName)).matcher() }.toTypedArray()
+            *firstItems.map { ComboBox.itemFor(ComboBoxItem(it.zone, it.displayName)).matcher() }.toList()
+                .toTypedArray()
         )
     }
 

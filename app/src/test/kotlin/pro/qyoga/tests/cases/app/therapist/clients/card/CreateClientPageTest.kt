@@ -2,13 +2,16 @@ package pro.qyoga.tests.cases.app.therapist.clients.card
 
 import io.kotest.inspectors.forAny
 import org.junit.jupiter.api.Test
-import pro.qyoga.core.clients.cards.api.DistributionSource
-import pro.qyoga.core.clients.cards.api.DistributionSourceType
+import pro.qyoga.core.clients.cards.model.DistributionSource
+import pro.qyoga.core.clients.cards.model.DistributionSourceType
 import pro.qyoga.tests.assertions.shouldBe
+import pro.qyoga.tests.assertions.shouldHaveElement
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
+import pro.qyoga.tests.fixture.data.faker
 import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
+import pro.qyoga.tests.pages.therapist.clients.card.CreateClientForm
 import pro.qyoga.tests.pages.therapist.clients.card.CreateClientPage
 
 class CreateClientPageTest : QYogaAppIntegrationBaseTest() {
@@ -36,7 +39,7 @@ class CreateClientPageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         val clients = backgrounds.clients.getAllClients()
-        clients.content.forAny { it shouldMatch newClientRequest }
+        clients.forAny { it shouldMatch newClientRequest }
     }
 
     @Test
@@ -52,7 +55,7 @@ class CreateClientPageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         val clients = backgrounds.clients.getAllClients()
-        clients.content.forAny { it shouldMatch newClientRequest }
+        clients.forAny { it shouldMatch newClientRequest }
     }
 
     @Test
@@ -65,8 +68,40 @@ class CreateClientPageTest : QYogaAppIntegrationBaseTest() {
         therapist.clients.createClient(minimalClient)
 
         // Then
-        val clients = backgrounds.clients.getAllClients().content
+        val clients = backgrounds.clients.getAllClients()
         clients.forAny { it shouldMatch minimalClient }
+    }
+
+    @Test
+    fun `System should return with duplicated phone error message on posting form with duplicated phone`() {
+        // Given
+        val thePhone = faker.phoneNumber().phoneNumberInternational()
+        backgrounds.clients.createClient(phone = thePhone)
+        val duplicatedClient = ClientsObjectMother.createClientCardDto(phone = thePhone)
+        val therapist = TherapistClient.loginAsTheTherapist()
+
+        // When
+        val document = therapist.clients.createClientForError(duplicatedClient)
+
+        // Then
+        document shouldHaveElement CreateClientForm.invalidPhoneInput
+    }
+
+    @Test
+    fun `System should allow to create client with existing phone number for another therapist`() {
+        // Given
+        val thePhone = faker.phoneNumber().phoneNumberInternational()
+        val anotherTherapistId = backgrounds.users.registerNewTherapist().id
+        backgrounds.clients.createClient(phone = thePhone, therapistId = anotherTherapistId)
+        val duplicatedClient = ClientsObjectMother.createClientCardDto(phone = thePhone)
+        val therapist = TherapistClient.loginAsTheTherapist()
+
+        // When
+        therapist.clients.createClient(duplicatedClient)
+
+        // Then
+        val clients = backgrounds.clients.getAllClients()
+        clients.forAny { it shouldMatch duplicatedClient }
     }
 
 }

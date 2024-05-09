@@ -1,0 +1,40 @@
+<div class="col-3 border-end border-bottom pe-1 pe-sm-3 g-2"
+     th:fragment="cell(time, day, appointment)"
+     th:style="${'height: 3rem; width: 30%;' + (time.minute != 45 ? 'border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important' : '')}"
+>
+    <div class="rounded-2 appointment-card"
+         th:id="|appointmentCard-${appointment.id}|"
+         th:classappend="${appointment.statusClass}"
+         th:if="${appointment != null}"
+         th:style="${'margin-top: ' + appointment.timeMarkOffsetPercent + 'rem; position: relative'}"
+    >
+
+        <a class="link-dark text-decoration-none"
+           hx-boost="true"
+           th:href="@{/therapist/appointments/{appointmentId}(appointmentId=${appointment.id})}"
+           th:id="|editAppointmentLink-${appointment.id}|"
+        >
+            <div class="rounded-top-2 px-1 py-1 header"
+                 style="height: 2rem">
+                <small>
+                    <span th:text=" ${appointment.period}"></span>
+                </small>
+            </div>
+            <div class="rounded-bottom-2 px-1 py-1 body"
+                 th:style="${'height: ' + (appointment.timeMarkLengthPercent - 2 - 0.25) + 'rem; max-height: ' + (appointment.timeMarkLengthPercent - 2 - 0.25)+ 'rem; '} ">
+                <small>
+                    <span th:text="${appointment.client}"></span>
+                    <br/>
+                    <span th:text="${appointment.type}"></span>
+                </small>
+            </div>
+        </a>
+    </div>
+    <a class="w-100 h-100 text-decoration-none d-block"
+       hx-boost="true"
+       id="|addAppointmentLink-${date}-${time}|"
+       th:href="@{/therapist/appointments/new?dateTime={dateTime}(dateTime=${day.atTime(time)})}"
+    >
+        &nbsp;
+    </a>
+</div>

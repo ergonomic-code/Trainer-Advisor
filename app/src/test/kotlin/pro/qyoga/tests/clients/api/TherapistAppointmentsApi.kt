@@ -12,19 +12,27 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
 import pro.azhidkov.platform.java.time.toLocalTimeString
+import pro.qyoga.app.therapist.appointments.core.edit.CreateAppointmentPageController
+import pro.qyoga.app.therapist.appointments.core.edit.EditAppointmentPageController
+import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
 import pro.qyoga.core.appointments.core.EditAppointmentRequest
 import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentPage
 import pro.qyoga.tests.pages.therapist.appointments.EditAppointmentPage
-import pro.qyoga.tests.pages.therapist.appointments.SchedulePage
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class TherapistAppointmentsApi(override val authCookie: Cookie) : AuthorizedApi {
 
-    fun getFutureAppointmentsSchedule(): Document {
+    fun getScheduleForDay(date: LocalDate? = null): Document {
         return Given {
             authorized()
+            if (date != null) {
+                queryParam(SchedulePageController.DATE, date.toString())
+            }
+            this
         } When {
-            get(SchedulePage.PATH)
+            get(SchedulePageController.PATH)
         } Then {
             statusCode(HttpStatus.OK.value())
         } Extract {
@@ -32,23 +40,13 @@ class TherapistAppointmentsApi(override val authCookie: Cookie) : AuthorizedApi 
         }
     }
 
-    fun getPastAppointmentsSchedule(): Document {
+    fun getCreateAppointmentPage(dateTime: LocalDateTime? = null): Document {
         return Given {
             authorized()
-            queryParam("past", true)
-        } When {
-            get(SchedulePage.PATH)
-        } Then {
-            statusCode(HttpStatus.OK.value())
-        } Extract {
-            Jsoup.parse(body().asString())
-        }
-    }
-
-    fun getCreateAppointmentPage(): Document {
-        return Given {
-            authorized()
-
+            if (dateTime != null) {
+                queryParam(CreateAppointmentPageController.DATE_TIME, dateTime.toString())
+            }
+            this
         } When {
             get(CreateAppointmentPage.path)
         } Then {
@@ -64,7 +62,7 @@ class TherapistAppointmentsApi(override val authCookie: Cookie) : AuthorizedApi 
 
             pathParam("appointmentId", appointmentId)
         } When {
-            get(EditAppointmentPage.path)
+            get(EditAppointmentPageController.PATH)
         } Then {
             statusCode(expectedStatus.value())
         } Extract {
@@ -167,12 +165,13 @@ class TherapistAppointmentsApi(override val authCookie: Cookie) : AuthorizedApi 
         return formParam(CreateAppointmentPage.editAppointmentForm.comment.name, appointment.comment ?: "")
     }
 
-    fun delete(appointmentId: Long): Response {
+    fun delete(appointmentId: Long, returnTo: LocalDate): Response {
         return Given {
             authorized()
             pathParam("appointmentId", appointmentId)
+            queryParam(EditAppointmentPageController.RETURN_TO, returnTo.toString())
         } When {
-            delete(SchedulePage.deleteButton.action!!.url)
+            delete(EditAppointmentPageController.PATH)
         }
     }
 

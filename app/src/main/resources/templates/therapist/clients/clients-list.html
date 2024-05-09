@@ -93,42 +93,39 @@
                     <div id="pagination">
 
                         <ul class="pagination justify-content-center">
-                            <div class="pagination">
+                            <div class="pagination"
+                                 th:if="${clients.totalPages > 0}">
                                 <li class="page-item"
                                     th:classappend="${(clients.getPageable().pageNumber == 0) ? 'disabled' : ''}">
                                     <a class="page-link"
+                                       id="prevPageLink"
                                        hx-target="#tablePagination"
                                        hx-trigger="click"
                                        style="cursor: pointer"
-                                       th:attr="hx-get=@{/therapist/clients/search-cl(pageNumber=${clients.getPageable().pageNumber}, searchDto=${searchDto})}"
-                                       th:if="${clients.getPageable().pageNumber >= 1}"
+                                       th:attr="hx-get=@{/therapist/clients/search(firstName=${searchDto.firstName}, lastName=${searchDto.lastName}, phoneNumber=${searchDto.phoneNumber}, page=${clients.getPageable().pageNumber - 1} )}"
                                     >Назад</a>
                                 </li>
-                            </div>
 
-                            <div class="pagination"
-                                 th:each="pageNumber : ${#numbers.sequence(1, clients.getTotalPages(), 1)}"
-                                 th:if="${clients.totalPages > 0}">
+
                                 <li class="page-item"
+                                    th:each="pageNumber : ${#numbers.sequence(1, clients.getTotalPages(), 1)}"
                                     th:classappend="${pageNumber == (clients.getPageable().pageNumber + 1)} ? 'active' : ''">
                                     <a class="page-link"
+                                       th:attr="hx-get=@{/therapist/clients/search(firstName=${searchDto.firstName}, lastName=${searchDto.lastName}, phoneNumber=${searchDto.phoneNumber}, page=${pageNumber - 1} )}"
                                        hx-target="#tablePagination"
                                        hx-trigger="click"
                                        style="cursor: pointer"
-                                       th:attr="hx-get=@{/therapist/clients/search-cl(pageNumber=${pageNumber}, searchDto=${searchDto})}"
+                                       th:id="|numberedPageLink${pageNumber}|"
                                        th:text="${pageNumber}"></a>
                                 </li>
-                            </div>
-
-                            <div class="pagination">
                                 <li class="page-item"
-                                    th:classappend="${!(clients.getPageable().pageNumber < clients.totalPages) ? 'disabled' : ''}">
+                                    th:classappend="${clients.getPageable().pageNumber + 1 == clients.totalPages ? 'disabled' : ''}">
                                     <a class="page-link"
+                                       id="nextPageLink"
                                        hx-target="#tablePagination"
                                        hx-trigger="click"
                                        style="cursor: pointer"
-                                       th:attr="hx-get=@{/therapist/clients/search-cl(pageNumber=${clients.getPageable().pageNumber + 2}, searchDto=${searchDto})}"
-                                       th:if="${clients.getPageable().pageNumber < clients.totalPages - 1}"
+                                       th:attr="hx-get=@{/therapist/clients/search(firstName=${searchDto.firstName}, lastName=${searchDto.lastName}, phoneNumber=${searchDto.phoneNumber}, page=${clients.getPageable().pageNumber + 1} )}"
                                     >Вперед</a>
                                 </li>
                             </div>

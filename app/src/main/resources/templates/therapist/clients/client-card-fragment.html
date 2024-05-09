@@ -1,105 +1,263 @@
-<div class="client__container" id="clientCardTab">
-    <form class="form__client-card" id="createClientForm" method="post" th:action="${formAction}">
-        <label class="form-label" for="ClientFirstName">Клиент</label>
-        <div class="input__container mb-4">
-            <div class="row g-0 input-group">
-                <div class="col me-sm-0 me-md-2 me-lg-2 me-xl-2 me-xxl-2 ">
-                    <input class="form-control q-input mt-2 w-100" id="ClientFirstName"
-                           name="firstName"
-                           placeholder="Имя"
-                           required th:value="${client?.firstName ?: ''}" type="text">
-                </div>
-                <div class="col me-sm-0 me-md-2 me-lg-2 me-xl-2 me-xxl-2 ">
-                    <input class="form-control q-input mt-2 w-100" id="ClientLastName"
-                           name="lastName"
-                           placeholder="Фамилия"
-                           required th:value="${client?.lastName ?: ''}" type="text">
-                </div>
-                <div class="col ">
-                    <input class="form-control q-input mt-2 w-100" id="ClientMiddleName"
-                           name="middleName"
-                           placeholder="Отчество"
-                           th:value="${client?.middleName ?: ''}" type="text" value="">
-                </div>
-            </div>
-            <div class="row g-0 input-group">
-                <div class="col me-sm-0 me-md-2 me-lg-2 me-xl-2 me-xxl-2 ">
-                    <input class="form-control q-input mt-2 w-100" id="ClientEmail" name="email"
-                           placeholder="example@mail.ru" th:value="${client?.email ?: ''}"
-                           type="email"
-                           value="">
-                </div>
-                <div class="col me-sm-0 me-md-2 me-lg-2 me-xl-2 me-xxl-2 ">
-                    <input class="form-control q-input mt-2 w-100" id="ClientPhone"
-                           name="phoneNumber"
-                           placeholder="+7 (999) 000-0000"
-                           required th:value="${client?.phoneNumber ?: ''}" type="tel">
-                </div>
-                <div class="col">
-                    <input class="form-control q-input mt-2 w-100" id="ClientDate" name="birthDate"
-                           pattern="\d{2}\.\d{2}\.\d{4}" placeholder="дд.мм.гггг"
-                           th:value="${client?.birthDate != null} ? ${#temporals.format(client.birthDate, T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN)}"
-                           type="text">
+<script th:inline="javascript">
+    let serverState = /*[[${client}]]*/ null;
+    let clientId = /*[[${id}]]*/ null;
 
+    let localStateKey = `qyoga.clientCardForm.${clientId || "new"}`;
+
+    let localState = localStorage.getItem(localStateKey) ? JSON.parse(localStorage.getItem(localStateKey)) : null;
+
+    let formData;
+    if (serverState == null) {
+        formData = localState || {version: 0};
+    } else if (serverState.version === localState?.version) {
+        formData = localState
+    } else {
+        formData = {...serverState}
+    }
+
+    function clientCardData() {
+        let hasUnsavedEdits = serverState != null && localState != null && !shallowEqual(serverState, localState);
+        let newCardWasntSaved = serverState == null && localState != null;
+        return {
+            form: formData,
+            serverState: serverState,
+            hasUnsavedChanges: hasUnsavedEdits || newCardWasntSaved
+        }
+    }
+
+    function saveLocalState(formData) {
+        localStorage.setItem(localStateKey, JSON.stringify(formData));
+    }
+
+    function resetLocalState() {
+        localStorage.removeItem(localStateKey);
+    }
+
+    function shallowEqual(object1, object2) {
+        const keys1 = Object.keys(object1);
+        const keys2 = Object.keys(object2);
+
+        if (keys1.length !== keys2.length) {
+            return false;
+        }
+
+        for (let key of keys1) {
+            if ((object1[key] instanceof Object && !shallowEqual(object1[key], object2[key])) ||
+                (!(object1[key] instanceof Object) && object1[key] !== object2[key])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    function isChanged(form, key) {
+        return serverState != null && serverState[key] !== form[key];
+    }
+
+    window.addEventListener("load", () => {
+        document.querySelectorAll(".form-control").forEach(it => {
+            it.setAttribute("x-model", "form." + it.name);
+            it.setAttribute(":class", "isChanged(form, '" + it.name + "') ? 'border-warning' : ''");
+        });
+    });
+
+</script>
+
+<div class="client__container" id="clientCardTab">
+    <form class="form__client-card" id="createClientForm" method="post" th:action="${formAction}"
+          th:fragment="createClientForm"
+          x-data="clientCardData()"
+          x-init="$watch('form', (form) => saveLocalState(form))">
+
+        <input
+                name="version"
+                th:value="${client?.version ?: 0}"
+                type="hidden"
+        >
+
+        <div class="alert alert-warning w-100"
+             role="alert"
+             x-show="hasUnsavedChanges">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            В карточке восстановлены несохранённые данные прошлой сессии
+        </div>
+
+        <fieldset class="mb-4">
+            <legend>Контактные данные</legend>
+
+            <div class="row mb-3">
+                <div class="col-12 col-sm-4 mb-3">
+                    <div class="form-floating ">
+                        <input class="form-control"
+                               maxlength="64"
+                               id="firstName"
+                               minlength="2"
+                               name="firstName"
+                               placeholder="Имя"
+                               required
+                               pattern="^[а-яА-ЯёЁ]{2,64}$"
+                               th:value="${client?.firstName ?: ''}"
+                               type="text"
+                        >
+                        <label for="firstName">Имя <span class="text-danger">*</span></label>
+                    </div>
+                    <div class="form-text">Только кириллица</div>
+                </div>
+                <div class="col-12 col-sm-4 mb-3">
+                    <div class="form-floating">
+                        <input class="form-control"
+                               maxlength="64"
+                               id="ClientLastName"
+                               minlength="2"
+                               name="lastName"
+                               placeholder="Фамилия"
+                               required
+                               pattern="^[а-яА-ЯёЁ]{2,64}$"
+                               th:value="${client?.lastName ?: ''}"
+                               type="text">
+                        <label for="ClientLastName">Фамилия <span class="text-danger">*</span></label>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-4 mb-3">
+                    <div class="form-floating">
+                        <input class="form-control"
+                               id="ClientMiddleName"
+                               name="middleName"
+                               minlength="2"
+                               maxlength="64"
+                               placeholder="Отчество"
+                               pattern="^[а-яА-ЯёЁ]{2,64}$"
+                               th:value="${client?.middleName ?: ''}"
+                               type="text">
+                        <label for="ClientMiddleName">Отчество</label>
+                    </div>
                 </div>
             </div>
-            <div class="row g-0 input-group">
+
+            <div class="row mb-3">
+                <div class="col-12 col-sm-4 mb-3">
+                    <div class="form-floating">
+                        <input class="form-control"
+                               id="ClientPhone"
+                               name="phoneNumber"
+                               placeholder="+7 (999) 000-00-00"
+                               required
+                               th:classappend="${duplicatedPhone} ? 'is-invalid' : ''"
+                               th:value="${client?.phoneNumber ?: ''}"
+                               type="tel"
+                               x-mask="+7 (999) 999-99-99"
+                        >
+                        <label for="ClientPhone">Номер телефона <span class="text-danger">*</span></label>
+                        <div class="form-text">В формате +7 (999) 111-22-33</div>
+                        <div class="invalid-feedback" id="duplicatedPhoneErrorMessage">
+                            К данному номеру телефона уже привязана карточка клиента.
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-4 mb-3">
+                    <div class="form-floating">
+                        <input class="form-control" id="email" name="email"
+                               placeholder="example@mail.ru" th:value="${client?.email ?: ''}"
+                               type="email">
+                        <label for="email">Email</label>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-4 mb-3">
+                    <div class="form-floating">
+                        <input class="form-control"
+                               id="birthDate"
+                               name="birthDate"
+                               placeholder="дд.мм.гггг"
+                               pattern="[0-3]{1}[0-9]{1}.[0-1]{1}[0-9].[1-2][0-9]{3}"
+                               th:value="${client?.birthDate != null} ? ${#temporals.format(client.birthDate, T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN)}"
+                               type="text"
+                               x-mask="99.99.9999"
+                        >
+                        <label for="birthDate">Дата рождения</label>
+                        <div class="form-text">В формате дд.мм.гггг</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mb-3">
                 <div class="col">
-                    <input class="form-control q-input mt-2 w-100" id="ClientAddress"
-                           name="address" placeholder="Адрес (город, улица, дом, квартира)"
-                           th:value="${client?.address ?: ''}" type="text" value="">
+                    <div class="form-floating">
+                        <input class="form-control w-100" id="address"
+                               name="address" placeholder=""
+                               th:value="${client?.address ?: ''}" type="text" value="">
+                        <label for="birthDate">Адрес (город, улица, дом, квартира)</label>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="textarea__container row g-0 input-group">
-            <div class="col">
-                <label class="form-label" for="ClientComplaints">Жалобы</label>
-                <textarea class="form-control w-100 mt-2" cols="20" id="ClientComplaints"
-                          name="complaints"
-                          placeholder="Введите данные"
-                          rows="10" th:text="${client?.complaints ?: ''}"></textarea>
+
+            <div class="row">
+                <div class="col mb-2">
+                    <div class="form-floating">
+                        <select class="form-control w-100 q-input form-select mb-2"
+                                id="distributionSourceType"
+                                name="distributionSourceType"
+                                th:value="${client?.distributionSourceType}">
+                            <option value="">Не указан</option>
+                            <option th:each="value : ${T(pro.qyoga.core.clients.cards.model.DistributionSourceType).entries}"
+                                    th:selected="${client?.distributionSourceType?.toString() == value.toString()}"
+                                    th:text="${value.label}" th:value="${value.name}">
+                            </option>
+                        </select>
+                        <label class="form-label" for="distributionSourceType">Как вы о нас узнали?</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-floating">
+                        <input class="form-control q-input" id="distributionSourceComment"
+                               name="distributionSourceComment"
+                               placeholder="Комментарий"
+                               th:value="${client?.distributionSourceComment ?: ''}"
+                               type="text">
+                        <label class="form-label" for="distributionSourceComment">Комментарий</label>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="textarea__container row g-0 input-group">
-            <div class="col">
-                <label class="form-label" for="ClientAnamnesis">Анамнез</label>
-                <textarea class="form-control w-100 mt-2" cols="20" id="ClientAnamnesis"
-                          name="anamnesis"
-                          placeholder="Введите данные"
-                          rows="10" th:text="${client?.anamnesis ?: ''}"></textarea>
+        </fieldset>
+
+
+        <fieldset class="mb-4">
+            <legend>Жалобы</legend>
+            <div class="textarea__container row g-0 input-group">
+                <div class="col">
+                    <textarea class="form-control w-100 mt-2" cols="20" id="ClientComplaints"
+                              name="complaints"
+                              placeholder="Введите данные"
+                              rows="10" th:text="${client?.complaints ?: ''}"></textarea>
+                </div>
             </div>
-        </div>
-        <div class="from-group row g-0 input-group mb-3">
-            <label class="form-label" for="distributionSourceType">Как вы о нас узнали?</label>
-            <div class="col me-md-4 me-xl-4 me-xxl-4">
-                <select class="form-control w-100 q-input form-select mb-2"
-                        id="distributionSourceType"
-                        name="distributionSourceType"
-                        th:value="${client?.distributionSource?.type}">
-                    <option value="">Не указан</option>
-                    <option th:each="value : ${T(pro.qyoga.core.clients.cards.api.DistributionSourceType).entries}"
-                            th:selected="${client?.distributionSource?.type == value}"
-                            th:text="${value.label}" th:value="${value.name}">
-                    </option>
-                </select>
+        </fieldset>
+
+        <fieldset class="mb-4">
+            <legend>Анамнез</legend>
+            <div class="textarea__container row g-0 input-group">
+                <div class="col">
+                    <textarea class="form-control w-100 mt-2" cols="20" id="ClientAnamnesis"
+                              name="anamnesis"
+                              placeholder="Введите данные"
+                              rows="10" th:text="${client?.anamnesis ?: ''}"></textarea>
+                </div>
             </div>
-            <div class="col text-end">
-                <input class="form-control q-input" name="distributionSourceComment"
-                       placeholder="Комментарий"
-                       th:value="${client?.distributionSource?.comment ?: ''}"
-                       type="text">
-            </div>
-        </div>
+        </fieldset>
 
         <div class="row g-2 justify-content-end">
             <div class="col-6 col-sm-auto text-center">
                 <a class="btn btn-outline-danger" style="min-width: 110px;"
-                   th:href="${ '/therapist/clients' + (client?.id != null ? '/' + client.id + '/journal' : '')}">
+                   @click="resetLocalState()"
+                   th:href="${'/therapist/clients' + (clientId != null ? '/' + clientId + '/journal' : '')}"
+                >
                     Отмена
                 </a>
             </div>
             <div class="col-6 col-sm-auto text-center">
-                <button class="btn btn-outline-success" name="confirmButton" style="min-width: 110px;">
+                <button @click="resetLocalState()" class="btn btn-outline-success" name="confirmButton"
+                        style="min-width: 110px;"
+                >
                     Сохранить
                 </button>
             </div>

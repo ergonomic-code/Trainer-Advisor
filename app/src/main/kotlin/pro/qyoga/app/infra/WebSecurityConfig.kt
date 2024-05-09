@@ -3,6 +3,7 @@ package pro.qyoga.app.infra
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.annotation.Order
 import org.springframework.http.HttpMethod
 import org.springframework.security.config.Customizer.withDefaults
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -22,17 +23,31 @@ class WebSecurityConfig(
     @Value("\${trainer-advisor.auth.remember-me-time:9d}") private val rememberMeTime: Duration
 ) {
 
+    @Order(1)
     @Bean
-    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
+    fun opsSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
+        http
+            .securityMatcher("/ops/**")
+            .csrf { it.disable() }
+            .authorizeHttpRequests { requests ->
+                requests
+
+                    // Ops
+                    .requestMatchers("/ops/**").hasAuthority(Role.ROLE_ADMIN.toString())
+            }
+            .httpBasic(withDefaults())
+        return http.build()
+    }
+
+    @Order(2)
+    @Bean
+    fun mainSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .csrf { it.disable() }
             .authorizeHttpRequests { requests ->
                 requests
                     // Therapist
                     .requestMatchers("/therapist/**").hasAnyAuthority(Role.ROLE_THERAPIST.toString())
-
-                    // Ops
-                    .requestMatchers("/ops/**").hasAuthority(Role.ROLE_ADMIN.toString())
 
                     // Public
                     .requestMatchers(
@@ -44,6 +59,7 @@ class WebSecurityConfig(
                         "/img/**",
                         "/js/**",
                         "/fonts/**",
+                        "/fontawesome*/**",
                         "/test/*"
                     )
                     .permitAll()
@@ -57,11 +73,10 @@ class WebSecurityConfig(
             .formLogin { form: FormLoginConfigurer<HttpSecurity?> ->
                 form
                     .loginPage("/login")
-                    .defaultSuccessUrl("/")
+                    .defaultSuccessUrl("/therapist")
                     .failureForwardUrl("/error-p")
                     .permitAll()
             }
-            .httpBasic(withDefaults())
             .logout { logout: LogoutConfigurer<HttpSecurity?> -> logout.permitAll() }
             .rememberMe { rememberMeConfigurer ->
                 rememberMeConfigurer

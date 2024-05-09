@@ -1,15 +1,16 @@
 package pro.azhidkov.platform.spring.sdj.erpo
 
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.Pageable
-import org.springframework.data.domain.Sort
+import org.springframework.dao.DuplicateKeyException
+import org.springframework.data.domain.*
 import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.data.jdbc.core.convert.EntityRowMapper
 import org.springframework.data.jdbc.core.convert.JdbcConverter
 import org.springframework.data.jdbc.repository.support.SimpleJdbcRepository
 import org.springframework.data.mapping.PersistentEntity
+import org.springframework.data.relational.core.conversion.DbActionExecutionException
 import org.springframework.data.relational.core.mapping.RelationalMappingContext
 import org.springframework.data.relational.core.mapping.RelationalPersistentEntity
+import org.springframework.data.relational.core.query.Query
 import org.springframework.data.relational.core.sql.SqlIdentifier
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
@@ -18,6 +19,7 @@ import pro.azhidkov.platform.spring.jdbc.queryForPage
 import pro.azhidkov.platform.spring.sdj.ALL
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.FetchSpec
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.hydrate
+import pro.azhidkov.platform.spring.sdj.findOneBy
 import pro.azhidkov.platform.spring.sdj.mapContent
 import pro.azhidkov.platform.spring.sdj.query.QueryBuilder
 import pro.azhidkov.platform.spring.sdj.query.query
@@ -38,13 +40,32 @@ class ErgoRepository<T : Any, ID : Any>(
 
     protected val rowMapper = EntityRowMapper(relationalPersistentEntity, jdbcConverter)
 
+    protected fun <S : T> saveAndMapDuplicatedKeyException(aggregate: T, map: (DuplicateKeyException) -> Throwable): S {
+        val res = runCatching { super.save(aggregate) }
+        when (val ex = (res.exceptionOrNull() as? DbActionExecutionException)?.cause as? DuplicateKeyException) {
+            is DuplicateKeyException -> throw map(ex)
+        }
+
+        @Suppress("UNCHECKED_CAST")
+        return res.getOrThrow() as S
+    }
+
     @Transactional
     fun update(id: ID, func: (T) -> T): T? {
-        val task = findByIdOrNull(id)
+        val aggregate = findByIdOrNull(id)
             ?: return null
 
-        val updatedTask = func(task)
-        return save(updatedTask)
+        val updatedAggreate = func(aggregate)
+        return save(updatedAggreate)
+    }
+
+    @Transactional
+    fun updateOne(query: Query, func: (T) -> T): T? {
+        val aggregate = findOne(query)
+            ?: return null
+
+        val updatedAggregate = func(aggregate)
+        return save(updatedAggregate)
     }
 
     fun findById(
@@ -80,8 +101,19 @@ class ErgoRepository<T : Any, ID : Any>(
         paramMap: Map<String, Any?>,
         fetch: Iterable<KProperty1<T, *>> = emptySet(),
     ): T? {
+        @Suppress("SqlSourceToSinkFlow")
         val aggregate = namedParameterJdbcOperations.query(query, paramMap, rowMapper)
             .firstOrNull()
+            ?: return null
+
+        return jdbcAggregateTemplate.hydrate(listOf(aggregate), FetchSpec(fetch)).single()
+    }
+
+    fun findOne(
+        query: Query,
+        fetch: Iterable<KProperty1<T, *>> = emptySet(),
+    ): T? {
+        val aggregate = jdbcAggregateTemplate.findOneBy(query, entity.type)
             ?: return null
 
         return jdbcAggregateTemplate.hydrate(listOf(aggregate), FetchSpec(fetch)).single()
@@ -113,16 +145,20 @@ class ErgoRepository<T : Any, ID : Any>(
         pageRequest: Pageable = ALL,
         fetch: Iterable<KProperty1<T, *>> = emptySet(),
         queryBuilder: QueryBuilder.() -> Unit = {}
-    ): Iterable<T> {
+    ): Slice<T> {
         val query = query(queryBuilder)
-        val res = jdbcAggregateTemplate.findAll(query, entity.type, pageRequest)
-            .content
-        return res.let {
-            jdbcAggregateTemplate.hydrate(
-                res,
-                FetchSpec(fetch)
-            )
-        }
+        val res = jdbcAggregateTemplate.findAll(
+            query,
+            entity.type,
+            PageRequest.of(pageRequest.pageNumber, pageRequest.pageSize + 1, pageRequest.sort)
+        )
+
+        val hydratedPage = res.content
+            .take(pageRequest.pageSize)
+            .let { jdbcAggregateTemplate.hydrate(it, FetchSpec(fetch)) }
+        val hasMore = res.totalElements > pageRequest.pageSize
+
+        return SliceImpl(hydratedPage, pageRequest, hasMore)
     }
 
     fun findPage(
@@ -140,6 +176,7 @@ class ErgoRepository<T : Any, ID : Any>(
         paramMap: Map<String, Any?>,
         fetch: Iterable<KProperty1<T, *>> = emptySet(),
     ): Collection<T> {
+        @Suppress("SqlSourceToSinkFlow")
         val rows = namedParameterJdbcOperations.query(query, paramMap, rowMapper)
         return jdbcAggregateTemplate.hydrate(rows, FetchSpec(fetch))
     }
@@ -152,8 +189,11 @@ class ErgoRepository<T : Any, ID : Any>(
     ): Collection<T> {
         val sortOrders =
             pageRequest.sort.map { "${getColumnNameToSortBy(it).reference} ${it.direction.name}" }.joinToString(", ")
+
         val sliceQuery =
             """SELECT * from ($query) AS data ORDER BY $sortOrders OFFSET ${pageRequest.offset} LIMIT ${pageRequest.pageSize}"""
+
+        @Suppress("SqlSourceToSinkFlow")
         val rows = namedParameterJdbcOperations.query(sliceQuery, paramMap, rowMapper)
 
         return jdbcAggregateTemplate.hydrate(

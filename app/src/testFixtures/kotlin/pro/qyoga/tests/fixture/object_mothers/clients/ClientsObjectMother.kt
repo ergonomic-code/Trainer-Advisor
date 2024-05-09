@@ -1,14 +1,14 @@
 package pro.qyoga.tests.fixture.object_mothers.clients
 
-import org.springframework.data.jdbc.core.mapping.AggregateReference
-import pro.qyoga.core.clients.cards.api.ClientCardDto
-import pro.qyoga.core.clients.cards.api.ClientRef
-import pro.qyoga.core.clients.cards.api.DistributionSource
-import pro.qyoga.core.clients.cards.api.DistributionSourceType
-import pro.qyoga.tests.fixture.data.randomCyrillicWord
-import pro.qyoga.tests.fixture.data.randomEmail
-import pro.qyoga.tests.fixture.data.randomLocalDate
-import pro.qyoga.tests.fixture.data.randomSentence
+import pro.azhidkov.platform.spring.sdj.erpo.hydration.AggregateReferenceTarget
+import pro.qyoga.core.clients.cards.Client
+import pro.qyoga.core.clients.cards.dtos.ClientCardDto
+import pro.qyoga.core.clients.cards.model.Client
+import pro.qyoga.core.clients.cards.model.ClientRef
+import pro.qyoga.core.clients.cards.model.DistributionSource
+import pro.qyoga.core.clients.cards.model.DistributionSourceType
+import pro.qyoga.tests.fixture.data.*
+import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
 import java.time.Duration
 import java.time.LocalDate
 import kotlin.random.Random
@@ -20,11 +20,11 @@ object ClientsObjectMother {
         (1..count).map { createClientCardDto() }
 
     fun createClientCardDto(
-        firstName: String = randomCyrillicWord(),
-        lastName: String = randomCyrillicWord(),
-        middleName: String? = randomCyrillicWord(),
+        firstName: String = faker.name().firstName(),
+        lastName: String = faker.name().lastName(),
+        middleName: String? = faker.name().nameWithMiddle().split(" ")[1],
         birthDate: LocalDate = randomBirthDate(),
-        phone: String = randomPhoneNumber(),
+        phone: String = faker.phoneNumber().phoneNumberInternational(),
         email: String? = randomEmail(),
         address: String? = randomCyrillicWord(),
         complains: String = randomCyrillicWord(),
@@ -53,7 +53,8 @@ object ClientsObjectMother {
         address: String? = null,
         complains: String? = null,
         anamnesis: String? = null,
-        distributionSource: DistributionSource? = null
+        distributionSource: DistributionSource? = null,
+        version: Long = Random.nextLong(0, Long.MAX_VALUE)
     ): ClientCardDto = ClientCardDto(
         firstName,
         lastName,
@@ -66,9 +67,15 @@ object ClientsObjectMother {
         anamnesis,
         distributionSource?.type,
         distributionSource?.comment,
+        version
     )
 
-    val fakeClientRef: ClientRef = AggregateReference.to(-1)
+    fun createClient(therapistId: Long, clientCardDto: ClientCardDto): Client =
+        Client(therapistId, clientCardDto)
+
+    val fakeClientRef: ClientRef = AggregateReferenceTarget(
+        createClient(THE_THERAPIST_ID, createClientCardDtoMinimal())
+    )
 
 }
 

@@ -1,6 +1,6 @@
 plugins {
-    kotlin("jvm") version "1.9.21" apply false
-    id("io.spring.dependency-management") version "1.1.4" apply false
-    id("org.springframework.boot") version "3.2.0" apply false
+    alias(libs.plugins.kotlin) apply false
+    alias(libs.plugins.spring.dependencyManagement) apply false
+    alias(libs.plugins.spring.boot) apply false
 }
 

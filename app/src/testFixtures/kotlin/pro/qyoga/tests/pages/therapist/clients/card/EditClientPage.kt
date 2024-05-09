@@ -1,7 +1,7 @@
 package pro.qyoga.tests.pages.therapist.clients.card
 
 import org.jsoup.nodes.Element
-import pro.qyoga.core.clients.cards.api.Client
+import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.tests.assertions.PageMatcher
 import pro.qyoga.tests.assertions.shouldBeElement
 import pro.qyoga.tests.assertions.shouldHaveComponent

@@ -2,6 +2,7 @@ package pro.qyoga.core.appointments.types
 
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Slice
 import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.data.jdbc.core.convert.JdbcConverter
 import org.springframework.data.mapping.model.BasicPersistentEntity
@@ -34,11 +35,11 @@ class AppointmentTypesRepo(
 
 }
 
-fun AppointmentTypesRepo.findByNameContaining(
+fun AppointmentTypesRepo.findTherapistAppointmentTypesSliceByName(
     therapistRef: TherapistRef,
     searchKey: String,
     page: Pageable
-): Iterable<AppointmentType> {
+): Slice<AppointmentType> {
     return findSlice(page) {
         AppointmentType::ownerRef isEqual therapistRef
         AppointmentType::name isILike searchKey

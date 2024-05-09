@@ -14,7 +14,7 @@ object RegisterPage : QYogaPage {
 
     override val path = "/register"
 
-    override val title = "Заявка на регистрацию"
+    override val title = "Регистрация"
 
     object RegisterForm : QYogaForm("registerForm", action = FormAction.hxPost(path)) {
 
@@ -27,7 +27,7 @@ object RegisterPage : QYogaPage {
 
         const val DUPLICATED_EMAIL_MESSAGE = "#duplicatedEmailMessage"
 
-        val submit by component { submit("register", "Отправить") }
+        val submit by component { submit("register", "Зарегестрироваться") }
 
     }
 

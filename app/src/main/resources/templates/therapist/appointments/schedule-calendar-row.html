@@ -1,0 +1,13 @@
+<div class="row calendar-row g-0 border-bo" th:fragment="row(time, days)"
+     th:id="${'row' + time}">
+    <div class="col-1 border-end border-end-0" style="width: 10%;">
+        <small style="position:relative; top: -0.3rem" th:if="${time.minute == 0}"
+               th:text="${time}">
+            09:30
+        </small>
+    </div>
+    <div th:replace="~{therapist/appointments/schedule-calendar-cell(${time}, ${days[0].first}, ${days[0].second})}"></div>
+    <div th:replace="~{therapist/appointments/schedule-calendar-cell(${time}, ${days[1].first}, ${days[1].second})}"></div>
+    <div th:replace="~{therapist/appointments/schedule-calendar-cell(${time}, ${days[2].first}, ${days[2].second})}"></div>
+
+</div>

@@ -16,7 +16,7 @@ object NotFoundErrorPage : HtmlPage {
 
     override val title = "Страница не существует"
 
-    private val returnToMainLink = Link("toMainLink", "/", "Вернуться на главную")
+    private val returnToMainLink = Link("toMainLink", "/therapist", "Вернуться на главную")
 
     override val matcher: Matcher<Element> = Matcher.all(
         haveTitle(title),

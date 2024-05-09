@@ -18,9 +18,18 @@
     <div id="layoutSidenav_content">
         <main>
             <section class="container px-4">
-                <h1 class="mt-4 pb-2 mb-3 border-bottom"
-                    th:text="${appointment?.clientTitle ?: 'Новый приём'}">
-                    Новый приём
+                <h1 class="mt-4 pb-2 mb-3 border-bottom d-flex justify-content-between align-items-baseline">
+                    <span th:text="${pageMode == 'CREATE' ? 'Новый приём' : appointment.clientTitle }">
+                        Новый приём
+                    </span>
+
+                    <a class="btn btn-outline-danger text"
+                       id="deleteAppointmentLink"
+                       th:hx-confirm="'Удалить приём для ' + ${appointment.clientTitle} + '?'"
+                       th:hx-delete="@{/therapist/appointments/{id}?returnTo={returnTo} (id=${appointmentId},returnTo=${appointment.dateTime.toLocalDate()})}"
+                       th:if="${pageMode == 'EDIT'}">
+                        <i class="fas fa-trash"></i>
+                    </a>
                 </h1>
 
                 <form class="mt-4"
@@ -28,6 +37,7 @@
                       id="editAppointmentForm"
                       th:attr="hx-post=${pageMode == 'CREATE' ? '/therapist/appointments/new' : null},hx-put=${pageMode == 'EDIT' ? '/therapist/appointments/' + appointmentId : null}"
                       th:fragment="editAppointmentForm"
+                      th:x-data="|{'dateTime': '${appointment?.dateTime ?: dateTime}', 'status': 'PENDING', canChangeStatus() { return Date.parse(this.dateTime) <= new Date() } }|"
                 >
 
                     <fieldset class="mb-4">
@@ -86,9 +96,11 @@
                                            min="2000-01-01"
                                            max="2100-01-01"
                                            name="dateTime"
+                                           @change="if (!$data.canChangeStatus()) { status = 'PENDING'}"
+                                           x-model="dateTime"
                                            required
                                            th:classappend="${appointmentsIntersectionError} ? 'is-invalid' : ''"
-                                           th:value="${appointment?.dateTime}"
+                                           th:value="${appointment?.dateTime ?: dateTime}"
                                            type="datetime-local">
                                     <label for="dateTime">Дата и время <span class="text-danger">*</span></label>
                                     <div class="invalid-feedback" id="appointmentsIntersectionErrorMessage">
@@ -201,8 +213,8 @@
                         </div>
                         <div class="row">
                             <div class="col">
-                                <span class="me-3">Статус приёма: </span>
-                                <div class="form-check form-check-inline mt-2">
+                                <span class="me-3 d-block d-sm-inline">Статус приёма: </span>
+                                <div class="form-check form-check-inline mt-2 w-100 w-sm-auto">
                                     <input class="form-check-input"
                                            id="appointmentStatusPending"
                                            name="appointmentStatus"
@@ -210,32 +222,36 @@
                                            required
                                            th:checked="${appointment == null || appointment.appointmentStatus.name == 'PENDING'}"
                                            type="radio"
+                                           x-model="status"
                                            value="PENDING">
                                     <label class="form-check-label" for="appointmentStatusPending">
                                         Ожидается клиент
                                     </label>
                                 </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input"
+                                <div class="form-check form-check-inline w-100 w-sm-auto">
+                                    <input class="form-check-input "
                                            id="appointmentStatusClientCame"
                                            name="appointmentStatus"
 
                                            required
                                            th:checked="${appointment?.appointmentStatus?.name == 'CLIENT_CAME'}"
                                            type="radio"
+                                           x-bind:disabled="!canChangeStatus()"
+                                           x-model="status"
                                            value="CLIENT_CAME">
                                     <label class="form-check-label" for="appointmentStatusClientCame">
                                         Клиент пришёл
                                     </label>
                                 </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input"
+                                <div class="form-check form-check-inline w-100 w-sm-auto">
+                                    <input class="form-check-input "
                                            id="appointmentStatusClientNotCame"
                                            name="appointmentStatus"
-
                                            required
                                            th:checked="${appointment?.appointmentStatus?.name == 'CLIENT_DO_NOT_CAME'}"
                                            type="radio"
+                                           x-bind:disabled="!canChangeStatus()"
+                                           x-model="status"
                                            value="CLIENT_DO_NOT_CAME">
                                     <label class="form-check-label" for="appointmentStatusClientNotCame">
                                         Клиент не пришёл
@@ -253,9 +269,8 @@
 
                     <div class="row g-2 justify-content-end">
                         <div class="col-6 col-sm-auto text-center">
-                            <a class="btn btn-outline-danger" href="/therapist/schedule"
-                               onclick="if (!window.confirm('Вы уверены, что хотите отменить все изменения и выйти?')) {event.preventDefault(); return false}"
-                               hx-boost="true"
+                            <a class="btn btn-outline-danger"
+                               onclick="if (window.confirm('Вы уверены, что хотите отменить все изменения и выйти?')) { history.back() }"
                                style="min-width: 110px;">
                                 Отмена
                             </a>

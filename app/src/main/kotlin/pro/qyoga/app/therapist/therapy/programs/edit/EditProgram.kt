@@ -6,7 +6,7 @@ import pro.qyoga.core.therapy.programs.impl.ProgramsRepo
 import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
 import pro.qyoga.core.therapy.programs.model.Program
 import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo
-import pro.qyoga.core.therapy.therapeutic_tasks.findByName
+import pro.qyoga.core.therapy.therapeutic_tasks.findOneByName
 
 sealed interface EditProgramResult {
     data class InvalidTherapeuticTaskName(val therapeuticTaskName: String) : EditProgramResult
@@ -25,7 +25,7 @@ class EditProgram(
         updateProgramRequest: CreateProgramRequest,
         therapeuticTaskName: String
     ): EditProgramResult {
-        val therapeuticTask = therapeuticTasksRepo.findByName(therapeuticTaskName)
+        val therapeuticTask = therapeuticTasksRepo.findOneByName(therapeuticTaskName)
             ?: return EditProgramResult.InvalidTherapeuticTaskName(therapeuticTaskName)
 
         val updatedProgram = programsRepo.update(programId) {

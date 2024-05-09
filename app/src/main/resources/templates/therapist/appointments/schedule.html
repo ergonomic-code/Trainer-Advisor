@@ -3,6 +3,80 @@
 <head>
     <div th:replace="~{fragments/header.html}"></div>
     <title>Расписание</title>
+
+    <style>
+        div.calendar-row {
+            height: 3rem;
+            font-size: clamp(0.85rem, 2vw, 1rem);
+        }
+
+        h1.calendar-header {
+            position: sticky;
+            top: 3rem;
+        }
+
+        div.days-footer {
+            position: sticky;
+            bottom: 2rem;
+        }
+
+        div.appointment-card.pending div.header {
+            background-color: rgba(77, 212, 172, 0.8);
+        }
+
+        div.appointment-card.pending div.body {
+            background-color: rgba(121, 223, 193, 0.3);
+        }
+
+        div.appointment-card.client-came div.header {
+            background-color: rgba(61, 139, 253, 0.8);
+        }
+
+        div.appointment-card.client-came div.body {
+            background-color: rgba(110, 168, 254, 0.3);
+        }
+
+        div.appointment-card.client-do-not-came div.header {
+            background-color: rgba(227, 93, 106, 0.8);
+        }
+
+        div.appointment-card.client-do-not-came div.body {
+            background-color: rgba(234, 134, 143, 0.3);
+        }
+    </style>
+
+    <script defer th:inline="javascript">
+
+        function revealAppointment() {
+            const queryParams = new URLSearchParams(window.location.search);
+            let appToFocus = queryParams.get("appointment");
+
+            let appCard;
+            if (appToFocus != null) {
+                appCard = document.querySelector(`#appointmentCard-${appToFocus}`);
+            } else {
+                appCard = document.querySelector(".appointment-card");
+            }
+
+            if (appCard != null) {
+                window.scrollTo(0, appCard.offsetTop - 100);
+            } else {
+                window.scrollTo(0, 0);
+            }
+        }
+
+        window.addEventListener("load", () => {
+            document.body.addEventListener('htmx:afterSwap', function (evt) {
+                if (evt.detail.xhr.status === 200) {
+                    revealAppointment();
+                }
+            })
+
+            revealAppointment();
+        });
+
+    </script>
+
 </head>
 
 <body class="sb-nav-fixed">
@@ -15,43 +89,69 @@
 
     <div id="layoutSidenav_content">
         <main class="container px-4">
-            <h1 class="mt-4 mb-3 pb-2 mb-3 border-bottom">Расписание</h1>
+            <h1 class="mt-4 d-flex justify-content-between align-items-baseline calendar-header bg-white z-2">
+                Расписание
 
-            <div class="row mb-3 justify-content-end">
-                <div class="col col-sm-3">
-                    <a class="btn btn-outline-success w-100" href="/therapist/appointments/new"
-                       id="addAppointmentLink">
-                        Запланировать приём
-                    </a>
+                <div class="calendar-header py-3 bg-white z-3 mb-4">
+                    <button class="btn btn-outline-secondary"
+                            name="datePickerButton"
+                            onclick="document.getElementById('datePicker').showPicker()"
+                            th:href="@{/therapist/schedule?calendar=true&date={date}(date=${today})}"
+
+                    >
+                        <span th:text="${selectedDayLabel}">
+                        </span>
+                        &nbsp;
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+
+                    <input class="d-none"
+                           hx-push-url="true"
+                           hx-select="main"
+                           hx-swap="outerHTML"
+                           hx-target="main"
+                           hx-trigger="change"
+                           id="datePicker"
+                           name="date"
+                           th:hx-get="@{/therapist/schedule}"
+                           th:value="${date}"
+                           type="date"
+                    >
                 </div>
-            </div>
+            </h1>
 
-            <div class="row mb-5">
-                <ul class="nav nav-tabs" id="scheduleTabs">
-                    <li class="nav-item">
-                        <a class="nav-link "
-                           href="/therapist/schedule"
-                           id="futureAppointmentsLink"
-                           hx-boost="true"
-                           th:classappend="${activeTab == 'future'} ? 'active'">
-                            Предстоящие
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link"
-                           href="/therapist/schedule?past=true"
-                           id="pastAppointmentsLink"
-                           hx-boost="true"
-                           th:classappend="${activeTab == 'past'} ? 'active'">
-                            Прошедшие
-                        </a>
-                    </li>
-                </ul>
-            </div>
+            <section id="calendar" th:fragment="calendarSchedule" xmlns:th="http://www.w3.org/1999/html">
 
-            <section th:replace="~{'therapist/appointments/schedule-tab-' + ${activeTab} + '.html'}">
+                <div class="calendar-body mb-4">
+                    <th:block th:each="mark : ${timeMarks}">
+                        <div th:replace="~{therapist/appointments/schedule-calendar-row(${mark.time}, ${mark.days})}"></div>
+                    </th:block>
+                </div>
+
+                <div class="days-footer rounded-4 bg-light text-dark opacity-75">
+                    <div class="row p-2 g-0 text-center">
+                        <div class="col rounded-2" th:classappend="${ (day.selected ? 'bg-secondary-subtle ' : '')}"
+                             th:each="day : ${calendarDays}"
+                        >
+
+                            <a class="text-decoration-none"
+                               hx-boost="true"
+                               hx-swap="show:none"
+                               th:classappend="${(day.holiday ? 'text-danger ' : 'link-dark')}"
+                               th:href="@{/therapist/schedule?date={date}(date=${day.date})}"
+                               th:id="|goToDayLink-day.day|"
+                            >
+                                <div class="calendar-day">
+                                    <small th:text="${day.label}">
+                                    </small>
+                                    <br/>
+                                    <span th:text="${day.day}"></span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </section>
-
 
         </main>
         <footer th:insert="~{fragments/footer.html :: footer}"></footer>
@@ -59,4 +159,5 @@
 </div>
 
 </body>
+
 </html>

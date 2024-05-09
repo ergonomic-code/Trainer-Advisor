@@ -6,19 +6,19 @@ import org.springframework.stereotype.Component
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.FetchSpec
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.hydrate
 import pro.qyoga.app.therapist.clients.journal.edit_entry.create.CreateJournalEntryWorkflow
-import pro.qyoga.core.clients.journals.JournalsService
+import pro.qyoga.core.clients.journals.JournalEntriesRepo
+import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRequest
 import pro.qyoga.core.clients.journals.dtos.JournalPageRequest
-import pro.qyoga.core.clients.journals.model.EditJournalEntryRequest
 import pro.qyoga.core.clients.journals.model.JournalEntry
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.tests.fixture.data.randomRecentLocalDate
-import pro.qyoga.tests.fixture.object_mothers.clients.JournalEntriesObjectMother
+import pro.qyoga.tests.fixture.object_mothers.clients.JournalEntriesObjectMother.journalEntry
 
 
 @Component
 class ClientJournalBackgrounds(
     private val createJournalEntryWorkflow: CreateJournalEntryWorkflow,
-    private val journalsService: JournalsService,
+    private val journalEntriesRepo: JournalEntriesRepo,
     private val jdbcAggregateOperations: JdbcAggregateOperations
 ) {
 
@@ -31,12 +31,11 @@ class ClientJournalBackgrounds(
     }
 
     fun createEntries(clientId: Long, therapist: QyogaUserDetails, count: Int): List<JournalEntry> {
-        val uniqueDates = generateSequence { randomRecentLocalDate() }
+        return generateSequence { randomRecentLocalDate() }
             .distinct()
-            .asIterable()
-        return (1..count).zip(uniqueDates).map { (_, date) ->
-            createJournalEntry(clientId, JournalEntriesObjectMother.journalEntry(date = date), therapist)
-        }
+            .take(count)
+            .map { date -> createJournalEntry(clientId, journalEntry(date = date), therapist) }
+            .toList()
     }
 
     fun hydrate(journalEntries: List<JournalEntry>): List<JournalEntry> =
@@ -46,7 +45,7 @@ class ClientJournalBackgrounds(
         )
 
     fun getWholeJournal(clientId: Long): Page<JournalEntry> {
-        return journalsService.getJournalPage(
+        return journalEntriesRepo.getJournalPage(
             JournalPageRequest.wholeJournal(
                 clientId,
                 fetch = listOf(JournalEntry::therapeuticTask)

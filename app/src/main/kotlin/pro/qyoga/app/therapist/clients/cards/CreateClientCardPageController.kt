@@ -6,15 +6,20 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import pro.qyoga.core.clients.cards.api.ClientCardDto
-import pro.qyoga.core.clients.cards.api.ClientsService
+import org.springframework.web.servlet.ModelAndView
+import pro.azhidkov.platform.kotlin.mapFailure
+import pro.azhidkov.platform.kotlin.mapSuccess
+import pro.qyoga.core.clients.cards.Client
+import pro.qyoga.core.clients.cards.ClientsRepo
+import pro.qyoga.core.clients.cards.dtos.ClientCardDto
+import pro.qyoga.core.clients.cards.errors.DuplicatedPhoneException
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 
 
 @Controller
 @RequestMapping("/therapist/clients")
 class CreateClientCardPageController(
-    private val clientsService: ClientsService
+    private val clientsRepo: ClientsRepo
 ) {
 
     @GetMapping("/create")
@@ -27,9 +32,21 @@ class CreateClientCardPageController(
     fun createClient(
         clientCardDto: ClientCardDto,
         @AuthenticationPrincipal principal: QyogaUserDetails,
-    ): String {
-        clientsService.createClients(principal.id, listOf(clientCardDto))
-        return "redirect:/therapist/clients"
+    ): ModelAndView {
+        val res = runCatching {
+            clientsRepo.save(Client(principal.id, clientCardDto))
+        }
+
+        val modelAndView = res
+            .mapSuccess {
+                ModelAndView("redirect:/therapist/clients")
+            }
+            .mapFailure { _: DuplicatedPhoneException ->
+                editClientFormWithValidationError(clientCardDto)
+            }
+            .getOrThrow()
+
+        return modelAndView
     }
 
 }

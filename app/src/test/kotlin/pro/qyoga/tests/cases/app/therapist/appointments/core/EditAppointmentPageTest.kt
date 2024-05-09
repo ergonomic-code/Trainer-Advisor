@@ -1,11 +1,13 @@
 package pro.qyoga.tests.cases.app.therapist.appointments.core
 
+import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.ref
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
 import pro.azhidkov.timezones.TimeZones
+import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
 import pro.qyoga.core.appointments.core.toEditRequest
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.assertions.shouldHave
@@ -18,10 +20,10 @@ import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentsObjectMot
 import pro.qyoga.tests.fixture.object_mothers.appointments.randomAppointmentCost
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import pro.qyoga.tests.pages.publc.NotFoundErrorPage
+import pro.qyoga.tests.pages.therapist.appointments.CalendarPage
 import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentForm
 import pro.qyoga.tests.pages.therapist.appointments.EditAppointmentForm
 import pro.qyoga.tests.pages.therapist.appointments.EditAppointmentPage
-import pro.qyoga.tests.pages.therapist.appointments.FutureSchedulePage
 import pro.qyoga.tests.platform.html.HtmlPage
 import java.time.Duration
 import java.time.LocalDate
@@ -88,7 +90,7 @@ class EditAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         response.statusCode() shouldBe HttpStatus.OK.value()
-        response shouldBePage FutureSchedulePage
+        response shouldBePage CalendarPage
 
         val persistedAppointment =
             backgrounds.appointments.getDaySchedule(editedAppointment.dateTime.toLocalDate()).single()
@@ -118,7 +120,7 @@ class EditAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         response.statusCode() shouldBe HttpStatus.OK.value()
-        response shouldBePage FutureSchedulePage
+        response shouldBePage CalendarPage
 
         val persistedAppointment = backgrounds.appointments.findAll().single()
         persistedAppointment shouldMatch editedAppointment
@@ -189,6 +191,25 @@ class EditAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
         val storedNextAppointment = backgrounds.appointments.findById(nextNotRescheduledAppointment.id)!!
         storedNextAppointment shouldMatch nextNotRescheduledAppointment
+    }
+
+    @Test
+    fun `Deletion of appointment should be persistent and return redirect to specified calendar day`() {
+        // Given
+        val appointment = backgrounds.appointments.create()
+        val therapist = TherapistClient.loginAsTheTherapist()
+
+        // When
+        val response = therapist.appointments.delete(appointment.id, appointment.wallClockDateTime.toLocalDate())
+
+        // Then
+        response.statusCode shouldBe HttpStatus.OK.value()
+        response.header("HX-Location") shouldBe SchedulePageController.DATE_PATH.replace(
+            "{date}",
+            appointment.wallClockDateTime.toLocalDate().toString()
+        )
+
+        backgrounds.appointments.getDaySchedule(appointment.wallClockDateTime.toLocalDate()).shouldBeEmpty()
     }
 
 }

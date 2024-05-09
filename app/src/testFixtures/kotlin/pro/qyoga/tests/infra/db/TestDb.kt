@@ -2,7 +2,6 @@ package pro.qyoga.tests.infra.db
 
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
-import org.flywaydb.core.Flyway
 import org.slf4j.LoggerFactory
 import java.sql.DriverManager
 import java.sql.SQLException
@@ -18,6 +17,7 @@ private const val DB_PASSWORD = "password"
 
 val jdbcUrl: String by lazy {
     try {
+        log.info("Checking for provided db")
         val con = DriverManager.getConnection(
             PROVIDED_DB_URL.replace("qyoga", DB_USER),
             DB_USER,
@@ -40,21 +40,10 @@ val jdbcUrl: String by lazy {
 }
 
 val testDataSource by lazy {
-    migrateSchema(jdbcUrl)
     val config = HikariConfig().apply {
         this.jdbcUrl = pro.qyoga.tests.infra.db.jdbcUrl
         this.username = DB_USER
         this.password = DB_PASSWORD
     }
     HikariDataSource(config)
-}
-
-fun migrateSchema(jdbcUrl: String) {
-    log.info("Migrating schema")
-    Flyway.configure()
-        .dataSource(jdbcUrl, DB_USER, DB_PASSWORD)
-        .locations("classpath:/db/migration/common")
-        .load()
-        .migrate()
-    log.info("Schema migrated")
 }

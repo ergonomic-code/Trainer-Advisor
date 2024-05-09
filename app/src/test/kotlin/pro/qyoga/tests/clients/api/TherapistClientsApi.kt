@@ -5,13 +5,15 @@ import io.restassured.module.kotlin.extensions.Extract
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
+import io.restassured.specification.RequestSpecification
 import org.hamcrest.CoreMatchers.endsWith
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
+import pro.qyoga.app.therapist.clients.ClientsListPageController
 import pro.qyoga.app.therapist.clients.components.ClientsComboBoxController
-import pro.qyoga.core.clients.cards.api.ClientCardDto
-import pro.qyoga.core.clients.cards.api.ClientSearchDto
+import pro.qyoga.core.clients.cards.dtos.ClientCardDto
+import pro.qyoga.core.clients.cards.dtos.ClientSearchDto
 import pro.qyoga.tests.pages.therapist.clients.ClientsListPage
 import pro.qyoga.tests.pages.therapist.clients.card.CreateClientForm
 import pro.qyoga.tests.pages.therapist.clients.card.CreateClientPage
@@ -74,17 +76,7 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
     fun createClient(request: ClientCardDto) {
         Given {
             authorized()
-            formParam(CreateClientForm.firstName.name, request.firstName)
-            formParam(CreateClientForm.lastName.name, request.lastName)
-            formParam(CreateClientForm.middleName.name, request.middleName ?: "")
-            formParam(CreateClientForm.birthDate.name, request.birthDate?.toString() ?: "")
-            formParam(CreateClientForm.email.name, request.email ?: "")
-            formParam(CreateClientForm.phoneNumber.name, request.phoneNumber)
-            formParam(CreateClientForm.address.name, request.address ?: "")
-            formParam(CreateClientForm.complaints.name, request.complaints ?: "")
-            formParam(CreateClientForm.anamnesis.name, request.anamnesis ?: "")
-            formParam(CreateClientForm.distributionSourceType.name, request.distributionSourceType ?: "")
-            formParam(CreateClientForm.distributionSourceComment.name, request.distributionSourceComment ?: "")
+            clientCardFormParams(request)
         } When {
             post(CreateClientForm.action.url)
         } Then {
@@ -93,23 +85,24 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
         }
     }
 
+    fun createClientForError(request: ClientCardDto): Document {
+        return Given {
+            authorized()
+            clientCardFormParams(request)
+        } When {
+            post(CreateClientForm.action.url)
+        } Then {
+            statusCode(HttpStatus.OK.value())
+        } Extract {
+            Jsoup.parse(body().asString())
+        }
+    }
+
     fun editClient(clientId: Long, request: ClientCardDto) {
         Given {
             authorized()
-
             pathParam("id", clientId)
-
-            formParam(EditClientForm.firstName.name, request.firstName)
-            formParam(EditClientForm.lastName.name, request.lastName)
-            formParam(EditClientForm.middleName.name, request.middleName ?: "")
-            formParam(EditClientForm.birthDate.name, request.birthDate?.toString() ?: "")
-            formParam(EditClientForm.email.name, request.email ?: "")
-            formParam(EditClientForm.phoneNumber.name, request.phoneNumber)
-            formParam(EditClientForm.address.name, request.address ?: "")
-            formParam(EditClientForm.complaints.name, request.complaints)
-            formParam(EditClientForm.anamnesis.name, request.anamnesis ?: "")
-            formParam(EditClientForm.distributionSourceType.name, request.distributionSourceType?.name ?: "")
-            formParam(EditClientForm.distributionSourceComment.name, request.distributionSourceComment ?: "")
+            clientCardFormParams(request)
         } When {
             post(EditClientPage.PATH)
         } Then {
@@ -118,14 +111,48 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
         }
     }
 
-    fun searchClients(searchForm: ClientSearchDto): Document {
+    fun editClientForError(
+        clientId: Long,
+        request: ClientCardDto,
+        expectedStatus: HttpStatus = HttpStatus.OK
+    ): Document {
+        return Given {
+            authorized()
+            pathParam("id", clientId)
+            clientCardFormParams(request)
+        } When {
+            post(EditClientPage.PATH)
+        } Then {
+            statusCode(expectedStatus.value())
+        } Extract {
+            Jsoup.parse(body().asString())
+        }
+    }
+
+    private fun RequestSpecification.clientCardFormParams(request: ClientCardDto): RequestSpecification {
+        formParam(EditClientForm.firstName.name, request.firstName)
+        formParam(EditClientForm.lastName.name, request.lastName)
+        formParam(EditClientForm.middleName.name, request.middleName ?: "")
+        formParam(EditClientForm.birthDate.name, request.birthDate?.toString() ?: "")
+        formParam(EditClientForm.email.name, request.email ?: "")
+        formParam(EditClientForm.phoneNumber.name, request.phoneNumber)
+        formParam(EditClientForm.address.name, request.address ?: "")
+        formParam(EditClientForm.complaints.name, request.complaints)
+        formParam(EditClientForm.anamnesis.name, request.anamnesis ?: "")
+        formParam(EditClientForm.distributionSourceType.name, request.distributionSourceType?.name ?: "")
+        formParam(EditClientForm.distributionSourceComment.name, request.distributionSourceComment ?: "")
+        return formParam(EditClientForm.version.name, request.version)
+    }
+
+    fun searchClients(searchForm: ClientSearchDto = ClientSearchDto(), page: Int = 1): Document {
         return Given {
             authorized()
             formParam(ClientsListPage.ClientSearchForm.firstName.name, searchForm.firstName)
             formParam(ClientsListPage.ClientSearchForm.lastName.name, searchForm.lastName)
             formParam(ClientsListPage.ClientSearchForm.phoneNumber.name, searchForm.phoneNumber)
+            formParam(ClientsListPageController.SEARCH_PARAM_PAGE, page - 1)
         } When {
-            get(ClientsListPage.ClientSearchForm.action.url)
+            get(ClientsListPageController.SEARCH_PATH)
         } Then {
             statusCode(HttpStatus.OK.value())
         } Extract {

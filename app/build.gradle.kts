@@ -1,13 +1,16 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	id("org.springframework.boot")
-	id("io.spring.dependency-management")
-	kotlin("jvm")
-	kotlin("plugin.spring") version "1.9.21"
-	id("org.jetbrains.kotlinx.kover") version "0.6.1"
+	alias(libs.plugins.kotlin)
+	alias(libs.plugins.kotlin.spring)
+
+	alias(libs.plugins.spring.dependencyManagement)
+	alias(libs.plugins.spring.boot)
+
+	alias(libs.plugins.gitProperties)
+
+	alias(libs.plugins.kover)
 	id("java-test-fixtures")
-	id("com.gorylenko.gradle-git-properties") version "2.4.1"
 }
 
 group = "pro.qyoga"
@@ -30,34 +33,34 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-mail")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
+	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.flywaydb:flyway-core")
-	implementation("jakarta.validation:jakarta.validation-api:3.0.2")
-	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
-	implementation("org.thymeleaf.extras:thymeleaf-extras-java8time:3.0.4.RELEASE")
-	implementation("org.postgresql:postgresql:42.6.0")
-	implementation("io.minio:minio:8.5.7")
-	implementation("org.apache.poi:poi-ooxml:5.2.5")
-	implementation("org.apache.poi:poi-ooxml-lite:5.2.5")
+	implementation(libs.jackarta.validation)
+	implementation(libs.thymeleaf.extras.java8time)
+	implementation(libs.postgres)
+	implementation(libs.minio)
+	implementation(libs.bundles.poi)
 
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
-	testFixturesImplementation("org.springframework.boot:spring-boot-starter-test")
 	testFixturesApi("org.springframework.boot:spring-boot-testcontainers")
+	testFixturesApi(testLibs.kotest.assertions)
+	testFixturesApi(testLibs.jsoup)
+	testFixturesApi(testLibs.datafaker)
+	testFixturesApi(testLibs.greenmail)
+
+	testFixturesImplementation("org.springframework.boot:spring-boot-starter-test")
 	testFixturesImplementation("org.testcontainers:junit-jupiter")
 	testFixturesImplementation("org.testcontainers:postgresql")
-	testFixturesApi("io.kotest:kotest-assertions-core:5.7.2")
-	testFixturesImplementation("org.testcontainers:minio:1.19.3")
-	testFixturesApi("org.jsoup:jsoup:1.16.2")
+	testFixturesImplementation(testLibs.testcontainers.minio)
 
 	testImplementation(testFixtures(project(":app")))
-	testImplementation("io.rest-assured:rest-assured:5.3.2")
-	testImplementation("io.rest-assured:kotlin-extensions:5.3.2")
-	testImplementation("com.tngtech.archunit:archunit:1.1.0")
-	testImplementation("io.github.ulfs:assertj-jsoup:0.1.4")
-	testFixturesApi("com.icegreen:greenmail-junit5:2.0.0")
-	testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
+	testImplementation(testLibs.bundles.restassured)
+	testImplementation(testLibs.archunit)
+	testImplementation(testLibs.mockito.kotlin)
 
 	modules {
 		module("org.codehaus.groovy:groovy") {

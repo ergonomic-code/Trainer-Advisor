@@ -25,6 +25,14 @@ spring:
           starttls:
             enable: true
 
+  web:
+    resources:
+      strategy:
+        content:
+          enabled=true
+          paths=/**
+
+
 management:
   endpoints:
     web:
@@ -62,8 +70,8 @@ minio:
   password: password
   endpoint: http://localhost:50000
 
-qyoga:
+trainer-advisor:
   admin:
-    email: me@azhidkov.pro
+    email: ta@azhidkov.pro
 
 debug: false

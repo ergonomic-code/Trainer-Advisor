@@ -5,32 +5,40 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.servlet.ModelAndView
-import pro.azhidkov.platform.spring.http.hxRedirect
 import pro.azhidkov.timezones.LocalizedTimeZone
 import pro.azhidkov.timezones.TimeZones
 import pro.qyoga.app.platform.EntityPageMode
+import pro.qyoga.app.platform.seeOther
 import pro.qyoga.app.publc.components.toComboBoxItem
-import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
+import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController.Companion.calendarForDayWithFocus
 import pro.qyoga.core.appointments.core.AppointmentsIntersectionException
 import pro.qyoga.core.appointments.core.EditAppointmentRequest
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.ref
+import java.time.LocalDateTime
 
 
 @Controller
-@RequestMapping("/therapist/appointments/new")
+@RequestMapping(CreateAppointmentPageController.PATH)
 class CreateAppointmentPageController(
     private val createAppointment: CreateAppointmentWorkflow,
     private val timeZones: TimeZones
 ) {
 
     @GetMapping
-    fun getCreateTrainingSessionPage(): ModelAndView {
+    fun getAppointmentPage(
+        @RequestParam("dateTime") dateTime: LocalDateTime?
+    ): ModelAndView {
         return appointmentPageModelAndView(
             pageMode = EntityPageMode.CREATE,
             allAvailableTimeZones = timeZones.allTimeZones.map(LocalizedTimeZone::toComboBoxItem)
-        )
+        ) {
+            if (dateTime != null) {
+                "dateTime" bindTo dateTime.toString()
+            }
+        }
     }
 
     @PostMapping
@@ -39,8 +47,8 @@ class CreateAppointmentPageController(
         @AuthenticationPrincipal therapist: QyogaUserDetails
     ): Any {
         return try {
-            createAppointment(therapist.ref, editAppointmentRequest)
-            hxRedirect(SchedulePageController.PATH)
+            val appointment = createAppointment(therapist.ref, editAppointmentRequest)
+            seeOther(calendarForDayWithFocus(editAppointmentRequest.dateTime.toLocalDate(), appointment.id))
         } catch (ex: AppointmentsIntersectionException) {
             appointmentPageModelAndView(
                 pageMode = EntityPageMode.CREATE,
@@ -51,6 +59,12 @@ class CreateAppointmentPageController(
                 "existingAppointment" bindTo ex.existingAppointment
             }
         }
+    }
+
+    companion object {
+        const val PATH = "/therapist/appointments/new"
+        const val DATE_TIME = "dateTime"
+        const val ADD_TO_DATE_TIME_PATH = "/therapist/appointments/new?$DATE_TIME={$DATE_TIME}"
     }
 
 }

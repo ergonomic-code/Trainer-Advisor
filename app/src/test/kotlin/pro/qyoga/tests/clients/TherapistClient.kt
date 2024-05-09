@@ -33,7 +33,7 @@ class TherapistClient(val authCookie: Cookie) {
         return Given {
             cookie(authCookie)
         } When {
-            get()
+            get("/therapist")
         } Then {
             statusCode(HttpStatus.OK.value())
         } Extract {

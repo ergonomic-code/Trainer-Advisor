@@ -3,16 +3,18 @@ package pro.qyoga.tests.cases.app.therapist.clients
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.shouldHaveSize
 import org.junit.jupiter.api.Test
-import pro.qyoga.core.clients.cards.api.Client
-import pro.qyoga.core.clients.cards.api.ClientSearchDto
+import pro.qyoga.core.clients.cards.dtos.ClientSearchDto
 import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.assertions.shouldHave
+import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
+import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother.createClient
 import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother.createClientCardDto
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import pro.qyoga.tests.pages.therapist.clients.ClientsListPage
+import pro.qyoga.tests.pages.therapist.clients.ClientsListPagination
 import java.time.LocalDate
 
 
@@ -47,8 +49,9 @@ class ClientsListPageTest : QYogaAppIntegrationBaseTest() {
         document shouldBe ClientsListPage
         ClientsListPage.clientRows(document) shouldHaveSize pageSize
         firstPage.forAll {
-            document shouldHave ClientsListPage.clientRow(Client(THE_THERAPIST_ID, it))
+            document shouldHave ClientsListPage.clientRow(createClient(THE_THERAPIST_ID, it))
         }
+        document shouldHaveComponent ClientsListPagination(pages = 2, currentPage = 1)
     }
 
     @Test
@@ -86,8 +89,8 @@ class ClientsListPageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         ClientsListPage.clientRows(document) shouldHaveSize 2
-        document shouldHave ClientsListPage.clientRow(Client(THE_THERAPIST_ID, fullMatch1))
-        document shouldHave ClientsListPage.clientRow(Client(THE_THERAPIST_ID, fullMatch2))
+        document shouldHave ClientsListPage.clientRow(createClient(THE_THERAPIST_ID, fullMatch1))
+        document shouldHave ClientsListPage.clientRow(createClient(THE_THERAPIST_ID, fullMatch2))
     }
 
     @Test
@@ -103,6 +106,27 @@ class ClientsListPageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         ClientsListPage.clientRows(therapist.clients.getClientsListPage()) shouldHaveSize 0
+    }
+
+    @Test
+    fun `Second clients list fragment should be rendered correctly`() {
+        // Given
+        val page = 2
+        val pageSize = 10
+        val therapist = TherapistClient.loginAsTheTherapist()
+        val clients = ClientsObjectMother.createClientCardDtos(pageSize * 2 + 1)
+        val secondPage = clients.sortedBy { it.lastName.lowercase() }.drop(pageSize).take(pageSize)
+        backgrounds.clients.createClients(clients)
+
+        // When
+        val document = therapist.clients.searchClients(page = page)
+
+        // Then
+        ClientsListPage.clientRows(document) shouldHaveSize pageSize
+        secondPage.forAll {
+            document shouldHave ClientsListPage.clientRow(createClient(THE_THERAPIST_ID, it))
+        }
+        document shouldHaveComponent ClientsListPagination(pages = 3, currentPage = page)
     }
 
 }

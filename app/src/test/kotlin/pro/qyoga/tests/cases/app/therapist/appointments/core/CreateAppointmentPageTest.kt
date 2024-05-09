@@ -11,12 +11,12 @@ import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.assertions.shouldHaveElement
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
+import pro.qyoga.tests.fixture.data.randomWorkingTime
 import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentsObjectMother
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentForm
 import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentPage
 import pro.qyoga.tests.pages.therapist.appointments.EditAppointmentForm
-import pro.qyoga.tests.pages.therapist.appointments.SchedulePage
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalTime
@@ -32,7 +32,7 @@ private val aTime = LocalTime.now()
 class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
     @Test
-    fun `Create training session page should be rendered correctly`() {
+    fun `Create appointment page should be rendered correctly`() {
         // Given
         val therapist = TherapistClient.loginAsTheTherapist()
 
@@ -41,6 +41,19 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         document shouldBePage CreateAppointmentPage
+    }
+
+    @Test
+    fun `Create appointment page should prefill date and time, if provided`() {
+        // Given
+        val aDateTime = LocalDate.now().atTime(randomWorkingTime())
+        val therapist = TherapistClient.loginAsTheTherapist()
+
+        // When
+        val document = therapist.appointments.getCreateAppointmentPage(aDateTime)
+
+        // Then
+        CreateAppointmentForm.dateTime.value(document) shouldBe aDateTime.toString()
     }
 
     @Test
@@ -60,7 +73,6 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         response.statusCode() shouldBe HttpStatus.OK.value()
-        response.header("HX-Redirect") shouldBe SchedulePage.PATH
 
         val storedAppointment =
             backgrounds.appointments.getDaySchedule(editAppointmentRequest.dateTime.toLocalDate()).single()
@@ -84,7 +96,6 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         response.statusCode() shouldBe HttpStatus.OK.value()
-        response.header("HX-Redirect") shouldBe SchedulePage.PATH
 
         val storedAppointment =
             backgrounds.appointments.getDaySchedule(editAppointmentRequest.dateTime.toLocalDate()).single()

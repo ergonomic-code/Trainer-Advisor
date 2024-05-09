@@ -66,7 +66,7 @@ class AuthTests : QYogaAppIntegrationBaseTest() {
     }
 
     @Test
-    fun `TA should allow access with credentials provided via basic authentication`() {
+    fun `TA should not allow access to app with credentials provided via basic authentication`() {
         Given {
             auth().preemptive().basic(THE_THERAPIST_LOGIN, THE_THERAPIST_PASSWORD)
         } When {
@@ -75,7 +75,7 @@ class AuthTests : QYogaAppIntegrationBaseTest() {
             statusCode(HttpStatus.OK.value())
         } Extract {
             val document = Jsoup.parse(body().asString())
-            document shouldBePage ClientsListPage
+            document shouldBePage LoginPage
         }
     }
 
@@ -102,10 +102,7 @@ class AuthTests : QYogaAppIntegrationBaseTest() {
         } When {
             get(actuatorPath)
         } Then {
-            statusCode(HttpStatus.OK.value())
-        } Extract {
-            val document = Jsoup.parse(body().asString())
-            document shouldBePage LoginPage
+            statusCode(HttpStatus.UNAUTHORIZED.value())
         }
     }
 

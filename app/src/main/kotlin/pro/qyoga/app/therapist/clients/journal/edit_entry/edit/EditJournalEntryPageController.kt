@@ -9,16 +9,16 @@ import pro.azhidkov.platform.spring.http.hxRedirect
 import pro.azhidkov.platform.spring.mvc.modelAndView
 import pro.qyoga.app.platform.notFound
 import pro.qyoga.app.therapist.clients.journal.edit_entry.shared.JOURNAL_ENTRY_VIEW_NAME
-import pro.qyoga.core.clients.journals.JournalsService
+import pro.qyoga.core.clients.journals.JournalEntriesRepo
+import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRequest
 import pro.qyoga.core.clients.journals.errors.DuplicatedDate
-import pro.qyoga.core.clients.journals.model.EditJournalEntryRequest
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 
 
 @Controller
 @RequestMapping("/therapist/clients/{clientId}/journal/{entryId}")
 class EditJournalEntryPageController(
-    private val journalsService: JournalsService,
+    private val journalsEntriesRepo: JournalEntriesRepo,
     private val getJournalEntryWorkflow: GetJournalEntryWorkflow,
     private val editJournalEntryWorkflow: EditJournalEntryWorkflow,
 ) {
@@ -66,7 +66,7 @@ class EditJournalEntryPageController(
         @PathVariable clientId: Long,
         @PathVariable entryId: Long,
     ) {
-        journalsService.deleteEntry(clientId, entryId)
+        journalsEntriesRepo.deleteById(entryId)
     }
 
 }

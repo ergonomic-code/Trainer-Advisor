@@ -10,7 +10,8 @@ import org.thymeleaf.standard.serializer.IStandardJavaScriptSerializer
 
 @Configuration
 class ThymeleafConfig(
-    private val objectMapper: ObjectMapper, private val engine: SpringTemplateEngine
+    private val objectMapper: ObjectMapper,
+    private val engine: SpringTemplateEngine
 ) {
 
     /**
