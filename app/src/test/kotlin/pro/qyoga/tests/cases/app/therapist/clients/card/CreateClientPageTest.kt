@@ -1,6 +1,7 @@
 package pro.qyoga.tests.cases.app.therapist.clients.card
 
 import io.kotest.inspectors.forAny
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import pro.qyoga.core.clients.cards.model.DistributionSource
 import pro.qyoga.core.clients.cards.model.DistributionSourceType
@@ -14,10 +15,12 @@ import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import pro.qyoga.tests.pages.therapist.clients.card.CreateClientForm
 import pro.qyoga.tests.pages.therapist.clients.card.CreateClientPage
 
+@DisplayName("Страница создания карточки клиента")
 class CreateClientPageTest : QYogaAppIntegrationBaseTest() {
 
+    @DisplayName("Страница создания карточки клиента должна содержать все ключевые элементы")
     @Test
-    fun `Create client page should be rendered correctly`() {
+    fun pageRendering() {
         // Given
         val therapist = TherapistClient.loginAsTheTherapist()
 
@@ -28,8 +31,9 @@ class CreateClientPageTest : QYogaAppIntegrationBaseTest() {
         document shouldBe CreateClientPage
     }
 
+    @DisplayName("После создания клиента он должен появиться в списке клиентов")
     @Test
-    fun `After creating a client, it should appear in the client table`() {
+    fun clientCreation() {
         // Given
         val therapist = TherapistClient.loginAsTheTherapist()
         val newClientRequest = ClientsObjectMother.createClientCardDto()
@@ -42,8 +46,9 @@ class CreateClientPageTest : QYogaAppIntegrationBaseTest() {
         clients.forAny { it shouldMatch newClientRequest }
     }
 
+    @DisplayName("Пустой комментарий источника источника распространения должен быть сохранён как null")
     @Test
-    fun `Null distribution source comment should be persisted as null`() {
+    fun persistenceOfNullDistributionSourceComment() {
         // Given
         val therapist = TherapistClient.loginAsTheTherapist()
         val newClientRequest = ClientsObjectMother.createClientCardDto(
@@ -58,8 +63,9 @@ class CreateClientPageTest : QYogaAppIntegrationBaseTest() {
         clients.forAny { it shouldMatch newClientRequest }
     }
 
+    @DisplayName("Система должна принимать формы, заполненные только в обязательных полях")
     @Test
-    fun `System should accept create client forms containing only required fields`() {
+    fun minimalClientCreation() {
         // Given
         val minimalClient = ClientsObjectMother.createClientCardDtoMinimal()
         val therapist = TherapistClient.loginAsTheTherapist()
@@ -72,8 +78,9 @@ class CreateClientPageTest : QYogaAppIntegrationBaseTest() {
         clients.forAny { it shouldMatch minimalClient }
     }
 
+    @DisplayName("Система должна возвращать форму с индикацией ошибки в поле ввода телефона при отправке формы с уже существующим телефоном")
     @Test
-    fun `System should return with duplicated phone error message on posting form with duplicated phone`() {
+    fun duplicatedPhone() {
         // Given
         val thePhone = faker.phoneNumber().phoneNumberInternational()
         backgrounds.clients.createClient(phone = thePhone)
@@ -87,8 +94,9 @@ class CreateClientPageTest : QYogaAppIntegrationBaseTest() {
         document shouldHaveElement CreateClientForm.invalidPhoneInput
     }
 
+    @DisplayName("Система должна позволять создавать клиента с номером телефона, уже существующего у другого терапевта")
     @Test
-    fun `System should allow to create client with existing phone number for another therapist`() {
+    fun multiplePhoneNumbersForDifferentTherapists() {
         // Given
         val thePhone = faker.phoneNumber().phoneNumberInternational()
         val anotherTherapistId = backgrounds.users.registerNewTherapist().id
