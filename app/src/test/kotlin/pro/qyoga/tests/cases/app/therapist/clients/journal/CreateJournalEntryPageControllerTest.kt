@@ -1,6 +1,7 @@
 package pro.qyoga.tests.cases.app.therapist.clients.journal
 
 import io.kotest.inspectors.forAny
+import io.kotest.matchers.shouldNotBe
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import pro.qyoga.app.therapist.clients.journal.edit_entry.create.CreateJournalEntryPageController
@@ -16,6 +17,8 @@ import java.time.LocalDate
 @DisplayName("Страница создания записи в журнале")
 class CreateJournalEntryPageControllerTest : QYogaAppIntegrationBaseTest() {
 
+    private val journalPageController = getBean<JournalPageController>()
+
     @DisplayName("После создания запииси в журнале, она должно отображаться на первой странице журнала")
     @Test
     fun creationOfJournalEntry() {
@@ -27,7 +30,7 @@ class CreateJournalEntryPageControllerTest : QYogaAppIntegrationBaseTest() {
         backgrounds.clientJournal.createJournalEntry(client.id, createJournalEntryRequest, theTherapistUserDetails)
 
         // And when
-        val modelAndView = getBean<JournalPageController>().getJournalPage(client.id)
+        val modelAndView = journalPageController.getJournalPage(client.id)
 
         // Then
         val journal = JournalPageController.getJournal(modelAndView.model).content
@@ -54,5 +57,36 @@ class CreateJournalEntryPageControllerTest : QYogaAppIntegrationBaseTest() {
         // Then
         backgrounds.clientJournal.getWholeJournal(client.id).content.forAny { it shouldMatch createJournalEntryRequest }
     }
+
+    @DisplayName(
+        "При создании записи в журнале с терапевтической задачей, не существующей у данного терапевта, но существующей у другого терапевта" +
+                "должна быть создана новая терапветическая задача данного терапевта"
+    )
+    @Test
+    fun createJournalEntryWithTaskExistingForAnotherTherapist() {
+        // Given
+        val taskName = "Йогатерапия гастрита"
+        val anotherTherapist = backgrounds.users.registerNewTherapist()
+        val anotherTherapeuticTask = backgrounds.therapeuticTasks.createTherapeuticTask(anotherTherapist.id, taskName)
+        val client = backgrounds.clients.aClient()
+
+        val createJournalEntryRequest =
+            JournalEntriesObjectMother.journalEntry(therapeuticTaskName = taskName)
+
+        // When
+        getBean<CreateJournalEntryPageController>().createJournalEntry(
+            client.id,
+            createJournalEntryRequest,
+            theTherapistUserDetails
+        )
+
+        // Then
+        val journal = backgrounds.clientJournal.getWholeJournal(client.id).content
+        journal.forAny {
+            it shouldMatch createJournalEntryRequest
+            it.therapeuticTask.id shouldNotBe anotherTherapeuticTask.id
+        }
+    }
+
 
 }
