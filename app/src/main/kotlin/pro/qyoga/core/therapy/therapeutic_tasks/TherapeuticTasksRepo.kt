@@ -45,6 +45,7 @@ class TherapeuticTasksRepo(
     @Transactional
     fun getOrCreate(therapeuticTask: TherapeuticTask): TherapeuticTask {
         var persistedTask = findOne {
+            TherapeuticTask::owner isEqual therapeuticTask.owner
             TherapeuticTask::name isEqual therapeuticTask.name
         }
 
