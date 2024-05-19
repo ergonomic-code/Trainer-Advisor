@@ -28,7 +28,7 @@ import kotlin.reflect.KProperty1
 
 class ErgoRepository<T : Any, ID : Any>(
     private val jdbcAggregateTemplate: JdbcAggregateOperations,
-    private val namedParameterJdbcOperations: NamedParameterJdbcOperations,
+    protected val namedParameterJdbcOperations: NamedParameterJdbcOperations,
     private val entity: PersistentEntity<T, *>,
     jdbcConverter: JdbcConverter,
     relationalMappingContext: RelationalMappingContext,

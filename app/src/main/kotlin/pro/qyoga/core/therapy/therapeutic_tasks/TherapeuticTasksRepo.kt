@@ -7,13 +7,16 @@ import org.springframework.data.jdbc.core.convert.JdbcConverter
 import org.springframework.data.mapping.model.BasicPersistentEntity
 import org.springframework.data.relational.core.mapping.RelationalMappingContext
 import org.springframework.data.util.TypeInformation
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
+import org.springframework.jdbc.support.GeneratedKeyHolder
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 import pro.azhidkov.platform.spring.sdj.erpo.ErgoRepository
 import pro.azhidkov.platform.spring.sdj.withSortBy
 import pro.qyoga.core.therapy.therapeutic_tasks.errors.DuplicatedTherapeuticTaskName
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
+import java.sql.Timestamp
 
 
 @Repository
@@ -44,16 +47,27 @@ class TherapeuticTasksRepo(
 
     @Transactional
     fun getOrCreate(therapeuticTask: TherapeuticTask): TherapeuticTask {
-        var persistedTask = findOne {
-            TherapeuticTask::owner isEqual therapeuticTask.owner
-            TherapeuticTask::name isEqual therapeuticTask.name
-        }
+        val sql = """
+            INSERT INTO therapeutic_tasks (name, owner, created_at, version) VALUES (:name, :owner, :createdAt, 1)
+            ON CONFLICT (owner, lower(name)) DO UPDATE SET name = excluded.name
+            RETURNING id
+        """.trimIndent()
+        val params = MapSqlParameterSource(
+            mapOf(
+                "name" to therapeuticTask.name,
+                "owner" to therapeuticTask.owner.id,
+                "createdAt" to Timestamp(therapeuticTask.createdAt.toEpochMilli())
+            )
+        )
+        val keyHolder = GeneratedKeyHolder()
 
-        if (persistedTask == null) {
-            persistedTask = save(therapeuticTask)
-        }
+        namedParameterJdbcOperations.update(
+            sql,
+            params,
+            keyHolder
+        )
 
-        return persistedTask
+        return therapeuticTask.copy(id = keyHolder.key!!.toLong())
     }
 
 }
