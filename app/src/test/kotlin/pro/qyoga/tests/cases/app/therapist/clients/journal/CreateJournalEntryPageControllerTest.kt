@@ -1,6 +1,7 @@
 package pro.qyoga.tests.cases.app.therapist.clients.journal
 
 import io.kotest.inspectors.forAny
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import pro.qyoga.app.therapist.clients.journal.edit_entry.create.CreateJournalEntryPageController
 import pro.qyoga.app.therapist.clients.journal.list.JournalPageController
@@ -12,10 +13,12 @@ import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import java.time.LocalDate
 
 
+@DisplayName("Страница создания записи в журнале")
 class CreateJournalEntryPageControllerTest : QYogaAppIntegrationBaseTest() {
 
+    @DisplayName("После создания запииси в журнале, она должно отображаться на первой странице журнала")
     @Test
-    fun `Journal entry for today should be included in first journal page`() {
+    fun creationOfJournalEntry() {
         // Given
         val client = backgrounds.clients.createClients(1, THE_THERAPIST_ID).first()
         val createJournalEntryRequest = JournalEntriesObjectMother.journalEntry(date = LocalDate.now())
@@ -31,8 +34,9 @@ class CreateJournalEntryPageControllerTest : QYogaAppIntegrationBaseTest() {
         journal.forAny { it shouldMatch createJournalEntryRequest }
     }
 
+    @DisplayName("При добавлении записи в журнал с указанием названия существующей терапевтической задачи, запись должна успешно создаваться")
     @Test
-    fun `Journal entry page should accept existing therapeutic task name and reuse existing entity`() {
+    fun createJournalEntryWithExistingTherapeuticTask() {
         // Given
         val taskName = "Йогатерапия гастрита"
         backgrounds.therapeuticTasks.createTherapeuticTask(THE_THERAPIST_ID, taskName)
