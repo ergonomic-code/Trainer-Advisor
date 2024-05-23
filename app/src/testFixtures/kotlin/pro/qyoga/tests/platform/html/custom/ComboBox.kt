@@ -1,4 +1,4 @@
-package pro.qyoga.tests.platform.html
+package pro.qyoga.tests.platform.html.custom
 
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.compose.all
@@ -6,6 +6,9 @@ import org.jsoup.nodes.Element
 import pro.qyoga.app.platform.components.combobox.ComboBoxItem
 import pro.qyoga.tests.assertions.haveComponent
 import pro.qyoga.tests.assertions.haveElements
+import pro.qyoga.tests.platform.html.Component
+import pro.qyoga.tests.platform.html.Input
+import pro.qyoga.tests.platform.html.InputBase
 
 
 class ComboBox(baseName: String, override val required: Boolean, val items: List<ComboBoxItem>? = null) : InputBase {

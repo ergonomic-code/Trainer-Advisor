@@ -7,6 +7,7 @@ import pro.qyoga.core.appointments.core.AppointmentStatus
 import pro.qyoga.core.appointments.core.EditAppointmentRequest
 import pro.qyoga.tests.assertions.PageMatcher
 import pro.qyoga.tests.platform.html.*
+import pro.qyoga.tests.platform.html.custom.ComboBox
 
 private const val PATH = "/therapist/appointments"
 

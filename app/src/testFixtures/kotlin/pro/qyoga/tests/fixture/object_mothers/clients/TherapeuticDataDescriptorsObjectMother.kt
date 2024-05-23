@@ -50,6 +50,14 @@ object TherapeuticDataDescriptorsObjectMother {
     )
 
     fun therapeuticDataDescriptor(
+        vararg blocks: TherapeuticDataBlock,
+        owner: TherapistRef = THE_THERAPIST_REF,
+    ) = TherapeuticDataDescriptor(
+        owner,
+        blocks.toList()
+    )
+
+    fun therapeuticDataDescriptor(
         blocksCount: Int = 1,
         fieldsPerBlock: Int = 1,
         owner: TherapistRef = THE_THERAPIST_REF
@@ -60,10 +68,15 @@ object TherapeuticDataDescriptorsObjectMother {
 
     fun therapeuticDataBlock(fields: Int = 1) = TherapeuticDataBlock(
         randomCyrillicWord(),
-        (1..fields).map { theraputicDataField() }
+        (1..fields).map { therapeuticDataField() }
     )
 
-    fun theraputicDataField() = TherapeuticDataField(
+    fun therapeuticDataBlock(vararg fields: TherapeuticDataField) = TherapeuticDataBlock(
+        randomCyrillicWord(),
+        fields.toList()
+    )
+
+    fun therapeuticDataField() = TherapeuticDataField(
         randomCyrillicWord(),
         CustomFieldType.entries.random(),
         Random.nextBoolean()

@@ -3,17 +3,23 @@ package pro.qyoga.tests.cases.app.therapist.clients.card
 import io.kotest.inspectors.forAny
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import pro.azhidkov.platform.extensible_entity.descriptor.CustomFieldType
 import pro.qyoga.core.clients.cards.model.DistributionSource
 import pro.qyoga.core.clients.cards.model.DistributionSourceType
+import pro.qyoga.core.clients.therapeutic_data.descriptors.TherapeuticDataField
 import pro.qyoga.tests.assertions.shouldBe
+import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.assertions.shouldHaveElement
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.fixture.data.faker
 import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
+import pro.qyoga.tests.fixture.object_mothers.clients.TherapeuticDataDescriptorsObjectMother
+import pro.qyoga.tests.fixture.object_mothers.clients.TherapeuticDataDescriptorsObjectMother.therapeuticDataBlock
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import pro.qyoga.tests.pages.therapist.clients.card.CreateClientForm
 import pro.qyoga.tests.pages.therapist.clients.card.CreateClientPage
+import pro.qyoga.tests.platform.html.custom.TherapeuticDataFormPart
 
 @DisplayName("Страница создания карточки клиента")
 class CreateClientPageTest : QYogaAppIntegrationBaseTest() {
@@ -110,6 +116,33 @@ class CreateClientPageTest : QYogaAppIntegrationBaseTest() {
         // Then
         val clients = backgrounds.clients.getAllClients()
         clients.forAny { it shouldMatch duplicatedClient }
+    }
+
+    @DisplayName("При наличии пользовательского строкового поля в форме терапевтических данных, оно должно отображаться на странице создания клиента")
+    @Test
+    fun stringCustomFieldRendering() {
+        // Given
+        val stringCustomField = TherapeuticDataField("Время подъёма", CustomFieldType.STRING, true)
+        val therapeuticDataBlock = therapeuticDataBlock(stringCustomField)
+        val therapist = TherapistClient.loginAsTheTherapist()
+
+        val therapeuticDataDescriptor = backgrounds.clients.createTherapeuticDataDescriptor {
+            TherapeuticDataDescriptorsObjectMother.therapeuticDataDescriptor(therapeuticDataBlock)
+        }
+
+        // When
+        val document = therapist.clients.getCreateClientPage()
+
+        // Then
+        document.getElementById(CreateClientForm.id)!! shouldHaveComponent TherapeuticDataFormPart(
+            therapeuticDataDescriptor
+        )
+    }
+
+    @DisplayName("При наличии пользовательского текстового поля в форме терапевтических данных, оно должно отображаться на странице создания клиента")
+    @Test
+    fun textCustomFieldRendering() {
+        io.kotest.assertions.fail("TODO")
     }
 
 }

@@ -245,6 +245,32 @@
             </div>
         </fieldset>
 
+        <div id="therapeuticData">
+            <fieldset class="mb-4" th:each="block : ${therapeuticDataDescriptor?.blocks}">
+                <legend th:text="${block.label}"></legend>
+
+                <div th:each="field : ${block.fields}">
+                    <div class="col"
+                         th:id="|customField-${field.id}|"
+                    >
+                        <th:block th:switch="${field.type.toString()}">
+                            <div class="form-floating" th:case="STRING">
+                                <input class="form-control q-input"
+                                       th:id="|customField-${field.id}-input|"
+                                       th:name="|customField.${field.id}|"
+                                       th:required="${field.required}"
+                                       type="text">
+                                <label class="form-label" th:for="|customField.${field.id}|">
+                                    [[${field.label}]]
+                                    <span class="text-danger">*</span>
+                                </label>
+                            </div>
+                        </th:block>
+                    </div>
+                </div>
+            </fieldset>
+        </div>
+
         <div class="row g-2 justify-content-end">
             <div class="col-6 col-sm-auto text-center">
                 <a class="btn btn-outline-danger" style="min-width: 110px;"

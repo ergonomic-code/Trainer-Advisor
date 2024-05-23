@@ -11,7 +11,7 @@ import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
 import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentTypesObjectMother
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
-import pro.qyoga.tests.platform.html.ComboBox
+import pro.qyoga.tests.platform.html.custom.ComboBox
 
 
 class AppointmentTypesComboBoxTest : QYogaAppIntegrationBaseTest() {

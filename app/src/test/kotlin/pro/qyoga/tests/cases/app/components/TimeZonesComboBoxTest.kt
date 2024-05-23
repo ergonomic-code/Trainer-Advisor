@@ -15,7 +15,7 @@ import pro.qyoga.app.platform.components.combobox.ComboBoxItem
 import pro.qyoga.app.publc.components.TimeZonesComboBoxController
 import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
-import pro.qyoga.tests.platform.html.ComboBox
+import pro.qyoga.tests.platform.html.custom.ComboBox
 
 
 class TimeZonesComboBoxTest : QYogaAppIntegrationBaseTest() {

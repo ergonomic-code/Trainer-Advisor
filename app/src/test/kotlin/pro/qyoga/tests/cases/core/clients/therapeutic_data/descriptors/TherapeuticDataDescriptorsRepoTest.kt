@@ -66,7 +66,7 @@ class TherapeuticDataDescriptorsRepoTest : QYogaAppIntegrationBaseTest() {
             therapeuticDataDescriptor(blocksCount = 1, fieldsPerBlock = 1)
         }
 
-        val addedField = TherapeuticDataDescriptorsObjectMother.theraputicDataField()
+        val addedField = TherapeuticDataDescriptorsObjectMother.therapeuticDataField()
         val therapeuticDataDescriptorWithAddedField =
             therapeuticDataDescriptorWithSingleField.withBlockPatchedBy(0) { it.withField(addedField) }
 
