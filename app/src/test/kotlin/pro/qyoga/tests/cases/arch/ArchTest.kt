@@ -12,9 +12,8 @@ import pro.qyoga.tests.infra.junit.SLOW_TEST
 class ArchTest {
 
     private val qyogaClasses: JavaClasses = ClassFileImporter()
-        .withImportOption(
-            ImportOption.DoNotIncludeTests()
-        )
+        .withImportOption(ImportOption.DoNotIncludeTests())
+        .withImportOption(ImportOption.DoNotIncludeGradleTestFixtures())
         .importPackages("pro")
 
     @Test
