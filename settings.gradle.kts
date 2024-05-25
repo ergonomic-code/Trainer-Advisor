@@ -7,8 +7,8 @@ dependencyResolutionManagement {
         create("libs") {
             // plugin versions
             val kotlinVersion = version("kotlin", "1.9.23")
-            val springBootVersion = version("springBoot", "3.2.4")
-            val springDependencyManagementVersion = version("springDependencyManagement", "1.1.4")
+            val springBootVersion = version("springBoot", "3.3.0")
+            val springDependencyManagementVersion = version("springDependencyManagement", "1.1.5")
             val koverVersion = version("kover", "0.6.1")
             val gitPropertiesVersion = version("gitProperties", "2.4.1")
 
@@ -28,7 +28,7 @@ dependencyResolutionManagement {
             plugin("gitProperties", "com.gorylenko.gradle-git-properties").versionRef(gitPropertiesVersion)
 
             // libs
-            library("jackarta-validation", "jakarta.validation", "jakarta.validation-api").version("3.0.2")
+            library("jackarta-validation", "jakarta.validation", "jakarta.validation-api").version("3.1.0")
             library(
                 "thymeleaf-extras-java8time",
                 "org.thymeleaf.extras",
@@ -36,7 +36,7 @@ dependencyResolutionManagement {
             ).version("3.0.4.RELEASE")
 
             library("postgres", "org.postgresql", "postgresql").version("42.7.3")
-            library("minio", "io.minio", "minio").version("8.5.9")
+            library("minio", "io.minio", "minio").version("8.5.10")
 
             library("poi-ooxml", "org.apache.poi", "poi-ooxml").versionRef(poiVersion)
             library("poi-ooxml-lite", "org.apache.poi", "poi-ooxml-lite").versionRef(poiVersion)
@@ -45,7 +45,7 @@ dependencyResolutionManagement {
         }
 
         create("testLibs") {
-            val selenideVersion = version("selenide", "7.2.3")
+            val selenideVersion = version("selenide", "7.3.2")
             val testContainersVersion = version("testcontainers", "1.19.7")
             val restAssuredVersion = version("restAssured", "5.4.0")
 
@@ -59,13 +59,13 @@ dependencyResolutionManagement {
             bundle("restassured", listOf("restassured-core", "restassured-kotlin"))
 
             library("jsoup", "org.jsoup", "jsoup").version("1.17.2")
-            library("datafaker", "net.datafaker", "datafaker").version("2.1.0")
+            library("datafaker", "net.datafaker", "datafaker").version("2.2.2")
             library("greenmail", "com.icegreen", "greenmail-junit5").version("2.0.1")
 
             library("testcontainers-minio", "org.testcontainers", "minio").versionRef(testContainersVersion)
 
-            library("mockito-kotlin", "org.mockito.kotlin", "mockito-kotlin").version("5.2.1")
-            library("archunit", "com.tngtech.archunit", "archunit").version("1.2.1")
+            library("mockito-kotlin", "org.mockito.kotlin", "mockito-kotlin").version("5.3.1")
+            library("archunit", "com.tngtech.archunit", "archunit").version("1.3.0")
         }
     }
 }
