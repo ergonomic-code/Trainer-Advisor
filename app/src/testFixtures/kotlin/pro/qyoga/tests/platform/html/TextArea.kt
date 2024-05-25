@@ -23,7 +23,7 @@ data class TextArea(
         )
     }
 
-    override fun selector(): String = "textarea[$nameAttrName=$name]"
+    override fun selector(): String = "textarea[$nameAttrName='$name']"
 
     override fun value(element: Element): String =
         element.select(selector()).text()

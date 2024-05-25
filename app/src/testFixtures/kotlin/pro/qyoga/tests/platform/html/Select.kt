@@ -81,6 +81,6 @@ data class Select(
     override fun value(element: Element): String =
         element.select("${selector()} option[selected]").`val`()
 
-    override fun selector(): String = "select[name=$name]"
+    override fun selector(): String = "select[name='$name']"
 
 }

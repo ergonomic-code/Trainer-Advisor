@@ -21,7 +21,7 @@ data class Input(
         if (id != null)
             "#$id"
         else
-            "input[$nameAttrName=$name][type=$type]" + (value?.let { "[value=$it]" } ?: "")
+            "input[$nameAttrName='$name'][type=$type]" + (value?.let { "[value=$it]" } ?: "")
 
     override fun matcher(): Matcher<Element> {
         val matchers = buildList {
