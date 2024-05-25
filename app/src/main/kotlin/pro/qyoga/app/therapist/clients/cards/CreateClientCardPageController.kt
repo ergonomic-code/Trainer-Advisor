@@ -12,7 +12,6 @@ import pro.azhidkov.platform.kotlin.mapSuccess
 import pro.azhidkov.platform.spring.mvc.modelAndView
 import pro.qyoga.core.clients.cards.Client
 import pro.qyoga.core.clients.cards.ClientsRepo
-import pro.qyoga.core.clients.cards.dtos.ClientCardDto
 import pro.qyoga.core.clients.cards.errors.DuplicatedPhoneException
 import pro.qyoga.core.clients.therapeutic_data.descriptors.TherapeuticDataDescriptorsRepo
 import pro.qyoga.core.clients.therapeutic_data.descriptors.findByTherapistId
@@ -40,11 +39,11 @@ class CreateClientCardPageController(
 
     @PostMapping("/create")
     fun createClient(
-        clientCardDto: ClientCardDto,
+        editClientCardForm: EditClientCardForm,
         @AuthenticationPrincipal principal: QyogaUserDetails,
     ): ModelAndView {
         val res = runCatching {
-            clientsRepo.save(Client(principal.id, clientCardDto))
+            clientsRepo.save(Client(principal.id, editClientCardForm.clientCard))
         }
 
         val modelAndView = res
@@ -52,7 +51,7 @@ class CreateClientCardPageController(
                 ModelAndView("redirect:/therapist/clients")
             }
             .mapFailure { _: DuplicatedPhoneException ->
-                editClientFormWithValidationError(clientCardDto)
+                editClientFormWithValidationError(editClientCardForm)
             }
             .getOrThrow()
 

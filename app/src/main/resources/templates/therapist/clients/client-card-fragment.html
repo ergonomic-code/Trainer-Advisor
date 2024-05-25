@@ -1,5 +1,5 @@
 <script th:inline="javascript">
-    let serverState = /*[[${client}]]*/ null;
+    let serverState = /*[[${clientForm}]]*/ null;
     let clientId = /*[[${id}]]*/ null;
 
     let localStateKey = `qyoga.clientCardForm.${clientId || "new"}`;
@@ -9,7 +9,7 @@
     let formData;
     if (serverState == null) {
         formData = localState || {version: 0};
-    } else if (serverState.version === localState?.version) {
+    } else if (serverState.clientCard.version === localState?.clientCard?.version) {
         formData = localState
     } else {
         formData = {...serverState}
@@ -71,8 +71,8 @@
           x-init="$watch('form', (form) => saveLocalState(form))">
 
         <input
-                name="version"
-                th:value="${client?.version ?: 0}"
+                name="clientCard.version"
+                th:value="${clientForm?.clientCard?.version ?: 0}"
                 type="hidden"
         >
 
@@ -93,11 +93,11 @@
                                maxlength="64"
                                id="firstName"
                                minlength="2"
-                               name="firstName"
+                               name="clientCard.firstName"
                                placeholder="Имя"
                                required
                                pattern="^[а-яА-ЯёЁ]{2,64}$"
-                               th:value="${client?.firstName ?: ''}"
+                               th:value="${clientForm?.clientCard?.firstName ?: ''}"
                                type="text"
                         >
                         <label for="firstName">Имя <span class="text-danger">*</span></label>
@@ -110,11 +110,11 @@
                                maxlength="64"
                                id="ClientLastName"
                                minlength="2"
-                               name="lastName"
+                               name="clientCard.lastName"
                                placeholder="Фамилия"
                                required
                                pattern="^[а-яА-ЯёЁ]{2,64}$"
-                               th:value="${client?.lastName ?: ''}"
+                               th:value="${clientForm?.clientCard?.lastName ?: ''}"
                                type="text">
                         <label for="ClientLastName">Фамилия <span class="text-danger">*</span></label>
                     </div>
@@ -123,12 +123,12 @@
                     <div class="form-floating">
                         <input class="form-control"
                                id="ClientMiddleName"
-                               name="middleName"
+                               name="clientCard.middleName"
                                minlength="2"
                                maxlength="64"
                                placeholder="Отчество"
                                pattern="^[а-яА-ЯёЁ]{2,64}$"
-                               th:value="${client?.middleName ?: ''}"
+                               th:value="${clientForm?.clientCard?.middleName ?: ''}"
                                type="text">
                         <label for="ClientMiddleName">Отчество</label>
                     </div>
@@ -140,11 +140,11 @@
                     <div class="form-floating">
                         <input class="form-control"
                                id="ClientPhone"
-                               name="phoneNumber"
+                               name="clientCard.phoneNumber"
                                placeholder="+7 (999) 000-00-00"
                                required
                                th:classappend="${duplicatedPhone} ? 'is-invalid' : ''"
-                               th:value="${client?.phoneNumber ?: ''}"
+                               th:value="${clientForm?.clientCard?.phoneNumber ?: ''}"
                                type="tel"
                                x-mask="+7 (999) 999-99-99"
                         >
@@ -157,8 +157,8 @@
                 </div>
                 <div class="col-12 col-sm-4 mb-3">
                     <div class="form-floating">
-                        <input class="form-control" id="email" name="email"
-                               placeholder="example@mail.ru" th:value="${client?.email ?: ''}"
+                        <input class="form-control" id="email" name="clientCard.email"
+                               placeholder="example@mail.ru" th:value="${clientForm?.clientCard?.email ?: ''}"
                                type="email">
                         <label for="email">Email</label>
                     </div>
@@ -167,10 +167,10 @@
                     <div class="form-floating">
                         <input class="form-control"
                                id="birthDate"
-                               name="birthDate"
+                               name="clientCard.birthDate"
                                placeholder="дд.мм.гггг"
                                pattern="[0-3]{1}[0-9]{1}.[0-1]{1}[0-9].[1-2][0-9]{3}"
-                               th:value="${client?.birthDate != null} ? ${#temporals.format(client.birthDate, T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN)}"
+                               th:value="${clientForm?.clientCard?.birthDate != null} ? ${#temporals.format(clientForm?.clientCard?.birthDate, T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN)}"
                                type="text"
                                x-mask="99.99.9999"
                         >
@@ -184,8 +184,8 @@
                 <div class="col">
                     <div class="form-floating">
                         <input class="form-control w-100" id="address"
-                               name="address" placeholder=""
-                               th:value="${client?.address ?: ''}" type="text" value="">
+                               name="clientCard.address" placeholder=""
+                               th:value="${clientForm?.clientCard?.address ?: ''}" type="text" value="">
                         <label for="birthDate">Адрес (город, улица, дом, квартира)</label>
                     </div>
                 </div>
@@ -196,12 +196,12 @@
                     <div class="form-floating">
                         <select class="form-control w-100 q-input form-select mb-2"
                                 id="distributionSourceType"
-                                name="distributionSourceType"
-                                th:value="${client?.distributionSourceType}">
+                                name="clientCard.distributionSourceType"
+                                th:value="${clientForm?.clientCard?.distributionSourceType}">
                             <option value="">Не указан</option>
                             <option th:each="value : ${T(pro.qyoga.core.clients.cards.model.DistributionSourceType).entries}"
-                                    th:selected="${client?.distributionSourceType?.toString() == value.toString()}"
-                                    th:text="${value.label}" th:value="${value.name}">
+                                    th:selected="${clientForm?.clientCard?.distributionSourceType?.toString() == value.toString()}"
+                                    th:text="${value.label}" th:value="${value.name}">clientCard.
                             </option>
                         </select>
                         <label class="form-label" for="distributionSourceType">Как вы о нас узнали?</label>
@@ -210,9 +210,9 @@
                 <div class="col">
                     <div class="form-floating">
                         <input class="form-control q-input" id="distributionSourceComment"
-                               name="distributionSourceComment"
+                               name="clientCard.distributionSourceComment"
                                placeholder="Комментарий"
-                               th:value="${client?.distributionSourceComment ?: ''}"
+                               th:value="${clientForm?.clientCard?.distributionSourceComment ?: ''}"
                                type="text">
                         <label class="form-label" for="distributionSourceComment">Комментарий</label>
                     </div>
@@ -226,9 +226,9 @@
             <div class="textarea__container row g-0 input-group">
                 <div class="col">
                     <textarea class="form-control w-100 mt-2" cols="20" id="ClientComplaints"
-                              name="complaints"
+                              name="clientCard.complaints"
                               placeholder="Введите данные"
-                              rows="10" th:text="${client?.complaints ?: ''}"></textarea>
+                              rows="10" th:text="${clientForm?.clientCard?.complaints ?: ''}"></textarea>
                 </div>
             </div>
         </fieldset>
@@ -238,9 +238,9 @@
             <div class="textarea__container row g-0 input-group">
                 <div class="col">
                     <textarea class="form-control w-100 mt-2" cols="20" id="ClientAnamnesis"
-                              name="anamnesis"
+                              name="clientCard.anamnesis"
                               placeholder="Введите данные"
-                              rows="10" th:text="${client?.anamnesis ?: ''}"></textarea>
+                              rows="10" th:text="${clientForm?.clientCard?.anamnesis ?: ''}"></textarea>
                 </div>
             </div>
         </fieldset>

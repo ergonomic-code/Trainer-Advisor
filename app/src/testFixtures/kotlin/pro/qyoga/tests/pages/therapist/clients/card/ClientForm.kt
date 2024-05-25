@@ -15,21 +15,21 @@ import pro.qyoga.tests.platform.html.Input.Companion.text
 
 abstract class ClientForm(action: FormAction) : QYogaForm("createClientForm", action) {
 
-    val firstName = text("firstName", true)
-    val lastName = text("lastName", true)
-    val middleName = text("middleName", false)
-    val birthDate = text("birthDate", false)
-    val phoneNumber = tel("phoneNumber", true)
+    val firstName = text("clientCard.firstName", true)
+    val lastName = text("clientCard.lastName", true)
+    val middleName = text("clientCard.middleName", false)
+    val birthDate = text("clientCard.birthDate", false)
+    val phoneNumber = tel("clientCard.phoneNumber", true)
     val invalidPhoneInput = "${phoneNumber.selector()}.is-invalid"
     val duplicatedPhoneErrorMessage = "#duplicatedPhoneErrorMessage"
-    val email = email("email", false)
-    val address = text("address", false)
-    val complaints = TextArea("complaints", false)
-    val anamnesis = TextArea("anamnesis", false)
+    val email = email("clientCard.email", false)
+    val address = text("clientCard.address", false)
+    val complaints = TextArea("clientCard.complaints", false)
+    val anamnesis = TextArea("clientCard.anamnesis", false)
     val distributionSourceType =
-        Select("distributionSourceType", false, DistributionSourceType.entries.map { Option.of(it) })
-    val distributionSourceComment = text("distributionSourceComment", false)
-    val version = hidden("version", false)
+        Select("clientCard.distributionSourceType", false, DistributionSourceType.entries.map { Option.of(it) })
+    val distributionSourceComment = text("clientCard.distributionSourceComment", false)
+    val version = hidden("clientCard.version", false)
     val submit = Button("confirmButton", "Сохранить")
 
     override val components: List<Component> = listOf(

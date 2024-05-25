@@ -15,7 +15,6 @@ import pro.qyoga.app.platform.notFound
 import pro.qyoga.app.therapist.clients.ClientPageTab
 import pro.qyoga.app.therapist.clients.clientPageModel
 import pro.qyoga.core.clients.cards.ClientsRepo
-import pro.qyoga.core.clients.cards.dtos.ClientCardDto
 import pro.qyoga.core.clients.cards.errors.DuplicatedPhoneException
 import pro.qyoga.core.clients.cards.patchedBy
 
@@ -41,11 +40,11 @@ class EditClientCardPageController(
 
     @PostMapping
     fun editClientCard(
-        clientCardDto: ClientCardDto,
+        editClientCardForm: EditClientCardForm,
         @PathVariable id: Long
     ): ModelAndView {
         val res = runCatching {
-            clientsRepo.update(id) { client -> client.patchedBy(clientCardDto) }
+            clientsRepo.update(id) { client -> client.patchedBy(editClientCardForm.clientCard) }
         }
 
         val modelAndView = res
@@ -56,7 +55,7 @@ class EditClientCardPageController(
                 notFound
             }
             .mapFailure { _: DuplicatedPhoneException ->
-                editClientFormWithValidationError(clientCardDto)
+                editClientFormWithValidationError(editClientCardForm)
             }
             .getOrThrow()
 
