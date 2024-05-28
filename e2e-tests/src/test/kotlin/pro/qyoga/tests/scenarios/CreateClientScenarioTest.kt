@@ -35,7 +35,7 @@ class CreateClientScenarioTest : QYogaE2EBaseTest() {
         click(CreateClientForm.submit)
 
         // После чего клиент появляется в списке
-        backgrounds.clients.getAllClients().forAny {
+        backgrounds.clients.getAllTherapistClients().forAny {
             it shouldMatch aClient
         }
 

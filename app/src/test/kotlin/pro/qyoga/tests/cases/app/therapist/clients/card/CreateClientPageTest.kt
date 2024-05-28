@@ -1,21 +1,27 @@
 package pro.qyoga.tests.cases.app.therapist.clients.card
 
 import io.kotest.inspectors.forAny
+import io.kotest.matchers.collections.shouldNotBeEmpty
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.springframework.data.jdbc.core.mapping.AggregateReference
 import pro.azhidkov.platform.extensible_entity.descriptor.CustomFieldType
+import pro.azhidkov.platform.spring.sdj.erpo.hydration.ref
 import pro.qyoga.core.clients.cards.model.DistributionSource
 import pro.qyoga.core.clients.cards.model.DistributionSourceType
 import pro.qyoga.core.clients.therapeutic_data.descriptors.TherapeuticDataField
+import pro.qyoga.core.clients.therapeutic_data.values.StringTherapeuticDataFieldValue
 import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.assertions.shouldHaveElement
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.fixture.data.faker
+import pro.qyoga.tests.fixture.data.randomCyrillicWord
 import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
 import pro.qyoga.tests.fixture.object_mothers.clients.TherapeuticDataDescriptorsObjectMother
 import pro.qyoga.tests.fixture.object_mothers.clients.TherapeuticDataDescriptorsObjectMother.therapeuticDataBlock
+import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import pro.qyoga.tests.pages.therapist.clients.card.CreateClientForm
 import pro.qyoga.tests.pages.therapist.clients.card.CreateClientPage
@@ -42,14 +48,14 @@ class CreateClientPageTest : QYogaAppIntegrationBaseTest() {
     fun clientCreation() {
         // Given
         val therapist = TherapistClient.loginAsTheTherapist()
-        val newClientRequest = ClientsObjectMother.createClientCardDto()
+        val newClientCardForm = ClientsObjectMother.createEditClientCardForm()
 
         // When
-        therapist.clients.createClient(newClientRequest)
+        therapist.clients.createClientCard(newClientCardForm)
 
         // Then
-        val clients = backgrounds.clients.getAllClients()
-        clients.forAny { it shouldMatch newClientRequest }
+        val clients = backgrounds.clients.getAllTherapistClients()
+        clients.forAny { it shouldMatch newClientCardForm.clientCard }
     }
 
     @DisplayName("Пустой комментарий источника источника распространения должен быть сохранён как null")
@@ -57,31 +63,35 @@ class CreateClientPageTest : QYogaAppIntegrationBaseTest() {
     fun persistenceOfNullDistributionSourceComment() {
         // Given
         val therapist = TherapistClient.loginAsTheTherapist()
-        val newClientRequest = ClientsObjectMother.createClientCardDto(
-            distributionSource = DistributionSource(DistributionSourceType.OTHER, null)
+        val newClientCardForm = ClientsObjectMother.createEditClientCardForm(
+            ClientsObjectMother.createClientCardDto(
+                distributionSource = DistributionSource(DistributionSourceType.OTHER, null)
+            )
         )
 
         // When
-        therapist.clients.createClient(newClientRequest)
+        therapist.clients.createClientCard(newClientCardForm)
 
         // Then
-        val clients = backgrounds.clients.getAllClients()
-        clients.forAny { it shouldMatch newClientRequest }
+        val clients = backgrounds.clients.getAllTherapistClients()
+        clients.forAny { it shouldMatch newClientCardForm.clientCard }
     }
 
     @DisplayName("Система должна принимать формы, заполненные только в обязательных полях")
     @Test
     fun minimalClientCreation() {
         // Given
-        val minimalClient = ClientsObjectMother.createClientCardDtoMinimal()
+        val minimalEditClientCardForm = ClientsObjectMother.createEditClientCardForm(
+            ClientsObjectMother.createClientCardDtoMinimal()
+        )
         val therapist = TherapistClient.loginAsTheTherapist()
 
         // When
-        therapist.clients.createClient(minimalClient)
+        therapist.clients.createClientCard(minimalEditClientCardForm)
 
         // Then
-        val clients = backgrounds.clients.getAllClients()
-        clients.forAny { it shouldMatch minimalClient }
+        val clients = backgrounds.clients.getAllTherapistClients()
+        clients.forAny { it shouldMatch minimalEditClientCardForm.clientCard }
     }
 
     @DisplayName("Система должна возвращать форму с индикацией ошибки в поле ввода телефона при отправке формы с уже существующим телефоном")
@@ -90,11 +100,13 @@ class CreateClientPageTest : QYogaAppIntegrationBaseTest() {
         // Given
         val thePhone = faker.phoneNumber().phoneNumberInternational()
         backgrounds.clients.createClient(phone = thePhone)
-        val duplicatedClient = ClientsObjectMother.createClientCardDto(phone = thePhone)
+        val duplicatedEditClientCardForm = ClientsObjectMother.createEditClientCardForm(
+            ClientsObjectMother.createClientCardDto(phone = thePhone)
+        )
         val therapist = TherapistClient.loginAsTheTherapist()
 
         // When
-        val document = therapist.clients.createClientForError(duplicatedClient)
+        val document = therapist.clients.createClientForError(duplicatedEditClientCardForm)
 
         // Then
         document shouldHaveElement CreateClientForm.invalidPhoneInput
@@ -107,15 +119,17 @@ class CreateClientPageTest : QYogaAppIntegrationBaseTest() {
         val thePhone = faker.phoneNumber().phoneNumberInternational()
         val anotherTherapistId = backgrounds.users.registerNewTherapist().id
         backgrounds.clients.createClient(phone = thePhone, therapistId = anotherTherapistId)
-        val duplicatedClient = ClientsObjectMother.createClientCardDto(phone = thePhone)
+        val duplicatedEditClientCardForm = ClientsObjectMother.createEditClientCardForm(
+            ClientsObjectMother.createClientCardDto(phone = thePhone)
+        )
         val therapist = TherapistClient.loginAsTheTherapist()
 
         // When
-        therapist.clients.createClient(duplicatedClient)
+        therapist.clients.createClientCard(duplicatedEditClientCardForm)
 
         // Then
-        val clients = backgrounds.clients.getAllClients()
-        clients.forAny { it shouldMatch duplicatedClient }
+        val clients = backgrounds.clients.getAllTherapistClients()
+        clients.forAny { it shouldMatch duplicatedEditClientCardForm.clientCard }
     }
 
     @DisplayName("При наличии пользовательского строкового поля в форме терапевтических данных, оно должно отображаться на странице создания клиента")

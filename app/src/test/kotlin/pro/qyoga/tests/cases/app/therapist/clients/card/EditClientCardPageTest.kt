@@ -62,7 +62,7 @@ class EditClientCardPageTest : QYogaAppIntegrationBaseTest() {
         therapist.clients.editClient(client.id, editedClientCardDto)
 
         // Then
-        val clients = backgrounds.clients.getAllClients()
+        val clients = backgrounds.clients.getAllTherapistClients()
         clients.forNone { it shouldMatch newClientCardDto }
         clients.forAny { it shouldMatch editedClientCardDto }
     }
@@ -79,7 +79,7 @@ class EditClientCardPageTest : QYogaAppIntegrationBaseTest() {
         therapist.clients.editClient(minimalClientId, editedMinimalClient)
 
         // Then
-        val clients = backgrounds.clients.getAllClients()
+        val clients = backgrounds.clients.getAllTherapistClients()
         clients.forAny { it shouldMatch editedMinimalClient }
     }
 
@@ -146,7 +146,7 @@ class EditClientCardPageTest : QYogaAppIntegrationBaseTest() {
         therapist.clients.editClient(targetClient.id, updatePhoneDto)
 
         // Then
-        val clients = backgrounds.clients.getAllClients()
+        val clients = backgrounds.clients.getAllTherapistClients()
         clients.forAny { it shouldMatch updatePhoneDto }
     }
 

@@ -7,16 +7,19 @@ import pro.qyoga.app.therapist.clients.ClientsListPageController
 import pro.qyoga.core.clients.cards.ClientsRepo
 import pro.qyoga.core.clients.cards.dtos.ClientCardDto
 import pro.qyoga.core.clients.cards.model.Client
+import pro.qyoga.core.clients.cards.model.ClientRef
 import pro.qyoga.core.clients.journals.model.JournalEntry
 import pro.qyoga.core.clients.therapeutic_data.descriptors.TherapeuticDataDescriptor
 import pro.qyoga.core.clients.therapeutic_data.descriptors.TherapeuticDataDescriptorsRepo
 import pro.qyoga.core.clients.therapeutic_data.descriptors.findByTherapistId
+import pro.qyoga.core.clients.therapeutic_data.values.TherapeuticDataFieldValue
+import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.tests.fixture.data.faker
 import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
 import pro.qyoga.tests.fixture.object_mothers.clients.TherapeuticDataDescriptorsObjectMother
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
+import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
 import pro.qyoga.tests.fixture.object_mothers.therapists.idOnlyUserDetails
-import pro.qyoga.tests.fixture.object_mothers.therapists.theTherapistUserDetails
 
 @Component
 class ClientsBackgrounds(
@@ -38,9 +41,9 @@ class ClientsBackgrounds(
         return createClients(ClientsObjectMother.createClientCardDtos(count), therapistId)
     }
 
-    fun getAllClients(): List<Client> {
+    fun getAllTherapistClients(therapist: TherapistRef = THE_THERAPIST_REF): List<Client> {
         val model = ExtendedModelMap()
-        clientsListPageController.getClients(theTherapistUserDetails, Pageable.ofSize(Int.MAX_VALUE), model)
+        clientsListPageController.getClients(idOnlyUserDetails(therapist.id!!), Pageable.ofSize(Int.MAX_VALUE), model)
         return ClientsListPageController.getClients(model).content
     }
 
