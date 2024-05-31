@@ -14,9 +14,9 @@ import java.time.LocalDate
 class GetCalendarAppointmentsWorkflow(
     private val userSettingsRepo: UserSettingsRepo,
     private val appointmentsRepo: AppointmentsRepo
-) : (TherapistRef, LocalDate) -> Collection<Appointment> {
+) : (TherapistRef, LocalDate) -> Iterable<Appointment> {
 
-    override fun invoke(therapist: TherapistRef, date: LocalDate): Collection<Appointment> {
+    override fun invoke(therapist: TherapistRef, date: LocalDate): Iterable<Appointment> {
         val currentUserTimeZone = userSettingsRepo.getUserTimeZone(UserRef(therapist))
         return appointmentsRepo.findAllByInterval(therapist, date.minusDays(1), date.plusDays(1), currentUserTimeZone)
     }

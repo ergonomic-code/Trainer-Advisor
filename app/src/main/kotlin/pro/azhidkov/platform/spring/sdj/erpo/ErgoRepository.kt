@@ -16,7 +16,6 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.transaction.annotation.Transactional
 import pro.azhidkov.platform.spring.jdbc.queryForPage
-import pro.azhidkov.platform.spring.sdj.ALL
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.FetchSpec
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.hydrate
 import pro.azhidkov.platform.spring.sdj.findOneBy
@@ -51,12 +50,12 @@ class ErgoRepository<T : Any, ID : Any>(
     }
 
     @Transactional
-    fun update(id: ID, func: (T) -> T): T? {
+    fun updateById(id: ID, func: (T) -> T): T? {
         val aggregate = findByIdOrNull(id)
             ?: return null
 
-        val updatedAggreate = func(aggregate)
-        return save(updatedAggreate)
+        val updatedAggregate = func(aggregate)
+        return save(updatedAggregate)
     }
 
     @Transactional
@@ -126,8 +125,8 @@ class ErgoRepository<T : Any, ID : Any>(
         return jdbcAggregateTemplate.exists(query, entity.type)
     }
 
-    fun findAll(
-        pageRequest: Pageable = ALL,
+    fun findPage(
+        pageRequest: Pageable,
         fetch: Iterable<KProperty1<T, *>> = emptySet(),
         queryBuilder: QueryBuilder.() -> Unit = {}
     ): Page<T> {
@@ -142,7 +141,7 @@ class ErgoRepository<T : Any, ID : Any>(
     }
 
     fun findSlice(
-        pageRequest: Pageable = ALL,
+        pageRequest: Pageable,
         fetch: Iterable<KProperty1<T, *>> = emptySet(),
         queryBuilder: QueryBuilder.() -> Unit = {}
     ): Slice<T> {
@@ -164,7 +163,7 @@ class ErgoRepository<T : Any, ID : Any>(
     fun findPage(
         query: String,
         paramMap: Map<String, Any?>,
-        pageRequest: Pageable = ALL,
+        pageRequest: Pageable,
         fetch: Iterable<KProperty1<T, *>> = emptySet(),
     ): Page<T> {
         val page = namedParameterJdbcOperations.queryForPage(query, paramMap, pageRequest, rowMapper)
@@ -172,36 +171,21 @@ class ErgoRepository<T : Any, ID : Any>(
     }
 
     fun findAll(
+        fetch: Iterable<KProperty1<T, *>> = emptySet(),
+    ): Iterable<T> {
+        val rows = jdbcAggregateTemplate.findAll(entity.type)
+        return jdbcAggregateTemplate.hydrate(rows, FetchSpec(fetch))
+    }
+
+    fun findAll(
         query: String,
         paramMap: Map<String, Any?>,
         fetch: Iterable<KProperty1<T, *>> = emptySet(),
-    ): Collection<T> {
+    ): Iterable<T> {
         @Suppress("SqlSourceToSinkFlow")
         val rows = namedParameterJdbcOperations.query(query, paramMap, rowMapper)
         return jdbcAggregateTemplate.hydrate(rows, FetchSpec(fetch))
     }
-
-    fun findSlice(
-        query: String,
-        paramMap: Map<String, Any?>,
-        pageRequest: Pageable,
-        fetch: Iterable<KProperty1<T, *>> = emptySet(),
-    ): Collection<T> {
-        val sortOrders =
-            pageRequest.sort.map { "${getColumnNameToSortBy(it).reference} ${it.direction.name}" }.joinToString(", ")
-
-        val sliceQuery =
-            """SELECT * from ($query) AS data ORDER BY $sortOrders OFFSET ${pageRequest.offset} LIMIT ${pageRequest.pageSize}"""
-
-        @Suppress("SqlSourceToSinkFlow")
-        val rows = namedParameterJdbcOperations.query(sliceQuery, paramMap, rowMapper)
-
-        return jdbcAggregateTemplate.hydrate(
-            rows,
-            FetchSpec(fetch)
-        )
-    }
-
 
     private fun getColumnNameToSortBy(order: Sort.Order): SqlIdentifier {
         val propertyToSortBy = relationalPersistentEntity.getPersistentProperty(order.property)

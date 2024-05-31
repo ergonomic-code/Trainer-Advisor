@@ -42,7 +42,7 @@ fun ClientFilesRepo.findClientFilesPage(
     clientId: Long,
     pageRequest: PageRequest,
     fetch: Iterable<KProperty1<ClientFile, *>> = ClientFile.Fetch.fileOnly
-): Page<ClientFile> = this.findAll(pageRequest, fetch) {
+): Page<ClientFile> = this.findPage(pageRequest, fetch) {
     ClientFile::clientRef isEqual AggregateReference.to(clientId)
 }
 

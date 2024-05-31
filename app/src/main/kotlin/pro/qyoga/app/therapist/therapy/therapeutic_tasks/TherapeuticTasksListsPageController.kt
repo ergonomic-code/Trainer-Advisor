@@ -86,7 +86,7 @@ class TherapeuticTasksListsPageController(
         @RequestParam taskName: String,
     ): ModelAndView {
         val res = runCatching {
-            therapeuticTasksRepo.update(taskId) {
+            therapeuticTasksRepo.updateById(taskId) {
                 it.withName(taskName)
             }
         }

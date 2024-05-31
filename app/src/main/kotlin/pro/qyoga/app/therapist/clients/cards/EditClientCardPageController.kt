@@ -45,7 +45,7 @@ class EditClientCardPageController(
         @PathVariable id: Long
     ): ModelAndView {
         val res = runCatching {
-            clientsRepo.update(id) { client -> client.patchedBy(clientCardDto) }
+            clientsRepo.updateById(id) { client -> client.patchedBy(clientCardDto) }
         }
 
         val modelAndView = res

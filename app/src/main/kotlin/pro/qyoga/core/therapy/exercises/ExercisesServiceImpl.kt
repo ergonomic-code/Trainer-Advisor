@@ -51,7 +51,7 @@ class ExercisesService(
     }
 
     fun updateExercise(exerciseId: Long, exerciseSummaryDto: ExerciseSummaryDto) {
-        exercisesRepo.update(exerciseId) {
+        exercisesRepo.updateById(exerciseId) {
             it.patchBy(exerciseSummaryDto)
         }
     }
