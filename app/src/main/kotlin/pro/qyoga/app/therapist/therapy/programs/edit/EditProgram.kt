@@ -28,7 +28,7 @@ class EditProgram(
         val therapeuticTask = therapeuticTasksRepo.findOneByName(therapeuticTaskName)
             ?: return EditProgramResult.InvalidTherapeuticTaskName(therapeuticTaskName)
 
-        val updatedProgram = programsRepo.update(programId) {
+        val updatedProgram = programsRepo.updateById(programId) {
             it.patchBy(updateProgramRequest, therapeuticTask.ref())
         }
 

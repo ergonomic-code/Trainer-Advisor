@@ -61,7 +61,7 @@ class UpdateAppointmentWorkflow(
 
         val typeRef = appointmentTypesRepo.createTypeIfNew(therapistRef, editAppointmentRequest)
 
-        return appointmentsRepo.update(appointmentRef.id!!) { appointment ->
+        return appointmentsRepo.updateById(appointmentRef.id!!) { appointment ->
             appointment.patchBy(editAppointmentRequest, typeRef)
         }
     }

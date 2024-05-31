@@ -50,7 +50,7 @@ fun ClientsRepo.findTherapistClientsPageBySearchForm(
     clientSearchDto: ClientSearchDto,
     pageRequest: Pageable
 ): Page<Client> {
-    return findAll(pageRequest) {
+    return findPage(pageRequest) {
         Client::therapistId isEqual therapistId
         Client::firstName isILikeIfNotNull clientSearchDto.firstName
         Client::lastName isILikeIfNotNull clientSearchDto.lastName

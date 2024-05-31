@@ -43,14 +43,14 @@ data class CalendarPageModel(
 
     companion object {
 
-        fun of(date: LocalDate, appointments: Collection<Appointment>, appointment: Long? = null): CalendarPageModel {
+        fun of(date: LocalDate, appointments: Iterable<Appointment>, appointment: Long? = null): CalendarPageModel {
             val timeMarks = generateTimeMarks(appointments, date)
             val weekCalendar = generateDaysAround(date)
             return CalendarPageModel(date, timeMarks, weekCalendar, appointment)
         }
 
         private fun generateTimeMarks(
-            appointments: Collection<Appointment>,
+            appointments: Iterable<Appointment>,
             date: LocalDate
         ): List<TimeMark> {
             val minHour = (appointments.minOfOrNull { it.wallClockDateTime.toLocalTime().hour } ?: DEFAULT_START_HOUR)
