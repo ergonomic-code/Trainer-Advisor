@@ -13,7 +13,9 @@ import org.springframework.data.relational.core.mapping.RelationalPersistentEnti
 import org.springframework.data.relational.core.query.Query
 import org.springframework.data.relational.core.sql.SqlIdentifier
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
+import org.springframework.jdbc.support.GeneratedKeyHolder
 import org.springframework.transaction.annotation.Transactional
 import pro.azhidkov.platform.spring.jdbc.queryForPage
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.FetchSpec
@@ -27,7 +29,7 @@ import kotlin.reflect.KProperty1
 
 class ErgoRepository<T : Any, ID : Any>(
     private val jdbcAggregateTemplate: JdbcAggregateOperations,
-    protected val namedParameterJdbcOperations: NamedParameterJdbcOperations,
+    private val namedParameterJdbcOperations: NamedParameterJdbcOperations,
     private val entity: PersistentEntity<T, *>,
     jdbcConverter: JdbcConverter,
     relationalMappingContext: RelationalMappingContext,
@@ -47,6 +49,20 @@ class ErgoRepository<T : Any, ID : Any>(
 
         @Suppress("UNCHECKED_CAST")
         return res.getOrThrow() as S
+    }
+
+    fun upsert(upsertQuery: String, vararg params: Pair<String, Any?>): ID {
+        val keyHolder = GeneratedKeyHolder()
+
+        @Suppress("SqlSourceToSinkFlow")
+        namedParameterJdbcOperations.update(
+            upsertQuery,
+            MapSqlParameterSource(params.toMap()),
+            keyHolder
+        )
+
+        @Suppress("UNCHECKED_CAST")
+        return keyHolder.keys?.values?.first() as ID
     }
 
     @Transactional

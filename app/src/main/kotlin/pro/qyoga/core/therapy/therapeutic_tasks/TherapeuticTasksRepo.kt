@@ -7,9 +7,7 @@ import org.springframework.data.jdbc.core.convert.JdbcConverter
 import org.springframework.data.mapping.model.BasicPersistentEntity
 import org.springframework.data.relational.core.mapping.RelationalMappingContext
 import org.springframework.data.util.TypeInformation
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
-import org.springframework.jdbc.support.GeneratedKeyHolder
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 import pro.azhidkov.platform.spring.sdj.erpo.ErgoRepository
@@ -45,29 +43,19 @@ class TherapeuticTasksRepo(
         }
     }
 
-    @Transactional
     fun getOrCreate(therapeuticTask: TherapeuticTask): TherapeuticTask {
-        val sql = """
+        val id = upsert(
+            """
             INSERT INTO therapeutic_tasks (name, owner, created_at, version) VALUES (:name, :owner, :createdAt, 1)
             ON CONFLICT (owner, lower(name)) DO UPDATE SET name = excluded.name
             RETURNING id
-        """.trimIndent()
-        val params = MapSqlParameterSource(
-            mapOf(
-                "name" to therapeuticTask.name,
-                "owner" to therapeuticTask.owner.id,
-                "createdAt" to Timestamp(therapeuticTask.createdAt.toEpochMilli())
-            )
-        )
-        val keyHolder = GeneratedKeyHolder()
-
-        namedParameterJdbcOperations.update(
-            sql,
-            params,
-            keyHolder
+        """,
+            "name" to therapeuticTask.name,
+            "owner" to therapeuticTask.owner.id,
+            "createdAt" to Timestamp(therapeuticTask.createdAt.toEpochMilli())
         )
 
-        return therapeuticTask.copy(id = keyHolder.key!!.toLong())
+        return therapeuticTask.copy(id = id)
     }
 
 }
