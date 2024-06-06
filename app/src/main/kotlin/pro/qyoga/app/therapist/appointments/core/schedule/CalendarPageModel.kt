@@ -28,6 +28,7 @@ import java.time.format.TextStyle
  */
 data class CalendarPageModel(
     val date: LocalDate,
+    val currentUserTimeZone: ZoneId,
     val timeMarks: List<TimeMark>,
     val calendarDays: Collection<CalendarDay>,
     val appointmentId: Long?
@@ -43,19 +44,20 @@ data class CalendarPageModel(
 
     companion object {
 
-        fun of(date: LocalDate, appointments: Collection<Appointment>, appointment: Long? = null): CalendarPageModel {
-            val timeMarks = generateTimeMarks(appointments, date)
+        fun of(date: LocalDate, currentUserTimeZone: ZoneId, appointments: Collection<Appointment>, appointment: Long? = null): CalendarPageModel {
+            val timeMarks = generateTimeMarks(appointments, date, currentUserTimeZone)
             val weekCalendar = generateDaysAround(date)
-            return CalendarPageModel(date, timeMarks, weekCalendar, appointment)
+            return CalendarPageModel(date, currentUserTimeZone, timeMarks, weekCalendar, appointment)
         }
 
         private fun generateTimeMarks(
             appointments: Collection<Appointment>,
-            date: LocalDate
+            date: LocalDate,
+            currentUserTimeZone: ZoneId
         ): List<TimeMark> {
-            val minHour = (appointments.minOfOrNull { it.wallClockDateTime.toLocalTime().hour } ?: DEFAULT_START_HOUR)
+            val minHour = (appointments.minOfOrNull { if (it.startsBeforeMidnight(date, currentUserTimeZone)) 0 else it.calendarDateTime(currentUserTimeZone).hour } ?: DEFAULT_START_HOUR)
                 .coerceAtMost(DEFAULT_START_HOUR)
-            val maxHour = (appointments.maxOfOrNull { it.endWallClockDateTime.toLocalTime().hour } ?: DEFAULT_END_HOUR)
+            val maxHour = (appointments.maxOfOrNull { if (it.endsAfterMidnight(currentUserTimeZone)) 23 else it.endCalendarDateTime(currentUserTimeZone).hour } ?: DEFAULT_END_HOUR)
                 .coerceAtLeast(DEFAULT_END_HOUR)
 
             val timesMarks = generateSequence(LocalTime.of(minHour, 0)) {
@@ -71,8 +73,10 @@ data class CalendarPageModel(
             val timeMarkRows = timesMarks.map { time ->
                 val timeMarkAppointments = days
                     .map { day ->
-                        val dateTimeAppointment = appointments.find { it.fallsIn(day.atTime(time), TimeMark.length) }
-                        day to dateTimeAppointment?.let { AppointmentCard(it) }
+                        val dateTimeAppointment = appointments.find { it.fallsIn(day.atTime(time), TimeMark.length, currentUserTimeZone) }
+                        day to dateTimeAppointment?.let {
+                            AppointmentCard(it, day, it.calendarDateTime(currentUserTimeZone), it.endCalendarDateTime(currentUserTimeZone))
+                        }
                     }
                     .toList()
 
@@ -83,8 +87,26 @@ data class CalendarPageModel(
             return timeMarkRows
         }
 
-        private fun Appointment.fallsIn(wallClockDateTime: LocalDateTime, span: Duration) =
-            this.wallClockDateTime >= wallClockDateTime && this.wallClockDateTime < wallClockDateTime + span
+        private fun Appointment.calendarDateTime(currentUserTimeZone: ZoneId) =
+                this.dateTime.atZone(currentUserTimeZone).toLocalDateTime()
+
+        private fun Appointment.endCalendarDateTime(currentUserTimeZone: ZoneId) =
+                (this.dateTime + this.duration).atZone(currentUserTimeZone).toLocalDateTime()
+
+        private fun Appointment.fallsIn(wallClockDateTime: LocalDateTime, span: Duration, currentUserTimeZone: ZoneId) =
+                (this.calendarDateTime(currentUserTimeZone) >= wallClockDateTime
+                        && this.calendarDateTime(currentUserTimeZone) < wallClockDateTime + span)
+                        || (wallClockDateTime.hour == 0 && wallClockDateTime.minute == 0
+                        && this.calendarDateTime(currentUserTimeZone) < wallClockDateTime
+                        && this.endCalendarDateTime(currentUserTimeZone) >= wallClockDateTime)
+
+        private fun Appointment.startsBeforeMidnight(date: LocalDate, currentUserTimeZone: ZoneId) =
+                this.calendarDateTime(currentUserTimeZone).dayOfMonth != this.endCalendarDateTime(currentUserTimeZone).dayOfMonth
+                        && this.endCalendarDateTime(currentUserTimeZone).minute != 0
+                        && this.calendarDateTime(currentUserTimeZone).dayOfMonth != date.plusDays(1).dayOfMonth
+
+        private fun Appointment.endsAfterMidnight(currentUserTimeZone: ZoneId) =
+                this.calendarDateTime(currentUserTimeZone).dayOfMonth != this.endCalendarDateTime(currentUserTimeZone).dayOfMonth
 
         private fun generateDaysAround(date: LocalDate) =
 
@@ -138,14 +160,14 @@ data class AppointmentCard(
     val timeMarkLengthPercent: Double,
 ) {
 
-    constructor(app: Appointment) : this(
+    constructor(app: Appointment, day: LocalDate, calendarDateTime: LocalDateTime, endCalendarDateTime: LocalDateTime) : this(
         app.id,
-        "${app.wallClockDateTime.format(russianTimeFormat)} - ${app.endWallClockDateTime.format(russianTimeFormat)}",
+        calendarDateTime.format(russianTimeFormat) + " - " + endCalendarDateTime.format(russianTimeFormat),
         app.clientRef.resolveOrThrow().fullName(),
         app.typeRef.resolveOrThrow().name,
         appointmentStatusClasses.getValue(app.status),
-        (app.wallClockDateTime.minute % 15) / 15.0 * 3,
-        (app.duration.toMinutes() / 5.0)
+        timeMarkOffsetPercent(day, calendarDateTime),
+        timeMarkLengthPercent(app, day, calendarDateTime, endCalendarDateTime)
     )
 
     companion object {
@@ -154,6 +176,22 @@ data class AppointmentCard(
             AppointmentStatus.CLIENT_CAME to "client-came",
             AppointmentStatus.CLIENT_DO_NOT_CAME to "client-do-not-came",
         )
+
+        private fun timeMarkOffsetPercent(day: LocalDate, calendarDateTime: LocalDateTime) =
+                if (calendarDateTime.dayOfMonth == day.dayOfMonth)
+                    (calendarDateTime.minute % 15) / 15.0 * 3
+                else
+                    0.0
+
+        private fun timeMarkLengthPercent(app: Appointment, day: LocalDate, calendarDateTime: LocalDateTime, endCalendarDateTime: LocalDateTime) =
+            if (calendarDateTime.dayOfMonth != endCalendarDateTime.dayOfMonth
+                    && calendarDateTime.dayOfMonth == day.dayOfMonth)
+                (24 * 60 * 60 - calendarDateTime.toLocalTime().toSecondOfDay()) / (60 * 5.0)
+            else if (calendarDateTime.dayOfMonth != endCalendarDateTime.dayOfMonth
+                    && endCalendarDateTime.dayOfMonth == day.dayOfMonth)
+                endCalendarDateTime.toLocalTime().toSecondOfDay() / (60 * 5.0)
+            else
+                app.duration.toMinutes() / 5.0
     }
 
 }
