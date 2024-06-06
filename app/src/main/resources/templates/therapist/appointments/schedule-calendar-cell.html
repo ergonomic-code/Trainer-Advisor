@@ -17,15 +17,15 @@
             <div class="rounded-top-2 px-1 py-1 header"
                  style="height: 2rem">
                 <small>
-                    <span th:text=" ${appointment.period}"></span>
+                    <span th:text=" ${appointment.client}"></span>
                 </small>
             </div>
             <div class="rounded-bottom-2 px-1 py-1 body"
-                 th:style="${'height: ' + (appointment.timeMarkLengthPercent - 2 - 0.25) + 'rem; max-height: ' + (appointment.timeMarkLengthPercent - 2 - 0.25)+ 'rem; '} ">
-                <small>
-                    <span th:text="${appointment.client}"></span>
+                 th:style="${'height: ' + (appointment.timeMarkLengthPercent - 2 - 0.25) + 'rem; max-height: ' + (appointment.timeMarkLengthPercent - 2 - 0.25) + 'rem; '} ">
+                <small th:if="${appointment.timeMarkLengthPercent > 3.8}">
+                    <span th:text="${appointment.period}"></span>
                     <br/>
-                    <span th:text="${appointment.type}"></span>
+                    <span th:if="${appointment.timeMarkLengthPercent > 5.2}" th:text="${appointment.type}"></span>
                 </small>
             </div>
         </a>
