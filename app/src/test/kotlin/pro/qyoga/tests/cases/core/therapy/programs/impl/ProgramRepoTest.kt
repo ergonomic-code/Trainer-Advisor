@@ -1,37 +1,30 @@
 package pro.qyoga.tests.cases.core.therapy.programs.impl
 
-import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.shouldNotBe
-import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import pro.qyoga.core.therapy.programs.impl.ProgramsRepo
-import pro.qyoga.core.therapy.programs.impl.findDocxOrNull
-import pro.qyoga.tests.fixture.backgrounds.Backgrounds
-import pro.qyoga.tests.infra.db.setupDb
-import pro.qyoga.tests.infra.db.testDataSource
+import pro.qyoga.core.therapy.programs.ProgramsRepo
+import pro.qyoga.core.therapy.programs.findDocxById
+import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.infra.test_config.spring.context
+import pro.qyoga.tests.infra.web.QYogaAppBaseTest
 import pro.qyoga.tests.platform.spring.context.getBean
 
-class ProgramRepoTest {
-    private val backgrounds = context.getBean<Backgrounds>()
+@DisplayName("Репозиторий программ")
+class ProgramRepoTest : QYogaAppBaseTest() {
+
     private val repo = context.getBean<ProgramsRepo>()
 
-    @BeforeEach
-    fun setup() {
-        testDataSource.setupDb()
+    @DisplayName("Должен находить корректные docx-программы по идентификатору со всеми упражнениями и их шагами")
+    @Test
+    fun findDocxProgram() {
+        // Given
+        val program = backgrounds.programs.createRandomProgram(exercisesCount = 3, stepsInEachExercise = 5)
+
+        // When
+        val docx = repo.findDocxById(program.id)
+
+        // Then
+        docx shouldMatch program
     }
 
-    @Test
-    fun should_execute_query() {
-        // Given
-        val programs = backgrounds.programs.createRandomProgram(exercisesCount = 3, stepsInEachExercise = 5)
-        // When
-        val docx = repo.findDocxOrNull(programs.id)
-        // Then
-        docx shouldNotBe null
-        docx!!.exercises shouldHaveSize 3
-        docx.exercises.forEach {
-            it.steps shouldHaveSize 5
-        }
-    }
 }

@@ -19,7 +19,7 @@ import kotlin.math.min
 
 object ProgramDocxGenerator {
 
-    fun generateDocx(program: DocxProgram, fetchImage: (Long?) -> StoredFileInputStream?): InputStream {
+    fun generateDocx(program: DocxProgram, fetchImage: (Long, Int) -> StoredFileInputStream?): InputStream {
         val buff = ByteArrayOutputStream()
         XWPFDocument().use {
             it.document.body.sectPr = CTSectPr.Factory.newInstance().apply {
@@ -58,7 +58,7 @@ object ProgramDocxGenerator {
                                     createRow()
                                 }
                                 with(cell.addParagraph()) {
-                                    val file = fetchImage(step.imageId)
+                                    val file = fetchImage(programExercise.id, stepIdx + 1)
                                     val img = file?.inputStream
                                     if (img != null) {
                                         addRun(createRun().apply {

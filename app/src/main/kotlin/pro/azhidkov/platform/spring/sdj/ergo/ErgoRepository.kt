@@ -12,6 +12,7 @@ import org.springframework.data.relational.core.mapping.RelationalPersistentEnti
 import org.springframework.data.relational.core.query.Query
 import org.springframework.data.relational.core.sql.SqlIdentifier
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.jdbc.support.GeneratedKeyHolder
@@ -103,14 +104,13 @@ class ErgoRepository<T : Any, ID : Any>(
         queryBuilder: QueryBuilder.() -> Unit
     ): T? {
         val query = query(queryBuilder)
-        return jdbcAggregateTemplate.findOne(query, relationalPersistentEntity.type)
-            .map {
+        return jdbcAggregateTemplate.findOneBy(query, relationalPersistentEntity.type)
+            ?.let {
                 jdbcAggregateTemplate.hydrate(
                     listOf(it),
                     FetchSpec(fetch)
                 ).single()
             }
-            .orElse(null)
     }
 
     fun findOne(
@@ -120,11 +120,21 @@ class ErgoRepository<T : Any, ID : Any>(
     ): T? {
         @Suppress("SqlSourceToSinkFlow")
         val aggregate = namedParameterJdbcOperations.query(query, paramMap, rowMapper)
-            .firstOrNull()
+            .singleOrNull()
             ?: return null
 
         return jdbcAggregateTemplate.hydrate(listOf(aggregate), FetchSpec(fetch)).single()
     }
+
+    fun <VIEW> findOne(
+        query: String,
+        paramMap: Map<String, Any>,
+        rowMapper: RowMapper<VIEW>
+    ): VIEW? {
+        val result = namedParameterJdbcOperations.query(query, paramMap) { rs, rowNum -> rowMapper.mapRow(rs, rowNum) }
+        return result.singleOrNull()
+    }
+
 
     fun findOne(
         query: Query,
