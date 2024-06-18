@@ -1,33 +1,24 @@
 package pro.qyoga.app.therapist.therapy.programs.list
 
-import org.springframework.data.jdbc.core.JdbcAggregateTemplate
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import pro.azhidkov.platform.file_storage.api.FileMetaData
 import pro.azhidkov.platform.file_storage.api.StoredFileInputStream
 import pro.qyoga.core.therapy.exercises.ExercisesService
 import pro.qyoga.core.therapy.programs.ProgramDocxGenerator
 import pro.qyoga.core.therapy.programs.ProgramsRepo
-import pro.qyoga.core.therapy.programs.model.fetchExercises
-
+import pro.qyoga.core.therapy.programs.findDocxById
 
 @Component
 class GenerateProgramDocx(
     private val programsRepo: ProgramsRepo,
     private val exercisesService: ExercisesService,
-    private val jdbcAggregateTemplate: JdbcAggregateTemplate
 ) : (Long) -> StoredFileInputStream? {
 
     override fun invoke(programId: Long): StoredFileInputStream? {
-        val program = programsRepo.findByIdOrNull(programId)
-            ?.fetchExercises(jdbcAggregateTemplate)
+        val program = programsRepo.findDocxById(programId)
             ?: return null
-
-        val docxInputStream = ProgramDocxGenerator.generateDocx(program) { (exerciseId, stepIdx) ->
-            exercisesService.getStepImage(
-                exerciseId,
-                stepIdx
-            )
+        val docxInputStream = ProgramDocxGenerator.generateDocx(program) { exerciseId, stepIdx ->
+            exercisesService.getStepImage(exerciseId, stepIdx)
         }
 
         return StoredFileInputStream(
@@ -38,5 +29,4 @@ class GenerateProgramDocx(
             ), docxInputStream
         )
     }
-
 }
