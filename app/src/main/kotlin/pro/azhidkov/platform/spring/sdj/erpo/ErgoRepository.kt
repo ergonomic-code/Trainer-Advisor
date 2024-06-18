@@ -6,7 +6,6 @@ import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.data.jdbc.core.convert.EntityRowMapper
 import org.springframework.data.jdbc.core.convert.JdbcConverter
 import org.springframework.data.jdbc.repository.support.SimpleJdbcRepository
-import org.springframework.data.mapping.PersistentEntity
 import org.springframework.data.relational.core.conversion.DbActionExecutionException
 import org.springframework.data.relational.core.mapping.RelationalMappingContext
 import org.springframework.data.relational.core.mapping.RelationalPersistentEntity
@@ -24,20 +23,23 @@ import pro.azhidkov.platform.spring.sdj.findOneBy
 import pro.azhidkov.platform.spring.sdj.mapContent
 import pro.azhidkov.platform.spring.sdj.query.QueryBuilder
 import pro.azhidkov.platform.spring.sdj.query.query
+import kotlin.reflect.KClass
 import kotlin.reflect.KProperty1
 
 
 class ErgoRepository<T : Any, ID : Any>(
     private val jdbcAggregateTemplate: JdbcAggregateOperations,
     private val namedParameterJdbcOperations: NamedParameterJdbcOperations,
-    private val entity: PersistentEntity<T, *>,
+    type: KClass<T>,
     jdbcConverter: JdbcConverter,
     relationalMappingContext: RelationalMappingContext,
-) : SimpleJdbcRepository<T, ID>(jdbcAggregateTemplate, entity, jdbcConverter) {
+) : SimpleJdbcRepository<T, ID>(
+    jdbcAggregateTemplate,
+    relationalMappingContext.getRelationPersistentEntity(type), jdbcConverter
+) {
 
-    @Suppress("UNCHECKED_CAST")
-    private final val relationalPersistentEntity =
-        relationalMappingContext.getRequiredPersistentEntity(entity.type) as RelationalPersistentEntity<T>
+    private final val relationalPersistentEntity: RelationalPersistentEntity<T> =
+        relationalMappingContext.getRelationPersistentEntity(type)
 
     protected val rowMapper = EntityRowMapper(relationalPersistentEntity, jdbcConverter)
 
@@ -101,7 +103,7 @@ class ErgoRepository<T : Any, ID : Any>(
         queryBuilder: QueryBuilder.() -> Unit
     ): T? {
         val query = query(queryBuilder)
-        return jdbcAggregateTemplate.findOne(query, entity.type)
+        return jdbcAggregateTemplate.findOne(query, relationalPersistentEntity.type)
             .map {
                 jdbcAggregateTemplate.hydrate(
                     listOf(it),
@@ -128,7 +130,7 @@ class ErgoRepository<T : Any, ID : Any>(
         query: Query,
         fetch: Iterable<KProperty1<T, *>> = emptySet(),
     ): T? {
-        val aggregate = jdbcAggregateTemplate.findOneBy(query, entity.type)
+        val aggregate = jdbcAggregateTemplate.findOneBy(query, relationalPersistentEntity.type)
             ?: return null
 
         return jdbcAggregateTemplate.hydrate(listOf(aggregate), FetchSpec(fetch)).single()
@@ -138,7 +140,7 @@ class ErgoRepository<T : Any, ID : Any>(
         queryBuilder: QueryBuilder.() -> Unit
     ): Boolean {
         val query = query(queryBuilder)
-        return jdbcAggregateTemplate.exists(query, entity.type)
+        return jdbcAggregateTemplate.exists(query, relationalPersistentEntity.type)
     }
 
     fun findPage(
@@ -147,7 +149,7 @@ class ErgoRepository<T : Any, ID : Any>(
         queryBuilder: QueryBuilder.() -> Unit = {}
     ): Page<T> {
         val query = query(queryBuilder)
-        val res = jdbcAggregateTemplate.findAll(query, entity.type, pageRequest)
+        val res = jdbcAggregateTemplate.findAll(query, relationalPersistentEntity.type, pageRequest)
         return res.mapContent {
             jdbcAggregateTemplate.hydrate(
                 res,
@@ -164,7 +166,7 @@ class ErgoRepository<T : Any, ID : Any>(
         val query = query(queryBuilder)
         val res = jdbcAggregateTemplate.findAll(
             query,
-            entity.type,
+            relationalPersistentEntity.type,
             PageRequest.of(pageRequest.pageNumber, pageRequest.pageSize + 1, pageRequest.sort)
         )
 
@@ -189,7 +191,7 @@ class ErgoRepository<T : Any, ID : Any>(
     fun findAll(
         fetch: Iterable<KProperty1<T, *>> = emptySet(),
     ): Iterable<T> {
-        val rows = jdbcAggregateTemplate.findAll(entity.type)
+        val rows = jdbcAggregateTemplate.findAll(relationalPersistentEntity.type)
         return jdbcAggregateTemplate.hydrate(rows, FetchSpec(fetch))
     }
 
@@ -213,3 +215,8 @@ class ErgoRepository<T : Any, ID : Any>(
     }
 
 }
+
+@Suppress("UNCHECKED_CAST")
+private fun <T : Any> RelationalMappingContext.getRelationPersistentEntity(
+    type: KClass<T>
+): RelationalPersistentEntity<T> = getRequiredPersistentEntity(type.java) as RelationalPersistentEntity<T>

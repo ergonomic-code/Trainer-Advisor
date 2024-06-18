@@ -3,9 +3,7 @@ package pro.qyoga.core.appointments.core
 import org.intellij.lang.annotations.Language
 import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.data.jdbc.core.convert.JdbcConverter
-import org.springframework.data.mapping.model.BasicPersistentEntity
 import org.springframework.data.relational.core.mapping.RelationalMappingContext
-import org.springframework.data.util.TypeInformation
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
 import pro.azhidkov.platform.postgresql.toPGInterval
@@ -26,7 +24,7 @@ class AppointmentsRepo(
 ) : ErgoRepository<Appointment, Long>(
     jdbcAggregateTemplate,
     namedParameterJdbcOperations,
-    BasicPersistentEntity(TypeInformation.of(Appointment::class.java)),
+    Appointment::class,
     jdbcConverter,
     relationalMappingContext
 )

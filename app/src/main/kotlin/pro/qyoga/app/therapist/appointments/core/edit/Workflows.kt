@@ -68,7 +68,6 @@ class UpdateAppointmentWorkflow(
 
 }
 
-
 private fun AppointmentTypesRepo.createTypeIfNew(
     therapistRef: TherapistRef,
     editAppointmentRequest: EditAppointmentRequest

@@ -5,9 +5,7 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.data.jdbc.core.convert.JdbcConverter
 import org.springframework.data.jdbc.core.mapping.AggregateReference
-import org.springframework.data.mapping.model.BasicPersistentEntity
 import org.springframework.data.relational.core.mapping.RelationalMappingContext
-import org.springframework.data.util.TypeInformation
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -28,7 +26,7 @@ class JournalEntriesRepo(
 ) : ErgoRepository<JournalEntry, Long>(
     jdbcAggregateTemplate,
     namedParameterJdbcOperations,
-    BasicPersistentEntity(TypeInformation.of(JournalEntry::class.java)),
+    JournalEntry::class,
     jdbcConverter,
     relationalMappingContext
 ) {
