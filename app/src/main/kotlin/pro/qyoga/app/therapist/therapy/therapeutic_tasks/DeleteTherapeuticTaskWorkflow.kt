@@ -4,7 +4,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.ref
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.azhidkov.platform.spring.sdj.withSortBy
 import pro.qyoga.core.clients.journals.JournalEntriesRepo
 import pro.qyoga.core.clients.journals.model.JournalEntry

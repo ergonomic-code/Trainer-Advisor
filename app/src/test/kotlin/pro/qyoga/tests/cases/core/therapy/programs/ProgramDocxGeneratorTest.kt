@@ -5,7 +5,7 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument
 import org.junit.jupiter.api.Test
 import pro.azhidkov.platform.file_storage.api.StoredFile
 import pro.azhidkov.platform.file_storage.api.StoredFileInputStream
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.ref
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.qyoga.core.therapy.exercises.model.Exercise
 import pro.qyoga.core.therapy.programs.ProgramDocxGenerator
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask

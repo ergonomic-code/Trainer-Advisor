@@ -1,7 +1,7 @@
 package pro.qyoga.tests.assertions
 
 import io.kotest.matchers.shouldBe
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
 import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRequest
 import pro.qyoga.core.clients.journals.model.JournalEntry
 

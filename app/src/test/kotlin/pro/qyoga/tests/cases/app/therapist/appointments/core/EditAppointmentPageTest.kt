@@ -4,8 +4,8 @@ import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.ref
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
 import pro.azhidkov.timezones.TimeZones
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
 import pro.qyoga.core.appointments.core.toEditRequest

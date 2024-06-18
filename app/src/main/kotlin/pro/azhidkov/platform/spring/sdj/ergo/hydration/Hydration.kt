@@ -1,4 +1,4 @@
-package pro.azhidkov.platform.spring.sdj.erpo.hydration
+package pro.azhidkov.platform.spring.sdj.ergo.hydration
 
 import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.data.jdbc.core.mapping.AggregateReference

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.data.jdbc.core.mapping.AggregateReference
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.*
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.*
 import pro.qyoga.core.clients.journals.model.JournalEntry
 import pro.qyoga.core.therapy.exercises.model.ExerciseStep
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask

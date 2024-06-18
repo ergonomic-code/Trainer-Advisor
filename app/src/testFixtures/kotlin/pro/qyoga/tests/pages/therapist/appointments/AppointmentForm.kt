@@ -2,7 +2,7 @@ package pro.qyoga.tests.pages.therapist.appointments
 
 import io.kotest.matchers.shouldBe
 import pro.azhidkov.platform.java.time.toLocalTimeString
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
 import pro.qyoga.core.appointments.core.AppointmentStatus
 import pro.qyoga.core.appointments.core.EditAppointmentRequest
 import pro.qyoga.tests.assertions.PageMatcher

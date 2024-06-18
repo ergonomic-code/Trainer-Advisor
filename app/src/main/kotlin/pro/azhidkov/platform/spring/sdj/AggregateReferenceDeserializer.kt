@@ -4,8 +4,8 @@ import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.*
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer
 import org.springframework.data.jdbc.core.mapping.AggregateReference
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.AggregateReferenceTarget
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.Identifiable
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.AggregateReferenceTarget
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.Identifiable
 
 
 class AggregateReferenceDeserializer : JsonDeserializer<AggregateReference<*, *>>(), ContextualDeserializer {

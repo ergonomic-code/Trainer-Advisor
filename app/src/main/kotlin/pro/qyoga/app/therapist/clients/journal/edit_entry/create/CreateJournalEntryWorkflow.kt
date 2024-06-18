@@ -3,7 +3,7 @@ package pro.qyoga.app.therapist.clients.journal.edit_entry.create
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.ref
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.qyoga.app.therapist.clients.journal.edit_entry.shared.ClientNotFound
 import pro.qyoga.core.clients.cards.ClientsRepo
 import pro.qyoga.core.clients.journals.JournalEntriesRepo

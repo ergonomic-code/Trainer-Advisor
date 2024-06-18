@@ -1,7 +1,7 @@
 package pro.qyoga.tests.fixture.object_mothers.therapy.programs
 
 import org.springframework.data.jdbc.core.mapping.AggregateReference
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.ref
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.qyoga.core.therapy.exercises.model.Exercise
 import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
 import pro.qyoga.core.therapy.programs.model.Program

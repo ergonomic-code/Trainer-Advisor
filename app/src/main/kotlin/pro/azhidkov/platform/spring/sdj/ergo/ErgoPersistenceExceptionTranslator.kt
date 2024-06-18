@@ -1,4 +1,4 @@
-package pro.azhidkov.platform.spring.sdj.erpo
+package pro.azhidkov.platform.spring.sdj.ergo
 
 import org.springframework.dao.DataAccessException
 import org.springframework.dao.support.PersistenceExceptionTranslator
