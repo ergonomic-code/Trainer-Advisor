@@ -8,7 +8,7 @@ import org.springframework.data.jdbc.core.convert.JdbcConverter
 import org.springframework.data.relational.core.mapping.RelationalMappingContext
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
-import pro.azhidkov.platform.spring.sdj.erpo.ErgoRepository
+import pro.azhidkov.platform.spring.sdj.ergo.ErgoRepository
 import pro.azhidkov.platform.spring.sdj.sortBy
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSearchDto
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto

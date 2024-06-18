@@ -6,7 +6,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
 import pro.azhidkov.platform.spring.mvc.modelAndView
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
 import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo
 import pro.qyoga.core.therapy.therapeutic_tasks.errors.DuplicatedTherapeuticTaskName
 import pro.qyoga.core.therapy.therapeutic_tasks.findTherapistTasksSliceByName

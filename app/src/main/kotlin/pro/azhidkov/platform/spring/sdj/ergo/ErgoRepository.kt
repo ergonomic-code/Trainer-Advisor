@@ -1,4 +1,4 @@
-package pro.azhidkov.platform.spring.sdj.erpo
+package pro.azhidkov.platform.spring.sdj.ergo
 
 import org.springframework.dao.DuplicateKeyException
 import org.springframework.data.domain.*
@@ -17,8 +17,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.jdbc.support.GeneratedKeyHolder
 import org.springframework.transaction.annotation.Transactional
 import pro.azhidkov.platform.spring.jdbc.queryForPage
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.FetchSpec
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.hydrate
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.FetchSpec
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.hydrate
 import pro.azhidkov.platform.spring.sdj.findOneBy
 import pro.azhidkov.platform.spring.sdj.mapContent
 import pro.azhidkov.platform.spring.sdj.query.QueryBuilder

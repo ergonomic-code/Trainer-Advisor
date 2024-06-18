@@ -3,7 +3,7 @@ package pro.qyoga.tests.pages.therapist.clients.files
 import io.kotest.matchers.collections.shouldHaveSize
 import org.jsoup.nodes.Element
 import pro.azhidkov.platform.file_storage.api.FileMetaData
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
 import pro.qyoga.core.clients.files.model.ClientFile
 import pro.qyoga.l10n.russianDateFormat
 import pro.qyoga.tests.assertions.PageMatcher

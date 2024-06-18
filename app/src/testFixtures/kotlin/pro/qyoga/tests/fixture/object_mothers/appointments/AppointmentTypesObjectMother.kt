@@ -1,6 +1,6 @@
 package pro.qyoga.tests.fixture.object_mothers.appointments
 
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.AggregateReferenceTarget
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.AggregateReferenceTarget
 import pro.qyoga.core.appointments.types.model.AppointmentType
 import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.tests.fixture.data.randomCyrillicWord

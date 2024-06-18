@@ -1,6 +1,6 @@
 package pro.qyoga.tests.fixture.object_mothers.clients
 
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.AggregateReferenceTarget
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.AggregateReferenceTarget
 import pro.qyoga.core.clients.cards.Client
 import pro.qyoga.core.clients.cards.dtos.ClientCardDto
 import pro.qyoga.core.clients.cards.model.Client

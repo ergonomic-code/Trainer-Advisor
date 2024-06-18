@@ -1,7 +1,7 @@
 package pro.qyoga.app.therapist.appointments.core.edit
 
 import org.springframework.stereotype.Component
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.ref
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.qyoga.core.appointments.core.*
 import pro.qyoga.core.appointments.types.AppointmentTypesRepo
 import pro.qyoga.core.appointments.types.model.AppointmentType

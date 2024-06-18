@@ -3,8 +3,8 @@ package pro.qyoga.app.therapist.therapy.programs.edit
 import org.springframework.web.servlet.ModelAndView
 import pro.azhidkov.platform.spring.mvc.ModelAndViewBuilder
 import pro.azhidkov.platform.spring.mvc.modelAndView
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrNull
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrNull
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
 import pro.qyoga.app.platform.EntityPageMode
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
 import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest

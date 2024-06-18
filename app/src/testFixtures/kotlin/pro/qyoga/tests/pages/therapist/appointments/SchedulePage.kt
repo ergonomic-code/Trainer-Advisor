@@ -6,7 +6,7 @@ import io.kotest.matchers.collections.shouldBeSameSizeAs
 import io.kotest.matchers.compose.all
 import org.jsoup.nodes.Document
 import org.jsoup.select.Elements
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
 import pro.qyoga.app.therapist.appointments.core.edit.CreateAppointmentPageController
 import pro.qyoga.app.therapist.appointments.core.schedule.AppointmentCard
 import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel

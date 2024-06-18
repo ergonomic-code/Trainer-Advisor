@@ -1,7 +1,7 @@
 package pro.qyoga.tests.fixture.backgrounds
 
 import org.springframework.stereotype.Component
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.ref
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.qyoga.core.therapy.programs.ProgramsRepo
 import pro.qyoga.core.therapy.programs.model.Program
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask

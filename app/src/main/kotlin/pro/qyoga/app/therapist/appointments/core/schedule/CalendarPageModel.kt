@@ -1,7 +1,7 @@
 package pro.qyoga.app.therapist.appointments.core.schedule
 
 import org.springframework.web.servlet.ModelAndView
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
 import pro.qyoga.core.appointments.core.Appointment
 import pro.qyoga.core.appointments.core.AppointmentStatus
 import pro.qyoga.l10n.russianDayOfMonthLongFormat

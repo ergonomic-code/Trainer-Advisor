@@ -7,7 +7,7 @@ import io.kotest.matchers.types.shouldBeInstanceOf
 import org.junit.jupiter.api.Test
 import org.springframework.web.servlet.ModelAndView
 import org.springframework.web.servlet.view.RedirectView
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.ref
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.qyoga.app.therapist.appointments.core.edit.CreateAppointmentPageController
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
 import pro.qyoga.tests.assertions.shouldMatch

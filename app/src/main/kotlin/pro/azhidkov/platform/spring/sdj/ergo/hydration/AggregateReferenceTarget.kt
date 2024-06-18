@@ -1,4 +1,4 @@
-package pro.azhidkov.platform.spring.sdj.erpo.hydration
+package pro.azhidkov.platform.spring.sdj.ergo.hydration
 
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonUnwrapped

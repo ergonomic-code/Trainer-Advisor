@@ -1,6 +1,6 @@
 package pro.qyoga.core.appointments.core
 
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrNull
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrNull
 import pro.azhidkov.timezones.LocalizedTimeZone
 import pro.qyoga.core.appointments.types.model.AppointmentTypeRef
 import java.time.ZoneId

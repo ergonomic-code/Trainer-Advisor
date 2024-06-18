@@ -3,8 +3,8 @@ package pro.qyoga.tests.fixture.backgrounds
 import org.springframework.data.domain.Page
 import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.stereotype.Component
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.FetchSpec
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.hydrate
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.FetchSpec
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.hydrate
 import pro.qyoga.app.therapist.clients.journal.edit_entry.create.CreateJournalEntryWorkflow
 import pro.qyoga.core.clients.journals.JournalEntriesRepo
 import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRequest

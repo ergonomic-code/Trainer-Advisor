@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.annotation.Version
 import org.springframework.data.relational.core.mapping.Table
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.Identifiable
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.Identifiable
 import java.time.Instant
 
 @Table("files")

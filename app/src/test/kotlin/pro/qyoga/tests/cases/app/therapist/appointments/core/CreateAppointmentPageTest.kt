@@ -4,7 +4,7 @@ import io.kotest.matchers.equality.shouldBeEqualToIgnoringFields
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.ref
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.qyoga.core.appointments.core.Appointment
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.assertions.shouldHave

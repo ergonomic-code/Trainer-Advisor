@@ -9,7 +9,7 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTDrawing
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTPageMar.*
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTSectPr
 import pro.azhidkov.platform.file_storage.api.StoredFileInputStream
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
 import pro.qyoga.core.therapy.programs.model.Program
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream

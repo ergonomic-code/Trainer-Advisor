@@ -5,7 +5,7 @@ import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.stereotype.Component
 import pro.azhidkov.platform.file_storage.api.StoredFile
 import pro.azhidkov.platform.spring.sdj.ALL
-import pro.azhidkov.platform.spring.sdj.erpo.hydration.resolveOrThrow
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
 import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.core.clients.files.ClientFilesService
 import pro.qyoga.core.clients.files.model.ClientFile
