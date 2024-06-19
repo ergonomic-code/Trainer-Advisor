@@ -1,8 +1,8 @@
 package pro.qyoga.tests.fixture.object_mothers.therapy.programs
 
 import org.springframework.data.jdbc.core.mapping.AggregateReference
-import pro.azhidkov.platform.file_storage.api.StoredFile
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
 import pro.qyoga.core.therapy.exercises.model.Exercise
 import pro.qyoga.core.therapy.exercises.model.ExerciseStep
 import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
@@ -38,26 +38,22 @@ object ProgramsObjectMother {
     }
 
     fun docxProgram(
-        program: Program,
-        exercisesWithImages: List<Pair<Exercise, Map<Int, StoredFile>>>
+        program: Program
     ): DocxProgram {
         return DocxProgram(
-            program.id, program.title, exercisesWithImages.mapIndexed { idx, exerciseWithImages ->
-                docxExercise(exerciseWithImages.first, exerciseWithImages.second[idx + 1]!!)
-            }
+            program.id,
+            program.title,
+            program.exercises.map { docxExercise(it.exerciseRef.resolveOrThrow()) }
         )
     }
 
     private fun docxExercise(
-        exercise: Exercise,
-        storedFile: StoredFile
+        exercise: Exercise
     ): DocxExercise {
         return DocxExercise(
             exercise.id,
             exercise.title,
             exercise.description,
-            exercise.steps.map {
-                ExerciseStep(it.description, AggregateReference.to(storedFile.id))
-            })
+            exercise.steps.map { ExerciseStep(it.description, it.imageId) })
     }
 }

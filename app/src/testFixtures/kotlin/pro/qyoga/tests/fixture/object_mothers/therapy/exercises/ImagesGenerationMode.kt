@@ -13,7 +13,7 @@ sealed interface ImagesGenerationMode {
 data object AllSteps : ImagesGenerationMode {
 
     override fun generateImages(steps: Int): Map<Int, StoredFile> =
-        (1..steps).associateWith { FilesObjectMother.randomImage() }
+        (0 until steps).associateWith { FilesObjectMother.randomImageFile() }
 
 }
 

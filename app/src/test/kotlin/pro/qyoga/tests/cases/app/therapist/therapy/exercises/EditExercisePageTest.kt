@@ -61,7 +61,7 @@ class EditExercisePageTest : QYogaAppIntegrationBaseTest() {
         // Given
         val therapist = TherapistClient.loginAsTheTherapist()
         val exercise = ExercisesObjectMother.createExerciseRequest { ExercisesObjectMother.exerciseSteps(1) }
-        val img = FilesObjectMother.randomImage()
+        val img = FilesObjectMother.randomImageFile()
         val stepIdx = 0
         val exerciseId =
             backgrounds.exercises.createExercises(listOf(exercise), listOf(mapOf(stepIdx to img))).single().id

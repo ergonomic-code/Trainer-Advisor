@@ -1,5 +1,6 @@
 package pro.qyoga.tests.cases.core.therapy.programs
 
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.result.shouldBeSuccess
 import org.apache.poi.xwpf.usermodel.XWPFDocument
 import org.junit.jupiter.api.Test
@@ -36,6 +37,10 @@ class ProgramDocxGeneratorTest {
 
         val openResult = runCatching { XWPFDocument(ByteArrayInputStream(buffer)) }
         openResult.shouldBeSuccess()
+
+        // And then
+        val doc = openResult.getOrThrow()
+        doc.allPictures shouldHaveSize imagesMap.size
     }
 
     private fun givenData(): Pair<DocxProgram, Map<Pair<Long, Int>, StoredFileInputStream>> {
@@ -50,9 +55,8 @@ class ProgramDocxGeneratorTest {
             therapeuticTask = task.ref(),
             exercises = exercisesWithImages.map { it.first })
 
-        return ProgramsObjectMother.docxProgram(
-            program, exercisesWithImages
-        ) to getExerciseStepImagesSource(exercisesWithImages)
+        val docxProgram = ProgramsObjectMother.docxProgram(program)
+        return docxProgram to getExerciseStepImagesSource(exercisesWithImages)
     }
 
     private fun getExerciseStepImagesSource(exercisesWithImages: List<Pair<Exercise, Map<Int, StoredFile>>>) =

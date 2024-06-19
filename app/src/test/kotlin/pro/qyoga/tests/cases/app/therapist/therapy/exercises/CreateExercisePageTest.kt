@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
-import pro.qyoga.tests.fixture.object_mothers.FilesObjectMother.randomImage
+import pro.qyoga.tests.fixture.object_mothers.FilesObjectMother.randomImageFile
 import pro.qyoga.tests.fixture.object_mothers.therapy.exercises.ExercisesObjectMother
 import pro.qyoga.tests.fixture.object_mothers.therapy.exercises.ExercisesObjectMother.createExerciseRequest
 import pro.qyoga.tests.fixture.object_mothers.therapy.exercises.ExercisesObjectMother.exerciseSteps
@@ -48,8 +48,8 @@ class CreateExercisePageTest : QYogaAppIntegrationBaseTest() {
         }
 
         val images = mapOf(
-            firstStepIdx.toLong() to randomImage(),
-            secondStepIdx.toLong() to randomImage()
+            firstStepIdx.toLong() to randomImageFile(),
+            secondStepIdx.toLong() to randomImageFile()
         )
 
         // When
