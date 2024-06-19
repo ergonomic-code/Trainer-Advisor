@@ -1,4 +1,4 @@
-package pro.qyoga.tests.cases.core.therapy.programs.impl
+package pro.qyoga.tests.cases.core.therapy.programs
 
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test

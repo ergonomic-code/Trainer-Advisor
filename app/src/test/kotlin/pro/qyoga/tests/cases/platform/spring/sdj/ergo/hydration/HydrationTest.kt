@@ -36,7 +36,7 @@ class HydrationTest {
     fun `When for list of entities single property are hydrated, then all entities should have specified property hydrated`() {
         // Given
         val jdbcAggregateOperations = context.getBean<JdbcAggregateOperations>()
-        val refs = (1..3).map { jdbcAggregateOperations.save(FilesObjectMother.randomImage().metaData) }
+        val refs = (1..3).map { jdbcAggregateOperations.save(FilesObjectMother.randomImageFile().metaData) }
         val aggs = refs.map { ExerciseStep("", AggregateReference.to(it.id)) }
 
         // When

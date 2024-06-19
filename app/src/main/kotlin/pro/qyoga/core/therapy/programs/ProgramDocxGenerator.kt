@@ -58,7 +58,7 @@ object ProgramDocxGenerator {
                                     createRow()
                                 }
                                 with(cell.addParagraph()) {
-                                    val file = fetchImage(programExercise.id, stepIdx + 1)
+                                    val file = fetchImage(programExercise.id, stepIdx)
                                     val img = file?.inputStream
                                     if (img != null) {
                                         addRun(createRun().apply {
