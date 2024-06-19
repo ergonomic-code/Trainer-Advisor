@@ -1,7 +1,5 @@
 # Проект для прода
 
-version: '3'
-
 services:
 
   postgres:
