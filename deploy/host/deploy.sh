@@ -1,4 +1,4 @@
 #!/bin/bash
-./backup-db.sh
-./backup-minio.sh
-./deploy-only.sh
+./backup-db.sh || exit
+./backup-minio.sh || exit
+./deploy-only.sh || exit
