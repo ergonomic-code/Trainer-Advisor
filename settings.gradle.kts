@@ -7,13 +7,13 @@ dependencyResolutionManagement {
         create("libs") {
             // plugin versions
             val kotlinVersion = version("kotlin", "1.9.23")
-            val springBootVersion = version("springBoot", "3.3.0")
-            val springDependencyManagementVersion = version("springDependencyManagement", "1.1.5")
+            val springBootVersion = version("springBoot", "3.3.2")
+            val springDependencyManagementVersion = version("springDependencyManagement", "1.1.6")
             val koverVersion = version("kover", "0.6.1")
-            val gitPropertiesVersion = version("gitProperties", "2.4.1")
+            val gitPropertiesVersion = version("gitProperties", "2.4.2")
 
             // lib versions
-            val poiVersion = version("poi", "5.2.5")
+            val poiVersion = version("poi", "5.3.0")
 
             // plugins
             plugin("kotlin", "org.jetbrains.kotlin.jvm").versionRef(kotlinVersion)
@@ -36,7 +36,7 @@ dependencyResolutionManagement {
             ).version("3.0.4.RELEASE")
 
             library("postgres", "org.postgresql", "postgresql").version("42.7.3")
-            library("minio", "io.minio", "minio").version("8.5.10")
+            library("minio", "io.minio", "minio").version("8.5.11")
 
             library("poi-ooxml", "org.apache.poi", "poi-ooxml").versionRef(poiVersion)
             library("poi-ooxml-lite", "org.apache.poi", "poi-ooxml-lite").versionRef(poiVersion)
@@ -45,26 +45,26 @@ dependencyResolutionManagement {
         }
 
         create("testLibs") {
-            val selenideVersion = version("selenide", "7.3.2")
-            val testContainersVersion = version("testcontainers", "1.19.7")
-            val restAssuredVersion = version("restAssured", "5.4.0")
+            val selenideVersion = version("selenide", "7.4.1")
+            val testContainersVersion = version("testcontainers", "1.20.1")
+            val restAssuredVersion = version("restAssured", "5.5.0")
 
             library("selenide-proxy", "com.codeborne", "selenide-proxy").versionRef(selenideVersion)
             library("testcontainers-selenium", "org.testcontainers", "selenium").versionRef(testContainersVersion)
 
-            library("kotest-assertions", "io.kotest", "kotest-assertions-core").version("5.8.1")
+            library("kotest-assertions", "io.kotest", "kotest-assertions-core").version("5.9.1")
 
             library("restassured-core", "io.rest-assured", "rest-assured").versionRef(restAssuredVersion)
             library("restassured-kotlin", "io.rest-assured", "kotlin-extensions").versionRef(restAssuredVersion)
             bundle("restassured", listOf("restassured-core", "restassured-kotlin"))
 
-            library("jsoup", "org.jsoup", "jsoup").version("1.17.2")
-            library("datafaker", "net.datafaker", "datafaker").version("2.2.2")
+            library("jsoup", "org.jsoup", "jsoup").version("1.18.1")
+            library("datafaker", "net.datafaker", "datafaker").version("2.3.1")
             library("greenmail", "com.icegreen", "greenmail-junit5").version("2.0.1")
 
             library("testcontainers-minio", "org.testcontainers", "minio").versionRef(testContainersVersion)
 
-            library("mockito-kotlin", "org.mockito.kotlin", "mockito-kotlin").version("5.3.1")
+            library("mockito-kotlin", "org.mockito.kotlin", "mockito-kotlin").version("5.4.0")
             library("archunit", "com.tngtech.archunit", "archunit").version("1.3.0")
         }
     }
