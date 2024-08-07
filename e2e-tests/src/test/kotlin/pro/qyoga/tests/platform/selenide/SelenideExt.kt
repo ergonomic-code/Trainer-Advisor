@@ -54,5 +54,7 @@ fun open(page: QYogaPage) {
 }
 
 fun click(component: Component) {
-    Selenide.`$`(component.selector()).click()
+    Selenide.`$`(component.selector())
+        .scrollIntoView("{behavior: \"instant\", block: \"center\", inline: \"center\"}")
+        .click()
 }
