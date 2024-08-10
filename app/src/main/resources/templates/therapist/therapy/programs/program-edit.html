@@ -26,7 +26,6 @@
                     document.addEventListener('alpine:init', () => {
                         Alpine.data('programForm', () => ({
                             exercises: initialExercises,
-
                             remove(idx) {
                                 this.exercises.splice(idx, 1);
                             },
@@ -114,6 +113,10 @@
 
                     }
 
+                    function exerciseTagId(ex) {
+                        return `exerciseTag${ex.id}TagId`
+                    }
+
                 </script>
 
                 <form class="mt-4"
@@ -121,6 +124,7 @@
                       th:attr="hx-post=${pageMode == 'CREATE' ? '/therapist/programs/create' : null},hx-put=${pageMode == 'EDIT' ? '/therapist/programs/' + program.id : null}"
                       hx-on:htmx:validation:validate="validate(event)"
                       x-data="programForm"
+                      x-init="$watch('exercises', new_value => {htmx.process(htmx.find('#' + exerciseTagId(new_value.slice(-1)[0])))})"
                       th:fragment="programForm"
                 >
 
@@ -230,18 +234,22 @@
 
                     <ul class="list-group list-group-flush g-0">
                         <template :key="exercise.id" x-for="(exercise, idx) in exercises">
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <li
+                                    class="list-group-item d-flex justify-content-between align-items-center"
+                                    :id="exerciseTagId(exercise)">
                                 <input :value="exercise.id"
                                        name="exerciseIds"
                                        type="hidden">
                                 <div class="col-8">
-                                    <div class="text-truncate" x-text="exercise.title">
-                                        Разминка для шеи
-                                    </div>
+                                    <div class="link link-primary"
+                                         role="button"
+                                         :hx-get="`/therapist/exercises/${exercise.id}/modal`"
+                                         data-bs-target="#exercise-modal"
+                                         data-bs-toggle="modal"
+                                         hx-target="#modal-content"
+                                         x-text="exercise.title"></div>
                                     <small class="text-muted"
-                                           x-text="`${exercise.type.label}, ${exercise.duration} мин.`">
-                                        Разминка, 10 мин
-                                    </small>
+                                           x-text="`${exercise.type.label}, ${exercise.duration} мин.`"></small>
                                 </div>
                                 <div class="btn-group h-fit-content ">
                                     <button @click="moveUp(idx)" class="btn btn-sm btn-outline-secondary"
@@ -260,6 +268,12 @@
                             </li>
                         </template>
                     </ul>
+
+                    <div class="modal modal-blur fade" id="exercise-modal" tabindex="-1">
+                        <div class="modal-dialog modal-xl modal-dialog-centered">
+                            <div class="modal-content" id="modal-content"></div>
+                        </div>
+                    </div>
 
                     <div class="row g-2 justify-content-end">
                         <div class="col-6 col-sm-auto text-center">

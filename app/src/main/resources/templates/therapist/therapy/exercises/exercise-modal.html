@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<div class="modal-content" id="exercise-modal">
+    <div class="modal-header">
+        <h3 class="modal-title me-2" id="exercise-title" th:text="${exercise?.title}"></h3>
+        <button aria-label="Закрыть" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+    </div>
+    <div class="modal-body" id="modal-body">
+        <section class="container px-2">
+
+            <div class="row">
+
+                <div class="col-6 mb-3 col-sm-5" id="exercise-type" th:text="${exercise.exerciseType.label}">
+                </div>
+
+                <div class="col-6 mb-3 col-sm-2"
+                     th:text="${T(pro.azhidkov.platform.java.time.DurationExtKt).toDecimalMinutes(exercise?.duration) + ' мин.'}"
+                >
+                </div>
+            </div>
+
+            <div th:if="${exercise.description != null && exercise.description.length> 0}">
+                <div class="row mb-5">
+                    <div class="col" id="exercise-description" th:text="${exercise.description ?: ''}">
+                    </div>
+                </div>
+
+                <h4>Шаги</h4>
+            </div>
+
+            <div class="row step-row" th:each="step, iterStat : ${exercise.steps}">
+                <div class="row align-items-center px-3 mb-3">
+                    <div class="col-sm-2 mb-3 text-center mx-auto" th:if="${step.imageId != null}">
+                        <img class="mw-100 d-block"
+                             th:src="${'/therapist/exercises/' + exercise.id + '/step-images/' +iterStat.index}">
+                    </div>
+                    <div class="col-sm-10 step-description">
+                        <strong class="step-description" th:text="'Шаг ' + ${iterStat.index + 1} + ': '"></strong>[[${step.description}]]
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </div>
+</div>

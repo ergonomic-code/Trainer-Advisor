@@ -151,4 +151,17 @@ class TherapistExercisesApi(override val authCookie: Cookie) : AuthorizedApi {
         }
     }
 
+    fun getExerciseModal(exerciseId: Long, expectedStatus: HttpStatus = HttpStatus.OK): Document {
+        return Given {
+            authorized()
+            pathParam("exerciseId", exerciseId)
+        } When {
+            get(ExerciseModal.PATH)
+        } Then {
+            statusCode(expectedStatus.value())
+        } Extract {
+            Jsoup.parse(body().asString())
+        }
+    }
+
 }

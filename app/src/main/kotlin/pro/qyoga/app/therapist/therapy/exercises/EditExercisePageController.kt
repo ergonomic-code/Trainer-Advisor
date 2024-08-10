@@ -11,6 +11,7 @@ import pro.qyoga.app.platform.notFound
 import pro.qyoga.core.therapy.exercises.ExercisesService
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
 
+
 @Controller
 @RequestMapping("/therapist/exercises/{exerciseId}")
 class EditExercisePageController(
