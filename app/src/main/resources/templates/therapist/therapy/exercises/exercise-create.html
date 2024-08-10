@@ -127,11 +127,9 @@
                                     reader.onload = e => callback(e.target.result)
                                 }
 
-
                                 function exerciseStep(step, idx) {
                                     let exerciseId = /*[[${exercise?.id}]]*/ 0;
                                     let imageUrl = step?.imageId != null ? `/therapist/exercises/${exerciseId}/step-images/${idx}` : noImage;
-                                    console.log(imageUrl)
                                     return {
                                         description: step?.description,
                                         imageUrl: step ? imageUrl : noImage,

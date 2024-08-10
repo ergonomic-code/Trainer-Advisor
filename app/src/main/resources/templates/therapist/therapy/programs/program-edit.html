@@ -3,22 +3,6 @@
 <head>
     <div th:replace="~{fragments/header.html}"></div>
     <title th:text="${program?.title ?: 'Новая программа'}">Новая программа</title>
-    <style>
-        .modal-lg {
-            max-width: 90%;
-        }
-
-        .modal-content {
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-        }
-
-        .modal-body {
-            flex: 1 1 auto;
-            overflow-y: auto;
-        }
-    </style>
 </head>
 <body class="sb-nav-fixed">
 
@@ -42,9 +26,6 @@
                     document.addEventListener('alpine:init', () => {
                         Alpine.data('programForm', () => ({
                             exercises: initialExercises,
-                            loadPage() {
-                                new bootstrap.Modal(document.getElementById('modals-here')).show();
-                            },
                             remove(idx) {
                                 this.exercises.splice(idx, 1);
                             },
@@ -263,8 +244,9 @@
                                     <div class="link link-primary"
                                          role="button"
                                          :hx-get="`/therapist/exercises/${exercise.id}/modal`"
-                                         @click="loadPage(exercise.id)"
-                                         hx-target="#modal-body"
+                                         data-bs-target="#exercise-modal"
+                                         data-bs-toggle="modal"
+                                         hx-target="#modal-content"
                                          x-text="exercise.title"></div>
                                     <small class="text-muted"
                                            x-text="`${exercise.type.label}, ${exercise.duration} мин.`"></small>
@@ -287,11 +269,9 @@
                         </template>
                     </ul>
 
-                    <div class="modal modal-blur fade" id="modals-here" tabindex="-1">
-                        <div class="modal-dialog modal-lg modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-body" id="modal-body"></div>
-                            </div>
+                    <div class="modal modal-blur fade" id="exercise-modal" tabindex="-1">
+                        <div class="modal-dialog modal-xl modal-dialog-centered">
+                            <div class="modal-content" id="modal-content"></div>
                         </div>
                     </div>
 
