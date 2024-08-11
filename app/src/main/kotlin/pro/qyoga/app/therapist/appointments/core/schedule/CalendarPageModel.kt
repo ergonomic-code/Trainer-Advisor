@@ -1,15 +1,17 @@
 package pro.qyoga.app.therapist.appointments.core.schedule
 
 import org.springframework.web.servlet.ModelAndView
-import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
-import pro.qyoga.core.appointments.core.Appointment
+import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel.Companion.DAYS_IN_CALENDAR
+import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel.Companion.DAYS_IN_WEEK
+import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel.Companion.DEFAULT_END_HOUR
+import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel.Companion.DEFAULT_START_HOUR
 import pro.qyoga.core.appointments.core.AppointmentStatus
+import pro.qyoga.core.appointments.core.LocalizedAppointmentSummary
 import pro.qyoga.l10n.russianDayOfMonthLongFormat
 import pro.qyoga.l10n.russianTimeFormat
 import pro.qyoga.l10n.systemLocale
 import java.time.*
 import java.time.format.TextStyle
-
 
 /**
  * Модель страницы календаря расписания приёмов.
@@ -17,7 +19,7 @@ import java.time.format.TextStyle
  * Состоит из:
  * * Контрола выбора дня в нативном календаре
  * * Сетки календаря с приёмами
- * * Контрла быстрого выбора дня
+ * * Контрола быстрого выбора дня
  *
  * Календарь состоит из трёх столбцов - выбранный день +/- 1 день
  * и пачки строк - от мин(7 утра, минимальный час начала приём) до макс(22, максимальный час конца приёма).
@@ -28,10 +30,8 @@ import java.time.format.TextStyle
  */
 data class CalendarPageModel(
     val date: LocalDate,
-    val currentUserTimeZone: ZoneId,
     val timeMarks: List<TimeMark>,
-    val calendarDays: Collection<CalendarDay>,
-    val appointmentId: Long?
+    val calendarDays: Collection<CalendarDay>
 ) : ModelAndView("therapist/appointments/schedule.html") {
 
     init {
@@ -39,91 +39,18 @@ data class CalendarPageModel(
         addObject("timeMarks", timeMarks)
         addObject("calendarDays", calendarDays)
         addObject("selectedDayLabel", date.format(russianDayOfMonthLongFormat))
-        addObject("focusAppointmentId", appointmentId)
     }
 
     companion object {
 
-        fun of(date: LocalDate, currentUserTimeZone: ZoneId, appointments: Iterable<Appointment>, appointment: Long? = null): CalendarPageModel {
-            val timeMarks = generateTimeMarks(appointments, date, currentUserTimeZone)
-            val weekCalendar = generateDaysAround(date)
-            return CalendarPageModel(date, currentUserTimeZone, timeMarks, weekCalendar, appointment)
-        }
-
-        private fun generateTimeMarks(
-            appointments: Iterable<Appointment>,
+        fun of(
             date: LocalDate,
-            currentUserTimeZone: ZoneId
-        ): List<TimeMark> {
-            val minHour = (appointments.minOfOrNull { if (it.startsBeforeMidnight(date, currentUserTimeZone)) 0 else it.calendarDateTime(currentUserTimeZone).hour } ?: DEFAULT_START_HOUR)
-                .coerceAtMost(DEFAULT_START_HOUR)
-            val maxHour = (appointments.maxOfOrNull { if (it.endsAfterMidnight(currentUserTimeZone)) 23 else it.endCalendarDateTime(currentUserTimeZone).hour } ?: DEFAULT_END_HOUR)
-                .coerceAtLeast(DEFAULT_END_HOUR)
-
-            val timesMarks = generateSequence(LocalTime.of(minHour, 0)) {
-                it + TimeMark.length
-            }
-                .take((maxHour - minHour + 1) * (TimeMark.marksPerHour))
-
-            val days = generateSequence(date.minusDays(1)) {
-                it.plusDays(1)
-            }
-                .take(3)
-
-            val timeMarkRows = timesMarks.map { time ->
-                val timeMarkAppointments = days
-                    .map { day ->
-                        val dateTimeAppointment = appointments.find { it.fallsIn(day.atTime(time), TimeMark.length, currentUserTimeZone) }
-                        day to dateTimeAppointment?.let {
-                            AppointmentCard(it, day, it.calendarDateTime(currentUserTimeZone), it.endCalendarDateTime(currentUserTimeZone))
-                        }
-                    }
-                    .toList()
-
-                TimeMark(time, timeMarkAppointments)
-            }
-                .toList()
-
-            return timeMarkRows
+            appointments: Iterable<LocalizedAppointmentSummary>
+        ): CalendarPageModel {
+            val timeMarks = generateTimeMarks(appointments, date)
+            val weekCalendar = generateDaysAround(date)
+            return CalendarPageModel(date, timeMarks, weekCalendar)
         }
-
-        private fun Appointment.calendarDateTime(currentUserTimeZone: ZoneId) =
-                this.dateTime.atZone(currentUserTimeZone).toLocalDateTime()
-
-        private fun Appointment.endCalendarDateTime(currentUserTimeZone: ZoneId) =
-                (this.dateTime + this.duration).atZone(currentUserTimeZone).toLocalDateTime()
-
-        private fun Appointment.fallsIn(wallClockDateTime: LocalDateTime, span: Duration, currentUserTimeZone: ZoneId) =
-                (this.calendarDateTime(currentUserTimeZone) >= wallClockDateTime
-                        && this.calendarDateTime(currentUserTimeZone) < wallClockDateTime + span)
-                        || (wallClockDateTime.hour == 0 && wallClockDateTime.minute == 0
-                        && this.calendarDateTime(currentUserTimeZone) < wallClockDateTime
-                        && this.endCalendarDateTime(currentUserTimeZone) >= wallClockDateTime)
-
-        private fun Appointment.startsBeforeMidnight(date: LocalDate, currentUserTimeZone: ZoneId) =
-                this.calendarDateTime(currentUserTimeZone).dayOfMonth != this.endCalendarDateTime(currentUserTimeZone).dayOfMonth
-                        && this.endCalendarDateTime(currentUserTimeZone).minute != 0
-                        && this.calendarDateTime(currentUserTimeZone).dayOfMonth != date.plusDays(1).dayOfMonth
-
-        private fun Appointment.endsAfterMidnight(currentUserTimeZone: ZoneId) =
-                this.calendarDateTime(currentUserTimeZone).dayOfMonth != this.endCalendarDateTime(currentUserTimeZone).dayOfMonth
-
-        private fun generateDaysAround(date: LocalDate) =
-
-            generateSequence(date.minusDays(3)) {
-                it.plusDays(1)
-            }
-                .map {
-                    CalendarDay(
-                        it,
-                        it.dayOfWeek.getDisplayName(TextStyle.SHORT, systemLocale),
-                        it.dayOfMonth,
-                        it.dayOfWeek in setOf(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY),
-                        it == date
-                    )
-                }
-                .take(DAYS_IN_WEEK)
-                .toList()
 
         const val DAYS_IN_CALENDAR = 3
         const val DAYS_IN_WEEK = 7
@@ -134,8 +61,76 @@ data class CalendarPageModel(
 
 }
 
+private fun generateTimeMarks(
+    appointments: Iterable<LocalizedAppointmentSummary>,
+    date: LocalDate
+): List<TimeMark> {
+    val days = generateSequence(date.minusDays(DAYS_IN_CALENDAR / 2L)) { it.plusDays(DAYS_IN_CALENDAR / 2L) }
+        .take(DAYS_IN_CALENDAR)
+        .toList()
+    check(days.size == DAYS_IN_CALENDAR)
+    val daysRange = days.first()..days.last()
+
+    val (minHour, maxHour) = determineTimeBoundaries(appointments, daysRange)
+
+    val timesMarks = generateSequence(LocalTime.of(minHour, 0)) { it + TimeMark.length }
+        .take((maxHour - minHour + 1) * (TimeMark.marksPerHour))
+        .toList()
+
+    val timeMarkRows = timesMarks.map { time ->
+        val timeMarkAppointments = days
+            .map { day ->
+                val dateTimeAppointment = appointments
+                    .find { it.shouldHasCardInCell(day.atTime(time), TimeMark.length) }
+                    ?.let { AppointmentCard(it, day) }
+                day to dateTimeAppointment
+            }
+
+        TimeMark(time, timeMarkAppointments)
+    }
+
+    return timeMarkRows
+}
+
+private fun determineTimeBoundaries(
+    appointments: Iterable<LocalizedAppointmentSummary>,
+    daysRange: ClosedRange<LocalDate>
+): Pair<Int, Int> {
+    val minHour = (appointments.minOfOrNull {
+        if (it.spansMidnight && it.endsWithin(daysRange)) 0
+        else it.dateTime.hour
+    } ?: DEFAULT_START_HOUR)
+        .coerceAtMost(DEFAULT_START_HOUR)
+
+    val maxHour = (appointments.maxOfOrNull {
+        if (it.spansMidnight && it.startsWithin(daysRange)) 23
+        else it.endDateTime.hour
+    } ?: DEFAULT_END_HOUR)
+        .coerceAtLeast(DEFAULT_END_HOUR)
+    return Pair(minHour, maxHour)
+}
+
+private fun LocalizedAppointmentSummary.startsWithin(daysRange: ClosedRange<LocalDate>): Boolean =
+    this.dateTime.toLocalDate() in daysRange
+
+private fun LocalizedAppointmentSummary.endsWithin(daysRange: ClosedRange<LocalDate>): Boolean =
+    this.endDateTime.toLocalDate() in daysRange
+
+private fun LocalizedAppointmentSummary.shouldHasCardInCell(wallClockDateTime: LocalDateTime, span: Duration) =
+    (this.dateTime >= wallClockDateTime && this.dateTime < wallClockDateTime + span) ||
+            (wallClockDateTime.toLocalTime() == LocalTime.MIDNIGHT && this.spansMidnight && this.endDateTime.toLocalDate() == wallClockDateTime.toLocalDate())
+
+private val LocalizedAppointmentSummary.spansMidnight
+    get() = this.dateTime.toLocalTime().isAfter(this.endDateTime.toLocalTime())
+
+private fun generateDaysAround(date: LocalDate) =
+    generateSequence(date.minusDays(3)) { it.plusDays(1) }
+        .map { CalendarDay(it, selected = it == date) }
+        .take(DAYS_IN_WEEK)
+        .toList()
+
 /**
- * Строка календаря - время дня (+15 минут) и приёмы, начинающиеся в это время в
+ * Строка календаря - 15-минутный интервал начинающийся в определённое время дня и приёмы, начинающиеся в это время в
  * выбранные дни
  */
 data class TimeMark(
@@ -150,6 +145,12 @@ data class TimeMark(
 
 }
 
+/**
+ * Карточка приёма в календаре.
+ * Позиция карточки определяется как оффсет от начала строки календаря, в которую попадает карточка в процентах от
+ * высоты строки.
+ * Высота карточки определяется как процент от высоты строки календаря.
+ */
 data class AppointmentCard(
     val id: Long,
     val period: String,
@@ -160,14 +161,17 @@ data class AppointmentCard(
     val timeMarkLengthPercent: Double,
 ) {
 
-    constructor(app: Appointment, day: LocalDate, calendarDateTime: LocalDateTime, endCalendarDateTime: LocalDateTime) : this(
+    constructor(
+        app: LocalizedAppointmentSummary,
+        day: LocalDate,
+    ) : this(
         app.id,
-        calendarDateTime.format(russianTimeFormat) + " - " + endCalendarDateTime.format(russianTimeFormat),
-        app.clientRef.resolveOrThrow().fullName(),
-        app.typeRef.resolveOrThrow().name,
+        app.dateTime.format(russianTimeFormat) + " - " + app.endDateTime.format(russianTimeFormat),
+        app.clientName,
+        app.typeName,
         appointmentStatusClasses.getValue(app.status),
-        timeMarkOffsetPercent(day, calendarDateTime),
-        timeMarkLengthPercent(app, day, calendarDateTime, endCalendarDateTime)
+        timeMarkOffsetPercent(app, day),
+        timeMarkLengthPercent(app, day)
     )
 
     companion object {
@@ -177,24 +181,32 @@ data class AppointmentCard(
             AppointmentStatus.CLIENT_DO_NOT_CAME to "client-do-not-came",
         )
 
-        private fun timeMarkOffsetPercent(day: LocalDate, calendarDateTime: LocalDateTime) =
-                if (calendarDateTime.dayOfMonth == day.dayOfMonth)
-                    (calendarDateTime.minute % 15) / 15.0 * 3
-                else
-                    0.0
-
-        private fun timeMarkLengthPercent(app: Appointment, day: LocalDate, calendarDateTime: LocalDateTime, endCalendarDateTime: LocalDateTime) =
-            if (calendarDateTime.dayOfMonth != endCalendarDateTime.dayOfMonth
-                    && calendarDateTime.dayOfMonth == day.dayOfMonth)
-                (24 * 60 * 60 - calendarDateTime.toLocalTime().toSecondOfDay()) / (60 * 5.0)
-            else if (calendarDateTime.dayOfMonth != endCalendarDateTime.dayOfMonth
-                    && endCalendarDateTime.dayOfMonth == day.dayOfMonth)
-                endCalendarDateTime.toLocalTime().toSecondOfDay() / (60 * 5.0)
-            else
-                app.duration.toMinutes() / 5.0
     }
 
 }
+
+private fun timeMarkOffsetPercent(app: LocalizedAppointmentSummary, day: LocalDate) =
+    if (app.dateTime.dayOfMonth == day.dayOfMonth)
+        (app.dateTime.minute % 15) / TimeMark.length.toMinutes().toDouble()
+    else
+        0.0
+
+private fun timeMarkLengthPercent(app: LocalizedAppointmentSummary, day: LocalDate) =
+    app.durationAtDay(day).toMinutes() / TimeMark.length.toMinutes().toDouble()
+
+private fun LocalizedAppointmentSummary.durationAtDay(day: LocalDate) =
+    when {
+        this.dateTime.dayOfMonth == this.endDateTime.dayOfMonth ->
+            duration
+
+        this.dateTime.toLocalDate() == day ->
+            Duration.between(this.dateTime.toLocalTime(), LocalTime.MAX).plusNanos(1)
+
+        this.endDateTime.toLocalDate() == day ->
+            Duration.between(LocalTime.MIDNIGHT, this.endDateTime.toLocalTime())
+
+        else -> error("Appointment spans more than two days")
+    }
 
 data class CalendarDay(
     val date: LocalDate,
@@ -202,5 +214,13 @@ data class CalendarDay(
     val day: Int,
     val holiday: Boolean,
     val selected: Boolean
-)
+) {
+    constructor(date: LocalDate, selected: Boolean) : this(
+        date,
+        date.dayOfWeek.getDisplayName(TextStyle.SHORT, systemLocale),
+        date.dayOfMonth,
+        date.dayOfWeek in setOf(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY),
+        selected
+    )
+}
 

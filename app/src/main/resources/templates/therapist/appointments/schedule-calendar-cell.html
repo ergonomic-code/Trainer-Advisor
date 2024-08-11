@@ -6,7 +6,7 @@
          th:id="|appointmentCard-${appointment.id}|"
          th:classappend="${appointment.statusClass}"
          th:if="${appointment != null}"
-         th:style="${'margin-top: ' + appointment.timeMarkOffsetPercent + 'rem; position: relative'}"
+         th:style="${'margin-top: ' + (3 * appointment.timeMarkOffsetPercent) + 'rem; position: relative'}"
     >
 
         <a class="link-dark text-decoration-none"
@@ -14,18 +14,16 @@
            th:href="@{/therapist/appointments/{appointmentId}(appointmentId=${appointment.id})}"
            th:id="|editAppointmentLink-${appointment.id}|"
         >
-            <div class="rounded-top-2 px-1 py-1 header"
-                 style="height: 2rem">
+
+            <div class="rounded-top-2 rounded-bottom-2 px-1 py-1 body"
+                 th:style="${'height: ' + (T(java.lang.Math).max(3 * appointment.timeMarkLengthPercent - 0.25, 0.0)) + 'rem; max-height: ' + (3 * appointment.timeMarkLengthPercent) + 'rem; '} "
+            >
                 <small>
-                    <span th:text=" ${appointment.client}"></span>
-                </small>
-            </div>
-            <div class="rounded-bottom-2 px-1 py-1 body"
-                 th:style="${'height: ' + (appointment.timeMarkLengthPercent - 2 - 0.25) + 'rem; max-height: ' + (appointment.timeMarkLengthPercent - 2 - 0.25) + 'rem; '} ">
-                <small th:if="${appointment.timeMarkLengthPercent > 3.8}">
-                    <span th:text="${appointment.period}"></span>
+                    <span th:if="${appointment.timeMarkLengthPercent > 0.6}" th:text=" ${appointment.client}"></span>
                     <br/>
-                    <span th:if="${appointment.timeMarkLengthPercent > 5.2}" th:text="${appointment.type}"></span>
+                    <span th:if="${appointment.timeMarkLengthPercent > 1.1}" th:text="${appointment.period}"></span>
+                    <br/>
+                    <span th:if="${appointment.timeMarkLengthPercent > 1.6}" th:text="${appointment.type}"></span>
                 </small>
             </div>
         </a>

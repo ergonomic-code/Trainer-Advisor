@@ -49,7 +49,7 @@ class SchedulePageTest : QYogaAppIntegrationBaseTest() {
         val therapist = TherapistClient.loginAsTheTherapist()
 
         // When
-        val document = therapist.appointments.getScheduleForDay(LocalDate.now())
+        val document = therapist.appointments.getScheduleForDay(today)
 
         // Then
         document shouldBePage CalendarPage

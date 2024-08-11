@@ -7,6 +7,7 @@ import pro.qyoga.app.therapist.appointments.core.edit.CreateAppointmentWorkflow
 import pro.qyoga.app.therapist.appointments.core.schedule.GetCalendarAppointmentsWorkflow
 import pro.qyoga.core.appointments.core.Appointment
 import pro.qyoga.core.appointments.core.AppointmentsRepo
+import pro.qyoga.core.appointments.core.LocalizedAppointmentSummary
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.TherapistRef
@@ -43,7 +44,7 @@ class AppointmentsBackgrounds(
     fun getDaySchedule(
         date: LocalDate,
         therapistUserDetails: QyogaUserDetails = theTherapistUserDetails
-    ): Iterable<Appointment> {
+    ): Iterable<LocalizedAppointmentSummary> {
         return getCalendarAppointments(therapistUserDetails.ref, date)
     }
 

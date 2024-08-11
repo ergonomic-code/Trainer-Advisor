@@ -62,8 +62,8 @@ infix fun Elements.shouldMatch(appointments: Iterable<Appointment>) {
         el shouldHaveComponent Link(
             "editAppointmentLink",
             EditAppointmentPage,
-            russianTimeFormat.format(app.wallClockDateTime) + " - " + russianTimeFormat.format(app.endWallClockDateTime) + " " + app.clientRef.resolveOrThrow()
-                .fullName()
+            app.clientRef.resolveOrThrow().fullName() + " " +
+                    russianTimeFormat.format(app.wallClockDateTime) + " - " + russianTimeFormat.format(app.endWallClockDateTime)
         )
         el.select("div.appointment-card")
             .single() shouldHaveClass AppointmentCard.appointmentStatusClasses[app.status]!!

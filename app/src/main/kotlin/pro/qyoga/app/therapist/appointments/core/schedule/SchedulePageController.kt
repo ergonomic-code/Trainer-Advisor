@@ -23,8 +23,8 @@ class SchedulePageController(
         @RequestParam(APPOINTMENT) appointment: Long? = null,
         @AuthenticationPrincipal therapist: QyogaUserDetails
     ): ModelAndView {
-        val (currentUserTimeZone, appointments) = getCalendarAppointments(therapist.ref, date)
-        return CalendarPageModel.of(date, currentUserTimeZone, appointments, appointment)
+        val appointments = getCalendarAppointments(therapist.ref, date)
+        return CalendarPageModel.of(date, appointments)
     }
 
     companion object {

@@ -215,6 +215,15 @@ class ErgoRepository<T : Any, ID : Any>(
         return jdbcAggregateTemplate.hydrate(rows, FetchSpec(fetch))
     }
 
+    fun <T : Any> findAll(
+        query: String,
+        paramMap: Map<String, Any?>,
+        rowMapper: RowMapper<T>
+    ): Iterable<T> {
+        @Suppress("SqlSourceToSinkFlow")
+        return namedParameterJdbcOperations.query(query, paramMap, rowMapper)
+    }
+
     private fun getColumnNameToSortBy(order: Sort.Order): SqlIdentifier {
         val propertyToSortBy = relationalPersistentEntity.getPersistentProperty(order.property)
         if (propertyToSortBy != null) {

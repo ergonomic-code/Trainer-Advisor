@@ -87,7 +87,7 @@ class CreateAppointmentPageControllerTest : QYogaAppBaseTest() {
         // Then
         result.shouldBeSuccess()
         backgrounds.appointments.getDaySchedule(aDate).toList().forAny {
-            it shouldMatch createNewAppointmentRequest
+            it.shouldMatch(createNewAppointmentRequest, atTimeZone = asiaNovosibirsk)
         }
     }
 
@@ -117,7 +117,8 @@ class CreateAppointmentPageControllerTest : QYogaAppBaseTest() {
 
         // Then
         result.shouldBeSuccess()
-        backgrounds.appointments.getDaySchedule(aDate).toList().forAny { it shouldMatch createNewAppointmentRequest }
+        backgrounds.appointments.getDaySchedule(aDate).toList()
+            .forAny { it.shouldMatch(createNewAppointmentRequest, atTimeZone = asiaNovosibirsk) }
     }
 
     @Test
@@ -145,7 +146,8 @@ class CreateAppointmentPageControllerTest : QYogaAppBaseTest() {
 
         // Then
         result.shouldBeSuccess()
-        backgrounds.appointments.getDaySchedule(aDate).toList().forAny { it shouldMatch createNewAppointmentRequest }
+        backgrounds.appointments.getDaySchedule(aDate).toList()
+            .forAny { it.shouldMatch(createNewAppointmentRequest, atTimeZone = asiaNovosibirsk) }
     }
 
     @Test
@@ -174,7 +176,8 @@ class CreateAppointmentPageControllerTest : QYogaAppBaseTest() {
 
         // Then
         result.shouldBeSuccess()
-        backgrounds.appointments.getDaySchedule(aDate).toList().forAny { it shouldMatch createNewAppointmentRequest }
+        backgrounds.appointments.getDaySchedule(aDate).toList()
+            .forAny { it.shouldMatch(createNewAppointmentRequest, atTimeZone = asiaNovosibirsk) }
     }
 
     private fun Any.shouldBeIntersectionError() {

@@ -5,13 +5,12 @@ import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
 import pro.qyoga.core.appointments.core.Appointment
 import pro.qyoga.core.appointments.core.AppointmentStatus
 import pro.qyoga.core.appointments.core.EditAppointmentRequest
+import pro.qyoga.core.appointments.core.LocalizedAppointmentSummary
 import pro.qyoga.core.appointments.types.model.AppointmentTypeRef
 import pro.qyoga.core.clients.cards.model.ClientRef
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
-import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.tests.fixture.data.*
 import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
-import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -20,38 +19,22 @@ import kotlin.random.Random
 
 object AppointmentsObjectMother {
 
-    fun randomAppointment(
-        therapistRef: TherapistRef = THE_THERAPIST_REF,
+    fun randomLocalizedAppointmentSummary(
         client: ClientRef = ClientsObjectMother.fakeClientRef,
-        typeId: AppointmentTypeRef? = null,
         typeTitle: String = randomCyrillicWord(),
         therapeuticTask: TherapeuticTaskRef? = null,
         dateTime: LocalDateTime = randomAppointmentDate(),
-        timeZone: ZoneId = randomTimeZone(),
         duration: Duration = randomAppointmentDuration(),
-        place: String? = null,
-        cost: Int? = null,
-        payed: Boolean? = null,
         appointmentStatus: AppointmentStatus = AppointmentStatus.entries.random(),
-        comment: String? = null
-    ): Appointment {
-        return Appointment(
-            therapistRef,
-            randomEditAppointmentRequest(
-                client,
-                typeId,
-                typeTitle,
-                therapeuticTask,
-                dateTime,
-                timeZone,
-                duration,
-                place,
-                cost,
-                payed,
-                appointmentStatus,
-                comment
-            ),
-            AppointmentTypesObjectMother.fakeAppointmentType()
+    ): LocalizedAppointmentSummary {
+        return LocalizedAppointmentSummary(
+            0L,
+            client.resolveOrThrow().fullName(),
+            typeTitle,
+            therapeuticTask?.resolveOrThrow()?.name,
+            dateTime,
+            duration,
+            appointmentStatus
         )
     }
 

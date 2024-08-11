@@ -6,7 +6,7 @@ spring:
   datasource:
     username: postgres
     password: password
-    url: jdbc:postgresql://localhost:54501/qyoga
+    url: jdbc:postgresql://localhost:54503/qyoga
 
   servlet:
     multipart:

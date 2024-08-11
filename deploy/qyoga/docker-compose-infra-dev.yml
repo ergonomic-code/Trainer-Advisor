@@ -2,7 +2,7 @@
 # dev-инфраструктура хранит данные на docker volume (данные переживают перезапуск контейнера, но не его удаление)
 # На этот проект настроена интеграция Spring Boot с Docker Compose (при необходимости, Спринг автоматически запускает проект на старте)
 
-name: qyoga-infra-dev
+name: qyoga-infra-dev-zhenya
 
 services:
 
@@ -11,10 +11,10 @@ services:
       file: docker-compose-infra-base.yml
       service: postgres
 
-    container_name: qg-pg-dev
+    container_name: "${COMPOSE_PROJECT_NAME}-qg-pg-dev"
 
     ports:
-      - "54501:5432"
+      - "54503:5432"
 
 
   minio:
@@ -22,7 +22,7 @@ services:
       file: docker-compose-infra-base.yml
       service: minio
 
-    container_name: qg-minio-dev
+    container_name: "${COMPOSE_PROJECT_NAME}-qg-minio-dev"
 
     ports:
       - "50000:9000"
