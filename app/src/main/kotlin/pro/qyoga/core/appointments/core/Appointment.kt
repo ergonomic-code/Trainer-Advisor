@@ -42,7 +42,6 @@ data class Appointment(
     val version: Long = 0
 ) {
 
-
     @Transient
     val wallClockDateTime: LocalDateTime = dateTime.atZone(timeZone).toLocalDateTime()
 
@@ -70,6 +69,7 @@ data class Appointment(
 
     init {
         require(cost == null || cost > 0) { "Cost should be non-negative" }
+        require(duration.toHours() <= 24) { "Appointment duration must be less or equal than 24 hours" }
     }
 
     object Fetch {

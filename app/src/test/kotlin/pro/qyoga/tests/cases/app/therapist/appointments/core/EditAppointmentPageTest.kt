@@ -94,7 +94,7 @@ class EditAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
         val persistedAppointment =
             backgrounds.appointments.getDaySchedule(editedAppointment.dateTime.toLocalDate()).single()
-        persistedAppointment shouldMatch editedAppointment
+        persistedAppointment.shouldMatch(editedAppointment)
     }
 
     @Test

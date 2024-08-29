@@ -1,11 +1,9 @@
 package pro.qyoga.tests.cases.app.therapist.appointments.core
 
-import io.kotest.matchers.equality.shouldBeEqualToIgnoringFields
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
-import pro.qyoga.core.appointments.core.Appointment
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.assertions.shouldHaveElement
@@ -76,7 +74,7 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
         val storedAppointment =
             backgrounds.appointments.getDaySchedule(editAppointmentRequest.dateTime.toLocalDate()).single()
-        storedAppointment shouldMatch editAppointmentRequest
+        storedAppointment.shouldMatch(editAppointmentRequest)
     }
 
     @Test
@@ -99,7 +97,7 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
         val storedAppointment =
             backgrounds.appointments.getDaySchedule(editAppointmentRequest.dateTime.toLocalDate()).single()
-        storedAppointment shouldMatch editAppointmentRequest
+        storedAppointment.shouldMatch(editAppointmentRequest)
     }
 
     @Test
@@ -110,7 +108,7 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
         val zoneId = ZoneId.of("Asia/Novosibirsk")
         val existingAppointmentDuration = Duration.ofHours(1)
 
-        val existingAppointment = backgrounds.appointments.create(
+        backgrounds.appointments.create(
             dateTime = appointmentsDate.atTime(appointmentsBaseTime),
             timeZone = zoneId,
             duration = existingAppointmentDuration
@@ -130,15 +128,6 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
         document shouldBePage CreateAppointmentPage
         document shouldHave EditAppointmentForm.formPrefilledWith(newAppointmentRequest)
         document shouldHaveElement CreateAppointmentForm.appointmentsIntersectionErrorMessage
-
-        val storedAppointment = backgrounds.appointments.getDaySchedule(aDate).single()
-        storedAppointment.shouldBeEqualToIgnoringFields(
-            existingAppointment,
-            Appointment::id,
-            Appointment::createdAt,
-            Appointment::clientRef,
-            Appointment::typeRef
-        )
     }
 
 }

@@ -24,7 +24,7 @@ class SchedulePageController(
         @AuthenticationPrincipal therapist: QyogaUserDetails
     ): ModelAndView {
         val appointments = getCalendarAppointments(therapist.ref, date)
-        return CalendarPageModel.of(date, appointments, appointment)
+        return CalendarPageModel.of(date, appointments)
     }
 
     companion object {

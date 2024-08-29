@@ -1,8 +1,8 @@
 package pro.qyoga.app.therapist.appointments.core.schedule
 
 import org.springframework.stereotype.Component
-import pro.qyoga.core.appointments.core.Appointment
 import pro.qyoga.core.appointments.core.AppointmentsRepo
+import pro.qyoga.core.appointments.core.LocalizedAppointmentSummary
 import pro.qyoga.core.appointments.core.findAllByInterval
 import pro.qyoga.core.users.auth.model.UserRef
 import pro.qyoga.core.users.settings.UserSettingsRepo
@@ -14,11 +14,13 @@ import java.time.LocalDate
 class GetCalendarAppointmentsWorkflow(
     private val userSettingsRepo: UserSettingsRepo,
     private val appointmentsRepo: AppointmentsRepo
-) : (TherapistRef, LocalDate) -> Iterable<Appointment> {
+) : (TherapistRef, LocalDate) -> Iterable<LocalizedAppointmentSummary> {
 
-    override fun invoke(therapist: TherapistRef, date: LocalDate): Iterable<Appointment> {
+    override fun invoke(therapist: TherapistRef, date: LocalDate): Iterable<LocalizedAppointmentSummary> {
         val currentUserTimeZone = userSettingsRepo.getUserTimeZone(UserRef(therapist))
-        return appointmentsRepo.findAllByInterval(therapist, date.minusDays(1), date.plusDays(1), currentUserTimeZone)
+        val appointments =
+            appointmentsRepo.findAllByInterval(therapist, date.minusDays(1), date.plusDays(1), currentUserTimeZone)
+        return appointments
     }
 
 }
