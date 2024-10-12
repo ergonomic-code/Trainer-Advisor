@@ -42,6 +42,7 @@ dependencies {
 	implementation(libs.postgres)
 	implementation(libs.minio)
 	implementation(libs.bundles.poi)
+    implementation(libs.nanocaptcha)
 
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")

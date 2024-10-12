@@ -42,6 +42,8 @@ dependencyResolutionManagement {
             library("poi-ooxml-lite", "org.apache.poi", "poi-ooxml-lite").versionRef(poiVersion)
 
             bundle("poi", listOf("poi-ooxml", "poi-ooxml-lite"))
+
+            library("nanocaptcha", "net.logicsquad", "nanocaptcha").version("2.1")
         }
 
         create("testLibs") {
