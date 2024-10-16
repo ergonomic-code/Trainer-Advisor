@@ -1,6 +1,6 @@
 package pro.qyoga.core.users.therapists
 
-import pro.qyoga.app.publc.register.captcha.CaptchaAnswer
+import pro.qyoga.tech.captcha.CaptchaAnswer
 
 
 data class RegisterTherapistRequest(

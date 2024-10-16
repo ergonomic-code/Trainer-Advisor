@@ -1,5 +1,7 @@
 package pro.qyoga.tests.scenarios
 
+import com.codeborne.selenide.Condition.attribute
+import com.codeborne.selenide.Selenide.`$`
 import io.kotest.inspectors.forAny
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -35,6 +37,7 @@ class CreateClientScenarioTest : QYogaE2EBaseTest() {
         click(CreateClientForm.submit)
 
         // После чего клиент появляется в списке
+        `$`("title").shouldHave(attribute("text", "Список клиентов"))
         backgrounds.clients.getAllClients().forAny {
             it shouldMatch aClient
         }

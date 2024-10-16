@@ -1,4 +1,4 @@
-package pro.qyoga.app.publc.register.captcha
+package pro.qyoga.tech.captcha
 
 import net.logicsquad.nanocaptcha.image.ImageCaptcha
 import org.springframework.stereotype.Service
@@ -10,7 +10,7 @@ import java.util.concurrent.ConcurrentHashMap
 @Service
 class CaptchaService {
 
-    val captchas = ConcurrentHashMap<UUID, CaptchaCodeValue>()
+    private val captchas = ConcurrentHashMap<UUID, CaptchaCodeValue>()
 
     fun verifyCaptcha(id: UUID, captchaCode: String): Boolean {
         removeAllExpiredCaptchas()

@@ -15,6 +15,7 @@ import pro.qyoga.tests.infra.web.QYogaAppBaseTest
 open class QYogaE2EBaseTest : QYogaAppBaseTest() {
 
     private val baseUri = "http://host.testcontainers.internal:$port"
+//    private val baseUri = "http://localhost:$port"
 
     @BeforeEach
     fun setUp() {
@@ -22,6 +23,7 @@ open class QYogaE2EBaseTest : QYogaAppBaseTest() {
         val url = container.seleniumAddress
         Configuration.baseUrl = baseUri
         WebDriverRunner.setWebDriver(RemoteWebDriver(url, ChromeOptions()))
+//        WebDriverRunner.setWebDriver(ChromeDriver(ChromeOptions()))
     }
 
     @AfterEach

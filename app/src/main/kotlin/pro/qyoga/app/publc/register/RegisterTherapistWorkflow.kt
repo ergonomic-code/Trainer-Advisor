@@ -3,13 +3,13 @@ package pro.qyoga.app.publc.register
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
-import pro.qyoga.app.publc.register.captcha.CaptchaService
-import pro.qyoga.app.publc.register.captcha.IncorrectCaptchaCodeException
 import pro.qyoga.core.users.therapists.CreateTherapistUserWorkflow
 import pro.qyoga.core.users.therapists.RegisterTherapistRequest
 import pro.qyoga.core.users.therapists.Therapist
 import pro.qyoga.i9ns.email.Email
 import pro.qyoga.i9ns.email.EmailSender
+import pro.qyoga.tech.captcha.CaptchaService
+import pro.qyoga.tech.captcha.IncorrectCaptchaCodeException
 import kotlin.random.Random
 
 @Component
@@ -26,7 +26,11 @@ class RegisterTherapistWorkflow(
     override fun invoke(registerTherapistRequest: RegisterTherapistRequest): Therapist {
         log.info("Registering new therapist: {}", registerTherapistRequest)
 
-        if (!captchaService.verifyCaptcha(registerTherapistRequest.captchaAnswer.captchaHash, registerTherapistRequest.captchaAnswer.captchaCode)) {
+        if (!captchaService.verifyCaptcha(
+                registerTherapistRequest.captchaAnswer.captchaId,
+                registerTherapistRequest.captchaAnswer.captchaCode
+            )
+        ) {
             throw IncorrectCaptchaCodeException()
         }
 

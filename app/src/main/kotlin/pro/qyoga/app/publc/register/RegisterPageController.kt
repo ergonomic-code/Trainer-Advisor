@@ -9,11 +9,11 @@ import org.springframework.web.servlet.ModelAndView
 import pro.azhidkov.platform.kotlin.mapFailure
 import pro.azhidkov.platform.kotlin.mapSuccess
 import pro.azhidkov.platform.spring.mvc.modelAndView
-import pro.qyoga.app.publc.register.captcha.CaptchaAnswer
-import pro.qyoga.app.publc.register.captcha.CaptchaService
-import pro.qyoga.app.publc.register.captcha.IncorrectCaptchaCodeException
 import pro.qyoga.core.users.auth.errors.DuplicatedEmailException
 import pro.qyoga.core.users.therapists.RegisterTherapistRequest
+import pro.qyoga.tech.captcha.CaptchaAnswer
+import pro.qyoga.tech.captcha.CaptchaService
+import pro.qyoga.tech.captcha.IncorrectCaptchaCodeException
 import java.awt.image.BufferedImage
 import java.io.ByteArrayOutputStream
 import java.util.*
@@ -21,9 +21,9 @@ import javax.imageio.ImageIO
 
 @Controller
 class RegisterPageController(
-        private val registerTherapist: RegisterTherapistWorkflow,
-        private val captchaService: CaptchaService,
-        @Value("\${trainer-advisor.admin.email}") private val adminEmail: String
+    private val registerTherapist: RegisterTherapistWorkflow,
+    private val captchaService: CaptchaService,
+    @Value("\${trainer-advisor.admin.email}") private val adminEmail: String
 ) {
 
     @GetMapping("/register")

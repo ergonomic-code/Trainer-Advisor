@@ -15,5 +15,6 @@ data class Backgrounds(
     val exercises: ExerciseBackgrounds,
     val therapeuticTasks: TherapeuticTasksBackgrounds,
     val users: UsersBackgrounds,
-    val spring: SpringBackgrounds
+    val spring: SpringBackgrounds,
+    val captchaBackgrounds: CaptchaBackgrounds
 )

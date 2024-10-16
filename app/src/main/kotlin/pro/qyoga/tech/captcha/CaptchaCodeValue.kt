@@ -1,4 +1,4 @@
-package pro.qyoga.app.publc.register.captcha
+package pro.qyoga.tech.captcha
 
 import java.time.Instant
 

@@ -1,3 +1,3 @@
-package pro.qyoga.app.publc.register.captcha
+package pro.qyoga.tech.captcha
 
 class IncorrectCaptchaCodeException : RuntimeException("The captcha code is incorrect")

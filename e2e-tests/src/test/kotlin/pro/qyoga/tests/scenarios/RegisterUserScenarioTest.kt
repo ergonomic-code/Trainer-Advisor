@@ -46,6 +46,11 @@ class RegisterUserScenarioTest : QYogaE2EBaseTest() {
         typeInto(RegisterPage.RegisterForm.firstName, registerTherapistRequest.firstName)
         typeInto(RegisterPage.RegisterForm.lastName, registerTherapistRequest.lastName)
         typeInto(RegisterPage.RegisterForm.email, registerTherapistRequest.email)
+        typeInto(
+            RegisterPage.RegisterForm.captchaCode,
+            backgrounds.captchaBackgrounds.getCaptchaCode(`$`("#captchaId").value!!)
+        )
+
         click(RegisterPage.RegisterForm.submit)
 
         // И видит сообщение об успешной регистрации
