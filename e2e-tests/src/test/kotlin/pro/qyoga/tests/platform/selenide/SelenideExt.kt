@@ -1,6 +1,8 @@
 package pro.qyoga.tests.platform.selenide
 
+import com.codeborne.selenide.Condition.attribute
 import com.codeborne.selenide.Selenide
+import com.codeborne.selenide.Selenide.`$`
 import com.codeborne.selenide.SelenideElement
 import com.codeborne.selenide.TypeOptions
 import pro.qyoga.tests.platform.html.ComboBox
@@ -47,14 +49,23 @@ fun selectIn(comboBox: ComboBox, option: String?) {
 }
 
 fun find(component: Component): SelenideElement =
-    Selenide.`$`(component.selector())
+    `$`(component.selector())
 
 fun open(page: QYogaPage) {
     Selenide.open(page.path)
 }
 
 fun click(component: Component) {
-    Selenide.`$`(component.selector())
+    `$`(component.selector())
         .scrollIntoView("{behavior: \"instant\", block: \"center\", inline: \"center\"}")
         .click()
 }
+
+fun await(page: QYogaPage) {
+    requireNotNull(page.title) { "Невозможно дождаться страницы без названия" }
+    `$`("title").shouldHave(attribute("text", page.title!!))
+}
+
+fun `$`(component: Component): SelenideElement =
+    `$`(component.selector())
+

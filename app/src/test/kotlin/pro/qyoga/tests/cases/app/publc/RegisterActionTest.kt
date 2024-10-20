@@ -5,6 +5,7 @@ import com.icegreen.greenmail.junit5.GreenMailExtension
 import com.icegreen.greenmail.util.ServerSetupTest
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.string.shouldContain
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.RegisterExtension
 import org.springframework.core.env.Environment
@@ -22,24 +23,14 @@ import pro.qyoga.tests.pages.publc.RegistrationSuccessFragment
 import pro.qyoga.tests.pages.therapist.clients.ClientsListPage
 
 
-class RegistrationPageTest : QYogaAppIntegrationBaseTest() {
+@DisplayName("Метод регистрации пользователя")
+class RegisterActionTest : QYogaAppIntegrationBaseTest() {
 
-    val adminEmail = getBean<Environment>()["trainer-advisor.admin.email"]!!
-
-    @Test
-    fun `Registration page should be rendered correctly`() {
-        // Given
-
-        // When
-        val document = PublicClient.authApi.getRegistrationPage()
-
-        // Then
-        document shouldBe RegisterPage
-    }
+    private val adminEmail = getBean<Environment>()["trainer-advisor.admin.email"]!!
 
     @Test
-    fun `After submit of registration form therapist should be created and creds should be sent to admin and success response should be returned`() {
-        // Given
+    fun `должен создавать нового терапевта и отправлять письмо с паролем пользователю и письмо с оповещением админу`() {
+        // Сетап
         val userEmail = "new-therapist@trainer-advisor.pro"
         val (captchaId, captchaCode) = backgrounds.captchaBackgrounds.generateCaptcha()
         val registerTherapistRequest = registerTherapistRequest(
@@ -49,50 +40,50 @@ class RegistrationPageTest : QYogaAppIntegrationBaseTest() {
             captchaAnswer(captchaId, captchaCode)
         )
 
-        // When
+        // Действие №1
         val document = PublicClient.authApi.registerTherapist(registerTherapistRequest)
 
-        // Then
+        // Проверка №1
         document shouldHaveComponent RegistrationSuccessFragment
 
-        // And then
+        // Проверка №2
         val userReceivedMessages = greenMail.getReceivedMessagesForDomain(userEmail)
         userReceivedMessages shouldHaveSize 1
         userReceivedMessages[0] shouldBePasswordEmailFor registerTherapistRequest
         val password = passwordEmailPattern.matchEntire(userReceivedMessages[0].content as String)!!.groupValues[2]
 
-        // And then
+        // Проверка №3
         val adminReceivedMessages = greenMail.getReceivedMessagesForDomain(adminEmail)
         adminReceivedMessages shouldHaveSize 1
         adminReceivedMessages[0] shouldMatch registerTherapistRequest
 
-        // And when
+        // Действие №1
         val therapist = TherapistClient.login(userEmail, password)
         val getClientsResponse = therapist.clients.getClientsListPage()
 
-        // Then
+        // Проверка
         getClientsResponse shouldBe ClientsListPage
     }
 
     @Test
-    fun `When user enters existing email, error message should be returned`() {
-        // Given
+    fun `должен возвращать соответствующую ошибку если пользователь ввёл существующий емейл`() {
+        // Сетап
         val (captchaId, captchaCode) = backgrounds.captchaBackgrounds.generateCaptcha()
         val registerTherapistRequest = registerTherapistRequest(
             email = THE_THERAPIST_LOGIN,
             captchaAnswer = captchaAnswer(captchaId, captchaCode)
         )
 
-        // When
+        // Действие
         val document = PublicClient.authApi.registerTherapist(registerTherapistRequest)
 
-        // Then
+        // Проверка
         document shouldHaveElement RegisterPage.RegisterForm.duplicatedEmail
         document.select(RegisterPage.RegisterForm.DUPLICATED_EMAIL_MESSAGE)[0].text() shouldContain adminEmail
     }
 
     @Test
-    fun `должна возвращать соответствующую ошибку при передаче некорректного токена`() {
+    fun `должен возвращать соответствующую ошибку если пользователь ввёл некорректный код капчи`() {
         // Given
         val (captchaId) = backgrounds.captchaBackgrounds.generateCaptcha()
         val registerTherapistRequest = registerTherapistRequest(
