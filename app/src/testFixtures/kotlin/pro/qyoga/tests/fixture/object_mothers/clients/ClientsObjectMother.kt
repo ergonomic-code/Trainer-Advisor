@@ -11,7 +11,6 @@ import pro.qyoga.tests.fixture.data.*
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
 import java.time.Duration
 import java.time.LocalDate
-import kotlin.random.Random
 
 
 object ClientsObjectMother {
@@ -54,7 +53,7 @@ object ClientsObjectMother {
         complains: String? = null,
         anamnesis: String? = null,
         distributionSource: DistributionSource? = null,
-        version: Long = Random.nextLong(0, Long.MAX_VALUE)
+        version: Long = faker.random().nextLong(0, Long.MAX_VALUE)
     ): ClientCardDto = ClientCardDto(
         firstName,
         lastName,
@@ -87,11 +86,13 @@ fun randomBirthDate(): LocalDate =
     randomLocalDate(minBirthDate, Duration.between(minBirthDate.atStartOfDay(), maxBirthDate.atStartOfDay()))
 
 fun randomPhoneNumber() =
-    "+7-${Random.nextInt(900, 999)}-${Random.nextInt(100, 999)}-${Random.nextInt(10, 99)}-${Random.nextInt(10, 99)}"
+    "+7-${faker.random().nextInt(900, 999)}-${faker.random().nextInt(100, 999)}-${
+        faker.random().nextInt(10, 99)
+    }-${faker.random().nextInt(10, 99)}"
 
 fun randomDistributionSource(): DistributionSource {
-    val type = DistributionSourceType.entries.random()
-    val hasComment = Random.nextBoolean()
+    val type = DistributionSourceType.entries.randomElement()
+    val hasComment = faker.random().nextBoolean()
     val comment = if (hasComment) randomSentence(1, 5) else null
     return DistributionSource(type, comment)
 }

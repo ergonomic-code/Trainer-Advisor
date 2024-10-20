@@ -11,7 +11,6 @@ import java.io.ByteArrayOutputStream
 import java.nio.file.Files
 import java.nio.file.Path
 import javax.imageio.ImageIO
-import kotlin.random.Random
 
 
 object FilesObjectMother {
@@ -21,7 +20,7 @@ object FilesObjectMother {
         format: String = randomFileExtension(),
         size: Int = randomTestFileSize()
     ): StoredFile {
-        val data = Random.nextBytes(size)
+        val data = faker.random().nextRandomBytes(size)
         val fileName = fileName(name, format)
         return StoredFile(
             FileMetaData(
