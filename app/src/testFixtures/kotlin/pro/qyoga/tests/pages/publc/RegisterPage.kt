@@ -5,6 +5,7 @@ import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.assertions.shouldHaveTitle
 import pro.qyoga.tests.platform.html.FormAction
 import pro.qyoga.tests.platform.html.Input.Companion.email
+import pro.qyoga.tests.platform.html.Input.Companion.hidden
 import pro.qyoga.tests.platform.html.Input.Companion.submit
 import pro.qyoga.tests.platform.html.Input.Companion.text
 import pro.qyoga.tests.platform.html.QYogaForm
@@ -25,9 +26,14 @@ object RegisterPage : QYogaPage {
         val email by component { email("email", true) }
         val duplicatedEmail = "${email.selector()}.is-invalid"
 
+        val captchaId by component { hidden("captchaAnswer.captchaId", true, id = "captchaId") }
+
+        val captchaCode by component { text("captchaAnswer.captchaCode", true, id = "captchaCode") }
+        val invalidCaptcha = "${captchaCode.selector()}.is-invalid"
+
         const val DUPLICATED_EMAIL_MESSAGE = "#duplicatedEmailMessage"
 
-        val submit by component { submit("register", "Зарегестрироваться") }
+        val submit by component { submit("register", "Зарегистрироваться") }
 
     }
 

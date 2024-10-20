@@ -19,6 +19,7 @@ import pro.qyoga.tests.infra.QYogaE2EBaseTest
 import pro.qyoga.tests.pages.publc.LoginPage
 import pro.qyoga.tests.pages.publc.RegisterPage
 import pro.qyoga.tests.pages.therapist.appointments.CalendarPage
+import pro.qyoga.tests.platform.selenide.`$`
 import pro.qyoga.tests.platform.selenide.click
 import pro.qyoga.tests.platform.selenide.typeInto
 
@@ -46,6 +47,11 @@ class RegisterUserScenarioTest : QYogaE2EBaseTest() {
         typeInto(RegisterPage.RegisterForm.firstName, registerTherapistRequest.firstName)
         typeInto(RegisterPage.RegisterForm.lastName, registerTherapistRequest.lastName)
         typeInto(RegisterPage.RegisterForm.email, registerTherapistRequest.email)
+        typeInto(
+            RegisterPage.RegisterForm.captchaCode,
+            backgrounds.captchaBackgrounds.getCaptchaCode(`$`(RegisterPage.RegisterForm.captchaId).value!!)
+        )
+
         click(RegisterPage.RegisterForm.submit)
 
         // И видит сообщение об успешной регистрации

@@ -5,7 +5,7 @@ import pro.qyoga.core.users.auth.impl.TaUserDetailsService
 import pro.qyoga.core.users.therapists.CreateTherapistUserWorkflow
 import pro.qyoga.core.users.therapists.Therapist
 import pro.qyoga.tests.fixture.data.randomPassword
-import pro.qyoga.tests.fixture.object_mothers.therapists.TherapistsObjectMother
+import pro.qyoga.tests.fixture.object_mothers.therapists.TherapistsObjectMother.registerTherapistRequest
 
 @Component
 class UsersBackgrounds(
@@ -14,7 +14,7 @@ class UsersBackgrounds(
 ) {
 
     fun registerNewTherapist(): Therapist {
-        return createTherapistUser(TherapistsObjectMother.registerTherapistRequest(), randomPassword())
+        return createTherapistUser(registerTherapistRequest(), randomPassword())
     }
 
     fun disable(userLogin: String) {

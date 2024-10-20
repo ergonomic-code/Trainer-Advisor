@@ -62,6 +62,8 @@ object AuthApi {
             formParam(RegisterPage.RegisterForm.firstName.name, registerTherapistRequest.firstName)
             formParam(RegisterPage.RegisterForm.lastName.name, registerTherapistRequest.lastName)
             formParam(RegisterPage.RegisterForm.email.name, registerTherapistRequest.email)
+            formParam(RegisterPage.RegisterForm.captchaId.name, registerTherapistRequest.captchaAnswer.captchaId)
+            formParam(RegisterPage.RegisterForm.captchaCode.name, registerTherapistRequest.captchaAnswer.captchaCode)
         } When {
             post(RegisterPage.RegisterForm.action.url)
         } Then {

@@ -1,7 +1,5 @@
 package pro.qyoga.tests.fixture.data
 
-import kotlin.random.Random
-
 val lowerCaseCyrillicLetters = ('а'..'я').toList()
 val upperCaseCyrillicLetters = ('А'..'Я').toList()
 val cyrillicLetters = lowerCaseCyrillicLetters + upperCaseCyrillicLetters
@@ -10,9 +8,9 @@ val lowerCaseLatinLetters = ('a'..'z').toList()
 
 fun randomWord(letters: List<Char>, minLength: Int = 1, maxLength: Int = 12) =
     buildString {
-        val length = Random.nextInt(minLength, maxLength)
+        val length = faker.random().nextInt(minLength, maxLength)
         repeat(length) {
-            append(letters[Random.nextInt(letters.size)])
+            append(letters[faker.random().nextInt(letters.size)])
         }
         check(this.length in minLength..maxLength)
     }
@@ -24,7 +22,7 @@ fun randomLatinWord(minLength: Int = 1, maxLength: Int = 12) =
     randomWord(lowerCaseLatinLetters, minLength, maxLength)
 
 fun randomSentence(minWords: Int = 3, maxWords: Int = 20): String {
-    val length = Random.nextInt(minWords, maxWords)
+    val length = faker.random().nextInt(minWords, maxWords)
     val sentence = (1..length).joinToString(". ") {
         randomCyrillicWord(minLength = 3)
     }

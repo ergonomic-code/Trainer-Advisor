@@ -12,6 +12,7 @@ import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.core.users.therapists.ref
+import pro.qyoga.tests.fixture.data.faker
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
 import pro.qyoga.tests.fixture.data.randomSentence
 import pro.qyoga.tests.fixture.data.randomTimeZone
@@ -26,7 +27,6 @@ import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
-import kotlin.random.Random
 
 @Component
 class AppointmentsBackgrounds(
@@ -54,7 +54,7 @@ class AppointmentsBackgrounds(
         duration: Duration = randomAppointmentDuration(),
         place: String? = randomCyrillicWord(),
         cost: Int? = randomAppointmentCost(),
-        payed: Boolean? = Random.nextBoolean(),
+        payed: Boolean? = faker.random().nextBoolean(),
         comment: String? = randomSentence(),
         therapist: TherapistRef = THE_THERAPIST_REF,
         therapeuticTaskRef: TherapeuticTaskRef? = therapeuticTasksBackgrounds.createTherapeuticTask(therapist.id!!)

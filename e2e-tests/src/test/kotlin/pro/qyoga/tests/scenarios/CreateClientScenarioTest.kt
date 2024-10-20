@@ -7,14 +7,16 @@ import pro.qyoga.tests.assertions.clients.card.shouldBeEmpty
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother.createClientCardDto
 import pro.qyoga.tests.infra.QYogaE2EBaseTest
+import pro.qyoga.tests.pages.therapist.clients.ClientsListPage
 import pro.qyoga.tests.pages.therapist.clients.card.CreateClientForm
+import pro.qyoga.tests.platform.selenide.await
 import pro.qyoga.tests.platform.selenide.click
 import pro.qyoga.tests.scripts.loginAsTheTherapist
 import pro.qyoga.tests.scripts.therapist.clients.card.fillClientForm
 import pro.qyoga.tests.scripts.therapist.clients.card.goToCreateClientPage
 
 
-@DisplayName("Созданиe клиента")
+@DisplayName("Создание клиента")
 class CreateClientScenarioTest : QYogaE2EBaseTest() {
 
     @DisplayName("Успешное создание")
@@ -35,6 +37,7 @@ class CreateClientScenarioTest : QYogaE2EBaseTest() {
         click(CreateClientForm.submit)
 
         // После чего клиент появляется в списке
+        await(ClientsListPage)
         backgrounds.clients.getAllClients().forAny {
             it shouldMatch aClient
         }
