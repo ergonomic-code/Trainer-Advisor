@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.servlet.ModelAndView
 import pro.azhidkov.platform.kotlin.mapFailure
 import pro.azhidkov.platform.kotlin.mapSuccess
+import pro.azhidkov.platform.spring.mvc.ModelBuilder
+import pro.azhidkov.platform.spring.mvc.model
 import pro.azhidkov.platform.spring.mvc.modelAndView
 import pro.qyoga.core.users.auth.errors.DuplicatedEmailException
 import pro.qyoga.core.users.therapists.RegisterTherapistRequest
@@ -27,10 +29,15 @@ class RegisterPageController(
 ) {
 
     @GetMapping("/register")
-    fun getRegisterPage(model: Model): String {
+    fun getRegisterPage(model: Model): ModelAndView {
         val (captchaHash, captchaImage) = captchaService.generateCaptcha()
-        model.addAttribute("requestForm", RegisterTherapistRequest("", "", "", CaptchaAnswer(captchaHash, "", bufferedImageToBase64Png(captchaImage))))
-        return "public/register"
+        return modelAndView(
+            viewName = "public/register",
+            model = registerPageModel(
+                RegisterTherapistRequest("", "", "", CaptchaAnswer(captchaHash, "", "")),
+                captchaImage
+            )
+        )
     }
 
     @PostMapping("/register")
@@ -41,44 +48,67 @@ class RegisterPageController(
 
         val modelAndView = res
             .mapSuccess {
-                successMessageFragment()
+                successMessageFragment(adminEmail)
             }
             .mapFailure { _: DuplicatedEmailException ->
                 formWithValidationErrorFragment(registerTherapistRequest, false)
             }
-                .mapFailure { _: IncorrectCaptchaCodeException ->
-                    formWithValidationErrorFragment(registerTherapistRequest, true)
+            .mapFailure { _: IncorrectCaptchaCodeException ->
+                formWithValidationErrorFragment(registerTherapistRequest, true)
             }
             .getOrThrow()
 
         return modelAndView
     }
 
-    private fun formWithValidationErrorFragment(registerTherapistRequest: RegisterTherapistRequest, incorrectCaptchaCode: Boolean): ModelAndView {
+    private fun formWithValidationErrorFragment(
+        registerTherapistRequest: RegisterTherapistRequest,
+        incorrectCaptchaCode: Boolean
+    ): ModelAndView {
         val (captchaHash, captchaImage) = captchaService.generateCaptcha()
-        return modelAndView("public/register :: registerForm") {
-            "userAlreadyExists" bindTo !incorrectCaptchaCode
-            "incorrectCaptchaCode" bindTo incorrectCaptchaCode
-            "adminEmail" bindTo adminEmail
-            "requestForm" bindTo RegisterTherapistRequest(
-                    registerTherapistRequest.firstName,
-                    registerTherapistRequest.lastName,
-                    registerTherapistRequest.email,
-                    CaptchaAnswer(captchaHash, "", bufferedImageToBase64Png(captchaImage))
+        return modelAndView(
+            viewName = "public/register :: registerForm",
+            model = registerPageModel(
+                registerTherapistRequest.copy(captchaAnswer = registerTherapistRequest.captchaAnswer.copy(captchaId = captchaHash)),
+                captchaImage,
+                incorrectCaptchaCode,
+                adminEmail
             )
-        }
+        )
     }
 
-    private fun successMessageFragment() =
-        modelAndView("public/register-success-fragment") {
-            "adminEmail" bindTo adminEmail
-        }
+}
 
-    private fun bufferedImageToBase64Png(captchaImage: BufferedImage): String {
-        val outputStream = ByteArrayOutputStream()
-        ImageIO.write(captchaImage, "png", outputStream)
-        val base64Image = Base64.getEncoder().encodeToString(outputStream.toByteArray())
-        outputStream.close()
-        return base64Image
+private fun registerPageModel(
+    registerTherapistRequest: RegisterTherapistRequest,
+    captchaImage: BufferedImage,
+    incorrectCaptchaCode: Boolean? = null,
+    adminEmail: String? = null
+) = model {
+    "requestForm" bindTo registerTherapistRequest
+    "captchaImage" bindTo captchaImage.toBase64()
+    if (adminEmail != null) {
+        withAdminEmail(adminEmail)
     }
+    if (incorrectCaptchaCode != null) {
+        "userAlreadyExists" bindTo !incorrectCaptchaCode
+        "incorrectCaptchaCode" bindTo incorrectCaptchaCode
+    }
+}
+
+private fun successMessageFragment(adminEmail: String) =
+    modelAndView("public/register-success-fragment") {
+        withAdminEmail(adminEmail)
+    }
+
+private fun ModelBuilder.withAdminEmail(adminEmail: String) {
+    "adminEmail" bindTo adminEmail
+}
+
+private fun BufferedImage.toBase64(): String {
+    val outputStream = ByteArrayOutputStream()
+    ImageIO.write(this, "png", outputStream)
+    val base64Image = Base64.getEncoder().encodeToString(outputStream.toByteArray())
+    outputStream.close()
+    return base64Image
 }
