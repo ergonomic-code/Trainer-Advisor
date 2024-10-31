@@ -4,5 +4,6 @@ import java.util.*
 
 data class CaptchaAnswer(
     val captchaId: UUID,
-                         val captchaCode: String,
-                         val captchaImage: String?)
+    val captchaCode: String,
+    val captchaImage: String?
+)

@@ -26,7 +26,7 @@ class RegisterTherapistWorkflow(
     override fun invoke(registerTherapistRequest: RegisterTherapistRequest): Therapist {
         log.info("Registering new therapist: {}", registerTherapistRequest)
 
-        if (!captchaService.verifyCaptcha(
+        if (captchaService.isInvalid(
                 registerTherapistRequest.captchaAnswer.captchaId,
                 registerTherapistRequest.captchaAnswer.captchaCode
             )
