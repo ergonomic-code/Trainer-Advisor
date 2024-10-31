@@ -1,7 +1,7 @@
 package pro.qyoga.app.therapist.therapy.programs.edit
 
 import org.springframework.web.servlet.ModelAndView
-import pro.azhidkov.platform.spring.mvc.ModelAndViewBuilder
+import pro.azhidkov.platform.spring.mvc.ModelBuilder
 import pro.azhidkov.platform.spring.mvc.modelAndView
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrNull
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
@@ -38,7 +38,7 @@ fun programPageModelAndView(
     pageMode: EntityPageMode,
     program: ProgramPageModel? = null,
     fragment: String? = null,
-    additionalModel: ModelAndViewBuilder.() -> Unit = {}
+    additionalModel: ModelBuilder.() -> Unit = {}
 ): ModelAndView {
     val modelAndView =
         modelAndView("therapist/therapy/programs/program-edit.html${fragment?.let { " :: $it" } ?: ""}") {
