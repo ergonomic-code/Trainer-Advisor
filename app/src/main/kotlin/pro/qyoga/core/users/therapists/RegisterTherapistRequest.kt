@@ -1,6 +1,7 @@
 package pro.qyoga.core.users.therapists
 
 import pro.qyoga.tech.captcha.CaptchaAnswer
+import java.util.*
 
 
 data class RegisterTherapistRequest(
@@ -9,6 +10,9 @@ data class RegisterTherapistRequest(
     val email: String,
     val captchaAnswer: CaptchaAnswer
 ) {
+
+    fun withCaptchaHash(captchaHash: UUID): RegisterTherapistRequest =
+        copy(captchaAnswer = captchaAnswer.copy(captchaId = captchaHash))
 
     val fullName: String = "$firstName $lastName"
 

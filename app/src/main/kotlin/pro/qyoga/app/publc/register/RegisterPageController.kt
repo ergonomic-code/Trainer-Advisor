@@ -34,7 +34,7 @@ class RegisterPageController(
         return modelAndView(
             viewName = "public/register",
             model = registerPageModel(
-                RegisterTherapistRequest("", "", "", CaptchaAnswer(captchaHash, "", "")),
+                RegisterTherapistRequest("", "", "", CaptchaAnswer(captchaHash, "")),
                 captchaImage
             )
         )
@@ -69,7 +69,7 @@ class RegisterPageController(
         return modelAndView(
             viewName = "public/register :: registerForm",
             model = registerPageModel(
-                registerTherapistRequest.copy(captchaAnswer = registerTherapistRequest.captchaAnswer.copy(captchaId = captchaHash)),
+                registerTherapistRequest.withCaptchaHash(captchaHash),
                 captchaImage,
                 incorrectCaptchaCode,
                 adminEmail

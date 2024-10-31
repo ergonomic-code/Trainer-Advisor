@@ -22,5 +22,5 @@ object TherapistsObjectMother {
         captchaId: UUID = UUID.randomUUID(),
         captchaCode: String = faker.text().text(7)
     ) =
-        CaptchaAnswer(captchaId, captchaCode, "")
+        CaptchaAnswer(captchaId, captchaCode)
 }
