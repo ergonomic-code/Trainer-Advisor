@@ -5,10 +5,7 @@ import com.codeborne.selenide.Selenide
 import com.codeborne.selenide.Selenide.`$`
 import com.codeborne.selenide.SelenideElement
 import com.codeborne.selenide.TypeOptions
-import pro.qyoga.tests.platform.html.ComboBox
-import pro.qyoga.tests.platform.html.Component
-import pro.qyoga.tests.platform.html.QYogaPage
-import pro.qyoga.tests.platform.html.Select
+import pro.qyoga.tests.platform.html.*
 import java.time.Duration
 
 
@@ -61,7 +58,7 @@ fun click(component: Component) {
         .click()
 }
 
-fun await(page: QYogaPage) {
+fun await(page: HtmlPageCompat) {
     requireNotNull(page.title) { "Невозможно дождаться страницы без названия" }
     `$`("title").shouldHave(attribute("text", page.title!!))
 }

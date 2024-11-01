@@ -20,6 +20,7 @@ import pro.qyoga.tests.pages.publc.LoginPage
 import pro.qyoga.tests.pages.publc.RegisterPage
 import pro.qyoga.tests.pages.therapist.appointments.CalendarPage
 import pro.qyoga.tests.platform.selenide.`$`
+import pro.qyoga.tests.platform.selenide.await
 import pro.qyoga.tests.platform.selenide.click
 import pro.qyoga.tests.platform.selenide.typeInto
 
@@ -70,6 +71,7 @@ class RegisterUserScenarioTest : QYogaE2EBaseTest() {
         click(LoginPage.LoginForm.submit)
 
         // И видит страницу расписания
+        await(CalendarPage)
         title() shouldBe CalendarPage.title
     }
 
