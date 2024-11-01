@@ -11,8 +11,8 @@ data class RegisterTherapistRequest(
     val captchaAnswer: CaptchaAnswer
 ) {
 
-    fun withCaptchaHash(captchaHash: UUID): RegisterTherapistRequest =
-        copy(captchaAnswer = captchaAnswer.copy(captchaId = captchaHash))
+    fun withCaptchaId(captchaId: UUID): RegisterTherapistRequest =
+        copy(captchaAnswer = captchaAnswer.copy(captchaId = captchaId))
 
     val fullName: String = "$firstName $lastName"
 

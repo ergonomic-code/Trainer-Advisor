@@ -28,11 +28,11 @@ class RegisterPageController(
 
     @GetMapping("/register")
     fun getRegisterPage(model: Model): ModelAndView {
-        val (captchaHash, captchaImage) = captchaService.generateCaptcha()
+        val (captchaId, captchaImage) = captchaService.generateCaptcha()
         return modelAndView(
             viewName = "public/register",
             model = registerPageModel(
-                RegisterTherapistRequest("", "", "", CaptchaAnswer(captchaHash, "")),
+                RegisterTherapistRequest("", "", "", CaptchaAnswer(captchaId, "")),
                 captchaImage
             )
         )
@@ -88,7 +88,7 @@ private fun formWithValidationErrorFragment(
     return modelAndView(
         viewName = "public/register :: registerForm",
         model = registerPageModel(
-            registerTherapistRequest.withCaptchaHash(registrationException.newCaptcha.first),
+            registerTherapistRequest.withCaptchaId(registrationException.newCaptcha.first),
             registrationException.newCaptcha.second,
             registrationException,
             adminEmail
