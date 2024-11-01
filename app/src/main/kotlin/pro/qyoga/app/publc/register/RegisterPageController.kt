@@ -6,8 +6,8 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.servlet.ModelAndView
-import pro.azhidkov.platform.kotlin.mapFailure
 import pro.azhidkov.platform.kotlin.mapSuccess
+import pro.azhidkov.platform.kotlin.recoverFailure
 import pro.azhidkov.platform.spring.mvc.ModelBuilder
 import pro.azhidkov.platform.spring.mvc.model
 import pro.azhidkov.platform.spring.mvc.modelAndView
@@ -50,10 +50,10 @@ class RegisterPageController(
             .mapSuccess {
                 successMessageFragment(adminEmail)
             }
-            .mapFailure { _: DuplicatedEmailException ->
+            .recoverFailure { _: DuplicatedEmailException ->
                 formWithValidationErrorFragment(registerTherapistRequest, false)
             }
-            .mapFailure { _: IncorrectCaptchaCodeException ->
+            .recoverFailure { _: IncorrectCaptchaCodeException ->
                 formWithValidationErrorFragment(registerTherapistRequest, true)
             }
             .getOrThrow()
