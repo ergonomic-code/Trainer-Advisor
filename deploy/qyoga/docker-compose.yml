@@ -25,7 +25,7 @@ services:
   app:
     logging:
       driver: journald
-    image: ghcr.io/d-r-q/qyoga:latest
+    image: ghcr.io/ergonomic-code/trainer-advisor:latest
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/qyoga
       - SPRING_PROFILES_ACTIVE=prod
