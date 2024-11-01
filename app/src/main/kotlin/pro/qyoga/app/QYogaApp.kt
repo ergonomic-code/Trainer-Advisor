@@ -18,6 +18,7 @@ import pro.qyoga.infra.minio.MinioConfig
 import pro.qyoga.infra.timezones.TimeZonesConfig
 import pro.qyoga.infra.web.ThymeleafConfig
 import pro.qyoga.infra.web.WebConfig
+import pro.qyoga.tech.captcha.CaptchaConf
 
 @Import(
     // Apps
@@ -32,6 +33,9 @@ import pro.qyoga.infra.web.WebConfig
 
     // I9ns
     EmailsConfig::class,
+
+    // Tech
+    CaptchaConf::class,
 
     // Infra
     AuthConfig::class,

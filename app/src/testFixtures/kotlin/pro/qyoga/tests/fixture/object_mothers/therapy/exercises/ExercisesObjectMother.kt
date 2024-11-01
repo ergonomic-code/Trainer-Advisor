@@ -10,13 +10,9 @@ import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
 import pro.qyoga.core.therapy.exercises.model.Exercise
 import pro.qyoga.core.therapy.exercises.model.ExerciseStep
 import pro.qyoga.core.therapy.exercises.model.ExerciseType
-import pro.qyoga.tests.fixture.data.randomCyrillicWord
-import pro.qyoga.tests.fixture.data.randomListIndexed
-import pro.qyoga.tests.fixture.data.randomMinutesDuration
-import pro.qyoga.tests.fixture.data.randomSentence
+import pro.qyoga.tests.fixture.data.*
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
 import java.time.Duration
-import kotlin.random.Random
 
 
 object ExercisesObjectMother {
@@ -26,7 +22,7 @@ object ExercisesObjectMother {
         description: String = randomSentence(),
         duration: Duration = randomExerciseDuration(),
         exerciseType: ExerciseType = randomExerciseTypeId(),
-        steps: () -> List<ExerciseStep> = { exerciseSteps(Random.nextInt(1, 5)) }
+        steps: () -> List<ExerciseStep> = { exerciseSteps(faker.random().nextInt(1, 5)) }
     ) = CreateExerciseRequest(
         exerciseSummary(title, description, duration, exerciseType),
         steps()
@@ -69,7 +65,7 @@ object ExercisesObjectMother {
             randomCyrillicWord(),
             randomSentence(),
             randomExerciseDuration(),
-            ExerciseType.entries.random(),
+            ExerciseType.entries.randomElement(),
             therapistId,
             steps = exerciseSteps(stepsCount),
             id = id
@@ -100,4 +96,4 @@ object ExercisesObjectMother {
 
 fun randomExerciseDuration(): Duration = randomMinutesDuration(4, 30)
 
-fun randomExerciseTypeId() = ExerciseType.entries.random()
+fun randomExerciseTypeId() = ExerciseType.entries.randomElement()

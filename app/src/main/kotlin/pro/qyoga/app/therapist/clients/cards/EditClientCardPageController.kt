@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.servlet.ModelAndView
-import pro.azhidkov.platform.kotlin.mapFailure
 import pro.azhidkov.platform.kotlin.mapNull
 import pro.azhidkov.platform.kotlin.mapSuccessOrNull
+import pro.azhidkov.platform.kotlin.recoverFailure
 import pro.qyoga.app.platform.notFound
 import pro.qyoga.app.therapist.clients.ClientPageTab
 import pro.qyoga.app.therapist.clients.clientPageModel
@@ -55,7 +55,7 @@ class EditClientCardPageController(
             .mapNull {
                 notFound
             }
-            .mapFailure { _: DuplicatedPhoneException ->
+            .recoverFailure { _: DuplicatedPhoneException ->
                 editClientFormWithValidationError(clientCardDto)
             }
             .getOrThrow()

@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.servlet.ModelAndView
-import pro.azhidkov.platform.kotlin.mapFailure
 import pro.azhidkov.platform.kotlin.mapSuccess
+import pro.azhidkov.platform.kotlin.recoverFailure
 import pro.qyoga.core.clients.cards.Client
 import pro.qyoga.core.clients.cards.ClientsRepo
 import pro.qyoga.core.clients.cards.dtos.ClientCardDto
@@ -41,7 +41,7 @@ class CreateClientCardPageController(
             .mapSuccess {
                 ModelAndView("redirect:/therapist/clients")
             }
-            .mapFailure { _: DuplicatedPhoneException ->
+            .recoverFailure { _: DuplicatedPhoneException ->
                 editClientFormWithValidationError(clientCardDto)
             }
             .getOrThrow()

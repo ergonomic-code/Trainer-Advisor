@@ -15,7 +15,6 @@ import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
-import kotlin.random.Random
 
 object AppointmentsObjectMother {
 
@@ -25,7 +24,7 @@ object AppointmentsObjectMother {
         therapeuticTask: TherapeuticTaskRef? = null,
         dateTime: LocalDateTime = randomAppointmentDate(),
         duration: Duration = randomAppointmentDuration(),
-        appointmentStatus: AppointmentStatus = AppointmentStatus.entries.random(),
+        appointmentStatus: AppointmentStatus = AppointmentStatus.entries.randomElement(),
     ): LocalizedAppointmentSummary {
         return LocalizedAppointmentSummary(
             0L,
@@ -49,7 +48,7 @@ object AppointmentsObjectMother {
         place: String? = null,
         cost: Int? = null,
         payed: Boolean? = null,
-        appointmentStatus: AppointmentStatus = AppointmentStatus.entries.random(),
+        appointmentStatus: AppointmentStatus = AppointmentStatus.entries.randomElement(),
         comment: String? = null
     ): EditAppointmentRequest {
         return EditAppointmentRequest(
@@ -77,7 +76,7 @@ object AppointmentsObjectMother {
         therapeuticTask: TherapeuticTaskRef,
         place: String = randomSentence(),
         cost: Int = randomAppointmentCost(),
-        payed: Boolean = Random.nextBoolean(),
+        payed: Boolean = faker.random().nextBoolean(),
         comment: String = randomSentence()
     ) = randomEditAppointmentRequest(
         client,
@@ -97,7 +96,7 @@ object AppointmentsObjectMother {
         place: String?,
         cost: Int?,
         payed: Boolean?,
-        appointmentStatus: AppointmentStatus = AppointmentStatus.entries.random(),
+        appointmentStatus: AppointmentStatus = AppointmentStatus.entries.randomElement(),
         comment: String?
     ): EditAppointmentRequest =
         EditAppointmentRequest(
@@ -124,10 +123,10 @@ fun randomAppointmentDate(): LocalDateTime =
     randomLocalDate(LocalDate.now(), Duration.ofDays(30))
         .atTime(randomWorkingTime())
 
-fun randomAppointmentCost(): Int = Random.nextInt(0, 10_000)
+fun randomAppointmentCost(): Int = faker.random().nextInt(0, 10_000)
 
 fun randomAppointmentDuration(): Duration {
     val fraction = 15
     val fractions = 3L * 60 / 15
-    return Duration.ofMinutes(fraction * Random.nextLong(1, fractions))
+    return Duration.ofMinutes(fraction * faker.random().nextLong(1, fractions))
 }

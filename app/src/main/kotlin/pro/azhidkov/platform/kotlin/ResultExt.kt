@@ -33,5 +33,8 @@ inline fun <R : Any, reified T : Any?> Result<T>.mapNull(transform: () -> R): Re
         else -> this as Result<R>
     }
 
-inline fun <reified T : Throwable, V : R, R> Result<V>.mapFailure(block: (T) -> R): Result<R> =
+inline fun <reified T : Throwable, V : R, R> Result<V>.recoverFailure(block: (T) -> R): Result<R> =
     if (this.exceptionOrNull() is T) Result.success(block(this.exceptionOrNull() as T)) else this
+
+inline fun <reified T : Throwable, R> Result<R>.mapFailure(block: (T) -> Throwable): Result<R> =
+    if (this.exceptionOrNull() is T) Result.failure(block(this.exceptionOrNull() as T)) else this

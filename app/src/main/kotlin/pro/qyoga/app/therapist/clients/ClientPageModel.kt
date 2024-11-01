@@ -1,7 +1,7 @@
 package pro.qyoga.app.therapist.clients
 
 import org.springframework.web.servlet.ModelAndView
-import pro.azhidkov.platform.spring.mvc.ModelAndViewBuilder
+import pro.azhidkov.platform.spring.mvc.ModelBuilder
 import pro.azhidkov.platform.spring.mvc.modelAndView
 import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.core.clients.cards.toDto
@@ -16,7 +16,7 @@ enum class ClientPageTab {
 fun clientPageModel(
     client: Client,
     activeTab: ClientPageTab,
-    fragmentModel: ModelAndViewBuilder.() -> Unit
+    fragmentModel: ModelBuilder.() -> Unit
 ): ModelAndView {
     val modelAndView = modelAndView("therapist/clients/client-edit") {
         "client" bindTo client.toDto()
