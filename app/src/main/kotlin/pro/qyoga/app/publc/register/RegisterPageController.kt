@@ -11,11 +11,9 @@ import pro.azhidkov.platform.kotlin.recoverFailure
 import pro.azhidkov.platform.spring.mvc.ModelBuilder
 import pro.azhidkov.platform.spring.mvc.model
 import pro.azhidkov.platform.spring.mvc.modelAndView
-import pro.qyoga.core.users.auth.errors.DuplicatedEmailException
 import pro.qyoga.core.users.therapists.RegisterTherapistRequest
 import pro.qyoga.tech.captcha.CaptchaAnswer
 import pro.qyoga.tech.captcha.CaptchaService
-import pro.qyoga.tech.captcha.IncorrectCaptchaCodeException
 import java.awt.image.BufferedImage
 import java.io.ByteArrayOutputStream
 import java.util.*
@@ -50,31 +48,12 @@ class RegisterPageController(
             .mapSuccess {
                 successMessageFragment(adminEmail)
             }
-            .recoverFailure { _: DuplicatedEmailException ->
-                formWithValidationErrorFragment(registerTherapistRequest, false)
-            }
-            .recoverFailure { _: IncorrectCaptchaCodeException ->
-                formWithValidationErrorFragment(registerTherapistRequest, true)
+            .recoverFailure { ex: RegistrationException ->
+                formWithValidationErrorFragment(registerTherapistRequest, ex, adminEmail)
             }
             .getOrThrow()
 
         return modelAndView
-    }
-
-    private fun formWithValidationErrorFragment(
-        registerTherapistRequest: RegisterTherapistRequest,
-        incorrectCaptchaCode: Boolean
-    ): ModelAndView {
-        val (captchaHash, captchaImage) = captchaService.generateCaptcha()
-        return modelAndView(
-            viewName = "public/register :: registerForm",
-            model = registerPageModel(
-                registerTherapistRequest.withCaptchaHash(captchaHash),
-                captchaImage,
-                incorrectCaptchaCode,
-                adminEmail
-            )
-        )
     }
 
 }
@@ -82,7 +61,7 @@ class RegisterPageController(
 private fun registerPageModel(
     registerTherapistRequest: RegisterTherapistRequest,
     captchaImage: BufferedImage,
-    incorrectCaptchaCode: Boolean? = null,
+    registrationException: RegistrationException? = null,
     adminEmail: String? = null
 ) = model {
     "requestForm" bindTo registerTherapistRequest
@@ -90,9 +69,9 @@ private fun registerPageModel(
     if (adminEmail != null) {
         withAdminEmail(adminEmail)
     }
-    if (incorrectCaptchaCode != null) {
-        "userAlreadyExists" bindTo !incorrectCaptchaCode
-        "incorrectCaptchaCode" bindTo incorrectCaptchaCode
+    if (registrationException != null) {
+        "userAlreadyExists" bindTo registrationException.isDuplicatedEmail
+        "incorrectCaptchaCode" bindTo registrationException.isInvalidCaptcha
     }
 }
 
@@ -100,6 +79,22 @@ private fun successMessageFragment(adminEmail: String) =
     modelAndView("public/register-success-fragment") {
         withAdminEmail(adminEmail)
     }
+
+private fun formWithValidationErrorFragment(
+    registerTherapistRequest: RegisterTherapistRequest,
+    registrationException: RegistrationException,
+    adminEmail: String
+): ModelAndView {
+    return modelAndView(
+        viewName = "public/register :: registerForm",
+        model = registerPageModel(
+            registerTherapistRequest.withCaptchaHash(registrationException.newCaptcha.first),
+            registrationException.newCaptcha.second,
+            registrationException,
+            adminEmail
+        )
+    )
+}
 
 private fun ModelBuilder.withAdminEmail(adminEmail: String) {
     "adminEmail" bindTo adminEmail

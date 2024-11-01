@@ -3,14 +3,43 @@ package pro.qyoga.app.publc.register
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
+import pro.azhidkov.platform.errors.DomainError
+import pro.azhidkov.platform.kotlin.mapFailure
+import pro.qyoga.core.users.auth.errors.DuplicatedEmailException
 import pro.qyoga.core.users.therapists.CreateTherapistUserWorkflow
 import pro.qyoga.core.users.therapists.RegisterTherapistRequest
 import pro.qyoga.core.users.therapists.Therapist
 import pro.qyoga.i9ns.email.Email
 import pro.qyoga.i9ns.email.EmailSender
 import pro.qyoga.tech.captcha.CaptchaService
-import pro.qyoga.tech.captcha.IncorrectCaptchaCodeException
+import java.awt.image.BufferedImage
+import java.util.*
 import kotlin.random.Random
+
+class RegistrationException(
+    val newCaptcha: Pair<UUID, BufferedImage>,
+    msg: String,
+    val isDuplicatedEmail: Boolean = false,
+    val isInvalidCaptcha: Boolean = false,
+    cause: Throwable? = null
+) : DomainError(msg, cause) {
+
+    companion object {
+
+        fun invalidCaptcha(newCaptcha: Pair<UUID, BufferedImage>) =
+            RegistrationException(newCaptcha, "Invalid captcha code", isInvalidCaptcha = true)
+
+        fun duplicatedEmail(email: String, cause: DuplicatedEmailException, newCaptcha: Pair<UUID, BufferedImage>) =
+            RegistrationException(
+                newCaptcha,
+                "User with email ${email} already exists",
+                isDuplicatedEmail = true,
+                cause = cause
+            )
+
+    }
+
+}
 
 @Component
 class RegisterTherapistWorkflow(
@@ -26,24 +55,26 @@ class RegisterTherapistWorkflow(
     override fun invoke(registerTherapistRequest: RegisterTherapistRequest): Therapist {
         log.info("Registering new therapist: {}", registerTherapistRequest)
 
-        if (captchaService.isInvalid(
-                registerTherapistRequest.captchaAnswer.captchaId,
-                registerTherapistRequest.captchaAnswer.captchaCode
-            )
-        ) {
-            throw IncorrectCaptchaCodeException()
+        if (captchaService.isInvalid(registerTherapistRequest.captchaAnswer)) {
+            throw RegistrationException.invalidCaptcha(newCaptcha = captchaService.generateCaptcha())
         }
 
         val password = randomPassword()
+        val therapist = runCatching { createTherapistUser(registerTherapistRequest, password) }
+            .mapFailure<DuplicatedEmailException, _> { ex ->
+                RegistrationException.duplicatedEmail(
+                    email = registerTherapistRequest.email,
+                    cause = ex,
+                    newCaptcha = captchaService.generateCaptcha()
+                )
+            }
+            .getOrThrow()
 
-        val therapist = createTherapistUser(registerTherapistRequest, password)
-
-        emailSender.sendEmail(newTherapistPasswordEmail(to = registerTherapistRequest.email, password))
         emailSender.sendEmail(
-            newRegistrationNotificationEmail(
-                to = adminEmail,
-                therapistEmail = registerTherapistRequest.email
-            )
+            newTherapistPasswordEmail(to = registerTherapistRequest.email, password)
+        )
+        emailSender.sendEmail(
+            newRegistrationNotificationEmail(to = adminEmail, therapistEmail = registerTherapistRequest.email)
         )
 
         log.info("Therapist for {} registered", registerTherapistRequest.email)

@@ -25,8 +25,8 @@ class CaptchaService {
         return Pair(hash, imageCaptcha.image)
     }
 
-    fun isInvalid(id: UUID, captchaCode: String): Boolean {
-        return captchas.remove(id)?.captchaCode != captchaCode
+    fun isInvalid(captchaAnswer: CaptchaAnswer): Boolean {
+        return captchas.remove(captchaAnswer.captchaId)?.captchaCode != captchaAnswer.captchaCode
     }
 
     private fun cleanCache(instant: Instant) {
