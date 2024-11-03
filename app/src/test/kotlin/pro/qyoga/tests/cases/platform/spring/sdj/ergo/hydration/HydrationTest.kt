@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.data.jdbc.core.mapping.AggregateReference
+import pro.azhidkov.platform.file_storage.api.FileMetaData
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.*
 import pro.qyoga.core.clients.journals.model.JournalEntry
 import pro.qyoga.core.therapy.exercises.model.ExerciseStep
@@ -55,8 +56,9 @@ class HydrationTest {
         // Then
         (refs zip hydrated).forAll { (origin, fetched) ->
             fetched.imageId.shouldBeInstanceOf<AggregateReferenceTarget<*, *>>()
-            fetched.imageId.resolveOrThrow().name shouldBe origin.name
-            fetched.imageId.resolveOrThrow().size shouldBe origin.size
+            val image: FileMetaData = fetched.imageId.resolveOrThrow()
+            image.name shouldBe origin.name
+            image.size shouldBe origin.size
         }
     }
 

@@ -53,6 +53,12 @@ dependencies {
 	testFixturesApi(testLibs.datafaker)
 	testFixturesApi(testLibs.greenmail)
 
+	testFixturesImplementation("org.springframework.boot:spring-boot-starter-data-jdbc")
+	testFixturesImplementation("org.springframework.boot:spring-boot-starter-web")
+	testFixturesImplementation("org.springframework.boot:spring-boot-starter-security")
+	testFixturesImplementation("com.fasterxml.jackson.core:jackson-databind")
+	testFixturesImplementation(libs.minio)
+
 	testFixturesImplementation("org.springframework.boot:spring-boot-starter-test")
 	testFixturesImplementation("org.testcontainers:junit-jupiter")
 	testFixturesImplementation("org.testcontainers:postgresql")
