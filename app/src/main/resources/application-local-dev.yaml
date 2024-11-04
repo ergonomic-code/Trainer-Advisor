@@ -15,6 +15,17 @@ spring:
       enabled: true
       lifecycle-management: start_only
 
+  mail:
+    host: localhost
+    port: 3025
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 management:
   health:
     mail:

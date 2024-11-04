@@ -1,0 +1,15 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="QYogaAppKt" type="AmplicodeSpringBootApplication" nameIsGenerated="true">
+        <option name="MAIN_CLASS_NAME" value="pro.qyoga.app.QYogaAppKt"/>
+        <module name="QYoga.app.main"/>
+        <option name="profiles">
+            <list>
+                <option value="local-dev"/>
+                <option value="demo"/>
+            </list>
+        </option>
+        <method v="2">
+            <option name="Make" enabled="true"/>
+        </method>
+    </configuration>
+</component>

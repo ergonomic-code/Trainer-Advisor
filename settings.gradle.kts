@@ -6,8 +6,8 @@ dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
             // plugin versions
-            val kotlinVersion = version("kotlin", "1.9.23")
-            val springBootVersion = version("springBoot", "3.3.2")
+            val kotlinVersion = version("kotlin", "2.0.21")
+            val springBootVersion = version("springBoot", "3.3.5")
             val springDependencyManagementVersion = version("springDependencyManagement", "1.1.6")
             val koverVersion = version("kover", "0.6.1")
             val gitPropertiesVersion = version("gitProperties", "2.4.2")
@@ -35,8 +35,8 @@ dependencyResolutionManagement {
                 "thymeleaf-extras-java8time"
             ).version("3.0.4.RELEASE")
 
-            library("postgres", "org.postgresql", "postgresql").version("42.7.3")
-            library("minio", "io.minio", "minio").version("8.5.11")
+            library("postgres", "org.postgresql", "postgresql").version("42.7.4")
+            library("minio", "io.minio", "minio").version("8.5.13")
 
             library("poi-ooxml", "org.apache.poi", "poi-ooxml").versionRef(poiVersion)
             library("poi-ooxml-lite", "org.apache.poi", "poi-ooxml-lite").versionRef(poiVersion)
@@ -47,8 +47,8 @@ dependencyResolutionManagement {
         }
 
         create("testLibs") {
-            val selenideVersion = version("selenide", "7.4.1")
-            val testContainersVersion = version("testcontainers", "1.20.1")
+            val selenideVersion = version("selenide", "7.5.1")
+            val testContainersVersion = version("testcontainers", "1.20.3")
             val restAssuredVersion = version("restAssured", "5.5.0")
 
             library("selenide-proxy", "com.codeborne", "selenide-proxy").versionRef(selenideVersion)
@@ -61,8 +61,8 @@ dependencyResolutionManagement {
             bundle("restassured", listOf("restassured-core", "restassured-kotlin"))
 
             library("jsoup", "org.jsoup", "jsoup").version("1.18.1")
-            library("datafaker", "net.datafaker", "datafaker").version("2.3.1")
-            library("greenmail", "com.icegreen", "greenmail-junit5").version("2.0.1")
+            library("datafaker", "net.datafaker", "datafaker").version("2.4.1")
+            library("greenmail", "com.icegreen", "greenmail-junit5").version("2.1.0")
 
             library("testcontainers-minio", "org.testcontainers", "minio").versionRef(testContainersVersion)
 
