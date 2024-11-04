@@ -2,7 +2,7 @@
 # dev-инфраструктура хранит данные на docker volume (данные переживают перезапуск контейнера, но не его удаление)
 # На этот проект настроена интеграция Spring Boot с Docker Compose (при необходимости, Спринг автоматически запускает проект на старте)
 
-name: qyoga-infra-dev-zhenya
+name: qyoga-infra-dev
 
 services:
 
@@ -26,3 +26,13 @@ services:
 
     ports:
       - "50000:9000"
+
+  mail:
+    image: greenmail/standalone:2.1.0
+
+    ports:
+      - "58080:8080"
+      - 3025:3025
+
+    environment:
+      GREENMAIL_OPTS: "-Djava.net.preferIPv4Stack=true -Dgreenmail.setup.test.all -Dgreenmail.hostname=0.0.0.0 -Dgreenmail.tls.keystore.file=/home/greenmail/greenmail.p12 -Dgreenmail.tls.keystore.password=changeit -Dgreenmail.auth.disabled -Dgreenmail.users=qyogapro:<secret>"
