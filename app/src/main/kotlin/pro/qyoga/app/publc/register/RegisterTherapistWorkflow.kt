@@ -5,10 +5,13 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import pro.azhidkov.platform.errors.DomainError
 import pro.azhidkov.platform.kotlin.mapFailure
+import pro.qyoga.core.users.auth.UsersFactory
+import pro.qyoga.core.users.auth.UsersRepo
 import pro.qyoga.core.users.auth.errors.DuplicatedEmailException
-import pro.qyoga.core.users.therapists.CreateTherapistUserWorkflow
 import pro.qyoga.core.users.therapists.RegisterTherapistRequest
 import pro.qyoga.core.users.therapists.Therapist
+import pro.qyoga.core.users.therapists.TherapistsRepo
+import pro.qyoga.core.users.therapists.createTherapistUser
 import pro.qyoga.i9ns.email.Email
 import pro.qyoga.i9ns.email.EmailSender
 import pro.qyoga.tech.captcha.CaptchaService
@@ -43,7 +46,9 @@ class RegistrationException(
 
 @Component
 class RegisterTherapistWorkflow(
-    private val createTherapistUser: CreateTherapistUserWorkflow,
+    private val usersRepo: UsersRepo,
+    private val therapistsRepo: TherapistsRepo,
+    private val usersFactory: UsersFactory,
     private val emailSender: EmailSender,
     private val captchaService: CaptchaService,
     @Value("\${spring.mail.username}") private val fromEmail: String,
@@ -52,6 +57,16 @@ class RegisterTherapistWorkflow(
 
     private val log = LoggerFactory.getLogger(javaClass)
 
+    private val createTherapistUser = { registerTherapistRequest: RegisterTherapistRequest, password: CharSequence ->
+        createTherapistUser(
+            usersRepo,
+            therapistsRepo,
+            usersFactory,
+            registerTherapistRequest,
+            password
+        )
+    }
+
     override fun invoke(registerTherapistRequest: RegisterTherapistRequest): Therapist {
         log.info("Registering new therapist: {}", registerTherapistRequest)
 
@@ -59,7 +74,7 @@ class RegisterTherapistWorkflow(
             throw RegistrationException.invalidCaptcha(newCaptcha = captchaService.generateCaptcha())
         }
 
-        val password = randomPassword()
+        val password = generateRandomPassword()
         val therapist = runCatching { createTherapistUser(registerTherapistRequest, password) }
             .mapFailure<DuplicatedEmailException, _> { ex ->
                 RegistrationException.duplicatedEmail(
@@ -71,18 +86,16 @@ class RegisterTherapistWorkflow(
             .getOrThrow()
 
         emailSender.sendEmail(
-            newTherapistPasswordEmail(to = registerTherapistRequest.email, password)
+            welcomeEmail(to = registerTherapistRequest.email, password = password)
         )
-        emailSender.sendEmail(
-            newRegistrationNotificationEmail(to = adminEmail, therapistEmail = registerTherapistRequest.email)
-        )
+        emailSender.sendEmail(newRegistrationEmail(to = adminEmail, therapistEmail = registerTherapistRequest.email))
 
         log.info("Therapist for {} registered", registerTherapistRequest.email)
 
         return therapist
     }
 
-    private fun newTherapistPasswordEmail(to: String, password: String) =
+    private fun welcomeEmail(to: String, password: String) =
         Email(
             fromEmail,
             to,
@@ -100,7 +113,7 @@ class RegisterTherapistWorkflow(
             """.trimIndent()
         )
 
-    private fun newRegistrationNotificationEmail(to: String, therapistEmail: String) = Email(
+    private fun newRegistrationEmail(to: String, therapistEmail: String) = Email(
         fromEmail,
         to,
         "Новый терапевт добавлен в систему",
@@ -115,7 +128,7 @@ private val passwordChars = ('a'..'z').toList() + ('A'..'Z').toList() + ('0'..'9
 
 private const val PASSWORD_LENGTH = 8
 
-private fun randomPassword() =
+private fun generateRandomPassword() =
     buildString {
         repeat(PASSWORD_LENGTH) {
             append(passwordChars[Random.nextInt(passwordChars.size)])
