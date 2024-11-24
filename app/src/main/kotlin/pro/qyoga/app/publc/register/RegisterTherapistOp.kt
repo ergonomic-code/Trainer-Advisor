@@ -45,7 +45,7 @@ class RegistrationException(
 }
 
 @Component
-class RegisterTherapistWorkflow(
+class RegisterTherapistOp(
     private val usersRepo: UsersRepo,
     private val therapistsRepo: TherapistsRepo,
     private val usersFactory: UsersFactory,

@@ -7,7 +7,7 @@ import pro.qyoga.core.clients.journals.JournalEntriesRepo
 import pro.qyoga.core.clients.journals.model.JournalEntry
 
 @Component
-class GetJournalEntryWorkflow(
+class GetJournalEntryOp(
     private val clientsRepo: ClientsRepo,
     private val journalEntriesRepo: JournalEntriesRepo
 ) {

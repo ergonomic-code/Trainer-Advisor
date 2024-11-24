@@ -24,7 +24,7 @@ import java.time.LocalDate
 class EditAppointmentPageController(
     private val appointmentsRepo: AppointmentsRepo,
     private val timeZones: TimeZones,
-    private val updateAppointment: UpdateAppointmentWorkflow
+    private val updateAppointment: UpdateAppointmentOp
 ) {
 
     @GetMapping

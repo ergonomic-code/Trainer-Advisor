@@ -23,7 +23,7 @@ const val DUPLICATED_EDITED_TASK_NAME = "duplicatedEditedTaskName"
 @RequestMapping("/therapist/therapeutic-tasks")
 class TherapeuticTasksListsPageController(
     private val therapeuticTasksRepo: TherapeuticTasksRepo,
-    private val deleteTherapeuticTaskWorkflow: DeleteTherapeuticTaskWorkflow
+    private val deleteTherapeuticTask: DeleteTherapeuticTaskOp
 ) {
 
     @GetMapping
@@ -112,7 +112,7 @@ class TherapeuticTasksListsPageController(
         @PathVariable taskId: Long,
     ): Any {
         val res = runCatching {
-            deleteTherapeuticTaskWorkflow(taskId)
+            deleteTherapeuticTask(taskId)
         }
 
         when (val ex = res.exceptionOrNull()) {

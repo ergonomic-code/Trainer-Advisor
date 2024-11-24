@@ -23,7 +23,7 @@ import java.time.LocalDateTime
 @Controller
 @RequestMapping(CreateAppointmentPageController.PATH)
 class CreateAppointmentPageController(
-    private val createAppointment: CreateAppointmentWorkflow,
+    private val createAppointment: CreateAppointmentOp,
     private val timeZones: TimeZones
 ) {
 

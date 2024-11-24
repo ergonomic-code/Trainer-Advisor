@@ -13,7 +13,7 @@ import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo
 private val referencesPageRequest = Pageable.ofSize(4).withSortBy(JournalEntry::createdAt)
 
 @Component
-class DeleteTherapeuticTaskWorkflow(
+class DeleteTherapeuticTaskOp(
     private val therapeuticTasksRepo: TherapeuticTasksRepo,
     private val journalEntriesRepo: JournalEntriesRepo,
 ) : (Long) -> Unit {

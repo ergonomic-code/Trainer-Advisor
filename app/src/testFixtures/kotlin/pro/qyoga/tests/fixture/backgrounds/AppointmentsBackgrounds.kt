@@ -3,8 +3,8 @@ package pro.qyoga.tests.fixture.backgrounds
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
-import pro.qyoga.app.therapist.appointments.core.edit.CreateAppointmentWorkflow
-import pro.qyoga.app.therapist.appointments.core.schedule.GetCalendarAppointmentsWorkflow
+import pro.qyoga.app.therapist.appointments.core.edit.CreateAppointmentOp
+import pro.qyoga.app.therapist.appointments.core.schedule.GetCalendarAppointmentsOp
 import pro.qyoga.core.appointments.core.Appointment
 import pro.qyoga.core.appointments.core.AppointmentsRepo
 import pro.qyoga.core.appointments.core.LocalizedAppointmentSummary
@@ -31,8 +31,8 @@ import java.time.ZoneId
 @Component
 class AppointmentsBackgrounds(
     private val appointmentsRepo: AppointmentsRepo,
-    private val createAppointment: CreateAppointmentWorkflow,
-    private val getCalendarAppointments: GetCalendarAppointmentsWorkflow,
+    private val createAppointment: CreateAppointmentOp,
+    private val getCalendarAppointments: GetCalendarAppointmentsOp,
     private val clientsBackgrounds: ClientsBackgrounds,
     private val therapeuticTasksBackgrounds: TherapeuticTasksBackgrounds,
 ) {

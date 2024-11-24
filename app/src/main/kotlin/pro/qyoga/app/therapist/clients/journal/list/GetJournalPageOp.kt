@@ -15,7 +15,7 @@ sealed interface GetJournalPageResult {
 }
 
 @Component
-class GetJournalPageWorkflow(
+class GetJournalPageOp(
     private val clientsRepo: ClientsRepo,
     private val journalEntriesRepo: JournalEntriesRepo
 ) : (JournalPageRequest) -> GetJournalPageResult {

@@ -30,7 +30,7 @@ class CreateJournalEntryPageControllerTest : QYogaAppIntegrationBaseTest() {
         backgrounds.clientJournal.createJournalEntry(client.id, createJournalEntryRequest, theTherapistUserDetails)
 
         // And when
-        val modelAndView = journalPageController.getJournalPage(client.id)
+        val modelAndView = journalPageController.handleGetJournalPage(client.id)
 
         // Then
         val journal = JournalPageController.getJournal(modelAndView.model).content
@@ -48,7 +48,7 @@ class CreateJournalEntryPageControllerTest : QYogaAppIntegrationBaseTest() {
             JournalEntriesObjectMother.journalEntry(date = LocalDate.now(), therapeuticTaskName = taskName)
 
         // When
-        getBean<CreateJournalEntryPageController>().createJournalEntry(
+        getBean<CreateJournalEntryPageController>().handleCreateJournalEntry(
             client.id,
             createJournalEntryRequest,
             theTherapistUserDetails
@@ -74,7 +74,7 @@ class CreateJournalEntryPageControllerTest : QYogaAppIntegrationBaseTest() {
             JournalEntriesObjectMother.journalEntry(therapeuticTaskName = taskName)
 
         // When
-        getBean<CreateJournalEntryPageController>().createJournalEntry(
+        getBean<CreateJournalEntryPageController>().handleCreateJournalEntry(
             client.id,
             createJournalEntryRequest,
             theTherapistUserDetails

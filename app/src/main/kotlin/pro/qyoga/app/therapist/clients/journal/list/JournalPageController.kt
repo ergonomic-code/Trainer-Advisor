@@ -18,15 +18,15 @@ private const val JOURNAL = "journal"
 @Controller
 @RequestMapping("/therapist/clients")
 class JournalPageController(
-    private val getJournalPageWorkflow: GetJournalPageWorkflow
+    private val getJournalPage: GetJournalPageOp
 ) {
 
     @GetMapping("/{id}/journal")
-    fun getJournalPage(
+    fun handleGetJournalPage(
         @PathVariable id: Long
     ): ModelAndView {
         val firstPage = JournalPageRequest.firstPage(id, fetch = listOf(JournalEntry::therapeuticTask))
-        return when (val result = getJournalPageWorkflow(firstPage)) {
+        return when (val result = getJournalPage(firstPage)) {
             is GetJournalPageResult.ClientNotFound ->
                 notFound
 
