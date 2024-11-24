@@ -19,16 +19,16 @@ import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 @RequestMapping("/therapist/clients/{clientId}/journal/{entryId}")
 class EditJournalEntryPageController(
     private val journalsEntriesRepo: JournalEntriesRepo,
-    private val getJournalEntryWorkflow: GetJournalEntryWorkflow,
-    private val editJournalEntryWorkflow: EditJournalEntryWorkflow,
+    private val getJournalEntry: GetJournalEntryOp,
+    private val editJournalEntry: EditJournalEntryOp,
 ) {
 
     @GetMapping()
-    fun getEditJournalEntryPage(
+    fun handleGetEditJournalEntryPage(
         @PathVariable clientId: Long,
         @PathVariable entryId: Long
     ): ModelAndView {
-        val result = getJournalEntryWorkflow.getJournalEntry(clientId, entryId)
+        val result = getJournalEntry.getJournalEntry(clientId, entryId)
             ?: return notFound
 
         return modelAndView(JOURNAL_ENTRY_VIEW_NAME) {
@@ -41,14 +41,14 @@ class EditJournalEntryPageController(
     private fun editFormAction(clientId: Long, entryId: Long) = "/therapist/clients/$clientId/journal/$entryId"
 
     @PostMapping
-    fun editJournalEntry(
+    fun handleEditJournalEntry(
         @PathVariable clientId: Long,
         @PathVariable entryId: Long,
         @ModelAttribute editJournalEntryRequest: EditJournalEntryRequest,
         @AuthenticationPrincipal principal: QyogaUserDetails,
     ): Any {
         try {
-            editJournalEntryWorkflow.editJournalEntry(clientId, entryId, editJournalEntryRequest, principal)
+            editJournalEntry.editJournalEntry(clientId, entryId, editJournalEntryRequest, principal)
             return hxRedirect("/therapist/clients/$clientId/journal")
         } catch (ex: DuplicatedDate) {
             return modelAndView("$JOURNAL_ENTRY_VIEW_NAME :: journalEntryFrom") {
@@ -62,7 +62,7 @@ class EditJournalEntryPageController(
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.OK)
-    fun deleteJournalEntry(
+    fun handleDeleteJournalEntry(
         @PathVariable clientId: Long,
         @PathVariable entryId: Long,
     ) {

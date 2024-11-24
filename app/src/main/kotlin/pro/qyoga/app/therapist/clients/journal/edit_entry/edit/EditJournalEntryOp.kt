@@ -1,44 +1,40 @@
-package pro.qyoga.app.therapist.clients.journal.edit_entry.create
+package pro.qyoga.app.therapist.clients.journal.edit_entry.edit
 
-import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
-import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
-import pro.qyoga.app.therapist.clients.journal.edit_entry.shared.ClientNotFound
-import pro.qyoga.core.clients.cards.ClientsRepo
+import pro.azhidkov.platform.spring.sdj.query.query
 import pro.qyoga.core.clients.journals.JournalEntriesRepo
 import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRequest
 import pro.qyoga.core.clients.journals.model.JournalEntry
+import pro.qyoga.core.clients.journals.model.updatedBy
 import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 
 @Component
-class CreateJournalEntryWorkflow(
-    private val clientsRepo: ClientsRepo,
-    private val journalEntriesRepo: JournalEntriesRepo,
+class EditJournalEntryOp(
+    private val journalsRepo: JournalEntriesRepo,
     private val therapeuticTasksRepo: TherapeuticTasksRepo
 ) {
 
     @Transactional
-    fun createJournalEntry(
+    fun editJournalEntry(
         clientId: Long,
+        entryId: Long,
         editJournalEntryRequest: EditJournalEntryRequest,
         principal: QyogaUserDetails,
-    ): JournalEntry {
-        val client = clientsRepo.findByIdOrNull(clientId)
-            ?: throw ClientNotFound(clientId)
-
+    ): JournalEntry? {
         val therapeuticTask = therapeuticTasksRepo.getOrCreate(
             TherapeuticTask(principal.id, editJournalEntryRequest.therapeuticTaskName)
         )
-        val newEntry = JournalEntry(
-            client.ref(),
-            editJournalEntryRequest.date,
-            therapeuticTask.ref(),
-            editJournalEntryRequest.journalEntryText
-        )
-        val persistedEntry = journalEntriesRepo.save(newEntry)
+
+        val query = query {
+            JournalEntry::client isEqual clientId
+            JournalEntry::id isEqual entryId
+        }
+        val persistedEntry =
+            journalsRepo.updateOne(query) { entry -> entry.updatedBy(editJournalEntryRequest, therapeuticTask) }
+                ?: error("Entry $entryId for client $clientId not found")
 
         return persistedEntry
     }

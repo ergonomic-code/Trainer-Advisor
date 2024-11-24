@@ -21,11 +21,11 @@ import java.time.LocalDate
 @RequestMapping("/therapist/clients/{clientId}/journal")
 class CreateJournalEntryPageController(
     private val clientsRepo: ClientsRepo,
-    private val createJournalEntryWorkflow: CreateJournalEntryWorkflow
+    private val createJournalEntry: CreateJournalEntryOp
 ) {
 
     @GetMapping("/create")
-    fun getCreateJournalEntryPage(
+    fun handleGetCreateJournalEntryPage(
         @PathVariable clientId: Long
     ): ModelAndView {
         val client = clientsRepo.findByIdOrNull(clientId)
@@ -40,13 +40,13 @@ class CreateJournalEntryPageController(
 
 
     @PostMapping("/create")
-    fun createJournalEntry(
+    fun handleCreateJournalEntry(
         @PathVariable clientId: Long,
         @ModelAttribute editJournalEntryRequest: EditJournalEntryRequest,
         @AuthenticationPrincipal principal: QyogaUserDetails,
     ): Any {
         val result = runCatching {
-            createJournalEntryWorkflow.createJournalEntry(clientId, editJournalEntryRequest, principal)
+            createJournalEntry.createJournalEntry(clientId, editJournalEntryRequest, principal)
         }
 
         return when {

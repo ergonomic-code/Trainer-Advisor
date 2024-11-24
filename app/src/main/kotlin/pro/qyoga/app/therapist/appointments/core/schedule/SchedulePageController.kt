@@ -14,7 +14,7 @@ import java.time.LocalDate
 @Controller
 @RequestMapping(SchedulePageController.PATH)
 class SchedulePageController(
-    private val getCalendarAppointments: GetCalendarAppointmentsWorkflow
+    private val getCalendarAppointments: GetCalendarAppointmentsOp
 ) {
 
     @GetMapping

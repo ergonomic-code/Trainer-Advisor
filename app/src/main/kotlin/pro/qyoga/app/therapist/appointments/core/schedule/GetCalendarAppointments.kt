@@ -11,7 +11,7 @@ import java.time.LocalDate
 
 
 @Component
-class GetCalendarAppointmentsWorkflow(
+class GetCalendarAppointmentsOp(
     private val userSettingsRepo: UserSettingsRepo,
     private val appointmentsRepo: AppointmentsRepo
 ) : (TherapistRef, LocalDate) -> Iterable<LocalizedAppointmentSummary> {

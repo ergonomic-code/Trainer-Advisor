@@ -21,7 +21,7 @@ import javax.imageio.ImageIO
 
 @Controller
 class RegisterPageController(
-    private val registerTherapist: RegisterTherapistWorkflow,
+    private val registerTherapist: RegisterTherapistOp,
     private val captchaService: CaptchaService,
     @Value("\${trainer-advisor.admin.email}") private val adminEmail: String
 ) {

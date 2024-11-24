@@ -47,7 +47,7 @@ class CreateJournalEntryPageTest : QYogaAppIntegrationBaseTest() {
         therapist.clientJournal.createJournalEntry(client.id, createJournalEntryRequest)
 
         // And when
-        val modelAndView = getBean<JournalPageController>().getJournalPage(client.id)
+        val modelAndView = getBean<JournalPageController>().handleGetJournalPage(client.id)
 
         // Then
         val journal = JournalPageController.getJournal(modelAndView.model).content

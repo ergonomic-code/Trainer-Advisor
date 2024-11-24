@@ -10,7 +10,7 @@ import pro.qyoga.core.users.therapists.TherapistRef
 
 
 @Component
-class CreateAppointmentWorkflow(
+class CreateAppointmentOp(
     private val appointmentsRepo: AppointmentsRepo,
     private val appointmentTypesRepo: AppointmentTypesRepo
 ) : (TherapistRef, EditAppointmentRequest) -> Appointment {
@@ -36,7 +36,7 @@ class CreateAppointmentWorkflow(
 }
 
 @Component
-class UpdateAppointmentWorkflow(
+class UpdateAppointmentOp(
     private val appointmentsRepo: AppointmentsRepo,
     private val appointmentTypesRepo: AppointmentTypesRepo
 ) : (TherapistRef, AppointmentRef, EditAppointmentRequest) -> Appointment? {
