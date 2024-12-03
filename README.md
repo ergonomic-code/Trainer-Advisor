@@ -4,7 +4,7 @@
 
 Данный проект является иллюстрацией кодовой базы, выполненной в соответствии с [Эргономичным подходом](https://azhidkov.pro/ergo-approach/landing/).
 
-Посты с описанием проекта можно найти у меня в [блоге](https://azhidkov.pro/tags/trainer-advisor/) и [Telegram-канале](https://t.me/ergonomic_code).
+Посты с описанием проекта можно найти у меня в [блоге](https://azhidkov.pro/tags/trainer-advisor/) и [Telegram-канале](https://t.me/s/ergonomic_code?q=%23traineradvisor).
 
 ## Требования к инфраструктуре
 
