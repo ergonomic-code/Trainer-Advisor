@@ -1,3 +1,5 @@
+import kotlinx.kover.gradle.plugin.dsl.AggregationType
+import kotlinx.kover.gradle.plugin.dsl.CoverageUnit
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -96,41 +98,56 @@ tasks.withType<Test> {
 }
 
 kover {
-	htmlReport {
-		onCheck.set(true)
+	currentProject {
+		createVariant("Endpoints") {
+			add("jvm")
+
+		}
 	}
-	verify {
-		onCheck.set(true)
-
-		rule {
-			isEnabled = true
-			name = "Line coverage"
-
-			target = kotlinx.kover.api.VerificationTarget.ALL
-
-			bound {
-				minValue = 85
-				maxValue = 100
-				counter = kotlinx.kover.api.CounterType.LINE
-				valueType = kotlinx.kover.api.VerificationValueType.COVERED_PERCENTAGE
+	reports {
+		total {
+			html {
+				onCheck = true
 			}
 		}
 
+		verify {
+			rule("Line coverage") {
+				disabled = false
+				groupBy = kotlinx.kover.gradle.plugin.dsl.GroupingEntityType.APPLICATION
 
-		rule {
-			isEnabled = true
-			name = "Endpoints coverage"
+				bound {
+					minValue = 90
+					maxValue = 100
+					coverageUnits.set(CoverageUnit.LINE)
+					aggregationForGroup.set(AggregationType.COVERED_PERCENTAGE)
+				}
+			}
+		}
 
-			target = kotlinx.kover.api.VerificationTarget.CLASS
+		variant("Endpoints") {
 
-			overrideClassFilter {
-				includes += "pro.qyoga.**Controller"
+			html {
+				onCheck = true
+			}
+			filters {
+				includes {
+					classes("pro.qyoga.**Controller")
+				}
 			}
 
-			bound {
-				minValue = 100
-				counter = kotlinx.kover.api.CounterType.INSTRUCTION
-				valueType = kotlinx.kover.api.VerificationValueType.COVERED_PERCENTAGE
+			verify {
+				onCheck = true
+				rule("Endpoints coverage") {
+					disabled = false
+					groupBy = kotlinx.kover.gradle.plugin.dsl.GroupingEntityType.CLASS
+
+					bound {
+						minValue = 100
+						coverageUnits.set(CoverageUnit.INSTRUCTION)
+						aggregationForGroup.set(AggregationType.COVERED_PERCENTAGE)
+					}
+				}
 			}
 		}
 	}
