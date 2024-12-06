@@ -18,7 +18,9 @@ object ResponseEntityExt {
         ResponseEntity.ok()
             .headers {
                 it.contentType = MediaType.parseMediaType(storedFileInputStream.metaData.mediaType)
-                it.contentLength = storedFileInputStream.metaData.size
+                if (storedFileInputStream.metaData.size > 0) {
+                    it.contentLength = storedFileInputStream.metaData.size
+                }
                 it.contentDisposition = ContentDispositionExt.inline(storedFileInputStream.metaData)
             }
             .body(InputStreamResource(storedFileInputStream.inputStream))

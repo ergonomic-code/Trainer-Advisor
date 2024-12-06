@@ -7,7 +7,7 @@ dependencyResolutionManagement {
         create("libs") {
             // plugin versions
             val kotlinVersion = version("kotlin", "2.1.0")
-            val springBootVersion = version("springBoot", "3.3.5")
+            val springBootVersion = version("springBoot", "3.4.0")
             val springDependencyManagementVersion = version("springDependencyManagement", "1.1.6")
             val koverVersion = version("kover", "0.8.3")
             val gitPropertiesVersion = version("gitProperties", "2.4.2")
