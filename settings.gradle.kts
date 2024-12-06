@@ -36,7 +36,7 @@ dependencyResolutionManagement {
             ).version("3.0.4.RELEASE")
 
             library("postgres", "org.postgresql", "postgresql").version("42.7.4")
-            library("minio", "io.minio", "minio").version("8.5.13")
+            library("minio", "io.minio", "minio").version("8.5.14")
 
             library("poi-ooxml", "org.apache.poi", "poi-ooxml").versionRef(poiVersion)
             library("poi-ooxml-lite", "org.apache.poi", "poi-ooxml-lite").versionRef(poiVersion)
@@ -47,8 +47,8 @@ dependencyResolutionManagement {
         }
 
         create("testLibs") {
-            val selenideVersion = version("selenide", "7.5.1")
-            val testContainersVersion = version("testcontainers", "1.20.3")
+            val selenideVersion = version("selenide", "7.6.1")
+            val testContainersVersion = version("testcontainers", "1.20.4")
             val restAssuredVersion = version("restAssured", "5.5.0")
 
             library("selenide-proxy", "com.codeborne", "selenide-proxy").versionRef(selenideVersion)
@@ -61,8 +61,8 @@ dependencyResolutionManagement {
             bundle("restassured", listOf("restassured-core", "restassured-kotlin"))
 
             library("jsoup", "org.jsoup", "jsoup").version("1.18.1")
-            library("datafaker", "net.datafaker", "datafaker").version("2.4.1")
-            library("greenmail", "com.icegreen", "greenmail-junit5").version("2.1.0")
+            library("datafaker", "net.datafaker", "datafaker").version("2.4.2")
+            library("greenmail", "com.icegreen", "greenmail-junit5").version("2.1.2")
 
             library("testcontainers-minio", "org.testcontainers", "minio").versionRef(testContainersVersion)
 
