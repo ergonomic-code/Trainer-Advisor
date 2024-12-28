@@ -8,6 +8,7 @@ import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.core.clients.cards.model.ClientRef
 import pro.qyoga.core.clients.cards.model.DistributionSource
 import pro.qyoga.core.clients.cards.model.DistributionSourceType
+import pro.qyoga.core.clients.therapeutic_data.descriptors.TherapeuticDataField
 import pro.qyoga.core.clients.therapeutic_data.values.TherapeuticDataFieldValue
 import pro.qyoga.tests.fixture.data.*
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
@@ -23,7 +24,7 @@ object ClientsObjectMother {
 
     fun createEditClientCardForm(
         clientCardDto: ClientCardDto = createClientCardDtoMinimal(),
-        customFields: List<TherapeuticDataFieldValue<*>> = emptyList()
+        customFields: List<Pair<TherapeuticDataField, Any>> = emptyList()
     ) = EditClientCardForm(clientCardDto)
 
     fun createClientCardDto(

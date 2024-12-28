@@ -153,6 +153,33 @@ class CreateClientPageTest : QYogaAppIntegrationBaseTest() {
         )
     }
 
+    @DisplayName("При наличии пользовательского строковго поля в форме терапевтических данных, оно должно сохраняться в БД при отправке формы")
+    @Test
+    fun stringCustomFieldPersistence() {
+        // Given
+        val stringCustomField = TherapeuticDataField("Время подъёма", CustomFieldType.STRING, true)
+        val therapeuticDataBlock = therapeuticDataBlock(stringCustomField)
+        val therapist = TherapistClient.loginAsTheTherapist()
+        val therapeuticDataDescriptor = backgrounds.clients.createTherapeuticDataDescriptor {
+            TherapeuticDataDescriptorsObjectMother.therapeuticDataDescriptor(therapeuticDataBlock)
+        }
+        val customField = therapeuticDataDescriptor.fields[0]
+        val customFieldValue = randomCyrillicWord()
+
+        val customFields = listOf(
+            stringCustomField to randomCyrillicWord()
+        )
+
+        val clientCardDto = ClientsObjectMother.createEditClientCardForm(customFields = customFields)
+
+        // When
+        therapist.clients.createClientCard(clientCardDto)
+
+        // Then
+        val client = backgrounds.clients.getAllTherapistClients(THE_THERAPIST_REF).single()
+        backgrounds.clients.getTherapeuticData(client.ref()).shouldNotBeEmpty()
+    }
+
     @DisplayName("При наличии пользовательского текстового поля в форме терапевтических данных, оно должно отображаться на странице создания клиента")
     @Test
     fun textCustomFieldRendering() {

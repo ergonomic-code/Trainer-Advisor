@@ -11,12 +11,14 @@ import org.springframework.data.relational.core.conversion.DbActionExecutionExce
 import org.springframework.data.relational.core.mapping.RelationalMappingContext
 import org.springframework.data.relational.core.mapping.RelationalPersistentEntity
 import org.springframework.data.relational.core.query.Query
-import org.springframework.data.relational.core.sql.SqlIdentifier
+import org.springframework.data.relational.core.sql.*
+import org.springframework.data.relational.core.sql.render.SqlRenderer
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.transaction.annotation.Transactional
 import pro.azhidkov.platform.spring.jdbc.queryForPage
 import pro.azhidkov.platform.spring.sdj.ALL
+import pro.azhidkov.platform.spring.sdj.getPersistentProperties
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.FetchSpec
 import pro.azhidkov.platform.spring.sdj.erpo.hydration.hydrate
 import pro.azhidkov.platform.spring.sdj.findOneBy
@@ -126,7 +128,7 @@ class ErgoRepository<T : Any, ID : Any>(
         return jdbcAggregateTemplate.exists(query, entity.type)
     }
 
-    fun findAll(
+    fun findPage(
         pageRequest: Pageable = ALL,
         fetch: Iterable<KProperty1<T, *>> = emptySet(),
         queryBuilder: QueryBuilder.() -> Unit = {}
@@ -139,6 +141,16 @@ class ErgoRepository<T : Any, ID : Any>(
                 FetchSpec(fetch)
             )
         }
+    }
+
+    fun findAll(
+        sort: Sort = Sort.unsorted(),
+        fetch: Iterable<KProperty1<T, *>> = emptySet(),
+        queryBuilder: QueryBuilder.() -> Unit = {}
+    ): Iterable<T> {
+        val query = query(queryBuilder)
+        val roots = jdbcAggregateTemplate.findAll(query.sort(sort), entity.type)
+        return jdbcAggregateTemplate.hydrate(roots, FetchSpec(fetch))
     }
 
     fun findSlice(

@@ -69,4 +69,8 @@ class ClientsBackgrounds(
     fun getTherapeuticDataDescription(therapistId: Long): TherapeuticDataDescriptor? =
         therapeuticDataDescriptorsRepo.findByTherapistId(therapistId)
 
+    fun getTherapeuticData(ref: ClientRef): List<TherapeuticDataFieldValue<*>> {
+        TODO()
+    }
+
 }

@@ -32,7 +32,7 @@ class ExercisesRepo(
 ) {
 
     fun findExerciseSummaries(exercisesSearchDto: ExerciseSearchDto, page: Pageable): Page<ExerciseSummaryDto> {
-        val entitiesPage = findAll(PageRequest.of(page.pageNumber, page.pageSize, sortBy(Exercise::title))) {
+        val entitiesPage = findPage(PageRequest.of(page.pageNumber, page.pageSize, sortBy(Exercise::title))) {
             Exercise::title containsIfNotNull exercisesSearchDto.title
             Exercise::exerciseType isEqualIfNotNull exercisesSearchDto.exerciseType
         }

@@ -77,7 +77,7 @@ fun TherapeuticTasksRepo.findTherapistTasksSliceByName(
     searchKey: String?,
     page: Pageable
 ): Slice<TherapeuticTask> {
-    return findAll(page) {
+    return findPage(page) {
         TherapeuticTask::owner isEqual therapistId
         TherapeuticTask::name isILikeIfNotNull searchKey
     }

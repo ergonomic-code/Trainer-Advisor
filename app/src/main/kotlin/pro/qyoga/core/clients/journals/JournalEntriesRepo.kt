@@ -41,7 +41,7 @@ class JournalEntriesRepo(
     }
 
     fun getJournalPage(journalPageRequest: JournalPageRequest): Page<JournalEntry> {
-        return findAll(
+        return findPage(
             pageRequest = PageRequest.of(0, journalPageRequest.pageSize, sortBy(JournalEntry::date).descending()),
             fetch = journalPageRequest.fetch,
         ) {

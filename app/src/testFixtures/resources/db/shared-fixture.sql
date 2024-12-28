@@ -4,7 +4,7 @@ TRUNCATE
     journal_entries, files, client_files,
     programs, program_exercises,
     appointments, appointment_types,
-    therapeutic_data_descriptors, therapeutic_data_blocks, therapeutic_data_fields
+    therapeutic_data_descriptors, therapeutic_data_blocks, therapeutic_data_fields, therapeutic_data_field_values
     RESTART IDENTITY;
 
 INSERT INTO users (email, password_hash, roles, created_at, version)

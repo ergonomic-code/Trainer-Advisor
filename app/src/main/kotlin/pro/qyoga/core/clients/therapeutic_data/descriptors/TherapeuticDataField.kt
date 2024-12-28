@@ -1,9 +1,11 @@
 package pro.qyoga.core.clients.therapeutic_data.descriptors
 
+import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.Table
 import pro.azhidkov.platform.extensible_entity.descriptor.CustomField
 import pro.azhidkov.platform.extensible_entity.descriptor.CustomFieldType
 
+typealias TherapeuticDataFieldRef = AggregateReference<TherapeuticDataField, Long>
 
 @Table("therapeutic_data_fields")
 data class TherapeuticDataField(

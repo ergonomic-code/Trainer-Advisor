@@ -22,7 +22,8 @@ import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 @RequestMapping("/therapist/clients")
 class CreateClientCardPageController(
     private val clientsRepo: ClientsRepo,
-    private val therapeuticDataDescriptorsRepo: TherapeuticDataDescriptorsRepo
+    private val therapeuticDataDescriptorsRepo: TherapeuticDataDescriptorsRepo,
+    private val getClientCardWorkflow: GetClientCardWorkflow
 ) {
 
     @GetMapping("/create")
@@ -42,6 +43,7 @@ class CreateClientCardPageController(
         editClientCardForm: EditClientCardForm,
         @AuthenticationPrincipal principal: QyogaUserDetails,
     ): ModelAndView {
+        getClientCardWorkflow(principal.id, 1)
         val res = runCatching {
             clientsRepo.save(Client(principal.id, editClientCardForm.clientCard))
         }

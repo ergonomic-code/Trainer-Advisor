@@ -18,7 +18,7 @@ class ProgramsBackgrounds(
 ) {
 
     fun findAll(): Iterable<Program> {
-        return programsRepo.findAll(fetch = Program.Fetch.therapistOnly)
+        return programsRepo.findPage(fetch = Program.Fetch.therapistOnly)
     }
 
     fun createPrograms(

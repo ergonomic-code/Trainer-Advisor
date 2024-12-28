@@ -22,7 +22,9 @@ import pro.qyoga.core.clients.cards.patchedBy
 @Controller
 @RequestMapping("/therapist/clients/{id}/card")
 class EditClientCardPageController(
-    private val clientsRepo: ClientsRepo
+    private val clientsRepo: ClientsRepo,
+    private val getClientCardWorkflow: GetClientCardWorkflow
+
 ) {
 
     @GetMapping
@@ -32,6 +34,8 @@ class EditClientCardPageController(
     ): ModelAndView {
         val client = clientsRepo.findByIdOrNull(id)
             ?: return notFound
+
+        getClientCardWorkflow(1, 1)
 
         return clientPageModel(client, ClientPageTab.CARD) {
             "formAction" bindTo "/therapist/clients/${client.id}/card"
@@ -43,6 +47,7 @@ class EditClientCardPageController(
         editClientCardForm: EditClientCardForm,
         @PathVariable id: Long
     ): ModelAndView {
+        getClientCardWorkflow(1, 1)
         val res = runCatching {
             clientsRepo.update(id) { client -> client.patchedBy(editClientCardForm.clientCard) }
         }
