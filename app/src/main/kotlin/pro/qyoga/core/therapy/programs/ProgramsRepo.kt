@@ -7,9 +7,9 @@ import org.springframework.data.domain.PageRequest
 import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.data.jdbc.core.convert.JdbcConverter
 import org.springframework.data.relational.core.mapping.RelationalMappingContext
-import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
+import pro.azhidkov.platform.spring.jdbc.rowMapperFor
 import pro.azhidkov.platform.spring.sdj.ergo.ErgoRepository
 import pro.azhidkov.platform.spring.sdj.sortBy
 import pro.qyoga.core.therapy.programs.dtos.ProgramsSearchFilter
@@ -36,10 +36,7 @@ class ProgramsRepo(
         val firstTenByTitle = PageRequest.of(0, 10, sortBy(Program::title))
     }
 
-    internal val docxProgramRowMapper = RowMapper<DocxProgram> { rs, _ ->
-        rs.getString(1)
-            ?.let { objectMapper.readValue(it, DocxProgram::class.java) }
-    }
+    internal val docxProgramRowMapper = rowMapperFor<DocxProgram>(objectMapper)
 
 }
 
