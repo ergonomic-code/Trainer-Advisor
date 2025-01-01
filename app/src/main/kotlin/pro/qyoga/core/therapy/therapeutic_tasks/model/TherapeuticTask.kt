@@ -6,6 +6,7 @@ import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.annotation.Version
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.Table
+import pro.azhidkov.platform.NamedEntity
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.Identifiable
 import pro.qyoga.core.users.therapists.Therapist
 import java.time.Instant
@@ -15,7 +16,7 @@ typealias TherapeuticTaskRef = AggregateReference<TherapeuticTask, Long>
 @Table("therapeutic_tasks")
 data class TherapeuticTask(
     val owner: AggregateReference<Therapist, Long>,
-    val name: String,
+    override val name: String,
 
     @Id
     override val id: Long = 0,
@@ -25,7 +26,7 @@ data class TherapeuticTask(
     val lastModifiedAt: Instant? = null,
     @Version
     val version: Long = 0,
-) : Identifiable<Long> {
+) : Identifiable<Long>, NamedEntity<TherapeuticTask, Long> {
 
     constructor(owner: Long, taskName: String) : this(AggregateReference.to(owner), taskName)
 

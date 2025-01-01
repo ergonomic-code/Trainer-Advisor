@@ -15,6 +15,7 @@ import pro.azhidkov.platform.spring.sdj.sortBy
 import pro.qyoga.core.therapy.programs.dtos.ProgramsSearchFilter
 import pro.qyoga.core.therapy.programs.model.DocxProgram
 import pro.qyoga.core.therapy.programs.model.Program
+import pro.qyoga.core.therapy.programs.views.ProgramSummaryView
 import kotlin.reflect.KProperty1
 
 @Repository
@@ -37,6 +38,8 @@ class ProgramsRepo(
     }
 
     internal val docxProgramRowMapper = rowMapperFor<DocxProgram>(objectMapper)
+
+    internal val programSummaryViewRowMapper = rowMapperFor<ProgramSummaryView>(objectMapper)
 
 }
 
@@ -62,7 +65,7 @@ fun ProgramsRepo.findAllMatching(
     return findPage(query, params, pageRequest, fetch)
 }
 
-fun ProgramsRepo.findDocxById(id: Long): DocxProgram? {
+fun ProgramsRepo.findDocxById(programId: Long): DocxProgram? {
     @Language("PostgreSQL")
     val query = """
         with
@@ -84,5 +87,29 @@ fun ProgramsRepo.findDocxById(id: Long): DocxProgram? {
         where p.id = :id
     """.trimIndent()
 
-    return findOne(query, mapOf("id" to id), docxProgramRowMapper)
+    return findOne(query, mapOf("id" to programId), docxProgramRowMapper)
+}
+
+fun ProgramsRepo.getSummaryById(programId: Long): ProgramSummaryView? {
+    @Language("PostgreSQL")
+    val query = """
+        WITH
+        exercises AS (
+            SELECT e.id, pe.exercise_index, e.title, e.description, format_to_iso_8601(e.duration) duration, e.exercise_type type, pe.program_id
+            FROM program_exercises pe
+                LEFT JOIN exercises e on e.id = pe.exercise_ref
+        ),
+        programs AS (
+            SELECT p.id, p.title, json_build_object('id', tt.id, 'name', tt.name) "therapeuticTask", json_agg(e order by exercise_index) AS exercises
+            FROM programs p left
+                JOIN exercises e on p.id = e.program_id
+                JOIN therapeutic_tasks tt on p.therapeutic_task_ref = tt.id
+            GROUP BY p.id, tt.id
+        )
+        SELECT to_json(p.*)
+        FROM programs p
+        WHERE p.id = :id
+    """.trimIndent()
+
+    return findOne(query, mapOf("id" to programId), programSummaryViewRowMapper)
 }

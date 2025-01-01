@@ -58,6 +58,12 @@ fun click(component: Component) {
         .click()
 }
 
+fun SelenideElement.click(selector: String) {
+    `$`(selector)
+        .scrollIntoView("{behavior: \"instant\", block: \"center\", inline: \"center\"}")
+        .click()
+}
+
 fun await(page: HtmlPageCompat) {
     requireNotNull(page.title) { "Невозможно дождаться страницы без названия" }
     `$`("title").shouldHave(attribute("text", page.title!!))

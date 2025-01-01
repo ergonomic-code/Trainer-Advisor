@@ -9,19 +9,21 @@ import org.springframework.web.servlet.ModelAndView
 import pro.azhidkov.platform.spring.http.hxRedirect
 import pro.qyoga.app.platform.EntityPageMode
 import pro.qyoga.app.platform.notFound
+import pro.qyoga.core.therapy.programs.ProgramsRepo
 import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
+import pro.qyoga.core.therapy.programs.getSummaryById
 
 
 @Controller
 @RequestMapping("/therapist/programs/{programId}")
 class EditProgramPageController(
-    private val getProgram: GetProgram,
+    private val programsRepo: ProgramsRepo,
     private val editProgram: EditProgram
 ) {
 
     @GetMapping
     fun getEditProgramPage(@PathVariable programId: Long): ModelAndView {
-        val program = getProgram(programId)
+        val program = programsRepo.getSummaryById(programId)
             ?: return notFound
         return programPageModelAndView(EntityPageMode.EDIT, ProgramPageModel(program))
     }

@@ -11,7 +11,7 @@ import pro.qyoga.tests.assertions.*
 import pro.qyoga.tests.platform.html.*
 
 
-private const val PROGRAM_FORM_SCRIPT = "programFormScript"
+const val PROGRAM_FORM_SCRIPT = "programFormScript"
 
 abstract class ProgramPage(
     override val path: String,
@@ -22,6 +22,8 @@ abstract class ProgramPage(
     val searchExercisePath = "/therapist/programs/create/search-exercises"
 
     val searchKey = "searchKey"
+
+    val exercisesSelector = "li.exercise"
 
     object ProgramFormScript : Script(PROGRAM_FORM_SCRIPT) {
 
@@ -39,7 +41,7 @@ abstract class ProgramPage(
         element shouldHaveComponent programForm
         element shouldHaveComponent ProgramFormScript
 
-        element shouldHave "script#$PROGRAM_FORM_SCRIPT"
+        element shouldHaveElement "script#$PROGRAM_FORM_SCRIPT"
         val programFormScript = element.getElementById(PROGRAM_FORM_SCRIPT)!!
         programFormScript.html() shouldContain "$searchExercisePath?$searchKey"
     }
