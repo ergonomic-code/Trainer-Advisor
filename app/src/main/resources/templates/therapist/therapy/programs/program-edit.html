@@ -134,7 +134,7 @@
                             <legend class="border-bottom">Общая информация</legend>
                         </fieldset>
                         <div class="form-floating mb-3">
-                            <input class="form-control "
+                            <input class="form-control"
                                    id="title"
                                    maxlength="512"
                                    minlength="2"
@@ -213,10 +213,10 @@
                             </li>
 
                             <template x-for="(foundExercise, idx) in searchResult">
-                                <li>
+                                <li class="found-exercise">
                                     <button
                                             @mousedown="$data.addExercise(selectExercise(idx))"
-                                            class="dropdown-item"
+                                            class="dropdown-item add-button"
                                             type="button">
 
                                         <div class="overflow-y-hidden text-truncate" x-text="foundExercise.title">
@@ -235,20 +235,21 @@
                     <ul class="list-group list-group-flush g-0">
                         <template :key="exercise.id" x-for="(exercise, idx) in exercises">
                             <li
-                                    class="list-group-item d-flex justify-content-between align-items-center"
+                                    class="list-group-item d-flex justify-content-between align-items-center exercise"
                                     :id="exerciseTagId(exercise)">
                                 <input :value="exercise.id"
+                                       class="id"
                                        name="exerciseIds"
                                        type="hidden">
                                 <div class="col-8">
-                                    <div class="link link-primary"
+                                    <div class="link link-primary title"
                                          role="button"
                                          :hx-get="`/therapist/exercises/${exercise.id}/modal`"
                                          data-bs-target="#exercise-modal"
                                          data-bs-toggle="modal"
                                          hx-target="#modal-content"
                                          x-text="exercise.title"></div>
-                                    <small class="text-muted"
+                                    <small class="text-muted summary"
                                            x-text="`${exercise.type.label}, ${exercise.duration} мин.`"></small>
                                 </div>
                                 <div class="btn-group h-fit-content ">
@@ -260,7 +261,7 @@
                                             type="button">
                                         <i class="fas fa-chevron-down"></i>
                                     </button>
-                                    <button @click="remove(idx)" class="btn btn-sm btn-outline-danger"
+                                    <button @click="remove(idx)" class="btn btn-sm btn-outline-danger remove-button"
                                             type="button">
                                         <i class="fas fa-trash-alt"></i>
                                     </button>

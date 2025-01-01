@@ -31,6 +31,7 @@ dependencies {
     testImplementation(kotlin("reflect"))
     testImplementation(project(":app"))
     testImplementation(testFixtures(project(":app")))
+    testImplementation("org.springframework.boot:spring-boot-starter-data-jdbc")
     testImplementation(testLibs.selenide.proxy)
     testImplementation(testLibs.testcontainers.selenium)
 }

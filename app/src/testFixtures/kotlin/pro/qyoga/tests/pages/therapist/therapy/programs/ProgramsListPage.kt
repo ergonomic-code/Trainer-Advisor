@@ -39,6 +39,8 @@ object ProgramsListPage : QYogaPage {
 
     fun editProgramLink(program: Program) = Link("editProgram${program.id}", programPath, program.title)
 
+    fun editProgramPath(programId: Long) = programPath.replace("{programId}", programId.toString())
+
     fun downloadProgramDocxButton(programId: Long) = Link("downloadProgramDocx${programId}", programDocxPath, "")
 
     fun deleteProgramButton(program: Program) =

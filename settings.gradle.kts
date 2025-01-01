@@ -58,7 +58,12 @@ dependencyResolutionManagement {
 
             library("restassured-core", "io.rest-assured", "rest-assured").versionRef(restAssuredVersion)
             library("restassured-kotlin", "io.rest-assured", "kotlin-extensions").versionRef(restAssuredVersion)
-            bundle("restassured", listOf("restassured-core", "restassured-kotlin"))
+            library(
+                "restassured-json-schema",
+                "io.rest-assured",
+                "json-schema-validator"
+            ).versionRef(restAssuredVersion)
+            bundle("restassured", listOf("restassured-core", "restassured-kotlin", "restassured-json-schema"))
 
             library("jsoup", "org.jsoup", "jsoup").version("1.18.1")
             library("datafaker", "net.datafaker", "datafaker").version("2.4.2")

@@ -1,12 +1,9 @@
 package pro.qyoga.core.therapy.programs.model
 
 import org.springframework.data.annotation.*
-import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
-import pro.azhidkov.platform.spring.sdj.ergo.hydration.FetchSpec
-import pro.azhidkov.platform.spring.sdj.ergo.hydration.hydrate
 import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
 import pro.qyoga.core.users.therapists.Therapist
@@ -68,13 +65,3 @@ data class Program(
     }
 
 }
-
-fun Program.fetchExercises(jdbcAggregateOperations: JdbcAggregateOperations): Program {
-    return this.copy(
-        exercises = jdbcAggregateOperations.hydrate(
-            this.exercises,
-            FetchSpec(listOf(ProgramExercise::exerciseRef))
-        )
-    )
-}
-

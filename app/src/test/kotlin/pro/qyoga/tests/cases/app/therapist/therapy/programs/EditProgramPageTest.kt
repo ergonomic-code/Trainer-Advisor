@@ -1,9 +1,13 @@
 package pro.qyoga.tests.cases.app.therapist.therapy.programs
 
+import com.fasterxml.jackson.core.type.TypeReference
+import io.kotest.inspectors.forAll
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
+import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
 import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.assertions.shouldHave
@@ -16,6 +20,8 @@ import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import pro.qyoga.tests.pages.publc.NotFoundErrorPage
 import pro.qyoga.tests.pages.therapist.therapy.programs.CreateProgramForm
 import pro.qyoga.tests.pages.therapist.therapy.programs.EditProgramPage
+import pro.qyoga.tests.pages.therapist.therapy.programs.PROGRAM_FORM_SCRIPT
+import pro.qyoga.tests.pages.therapist.therapy.programs.ProgramPage.ProgramFormScript
 import pro.qyoga.tests.pages.therapist.therapy.programs.ProgramsListPage
 
 
@@ -33,6 +39,13 @@ class EditProgramPageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         document shouldBePage EditProgramPage.pageFor(program)
+        val exercises = ProgramFormScript.initialExercises.value(
+            document.getElementById(PROGRAM_FORM_SCRIPT)!!,
+            object : TypeReference<List<ExerciseSummaryDto>>() {})
+        exercises shouldHaveSize program.exercises.size
+        exercises.zip(program.exercises).forAll { (responseExercise, original) ->
+            responseExercise shouldMatch original.exerciseRef.resolveOrThrow()
+        }
     }
 
     @Test

@@ -7,6 +7,7 @@ import io.kotest.matchers.shouldNotBe
 import pro.azhidkov.platform.java.time.toDecimalMinutes
 import pro.qyoga.core.therapy.exercises.dtos.CreateExerciseRequest
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
+import pro.qyoga.core.therapy.exercises.model.Exercise
 
 
 infix fun ExerciseSummaryDto.shouldMatch(source: CreateExerciseRequest) {
@@ -22,4 +23,11 @@ infix fun ExerciseSummaryDto?.shouldMatch(another: ExerciseSummaryDto) {
     }
 
     this!!.shouldBeEqualToIgnoringFields(another, ExerciseSummaryDto::id)
+}
+
+infix fun ExerciseSummaryDto.shouldMatch(another: Exercise) {
+    title shouldBe another.title
+    description shouldBe another.description
+    duration shouldBe another.duration
+    type shouldBe another.exerciseType
 }

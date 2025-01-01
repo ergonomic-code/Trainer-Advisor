@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ExerciseSummaryDto",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "duration": {
+      "type": "number"
+    },
+    "type": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": [
+            "WARM_UP",
+            "MOBILISATION",
+            "STRENGTHENING",
+            "STRETCHING",
+            "RELAXATION",
+            "TRACTION"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "enum": [
+            "Разминка",
+            "Мобилизация",
+            "Укрепление",
+            "Растяжка",
+            "Расслабление",
+            "Тракция"
+          ]
+        }
+      },
+      "required": [
+        "name",
+        "label"
+      ],
+      "additionalProperties": false
+    },
+    "id": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "title",
+    "description",
+    "duration",
+    "type"
+  ]
+}

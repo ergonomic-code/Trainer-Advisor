@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode
 import com.fasterxml.jackson.module.kotlin.convertValue
 import io.restassured.http.ContentType
 import io.restassured.http.Cookie
+import io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath
 import io.restassured.module.kotlin.extensions.Extract
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
@@ -98,6 +99,7 @@ class TherapistProgramsApi(override val authCookie: Cookie) : AuthorizedApi {
             get(CreateProgramPage.searchExercisePath)
         } Then {
             statusCode(HttpStatus.OK.value())
+            matchesJsonSchemaInClasspath("json-schemas/therapist/therapy/programs/search-exercise-rs.json")
         } Extract {
             val node = body().`as`(ObjectNode::class.java)
             mapper.convertValue(node.get("content"))
