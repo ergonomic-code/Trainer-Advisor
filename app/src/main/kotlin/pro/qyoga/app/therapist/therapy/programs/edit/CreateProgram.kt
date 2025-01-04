@@ -8,6 +8,7 @@ import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
 import pro.qyoga.core.therapy.programs.model.Program
 import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo
 import pro.qyoga.core.therapy.therapeutic_tasks.findOneByName
+import java.util.*
 
 
 sealed interface CreateProgramResult {
@@ -21,12 +22,12 @@ sealed interface CreateProgramResult {
 class CreateProgram(
     private val programsRepo: ProgramsRepo,
     private val therapeuticTasksRepo: TherapeuticTasksRepo
-) : (CreateProgramRequest, String, Long) -> CreateProgramResult {
+) : (CreateProgramRequest, String, UUID) -> CreateProgramResult {
 
     override fun invoke(
         createExerciseRequest: CreateProgramRequest,
         therapeuticTaskName: String,
-        therapistId: Long
+        therapistId: UUID
     ): CreateProgramResult {
         val therapeuticTask = therapeuticTasksRepo.findOneByName(therapeuticTaskName)
             ?: return CreateProgramResult.InvalidTherapeuticTaskName(therapeuticTaskName)

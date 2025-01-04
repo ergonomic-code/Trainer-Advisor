@@ -8,7 +8,7 @@ import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.Embedded
 import org.springframework.data.relational.core.mapping.Table
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.Identifiable
-import pro.qyoga.core.users.therapists.Therapist
+import pro.qyoga.core.users.therapists.TherapistRef
 import java.time.Instant
 import java.time.LocalDate
 
@@ -27,7 +27,7 @@ data class Client(
     val anamnesis: String?,
     @Embedded(onEmpty = Embedded.OnEmpty.USE_NULL, prefix = "distribution_source_")
     val distributionSource: DistributionSource?,
-    val therapistId: AggregateReference<Therapist, Long>,
+    val therapistRef: TherapistRef,
 
     @Id
     override val id: Long = 0,
@@ -40,7 +40,7 @@ data class Client(
 ) : Identifiable<Long> {
 
     fun fullName() = listOf(lastName, firstName, middleName)
-        .filter { it?.isNotBlank() ?: false }
+        .filter { it?.isNotBlank() == true }
         .joinToString(" ")
 
 }

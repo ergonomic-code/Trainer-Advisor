@@ -15,6 +15,7 @@ import pro.azhidkov.platform.spring.sdj.sortBy
 import pro.qyoga.core.clients.cards.dtos.ClientSearchDto
 import pro.qyoga.core.clients.cards.errors.DuplicatedPhoneException
 import pro.qyoga.core.clients.cards.model.Client
+import java.util.*
 
 @Repository
 class ClientsRepo(
@@ -44,12 +45,12 @@ class ClientsRepo(
 
 
 fun ClientsRepo.findTherapistClientsPageBySearchForm(
-    therapistId: Long,
+    therapistId: UUID,
     clientSearchDto: ClientSearchDto,
     pageRequest: Pageable
 ): Page<Client> {
     return findPage(pageRequest) {
-        Client::therapistId isEqual therapistId
+        Client::therapistRef isEqual therapistId
         Client::firstName isILikeIfNotNull clientSearchDto.firstName
         Client::lastName isILikeIfNotNull clientSearchDto.lastName
         Client::phoneNumber isILikeIfNotNull clientSearchDto.phoneNumber
@@ -57,12 +58,12 @@ fun ClientsRepo.findTherapistClientsPageBySearchForm(
 }
 
 fun ClientsRepo.findTherapistClientsSliceBySearchKey(
-    therapistId: Long,
+    therapistId: UUID,
     searchKey: String,
     page: Pageable
 ): Slice<Client> {
     return findSlice(page) {
-        Client::therapistId isEqual therapistId
+        Client::therapistRef isEqual therapistId
         and {
             mode = BuildMode.OR
             Client::firstName isILike searchKey

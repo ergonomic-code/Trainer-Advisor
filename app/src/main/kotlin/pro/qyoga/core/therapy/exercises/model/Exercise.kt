@@ -10,8 +10,10 @@ import org.springframework.data.relational.core.mapping.Table
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.Identifiable
 import pro.qyoga.core.therapy.exercises.dtos.CreateExerciseRequest
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
+import pro.qyoga.core.users.therapists.TherapistRef
 import java.time.Duration
 import java.time.Instant
+import java.util.*
 
 @Table("exercises")
 data class Exercise(
@@ -19,7 +21,7 @@ data class Exercise(
     val description: String,
     val duration: Duration,
     val exerciseType: ExerciseType,
-    val therapistId: Long,
+    val ownerRef: TherapistRef,
     @MappedCollection(idColumn = "exercise_id", keyColumn = "step_index")
     val steps: List<ExerciseStep>,
 
@@ -49,7 +51,7 @@ data class Exercise(
         fun of(
             createExerciseRequest: CreateExerciseRequest,
             persistedImages: Map<Int, Long>,
-            therapistId: Long
+            therapistId: UUID
         ): Exercise {
             val stepsWithRefs = createExerciseRequest.steps.mapIndexed { idx, dto ->
                 dto.withImage(persistedImages[idx]?.let { AggregateReference.to(it) })
@@ -60,7 +62,7 @@ data class Exercise(
                 createExerciseRequest.summary.description,
                 createExerciseRequest.summary.duration,
                 createExerciseRequest.summary.type,
-                therapistId,
+                TherapistRef.to(therapistId),
                 stepsWithRefs
             )
         }

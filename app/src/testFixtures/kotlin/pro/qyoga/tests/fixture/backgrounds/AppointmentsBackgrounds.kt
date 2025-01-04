@@ -27,6 +27,7 @@ import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.util.*
 
 @Component
 class AppointmentsBackgrounds(
@@ -37,7 +38,7 @@ class AppointmentsBackgrounds(
     private val therapeuticTasksBackgrounds: TherapeuticTasksBackgrounds,
 ) {
 
-    fun findAll(therapistId: Long = THE_THERAPIST_ID): Iterable<Appointment> {
+    fun findAll(therapistId: UUID = THE_THERAPIST_ID): Iterable<Appointment> {
         return appointmentsRepo.findAll()
     }
 

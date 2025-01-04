@@ -6,7 +6,7 @@ import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
 import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
-import pro.qyoga.core.users.therapists.Therapist
+import pro.qyoga.core.users.therapists.TherapistRef
 import java.time.Instant
 
 @Immutable
@@ -14,7 +14,7 @@ import java.time.Instant
 data class Program(
     val title: String,
     val therapeuticTaskRef: TherapeuticTaskRef,
-    val ownerRef: AggregateReference<Therapist, Long>,
+    val ownerRef: TherapistRef,
     @MappedCollection(idColumn = "program_id", keyColumn = "exercise_index")
     val exercises: List<ProgramExercise>,
 
@@ -49,7 +49,7 @@ data class Program(
         fun of(
             createExerciseRequest: CreateProgramRequest,
             therapeuticTask: TherapeuticTaskRef,
-            therapist: AggregateReference<Therapist, Long>,
+            therapist: TherapistRef,
             programId: Long = 0
         ): Program = Program(
             createExerciseRequest.title,

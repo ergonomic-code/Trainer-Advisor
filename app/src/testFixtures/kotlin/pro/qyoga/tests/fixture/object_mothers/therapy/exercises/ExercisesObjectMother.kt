@@ -10,8 +10,9 @@ import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
 import pro.qyoga.core.therapy.exercises.model.Exercise
 import pro.qyoga.core.therapy.exercises.model.ExerciseStep
 import pro.qyoga.core.therapy.exercises.model.ExerciseType
+import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.tests.fixture.data.*
-import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
+import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
 import java.time.Duration
 
 
@@ -58,7 +59,7 @@ object ExercisesObjectMother {
     fun randomExercise(
         stepsCount: Int = 0,
         imagesGenerationMode: ImagesGenerationMode = None,
-        therapistId: Long = THE_THERAPIST_ID,
+        therapistId: TherapistRef = THE_THERAPIST_REF,
         id: Long = 0
     ): Pair<Exercise, Map<Int, StoredFile>> {
         val exercise = Exercise(
@@ -78,7 +79,7 @@ object ExercisesObjectMother {
         count: Int,
         eachExerciseStepsCount: Int,
         imagesGenerationMode: ImagesGenerationMode,
-        therapistId: Long = THE_THERAPIST_ID,
+        therapistId: TherapistRef = THE_THERAPIST_REF,
         generateIds: Boolean = false
     ): List<Pair<Exercise, Map<Int, StoredFile>>> {
         var id = 0L

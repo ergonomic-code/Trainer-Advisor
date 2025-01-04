@@ -1,6 +1,5 @@
 package pro.qyoga.tests.fixture.object_mothers.therapy.programs
 
-import org.springframework.data.jdbc.core.mapping.AggregateReference
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
 import pro.qyoga.core.therapy.exercises.model.Exercise
@@ -11,7 +10,7 @@ import pro.qyoga.core.therapy.programs.model.DocxProgram
 import pro.qyoga.core.therapy.programs.model.Program
 import pro.qyoga.core.therapy.programs.model.ProgramExercise
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
-import pro.qyoga.core.users.therapists.Therapist
+import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
 
@@ -27,7 +26,7 @@ object ProgramsObjectMother {
         title: String = randomCyrillicWord(),
         therapeuticTask: TherapeuticTaskRef,
         exercises: Iterable<Exercise> = emptyList(),
-        owner: AggregateReference<Therapist, Long> = THE_THERAPIST_REF,
+        owner: TherapistRef = THE_THERAPIST_REF,
     ): Program {
         return Program(
             title,

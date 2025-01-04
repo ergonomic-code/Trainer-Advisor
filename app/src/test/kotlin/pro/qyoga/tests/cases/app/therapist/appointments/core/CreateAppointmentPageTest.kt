@@ -58,7 +58,7 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
     fun `Creation of appointment with required-only fields should be persistent`() {
         // Given
         val client = backgrounds.clients.createClients(1).single()
-        val therapeuticTask = backgrounds.therapeuticTasks.createTherapeuticTask(1)
+        val therapeuticTask = backgrounds.therapeuticTasks.createTherapeuticTask()
         val editAppointmentRequest = AppointmentsObjectMother.randomEditAppointmentRequest(
             client = client.ref(),
             therapeuticTask = therapeuticTask.ref()
@@ -81,7 +81,7 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
     fun `Creation of appointment with all fields should be persistent`() {
         // Given
         val client = backgrounds.clients.createClients(1).single()
-        val therapeuticTask = backgrounds.therapeuticTasks.createTherapeuticTask(1)
+        val therapeuticTask = backgrounds.therapeuticTasks.createTherapeuticTask()
         val editAppointmentRequest = AppointmentsObjectMother.randomFullEditAppointmentRequest(
             client = client.ref(),
             therapeuticTask = therapeuticTask.ref()

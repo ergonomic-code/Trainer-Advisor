@@ -11,6 +11,7 @@ import pro.qyoga.tests.fixture.data.*
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
 import java.time.Duration
 import java.time.LocalDate
+import java.util.*
 
 
 object ClientsObjectMother {
@@ -69,7 +70,7 @@ object ClientsObjectMother {
         version
     )
 
-    fun createClient(therapistId: Long, clientCardDto: ClientCardDto): Client =
+    fun createClient(therapistId: UUID, clientCardDto: ClientCardDto): Client =
         Client(therapistId, clientCardDto)
 
     val fakeClientRef: ClientRef = AggregateReferenceTarget(

@@ -6,10 +6,12 @@ import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.annotation.Version
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.Table
+import pro.azhidkov.platform.uuid.UUIDv7
 import pro.qyoga.core.users.therapists.TherapistRef
 import java.time.Instant
+import java.util.*
 
-typealias UserRef = AggregateReference<User, Long>
+typealias UserRef = AggregateReference<User, UUID>
 
 fun UserRef(therapistRef: TherapistRef): UserRef = AggregateReference.to(therapistRef.id!!)
 
@@ -21,7 +23,7 @@ data class User(
     val enabled: Boolean,
 
     @Id
-    val id: Long = 0,
+    val id: UUID = UUIDv7.randomUUID(),
     @CreatedDate
     val createdAt: Instant = Instant.now(),
     @LastModifiedDate
