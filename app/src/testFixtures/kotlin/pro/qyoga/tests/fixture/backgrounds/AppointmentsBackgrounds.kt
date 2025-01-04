@@ -40,6 +40,7 @@ class AppointmentsBackgrounds(
 
     fun findAll(therapistId: UUID = THE_THERAPIST_ID): Iterable<Appointment> {
         return appointmentsRepo.findAll()
+            .filter { it.therapistRef.id == therapistId }
     }
 
     fun getDaySchedule(
