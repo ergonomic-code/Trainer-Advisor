@@ -3,7 +3,10 @@ package pro.qyoga.app.therapist.clients.journal.edit_entry.create
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.ModelAttribute
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.servlet.ModelAndView
 import pro.azhidkov.platform.kotlin.isFailureOf
 import pro.azhidkov.platform.spring.http.hxRedirect
@@ -18,13 +21,12 @@ import java.time.LocalDate
 
 
 @Controller
-@RequestMapping("/therapist/clients/{clientId}/journal")
 class CreateJournalEntryPageController(
     private val clientsRepo: ClientsRepo,
     private val createJournalEntry: CreateJournalEntryOp
 ) {
 
-    @GetMapping("/create")
+    @GetMapping(CREATE_JOURNAL_PAGE_URL)
     fun handleGetCreateJournalEntryPage(
         @PathVariable clientId: Long
     ): ModelAndView {
@@ -39,7 +41,7 @@ class CreateJournalEntryPageController(
     }
 
 
-    @PostMapping("/create")
+    @PostMapping(CREATE_JOURNAL_PAGE_URL)
     fun handleCreateJournalEntry(
         @PathVariable clientId: Long,
         @ModelAttribute editJournalEntryRequest: EditJournalEntryRequest,
@@ -68,6 +70,11 @@ class CreateJournalEntryPageController(
         }
     }
 
-    private fun createFormAction(clientId: Long) = "/therapist/clients/$clientId/journal/create"
+    private fun createFormAction(clientId: Long) = CREATE_JOURNAL_PAGE_URL.replace("\\{clientId}", clientId.toString())
+
+    companion object {
+
+        const val CREATE_JOURNAL_PAGE_URL = "/therapist/clients/{clientId}/journal/create"
+    }
 
 }

@@ -63,7 +63,7 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
     fun getEditClientCardPage(clientId: Long, expectedStatus: HttpStatus = HttpStatus.OK): Document {
         return Given {
             authorized()
-            pathParam("id", clientId)
+            pathParam("clientId", clientId)
         } When {
             get(EditClientPage.PATH)
         } Then {
@@ -101,7 +101,7 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
     fun editClient(clientId: Long, request: ClientCardDto) {
         Given {
             authorized()
-            pathParam("id", clientId)
+            pathParam("clientId", clientId)
             clientCardFormParams(request)
         } When {
             post(EditClientPage.PATH)
@@ -118,7 +118,7 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
     ): Document {
         return Given {
             authorized()
-            pathParam("id", clientId)
+            pathParam("clientId", clientId)
             clientCardFormParams(request)
         } When {
             post(EditClientPage.PATH)

@@ -27,7 +27,7 @@ class JournalPageTest : QYogaAppIntegrationBaseTest() {
         val document = therapist.clientJournal.getJournalPage(client.id)
 
         // Then
-        document shouldBe NonEmptyClientJournalPage(firstPageEntries)
+        document shouldBe NonEmptyClientJournalPage(client.id, firstPageEntries)
     }
 
     @Test
@@ -42,7 +42,7 @@ class JournalPageTest : QYogaAppIntegrationBaseTest() {
         val document = therapist.clientJournal.getJournalPage(client.id)
 
         // Then
-        document shouldBe EmptyClientJournalPage
+        document shouldBe EmptyClientJournalPage(client.id)
     }
 
     @Test

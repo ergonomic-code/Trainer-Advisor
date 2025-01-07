@@ -37,7 +37,7 @@ class ClientViewPageTest : QYogaAppIntegrationBaseTest() {
         val document = therapist.clients.getClientEditPage(client.id)
 
         // Then
-        document shouldBe EmptyClientJournalPage
+        document shouldBe EmptyClientJournalPage(client.id)
     }
 
 }
