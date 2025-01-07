@@ -9,6 +9,7 @@ import pro.qyoga.tests.pages.therapist.clients.card.EditClientPage
 import pro.qyoga.tests.pages.therapist.clients.files.ClientFilesPage
 import pro.qyoga.tests.platform.html.Component
 import pro.qyoga.tests.platform.html.Link
+import java.util.*
 
 
 object ClientPageTabsFragment : Component {
@@ -27,16 +28,16 @@ object ClientPageTabsFragment : Component {
         haveComponent(filesLink)
     )
 
-    fun journalLinkClientId(element: Element): Long? {
-        return journalLink.pathParam(element, "clientId")?.toLong()
+    fun journalLinkClientId(element: Element): UUID? {
+        return journalLink.pathParam(element, "clientId")?.let { UUID.fromString(it) }
     }
 
-    fun cardLinkClientId(element: Element): Long? {
-        return cardLink.pathParam(element, "clientId")?.toLong()
+    fun cardLinkClientId(element: Element): UUID? {
+        return cardLink.pathParam(element, "clientId")?.let { UUID.fromString(it) }
     }
 
-    fun filesLinkClientId(element: Element): Long? {
-        return filesLink.pathParam(element, "clientId")?.toLong()
+    fun filesLinkClientId(element: Element): UUID? {
+        return filesLink.pathParam(element, "clientId")?.let { UUID.fromString(it) }
     }
 
 }

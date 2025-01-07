@@ -75,13 +75,13 @@ class HydrationTest {
         val hydrated = jdbcAggregateOperations.hydrate(
             listOf(entry),
             FetchSpec(
-                JournalEntry::client,
+                JournalEntry::clientRef,
                 JournalEntry::therapeuticTask
             )
         ).first()
 
         // Then
-        hydrated.client.shouldBeInstanceOf<AggregateReferenceTarget<*, *>>()
+        hydrated.clientRef.shouldBeInstanceOf<AggregateReferenceTarget<*, *>>()
         hydrated.therapeuticTask.shouldBeInstanceOf<AggregateReferenceTarget<*, *>>()
     }
 
@@ -99,7 +99,7 @@ class HydrationTest {
             FetchSpec(TherapeuticTask::ownerRef)
         )
         val entryClientFetchSpec =
-            PropertyFetchSpec(JournalEntry::client)
+            PropertyFetchSpec(JournalEntry::clientRef)
 
         // When
         val hydrated = jdbcAggregateOperations.hydrate(

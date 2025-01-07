@@ -1,13 +1,13 @@
 INSERT INTO clients (first_name, middle_name, last_name, birth_date, phone_number, email, distribution_source_type,
                      distribution_source_comment,
-                     complaints, therapist_id, created_at, version)
+                     complaints, therapist_ref, created_at, version)
 VALUES ('Яна', null, 'Бортник', '1990.01.01', '+79231233445', 'bortnik@ya.ru', 'SOCIAL_NETWORKS', null,
-        'Боль в пояснице слева, мышечный спазм.', 2, now(), 1),
+        'Боль в пояснице слева, мышечный спазм.', usr('therapist@trainer-advisor.pro'), now(), 1),
 
 -- ---
 
        ('Любовь', null, 'Королёва', null, '+79139282181', null, 'OTHER', 'Клиент Forpost yoga',
-        'Слабость мтд', 2,
+        'Слабость мтд', usr('therapist@trainer-advisor.pro'),
         now(), 1),
 
 -- ---
@@ -18,10 +18,10 @@ VALUES ('Яна', null, 'Бортник', '1990.01.01', '+79231233445', 'bortnik
 С-образный левосторонний сколиоз.
 Крыловидные лопатки.
 Натяжение нервов по задней поверхности ног.
-Астеничное телосложение.', 2,
+Астеничное телосложение.', usr('therapist@trainer-advisor.pro'),
         now(), 1);
 
-CREATE OR REPLACE FUNCTION client(client_last_name varchar) RETURNS BIGINT
+CREATE OR REPLACE FUNCTION client(client_last_name varchar) RETURNS UUID
 AS
 'SELECT id
  FROM clients

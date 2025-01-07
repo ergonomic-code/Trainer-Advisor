@@ -9,9 +9,10 @@ import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.pages.therapist.clients.ClientPageTabsFragment
 import pro.qyoga.tests.platform.html.Link
 import pro.qyoga.tests.platform.html.QYogaPage
+import java.util.*
 
 
-abstract class ClientJournalPage(val clientId: Long, val addEntryLink: Link) : QYogaPage {
+abstract class ClientJournalPage(val clientId: UUID, val addEntryLink: Link) : QYogaPage {
 
     override val path = "/therapist/clients/{id}/journal"
 
@@ -26,13 +27,14 @@ abstract class ClientJournalPage(val clientId: Long, val addEntryLink: Link) : Q
         ClientPageTabsFragment.filesLinkClientId(element) shouldBe clientId
     }
 
-    fun addEntryLinkClientId(element: Element): Long? {
-        return addEntryLink.pathParam(element, "clientId")?.toLong()
+    fun addEntryLinkClientId(element: Element): UUID? {
+        return addEntryLink.pathParam(element, "clientId")
+            ?.let { UUID.fromString(it) }
     }
 
 }
 
-class EmptyClientJournalPage(clientId: Long) : ClientJournalPage(
+class EmptyClientJournalPage(clientId: UUID) : ClientJournalPage(
     clientId,
     Link.hxGet("addFirstEntryLink", CreateJournalEntryPageController.CREATE_JOURNAL_PAGE_URL, "Добавьте первую")
 ) {
@@ -45,7 +47,7 @@ class EmptyClientJournalPage(clientId: Long) : ClientJournalPage(
 }
 
 class NonEmptyClientJournalPage(
-    clientId: Long,
+    clientId: UUID,
     private val entries: List<JournalEntry>,
 ) : ClientJournalPage(
     clientId,

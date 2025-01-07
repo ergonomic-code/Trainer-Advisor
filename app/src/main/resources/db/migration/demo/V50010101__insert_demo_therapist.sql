@@ -1,4 +1,4 @@
-CREATE OR REPLACE FUNCTION usr(user_email varchar) RETURNS BIGINT
+CREATE OR REPLACE FUNCTION usr(user_email varchar) RETURNS UUID
 AS
 'SELECT id
  FROM users

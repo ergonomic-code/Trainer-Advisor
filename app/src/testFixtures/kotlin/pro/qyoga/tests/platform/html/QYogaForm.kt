@@ -51,4 +51,14 @@ abstract class QYogaForm(
         (this@QYogaForm.components as ArrayList).add(comp)
     }
 
+    fun actionParam(element: Element, paramName: String): String? {
+        val actualUrl = element.select(selector()).attr(action.attr)
+        val paramIdx = "\\{.*?}".toRegex().findAll(action.url)
+            .indexOfFirst { it.value == "{$paramName}" }
+            .takeIf { it >= 0 }
+            ?: return null
+
+        return action.urlRegex.matchEntire(actualUrl)?.groupValues[paramIdx + 1]
+    }
+
 }

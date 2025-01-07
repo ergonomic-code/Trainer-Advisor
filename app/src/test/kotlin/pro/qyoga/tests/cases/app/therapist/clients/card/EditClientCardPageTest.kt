@@ -87,7 +87,7 @@ class EditClientCardPageTest : QYogaAppIntegrationBaseTest() {
     fun `Request of edit page for not existing client id should return 404 error page`() {
         // Given
         val therapist = TherapistClient.loginAsTheTherapist()
-        val notExistingClientId: Long = -1
+        val notExistingClientId = ClientsObjectMother.randomId()
 
         // When
         val document =
@@ -101,7 +101,7 @@ class EditClientCardPageTest : QYogaAppIntegrationBaseTest() {
     fun `Edit of not existing client should return 404 error page`() {
         // Given
         val therapist = TherapistClient.loginAsTheTherapist()
-        val notExistingClientId: Long = -1
+        val notExistingClientId = ClientsObjectMother.randomId()
 
         // When
         val document =

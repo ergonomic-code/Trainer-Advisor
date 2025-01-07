@@ -23,7 +23,7 @@ class ClientsRepo(
     namedParameterJdbcOperations: NamedParameterJdbcOperations,
     jdbcConverter: JdbcConverter,
     relationalMappingContext: RelationalMappingContext
-) : ErgoRepository<Client, Long>(
+) : ErgoRepository<Client, UUID>(
     jdbcAggregateTemplate,
     namedParameterJdbcOperations,
     Client::class,

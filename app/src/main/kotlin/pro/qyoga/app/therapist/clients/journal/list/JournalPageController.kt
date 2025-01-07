@@ -10,6 +10,7 @@ import pro.qyoga.app.therapist.clients.ClientPageTab
 import pro.qyoga.app.therapist.clients.clientPageModel
 import pro.qyoga.core.clients.journals.dtos.JournalPageRequest
 import pro.qyoga.core.clients.journals.model.JournalEntry
+import java.util.*
 
 
 private const val JOURNAL = "journal"
@@ -21,7 +22,7 @@ class JournalPageController(
 
     @GetMapping(JOURNAL_PAGE_PATH)
     fun handleGetJournalPage(
-        @PathVariable clientId: Long
+        @PathVariable clientId: UUID
     ): ModelAndView {
         val firstPage = JournalPageRequest.firstPage(clientId, fetch = listOf(JournalEntry::therapeuticTask))
         return when (val result = getJournalPage(firstPage)) {

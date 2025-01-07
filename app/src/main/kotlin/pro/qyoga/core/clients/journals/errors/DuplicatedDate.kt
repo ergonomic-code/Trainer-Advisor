@@ -8,4 +8,4 @@ class DuplicatedDate(
     val duplicatedEntry: JournalEntry,
     override val cause: DuplicateKeyException
 ) :
-    DomainError("Journal entry for client ${duplicatedEntry.client.id} and date ${duplicatedEntry.date} already exists")
+    DomainError("Journal entry for client ${duplicatedEntry.clientRef.id} and date ${duplicatedEntry.date} already exists")

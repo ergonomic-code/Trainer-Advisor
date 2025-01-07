@@ -5,6 +5,7 @@ import pro.qyoga.app.therapist.clients.journal.edit_entry.shared.ClientNotFound
 import pro.qyoga.core.clients.cards.ClientsRepo
 import pro.qyoga.core.clients.journals.JournalEntriesRepo
 import pro.qyoga.core.clients.journals.model.JournalEntry
+import java.util.*
 
 @Component
 class GetJournalEntryOp(
@@ -12,7 +13,7 @@ class GetJournalEntryOp(
     private val journalEntriesRepo: JournalEntriesRepo
 ) {
 
-    fun getJournalEntry(clientId: Long, entryId: Long): JournalEntry? {
+    fun getJournalEntry(clientId: UUID, entryId: Long): JournalEntry? {
         if (!clientsRepo.existsById(clientId)) {
             throw ClientNotFound(clientId)
         }

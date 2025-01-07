@@ -11,10 +11,11 @@ import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
 import pro.azhidkov.platform.file_storage.api.StoredFile
 import pro.qyoga.tests.pages.therapist.clients.files.ClientFilesPage
+import java.util.*
 
 class TherapistClientFilesApi(override val authCookie: Cookie) : AuthorizedApi {
 
-    fun getClientFilesPage(clientId: Long, expectedStatus: HttpStatus = HttpStatus.OK): Document {
+    fun getClientFilesPage(clientId: UUID, expectedStatus: HttpStatus = HttpStatus.OK): Document {
         return Given {
             authorized()
 
@@ -28,7 +29,7 @@ class TherapistClientFilesApi(override val authCookie: Cookie) : AuthorizedApi {
         }
     }
 
-    fun upload(clientId: Long, file: StoredFile, expectedStatus: HttpStatus = HttpStatus.OK): Document? {
+    fun upload(clientId: UUID, file: StoredFile, expectedStatus: HttpStatus = HttpStatus.OK): Document? {
         return Given {
             contentType("multipart/form-data; charset=UTF-8")
             authorized()
@@ -55,7 +56,7 @@ class TherapistClientFilesApi(override val authCookie: Cookie) : AuthorizedApi {
         }
     }
 
-    fun download(clientId: Long, fileId: Long): Response {
+    fun download(clientId: UUID, fileId: Long): Response {
         return Given {
             authorized()
 
@@ -66,7 +67,7 @@ class TherapistClientFilesApi(override val authCookie: Cookie) : AuthorizedApi {
         }
     }
 
-    fun deleteFile(clientId: Long, fileId: Long): Document? {
+    fun deleteFile(clientId: UUID, fileId: Long): Document? {
         return Given {
             authorized()
 

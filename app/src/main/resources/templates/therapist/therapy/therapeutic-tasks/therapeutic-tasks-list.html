@@ -108,7 +108,7 @@
                                             <li
                                                     class="text-danger"
                                                     th:each="entry : ${references}"
-                                                    th:text="${entry.client.entity.fullName() + ' - ' + #temporals.format(entry.date, T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN)}">
+                                                    th:text="${entry.clientRef.entity.fullName() + ' - ' + #temporals.format(entry.date, T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN)}">
                                             </li>
                                         </ul>
                                     </div>

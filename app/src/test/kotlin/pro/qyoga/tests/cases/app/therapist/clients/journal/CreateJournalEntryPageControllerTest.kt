@@ -84,7 +84,7 @@ class CreateJournalEntryPageControllerTest : QYogaAppIntegrationBaseTest() {
         val journal = backgrounds.clientJournal.getWholeJournal(client.id).content
         journal.forAny {
             it shouldMatch createJournalEntryRequest
-            it.therapeuticTask.id shouldNotBe anotherTherapeuticTask.id
+            it.therapeuticTask?.id shouldNotBe anotherTherapeuticTask.id
         }
     }
 

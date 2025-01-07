@@ -8,11 +8,13 @@ import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.Embedded
 import org.springframework.data.relational.core.mapping.Table
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.Identifiable
+import pro.azhidkov.platform.uuid.UUIDv7
 import pro.qyoga.core.users.therapists.TherapistRef
 import java.time.Instant
 import java.time.LocalDate
+import java.util.*
 
-typealias ClientRef = AggregateReference<Client, Long>
+typealias ClientRef = AggregateReference<Client, UUID>
 
 @Table("clients")
 data class Client(
@@ -30,14 +32,14 @@ data class Client(
     val therapistRef: TherapistRef,
 
     @Id
-    override val id: Long = 0,
+    override val id: UUID = UUIDv7.randomUUID(),
     @CreatedDate
     val createdAt: Instant = Instant.now(),
     @LastModifiedDate
     val modifiedAt: Instant? = null,
     @Version
     val version: Long = 0
-) : Identifiable<Long> {
+) : Identifiable<UUID> {
 
     fun fullName() = listOf(lastName, firstName, middleName)
         .filter { it?.isNotBlank() == true }

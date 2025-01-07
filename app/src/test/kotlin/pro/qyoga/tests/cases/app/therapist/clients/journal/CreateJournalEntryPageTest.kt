@@ -6,9 +6,12 @@ import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import pro.qyoga.app.therapist.clients.journal.list.JournalPageController
 import pro.qyoga.l10n.russianDateFormat
-import pro.qyoga.tests.assertions.*
-import pro.qyoga.tests.assertions.shouldBe
+import pro.qyoga.tests.assertions.shouldBeComponent
+import pro.qyoga.tests.assertions.shouldBePage
+import pro.qyoga.tests.assertions.shouldHaveElement
+import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
+import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
 import pro.qyoga.tests.fixture.object_mothers.clients.JournalEntriesObjectMother
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
 import pro.qyoga.tests.fixture.object_mothers.therapists.theTherapistUserDetails
@@ -33,7 +36,7 @@ class CreateJournalEntryPageTest : QYogaAppIntegrationBaseTest() {
         val document = therapist.clientJournal.getCreateJournalEntryPage(client.id)
 
         // Then
-        document shouldHaveComponent CreateJournalEntryPage
+        document shouldBePage CreateJournalEntryPage(client.id)
     }
 
     @Test
@@ -84,14 +87,14 @@ class CreateJournalEntryPageTest : QYogaAppIntegrationBaseTest() {
         CreateJournalEntryForm.dateInput.value(document) shouldBe russianDateFormat.format(LocalDate.now())
         CreateJournalEntryForm.therapeuticTaskNameInput.value(document) shouldBe createJournalEntryRequest.therapeuticTaskName
         CreateJournalEntryForm.entryTextInput.value(document) shouldBe createJournalEntryRequest.journalEntryText
-        document shouldHave JournalEntryFrom.DUPLICATED_DATE_MESSAGE
+        document shouldHaveElement JournalEntryFrom.DUPLICATED_DATE_MESSAGE
     }
 
     @Test
     fun `Request of create journal entry page for not existing client id should return 404 error page`() {
         // Given
         val therapist = TherapistClient.loginAsTheTherapist()
-        val notExistingClientId: Long = -1
+        val notExistingClientId = ClientsObjectMother.randomId()
 
         // When
         val document = therapist.clientJournal.getCreateJournalEntryPage(
@@ -107,7 +110,7 @@ class CreateJournalEntryPageTest : QYogaAppIntegrationBaseTest() {
     fun `Post of create journal entry request for not existing client id should return generic error page`() {
         // Given
         val therapist = TherapistClient.loginAsTheTherapist()
-        val notExistingClientId: Long = -1
+        val notExistingClientId = ClientsObjectMother.randomId()
         val anyJournalEntry = JournalEntriesObjectMother.journalEntry()
 
         // When
@@ -118,7 +121,7 @@ class CreateJournalEntryPageTest : QYogaAppIntegrationBaseTest() {
         )
 
         // Then
-        document shouldBe GenericErrorPage
+        document shouldBePage GenericErrorPage
     }
 
 }

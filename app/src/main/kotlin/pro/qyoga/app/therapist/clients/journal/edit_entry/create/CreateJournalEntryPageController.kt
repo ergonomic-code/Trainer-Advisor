@@ -18,6 +18,7 @@ import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRequest
 import pro.qyoga.core.clients.journals.errors.DuplicatedDate
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import java.time.LocalDate
+import java.util.*
 
 
 @Controller
@@ -28,7 +29,7 @@ class CreateJournalEntryPageController(
 
     @GetMapping(CREATE_JOURNAL_PAGE_URL)
     fun handleGetCreateJournalEntryPage(
-        @PathVariable clientId: Long
+        @PathVariable clientId: UUID
     ): ModelAndView {
         val client = clientsRepo.findByIdOrNull(clientId)
             ?: return notFound
@@ -43,7 +44,7 @@ class CreateJournalEntryPageController(
 
     @PostMapping(CREATE_JOURNAL_PAGE_URL)
     fun handleCreateJournalEntry(
-        @PathVariable clientId: Long,
+        @PathVariable clientId: UUID,
         @ModelAttribute editJournalEntryRequest: EditJournalEntryRequest,
         @AuthenticationPrincipal principal: QyogaUserDetails,
     ): Any {
@@ -58,7 +59,7 @@ class CreateJournalEntryPageController(
             result.isFailureOf<DuplicatedDate>() -> {
                 val ex = result.exceptionOrNull() as DuplicatedDate
                 modelAndView("$JOURNAL_ENTRY_VIEW_NAME :: journalEntryFrom") {
-                    "client" bindTo ex.duplicatedEntry.client
+                    "client" bindTo ex.duplicatedEntry.clientRef
                     "entry" bindTo ex.duplicatedEntry
                     "duplicatedDate" bindTo true
                     "formAction" bindTo createFormAction(clientId)
@@ -70,7 +71,7 @@ class CreateJournalEntryPageController(
         }
     }
 
-    private fun createFormAction(clientId: Long) = CREATE_JOURNAL_PAGE_URL.replace("\\{clientId}", clientId.toString())
+    private fun createFormAction(clientId: UUID) = CREATE_JOURNAL_PAGE_URL.replace("{clientId}", clientId.toString())
 
     companion object {
 

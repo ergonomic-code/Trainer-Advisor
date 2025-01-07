@@ -13,6 +13,7 @@ import pro.qyoga.core.clients.journals.JournalEntriesRepo
 import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRequest
 import pro.qyoga.core.clients.journals.errors.DuplicatedDate
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
+import java.util.*
 
 
 @Controller
@@ -25,24 +26,24 @@ class EditJournalEntryPageController(
 
     @GetMapping()
     fun handleGetEditJournalEntryPage(
-        @PathVariable clientId: Long,
+        @PathVariable clientId: UUID,
         @PathVariable entryId: Long
     ): ModelAndView {
         val result = getJournalEntry.getJournalEntry(clientId, entryId)
             ?: return notFound
 
         return modelAndView(JOURNAL_ENTRY_VIEW_NAME) {
-            "client" bindTo result.client
+            "client" bindTo result.clientRef
             "entry" bindTo result
             "formAction" bindTo editFormAction(clientId, entryId)
         }
     }
 
-    private fun editFormAction(clientId: Long, entryId: Long) = "/therapist/clients/$clientId/journal/$entryId"
+    private fun editFormAction(clientId: UUID, entryId: Long) = "/therapist/clients/$clientId/journal/$entryId"
 
     @PostMapping
     fun handleEditJournalEntry(
-        @PathVariable clientId: Long,
+        @PathVariable clientId: UUID,
         @PathVariable entryId: Long,
         @ModelAttribute editJournalEntryRequest: EditJournalEntryRequest,
         @AuthenticationPrincipal principal: QyogaUserDetails,
@@ -52,7 +53,7 @@ class EditJournalEntryPageController(
             return hxRedirect("/therapist/clients/$clientId/journal")
         } catch (ex: DuplicatedDate) {
             return modelAndView("$JOURNAL_ENTRY_VIEW_NAME :: journalEntryFrom") {
-                "client" bindTo ex.duplicatedEntry.client
+                "client" bindTo ex.duplicatedEntry.clientRef
                 "entry" bindTo ex.duplicatedEntry
                 "duplicatedDate" bindTo true
                 "formAction" bindTo editFormAction(clientId, entryId)
@@ -63,7 +64,7 @@ class EditJournalEntryPageController(
     @DeleteMapping
     @ResponseStatus(HttpStatus.OK)
     fun handleDeleteJournalEntry(
-        @PathVariable clientId: Long,
+        @PathVariable clientId: UUID,
         @PathVariable entryId: Long,
     ) {
         journalsEntriesRepo.deleteById(entryId)

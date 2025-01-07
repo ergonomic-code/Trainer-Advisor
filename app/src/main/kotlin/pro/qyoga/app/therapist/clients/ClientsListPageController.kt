@@ -14,6 +14,7 @@ import pro.qyoga.core.clients.cards.dtos.ClientSearchDto
 import pro.qyoga.core.clients.cards.findTherapistClientsPageBySearchForm
 import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
+import java.util.*
 
 private const val CLIENTS = "clients"
 
@@ -59,7 +60,7 @@ class ClientsListPageController(
 
     @DeleteMapping("/delete/{id}")
     @ResponseBody
-    fun deleteClient(@PathVariable id: Long) {
+    fun deleteClient(@PathVariable id: UUID) {
         clientsRepo.deleteById(id)
     }
 

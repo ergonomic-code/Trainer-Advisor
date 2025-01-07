@@ -29,8 +29,8 @@ class CaptchaBackgrounds(
         return id to captchas[id]!!.captchaCode
     }
 
-    fun getCaptchaCode(captchaId: String): String {
-        return captchas[UUID.fromString(captchaId)]!!.captchaCode
+    fun getCaptchaCode(captchaId: UUID): String {
+        return captchas[captchaId]!!.captchaCode
     }
 
 }
