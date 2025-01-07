@@ -6,18 +6,19 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import org.jsoup.nodes.Element
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
+import pro.qyoga.app.therapist.clients.journal.edit_entry.create.CreateJournalEntryPageController
 import pro.qyoga.core.clients.journals.model.JournalEntry
 import pro.qyoga.l10n.russianDateFormat
 import pro.qyoga.tests.assertions.PageMatcher
 import pro.qyoga.tests.assertions.shouldHaveComponent
-import pro.qyoga.tests.pages.therapist.clients.journal.entry.CreateJournalEntryPage
 import pro.qyoga.tests.pages.therapist.clients.journal.entry.EditJournalEntryPage
 import pro.qyoga.tests.platform.html.Link
 
 
 object ClientJournalFragment {
 
-    private val addEntryLink = Link.hxGet("addEntryLink", CreateJournalEntryPage.PATH, "Добавить запись")
+    private val addEntryLink =
+        Link.hxGet("addEntryLink", CreateJournalEntryPageController.CREATE_JOURNAL_PAGE_URL, "Добавить запись")
     private val editEntryLink = Link.hxGet("editEntryLink", EditJournalEntryPage.PATH, "")
     private val deleteEntryLink = Link.hxDelete("deleteEntryLink", EditJournalEntryPage.PATH, "")
 
@@ -32,12 +33,12 @@ object ClientJournalFragment {
             entries.zip(entryElements).forAll { (entry, el) ->
 
                 val expectedEditLink = editEntryLink.urlPattern
-                    .replace("{clientId}", entry.client.id.toString())
+                    .replace("{clientId}", entry.clientRef.id.toString())
                     .replace("{entryId}", entry.id.toString())
                 el.select(".editEntryLink").attr(editEntryLink.targetAttr) shouldBe expectedEditLink
 
                 val expectedDeleteLink = deleteEntryLink.urlPattern
-                    .replace("{clientId}", entry.client.id.toString())
+                    .replace("{clientId}", entry.clientRef.id.toString())
                     .replace("{entryId}", entry.id.toString())
                 el.select(".deleteEntryLink").attr(deleteEntryLink.targetAttr) shouldBe expectedDeleteLink
 

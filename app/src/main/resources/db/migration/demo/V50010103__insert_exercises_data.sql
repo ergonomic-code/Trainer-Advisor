@@ -1,9 +1,12 @@
-INSERT INTO exercises(title, description, duration, exercise_type, therapist_id, created_at, version)
-VALUES ('Разминка для шеи', '', '00:10:00', 'WARM_UP', 2, now(), 1),
-       ('ПИР на верхние трапеции', '', '00:10:00', 'RELAXATION', 2, now(), 1),
-       ('ПИР на ременные мышцы шеи и головы', '', '00:10:00', 'RELAXATION', 2, now(), 1),
-       ('Укрепление глубоких сгибателей шеи', '', '00:04:00', 'STRENGTHENING', 2, now(), 1),
-       ('Тракция и расслабление шеи в шавасане', '', '00:15:00', 'TRACTION', 2, now(), 1);
+INSERT INTO exercises(title, description, duration, exercise_type, owner_ref, created_at, version)
+VALUES ('Разминка для шеи', '', '00:10:00', 'WARM_UP', usr('therapist@trainer-advisor.pro'), now(), 1),
+       ('ПИР на верхние трапеции', '', '00:10:00', 'RELAXATION', usr('therapist@trainer-advisor.pro'), now(), 1),
+       ('ПИР на ременные мышцы шеи и головы', '', '00:10:00', 'RELAXATION', usr('therapist@trainer-advisor.pro'), now(),
+        1),
+       ('Укрепление глубоких сгибателей шеи', '', '00:04:00', 'STRENGTHENING', usr('therapist@trainer-advisor.pro'),
+        now(), 1),
+       ('Тракция и расслабление шеи в шавасане', '', '00:15:00', 'TRACTION', usr('therapist@trainer-advisor.pro'),
+        now(), 1);
 
 INSERT
 INTO exercise_steps(exercise_id, step_index, description)

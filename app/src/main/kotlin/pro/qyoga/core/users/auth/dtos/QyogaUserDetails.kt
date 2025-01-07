@@ -4,9 +4,10 @@ import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 import pro.qyoga.core.users.auth.model.User
+import java.util.*
 
 data class QyogaUserDetails(
-    val id: Long,
+    val id: UUID,
     private val username: String,
     private val password: String,
     private val roles: Collection<GrantedAuthority>,

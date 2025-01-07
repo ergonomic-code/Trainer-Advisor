@@ -13,9 +13,9 @@ import java.time.LocalDate
 
 @Table("journal_entries")
 data class JournalEntry(
-    val client: ClientRef,
+    val clientRef: ClientRef,
     val date: LocalDate,
-    val therapeuticTask: TherapeuticTaskRef,
+    val therapeuticTask: TherapeuticTaskRef?,
     val entryText: String,
 
     @Id val id: Long = 0,
@@ -26,7 +26,7 @@ data class JournalEntry(
 
     object Fetch {
         val summaryRefs = listOf(JournalEntry::therapeuticTask)
-        val client = listOf(JournalEntry::client)
+        val client = listOf(JournalEntry::clientRef)
     }
 
 }

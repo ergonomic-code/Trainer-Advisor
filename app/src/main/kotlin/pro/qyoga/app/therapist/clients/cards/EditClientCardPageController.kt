@@ -2,11 +2,9 @@ package pro.qyoga.app.therapist.clients.cards
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Controller
-import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.servlet.ModelAndView
 import pro.azhidkov.platform.kotlin.mapNull
 import pro.azhidkov.platform.kotlin.mapSuccessOrNull
@@ -18,20 +16,19 @@ import pro.qyoga.core.clients.cards.ClientsRepo
 import pro.qyoga.core.clients.cards.dtos.ClientCardDto
 import pro.qyoga.core.clients.cards.errors.DuplicatedPhoneException
 import pro.qyoga.core.clients.cards.patchedBy
+import java.util.*
 
 
 @Controller
-@RequestMapping("/therapist/clients/{id}/card")
 class EditClientCardPageController(
     private val clientsRepo: ClientsRepo
 ) {
 
-    @GetMapping
+    @GetMapping(EDIT_CLIENT_CARD_PAGE_PATH)
     fun getEditClientCardPage(
-        @PathVariable id: Long,
-        model: Model
+        @PathVariable clientId: UUID
     ): ModelAndView {
-        val client = clientsRepo.findByIdOrNull(id)
+        val client = clientsRepo.findByIdOrNull(clientId)
             ?: return notFound
 
         return clientPageModel(client, ClientPageTab.CARD) {
@@ -39,13 +36,13 @@ class EditClientCardPageController(
         }
     }
 
-    @PostMapping
+    @PostMapping(EDIT_CLIENT_CARD_PAGE_PATH)
     fun editClientCard(
         clientCardDto: ClientCardDto,
-        @PathVariable id: Long
+        @PathVariable clientId: UUID
     ): ModelAndView {
         val res = runCatching {
-            clientsRepo.updateById(id) { client -> client.patchedBy(clientCardDto) }
+            clientsRepo.updateById(clientId) { client -> client.patchedBy(clientCardDto) }
         }
 
         val modelAndView = res
@@ -61,6 +58,12 @@ class EditClientCardPageController(
             .getOrThrow()
 
         return modelAndView
+    }
+
+    companion object {
+
+        const val EDIT_CLIENT_CARD_PAGE_PATH = "/therapist/clients/{clientId}/card"
+
     }
 
 }

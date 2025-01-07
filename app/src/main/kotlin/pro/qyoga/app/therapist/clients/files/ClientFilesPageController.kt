@@ -1,6 +1,5 @@
 package pro.qyoga.app.therapist.clients.files
 
-import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -14,8 +13,10 @@ import pro.qyoga.app.platform.toStoredFile
 import pro.qyoga.app.therapist.clients.ClientPageTab
 import pro.qyoga.app.therapist.clients.clientPageModel
 import pro.qyoga.core.clients.cards.ClientsRepo
+import pro.qyoga.core.clients.cards.model.ClientRef
 import pro.qyoga.core.clients.files.ClientFilesService
 import pro.qyoga.core.clients.files.impl.ClientFilesRepo
+import java.util.*
 
 
 @Controller
@@ -26,7 +27,7 @@ class ClientFilesPageController(
 ) {
 
     @GetMapping
-    fun getClientFilesPage(@PathVariable clientId: Long): ModelAndView {
+    fun getClientFilesPage(@PathVariable clientId: UUID): ModelAndView {
         val client = clientsRepo.findByIdOrNull(clientId)
             ?: return notFound
 
@@ -39,11 +40,11 @@ class ClientFilesPageController(
 
     @PostMapping
     fun uploadImage(
-        @PathVariable clientId: Long,
+        @PathVariable clientId: UUID,
         newFile: MultipartFile
     ): ModelAndView {
         val storedFile = newFile.toStoredFile()
-        val uploadedFile = clientFilesService.addFile(AggregateReference.to(clientId), storedFile)
+        val uploadedFile = clientFilesService.addFile(ClientRef.to(clientId), storedFile)
 
         return modelAndView("therapist/clients/client-files-fragment :: client-files-list-row") {
             "clientFiles" bindTo listOf(uploadedFile)
@@ -51,7 +52,7 @@ class ClientFilesPageController(
     }
 
     @GetMapping("/{fileId}")
-    fun getFile(@PathVariable clientId: Long, @PathVariable fileId: Long): Any {
+    fun getFile(@PathVariable clientId: UUID, @PathVariable fileId: Long): Any {
         val storedFileInputStream = clientFilesService.findFileContent(clientId, fileId)
             ?: return notFound
 
@@ -59,7 +60,7 @@ class ClientFilesPageController(
     }
 
     @DeleteMapping("/{fileId}")
-    fun deleteFile(@PathVariable clientId: Long, @PathVariable fileId: Long): ResponseEntity<String> {
+    fun deleteFile(@PathVariable clientId: UUID, @PathVariable fileId: Long): ResponseEntity<String> {
         clientFilesService.deleteFile(clientId, fileId)
         return ResponseEntity.ok(null)
     }

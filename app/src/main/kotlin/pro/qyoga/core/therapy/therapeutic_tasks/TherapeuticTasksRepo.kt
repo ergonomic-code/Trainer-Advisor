@@ -13,6 +13,7 @@ import pro.azhidkov.platform.spring.sdj.withSortBy
 import pro.qyoga.core.therapy.therapeutic_tasks.errors.DuplicatedTherapeuticTaskName
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
 import java.sql.Timestamp
+import java.util.*
 
 
 @Repository
@@ -44,12 +45,12 @@ class TherapeuticTasksRepo(
     fun getOrCreate(therapeuticTask: TherapeuticTask): TherapeuticTask {
         val id = upsert(
             """
-            INSERT INTO therapeutic_tasks (name, owner, created_at, version) VALUES (:name, :owner, :createdAt, 1)
-            ON CONFLICT (owner, lower(name)) DO UPDATE SET name = excluded.name
+            INSERT INTO therapeutic_tasks (name, owner_ref, created_at, version) VALUES (:name, :owner_ref, :createdAt, 1)
+            ON CONFLICT (owner_ref, lower(name)) DO UPDATE SET name = excluded.name
             RETURNING id
         """,
             "name" to therapeuticTask.name,
-            "owner" to therapeuticTask.owner.id,
+            "owner_ref" to therapeuticTask.ownerRef.id,
             "createdAt" to Timestamp(therapeuticTask.createdAt.toEpochMilli())
         )
 
@@ -59,12 +60,12 @@ class TherapeuticTasksRepo(
 }
 
 fun TherapeuticTasksRepo.findTherapistTasksSliceByName(
-    therapistId: Long,
+    therapistId: UUID,
     searchKey: String?,
     page: Pageable
 ): Slice<TherapeuticTask> {
     return findPage(page) {
-        TherapeuticTask::owner isEqual therapistId
+        TherapeuticTask::ownerRef isEqual therapistId
         TherapeuticTask::name isILikeIfNotNull searchKey
     }
 }

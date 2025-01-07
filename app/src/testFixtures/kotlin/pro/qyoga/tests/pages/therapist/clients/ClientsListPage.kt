@@ -14,6 +14,7 @@ import pro.qyoga.tests.pages.therapist.clients.card.CreateClientPage
 import pro.qyoga.tests.platform.html.*
 import pro.qyoga.tests.platform.html.Input.Companion.text
 import pro.qyoga.tests.platform.kotest.buildAllOfMatcher
+import java.util.*
 
 
 object ClientsListPage : QYogaPage {
@@ -38,10 +39,10 @@ object ClientsListPage : QYogaPage {
     }
 
     val updateAction = "$path/{id}/journal"
-    private val updateActionPattern = updateAction.replace("{id}", "(\\d+)").toRegex()
+    private val updateActionPattern = updateAction.replace("{id}", "([a-zA-Z0-9_-]+)").toRegex()
 
     val deleteAction = "$path/delete/{id}"
-    private val deleteActionPattern = deleteAction.replace("{id}", "(\\d+)").toRegex()
+    private val deleteActionPattern = deleteAction.replace("{id}", "([a-zA-Z0-9_-]+)").toRegex()
 
     private val addLink = Link("createClientLink", CreateClientPage, "Добавить")
 
@@ -55,18 +56,23 @@ object ClientsListPage : QYogaPage {
         element shouldHaveComponent addLink
     }
 
-    fun clientId(document: Document, rowIdx: Int): Long {
+    fun clientId(document: Document, rowIdx: Int): UUID {
         val deleteUrl = document.select(CLIENT_ROW)[rowIdx].select("td a").attr("hx-delete")
-        val matcher = deleteActionPattern.matchEntire(deleteUrl)
-        checkNotNull(matcher)
-        return matcher.groups[1]!!.value.toLong()
+        val matcher = deleteActionPattern.matchEntire(deleteUrl)!!
+        return UUID.fromString(matcher.groups[1]!!.value)
     }
 
     fun clientRow(client: Client): PageMatcher = PageMatcher { element ->
         element.select(CLIENT_ROW).forAny { row ->
             row.select("td.nameCell").text() shouldBe client.fullName()
-            row.select("td a.updateLink").attr("href") shouldMatch updateActionPattern
-            row.select("td a.deleteClientLink").attr("hx-delete") shouldMatch deleteActionPattern
+            val updateUrl = row.select("td a.updateLink").attr("href")
+            updateUrl shouldMatch updateActionPattern
+            val deleteUrl = row.select("td a.deleteClientLink").attr("hx-delete")
+            deleteUrl shouldMatch deleteActionPattern
+
+            val deleteClientIdMatcher = deleteActionPattern.matchEntire(deleteUrl)!!
+            val updateClientIdMatcher = updateActionPattern.matchEntire(updateUrl)!!
+            deleteClientIdMatcher.groups[1]!!.value shouldBe updateClientIdMatcher.groups[1]!!.value
         }
     }
 

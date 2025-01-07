@@ -18,6 +18,7 @@ import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
 import pro.qyoga.tests.fixture.object_mothers.FilesObjectMother
+import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
 import pro.qyoga.tests.fixture.object_mothers.therapy.exercises.AllSteps
 import pro.qyoga.tests.infra.junit.SLOW_TEST
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
@@ -31,9 +32,11 @@ class ClientFilesPageTest : QYogaAppIntegrationBaseTest() {
     fun `Request of client files page for not existing client should return 404`() {
         // Given
         val therapist = TherapistClient.loginAsTheTherapist()
+        val notExistingClientId = ClientsObjectMother.randomId()
 
         // When
-        val document = therapist.clientFiles.getClientFilesPage(-1, expectedStatus = HttpStatus.NOT_FOUND)
+        val document =
+            therapist.clientFiles.getClientFilesPage(notExistingClientId, expectedStatus = HttpStatus.NOT_FOUND)
 
         // Then
         document shouldBePage NotFoundErrorPage
@@ -110,7 +113,7 @@ class ClientFilesPageTest : QYogaAppIntegrationBaseTest() {
         val client = backgrounds.clients.createClients(1).single()
         val therapist = TherapistClient.loginAsTheTherapist()
         val file = FilesObjectMother.randomFile()
-        val clientFile = backgrounds.clientFiles.createFile(1, file)
+        val clientFile = backgrounds.clientFiles.createFile(client.id, file)
 
         // When
         val result = therapist.clientFiles.download(client.id, clientFile.id)
@@ -131,7 +134,7 @@ class ClientFilesPageTest : QYogaAppIntegrationBaseTest() {
         val client = backgrounds.clients.createClients(1).single()
         val therapist = TherapistClient.loginAsTheTherapist()
         val file = FilesObjectMother.randomFile(name = randomCyrillicWord())
-        val clientFile = backgrounds.clientFiles.createFile(1, file)
+        val clientFile = backgrounds.clientFiles.createFile(client.id, file)
 
         // When
         val result = therapist.clientFiles.download(client.id, clientFile.id)
@@ -154,7 +157,7 @@ class ClientFilesPageTest : QYogaAppIntegrationBaseTest() {
         val client = backgrounds.clients.createClients(1).single()
         val therapist = TherapistClient.loginAsTheTherapist()
         val file = FilesObjectMother.randomFile(name = randomCyrillicWord())
-        val clientFile = backgrounds.clientFiles.createFile(1, file)
+        val clientFile = backgrounds.clientFiles.createFile(client.id, file)
 
         // When
         val document = therapist.clientFiles.deleteFile(client.id, clientFile.id)
@@ -204,7 +207,7 @@ class ClientFilesPageTest : QYogaAppIntegrationBaseTest() {
         backgrounds.exercises.createExercise(1, AllSteps)
         val client = backgrounds.clients.createClients(1).single()
         val file = FilesObjectMother.randomFile()
-        val clientFile = backgrounds.clientFiles.createFile(1, file)
+        val clientFile = backgrounds.clientFiles.createFile(client.id, file)
 
         // When
         val result = therapist.clientFiles.download(client.id, clientFile.id)

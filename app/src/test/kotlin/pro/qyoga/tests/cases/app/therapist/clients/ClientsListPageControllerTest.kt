@@ -64,7 +64,7 @@ class ClientsListPageControllerTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         clients.content shouldHaveSize ownClientsCount
-        clients.content.forAll { it.therapistId shouldBe THE_THERAPIST_REF }
+        clients.content.forAll { it.therapistRef shouldBe THE_THERAPIST_REF }
     }
 
     @Test
@@ -91,7 +91,7 @@ class ClientsListPageControllerTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         clients.content shouldHaveSize ownClientsCount
-        clients.content.forAll { it.therapistId shouldBe THE_THERAPIST_REF }
+        clients.content.forAll { it.therapistRef shouldBe THE_THERAPIST_REF }
     }
 
 }

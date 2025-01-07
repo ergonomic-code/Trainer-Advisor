@@ -1,6 +1,7 @@
 package pro.qyoga.tests.fixture.object_mothers.clients
 
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.AggregateReferenceTarget
+import pro.azhidkov.platform.uuid.UUIDv7
 import pro.qyoga.core.clients.cards.Client
 import pro.qyoga.core.clients.cards.dtos.ClientCardDto
 import pro.qyoga.core.clients.cards.model.Client
@@ -11,6 +12,7 @@ import pro.qyoga.tests.fixture.data.*
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
 import java.time.Duration
 import java.time.LocalDate
+import java.util.*
 
 
 object ClientsObjectMother {
@@ -69,8 +71,11 @@ object ClientsObjectMother {
         version
     )
 
-    fun createClient(therapistId: Long, clientCardDto: ClientCardDto): Client =
+    fun createClient(therapistId: UUID, clientCardDto: ClientCardDto): Client =
         Client(therapistId, clientCardDto)
+
+    fun randomId() =
+        UUIDv7.randomUUID()
 
     val fakeClientRef: ClientRef = AggregateReferenceTarget(
         createClient(THE_THERAPIST_ID, createClientCardDtoMinimal())

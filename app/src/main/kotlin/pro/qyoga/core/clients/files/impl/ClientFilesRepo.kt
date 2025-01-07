@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository
 import pro.azhidkov.platform.spring.sdj.ergo.ErgoRepository
 import pro.azhidkov.platform.spring.sdj.sortBy
 import pro.qyoga.core.clients.files.model.ClientFile
+import java.util.*
 import kotlin.reflect.KProperty1
 
 
@@ -37,7 +38,7 @@ class ClientFilesRepo(
 }
 
 fun ClientFilesRepo.findClientFilesPage(
-    clientId: Long,
+    clientId: UUID,
     pageRequest: PageRequest,
     fetch: Iterable<KProperty1<ClientFile, *>> = ClientFile.Fetch.fileOnly
 ): Page<ClientFile> = this.findPage(pageRequest, fetch) {
@@ -45,7 +46,7 @@ fun ClientFilesRepo.findClientFilesPage(
 }
 
 fun ClientFilesRepo.findFile(
-    clientId: Long,
+    clientId: UUID,
     clientFileId: Long
 ): ClientFile? =
     this.findOne {

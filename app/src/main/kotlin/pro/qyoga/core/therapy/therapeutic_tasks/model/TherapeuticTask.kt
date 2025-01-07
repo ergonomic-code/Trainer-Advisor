@@ -8,14 +8,15 @@ import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.Table
 import pro.azhidkov.platform.NamedEntity
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.Identifiable
-import pro.qyoga.core.users.therapists.Therapist
+import pro.qyoga.core.users.therapists.TherapistRef
 import java.time.Instant
+import java.util.*
 
 typealias TherapeuticTaskRef = AggregateReference<TherapeuticTask, Long>
 
 @Table("therapeutic_tasks")
 data class TherapeuticTask(
-    val owner: AggregateReference<Therapist, Long>,
+    val ownerRef: TherapistRef,
     override val name: String,
 
     @Id
@@ -28,7 +29,7 @@ data class TherapeuticTask(
     val version: Long = 0,
 ) : Identifiable<Long>, NamedEntity<TherapeuticTask, Long> {
 
-    constructor(owner: Long, taskName: String) : this(AggregateReference.to(owner), taskName)
+    constructor(owner: UUID, taskName: String) : this(AggregateReference.to(owner), taskName)
 
     fun withName(newName: String): TherapeuticTask {
         return copy(name = newName)

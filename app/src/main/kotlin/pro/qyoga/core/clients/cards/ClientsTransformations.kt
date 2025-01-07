@@ -3,9 +3,10 @@ package pro.qyoga.core.clients.cards
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import pro.qyoga.core.clients.cards.dtos.ClientCardDto
 import pro.qyoga.core.clients.cards.model.Client
+import java.util.*
 
 
-fun Client(therapistId: Long, createRequest: ClientCardDto): Client =
+fun Client(therapistId: UUID, createRequest: ClientCardDto): Client =
     Client(
         createRequest.firstName,
         createRequest.lastName,
@@ -31,7 +32,7 @@ fun Client.patchedBy(clientCardDto: ClientCardDto): Client = Client(
     distributionSource = clientCardDto.distributionSource,
     complaints = clientCardDto.complaints,
     anamnesis = clientCardDto.anamnesis,
-    therapistId = therapistId,
+    therapistRef = therapistRef,
 
     id = id,
     version = version

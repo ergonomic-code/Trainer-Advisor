@@ -9,8 +9,9 @@ import org.springframework.data.relational.core.mapping.Table
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.Identifiable
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import java.time.Instant
+import java.util.*
 
-typealias TherapistRef = AggregateReference<Therapist, Long>
+typealias TherapistRef = AggregateReference<Therapist, UUID>
 
 @Table("therapists")
 data class Therapist(
@@ -18,14 +19,14 @@ data class Therapist(
     val lastName: String,
 
     @Id
-    override val id: Long,
+    override val id: UUID,
     @CreatedDate
     val createdAt: Instant = Instant.now(),
     @LastModifiedDate
     val modifiedAt: Instant? = null,
     @Version
     val version: Long = 0
-) : Identifiable<Long>
+) : Identifiable<UUID>
 
 val QyogaUserDetails.ref: TherapistRef
     get() = AggregateReference.to(id)

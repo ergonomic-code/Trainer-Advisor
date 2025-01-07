@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.clients.TherapistClient
+import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
 import pro.qyoga.tests.fixture.object_mothers.therapists.theTherapistUserDetails
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
@@ -27,7 +28,7 @@ class JournalPageTest : QYogaAppIntegrationBaseTest() {
         val document = therapist.clientJournal.getJournalPage(client.id)
 
         // Then
-        document shouldBe NonEmptyClientJournalPage(firstPageEntries)
+        document shouldBe NonEmptyClientJournalPage(client.id, firstPageEntries)
     }
 
     @Test
@@ -42,14 +43,14 @@ class JournalPageTest : QYogaAppIntegrationBaseTest() {
         val document = therapist.clientJournal.getJournalPage(client.id)
 
         // Then
-        document shouldBe EmptyClientJournalPage
+        document shouldBe EmptyClientJournalPage(client.id)
     }
 
     @Test
     fun `When not existing journal entry is deleted response with 200 status should be returned`() {
         // Given
         val therapist = TherapistClient.loginAsTheTherapist()
-        val notExistingClientId = -1L
+        val notExistingClientId = ClientsObjectMother.randomId()
         val notExistingEntryId = -1L
 
         // When/Then

@@ -14,6 +14,7 @@ import pro.azhidkov.platform.spring.sdj.sortBy
 import pro.qyoga.core.clients.journals.dtos.JournalPageRequest
 import pro.qyoga.core.clients.journals.errors.DuplicatedDate
 import pro.qyoga.core.clients.journals.model.JournalEntry
+import java.util.*
 import kotlin.reflect.KProperty1
 
 
@@ -43,18 +44,18 @@ class JournalEntriesRepo(
             pageRequest = PageRequest.of(0, journalPageRequest.pageSize, sortBy(JournalEntry::date).descending()),
             fetch = journalPageRequest.fetch,
         ) {
-            JournalEntry::client isEqual AggregateReference.to(journalPageRequest.clientId)
+            JournalEntry::clientRef isEqual AggregateReference.to(journalPageRequest.clientId)
             JournalEntry::date isLessThanIfNotNull journalPageRequest.date
         }
     }
 
     fun getEntry(
-        clientId: Long,
+        clientId: UUID,
         entryId: Long,
         fetch: Iterable<KProperty1<JournalEntry, *>> = emptySet()
     ): JournalEntry? {
         return findOne(fetch) {
-            JournalEntry::client isEqual AggregateReference.to(clientId)
+            JournalEntry::clientRef isEqual AggregateReference.to(clientId)
             JournalEntry::id isEqual entryId
         }
     }

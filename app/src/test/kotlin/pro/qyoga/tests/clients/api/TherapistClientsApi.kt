@@ -19,6 +19,7 @@ import pro.qyoga.tests.pages.therapist.clients.card.CreateClientForm
 import pro.qyoga.tests.pages.therapist.clients.card.CreateClientPage
 import pro.qyoga.tests.pages.therapist.clients.card.EditClientForm
 import pro.qyoga.tests.pages.therapist.clients.card.EditClientPage
+import java.util.*
 
 
 class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
@@ -47,7 +48,7 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
         }
     }
 
-    fun getClientEditPage(clientId: Long, expectedStatus: HttpStatus = HttpStatus.OK): Document {
+    fun getClientEditPage(clientId: UUID, expectedStatus: HttpStatus = HttpStatus.OK): Document {
         return Given {
             authorized()
             pathParam("id", clientId)
@@ -60,10 +61,10 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
         }
     }
 
-    fun getEditClientCardPage(clientId: Long, expectedStatus: HttpStatus = HttpStatus.OK): Document {
+    fun getEditClientCardPage(clientId: UUID, expectedStatus: HttpStatus = HttpStatus.OK): Document {
         return Given {
             authorized()
-            pathParam("id", clientId)
+            pathParam("clientId", clientId)
         } When {
             get(EditClientPage.PATH)
         } Then {
@@ -98,10 +99,10 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
         }
     }
 
-    fun editClient(clientId: Long, request: ClientCardDto) {
+    fun editClient(clientId: UUID, request: ClientCardDto) {
         Given {
             authorized()
-            pathParam("id", clientId)
+            pathParam("clientId", clientId)
             clientCardFormParams(request)
         } When {
             post(EditClientPage.PATH)
@@ -112,13 +113,13 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
     }
 
     fun editClientForError(
-        clientId: Long,
+        clientId: UUID,
         request: ClientCardDto,
         expectedStatus: HttpStatus = HttpStatus.OK
     ): Document {
         return Given {
             authorized()
-            pathParam("id", clientId)
+            pathParam("clientId", clientId)
             clientCardFormParams(request)
         } When {
             post(EditClientPage.PATH)
@@ -160,10 +161,10 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
         }
     }
 
-    fun deleteClient(id: Long) {
+    fun deleteClient(clientId: UUID) {
         Given {
             authorized()
-            pathParam("id", id)
+            pathParam("id", clientId)
         } When {
             delete(ClientsListPage.deleteAction)
         } Then {

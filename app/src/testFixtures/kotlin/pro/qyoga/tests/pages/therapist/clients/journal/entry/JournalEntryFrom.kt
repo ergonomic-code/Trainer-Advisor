@@ -1,5 +1,6 @@
 package pro.qyoga.tests.pages.therapist.clients.journal.entry
 
+import pro.qyoga.app.therapist.clients.journal.edit_entry.create.CreateJournalEntryPageController
 import pro.qyoga.tests.platform.html.*
 
 abstract class JournalEntryFrom(action: FormAction) : QYogaForm("journalEntryFrom", action) {
@@ -23,6 +24,7 @@ abstract class JournalEntryFrom(action: FormAction) : QYogaForm("journalEntryFro
 
 }
 
-object CreateJournalEntryForm : JournalEntryFrom(FormAction.hxPost(CreateJournalEntryPage.PATH))
+object CreateJournalEntryForm :
+    JournalEntryFrom(FormAction.hxPost(CreateJournalEntryPageController.CREATE_JOURNAL_PAGE_URL))
 
 object EditJournalEntryForm : JournalEntryFrom(FormAction.hxPost(EditJournalEntryPage.PATH))

@@ -11,6 +11,7 @@ import pro.qyoga.tests.assertions.PageMatcher
 import pro.qyoga.tests.assertions.haveAttribute
 import pro.qyoga.tests.assertions.haveAttributeValue
 import pro.qyoga.tests.assertions.haveAttributeValueMatching
+import pro.qyoga.tests.platform.pathToRegex
 
 
 data class FormAction(
@@ -38,10 +39,12 @@ data class FormAction(
 
     }
 
+    val urlRegex = url.pathToRegex().toRegex()
+
     fun matcher(): Matcher<Element> {
         val matchers = buildList {
             add(haveAttribute(attr))
-            add(haveAttributeValueMatching(attr, url.replace("\\{.*}".toRegex(), ".+").toRegex()))
+            add(haveAttributeValueMatching(attr, urlRegex))
             if (method != null) {
                 add(haveAttributeValue("method", method, ignoreCase = true))
             }

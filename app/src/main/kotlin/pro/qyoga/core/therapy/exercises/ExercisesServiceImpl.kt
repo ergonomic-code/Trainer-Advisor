@@ -18,6 +18,7 @@ import pro.qyoga.core.therapy.exercises.dtos.ExerciseSearchDto
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
 import pro.qyoga.core.therapy.exercises.impl.ExercisesRepo
 import pro.qyoga.core.therapy.exercises.model.Exercise
+import java.util.*
 
 
 @Service
@@ -33,7 +34,7 @@ class ExercisesService(
     fun addExercise(
         createExerciseRequest: CreateExerciseRequest,
         stepImages: Map<Int, StoredFile>,
-        therapistId: Long
+        therapistId: UUID
     ): Exercise {
         val stepIdxToStepImageId = exerciseStepsImagesStorage.uploadAllStepImages(stepImages)
             .mapValues { it.value.id }
@@ -59,7 +60,7 @@ class ExercisesService(
     @Transactional
     fun addExercises(
         createExerciseRequests: List<Pair<CreateExerciseRequest, Map<Int, StoredFile>>>,
-        therapistId: Long
+        therapistId: UUID
     ): Iterable<Exercise> {
         val exercises = createExerciseRequests.map { (request, images) ->
             val storedImages = exerciseStepsImagesStorage.uploadAllStepImages(images)

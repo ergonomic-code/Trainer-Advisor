@@ -1,5 +1,5 @@
 INSERT INTO journal_entries
-    (client, date, therapeutic_task, entry_text, created_at, version)
+    (client_ref, date, therapeutic_task, entry_text, created_at, version)
 VALUES ((SELECT id FROM clients WHERE last_name = 'Бортник'),
         '2023-12-28',
         (SELECT id FROM therapeutic_tasks WHERE name = 'Снятие напряжения с ШОП'),

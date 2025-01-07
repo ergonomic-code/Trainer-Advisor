@@ -22,6 +22,7 @@ import pro.qyoga.tests.infra.db.testDataSource
 import pro.qyoga.tests.infra.test_config.spring.context
 import pro.qyoga.tests.platform.spring.context.getBean
 import java.time.LocalDate
+import java.util.*
 
 
 class HydrationTest {
@@ -74,13 +75,13 @@ class HydrationTest {
         val hydrated = jdbcAggregateOperations.hydrate(
             listOf(entry),
             FetchSpec(
-                JournalEntry::client,
+                JournalEntry::clientRef,
                 JournalEntry::therapeuticTask
             )
         ).first()
 
         // Then
-        hydrated.client.shouldBeInstanceOf<AggregateReferenceTarget<*, *>>()
+        hydrated.clientRef.shouldBeInstanceOf<AggregateReferenceTarget<*, *>>()
         hydrated.therapeuticTask.shouldBeInstanceOf<AggregateReferenceTarget<*, *>>()
     }
 
@@ -95,10 +96,10 @@ class HydrationTest {
 
         val entryTaskFetchSpec = PropertyFetchSpec(
             JournalEntry::therapeuticTask,
-            FetchSpec(TherapeuticTask::owner)
+            FetchSpec(TherapeuticTask::ownerRef)
         )
         val entryClientFetchSpec =
-            PropertyFetchSpec(JournalEntry::client)
+            PropertyFetchSpec(JournalEntry::clientRef)
 
         // When
         val hydrated = jdbcAggregateOperations.hydrate(
@@ -112,8 +113,8 @@ class HydrationTest {
         ).first()
 
         // Then
-        val ownerRef = hydrated.therapeuticTask.resolveOrThrow().owner
-        ownerRef.shouldBeInstanceOf<AggregateReferenceTarget<Therapist, Long>>()
+        val ownerRef = hydrated.therapeuticTask.resolveOrThrow().ownerRef
+        ownerRef.shouldBeInstanceOf<AggregateReferenceTarget<Therapist, UUID>>()
         val owner = ownerRef.resolveOrThrow()
         owner.firstName shouldBe THE_THERAPIST_FIRST_NAME
     }

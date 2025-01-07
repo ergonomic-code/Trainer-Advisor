@@ -12,6 +12,7 @@ import pro.qyoga.core.clients.journals.model.JournalEntry
 import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
+import java.util.*
 
 @Component
 class CreateJournalEntryOp(
@@ -22,7 +23,7 @@ class CreateJournalEntryOp(
 
     @Transactional
     fun createJournalEntry(
-        clientId: Long,
+        clientId: UUID,
         editJournalEntryRequest: EditJournalEntryRequest,
         principal: QyogaUserDetails,
     ): JournalEntry {

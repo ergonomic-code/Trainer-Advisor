@@ -10,6 +10,7 @@ import pro.qyoga.core.clients.journals.model.updatedBy
 import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
+import java.util.*
 
 @Component
 class EditJournalEntryOp(
@@ -19,7 +20,7 @@ class EditJournalEntryOp(
 
     @Transactional
     fun editJournalEntry(
-        clientId: Long,
+        clientId: UUID,
         entryId: Long,
         editJournalEntryRequest: EditJournalEntryRequest,
         principal: QyogaUserDetails,
@@ -29,7 +30,7 @@ class EditJournalEntryOp(
         )
 
         val query = query {
-            JournalEntry::client isEqual clientId
+            JournalEntry::clientRef isEqual clientId
             JournalEntry::id isEqual entryId
         }
         val persistedEntry =

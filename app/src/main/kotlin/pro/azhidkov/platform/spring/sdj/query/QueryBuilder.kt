@@ -24,7 +24,7 @@ class QueryBuilder {
         }
     }
 
-    infix fun <T : Any> KProperty1<*, T>.isEqual(value: T) {
+    infix fun <T : Any> KProperty1<*, T?>.isEqual(value: T) {
         criteria.addLast(Criteria.where(this.name).isEqual(value))
     }
 

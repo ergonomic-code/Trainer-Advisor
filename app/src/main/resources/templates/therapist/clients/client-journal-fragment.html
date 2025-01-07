@@ -6,9 +6,10 @@
             Вы не добавили ещё ни одной записи.
             <br/>
             <a class="link-opacity-100"
+               id="addFirstEntryLink"
                href="#"
                hx-target="#tabContent"
-               th:hx-get="@{/therapist/clients/{id}/journal/create(id=${id})}"
+               th:hx-get="@{/therapist/clients/{clientId}/journal/create(clientId=${clientId})}"
             >Добавьте первую</a>
         </span>
     </p>
@@ -20,7 +21,7 @@
                 <a class="btn btn-outline-success link-opacity-100 w-100" href="#"
                    hx-target="#tabContent"
                    id="addEntryLink"
-                   th:hx-get="@{/therapist/clients/{id}/journal/create(id=${id})}">
+                   th:hx-get="@{/therapist/clients/{clientId}/journal/create(clientId=${clientId})}">
                     Добавить запись
                 </a>
             </div>
@@ -50,14 +51,14 @@
                     <div class="col-12 d-flex justify-content-end">
                         <a class="editEntryLink btn btn-outline-success me-3"
                            hx-target=" #tabContent"
-                           th:hx-get="@{/therapist/clients/{clientId}/journal/{entryId}(clientId=${id},entryId=${entry.id})}">
+                           th:hx-get="@{/therapist/clients/{clientId}/journal/{entryId}(clientId=${clientId},entryId=${entry.id})}">
                             <i class="fas fa-edit"></i>
                         </a>
                         <a class="deleteEntryLink btn btn-outline-danger"
                            hx-swap="outerHTML swap:0.2s"
                            hx-target="closest div.journalEntry"
                            th:hx-confirm="'Удалить запись за ' + ${entryDate} + '?'"
-                           th:hx-delete="@{/therapist/clients/{clientId}/journal/{entryId}(clientId=${id},entryId=${entry.id})}"
+                           th:hx-delete="@{/therapist/clients/{clientId}/journal/{entryId}(clientId=${clientId},entryId=${entry.id})}"
                            th:with="entryDate=${#temporals.format(entry.date, T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN)}">
                             <i class="fas fa-trash"></i>
                         </a>

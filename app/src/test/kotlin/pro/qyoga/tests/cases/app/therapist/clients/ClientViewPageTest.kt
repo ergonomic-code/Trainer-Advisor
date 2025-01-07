@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus
 import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.clients.TherapistClient
+import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
 import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother.createClientCardDto
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
@@ -16,7 +17,7 @@ class ClientViewPageTest : QYogaAppIntegrationBaseTest() {
     @Test
     fun `Request of non existing client edit page should be forwarded to not found error page`() {
         // Given
-        val notExistingClientId = -1L
+        val notExistingClientId = ClientsObjectMother.randomId()
         val therapist = TherapistClient.loginAsTheTherapist()
 
         // When
@@ -37,7 +38,7 @@ class ClientViewPageTest : QYogaAppIntegrationBaseTest() {
         val document = therapist.clients.getClientEditPage(client.id)
 
         // Then
-        document shouldBe EmptyClientJournalPage
+        document shouldBe EmptyClientJournalPage(client.id)
     }
 
 }

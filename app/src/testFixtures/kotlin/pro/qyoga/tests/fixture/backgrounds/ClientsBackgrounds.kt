@@ -13,6 +13,7 @@ import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
 import pro.qyoga.tests.fixture.object_mothers.therapists.idOnlyUserDetails
 import pro.qyoga.tests.fixture.object_mothers.therapists.theTherapistUserDetails
+import java.util.*
 
 @Component
 class ClientsBackgrounds(
@@ -25,11 +26,11 @@ class ClientsBackgrounds(
         return createClients(1, THE_THERAPIST_ID).single()
     }
 
-    fun createClients(clients: List<ClientCardDto>, therapistId: Long = THE_THERAPIST_ID): Iterable<Client> {
+    fun createClients(clients: List<ClientCardDto>, therapistId: UUID = THE_THERAPIST_ID): Iterable<Client> {
         return clientsRepo.saveAll(clients.map { ClientsObjectMother.createClient(therapistId, it) })
     }
 
-    fun createClients(count: Int, therapistId: Long = THE_THERAPIST_ID): Iterable<Client> {
+    fun createClients(count: Int, therapistId: UUID = THE_THERAPIST_ID): Iterable<Client> {
         return createClients(ClientsObjectMother.createClientCardDtos(count), therapistId)
     }
 
@@ -39,7 +40,7 @@ class ClientsBackgrounds(
         return ClientsListPageController.getClients(model).content
     }
 
-    fun createClientWithJournalEntry(therapistId: Long = THE_THERAPIST_ID): Pair<Client, JournalEntry> {
+    fun createClientWithJournalEntry(therapistId: UUID = THE_THERAPIST_ID): Pair<Client, JournalEntry> {
         val client = createClients(1, therapistId).single()
         val entry = journalBackgrounds.createEntries(client.id, idOnlyUserDetails(therapistId), 1).single()
         return client to entry
@@ -47,7 +48,7 @@ class ClientsBackgrounds(
 
     fun createClient(
         phone: String = faker.phoneNumber().phoneNumberInternational(),
-        therapistId: Long = THE_THERAPIST_ID
+        therapistId: UUID = THE_THERAPIST_ID
     ): Client {
         return createClients(listOf(ClientsObjectMother.createClientCardDto(phone = phone)), therapistId).single()
     }

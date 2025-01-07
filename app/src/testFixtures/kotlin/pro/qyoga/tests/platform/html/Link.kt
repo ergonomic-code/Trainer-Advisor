@@ -6,6 +6,7 @@ import org.jsoup.nodes.Element
 import pro.qyoga.tests.assertions.haveAttribute
 import pro.qyoga.tests.assertions.haveAttributeValueMatching
 import pro.qyoga.tests.assertions.isTag
+import pro.qyoga.tests.platform.pathToRegex
 
 class Link(
     val id: String,
@@ -14,9 +15,7 @@ class Link(
     val targetAttr: String = "href"
 ) : Component {
 
-    private val urlRegex = urlPattern.replace("\\{.*?}".toRegex(), ".*")
-        .replace("?", "\\?")
-        .replace("/", "\\/")
+    val urlRegex = urlPattern.pathToRegex().toRegex()
 
     constructor(id: String, page: HtmlPageCompat, text: String) : this(id, page.path, text)
 
@@ -32,8 +31,18 @@ class Link(
         return Matcher.all(
             isTag("a"),
             haveAttribute(targetAttr),
-            haveAttributeValueMatching(targetAttr, urlRegex.toRegex())
+            haveAttributeValueMatching(targetAttr, urlRegex)
         )
+    }
+
+    fun pathParam(element: Element, paramName: String): String? {
+        val actualUrl = element.select(selector()).attr(targetAttr)
+        val paramIdx = "\\{.*?}".toRegex().findAll(urlPattern)
+            .indexOfFirst { it.value == "{$paramName}" }
+            .takeIf { it >= 0 }
+            ?: return null
+
+        return urlRegex.matchEntire(actualUrl)!!.groupValues[paramIdx + 1]
     }
 
     companion object {

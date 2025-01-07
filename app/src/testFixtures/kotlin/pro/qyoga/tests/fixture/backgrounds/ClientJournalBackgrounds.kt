@@ -13,6 +13,7 @@ import pro.qyoga.core.clients.journals.model.JournalEntry
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.tests.fixture.data.randomRecentLocalDate
 import pro.qyoga.tests.fixture.object_mothers.clients.JournalEntriesObjectMother.journalEntry
+import java.util.*
 
 
 @Component
@@ -23,14 +24,14 @@ class ClientJournalBackgrounds(
 ) {
 
     fun createJournalEntry(
-        clientId: Long,
+        clientId: UUID,
         editJournalEntryRequest: EditJournalEntryRequest,
         therapist: QyogaUserDetails
     ): JournalEntry {
         return createJournalEntryOp.createJournalEntry(clientId, editJournalEntryRequest, therapist)
     }
 
-    fun createEntries(clientId: Long, therapist: QyogaUserDetails, count: Int): List<JournalEntry> {
+    fun createEntries(clientId: UUID, therapist: QyogaUserDetails, count: Int): List<JournalEntry> {
         return generateSequence { randomRecentLocalDate() }
             .distinct()
             .take(count)
@@ -44,7 +45,7 @@ class ClientJournalBackgrounds(
             FetchSpec(JournalEntry::therapeuticTask)
         )
 
-    fun getWholeJournal(clientId: Long): Page<JournalEntry> {
+    fun getWholeJournal(clientId: UUID): Page<JournalEntry> {
         return journalEntriesRepo.getJournalPage(
             JournalPageRequest.wholeJournal(
                 clientId,
