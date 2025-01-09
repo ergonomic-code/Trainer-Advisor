@@ -1,5 +1,6 @@
 import kotlinx.kover.gradle.plugin.dsl.AggregationType
 import kotlinx.kover.gradle.plugin.dsl.CoverageUnit
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -82,9 +83,11 @@ dependencies {
 }
 
 tasks.withType<KotlinCompile> {
-	kotlinOptions {
-		freeCompilerArgs = listOf("-Xjsr305=strict", "-Xjvm-default=all")
-		jvmTarget = "21"
+	kotlin {
+		compilerOptions {
+			freeCompilerArgs = listOf("-Xjsr305=strict", "-Xjvm-default=all")
+			jvmTarget.set(JvmTarget.JVM_21)
+		}
 	}
 }
 
