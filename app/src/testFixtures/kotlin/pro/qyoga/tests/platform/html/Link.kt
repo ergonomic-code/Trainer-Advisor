@@ -1,11 +1,12 @@
 package pro.qyoga.tests.platform.html
 
 import io.kotest.matchers.Matcher
-import io.kotest.matchers.compose.all
 import org.jsoup.nodes.Element
 import pro.qyoga.tests.assertions.haveAttribute
 import pro.qyoga.tests.assertions.haveAttributeValueMatching
+import pro.qyoga.tests.assertions.haveText
 import pro.qyoga.tests.assertions.isTag
+import pro.qyoga.tests.platform.kotest.all
 import pro.qyoga.tests.platform.pathToRegex
 
 class Link(
@@ -22,16 +23,14 @@ class Link(
     override fun selector(): String =
         buildString {
             append("a[id*=$id]")
-            if (text.isNotEmpty()) {
-                append(":contains($text)")
-            }
         }
 
     override fun matcher(): Matcher<Element> {
         return Matcher.all(
             isTag("a"),
             haveAttribute(targetAttr),
-            haveAttributeValueMatching(targetAttr, urlRegex)
+            haveAttributeValueMatching(targetAttr, urlRegex),
+            if (text.isNotEmpty()) haveText(text) else null
         )
     }
 

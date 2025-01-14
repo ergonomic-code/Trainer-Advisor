@@ -169,7 +169,10 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link disabled">
+                <a class="nav-link"
+                   href="/therapist/account/settings"
+                   id="settingsLink"
+                   th:classappend="${activeLink == 'settings'} ? 'active' : ''">
                     <div class="row">
                         <div class="col-1">
                             <i class="fas fa-gear me-2 icon"></i>
