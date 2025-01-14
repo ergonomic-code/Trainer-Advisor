@@ -3,6 +3,7 @@ package pro.azhidkov.platform.spring.mvc
 import org.springframework.ui.ModelMap
 import org.springframework.web.servlet.ModelAndView
 
+@Deprecated("Передавайте Map<String, Any?> явно")
 class ModelBuilder(
     private val modelMap: ModelMap
 ) {
@@ -13,6 +14,7 @@ class ModelBuilder(
 
 }
 
+@Deprecated("Передавайте Map<String, Any?> явно")
 fun modelAndView(viewName: String, buildModel: ModelBuilder.() -> Unit = {}): ModelAndView {
     val modelAndView = ModelAndView(viewName)
     val builder = ModelBuilder(modelAndView.modelMap)
@@ -20,15 +22,8 @@ fun modelAndView(viewName: String, buildModel: ModelBuilder.() -> Unit = {}): Mo
     return modelAndView
 }
 
-fun modelAndView(viewName: String, model: ModelMap): ModelAndView {
+fun modelAndView(viewName: String, model: Map<String, Any?>): ModelAndView {
     val modelAndView = ModelAndView(viewName)
     modelAndView.modelMap.mergeAttributes(model)
     return modelAndView
-}
-
-fun model(buildModel: ModelBuilder.() -> Unit = {}): ModelMap {
-    val model = ModelMap()
-    val builder = ModelBuilder(model)
-    builder.buildModel()
-    return model
 }

@@ -54,6 +54,7 @@ class ErgoRepository<T : Any, ID : Any>(
         return res.getOrThrow() as S
     }
 
+    @Transactional
     fun upsert(upsertQuery: String, vararg params: Pair<String, Any?>): ID {
         val keyHolder = GeneratedKeyHolder()
 

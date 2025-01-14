@@ -16,5 +16,6 @@ data class Backgrounds(
     val therapeuticTasks: TherapeuticTasksBackgrounds,
     val users: UsersBackgrounds,
     val spring: SpringBackgrounds,
-    val captchaBackgrounds: CaptchaBackgrounds
+    val captchaBackgrounds: CaptchaBackgrounds,
+    val settingsBackgrounds: TherapistSettingsBackgrounds
 )

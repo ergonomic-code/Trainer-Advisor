@@ -4,6 +4,7 @@ import io.kotest.matchers.Matcher
 import io.kotest.matchers.compose.all
 import org.jsoup.nodes.Element
 import pro.qyoga.tests.assertions.haveComponent
+import pro.qyoga.tests.pages.therapist.account.SettingsPage
 import pro.qyoga.tests.pages.therapist.appointments.CalendarPage
 import pro.qyoga.tests.pages.therapist.clients.ClientsListPage
 import pro.qyoga.tests.pages.therapist.therapy.exercises.ExercisesListPage
@@ -27,6 +28,7 @@ object LeftNavBarFragment : Component {
         Link("therapeuticTasksPageLink", TherapeuticTasksListPage, "Терапевтические задачи")
 
     // Account
+    private val settingsLink = Link("settingsLink", SettingsPage.PATH, "Настройки")
     private val logoutLink = Link("logoutLink", "/logout", "Выйти")
 
     override fun matcher(): Matcher<Element> =
@@ -38,6 +40,7 @@ object LeftNavBarFragment : Component {
             haveComponent(exercisesLink),
             haveComponent(therapeuticTasksLink),
 
+            haveComponent(settingsLink),
             haveComponent(logoutLink)
         )
 

@@ -9,6 +9,7 @@ import pro.qyoga.app.publc.PublicAppConfig
 import pro.qyoga.app.therapist.TherapistWebAppConfig
 import pro.qyoga.core.appointments.AppointmentsConfig
 import pro.qyoga.core.clients.ClientsConfig
+import pro.qyoga.core.survey_forms.SurveyFormsSettingsConfig
 import pro.qyoga.core.therapy.TherapyConfig
 import pro.qyoga.core.users.UsersConfig
 import pro.qyoga.i9ns.email.EmailsConfig
@@ -30,6 +31,7 @@ import pro.qyoga.tech.captcha.CaptchaConf
     ClientsConfig::class,
     TherapyConfig::class,
     UsersConfig::class,
+    SurveyFormsSettingsConfig::class,
 
     // I9ns
     EmailsConfig::class,
