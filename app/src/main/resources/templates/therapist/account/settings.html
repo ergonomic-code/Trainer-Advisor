@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div th:replace="~{fragments/header.html}"></div>
+    <title>Настройки</title>
+</head>
+
+<body class="sb-nav-fixed">
+
+<div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
+
+<div id="layoutSidenav">
+
+    <div th:replace="~{fragments/leftNavPanel :: leftNavPanel (activeLink = 'settings')}"></div>
+
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container px-4">
+
+                <view-title th:replace="~{components/view-title.html :: viewTitle(title='Настройки')}">
+                </view-title>
+                <div hx-get="/therapist/survey-forms/settings" hx-trigger="load" id="surveyFormsSettings"></div>
+            </div>
+        </main>
+        <footer th:insert="~{fragments/footer.html :: footer}"></footer>
+    </div>
+</div>
+
+</body>
+</html>

@@ -9,3 +9,7 @@ fun <T> buildAllOfMatcher(addMatchers: MutableList<Matcher<T>>.() -> Unit): Matc
     matchers.addMatchers()
     return Matcher.all(*matchers.toTypedArray())
 }
+
+fun <T : Any?> Matcher.Companion.all(
+    vararg matcher: Matcher<T>?
+): Matcher<T> = Matcher.all(*matcher.filterNotNull().toTypedArray())
