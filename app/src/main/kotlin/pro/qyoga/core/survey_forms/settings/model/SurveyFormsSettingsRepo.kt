@@ -23,14 +23,12 @@ class SurveyFormsSettingsRepo(
     SurveyFormsSettings::class,
     jdbcConverter,
     relationalMappingContext
-) {
+)
 
-    fun findByTherapistRef(ref: TherapistRef) =
-        findOne {
-            SurveyFormsSettings::therapistRef isEqual ref
-        }
-
-}
+fun SurveyFormsSettingsRepo.findByTherapistRef(ref: TherapistRef) =
+    findOne {
+        SurveyFormsSettings::therapistRef isEqual ref
+    }
 
 fun SurveyFormsSettingsRepo.upsertSettings(
     therapistRef: TherapistRef,
@@ -43,3 +41,8 @@ fun SurveyFormsSettingsRepo.upsertSettings(
 
     return upsert(query, "therapistId" to therapistRef.id, "newYandexAdminEmail" to newYandexAdminEmail)
 }
+
+fun SurveyFormsSettingsRepo.findByYandexAdminEmail(email: String) =
+    findOne {
+        SurveyFormsSettings::yandexAdminEmail isEqual email
+    }

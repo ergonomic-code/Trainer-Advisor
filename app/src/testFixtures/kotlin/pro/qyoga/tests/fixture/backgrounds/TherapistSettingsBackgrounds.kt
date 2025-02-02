@@ -12,6 +12,10 @@ class TherapistSettingsBackgrounds(
     private val surveyFormsSettingsRepo: SurveyFormsSettingsRepo
 ) {
 
+    fun createSurveyFormsSettings(therapist: TherapistRef, createRequest: SurveyFormsSettingsForm) {
+        surveyFormsSettingsRepo.upsertSettings(therapist, createRequest.yandexAdminEmail)
+    }
+
     fun updateSurveyFormsSettings(therapist: TherapistRef, updateRequest: SurveyFormsSettingsForm) {
         surveyFormsSettingsRepo.upsertSettings(therapist, updateRequest.yandexAdminEmail)
     }

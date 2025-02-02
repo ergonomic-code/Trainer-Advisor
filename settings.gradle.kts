@@ -50,11 +50,13 @@ dependencyResolutionManagement {
             val selenideVersion = version("selenide", "7.6.1")
             val testContainersVersion = version("testcontainers", "1.20.4")
             val restAssuredVersion = version("restAssured", "5.5.0")
+            val kotestVersion = version("kotest", "5.9.1")
 
             library("selenide-proxy", "com.codeborne", "selenide-proxy").versionRef(selenideVersion)
             library("testcontainers-selenium", "org.testcontainers", "selenium").versionRef(testContainersVersion)
 
-            library("kotest-assertions", "io.kotest", "kotest-assertions-core").version("5.9.1")
+            library("kotest-assertions", "io.kotest", "kotest-assertions-core").versionRef(kotestVersion)
+            library("kotest-runner", "io.kotest", "kotest-runner-junit5").versionRef(kotestVersion)
 
             library("restassured-core", "io.rest-assured", "rest-assured").versionRef(restAssuredVersion)
             library("restassured-kotlin", "io.rest-assured", "kotlin-extensions").versionRef(restAssuredVersion)

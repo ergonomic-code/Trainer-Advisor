@@ -4,11 +4,15 @@ import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Component
 import org.springframework.ui.ExtendedModelMap
 import pro.qyoga.app.therapist.clients.ClientsListPageController
+import pro.qyoga.app.therapist.clients.cards.CreateClientCardPageController
 import pro.qyoga.core.clients.cards.ClientsRepo
 import pro.qyoga.core.clients.cards.dtos.ClientCardDto
+import pro.qyoga.core.clients.cards.findByPhone
 import pro.qyoga.core.clients.cards.model.Client
+import pro.qyoga.core.clients.cards.model.PhoneNumber
 import pro.qyoga.core.clients.journals.model.JournalEntry
-import pro.qyoga.tests.fixture.data.faker
+import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
+import pro.qyoga.core.users.therapists.ref
 import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
 import pro.qyoga.tests.fixture.object_mothers.therapists.idOnlyUserDetails
@@ -19,7 +23,8 @@ import java.util.*
 class ClientsBackgrounds(
     private val clientsRepo: ClientsRepo,
     private val clientsListPageController: ClientsListPageController,
-    private val journalBackgrounds: ClientJournalBackgrounds
+    private val journalBackgrounds: ClientJournalBackgrounds,
+    private val clientsPageController: CreateClientCardPageController
 ) {
 
     fun aClient(): Client {
@@ -47,10 +52,18 @@ class ClientsBackgrounds(
     }
 
     fun createClient(
-        phone: String = faker.phoneNumber().phoneNumberInternational(),
+        phone: String,
         therapistId: UUID = THE_THERAPIST_ID
     ): Client {
         return createClients(listOf(ClientsObjectMother.createClientCardDto(phone = phone)), therapistId).single()
+    }
+
+    fun createClient(
+        clientDto: ClientCardDto = ClientsObjectMother.createClientCardDtoMinimal(),
+        principal: QyogaUserDetails = theTherapistUserDetails
+    ): Client {
+        clientsPageController.createClient(clientDto, principal)
+        return clientsRepo.findByPhone(principal.ref, PhoneNumber.of(clientDto.phoneNumber))!!
     }
 
 }
