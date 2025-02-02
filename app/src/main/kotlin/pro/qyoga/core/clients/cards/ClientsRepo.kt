@@ -11,10 +11,12 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
 import pro.azhidkov.platform.spring.sdj.ergo.ErgoRepository
 import pro.azhidkov.platform.spring.sdj.query.BuildMode
+import pro.azhidkov.platform.spring.sdj.query.query
 import pro.azhidkov.platform.spring.sdj.sortBy
 import pro.qyoga.core.clients.cards.dtos.ClientSearchDto
 import pro.qyoga.core.clients.cards.errors.DuplicatedPhoneException
 import pro.qyoga.core.clients.cards.model.Client
+import pro.qyoga.core.users.therapists.TherapistRef
 import java.util.*
 
 @Repository
@@ -78,4 +80,13 @@ fun ClientsRepo.findTherapistClientsSliceBySearchKey(
                     .takeIf { it.isNotBlank() })
         }
     }
+}
+
+fun ClientsRepo.findByPhone(therapistRef: TherapistRef, phone: String): Client? {
+    val query = query {
+        mode = BuildMode.AND
+        Client::therapistRef isEqual therapistRef
+        Client::phoneNumber isEqual phone
+    }
+    return findOne(query)
 }
