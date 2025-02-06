@@ -65,6 +65,9 @@ class QueryBuilder {
         criteria.addLast(subQueryBuilder.toCriteriaDefinition())
     }
 
+    fun withCriteria(criteria: Criteria) {
+        this.criteria.addLast(criteria)
+    }
 }
 
 fun query(body: QueryBuilder.() -> Unit): Query {

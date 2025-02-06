@@ -53,7 +53,12 @@ fun ClientsRepo.findTherapistClientsPageBySearchForm(
         Client::therapistRef isEqual therapistId
         Client::firstName isILikeIfNotNull clientSearchDto.firstName
         Client::lastName isILikeIfNotNull clientSearchDto.lastName
-        Client::phoneNumber isILikeIfNotNull clientSearchDto.phoneNumber
+        withCriteria(
+            Client::phoneNumber isPhoneNumberILikeIfNotNull clientSearchDto.phoneNumber?.replace(
+                "[^0-9]".toRegex(),
+                ""
+            )
+        )
     }
 }
 
@@ -68,7 +73,9 @@ fun ClientsRepo.findTherapistClientsSliceBySearchKey(
             mode = BuildMode.OR
             Client::firstName isILike searchKey
             Client::lastName isILike searchKey
-            Client::phoneNumber isILike searchKey
+            withCriteria(
+                Client::phoneNumber isPhoneNumberILikeIfNotNull searchKey.replace("[^0-9]".toRegex(), "")
+                    .takeIf { it.isNotBlank() })
         }
     }
 }

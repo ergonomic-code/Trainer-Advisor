@@ -3,6 +3,8 @@ package pro.qyoga.core.clients.cards
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import pro.qyoga.core.clients.cards.dtos.ClientCardDto
 import pro.qyoga.core.clients.cards.model.Client
+import pro.qyoga.core.clients.cards.model.PhoneNumber
+import pro.qyoga.core.clients.cards.model.toUIFormat
 import java.util.*
 
 
@@ -12,7 +14,7 @@ fun Client(therapistId: UUID, createRequest: ClientCardDto): Client =
         createRequest.lastName,
         createRequest.middleName,
         createRequest.birthDate,
-        createRequest.phoneNumber,
+        PhoneNumber.of(createRequest.phoneNumber),
         createRequest.email,
         createRequest.address,
         createRequest.complaints,
@@ -26,7 +28,7 @@ fun Client.patchedBy(clientCardDto: ClientCardDto): Client = Client(
     lastName = clientCardDto.lastName,
     middleName = clientCardDto.middleName,
     birthDate = clientCardDto.birthDate,
-    phoneNumber = clientCardDto.phoneNumber,
+    phoneNumber = PhoneNumber.of(clientCardDto.phoneNumber),
     email = clientCardDto.email,
     address = clientCardDto.address,
     distributionSource = clientCardDto.distributionSource,
@@ -43,7 +45,7 @@ fun Client.toDto(): ClientCardDto = ClientCardDto(
     lastName = lastName,
     middleName = middleName,
     birthDate = birthDate,
-    phoneNumber = phoneNumber,
+    phoneNumber = phoneNumber.toUIFormat(),
     email = email,
     address = address,
     distributionSourceType = distributionSource?.type,

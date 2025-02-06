@@ -5,6 +5,7 @@ import io.kotest.matchers.compose.all
 import io.kotest.matchers.should
 import org.junit.jupiter.api.Test
 import pro.qyoga.app.platform.components.combobox.ComboBoxItem
+import pro.qyoga.core.clients.cards.model.toUIFormat
 import pro.qyoga.l10n.systemCollator
 import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.assertions.shouldHaveElements
@@ -38,7 +39,7 @@ class ClientsComboBoxTest : QYogaAppIntegrationBaseTest() {
             ComboBoxItem(
                 matchingClient.id,
                 matchingClient.fullName(),
-                matchingClient.phoneNumber
+                matchingClient.phoneNumber.toUIFormat()
             )
         )
         document.shouldHaveElements(ComboBox.itemsSelector, 1)
@@ -59,7 +60,9 @@ class ClientsComboBoxTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         document should Matcher.all(
-            *clientsPage.map { ComboBox.itemFor(ComboBoxItem(it.id, it.fullName(), it.phoneNumber)).matcher() }
+            *clientsPage.map {
+                ComboBox.itemFor(ComboBoxItem(it.id, it.fullName(), it.phoneNumber.toUIFormat())).matcher()
+            }
                 .toTypedArray()
         )
     }
