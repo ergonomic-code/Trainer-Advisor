@@ -4,10 +4,7 @@ import pro.azhidkov.platform.spring.sdj.ergo.hydration.AggregateReferenceTarget
 import pro.azhidkov.platform.uuid.UUIDv7
 import pro.qyoga.core.clients.cards.Client
 import pro.qyoga.core.clients.cards.dtos.ClientCardDto
-import pro.qyoga.core.clients.cards.model.Client
-import pro.qyoga.core.clients.cards.model.ClientRef
-import pro.qyoga.core.clients.cards.model.DistributionSource
-import pro.qyoga.core.clients.cards.model.DistributionSourceType
+import pro.qyoga.core.clients.cards.model.*
 import pro.qyoga.tests.fixture.data.*
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
 import java.time.Duration
@@ -25,7 +22,7 @@ object ClientsObjectMother {
         lastName: String = faker.name().lastName(),
         middleName: String? = faker.name().nameWithMiddle().split(" ")[1],
         birthDate: LocalDate = randomBirthDate(),
-        phone: String = faker.phoneNumber().phoneNumberInternational(),
+        phone: String = randomPhoneNumber().toUIFormat(),
         email: String? = randomEmail(),
         address: String? = randomCyrillicWord(),
         complains: String = randomCyrillicWord(),
@@ -49,7 +46,7 @@ object ClientsObjectMother {
         lastName: String = randomCyrillicWord(),
         middleName: String? = null,
         birthDate: LocalDate? = null,
-        phone: String = randomPhoneNumber(),
+        phone: String = randomPhoneNumber().toUIFormat(),
         email: String? = null,
         address: String? = null,
         complains: String? = null,
@@ -90,10 +87,11 @@ val maxBirthDate: LocalDate = LocalDate.now().minusDays(MIN_AGE * 365)
 fun randomBirthDate(): LocalDate =
     randomLocalDate(minBirthDate, Duration.between(minBirthDate.atStartOfDay(), maxBirthDate.atStartOfDay()))
 
-fun randomPhoneNumber() =
+fun randomPhoneNumber() = PhoneNumber.of(
     "+7-${faker.random().nextInt(900, 999)}-${faker.random().nextInt(100, 999)}-${
         faker.random().nextInt(10, 99)
     }-${faker.random().nextInt(10, 99)}"
+)
 
 fun randomDistributionSource(): DistributionSource {
     val type = DistributionSourceType.entries.randomElement()

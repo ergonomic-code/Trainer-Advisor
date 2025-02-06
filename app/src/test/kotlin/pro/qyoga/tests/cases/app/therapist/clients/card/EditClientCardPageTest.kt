@@ -4,15 +4,16 @@ import io.kotest.inspectors.forAny
 import io.kotest.inspectors.forNone
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
+import pro.qyoga.core.clients.cards.model.toUIFormat
 import pro.qyoga.core.clients.cards.toDto
 import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.assertions.shouldHaveElement
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
-import pro.qyoga.tests.fixture.data.faker
 import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
 import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother.createClientCardDto
+import pro.qyoga.tests.fixture.object_mothers.clients.randomPhoneNumber
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import pro.qyoga.tests.pages.publc.NotFoundErrorPage
@@ -118,7 +119,7 @@ class EditClientCardPageTest : QYogaAppIntegrationBaseTest() {
     @Test
     fun `System should return page with duplicated phone error message on posting form with duplicated phone`() {
         // Given
-        val thePhone = faker.phoneNumber().phoneNumberInternational()
+        val thePhone = randomPhoneNumber().toUIFormat()
         backgrounds.clients.createClient(phone = thePhone)
         val existingClient = backgrounds.clients.createClient()
         val existingClientDto = existingClient.toDto()
@@ -135,7 +136,7 @@ class EditClientCardPageTest : QYogaAppIntegrationBaseTest() {
     @Test
     fun `System should allow to change client phone to phone number of client of another therapist`() {
         // Given
-        val thePhone = faker.phoneNumber().phoneNumberInternational()
+        val thePhone = randomPhoneNumber().toUIFormat()
         val anotherTherapistId = backgrounds.users.registerNewTherapist().id
         backgrounds.clients.createClient(phone = thePhone, therapistId = anotherTherapistId)
         val targetClient = backgrounds.clients.createClient()

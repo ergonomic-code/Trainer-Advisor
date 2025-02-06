@@ -22,7 +22,7 @@ data class Client(
     val lastName: String,
     val middleName: String?,
     val birthDate: LocalDate?,
-    val phoneNumber: String,
+    val phoneNumber: PhoneNumber,
     val email: String?,
     val address: String?,
     val complaints: String?,

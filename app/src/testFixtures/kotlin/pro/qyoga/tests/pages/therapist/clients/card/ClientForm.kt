@@ -1,9 +1,9 @@
 package pro.qyoga.tests.pages.therapist.clients.card
 
 import io.kotest.matchers.shouldBe
-import org.jsoup.nodes.Element
 import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.core.clients.cards.model.DistributionSourceType
+import pro.qyoga.core.clients.cards.model.toUIFormat
 import pro.qyoga.l10n.russianDateFormat
 import pro.qyoga.tests.assertions.PageMatcher
 import pro.qyoga.tests.assertions.SelectorOnlyComponent
@@ -54,22 +54,19 @@ object CreateClientForm : ClientForm(FormAction.classicPost("/therapist/clients/
 
 object EditClientForm : ClientForm(FormAction.classicPost("/therapist/clients/{id}")) {
 
-    fun clientForm(client: Client): PageMatcher = object : PageMatcher {
-
-        override fun match(element: Element) {
-            element.select(firstName.selector()).`val`() shouldBe client.firstName
-            element.select(lastName.selector()).`val`() shouldBe client.lastName
-            element.select(middleName.selector()).`val`() shouldBe (client.middleName ?: "")
-            element.select(birthDate.selector()).`val`() shouldBe (client.birthDate?.format(russianDateFormat) ?: "")
-            element.select(phoneNumber.selector()).`val`() shouldBe client.phoneNumber
-            element.select(email.selector()).`val`() shouldBe (client.email ?: "")
-            element.select(address.selector()).`val`() shouldBe (client.address ?: "")
-            element.select(distributionSourceType.selector())
-                .`val`() shouldBe (client.distributionSource?.type?.name ?: "")
-            element.select(distributionSourceComment.selector())
-                .`val`() shouldBe (client.distributionSource?.comment ?: "")
-            element.select(complaints.selector()).text() shouldBe (client.complaints ?: "")
-        }
+    fun clientForm(client: Client): PageMatcher = PageMatcher { element ->
+        element.select(firstName.selector()).`val`() shouldBe client.firstName
+        element.select(lastName.selector()).`val`() shouldBe client.lastName
+        element.select(middleName.selector()).`val`() shouldBe (client.middleName ?: "")
+        element.select(birthDate.selector()).`val`() shouldBe (client.birthDate?.format(russianDateFormat) ?: "")
+        element.select(phoneNumber.selector()).`val`() shouldBe client.phoneNumber.toUIFormat()
+        element.select(email.selector()).`val`() shouldBe (client.email ?: "")
+        element.select(address.selector()).`val`() shouldBe (client.address ?: "")
+        element.select(distributionSourceType.selector())
+            .`val`() shouldBe (client.distributionSource?.type?.name ?: "")
+        element.select(distributionSourceComment.selector())
+            .`val`() shouldBe (client.distributionSource?.comment ?: "")
+        element.select(complaints.selector()).text() shouldBe (client.complaints ?: "")
     }
 
 }

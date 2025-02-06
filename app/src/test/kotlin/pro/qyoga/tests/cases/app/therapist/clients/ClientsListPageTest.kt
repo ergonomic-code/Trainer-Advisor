@@ -69,7 +69,7 @@ class ClientsListPageTest : QYogaAppIntegrationBaseTest() {
         val nonMatchByLastName =
             createClientCardDto(firstName, lastName = lastName.reversed())
         val nonMatchByPhone =
-            createClientCardDto(firstName, lastName, birthDate = birthDate, phone = phonePart.reversed())
+            createClientCardDto(firstName, lastName, birthDate = birthDate, phone = "+7-${phonePart.reversed()}-22-44")
 
         backgrounds.clients.createClients(
             listOf(

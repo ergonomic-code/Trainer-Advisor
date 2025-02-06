@@ -10,6 +10,7 @@ import pro.qyoga.app.platform.components.combobox.ComboBoxItem
 import pro.qyoga.app.platform.components.combobox.ComboBoxModelAndView
 import pro.qyoga.core.clients.cards.ClientsRepo
 import pro.qyoga.core.clients.cards.findTherapistClientsSliceBySearchKey
+import pro.qyoga.core.clients.cards.model.toUIFormat
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 
 
@@ -31,7 +32,7 @@ class ClientsComboBoxController(
                 searchKey ?: "",
                 page = ClientsRepo.Page.topFiveByLastName
             )
-                .map { ComboBoxItem(it.id, it.fullName(), it.phoneNumber) }
+                .map { ComboBoxItem(it.id, it.fullName(), it.phoneNumber.toUIFormat()) }
 
         return ComboBoxModelAndView(searchResult)
     }
