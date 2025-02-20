@@ -8,4 +8,7 @@ import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
 class TherapeuticTaskHasReferences(
     val taskRef: TherapeuticTaskRef,
     val references: List<JournalEntry>
-) : DomainError("Therapeutic task ${taskRef.id} has ${references.size} references to it")
+) : DomainError(
+    "Therapeutic task ${taskRef.id} has ${references.size} references to it",
+    errorCode = "therapeutic-task-has-references"
+)

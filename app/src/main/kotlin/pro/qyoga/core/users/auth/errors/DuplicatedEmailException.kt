@@ -8,4 +8,4 @@ import pro.qyoga.core.users.auth.model.User
 class DuplicatedEmailException(
     duplicatedEntry: User,
     override val cause: DuplicateKeyException
-) : DomainError("User with email ${duplicatedEntry.email} already exists")
+) : DomainError("User with email ${duplicatedEntry.email} already exists", errorCode = "duplicated-email")

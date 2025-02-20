@@ -5,4 +5,7 @@ import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
 
 
 class DuplicatedTherapeuticTaskName(val failedToSaveTask: TherapeuticTask, override val cause: Throwable) :
-    DomainError("Therapeutic task with name ${failedToSaveTask.name} already exists")
+    DomainError(
+        "Therapeutic task with name ${failedToSaveTask.name} already exists",
+        errorCode = "duplicated-task-name"
+    )
