@@ -45,4 +45,26 @@ data class Client(
         .filter { it?.isNotBlank() == true }
         .joinToString(" ")
 
+    fun prependComplaints(value: String?): Client =
+        copy(
+            complaints = prependTextBlock(value, complaints)
+        )
+
+    fun prependAnamnesis(value: String?): Client =
+        copy(
+            anamnesis = prependTextBlock(value, anamnesis)
+        )
+
+}
+
+private fun prependTextBlock(value: String?, base: String?): String? {
+    if (value.isNullOrBlank()) {
+        return base
+    }
+
+    if (base.isNullOrBlank()) {
+        return value
+    }
+
+    return value.trimEnd('\n') + "\n\n" + base
 }

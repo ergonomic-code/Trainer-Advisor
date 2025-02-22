@@ -6,4 +6,4 @@ import pro.azhidkov.platform.errors.DomainError
 class AppointmentsIntersectionException(
     override val message: String,
     val existingAppointment: Appointment
-) : DomainError()
+) : DomainError(errorCode = "appointments.intersection")

@@ -29,6 +29,9 @@ class TherapistClient(val authCookie: Cookie) {
     val therapeuticTasks = TherapistTherapeuticTasksApi(authCookie)
     val appointmentTypes = TherapistAppointmentTypesApi(authCookie)
 
+    // Account
+    val settings = TherapistSettingsApi(authCookie)
+
     fun getIndexPage(): Document {
         return Given {
             cookie(authCookie)

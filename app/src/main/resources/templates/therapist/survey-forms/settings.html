@@ -1,0 +1,35 @@
+<div id="surveyFormsSettings" th:fragment="surveyFormsSettings">
+    <form hx-put="/therapist/survey-forms/settings"
+          hx-swap="outerHTML"
+          hx-target="#surveyFormsSettings"
+          id="surveyFormsSettingsForm"
+          th:with="yandexAdminEmail=${yandexAdminEmail != null ? ('''' + yandexAdminEmail + '''') : null}"
+          th:x-data="|{'original': ${yandexAdminEmail}, 'yandexAdminEmail': ${yandexAdminEmail}, 'saved': ${saved} }|">
+
+        <fieldset class="mb-4">
+            <legend>Формы анкет</legend>
+            <div class="input-group">
+                <div class="form-floating">
+                    <input
+                            class="form-control border-end-0"
+                            id="yandexAdminEmailInput"
+                            name="yandexAdminEmail"
+                            type="email"
+                            x-model="yandexAdminEmail"
+                    />
+                    <label for="yandexAdminEmailInput">Email аккаунта в Яндекс.Формах</label>
+                </div>
+                <div class="input-group-text bg-white border-start-0">
+                    <button :class="saved ? 'btn-outline-success' : 'btn-outline-secondary '" class="btn border-0"
+                            name="saveYandexAdminEmailButton">
+                        <i class="fas fa-check" x-show="original !== yandexAdminEmail || saved"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-text">
+                Необходим для привязки заполненных анкет к вашему аккаунту в Trainer Advisor
+            </div>
+        </fieldset>
+    </form>
+</div>

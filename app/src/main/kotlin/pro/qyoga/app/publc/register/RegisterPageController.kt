@@ -2,14 +2,12 @@ package pro.qyoga.app.publc.register
 
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Controller
-import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.servlet.ModelAndView
+import pro.azhidkov.platform.kotlin.mapOfNotNull
 import pro.azhidkov.platform.kotlin.mapSuccess
 import pro.azhidkov.platform.kotlin.recoverFailure
-import pro.azhidkov.platform.spring.mvc.ModelBuilder
-import pro.azhidkov.platform.spring.mvc.model
 import pro.azhidkov.platform.spring.mvc.modelAndView
 import pro.qyoga.core.users.therapists.RegisterTherapistRequest
 import pro.qyoga.tech.captcha.CaptchaAnswer
@@ -27,7 +25,7 @@ class RegisterPageController(
 ) {
 
     @GetMapping("/register")
-    fun getRegisterPage(model: Model): ModelAndView {
+    fun getRegisterPage(): ModelAndView {
         val (captchaId, captchaImage) = captchaService.generateCaptcha()
         return modelAndView(
             viewName = "public/register",
@@ -63,22 +61,16 @@ private fun registerPageModel(
     captchaImage: BufferedImage,
     registrationException: RegistrationException? = null,
     adminEmail: String? = null
-) = model {
-    "requestForm" bindTo registerTherapistRequest
-    "captchaImage" bindTo captchaImage.toBase64()
-    if (adminEmail != null) {
-        withAdminEmail(adminEmail)
-    }
-    if (registrationException != null) {
-        "userAlreadyExists" bindTo registrationException.isDuplicatedEmail
-        "incorrectCaptchaCode" bindTo registrationException.isInvalidCaptcha
-    }
-}
+) = mapOfNotNull(
+    "requestForm" to registerTherapistRequest,
+    "captchaImage" to captchaImage.toBase64(),
+    withAdminEmailIfPresent(adminEmail),
+    registrationException?.let { "userAlreadyExists" to registrationException.isDuplicatedEmail },
+    registrationException?.let { "incorrectCaptchaCode" to registrationException.isInvalidCaptcha }
+)
 
 private fun successMessageFragment(adminEmail: String) =
-    modelAndView("public/register-success-fragment") {
-        withAdminEmail(adminEmail)
-    }
+    modelAndView("public/register-success-fragment", model = mapOfNotNull(withAdminEmailIfPresent(adminEmail)))
 
 private fun formWithValidationErrorFragment(
     registerTherapistRequest: RegisterTherapistRequest,
@@ -96,9 +88,8 @@ private fun formWithValidationErrorFragment(
     )
 }
 
-private fun ModelBuilder.withAdminEmail(adminEmail: String) {
-    "adminEmail" bindTo adminEmail
-}
+private fun withAdminEmailIfPresent(adminEmail: String?): Pair<String, String>? =
+    adminEmail?.let { "adminEmail" to adminEmail }
 
 private fun BufferedImage.toBase64(): String {
     val outputStream = ByteArrayOutputStream()

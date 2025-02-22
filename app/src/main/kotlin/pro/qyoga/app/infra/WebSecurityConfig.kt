@@ -63,7 +63,7 @@ class WebSecurityConfig(
                         "/test/*"
                     )
                     .permitAll()
-                    .requestMatchers(HttpMethod.POST, "/login", "/register", "/error-p").permitAll()
+                    .requestMatchers(HttpMethod.POST, "/login", "/register", "/surveys", "/error-p").permitAll()
                     .requestMatchers("/error").permitAll()
 
                     .requestMatchers("/**").denyAll()

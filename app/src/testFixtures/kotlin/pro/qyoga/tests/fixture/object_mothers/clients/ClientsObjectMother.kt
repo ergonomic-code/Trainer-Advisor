@@ -5,8 +5,10 @@ import pro.azhidkov.platform.uuid.UUIDv7
 import pro.qyoga.core.clients.cards.Client
 import pro.qyoga.core.clients.cards.dtos.ClientCardDto
 import pro.qyoga.core.clients.cards.model.*
+import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.tests.fixture.data.*
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
+import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
 import java.time.Duration
 import java.time.LocalDate
 import java.util.*
@@ -70,6 +72,35 @@ object ClientsObjectMother {
 
     fun createClient(therapistId: UUID, clientCardDto: ClientCardDto): Client =
         Client(therapistId, clientCardDto)
+
+    fun aClientMinimal(
+        therapistRef: TherapistRef = THE_THERAPIST_REF,
+        firstName: String = randomCyrillicWord(),
+        lastName: String = randomCyrillicWord(),
+        middleName: String? = null,
+        birthDate: LocalDate? = null,
+        phone: String = randomPhoneNumber().toUIFormat(),
+        email: String? = null,
+        address: String? = null,
+        complains: String? = null,
+        anamnesis: String? = null,
+        distributionSource: DistributionSource? = null,
+        version: Long = faker.random().nextLong(0, Long.MAX_VALUE),
+    ) = Client(
+        therapistRef.id!!, createClientCardDtoMinimal(
+            firstName,
+            lastName,
+            middleName,
+            birthDate,
+            phone,
+            email,
+            address,
+            complains,
+            anamnesis,
+            distributionSource,
+            version
+        )
+    )
 
     fun randomId() =
         UUIDv7.randomUUID()

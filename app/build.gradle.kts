@@ -52,6 +52,7 @@ dependencies {
 
 	testFixturesApi("org.springframework.boot:spring-boot-testcontainers")
 	testFixturesApi(testLibs.kotest.assertions)
+    testFixturesApi(testLibs.kotest.runner)
 	testFixturesApi(testLibs.jsoup)
 	testFixturesApi(testLibs.datafaker)
 	testFixturesApi(testLibs.greenmail)
@@ -71,6 +72,9 @@ dependencies {
 	testImplementation(testLibs.bundles.restassured)
 	testImplementation(testLibs.archunit)
 	testImplementation(testLibs.mockito.kotlin)
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.springframework.security:spring-security-test")
+    testImplementation("org.springframework.boot:spring-boot-starter-webflux")
 
 	modules {
 		module("org.codehaus.groovy:groovy") {

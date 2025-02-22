@@ -24,19 +24,26 @@ class RegistrationException(
     msg: String,
     val isDuplicatedEmail: Boolean = false,
     val isInvalidCaptcha: Boolean = false,
-    cause: Throwable? = null
-) : DomainError(msg, cause) {
+    errorCode: String,
+    cause: Throwable? = null,
+) : DomainError(msg, cause, errorCode) {
 
     companion object {
 
         fun invalidCaptcha(newCaptcha: Pair<UUID, BufferedImage>) =
-            RegistrationException(newCaptcha, "Invalid captcha code", isInvalidCaptcha = true)
+            RegistrationException(
+                newCaptcha,
+                "Invalid captcha code",
+                isInvalidCaptcha = true,
+                errorCode = "invalid-captcha"
+            )
 
         fun duplicatedEmail(email: String, cause: DuplicatedEmailException, newCaptcha: Pair<UUID, BufferedImage>) =
             RegistrationException(
                 newCaptcha,
-                "User with email ${email} already exists",
+                "User with email $email already exists",
                 isDuplicatedEmail = true,
+                errorCode = "duplicated-email",
                 cause = cause
             )
 
