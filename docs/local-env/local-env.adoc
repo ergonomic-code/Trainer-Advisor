@@ -10,6 +10,6 @@
 
 [source,shell]
 ----
-curl -X GET "http://localhost:58080/api/user/test%40uya.ru/messages/" \
+curl -X GET "http://localhost:58080/api/user/test%40ya.ru/messages/" \
 -H 'accept: application/json' | jq -r '.[] | .mimeMessage ' | grep -A7 0JfQ | python3 -m base64 -d | grep 'Пароль'
 ----
