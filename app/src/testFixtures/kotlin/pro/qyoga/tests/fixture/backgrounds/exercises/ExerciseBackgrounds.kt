@@ -9,7 +9,10 @@ import pro.qyoga.core.therapy.exercises.dtos.CreateExerciseRequest
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSearchDto
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
 import pro.qyoga.core.therapy.exercises.model.Exercise
+import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
+import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
+import pro.qyoga.tests.fixture.object_mothers.therapists.theTherapistUserDetails
 import pro.qyoga.tests.fixture.object_mothers.therapy.exercises.ExercisesObjectMother
 import pro.qyoga.tests.fixture.object_mothers.therapy.exercises.ImagesGenerationMode
 import pro.qyoga.tests.fixture.object_mothers.therapy.exercises.None
@@ -37,7 +40,12 @@ class ExerciseBackgrounds(
     }
 
     fun findExerciseSummary(exerciseSearchDto: ExerciseSearchDto): ExerciseSummaryDto? {
-        val model = exercisesListPageController.getExercisesFiltered(exerciseSearchDto, Pageable.ofSize(2))
+        val model =
+            exercisesListPageController.getExercisesFiltered(
+                exerciseSearchDto,
+                Pageable.ofSize(2),
+                theTherapistUserDetails
+            )
         val page = model.exercises
         check(page.content.size <= 1)
         return page.content.firstOrNull()
@@ -62,12 +70,16 @@ class ExerciseBackgrounds(
         return (1..count).map { createExercise(eachExerciseStepsCount, imagesGenerationMode) }
     }
 
-    fun createExercise(stepsCount: Int = 0, imagesGenerationMode: ImagesGenerationMode = None): Exercise {
+    fun createExercise(
+        stepsCount: Int = 0,
+        imagesGenerationMode: ImagesGenerationMode = None,
+        ownerRef: TherapistRef = THE_THERAPIST_REF
+    ): Exercise {
         val steps = ExercisesObjectMother.exerciseSteps(stepsCount)
         val createExerciseRequest = ExercisesObjectMother.createExerciseRequest { steps }
         val images = imagesGenerationMode.generateImages(stepsCount)
 
-        return exercisesService.addExercise(createExerciseRequest, images, THE_THERAPIST_ID)
+        return exercisesService.addExercise(createExerciseRequest, images, ownerRef)
     }
 
 }

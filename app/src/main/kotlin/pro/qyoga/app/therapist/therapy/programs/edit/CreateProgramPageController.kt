@@ -12,6 +12,7 @@ import pro.qyoga.core.therapy.exercises.dtos.ExerciseSearchDto
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
 import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
+import pro.qyoga.core.users.therapists.ref
 
 
 @Controller
@@ -47,8 +48,15 @@ class CreateProgramPageController(
 
     @GetMapping("/search-exercises")
     @ResponseBody
-    fun searchExercises(@RequestParam searchKey: String?): Iterable<ExerciseSummaryDto> {
-        return exercisesService.findExerciseSummaries(ExerciseSearchDto(title = searchKey), PageRequest.of(0, 5))
+    fun searchExercises(
+        @RequestParam searchKey: String?,
+        @AuthenticationPrincipal principal: QyogaUserDetails,
+    ): Iterable<ExerciseSummaryDto> {
+        return exercisesService.findExerciseSummaries(
+            principal.ref,
+            ExerciseSearchDto(title = searchKey),
+            PageRequest.of(0, 5)
+        )
     }
 
 }

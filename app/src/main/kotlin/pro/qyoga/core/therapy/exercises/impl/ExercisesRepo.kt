@@ -13,6 +13,7 @@ import pro.azhidkov.platform.spring.sdj.sortBy
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSearchDto
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
 import pro.qyoga.core.therapy.exercises.model.Exercise
+import pro.qyoga.core.users.therapists.TherapistRef
 
 
 @Repository
@@ -29,8 +30,13 @@ class ExercisesRepo(
     relationalMappingContext
 ) {
 
-    fun findExerciseSummaries(exercisesSearchDto: ExerciseSearchDto, page: Pageable): Page<ExerciseSummaryDto> {
+    fun findExerciseSummaries(
+        therapistRef: TherapistRef,
+        exercisesSearchDto: ExerciseSearchDto,
+        page: Pageable
+    ): Page<ExerciseSummaryDto> {
         val entitiesPage = findPage(PageRequest.of(page.pageNumber, page.pageSize, sortBy(Exercise::title))) {
+            Exercise::ownerRef isEqual therapistRef
             Exercise::title containsIfNotNull exercisesSearchDto.title
             Exercise::exerciseType isEqualIfNotNull exercisesSearchDto.exerciseType
         }

@@ -14,6 +14,7 @@ import pro.qyoga.app.platform.toStoredFile
 import pro.qyoga.core.therapy.exercises.ExercisesService
 import pro.qyoga.core.therapy.exercises.dtos.CreateExerciseRequest
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
+import pro.qyoga.core.users.therapists.ref
 
 @Controller
 @RequestMapping("/therapist/exercises/create")
@@ -38,7 +39,7 @@ class CreateExercisePageController(
             }
             .toMap()
 
-        exercisesService.addExercise(createExerciseRequest, stepImages, principal.id)
+        exercisesService.addExercise(createExerciseRequest, stepImages, principal.ref)
 
         return hxRedirect("/therapist/exercises")
     }

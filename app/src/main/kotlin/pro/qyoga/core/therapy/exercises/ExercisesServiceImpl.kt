@@ -18,6 +18,7 @@ import pro.qyoga.core.therapy.exercises.dtos.ExerciseSearchDto
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
 import pro.qyoga.core.therapy.exercises.impl.ExercisesRepo
 import pro.qyoga.core.therapy.exercises.model.Exercise
+import pro.qyoga.core.users.therapists.TherapistRef
 import java.util.*
 
 
@@ -34,12 +35,12 @@ class ExercisesService(
     fun addExercise(
         createExerciseRequest: CreateExerciseRequest,
         stepImages: Map<Int, StoredFile>,
-        therapistId: UUID
+        therapistRef: TherapistRef
     ): Exercise {
         val stepIdxToStepImageId = exerciseStepsImagesStorage.uploadAllStepImages(stepImages)
             .mapValues { it.value.id }
 
-        val exercise = Exercise.of(createExerciseRequest, stepIdxToStepImageId, therapistId)
+        val exercise = Exercise.of(createExerciseRequest, stepIdxToStepImageId, therapistRef.id!!)
 
         return exercisesRepo.save(exercise)
     }
@@ -47,8 +48,12 @@ class ExercisesService(
     fun findById(exerciseId: Long): Exercise? =
         exercisesRepo.findByIdOrNull(exerciseId)
 
-    fun findExerciseSummaries(searchDto: ExerciseSearchDto, page: Pageable): Page<ExerciseSummaryDto> {
-        return exercisesRepo.findExerciseSummaries(searchDto, page)
+    fun findExerciseSummaries(
+        therapistRef: TherapistRef,
+        searchDto: ExerciseSearchDto,
+        page: Pageable
+    ): Page<ExerciseSummaryDto> {
+        return exercisesRepo.findExerciseSummaries(therapistRef, searchDto, page)
     }
 
     fun updateExercise(exerciseId: Long, exerciseSummaryDto: ExerciseSummaryDto) {
