@@ -2,7 +2,6 @@ package pro.qyoga.tests.fixture.backgrounds.exercises
 
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Component
-import org.springframework.ui.ExtendedModelMap
 import pro.azhidkov.platform.file_storage.api.StoredFile
 import pro.qyoga.app.therapist.therapy.exercises.ExercisesListPageController
 import pro.qyoga.core.therapy.exercises.ExercisesService
@@ -38,9 +37,8 @@ class ExerciseBackgrounds(
     }
 
     fun findExerciseSummary(exerciseSearchDto: ExerciseSearchDto): ExerciseSummaryDto? {
-        val model = ExtendedModelMap()
-        exercisesListPageController.getExercisesFiltered(exerciseSearchDto, Pageable.ofSize(2), model)
-        val page = ExercisesListPageController.getExercises(model)
+        val model = exercisesListPageController.getExercisesFiltered(exerciseSearchDto, Pageable.ofSize(2))
+        val page = model.exercises
         check(page.content.size <= 1)
         return page.content.firstOrNull()
     }

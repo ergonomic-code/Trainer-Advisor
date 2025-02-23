@@ -27,3 +27,5 @@ fun modelAndView(viewName: String, model: Map<String, Any?>): ModelAndView {
     modelAndView.modelMap.mergeAttributes(model)
     return modelAndView
 }
+
+fun viewId(viewName: String, fragment: String?) = viewName + (fragment?.let { " :: $it" } ?: "")
