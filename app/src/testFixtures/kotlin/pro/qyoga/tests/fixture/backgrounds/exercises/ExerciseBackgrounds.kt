@@ -65,9 +65,10 @@ class ExerciseBackgrounds(
     fun createExercises(
         count: Int,
         eachExerciseStepsCount: Int,
-        imagesGenerationMode: ImagesGenerationMode
+        imagesGenerationMode: ImagesGenerationMode,
+        ownerRef: TherapistRef = THE_THERAPIST_REF
     ): Iterable<Exercise> {
-        return (1..count).map { createExercise(eachExerciseStepsCount, imagesGenerationMode) }
+        return (1..count).map { createExercise(eachExerciseStepsCount, imagesGenerationMode, ownerRef) }
     }
 
     fun createExercise(

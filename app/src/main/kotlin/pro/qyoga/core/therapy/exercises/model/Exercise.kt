@@ -15,6 +15,8 @@ import java.time.Duration
 import java.time.Instant
 import java.util.*
 
+typealias ExerciseRef = AggregateReference<Exercise, Long>
+
 @Table("exercises")
 data class Exercise(
     val title: String,

@@ -1,6 +1,7 @@
 package pro.qyoga.tests.infra.web
 
 import io.kotest.core.spec.style.FreeSpec
+import org.slf4j.LoggerFactory
 import org.springframework.boot.autoconfigure.web.ServerProperties
 import pro.qyoga.tests.fixture.backgrounds.Backgrounds
 import pro.qyoga.tests.fixture.data.resetFaker
@@ -11,6 +12,8 @@ import javax.sql.DataSource
 
 
 abstract class QYogaAppBaseKoTest(body: FreeSpec.() -> Unit = {}) : FreeSpec() {
+
+    private val log = LoggerFactory.getLogger(javaClass)
 
     private val dataSource: DataSource = context.getBean(DataSource::class.java)
 
@@ -27,8 +30,10 @@ abstract class QYogaAppBaseKoTest(body: FreeSpec.() -> Unit = {}) : FreeSpec() {
         context.getBean(name, T::class.java)
 
     init {
-        beforeContainer {
-            dataSource.setupDb()
+        beforeAny {
+            if (it.descriptor.isRootTest()) {
+                dataSource.setupDb()
+            }
             resetFaker()
         }
         body()

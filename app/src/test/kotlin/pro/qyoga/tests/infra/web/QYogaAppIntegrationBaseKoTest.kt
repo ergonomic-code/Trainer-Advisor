@@ -12,11 +12,11 @@ import pro.qyoga.tests.infra.test_config.spring.context
 abstract class QYogaAppIntegrationBaseKoTest(body: QYogaAppIntegrationBaseKoTest.() -> Unit = {}) :
     QYogaAppBaseKoTest() {
 
-    val baseUri = "http://localhost:$port"
+    private val baseUri = "http://localhost:$port"
 
     lateinit var client: WebTestClient
 
-    var securityFilterChain: SecurityFilterChain = getBean("mainSecurityFilterChain")
+    private var securityFilterChain: SecurityFilterChain = getBean("mainSecurityFilterChain")
 
     init {
         beforeSpec {
