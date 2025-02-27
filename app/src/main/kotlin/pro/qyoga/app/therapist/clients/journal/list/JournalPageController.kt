@@ -30,9 +30,11 @@ class JournalPageController(
                 notFound
 
             is GetJournalPageResult.Success -> {
-                clientPageModel(result.client, ClientPageTab.JOURNAL) {
-                    JOURNAL bindTo result.page
-                }
+                clientPageModel(
+                    result.client, ClientPageTab.JOURNAL, mapOf(
+                        JOURNAL to result.page
+                    )
+                )
             }
         }
     }

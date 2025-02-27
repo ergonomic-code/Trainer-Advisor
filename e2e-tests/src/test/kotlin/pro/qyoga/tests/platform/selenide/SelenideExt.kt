@@ -69,6 +69,6 @@ fun await(page: HtmlPageCompat) {
     `$`("title").shouldHave(attribute("text", page.title!!))
 }
 
+@Suppress("unused", "Идея глючит - функция активно используется")
 fun `$`(component: Component): SelenideElement =
     `$`(component.selector())
-
