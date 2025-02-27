@@ -1,10 +1,13 @@
 package pro.qyoga.tests.scripts.therapist.clients.card
 
+import com.codeborne.selenide.Selenide
 import pro.qyoga.core.clients.cards.dtos.ClientCardDto
+import pro.qyoga.core.clients.cards.model.ClientRef
 import pro.qyoga.core.clients.cards.model.PhoneNumber
 import pro.qyoga.l10n.russianDateFormat
 import pro.qyoga.tests.pages.therapist.clients.card.CreateClientForm
 import pro.qyoga.tests.pages.therapist.clients.card.CreateClientPage
+import pro.qyoga.tests.pages.therapist.clients.card.EditClientPage
 import pro.qyoga.tests.platform.selenide.open
 import pro.qyoga.tests.platform.selenide.selectIn
 import pro.qyoga.tests.platform.selenide.typeInto
@@ -25,4 +28,8 @@ fun fillClientForm(client: ClientCardDto) {
     typeInto(CreateClientForm.anamnesis, client.anamnesis)
     selectIn(CreateClientForm.distributionSourceType, client.distributionSourceType)
     typeInto(CreateClientForm.distributionSourceComment, client.distributionSourceComment)
+}
+
+fun goToEditClientPage(clientRef: ClientRef) {
+    Selenide.open(EditClientPage.PATH.replace("{clientId}", clientRef.id.toString()))
 }
