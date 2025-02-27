@@ -1,10 +1,11 @@
 package pro.qyoga.tests.fixture.object_mothers.therapy.programs
 
-import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
 import pro.qyoga.core.therapy.exercises.model.Exercise
+import pro.qyoga.core.therapy.exercises.model.ExerciseRef
 import pro.qyoga.core.therapy.exercises.model.ExerciseStep
 import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
+import pro.qyoga.core.therapy.programs.dtos.ProgramsSearchFilter
 import pro.qyoga.core.therapy.programs.model.DocxExercise
 import pro.qyoga.core.therapy.programs.model.DocxProgram
 import pro.qyoga.core.therapy.programs.model.Program
@@ -25,14 +26,14 @@ object ProgramsObjectMother {
     fun randomProgram(
         title: String = randomCyrillicWord(),
         therapeuticTask: TherapeuticTaskRef,
-        exercises: Iterable<Exercise> = emptyList(),
+        exercises: Iterable<ExerciseRef> = emptyList(),
         owner: TherapistRef = THE_THERAPIST_REF,
     ): Program {
         return Program(
             title,
             therapeuticTask,
             owner,
-            exercises.map { ProgramExercise(it.ref()) }
+            exercises.map { ProgramExercise(it) }
         )
     }
 
@@ -55,4 +56,12 @@ object ProgramsObjectMother {
             exercise.description,
             exercise.steps.map { ExerciseStep(it.description, it.imageId) })
     }
+
+    fun aProgramSearchFilter(
+        titleKeyword: String = "",
+        therapeuticTaskKeyword: String = ""
+    ) = ProgramsSearchFilter(
+        titleKeyword = titleKeyword,
+        therapeuticTaskKeyword = therapeuticTaskKeyword
+    )
 }
