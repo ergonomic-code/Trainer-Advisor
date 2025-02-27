@@ -32,9 +32,9 @@ abstract class Script(
 
     abstract val vars: List<Variable>
 
-
     override fun matcher(): Matcher<Element> {
         val varMatchers = vars.map { htmlMatch(it.regex()) }
         return Matcher.all(*varMatchers.toTypedArray())
     }
+
 }

@@ -33,9 +33,11 @@ class ClientFilesPageController(
 
         val files = clientFilesService.findFilesPage(clientId, ClientFilesRepo.Page.tenNewest)
 
-        return clientPageModel(client, ClientPageTab.FILES) {
-            "clientFiles" bindTo files.content
-        }
+        return clientPageModel(
+            client, ClientPageTab.FILES, mapOf(
+                "clientFiles" to files.content
+            )
+        )
     }
 
     @PostMapping
@@ -46,9 +48,11 @@ class ClientFilesPageController(
         val storedFile = newFile.toStoredFile()
         val uploadedFile = clientFilesService.addFile(ClientRef.to(clientId), storedFile)
 
-        return modelAndView("therapist/clients/client-files-fragment :: client-files-list-row") {
-            "clientFiles" bindTo listOf(uploadedFile)
-        }
+        return modelAndView(
+            "therapist/clients/client-files-fragment :: client-files-list-row", mapOf(
+                "clientFiles" to listOf(uploadedFile)
+            )
+        )
     }
 
     @GetMapping("/{fileId}")

@@ -31,9 +31,11 @@ class EditClientCardPageController(
         val client = clientsRepo.findByIdOrNull(clientId)
             ?: return notFound
 
-        return clientPageModel(client, ClientPageTab.CARD) {
-            "formAction" bindTo "/therapist/clients/${client.id}/card"
-        }
+        return clientPageModel(
+            client, ClientPageTab.CARD, mapOf(
+                "formAction" to "/therapist/clients/${client.id}/card"
+            )
+        )
     }
 
     @PostMapping(EDIT_CLIENT_CARD_PAGE_PATH)
