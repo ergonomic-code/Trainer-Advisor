@@ -1,0 +1,1 @@
+../../app/src/testFixtures/resources/db/pg-initdb.d

@@ -1,4 +1,3 @@
-drop
-    database if exists qyoga;
-create
-    database qyoga;
+DROP DATABASE IF EXISTS qyoga;
+
+CREATE DATABASE qyoga TEMPLATE qyoga_template;

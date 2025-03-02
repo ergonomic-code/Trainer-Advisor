@@ -20,6 +20,9 @@ services:
     tmpfs:
       - /tmp
 
+    volumes:
+      - ./pg-initdb.d:/docker-entrypoint-initdb.d/
+
     ports:
       - "54502:5432"
 
