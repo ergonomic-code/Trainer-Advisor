@@ -1,8 +1,11 @@
 INSERT INTO journal_entries
     (client_ref, date, therapeutic_task, entry_text, created_at, version)
 VALUES ((SELECT id FROM clients WHERE last_name = 'Бортник'),
-        '2023-12-28',
-        (SELECT id FROM therapeutic_tasks WHERE name = 'Снятие напряжения с ШОП'),
+        '2023-12-29',
+        (SELECT id
+         FROM therapeutic_tasks
+         WHERE owner_ref = usr('therapist@trainer-advisor.pro')
+           AND name = 'Снятие напряжения с ШОП'),
         'Дыхание с резинкой на рёбрах => расслабилась.
        Расслабление мышц шеи:
        • суставная разминка
@@ -19,7 +22,9 @@ VALUES ((SELECT id FROM clients WHERE last_name = 'Бортник'),
 
        ((SELECT id FROM clients WHERE last_name = 'Бортник'),
         '2024-01-13',
-        (SELECT id FROM therapeutic_tasks WHERE name = 'ЙТ боли в пояснице'),
+        (SELECT id
+         FROM therapeutic_tasks
+         WHERE owner_ref = usr('therapist@trainer-advisor.pro') AND name = 'ЙТ боли в пояснице'),
         '    В начале занятия небольшая боль в пояснице. За день до этого было скручивающее движение с усилием, после этого поясница сильно заболела. После приема мануального терапевта стало лучше.
         Жалобы на зажатые диафрагму и таз.
 
@@ -39,7 +44,9 @@ VALUES ((SELECT id FROM clients WHERE last_name = 'Бортник'),
 
        ((SELECT id FROM clients WHERE last_name = 'Королёва'),
         '2023-12-26',
-        (SELECT id FROM therapeutic_tasks WHERE name = 'Укрепление МТД'),
+        (SELECT id
+         FROM therapeutic_tasks
+         WHERE owner_ref = usr('therapist@trainer-advisor.pro') AND name = 'Укрепление МТД'),
         'Работа с мтд:
 • сидя
 • сидя в z-сете
@@ -51,7 +58,10 @@ VALUES ((SELECT id FROM clients WHERE last_name = 'Бортник'),
 
        ((SELECT id FROM clients WHERE last_name = 'Сергеева'),
         '2023-12-23',
-        (SELECT id FROM therapeutic_tasks WHERE name = 'Коррекция плоскостопия'),
+        (SELECT id
+         FROM therapeutic_tasks
+         WHERE owner_ref = usr('therapist@trainer-advisor.pro')
+           AND name = 'Коррекция плоскостопия'),
         'С утра болела поясница, хотелось прохрустеть.
 Коррекция плоскостопия:
 1. Складка из коврика
