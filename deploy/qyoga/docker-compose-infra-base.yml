@@ -5,7 +5,7 @@ name: qyoga-infra
 services:
 
   postgres:
-    image: postgres:15.2
+    image: postgres:17.4
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password

@@ -66,5 +66,4 @@ class ExercisesListPageController(
         return ResponseEntity.ok(null)
     }
 
-
 }

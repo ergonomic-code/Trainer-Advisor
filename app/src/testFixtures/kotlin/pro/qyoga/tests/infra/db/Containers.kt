@@ -2,6 +2,7 @@ package pro.qyoga.tests.infra.db
 
 import org.testcontainers.containers.MinIOContainer
 import org.testcontainers.containers.PostgreSQLContainer
+import org.testcontainers.utility.MountableFile
 
 val pgContainer: PostgreSQLContainer<*> by lazy {
     PostgreSQLContainer("postgres:15.2")
@@ -13,6 +14,14 @@ val pgContainer: PostgreSQLContainer<*> by lazy {
         .withEnv("PGDATA", "/var/lib/postgresql/data-no-mounted")
         .withReuse(true)
         .withInitScript("db/qyoga-db-init.sql")
+        .withCopyFileToContainer(
+            MountableFile.forClasspathResource("db/pg-initdb.d/qyoga-baseline-250302.psql"),
+            "/docker-entrypoint-initdb.d/qyoga-baseline-250302.psql"
+        )
+        .withCopyFileToContainer(
+            MountableFile.forClasspathResource("db/pg-initdb.d/init.sh"),
+            "/docker-entrypoint-initdb.d/init.sh"
+        )
         .apply {
             start()
             // Сначала подключаемся к postgres, пересоздаём qyoga для обнуления фикстуры и подключаемся к ней

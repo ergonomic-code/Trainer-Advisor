@@ -1,0 +1,1015 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 15.2 (Debian 15.2-1.pgdg110+1)
+-- Dumped by pg_dump version 17.2
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+DROP DATABASE IF EXISTS qyoga_template;
+--
+-- Name: qyoga_template; Type: DATABASE; Schema: -; Owner: postgres
+--
+
+CREATE DATABASE qyoga_template WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE_PROVIDER = libc LOCALE = 'en_US.utf8';
+
+
+ALTER DATABASE qyoga_template OWNER TO postgres;
+
+\connect qyoga_template
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Name: format_to_iso_8601(interval); Type: FUNCTION; Schema: public; Owner: postgres
+--
+
+CREATE FUNCTION public.format_to_iso_8601(i interval) RETURNS text
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    SET LOCAL intervalstyle = 'iso_8601';
+    RETURN i::TEXT;
+END;
+$$;
+
+
+ALTER FUNCTION public.format_to_iso_8601(i interval) OWNER TO postgres;
+
+SET default_tablespace = '';
+
+SET default_table_access_method = heap;
+
+--
+-- Name: appointment_types; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.appointment_types (
+    id bigint NOT NULL,
+    name character varying NOT NULL,
+    created_at timestamp with time zone NOT NULL,
+    modified_at timestamp with time zone,
+    version bigint NOT NULL,
+    owner_ref uuid NOT NULL
+);
+
+
+ALTER TABLE public.appointment_types OWNER TO postgres;
+
+--
+-- Name: appointment_types_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.appointment_types ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.appointment_types_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: appointments; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.appointments (
+    id bigint NOT NULL,
+    type_ref bigint NOT NULL,
+    therapeutic_task_ref bigint,
+    date_time timestamp with time zone NOT NULL,
+    time_zone character varying NOT NULL,
+    place character varying,
+    cost numeric(6,0),
+    payed boolean NOT NULL,
+    comment text,
+    created_at timestamp with time zone NOT NULL,
+    modified_at timestamp with time zone,
+    version bigint NOT NULL,
+    duration interval NOT NULL,
+    status character varying NOT NULL,
+    therapist_ref uuid NOT NULL,
+    client_ref uuid NOT NULL,
+    CONSTRAINT appointments_cost_check CHECK ((cost >= (0)::numeric))
+);
+
+
+ALTER TABLE public.appointments OWNER TO postgres;
+
+--
+-- Name: appointments_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.appointments ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.appointments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: client_files; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.client_files (
+    id bigint NOT NULL,
+    file_ref bigint NOT NULL,
+    journal_entry_ref bigint,
+    created_at timestamp with time zone NOT NULL,
+    modified_at timestamp with time zone,
+    version bigint NOT NULL,
+    client_ref uuid NOT NULL
+);
+
+
+ALTER TABLE public.client_files OWNER TO postgres;
+
+--
+-- Name: client_files_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.client_files ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.client_files_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: clients; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.clients (
+    first_name character varying NOT NULL,
+    last_name character varying NOT NULL,
+    middle_name character varying,
+    birth_date date,
+    phone_number character varying(18) NOT NULL,
+    email character varying,
+    distribution_source_type character varying,
+    created_at timestamp with time zone NOT NULL,
+    modified_at timestamp with time zone,
+    version bigint NOT NULL,
+    address character varying,
+    complaints character varying,
+    distribution_source_comment character varying,
+    anamnesis character varying,
+    therapist_ref uuid NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL,
+    CONSTRAINT phone__number_e164_check CHECK ((((length((phone_number)::text) >= 12) AND (length((phone_number)::text) <= 14)) AND ((phone_number)::text ~ '^\+\d{1,3}\d{10}$'::text)))
+);
+
+
+ALTER TABLE public.clients OWNER TO postgres;
+
+--
+-- Name: exercise_steps; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.exercise_steps (
+    exercise_id bigint NOT NULL,
+    step_index smallint NOT NULL,
+    description character varying NOT NULL,
+    image_id bigint
+);
+
+
+ALTER TABLE public.exercise_steps OWNER TO postgres;
+
+--
+-- Name: exercises; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.exercises (
+    id bigint NOT NULL,
+    title character varying NOT NULL,
+    description text NOT NULL,
+    duration interval NOT NULL,
+    exercise_type character varying NOT NULL,
+    created_at timestamp with time zone NOT NULL,
+    modified_at timestamp with time zone,
+    version bigint NOT NULL,
+    owner_ref uuid NOT NULL
+);
+
+
+ALTER TABLE public.exercises OWNER TO postgres;
+
+--
+-- Name: exercises_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.exercises ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.exercises_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: files; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.files (
+    id bigint NOT NULL,
+    name character varying NOT NULL,
+    media_type character varying NOT NULL,
+    size bigint NOT NULL,
+    created_at timestamp with time zone NOT NULL,
+    modified_at timestamp with time zone,
+    version bigint NOT NULL,
+    bucket character varying NOT NULL
+);
+
+
+ALTER TABLE public.files OWNER TO postgres;
+
+--
+-- Name: flyway_schema_history; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.flyway_schema_history (
+    installed_rank integer NOT NULL,
+    version character varying(50),
+    description character varying(200) NOT NULL,
+    type character varying(20) NOT NULL,
+    script character varying(1000) NOT NULL,
+    checksum integer,
+    installed_by character varying(100) NOT NULL,
+    installed_on timestamp without time zone DEFAULT now() NOT NULL,
+    execution_time integer NOT NULL,
+    success boolean NOT NULL
+);
+
+
+ALTER TABLE public.flyway_schema_history OWNER TO postgres;
+
+--
+-- Name: images_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.files ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.images_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: journal_entries; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.journal_entries (
+    id bigint NOT NULL,
+    date date NOT NULL,
+    therapeutic_task bigint,
+    entry_text character varying,
+    created_at timestamp with time zone NOT NULL,
+    last_modified_at timestamp with time zone,
+    version bigint NOT NULL,
+    client_ref uuid NOT NULL
+);
+
+
+ALTER TABLE public.journal_entries OWNER TO postgres;
+
+--
+-- Name: journal_entries_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.journal_entries ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.journal_entries_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: persistent_logins; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.persistent_logins (
+    series character varying(64) NOT NULL,
+    username character varying(64) NOT NULL,
+    token character varying(64) NOT NULL,
+    last_used timestamp without time zone NOT NULL
+);
+
+
+ALTER TABLE public.persistent_logins OWNER TO postgres;
+
+--
+-- Name: program_exercises; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.program_exercises (
+    program_id bigint NOT NULL,
+    exercise_index smallint NOT NULL,
+    exercise_ref bigint NOT NULL
+);
+
+
+ALTER TABLE public.program_exercises OWNER TO postgres;
+
+--
+-- Name: programs; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.programs (
+    id bigint NOT NULL,
+    title character varying NOT NULL,
+    therapeutic_task_ref bigint NOT NULL,
+    created_at timestamp with time zone NOT NULL,
+    modified_at timestamp with time zone,
+    version bigint NOT NULL,
+    owner_ref uuid NOT NULL
+);
+
+
+ALTER TABLE public.programs OWNER TO postgres;
+
+--
+-- Name: programs_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.programs ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.programs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: survey_forms_settings; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.survey_forms_settings (
+    therapist_ref uuid NOT NULL,
+    yandex_admin_email character varying,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    last_modified_at timestamp with time zone,
+    version bigint DEFAULT 1 NOT NULL
+);
+
+
+ALTER TABLE public.survey_forms_settings OWNER TO postgres;
+
+--
+-- Name: therapeutic_tasks; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.therapeutic_tasks (
+    id bigint NOT NULL,
+    name character varying NOT NULL,
+    created_at timestamp with time zone NOT NULL,
+    last_modified_at timestamp with time zone,
+    version bigint NOT NULL,
+    owner_ref uuid NOT NULL
+);
+
+
+ALTER TABLE public.therapeutic_tasks OWNER TO postgres;
+
+--
+-- Name: therapeutic_tasks_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+ALTER TABLE public.therapeutic_tasks ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME public.therapeutic_tasks_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1
+);
+
+
+--
+-- Name: therapists; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.therapists (
+    created_at timestamp with time zone NOT NULL,
+    modified_at timestamp with time zone,
+    version bigint NOT NULL,
+    first_name character varying DEFAULT ''::character varying NOT NULL,
+    last_name character varying DEFAULT ''::character varying NOT NULL,
+    id uuid NOT NULL
+);
+
+
+ALTER TABLE public.therapists OWNER TO postgres;
+
+--
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.users (
+    email character varying NOT NULL,
+    password_hash character varying NOT NULL,
+    roles character varying[] NOT NULL,
+    created_at timestamp with time zone NOT NULL,
+    modified_at timestamp with time zone,
+    version bigint NOT NULL,
+    enabled boolean DEFAULT true NOT NULL,
+    id uuid DEFAULT gen_random_uuid() NOT NULL
+);
+
+
+ALTER TABLE public.users OWNER TO postgres;
+
+--
+-- Data for Name: appointment_types; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.appointment_types (id, name, created_at, modified_at, version, owner_ref) FROM stdin;
+\.
+
+
+--
+-- Data for Name: appointments; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.appointments (id, type_ref, therapeutic_task_ref, date_time, time_zone, place, cost, payed, comment, created_at, modified_at, version, duration, status, therapist_ref, client_ref) FROM stdin;
+\.
+
+
+--
+-- Data for Name: client_files; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.client_files (id, file_ref, journal_entry_ref, created_at, modified_at, version, client_ref) FROM stdin;
+\.
+
+
+--
+-- Data for Name: clients; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.clients (first_name, last_name, middle_name, birth_date, phone_number, email, distribution_source_type, created_at, modified_at, version, address, complaints, distribution_source_comment, anamnesis, therapist_ref, id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: exercise_steps; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.exercise_steps (exercise_id, step_index, description, image_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: exercises; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.exercises (id, title, description, duration, exercise_type, created_at, modified_at, version, owner_ref) FROM stdin;
+\.
+
+
+--
+-- Data for Name: files; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.files (id, name, media_type, size, created_at, modified_at, version, bucket) FROM stdin;
+\.
+
+
+--
+-- Data for Name: flyway_schema_history; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.flyway_schema_history (installed_rank, version, description, type, script, checksum, installed_by, installed_on, execution_time, success) FROM stdin;
+1	23110601	baseline	SQL	V23110601__baseline.sql	-1002562484	postgres	2025-03-02 09:48:18.5173	14	t
+2	23111301	fix timestamp types	SQL	V23111301__fix_timestamp_types.sql	2103184185	postgres	2025-03-02 09:48:18.556046	3	t
+3	23111701	split therapists name	SQL	V23111701__split_therapists_name.sql	-1829678034	postgres	2025-03-02 09:48:18.56823	2	t
+4	23112601	extend clients	SQL	V23112601__extend_clients.sql	-1823511136	postgres	2025-03-02 09:48:18.576764	3	t
+5	23120301	add persistent logins	SQL	V23120301__add_persistent_logins.sql	1451224587	postgres	2025-03-02 09:48:18.586539	1	t
+6	23120401	make distribution source enum	SQL	V23120401__make_distribution_source_enum.sql	-434223756	postgres	2025-03-02 09:48:18.592564	1	t
+7	23120701	add client anemnesis	SQL	V23120701__add_client_anemnesis.sql	828152473	postgres	2025-03-02 09:48:18.598713	1	t
+8	23121901	add therapeutic tasks	SQL	V23121901__add_therapeutic_tasks.sql	-535128378	postgres	2025-03-02 09:48:18.603874	2	t
+9	23121902	add journal entries	SQL	V23121902__add_journal_entries.sql	257309937	postgres	2025-03-02 09:48:18.610933	2	t
+10	23122001	make client birth date nullable	SQL	V23122001__make_client_birth_date_nullable.sql	1379643622	postgres	2025-03-02 09:48:18.617411	1	t
+11	23122701	make therapeutic task name unique ignoring case	SQL	V23122701__make_therapeutic_task_name_unique_ignoring_case.sql	585046502	postgres	2025-03-02 09:48:18.621886	1	t
+12	24010301	rename images to files	SQL	V24010301__rename_images_to_files.sql	-1034301833	postgres	2025-03-02 09:48:18.626262	0	t
+13	24010302	add files bucket	SQL	V24010302__add_files_bucket.sql	-655383291	postgres	2025-03-02 09:48:18.629678	1	t
+14	24010601	make files data nullable	SQL	V24010601__make_files_data_nullable.sql	-797223261	postgres	2025-03-02 09:48:18.634433	1	t
+15	24010602	remove files data	SQL	V24010602__remove_files_data.sql	-1652790387	postgres	2025-03-02 09:48:18.639179	1	t
+16	24012001	client files	SQL	V24012001__client_files.sql	984304686	postgres	2025-03-02 09:48:18.644274	2	t
+17	24012401	programs	SQL	V24012401__programs.sql	-1329080083	postgres	2025-03-02 09:48:18.650455	3	t
+18	24013101	make client complaints nullable	SQL	V24013101__make_client_complaints_nullable.sql	-377001053	postgres	2025-03-02 09:48:18.657462	1	t
+19	24020101	appointments	SQL	V24020101__appointments.sql	20826570	postgres	2025-03-02 09:48:18.661165	5	t
+20	24021101	appointment duration	SQL	V24021101__appointment_duration.sql	1744442883	postgres	2025-03-02 09:48:18.669965	1	t
+21	24021501	appointment status	SQL	V24021501__appointment_status.sql	2143606301	postgres	2025-03-02 09:48:18.674769	1	t
+22	24033001	add user enabled	SQL	V24033001__add_user_enabled.sql	44987213	postgres	2025-03-02 09:48:18.679597	1	t
+23	24040301	make client phone unique per therapist	SQL	V24040301__make_client_phone_unique_per_therapist.sql	61198306	postgres	2025-03-02 09:48:18.6836	1	t
+24	25010401	migrate therapists to uuid	SQL	V25010401__migrate_therapists_to_uuid.sql	196459582	postgres	2025-03-02 09:48:18.687705	19	t
+25	25010402	migrate clients to uuid	SQL	V25010402__migrate_clients_to_uuid.sql	1672282666	postgres	2025-03-02 09:48:18.713914	10	t
+26	25020201	format client phone numbers to e 164 format	SQL	V25020201__format_client_phone_numbers_to_e_164_format.sql	-575984220	postgres	2025-03-02 09:48:18.730593	2	t
+27	25020301	add survery forms settings	SQL	V25020301__add_survery_forms_settings.sql	-663758277	postgres	2025-03-02 09:48:18.737383	2	t
+28	25020901	makey survery forms settings yandex admin email unique	SQL	V25020901__makey_survery_forms_settings_yandex_admin_email_unique.sql	-884638319	postgres	2025-03-02 09:48:18.742934	0	t
+29	\N	format interval to period	SQL	R__format_interval_to_period.sql	1817617115	postgres	2025-03-02 09:48:18.746499	1	t
+\.
+
+
+--
+-- Data for Name: journal_entries; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.journal_entries (id, date, therapeutic_task, entry_text, created_at, last_modified_at, version, client_ref) FROM stdin;
+\.
+
+
+--
+-- Data for Name: persistent_logins; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.persistent_logins (series, username, token, last_used) FROM stdin;
+\.
+
+
+--
+-- Data for Name: program_exercises; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.program_exercises (program_id, exercise_index, exercise_ref) FROM stdin;
+\.
+
+
+--
+-- Data for Name: programs; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.programs (id, title, therapeutic_task_ref, created_at, modified_at, version, owner_ref) FROM stdin;
+\.
+
+
+--
+-- Data for Name: survey_forms_settings; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.survey_forms_settings (therapist_ref, yandex_admin_email, created_at, last_modified_at, version) FROM stdin;
+\.
+
+
+--
+-- Data for Name: therapeutic_tasks; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.therapeutic_tasks (id, name, created_at, last_modified_at, version, owner_ref) FROM stdin;
+\.
+
+
+--
+-- Data for Name: therapists; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.therapists (created_at, modified_at, version, first_name, last_name, id) FROM stdin;
+2025-03-02 02:48:18.769823+00	\N	1	Елена (тест)	Маркова	d43cf6b1-8b8c-4b45-b48c-b350dd99e497
+2025-03-02 02:48:18.770532+00	\N	1	Админ (тест)	Адамов	95cde197-9490-4d39-be46-764ba2107f79
+\.
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.users (email, password_hash, roles, created_at, modified_at, version, enabled, id) FROM stdin;
+therapist@qyoga.pro	password	{ROLE_THERAPIST}	2025-03-02 02:48:18.769339+00	\N	1	t	d43cf6b1-8b8c-4b45-b48c-b350dd99e497
+admin@ta.pro	password	{ROLE_ADMIN}	2025-03-02 02:48:18.770282+00	\N	1	t	95cde197-9490-4d39-be46-764ba2107f79
+\.
+
+
+--
+-- Name: appointment_types_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.appointment_types_id_seq', 1, false);
+
+
+--
+-- Name: appointments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.appointments_id_seq', 1, false);
+
+
+--
+-- Name: client_files_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.client_files_id_seq', 1, false);
+
+
+--
+-- Name: exercises_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.exercises_id_seq', 1, false);
+
+
+--
+-- Name: images_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.images_id_seq', 1, false);
+
+
+--
+-- Name: journal_entries_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.journal_entries_id_seq', 1, false);
+
+
+--
+-- Name: programs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.programs_id_seq', 1, false);
+
+
+--
+-- Name: therapeutic_tasks_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.therapeutic_tasks_id_seq', 1, false);
+
+
+--
+-- Name: appointment_types appointment_types_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.appointment_types
+    ADD CONSTRAINT appointment_types_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: appointments appointments_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.appointments
+    ADD CONSTRAINT appointments_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: client_files client_files_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.client_files
+    ADD CONSTRAINT client_files_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: clients clients_phone_number_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.clients
+    ADD CONSTRAINT clients_phone_number_key UNIQUE (therapist_ref, phone_number);
+
+
+--
+-- Name: clients clients_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.clients
+    ADD CONSTRAINT clients_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: exercise_steps exercise_steps_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.exercise_steps
+    ADD CONSTRAINT exercise_steps_pkey PRIMARY KEY (exercise_id, step_index);
+
+
+--
+-- Name: exercises exercises_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.exercises
+    ADD CONSTRAINT exercises_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: flyway_schema_history flyway_schema_history_pk; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.flyway_schema_history
+    ADD CONSTRAINT flyway_schema_history_pk PRIMARY KEY (installed_rank);
+
+
+--
+-- Name: files images_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.files
+    ADD CONSTRAINT images_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: journal_entries journal_entries_client_date_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.journal_entries
+    ADD CONSTRAINT journal_entries_client_date_key UNIQUE (client_ref, date);
+
+
+--
+-- Name: journal_entries journal_entries_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.journal_entries
+    ADD CONSTRAINT journal_entries_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: persistent_logins persistent_logins_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.persistent_logins
+    ADD CONSTRAINT persistent_logins_pkey PRIMARY KEY (series);
+
+
+--
+-- Name: program_exercises program_exercises_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.program_exercises
+    ADD CONSTRAINT program_exercises_pkey PRIMARY KEY (program_id, exercise_index);
+
+
+--
+-- Name: programs programs_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.programs
+    ADD CONSTRAINT programs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: survey_forms_settings survey_forms_settings_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.survey_forms_settings
+    ADD CONSTRAINT survey_forms_settings_pkey PRIMARY KEY (therapist_ref);
+
+
+--
+-- Name: survey_forms_settings survey_forms_settings_yandex_admin_email_uq; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.survey_forms_settings
+    ADD CONSTRAINT survey_forms_settings_yandex_admin_email_uq UNIQUE (yandex_admin_email);
+
+
+--
+-- Name: therapeutic_tasks therapeutic_tasks_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.therapeutic_tasks
+    ADD CONSTRAINT therapeutic_tasks_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: therapists therapists_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.therapists
+    ADD CONSTRAINT therapists_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_email_key UNIQUE (email);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: flyway_schema_history_s_idx; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE INDEX flyway_schema_history_s_idx ON public.flyway_schema_history USING btree (success);
+
+
+--
+-- Name: therapeutic_tasks_owner_name_key; Type: INDEX; Schema: public; Owner: postgres
+--
+
+CREATE UNIQUE INDEX therapeutic_tasks_owner_name_key ON public.therapeutic_tasks USING btree (owner_ref, lower((name)::text));
+
+
+--
+-- Name: appointment_types appointment_types_owner_ref_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.appointment_types
+    ADD CONSTRAINT appointment_types_owner_ref_fkey FOREIGN KEY (owner_ref) REFERENCES public.therapists(id) ON DELETE CASCADE;
+
+
+--
+-- Name: appointments appointments_client_ref_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.appointments
+    ADD CONSTRAINT appointments_client_ref_fkey FOREIGN KEY (client_ref) REFERENCES public.clients(id) ON DELETE CASCADE;
+
+
+--
+-- Name: appointments appointments_therapeutic_task_ref_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.appointments
+    ADD CONSTRAINT appointments_therapeutic_task_ref_fkey FOREIGN KEY (therapeutic_task_ref) REFERENCES public.therapeutic_tasks(id);
+
+
+--
+-- Name: appointments appointments_therapist_ref_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.appointments
+    ADD CONSTRAINT appointments_therapist_ref_fkey FOREIGN KEY (therapist_ref) REFERENCES public.therapists(id) ON DELETE CASCADE;
+
+
+--
+-- Name: appointments appointments_type_ref_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.appointments
+    ADD CONSTRAINT appointments_type_ref_fkey FOREIGN KEY (type_ref) REFERENCES public.appointment_types(id);
+
+
+--
+-- Name: client_files client_files_client_ref_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.client_files
+    ADD CONSTRAINT client_files_client_ref_fkey FOREIGN KEY (client_ref) REFERENCES public.clients(id) ON DELETE CASCADE;
+
+
+--
+-- Name: client_files client_files_file_ref_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.client_files
+    ADD CONSTRAINT client_files_file_ref_fkey FOREIGN KEY (file_ref) REFERENCES public.files(id);
+
+
+--
+-- Name: client_files client_files_journal_entry_ref_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.client_files
+    ADD CONSTRAINT client_files_journal_entry_ref_fkey FOREIGN KEY (journal_entry_ref) REFERENCES public.journal_entries(id);
+
+
+--
+-- Name: clients clients_therapist_ref_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.clients
+    ADD CONSTRAINT clients_therapist_ref_fkey FOREIGN KEY (therapist_ref) REFERENCES public.therapists(id) ON DELETE CASCADE;
+
+
+--
+-- Name: exercises exercises_owner_ref_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.exercises
+    ADD CONSTRAINT exercises_owner_ref_fkey FOREIGN KEY (owner_ref) REFERENCES public.therapists(id) ON DELETE CASCADE;
+
+
+--
+-- Name: exercise_steps fk_exercise_steps_exercises; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.exercise_steps
+    ADD CONSTRAINT fk_exercise_steps_exercises FOREIGN KEY (exercise_id) REFERENCES public.exercises(id) ON DELETE CASCADE;
+
+
+--
+-- Name: journal_entries journal_entries_client_ref_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.journal_entries
+    ADD CONSTRAINT journal_entries_client_ref_fkey FOREIGN KEY (client_ref) REFERENCES public.clients(id) ON DELETE CASCADE;
+
+
+--
+-- Name: journal_entries journal_entries_therapeutic_task_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.journal_entries
+    ADD CONSTRAINT journal_entries_therapeutic_task_fkey FOREIGN KEY (therapeutic_task) REFERENCES public.therapeutic_tasks(id);
+
+
+--
+-- Name: program_exercises program_exercises_exercise_ref_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.program_exercises
+    ADD CONSTRAINT program_exercises_exercise_ref_fkey FOREIGN KEY (exercise_ref) REFERENCES public.exercises(id);
+
+
+--
+-- Name: program_exercises program_exercises_program_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.program_exercises
+    ADD CONSTRAINT program_exercises_program_id_fkey FOREIGN KEY (program_id) REFERENCES public.programs(id);
+
+
+--
+-- Name: programs programs_owner_ref_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.programs
+    ADD CONSTRAINT programs_owner_ref_fkey FOREIGN KEY (owner_ref) REFERENCES public.therapists(id) ON DELETE CASCADE;
+
+
+--
+-- Name: programs programs_therapeutic_task_ref_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.programs
+    ADD CONSTRAINT programs_therapeutic_task_ref_fkey FOREIGN KEY (therapeutic_task_ref) REFERENCES public.therapeutic_tasks(id);
+
+
+--
+-- Name: survey_forms_settings survey_forms_settings_therapist_ref_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.survey_forms_settings
+    ADD CONSTRAINT survey_forms_settings_therapist_ref_fkey FOREIGN KEY (therapist_ref) REFERENCES public.therapists(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: therapeutic_tasks therapeutic_tasks_owner_ref_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.therapeutic_tasks
+    ADD CONSTRAINT therapeutic_tasks_owner_ref_fkey FOREIGN KEY (owner_ref) REFERENCES public.therapists(id) ON DELETE CASCADE;
+
+
+--
+-- Name: therapists therapists_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.therapists
+    ADD CONSTRAINT therapists_user_id_fkey FOREIGN KEY (id) REFERENCES public.users(id) ON DELETE CASCADE;
+
+
+--
+-- PostgreSQL database dump complete
+--
+

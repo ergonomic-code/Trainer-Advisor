@@ -1,0 +1,1 @@
+psql --file /docker-entrypoint-initdb.d/qyoga-baseline-250302.psql

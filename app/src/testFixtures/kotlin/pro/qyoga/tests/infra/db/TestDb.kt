@@ -27,7 +27,7 @@ val jdbcUrl: String by lazy {
         con.prepareStatement(
             """
                 DROP DATABASE IF EXISTS qyoga;
-                CREATE DATABASE qyoga;
+                CREATE DATABASE qyoga TEMPLATE qyoga_template;
             """.trimIndent()
         )
             .execute()
