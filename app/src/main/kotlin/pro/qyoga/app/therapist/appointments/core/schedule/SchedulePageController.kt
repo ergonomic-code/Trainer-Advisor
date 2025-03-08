@@ -6,9 +6,11 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.servlet.ModelAndView
+import pro.qyoga.core.appointments.core.AppointmentRef
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.ref
 import java.time.LocalDate
+import java.util.*
 
 
 @Controller
@@ -20,7 +22,7 @@ class SchedulePageController(
     @GetMapping
     fun getCalendarPage(
         @RequestParam(DATE) date: LocalDate = LocalDate.now(),
-        @RequestParam(APPOINTMENT) appointment: Long? = null,
+        @RequestParam(APPOINTMENT) appointment: UUID? = null,
         @AuthenticationPrincipal therapist: QyogaUserDetails
     ): ModelAndView {
         val appointments = getCalendarAppointments(therapist.ref, date)
@@ -34,9 +36,9 @@ class SchedulePageController(
         const val DATE_PATH = "$PATH?$DATE={$DATE}"
         const val DATE_APPOINTMENT_PATH = "$PATH?$DATE={$DATE}&$APPOINTMENT={$APPOINTMENT}"
         fun calendarForDateUrl(date: LocalDate) = DATE_PATH.replace("{$DATE}", date.toString())
-        fun calendarForDayWithFocus(date: LocalDate, appointment: Long) = DATE_APPOINTMENT_PATH
+        fun calendarForDayWithFocus(date: LocalDate, appointmentRef: AppointmentRef) = DATE_APPOINTMENT_PATH
             .replace("{$DATE}", date.toString())
-            .replace("{$APPOINTMENT}", appointment.toString())
+            .replace("{$APPOINTMENT}", appointmentRef.id.toString())
     }
 
 }

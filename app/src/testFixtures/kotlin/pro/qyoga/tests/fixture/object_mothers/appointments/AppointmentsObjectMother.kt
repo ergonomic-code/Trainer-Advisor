@@ -2,10 +2,8 @@ package pro.qyoga.tests.fixture.object_mothers.appointments
 
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrNull
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
-import pro.qyoga.core.appointments.core.Appointment
-import pro.qyoga.core.appointments.core.AppointmentStatus
-import pro.qyoga.core.appointments.core.EditAppointmentRequest
-import pro.qyoga.core.appointments.core.LocalizedAppointmentSummary
+import pro.azhidkov.platform.uuid.UUIDv7
+import pro.qyoga.core.appointments.core.*
 import pro.qyoga.core.appointments.types.model.AppointmentTypeRef
 import pro.qyoga.core.clients.cards.model.ClientRef
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
@@ -27,7 +25,7 @@ object AppointmentsObjectMother {
         appointmentStatus: AppointmentStatus = AppointmentStatus.entries.randomElement(),
     ): LocalizedAppointmentSummary {
         return LocalizedAppointmentSummary(
-            0L,
+            aAppointmentId().id!!,
             client.resolveOrThrow().fullName(),
             typeTitle,
             therapeuticTask?.resolveOrThrow()?.name,
@@ -116,6 +114,9 @@ object AppointmentsObjectMother {
             appointmentStatus,
             comment ?: appointment.comment,
         )
+
+    fun aAppointmentId(): AppointmentRef =
+        AppointmentRef(UUIDv7.randomUUID())
 
 }
 

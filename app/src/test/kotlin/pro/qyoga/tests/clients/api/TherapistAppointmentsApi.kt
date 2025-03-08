@@ -15,6 +15,7 @@ import pro.azhidkov.platform.java.time.toLocalTimeString
 import pro.qyoga.app.therapist.appointments.core.edit.CreateAppointmentPageController
 import pro.qyoga.app.therapist.appointments.core.edit.EditAppointmentPageController
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
+import pro.qyoga.core.appointments.core.AppointmentRef
 import pro.qyoga.core.appointments.core.EditAppointmentRequest
 import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentPage
 import pro.qyoga.tests.pages.therapist.appointments.EditAppointmentPage
@@ -56,11 +57,11 @@ class TherapistAppointmentsApi(override val authCookie: Cookie) : AuthorizedApi 
         }
     }
 
-    fun getEditAppointmentPage(appointmentId: Long, expectedStatus: HttpStatus = HttpStatus.OK): Document {
+    fun getEditAppointmentPage(appointmentRef: AppointmentRef, expectedStatus: HttpStatus = HttpStatus.OK): Document {
         return Given {
             authorized()
 
-            pathParam("appointmentId", appointmentId)
+            pathParam("appointmentId", appointmentRef.id)
         } When {
             get(EditAppointmentPageController.PATH)
         } Then {
@@ -94,20 +95,20 @@ class TherapistAppointmentsApi(override val authCookie: Cookie) : AuthorizedApi 
         }
     }
 
-    fun editAppointment(appointmentId: Long, appointment: EditAppointmentRequest): Response {
+    fun editAppointment(appointmentRef: AppointmentRef, appointment: EditAppointmentRequest): Response {
         return Given {
             authorized()
-            pathParam("appointmentId", appointmentId)
+            pathParam("appointmentId", appointmentRef.id)
             fillAppointmentForm(appointment)
         } When {
             put(EditAppointmentPage.path)
         }
     }
 
-    fun editAppointmentForError(appointmentId: Long, appointment: EditAppointmentRequest): Document {
+    fun editAppointmentForError(appointmentRef: AppointmentRef, appointment: EditAppointmentRequest): Document {
         return Given {
             authorized()
-            pathParam("appointmentId", appointmentId)
+            pathParam("appointmentId", appointmentRef.id)
             fillAppointmentForm(appointment)
         } When {
             put(EditAppointmentPage.path)
@@ -165,10 +166,10 @@ class TherapistAppointmentsApi(override val authCookie: Cookie) : AuthorizedApi 
         return formParam(CreateAppointmentPage.editAppointmentForm.comment.name, appointment.comment ?: "")
     }
 
-    fun delete(appointmentId: Long, returnTo: LocalDate): Response {
+    fun delete(appointmentRef: AppointmentRef, returnTo: LocalDate): Response {
         return Given {
             authorized()
-            pathParam("appointmentId", appointmentId)
+            pathParam("appointmentId", appointmentRef.id)
             queryParam(EditAppointmentPageController.RETURN_TO, returnTo.toString())
         } When {
             delete(EditAppointmentPageController.PATH)

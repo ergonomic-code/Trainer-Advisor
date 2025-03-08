@@ -12,6 +12,7 @@ import pro.qyoga.l10n.russianTimeFormat
 import pro.qyoga.l10n.systemLocale
 import java.time.*
 import java.time.format.TextStyle
+import java.util.*
 
 /**
  * Модель страницы календаря расписания приёмов.
@@ -152,7 +153,7 @@ data class TimeMark(
  * Высота карточки определяется как процент от высоты строки календаря.
  */
 data class AppointmentCard(
-    val id: Long,
+    val id: UUID,
     val period: String,
     val client: String,
     val type: String,

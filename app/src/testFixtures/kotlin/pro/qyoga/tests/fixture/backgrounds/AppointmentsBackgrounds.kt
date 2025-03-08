@@ -94,7 +94,7 @@ class AppointmentsBackgrounds(
         return appointmentsRepo.findById(appointment.id, Appointment.Fetch.editableRefs)!!
     }
 
-    fun findById(appointmentId: Long): Appointment? {
+    fun findById(appointmentId: UUID): Appointment? {
         return appointmentsRepo.findByIdOrNull(appointmentId)
     }
 
