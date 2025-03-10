@@ -2,9 +2,9 @@
 
 Информационная система йогатерапевта.
 
-Данный проект является иллюстрацией кодовой базы, выполненной в соответствии с [Эргономичным подходом](https://azhidkov.pro/ergo-approach/landing/).
+Данный проект является иллюстрацией кодовой базы, выполненной в соответствии с [Эргономичным подходом](https://ergowiki.azhidkov.pro/).
 
-Посты с описанием проекта можно найти у меня в [блоге](https://azhidkov.pro/tags/trainer-advisor/) и [Telegram-канале](https://t.me/s/ergonomic_code?q=%23traineradvisor).
+Посты с описанием проекта можно найти у меня в [блоге](https://azhidkov.pro/tags/trainer-advisor/) и [Telegram-канале](https://t.me/s/ergonomic_code?q=%23trainer_advisor).
 
 ## Требования к инфраструктуре
 
@@ -126,41 +126,3 @@ docker compose -f deploy/qyoga/docker-compose-infra-base.yml -f deploy/qyoga/doc
 ```
 
 После чего запустить контейнер заново
-
-## Работа с продом
-
-**Перед работой с продом на новой машине необходимо выполнить шаги из раздела "Сетап хоста"**
-
-### Деплой
-
-Для деплоя актуальной версии приложения необходимо выполнить скрипт:
-
-```shell
-deploy/host/deploy.sh
-```
-
-Этот скрипт подключится к серверу, загрузит последний образ приложения и задеплоит его.
-
-### Просмотр логов
-
-```shell
-deploy/host/logs.sh
-```
-
-### Обновление сертификата
-
-```shell
-deploy/host/update-cert.sh
-```
-
-### Сетап хоста
-
-```shell
-deploy/host/setup-host.sh
-```
-
-### Сетап нового сервера
-
-```shell
-deploy/host/setup-server.sh
-```
