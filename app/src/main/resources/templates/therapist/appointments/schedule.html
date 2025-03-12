@@ -33,15 +33,14 @@
         }
     </style>
 
-    <script defer th:inline="javascript">
+    <script defer id="revealAppointment" th:inline="javascript">
 
         function revealAppointment() {
-            const queryParams = new URLSearchParams(window.location.search);
-            let appToFocus = queryParams.get("appointment");
+            let focusedAppointment = /*[[${focusedAppointment}]]*/ null;
 
             let appCard;
-            if (appToFocus != null) {
-                appCard = document.querySelector(`#appointmentCard-${appToFocus}`);
+            if (focusedAppointment != null) {
+                appCard = document.querySelector(`#appointmentCard-${focusedAppointment}`);
             } else {
                 appCard = document.querySelector(".appointment-card");
             }
