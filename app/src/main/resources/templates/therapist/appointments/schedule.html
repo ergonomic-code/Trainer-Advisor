@@ -48,8 +48,7 @@
     <script defer th:inline="javascript">
 
         function revealAppointment() {
-            const queryParams = new URLSearchParams(window.location.search);
-            let appToFocus = queryParams.get("appointment");
+            let appToFocus = /*[[${appointemntToFocus}]]*/ null;
 
             let appCard;
             if (appToFocus != null) {

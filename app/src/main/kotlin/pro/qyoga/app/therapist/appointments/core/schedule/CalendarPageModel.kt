@@ -32,7 +32,8 @@ import java.util.*
 data class CalendarPageModel(
     val date: LocalDate,
     val timeMarks: List<TimeMark>,
-    val calendarDays: Collection<CalendarDay>
+    val calendarDays: Collection<CalendarDay>,
+    val focusedAppointment: UUID?
 ) : ModelAndView("therapist/appointments/schedule.html") {
 
     init {
@@ -40,17 +41,19 @@ data class CalendarPageModel(
         addObject("timeMarks", timeMarks)
         addObject("calendarDays", calendarDays)
         addObject("selectedDayLabel", date.format(russianDayOfMonthLongFormat))
+        addObject("focusedAppointment", focusedAppointment)
     }
 
     companion object {
 
         fun of(
             date: LocalDate,
-            appointments: Iterable<LocalizedAppointmentSummary>
+            appointments: Iterable<LocalizedAppointmentSummary>,
+            focusedAppointment: UUID? = null
         ): CalendarPageModel {
             val timeMarks = generateTimeMarks(appointments, date)
             val weekCalendar = generateDaysAround(date)
-            return CalendarPageModel(date, timeMarks, weekCalendar)
+            return CalendarPageModel(date, timeMarks, weekCalendar, focusedAppointment)
         }
 
         const val DAYS_IN_CALENDAR = 3
