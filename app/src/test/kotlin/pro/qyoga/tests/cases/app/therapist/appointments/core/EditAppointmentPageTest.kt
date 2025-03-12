@@ -16,6 +16,7 @@ import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
 import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentsObjectMother
+import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentsObjectMother.aAppointmentId
 import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentsObjectMother.randomEditAppointmentRequest
 import pro.qyoga.tests.fixture.object_mothers.appointments.randomAppointmentCost
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
@@ -43,7 +44,7 @@ class EditAppointmentPageTest : QYogaAppIntegrationBaseTest() {
         val therapist = TherapistClient.loginAsTheTherapist()
 
         // When
-        val document = therapist.appointments.getEditAppointmentPage(appointment.id)
+        val document = therapist.appointments.getEditAppointmentPage(appointment.ref())
 
         // Then
         document shouldBePage EditAppointmentPage
@@ -58,7 +59,7 @@ class EditAppointmentPageTest : QYogaAppIntegrationBaseTest() {
         val therapist = TherapistClient.loginAsTheTherapist()
 
         // When
-        val document = therapist.appointments.getEditAppointmentPage(appointment.id)
+        val document = therapist.appointments.getEditAppointmentPage(appointment.ref())
 
         // Then
         document shouldBePage EditAppointmentPage
@@ -86,7 +87,7 @@ class EditAppointmentPageTest : QYogaAppIntegrationBaseTest() {
         val therapist = TherapistClient.loginAsTheTherapist()
 
         // When
-        val response = therapist.appointments.editAppointment(appointment.id, editedAppointment)
+        val response = therapist.appointments.editAppointment(appointment.ref(), editedAppointment)
 
         // Then
         response.statusCode() shouldBe HttpStatus.OK.value()
@@ -116,7 +117,7 @@ class EditAppointmentPageTest : QYogaAppIntegrationBaseTest() {
         val therapist = TherapistClient.loginAsTheTherapist()
 
         // When
-        val response = therapist.appointments.editAppointment(appointment.id, editedAppointment)
+        val response = therapist.appointments.editAppointment(appointment.ref(), editedAppointment)
 
         // Then
         response.statusCode() shouldBe HttpStatus.OK.value()
@@ -132,7 +133,8 @@ class EditAppointmentPageTest : QYogaAppIntegrationBaseTest() {
         val therapist = TherapistClient.loginAsTheTherapist()
 
         // When
-        val document = therapist.appointments.getEditAppointmentPage(-1, expectedStatus = HttpStatus.NOT_FOUND)
+        val document =
+            therapist.appointments.getEditAppointmentPage(aAppointmentId(), expectedStatus = HttpStatus.NOT_FOUND)
 
         // Then
         document shouldBePage (NotFoundErrorPage as HtmlPage)
@@ -147,7 +149,7 @@ class EditAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
         // When
         val response = therapist.appointments.editAppointment(
-            -1, editAppointmentRequest
+            aAppointmentId(), editAppointmentRequest
         )
 
         // Then
@@ -180,7 +182,7 @@ class EditAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
         // When
         val document = therapist.appointments.editAppointmentForError(
-            nextNotRescheduledAppointment.id,
+            nextNotRescheduledAppointment.ref(),
             rescheduleAppointmentRequest
         )
 
@@ -200,7 +202,7 @@ class EditAppointmentPageTest : QYogaAppIntegrationBaseTest() {
         val therapist = TherapistClient.loginAsTheTherapist()
 
         // When
-        val response = therapist.appointments.delete(appointment.id, appointment.wallClockDateTime.toLocalDate())
+        val response = therapist.appointments.delete(appointment.ref(), appointment.wallClockDateTime.toLocalDate())
 
         // Then
         response.statusCode shouldBe HttpStatus.OK.value()
