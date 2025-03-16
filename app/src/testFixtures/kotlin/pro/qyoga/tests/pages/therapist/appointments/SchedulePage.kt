@@ -16,9 +16,7 @@ import pro.qyoga.core.appointments.core.Appointment
 import pro.qyoga.l10n.russianTimeFormat
 import pro.qyoga.tests.assertions.*
 import pro.qyoga.tests.pages.therapist.appointments.CalendarPage.APPOINTMENT_CARD_SELECTOR
-import pro.qyoga.tests.platform.html.Button
-import pro.qyoga.tests.platform.html.HtmlPage
-import pro.qyoga.tests.platform.html.Link
+import pro.qyoga.tests.platform.html.*
 import java.time.LocalTime
 
 
@@ -27,6 +25,11 @@ object CalendarPage : HtmlPage {
     private val datePickerButton = Button("datePickerButton", "")
 
     private val goToDayLink = Link("goToDayLink-", SchedulePageController.DATE_PATH, "")
+
+    object RevealAppointmentScript : Script("revealAppointment") {
+        val appToFocus = Variable(CalendarPageModel.FOCUSED_APPOINTMENT)
+        override val vars: List<Variable> = listOf(appToFocus)
+    }
 
     val addAppointmentLink = Link("addAppointmentLink-", CreateAppointmentPageController.ADD_TO_DATE_TIME_PATH, "")
 

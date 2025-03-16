@@ -3,6 +3,8 @@ package pro.qyoga.core.appointments.core
 import org.springframework.data.annotation.*
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.Table
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.Identifiable
+import pro.azhidkov.platform.uuid.UUIDv7
 import pro.qyoga.core.appointments.types.model.AppointmentTypeRef
 import pro.qyoga.core.clients.cards.model.ClientRef
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
@@ -11,10 +13,11 @@ import java.time.Duration
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.ZoneId
+import java.util.*
 
-typealias AppointmentRef = AggregateReference<Appointment, Long>
+typealias AppointmentRef = AggregateReference<Appointment, UUID>
 
-fun AppointmentRef(id: Long): AppointmentRef = AggregateReference.to(id)
+fun AppointmentRef(id: UUID): AppointmentRef = AggregateReference.to(id)
 
 @Table("appointments")
 data class Appointment(
@@ -33,14 +36,14 @@ data class Appointment(
     val comment: String?,
 
     @Id
-    val id: Long = 0,
+    override val id: UUID = UUIDv7.randomUUID(),
     @CreatedDate
     val createdAt: Instant = Instant.now(),
     @LastModifiedDate
     val modifiedAt: Instant? = null,
     @Version
     val version: Long = 0
-) {
+) : Identifiable<UUID> {
 
     @Transient
     val wallClockDateTime: LocalDateTime = dateTime.atZone(timeZone).toLocalDateTime()

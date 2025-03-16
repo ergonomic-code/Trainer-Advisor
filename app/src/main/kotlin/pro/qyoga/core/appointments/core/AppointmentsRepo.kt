@@ -17,6 +17,7 @@ import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
+import java.util.*
 
 @Repository
 class AppointmentsRepo(
@@ -24,7 +25,7 @@ class AppointmentsRepo(
     namedParameterJdbcOperations: NamedParameterJdbcOperations,
     jdbcConverter: JdbcConverter,
     relationalMappingContext: RelationalMappingContext,
-) : ErgoRepository<Appointment, Long>(
+) : ErgoRepository<Appointment, UUID>(
     jdbcAggregateTemplate,
     namedParameterJdbcOperations,
     Appointment::class,

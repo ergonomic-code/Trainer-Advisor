@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.servlet.ModelAndView
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.azhidkov.timezones.LocalizedTimeZone
 import pro.azhidkov.timezones.TimeZones
 import pro.qyoga.app.platform.EntityPageMode
@@ -48,7 +49,7 @@ class CreateAppointmentPageController(
     ): Any {
         return try {
             val appointment = createAppointment(therapist.ref, editAppointmentRequest)
-            seeOther(calendarForDayWithFocus(editAppointmentRequest.dateTime.toLocalDate(), appointment.id))
+            seeOther(calendarForDayWithFocus(editAppointmentRequest.dateTime.toLocalDate(), appointment.ref()))
         } catch (ex: AppointmentsIntersectionException) {
             appointmentPageModelAndView(
                 pageMode = EntityPageMode.CREATE,

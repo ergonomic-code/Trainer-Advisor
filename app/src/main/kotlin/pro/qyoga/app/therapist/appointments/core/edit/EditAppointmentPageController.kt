@@ -17,6 +17,7 @@ import pro.qyoga.core.appointments.core.*
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.ref
 import java.time.LocalDate
+import java.util.*
 
 
 @Controller
@@ -28,7 +29,7 @@ class EditAppointmentPageController(
 ) {
 
     @GetMapping
-    fun getEditAppointmentPage(@PathVariable appointmentId: Long): ModelAndView {
+    fun getEditAppointmentPage(@PathVariable appointmentId: UUID): ModelAndView {
         val appointment = appointmentsRepo.findById(appointmentId, Appointment.Fetch.editableRefs)
             ?: return notFound
 
@@ -43,7 +44,7 @@ class EditAppointmentPageController(
 
     @PutMapping
     fun editAppointment(
-        @PathVariable appointmentId: Long,
+        @PathVariable appointmentId: UUID,
         editAppointmentRequest: EditAppointmentRequest,
         @AuthenticationPrincipal therapist: QyogaUserDetails,
     ): ModelAndView {
@@ -54,7 +55,7 @@ class EditAppointmentPageController(
             seeOther(
                 SchedulePageController.calendarForDayWithFocus(
                     editAppointmentRequest.dateTime.toLocalDate(),
-                    appointmentId
+                    AppointmentRef(appointmentId)
                 )
             )
         } catch (ex: AppointmentsIntersectionException) {
@@ -71,7 +72,7 @@ class EditAppointmentPageController(
 
     @DeleteMapping
     fun deleteAppointment(
-        @PathVariable appointmentId: Long,
+        @PathVariable appointmentId: UUID,
         @RequestParam(RETURN_TO) returnTo: LocalDate
     ): ResponseEntity<Unit> {
         appointmentsRepo.deleteById(appointmentId)

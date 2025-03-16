@@ -13,7 +13,7 @@ data class Variable(
     val name: String
 ) {
 
-    fun regex(): Regex = "let $name = (.*?);.*".toRegex(RegexOption.DOT_MATCHES_ALL)
+    fun regex(): Regex = ".*let\\s+$name\\s*=\\s*(.*?)\\s*;.*".toRegex(RegexOption.DOT_MATCHES_ALL)
 
     fun <T> value(scriptElement: Element, typeReference: TypeReference<T>): T {
         val scriptText = scriptElement.html()
