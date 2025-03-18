@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
-import pro.qyoga.tests.pages.therapist.appointments.CalendarPage
+import pro.qyoga.tests.pages.therapist.clients.ClientsListPage
 
 
 class TherapistMainPageTest : QYogaAppIntegrationBaseTest() {
@@ -18,7 +18,7 @@ class TherapistMainPageTest : QYogaAppIntegrationBaseTest() {
         val document = therapist.getIndexPage()
 
         // Then
-        document shouldBePage CalendarPage
+        document shouldBePage ClientsListPage
     }
 
 }

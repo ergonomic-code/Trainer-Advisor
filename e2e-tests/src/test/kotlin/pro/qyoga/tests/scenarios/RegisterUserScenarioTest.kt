@@ -18,7 +18,7 @@ import pro.qyoga.tests.fixture.object_mothers.therapists.TherapistsObjectMother.
 import pro.qyoga.tests.infra.QYogaE2EBaseTest
 import pro.qyoga.tests.pages.publc.LoginPage
 import pro.qyoga.tests.pages.publc.RegisterPage
-import pro.qyoga.tests.pages.therapist.appointments.CalendarPage
+import pro.qyoga.tests.pages.therapist.clients.ClientsListPage
 import pro.qyoga.tests.platform.selenide.`$`
 import pro.qyoga.tests.platform.selenide.await
 import pro.qyoga.tests.platform.selenide.click
@@ -72,8 +72,7 @@ class RegisterUserScenarioTest : QYogaE2EBaseTest() {
         click(LoginPage.LoginForm.submit)
 
         // И видит страницу расписания
-        await(CalendarPage)
-        title() shouldBe CalendarPage.title
+        await(ClientsListPage)
     }
 
     companion object {

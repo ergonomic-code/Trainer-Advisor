@@ -20,6 +20,18 @@ import java.time.LocalDate
 class SchedulePageTest : QYogaAppIntegrationBaseTest() {
 
     @Test
+    fun `должна корректно рендерить пустой календарь за текущую дату`() {
+        // Сетап
+        val therapist = TherapistClient.loginAsTheTherapist()
+
+        // Действие
+        val document = therapist.appointments.getScheduleForDay()
+
+        // Проверка
+        document shouldBePage CalendarPage
+    }
+
+    @Test
     fun `должна корректно рендерить пустой календарь`() {
         // Сетап
         val therapist = TherapistClient.loginAsTheTherapist()

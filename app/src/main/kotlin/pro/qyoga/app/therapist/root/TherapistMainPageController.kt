@@ -2,6 +2,7 @@ package pro.qyoga.app.therapist.root
 
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
+import pro.qyoga.app.therapist.clients.ClientsListPageController
 
 
 @Controller
@@ -9,7 +10,7 @@ class TherapistMainPageController {
 
     @GetMapping("/therapist", "/therapist/")
     fun getTherapistMainPage(): String {
-        return "redirect:/therapist/schedule"
+        return "redirect:${ClientsListPageController.PATH}"
     }
 
 }
