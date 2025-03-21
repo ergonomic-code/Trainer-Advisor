@@ -7,7 +7,7 @@ import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.qyoga.app.therapist.clients.journal.edit_entry.shared.ClientNotFound
 import pro.qyoga.core.clients.cards.ClientsRepo
 import pro.qyoga.core.clients.journals.JournalEntriesRepo
-import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRequest
+import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRq
 import pro.qyoga.core.clients.journals.model.JournalEntry
 import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
@@ -24,20 +24,20 @@ class CreateJournalEntryOp(
     @Transactional
     fun createJournalEntry(
         clientId: UUID,
-        editJournalEntryRequest: EditJournalEntryRequest,
+        editJournalEntryRq: EditJournalEntryRq,
         principal: QyogaUserDetails,
     ): JournalEntry {
         val client = clientsRepo.findByIdOrNull(clientId)
             ?: throw ClientNotFound(clientId)
 
         val therapeuticTask = therapeuticTasksRepo.getOrCreate(
-            TherapeuticTask(principal.id, editJournalEntryRequest.therapeuticTaskName)
+            TherapeuticTask(principal.id, editJournalEntryRq.therapeuticTaskName)
         )
         val newEntry = JournalEntry(
             client.ref(),
-            editJournalEntryRequest.date,
+            editJournalEntryRq.date,
             therapeuticTask.ref(),
-            editJournalEntryRequest.journalEntryText
+            editJournalEntryRq.journalEntryText
         )
         val persistedEntry = journalEntriesRepo.save(newEntry)
 
