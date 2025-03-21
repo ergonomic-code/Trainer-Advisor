@@ -7,9 +7,9 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import pro.azhidkov.platform.spring.sdj.withSortBy
 import pro.qyoga.core.clients.cards.ClientsRepo
+import pro.qyoga.core.clients.cards.ClientsRepo.Companion.descendingTouchTime
 import pro.qyoga.core.clients.cards.dtos.ClientSearchDto
 import pro.qyoga.core.clients.cards.findTherapistClientsPageBySearchForm
-import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import java.util.*
 
@@ -29,7 +29,7 @@ class ClientsListPageController(
             clientsRepo.findTherapistClientsPageBySearchForm(
                 therapistId = principal.id,
                 searchDto,
-                pageRequest.withSortBy(Client::lastName)
+                pageRequest.withSortBy(descendingTouchTime)
             )
         return ClientsListPageModel(clients, searchDto)
     }
@@ -44,7 +44,7 @@ class ClientsListPageController(
             clientsRepo.findTherapistClientsPageBySearchForm(
                 therapistId = principal.id,
                 searchDto,
-                pageRequest.withSortBy(Client::lastName)
+                pageRequest.withSortBy(descendingTouchTime)
             )
         return ClientsListPageModel(clients, searchDto, "clients")
     }
