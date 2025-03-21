@@ -10,5 +10,6 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class Presets(
     val surveysFixturePresets: SurveysFixturePresets,
-    val therapistsPreset: TherapistsPreset
+    val therapistsFixturePreset: TherapistsFixturePreset,
+    val clientsFixturePresets: ClientsFixturePresets
 )

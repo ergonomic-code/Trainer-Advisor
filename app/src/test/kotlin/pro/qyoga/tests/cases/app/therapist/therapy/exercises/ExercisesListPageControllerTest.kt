@@ -20,7 +20,7 @@ class ExercisesListPageControllerTest : QYogaAppIntegrationBaseKoTest({
         "при наличии в системе упражнений у нескольких терапевтов" - {
             // Сетап
             val exercise = backgrounds.exercises.createExercise(ownerRef = THE_THERAPIST_REF)
-            presets.therapistsPreset.createTherapistWithExercise()
+            presets.therapistsFixturePreset.createTherapistWithExercise()
 
             "должен возвращать только упражнения аутентифицированного терапевта" {
 

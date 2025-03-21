@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.FetchSpec
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.hydrate
 import pro.qyoga.app.therapist.clients.journal.edit_entry.create.CreateJournalEntryOp
+import pro.qyoga.app.therapist.clients.journal.edit_entry.edit.EditJournalEntryOp
+import pro.qyoga.core.clients.cards.model.ClientRef
 import pro.qyoga.core.clients.journals.JournalEntriesRepo
 import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRq
 import pro.qyoga.core.clients.journals.dtos.JournalPageRequest
@@ -19,6 +21,7 @@ import java.util.*
 @Component
 class ClientJournalBackgrounds(
     private val createJournalEntryOp: CreateJournalEntryOp,
+    private val editJournalEntryOp: EditJournalEntryOp,
     private val journalEntriesRepo: JournalEntriesRepo,
     private val jdbcAggregateOperations: JdbcAggregateOperations
 ) {
@@ -52,6 +55,15 @@ class ClientJournalBackgrounds(
                 fetch = listOf(JournalEntry::therapeuticTask)
             )
         )
+    }
+
+    fun updateJournalEntry(
+        clientRef: ClientRef,
+        journalEntryId: Long,
+        editJournalEntryRq: EditJournalEntryRq,
+        theTherapistUserDetails: QyogaUserDetails
+    ) {
+        editJournalEntryOp(clientRef, journalEntryId, editJournalEntryRq, theTherapistUserDetails)
     }
 
 }

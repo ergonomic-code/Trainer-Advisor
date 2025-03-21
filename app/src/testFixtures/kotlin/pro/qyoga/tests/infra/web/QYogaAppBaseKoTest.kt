@@ -11,7 +11,7 @@ import pro.qyoga.tests.infra.test_config.spring.context
 import javax.sql.DataSource
 
 
-abstract class QYogaAppBaseKoTest(body: FreeSpec.() -> Unit = {}) : FreeSpec() {
+abstract class QYogaAppBaseKoTest(body: QYogaAppBaseKoTest.() -> Unit = {}) : FreeSpec() {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
