@@ -5,7 +5,7 @@ import pro.qyoga.l10n.RUSSIAN_DATE_FORMAT_PATTERN
 import java.time.LocalDate
 
 
-data class EditJournalEntryRequest(
+data class EditJournalEntryRq(
     @DateTimeFormat(pattern = RUSSIAN_DATE_FORMAT_PATTERN)
     val date: LocalDate,
     val therapeuticTaskName: String,

@@ -2,12 +2,12 @@ package pro.qyoga.tests.assertions
 
 import io.kotest.matchers.shouldBe
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
-import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRequest
+import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRq
 import pro.qyoga.core.clients.journals.model.JournalEntry
 
 
-infix fun JournalEntry.shouldMatch(editJournalEntryRequest: EditJournalEntryRequest) {
-    date shouldBe editJournalEntryRequest.date
-    therapeuticTask.resolveOrThrow().name shouldBe editJournalEntryRequest.therapeuticTaskName
-    entryText shouldBe editJournalEntryRequest.journalEntryText
+infix fun JournalEntry.shouldMatch(editJournalEntryRq: EditJournalEntryRq) {
+    date shouldBe editJournalEntryRq.date
+    therapeuticTask.resolveOrThrow().name shouldBe editJournalEntryRq.therapeuticTaskName
+    entryText shouldBe editJournalEntryRq.journalEntryText
 }

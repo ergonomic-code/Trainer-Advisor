@@ -7,7 +7,7 @@ import pro.azhidkov.platform.spring.sdj.ergo.hydration.FetchSpec
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.hydrate
 import pro.qyoga.app.therapist.clients.journal.edit_entry.create.CreateJournalEntryOp
 import pro.qyoga.core.clients.journals.JournalEntriesRepo
-import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRequest
+import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRq
 import pro.qyoga.core.clients.journals.dtos.JournalPageRequest
 import pro.qyoga.core.clients.journals.model.JournalEntry
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
@@ -25,10 +25,10 @@ class ClientJournalBackgrounds(
 
     fun createJournalEntry(
         clientId: UUID,
-        editJournalEntryRequest: EditJournalEntryRequest,
+        editJournalEntryRq: EditJournalEntryRq,
         therapist: QyogaUserDetails
     ): JournalEntry {
-        return createJournalEntryOp.createJournalEntry(clientId, editJournalEntryRequest, therapist)
+        return createJournalEntryOp.createJournalEntry(clientId, editJournalEntryRq, therapist)
     }
 
     fun createEntries(clientId: UUID, therapist: QyogaUserDetails, count: Int): List<JournalEntry> {

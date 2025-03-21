@@ -3,30 +3,30 @@ package pro.qyoga.app.therapist.clients.journal.edit_entry.edit
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import pro.azhidkov.platform.spring.sdj.query.query
+import pro.qyoga.core.clients.cards.model.ClientRef
 import pro.qyoga.core.clients.journals.JournalEntriesRepo
-import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRequest
+import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRq
 import pro.qyoga.core.clients.journals.model.JournalEntry
 import pro.qyoga.core.clients.journals.model.updatedBy
 import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
-import java.util.*
 
 @Component
 class EditJournalEntryOp(
     private val journalsRepo: JournalEntriesRepo,
     private val therapeuticTasksRepo: TherapeuticTasksRepo
-) {
+) : (ClientRef, Long, EditJournalEntryRq, QyogaUserDetails) -> JournalEntry? {
 
     @Transactional
-    fun editJournalEntry(
-        clientId: UUID,
+    override operator fun invoke(
+        clientId: ClientRef,
         entryId: Long,
-        editJournalEntryRequest: EditJournalEntryRequest,
+        editJournalEntryRq: EditJournalEntryRq,
         principal: QyogaUserDetails,
     ): JournalEntry? {
         val therapeuticTask = therapeuticTasksRepo.getOrCreate(
-            TherapeuticTask(principal.id, editJournalEntryRequest.therapeuticTaskName)
+            TherapeuticTask(principal.id, editJournalEntryRq.therapeuticTaskName)
         )
 
         val query = query {
@@ -34,7 +34,7 @@ class EditJournalEntryOp(
             JournalEntry::id isEqual entryId
         }
         val persistedEntry =
-            journalsRepo.updateOne(query) { entry -> entry.updatedBy(editJournalEntryRequest, therapeuticTask) }
+            journalsRepo.updateOne(query) { entry -> entry.updatedBy(editJournalEntryRq, therapeuticTask) }
                 ?: error("Entry $entryId for client $clientId not found")
 
         return persistedEntry

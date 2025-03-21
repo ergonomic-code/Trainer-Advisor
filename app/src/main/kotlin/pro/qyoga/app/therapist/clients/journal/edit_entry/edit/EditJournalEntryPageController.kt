@@ -6,25 +6,24 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
 import pro.azhidkov.platform.spring.http.hxRedirect
-import pro.azhidkov.platform.spring.mvc.modelAndView
 import pro.qyoga.app.platform.notFound
-import pro.qyoga.app.therapist.clients.journal.edit_entry.shared.JOURNAL_ENTRY_VIEW_NAME
+import pro.qyoga.app.therapist.clients.journal.edit_entry.shared.JOURNAL_ENTRY_FROM
+import pro.qyoga.core.clients.cards.model.ClientRef
 import pro.qyoga.core.clients.journals.JournalEntriesRepo
-import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRequest
+import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRq
 import pro.qyoga.core.clients.journals.errors.DuplicatedDate
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import java.util.*
 
 
 @Controller
-@RequestMapping("/therapist/clients/{clientId}/journal/{entryId}")
 class EditJournalEntryPageController(
     private val journalsEntriesRepo: JournalEntriesRepo,
     private val getJournalEntry: GetJournalEntryOp,
     private val editJournalEntry: EditJournalEntryOp,
 ) {
 
-    @GetMapping()
+    @GetMapping(PATH)
     fun handleGetEditJournalEntryPage(
         @PathVariable clientId: UUID,
         @PathVariable entryId: Long
@@ -32,42 +31,45 @@ class EditJournalEntryPageController(
         val result = getJournalEntry.getJournalEntry(clientId, entryId)
             ?: return notFound
 
-        return modelAndView(JOURNAL_ENTRY_VIEW_NAME) {
-            "client" bindTo result.clientRef
-            "entry" bindTo result
-            "formAction" bindTo editFormAction(clientId, entryId)
-        }
+        return EditJournalEntryPageModel(
+            result.clientRef,
+            result,
+            formAction = editFormAction(result.clientRef, result.id),
+        )
     }
 
-    private fun editFormAction(clientId: UUID, entryId: Long) = "/therapist/clients/$clientId/journal/$entryId"
-
-    @PostMapping
+    @PostMapping(PATH)
     fun handleEditJournalEntry(
         @PathVariable clientId: UUID,
         @PathVariable entryId: Long,
-        @ModelAttribute editJournalEntryRequest: EditJournalEntryRequest,
+        @ModelAttribute editJournalEntryRq: EditJournalEntryRq,
         @AuthenticationPrincipal principal: QyogaUserDetails,
     ): Any {
         try {
-            editJournalEntry.editJournalEntry(clientId, entryId, editJournalEntryRequest, principal)
+            editJournalEntry(ClientRef.to(clientId), entryId, editJournalEntryRq, principal)
             return hxRedirect("/therapist/clients/$clientId/journal")
         } catch (ex: DuplicatedDate) {
-            return modelAndView("$JOURNAL_ENTRY_VIEW_NAME :: journalEntryFrom") {
-                "client" bindTo ex.duplicatedEntry.clientRef
-                "entry" bindTo ex.duplicatedEntry
-                "duplicatedDate" bindTo true
-                "formAction" bindTo editFormAction(clientId, entryId)
-            }
+            return EditJournalEntryPageModel(
+                ex.duplicatedEntry.clientRef,
+                ex.duplicatedEntry,
+                editFormAction(ex.duplicatedEntry.clientRef, ex.duplicatedEntry.id),
+                fragment = JOURNAL_ENTRY_FROM,
+                duplicatedDate = true,
+            )
         }
     }
 
-    @DeleteMapping
+    @DeleteMapping(PATH)
     @ResponseStatus(HttpStatus.OK)
     fun handleDeleteJournalEntry(
         @PathVariable clientId: UUID,
         @PathVariable entryId: Long,
     ) {
         journalsEntriesRepo.deleteById(entryId)
+    }
+
+    companion object {
+        const val PATH = "/therapist/clients/{clientId}/journal/{entryId}"
     }
 
 }
