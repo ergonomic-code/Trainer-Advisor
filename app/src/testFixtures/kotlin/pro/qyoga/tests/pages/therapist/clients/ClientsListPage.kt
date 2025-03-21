@@ -41,7 +41,7 @@ object ClientsListPage : QYogaPage {
     val updateAction = "$path/{id}/journal"
     private val updateActionPattern = updateAction.replace("{id}", "([a-zA-Z0-9_-]+)").toRegex()
 
-    val deleteAction = "$path/delete/{id}"
+    const val deleteAction = ClientsListPageController.DELETE_PATH
     private val deleteActionPattern = deleteAction.replace("{id}", "([a-zA-Z0-9_-]+)").toRegex()
 
     private val addLink = Link("createClientLink", CreateClientPage, "Добавить")
