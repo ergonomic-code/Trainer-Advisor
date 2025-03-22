@@ -7,6 +7,7 @@ import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel.Comp
 import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel.Companion.DEFAULT_START_HOUR
 import pro.qyoga.core.appointments.core.AppointmentStatus
 import pro.qyoga.core.appointments.core.LocalizedAppointmentSummary
+import pro.qyoga.core.calendar.LocalCalendarItem
 import pro.qyoga.l10n.russianDayOfMonthLongFormat
 import pro.qyoga.l10n.russianTimeFormat
 import pro.qyoga.l10n.systemLocale
@@ -48,7 +49,7 @@ data class CalendarPageModel(
 
         fun of(
             date: LocalDate,
-            appointments: Iterable<LocalizedAppointmentSummary>,
+            appointments: Iterable<LocalCalendarItem<*>>,
             appointmentToFocus: UUID? = null
         ): CalendarPageModel {
             val timeMarks = generateTimeMarks(appointments, date)
@@ -68,7 +69,7 @@ data class CalendarPageModel(
 }
 
 private fun generateTimeMarks(
-    appointments: Iterable<LocalizedAppointmentSummary>,
+    appointments: Iterable<LocalCalendarItem<*>>,
     date: LocalDate
 ): List<TimeMark> {
     val days = generateSequence(date.minusDays(DAYS_IN_CALENDAR / 2L)) { it.plusDays(DAYS_IN_CALENDAR / 2L) }
@@ -99,7 +100,7 @@ private fun generateTimeMarks(
 }
 
 private fun determineTimeBoundaries(
-    appointments: Iterable<LocalizedAppointmentSummary>,
+    appointments: Iterable<LocalCalendarItem<*>>,
     daysRange: ClosedRange<LocalDate>
 ): Pair<Int, Int> {
     val minHour = (appointments.minOfOrNull {
@@ -116,17 +117,17 @@ private fun determineTimeBoundaries(
     return Pair(minHour, maxHour)
 }
 
-private fun LocalizedAppointmentSummary.startsWithin(daysRange: ClosedRange<LocalDate>): Boolean =
+private fun LocalCalendarItem<*>.startsWithin(daysRange: ClosedRange<LocalDate>): Boolean =
     this.dateTime.toLocalDate() in daysRange
 
-private fun LocalizedAppointmentSummary.endsWithin(daysRange: ClosedRange<LocalDate>): Boolean =
+private fun LocalCalendarItem<*>.endsWithin(daysRange: ClosedRange<LocalDate>): Boolean =
     this.endDateTime.toLocalDate() in daysRange
 
-private fun LocalizedAppointmentSummary.shouldHasCardInCell(wallClockDateTime: LocalDateTime, span: Duration) =
+private fun LocalCalendarItem<*>.shouldHasCardInCell(wallClockDateTime: LocalDateTime, span: Duration) =
     (this.dateTime >= wallClockDateTime && this.dateTime < wallClockDateTime + span) ||
             (wallClockDateTime.toLocalTime() == LocalTime.MIDNIGHT && this.spansMidnight && this.endDateTime.toLocalDate() == wallClockDateTime.toLocalDate())
 
-private val LocalizedAppointmentSummary.spansMidnight
+private val LocalCalendarItem<*>.spansMidnight
     get() = this.dateTime.toLocalTime().isAfter(this.endDateTime.toLocalTime())
 
 private fun generateDaysAround(date: LocalDate) =
@@ -168,19 +169,25 @@ data class AppointmentCard(
 ) {
 
     constructor(
-        app: LocalizedAppointmentSummary,
+        app: LocalCalendarItem<*>,
         day: LocalDate,
     ) : this(
-        app.id,
+        app.id as UUID,
         app.dateTime.format(russianTimeFormat) + " - " + app.endDateTime.format(russianTimeFormat),
-        app.clientName,
-        app.typeName,
-        appointmentStatusClasses.getValue(app.status),
+        app.title,
+        app.description,
+        getCssClass(app),
         timeMarkOffsetPercent(app, day),
         timeMarkLengthPercent(app, day)
     )
 
     companion object {
+        fun getCssClass(item: LocalCalendarItem<*>) = when (item) {
+            is LocalizedAppointmentSummary if (item.status == AppointmentStatus.PENDING) -> "pending"
+            is LocalizedAppointmentSummary if (item.status == AppointmentStatus.CLIENT_CAME) -> "client-came"
+            is LocalizedAppointmentSummary if (item.status == AppointmentStatus.CLIENT_DO_NOT_CAME) -> "client-do-not-came"
+            else -> "draft"
+        }
         val appointmentStatusClasses = mapOf(
             AppointmentStatus.PENDING to "pending",
             AppointmentStatus.CLIENT_CAME to "client-came",
@@ -191,16 +198,16 @@ data class AppointmentCard(
 
 }
 
-private fun timeMarkOffsetPercent(app: LocalizedAppointmentSummary, day: LocalDate) =
+private fun timeMarkOffsetPercent(app: LocalCalendarItem<*>, day: LocalDate) =
     if (app.dateTime.dayOfMonth == day.dayOfMonth)
         (app.dateTime.minute % 15) / TimeMark.length.toMinutes().toDouble()
     else
         0.0
 
-private fun timeMarkLengthPercent(app: LocalizedAppointmentSummary, day: LocalDate) =
+private fun timeMarkLengthPercent(app: LocalCalendarItem<*>, day: LocalDate) =
     app.durationAtDay(day).toMinutes() / TimeMark.length.toMinutes().toDouble()
 
-private fun LocalizedAppointmentSummary.durationAtDay(day: LocalDate) =
+private fun LocalCalendarItem<*>.durationAtDay(day: LocalDate) =
     when {
         this.dateTime.dayOfMonth == this.endDateTime.dayOfMonth ->
             duration

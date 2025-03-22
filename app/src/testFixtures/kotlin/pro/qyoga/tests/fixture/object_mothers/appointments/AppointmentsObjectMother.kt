@@ -19,7 +19,6 @@ object AppointmentsObjectMother {
     fun randomLocalizedAppointmentSummary(
         client: ClientRef = ClientsObjectMother.fakeClientRef,
         typeTitle: String = randomCyrillicWord(),
-        therapeuticTask: TherapeuticTaskRef? = null,
         dateTime: LocalDateTime = randomAppointmentDate(),
         duration: Duration = randomAppointmentDuration(),
         appointmentStatus: AppointmentStatus = AppointmentStatus.entries.randomElement(),
@@ -28,7 +27,6 @@ object AppointmentsObjectMother {
             aAppointmentId().id!!,
             client.resolveOrThrow().fullName(),
             typeTitle,
-            therapeuticTask?.resolveOrThrow()?.name,
             dateTime,
             duration,
             appointmentStatus

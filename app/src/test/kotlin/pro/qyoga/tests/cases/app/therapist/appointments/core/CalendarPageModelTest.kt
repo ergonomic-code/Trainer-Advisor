@@ -171,7 +171,7 @@ class CalendarPageModelTest {
     }
 
     @Test
-    fun `должна две карточки приёма, в случае если он накладывается на два дня календаря`() {
+    fun `должна иметь две карточки приёма, в случае если он накладывается на два дня календаря`() {
         // Сетап
         val appointmentDuration = Duration.ofHours(2)
         val appointmentStartTime = LocalTime.MIDNIGHT
