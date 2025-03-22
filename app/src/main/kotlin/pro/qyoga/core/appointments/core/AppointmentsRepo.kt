@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository
 import pro.azhidkov.platform.postgresql.toPGInterval
 import pro.azhidkov.platform.spring.sdj.PGIntervalToDurationConverter
 import pro.azhidkov.platform.spring.sdj.ergo.ErgoRepository
+import pro.qyoga.core.calendar.CalendarsService
+import pro.qyoga.core.calendar.LocalCalendarItem
 import pro.qyoga.core.users.therapists.TherapistRef
 import java.sql.Timestamp
 import java.time.Duration
@@ -31,7 +33,47 @@ class AppointmentsRepo(
     Appointment::class,
     jdbcConverter,
     relationalMappingContext
-)
+), CalendarsService {
+
+    override fun findAllByInterval(
+        therapist: TherapistRef,
+        from: LocalDate,
+        to: LocalDate,
+        currentUserTimeZone: ZoneId
+    ): Iterable<LocalCalendarItem<*>> {
+        @Language("PostgreSQL") val query = """
+        WITH localized_appointment_summary AS
+         (SELECT  
+                 a.id,
+                 c.last_name || ' ' || c.first_name || 
+                     CASE WHEN length(c.middle_name) > 0 THEN ' ' || c.middle_name ELSE '' END AS client_name,
+                 at.name type_name,
+                 a.date_time AT TIME ZONE :localTimeZone AS date_time,
+                 a.duration,
+                 a.status,
+                 a.therapist_ref
+          FROM appointments a
+                   LEFT JOIN public.clients c ON c.id = a.client_ref
+                   LEFT JOIN appointment_types at ON a.type_ref = at.id)
+                   
+        SELECT *
+        FROM localized_appointment_summary
+        WHERE therapist_ref = :therapist
+          AND date_trunc('day', date_time) >= :from
+          AND date_trunc('day', date_time) <= :to
+        ORDER BY date_time
+    """
+
+        val params = mapOf(
+            "therapist" to therapist.id,
+            "from" to from.atStartOfDay(),
+            "to" to to.atStartOfDay(),
+            "localTimeZone" to currentUserTimeZone.id
+        )
+        return findAll(query, params, localizedAppointmentSummaryRowMapper)
+    }
+
+}
 
 fun AppointmentsRepo.findIntersectingAppointment(
     therapist: TherapistRef,
@@ -60,41 +102,3 @@ private val localizedAppointmentSummaryRowMapper =
             addConverter(PGIntervalToDurationConverter())
         }
     }
-
-fun AppointmentsRepo.findAllByInterval(
-    therapist: TherapistRef,
-    from: LocalDate,
-    to: LocalDate,
-    currentUserTimeZone: ZoneId
-): Iterable<LocalizedAppointmentSummary> {
-    @Language("PostgreSQL") val query = """
-        WITH localized_appointment_summary AS
-         (SELECT  
-                 a.id,
-                 c.last_name || ' ' || c.first_name || 
-                     CASE WHEN length(c.middle_name) > 0 THEN ' ' || c.middle_name ELSE '' END AS client_name,
-                 at.name type_name,
-                 a.date_time AT TIME ZONE :localTimeZone AS date_time,
-                 a.duration,
-                 a.status,
-                 a.therapist_ref
-          FROM appointments a
-                   LEFT JOIN public.clients c ON c.id = a.client_ref
-                   LEFT JOIN appointment_types at ON a.type_ref = at.id)
-                   
-        SELECT *
-        FROM localized_appointment_summary
-        WHERE therapist_ref = :therapist
-          AND date_trunc('day', date_time) >= :from
-          AND date_trunc('day', date_time) <= :to
-        ORDER BY date_time
-    """
-
-    val params = mapOf(
-        "therapist" to therapist.id,
-        "from" to from.atStartOfDay(),
-        "to" to to.atStartOfDay(),
-        "localTimeZone" to currentUserTimeZone.id
-    )
-    return findAll(query, params, localizedAppointmentSummaryRowMapper)
-}

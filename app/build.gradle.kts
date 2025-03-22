@@ -89,7 +89,7 @@ dependencies {
 tasks.withType<KotlinCompile> {
 	kotlin {
 		compilerOptions {
-			freeCompilerArgs = listOf("-Xjsr305=strict", "-Xjvm-default=all")
+			freeCompilerArgs = listOf("-Xjsr305=strict", "-Xjvm-default=all", "-Xwhen-guards")
 			jvmTarget.set(JvmTarget.JVM_21)
 		}
 	}

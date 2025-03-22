@@ -4,10 +4,12 @@ import io.kotest.matchers.Matcher
 import io.kotest.matchers.be
 import io.kotest.matchers.compose.any
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
 import pro.qyoga.core.appointments.core.Appointment
 import pro.qyoga.core.appointments.core.EditAppointmentRequest
 import pro.qyoga.core.appointments.core.LocalizedAppointmentSummary
+import pro.qyoga.core.calendar.LocalCalendarItem
 import java.time.LocalDateTime
 import java.time.ZoneId
 
@@ -42,10 +44,11 @@ infix fun Appointment.shouldMatch(another: Appointment) {
     this.comment shouldBe another.comment
 }
 
-fun LocalizedAppointmentSummary.shouldMatch(
+fun LocalCalendarItem<*>.shouldMatch(
     editAppointmentRequest: EditAppointmentRequest,
     atTimeZone: ZoneId = editAppointmentRequest.timeZone
 ) {
+    this.shouldBeInstanceOf<LocalizedAppointmentSummary>()
     this.clientName shouldBe editAppointmentRequest.client.resolveOrThrow().fullName()
     Matcher.any<LocalizedAppointmentSummary>(
         be(editAppointmentRequest.appointmentType?.id),
@@ -56,7 +59,8 @@ fun LocalizedAppointmentSummary.shouldMatch(
     this.status shouldBe editAppointmentRequest.appointmentStatus
 }
 
-infix fun LocalizedAppointmentSummary.shouldMatch(another: Appointment) {
+infix fun LocalCalendarItem<*>.shouldMatch(another: Appointment) {
+    this.shouldBeInstanceOf<LocalizedAppointmentSummary>()
     this.clientName shouldBe another.clientRef.resolveOrThrow().fullName()
     this.typeName shouldBe another.typeRef.resolveOrThrow().name
     this.dateTime shouldBe another.dateTime
