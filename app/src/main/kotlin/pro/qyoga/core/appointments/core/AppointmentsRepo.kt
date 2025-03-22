@@ -74,15 +74,14 @@ fun AppointmentsRepo.findAllByInterval(
                  c.last_name || ' ' || c.first_name || 
                      CASE WHEN length(c.middle_name) > 0 THEN ' ' || c.middle_name ELSE '' END AS client_name,
                  at.name type_name,
-                 tt.name therapeutic_task_name,
                  a.date_time AT TIME ZONE :localTimeZone AS date_time,
                  a.duration,
                  a.status,
                  a.therapist_ref
           FROM appointments a
                    LEFT JOIN public.clients c ON c.id = a.client_ref
-                   LEFT JOIN appointment_types at ON a.type_ref = at.id
-                   LEFT JOIN public.therapeutic_tasks tt on a.therapeutic_task_ref = tt.id)
+                   LEFT JOIN appointment_types at ON a.type_ref = at.id)
+                   
         SELECT *
         FROM localized_appointment_summary
         WHERE therapist_ref = :therapist

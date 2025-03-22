@@ -9,7 +9,6 @@ data class LocalizedAppointmentSummary(
     val id: UUID,
     val clientName: String,
     val typeName: String,
-    val therapeuticTaskName: String?,
     val dateTime: LocalDateTime,
     val duration: Duration,
     val status: AppointmentStatus,

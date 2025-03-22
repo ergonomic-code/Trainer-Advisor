@@ -51,7 +51,6 @@ fun LocalizedAppointmentSummary.shouldMatch(
         be(editAppointmentRequest.appointmentType?.id),
         be(editAppointmentRequest.appointmentTypeTitle)
     ).test(this)
-    this.therapeuticTaskName shouldBe editAppointmentRequest.therapeuticTask?.resolveOrThrow()?.name
     this.dateTime shouldBe editAppointmentRequest.wallClockDateTimeAt(atTimeZone)
     this.duration shouldBe editAppointmentRequest.duration
     this.status shouldBe editAppointmentRequest.appointmentStatus
@@ -60,7 +59,6 @@ fun LocalizedAppointmentSummary.shouldMatch(
 infix fun LocalizedAppointmentSummary.shouldMatch(another: Appointment) {
     this.clientName shouldBe another.clientRef.resolveOrThrow().fullName()
     this.typeName shouldBe another.typeRef.resolveOrThrow().name
-    this.therapeuticTaskName shouldBe another.therapeuticTaskRef?.resolveOrThrow()?.id
     this.dateTime shouldBe another.dateTime
     this.duration shouldBe another.duration
     this.status shouldBe another.status
