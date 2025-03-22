@@ -11,7 +11,7 @@ import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
 import pro.qyoga.app.therapist.clients.journal.edit_entry.create.CreateJournalEntryPageController
 import pro.qyoga.app.therapist.clients.journal.list.JournalPageController
-import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRequest
+import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRq
 import pro.qyoga.tests.pages.therapist.clients.journal.entry.CreateJournalEntryForm
 import pro.qyoga.tests.pages.therapist.clients.journal.entry.EditJournalEntryPage
 import pro.qyoga.tests.platform.pathToRegex
@@ -60,7 +60,7 @@ class TherapistClientJournalApi(override val authCookie: Cookie) : AuthorizedApi
         }
     }
 
-    fun createJournalEntry(clientId: UUID, journalEntry: EditJournalEntryRequest) {
+    fun createJournalEntry(clientId: UUID, journalEntry: EditJournalEntryRq) {
         postNewJournalEntry(journalEntry, clientId) Then {
             statusCode(HttpStatus.OK.value())
             header("Hx-Redirect", Matchers.matchesRegex(".*" + JournalPageController.JOURNAL_PAGE_PATH.pathToRegex()))
@@ -69,7 +69,7 @@ class TherapistClientJournalApi(override val authCookie: Cookie) : AuthorizedApi
 
     fun createJournalEntryForError(
         clientId: UUID,
-        journalEntry: EditJournalEntryRequest,
+        journalEntry: EditJournalEntryRq,
         expectedStatus: HttpStatus = HttpStatus.OK
     ): Document {
         return postNewJournalEntry(journalEntry, clientId) Then {
@@ -80,7 +80,7 @@ class TherapistClientJournalApi(override val authCookie: Cookie) : AuthorizedApi
     }
 
     private fun postNewJournalEntry(
-        journalEntry: EditJournalEntryRequest,
+        journalEntry: EditJournalEntryRq,
         clientId: UUID
     ) = Given {
         authorized()
@@ -98,7 +98,7 @@ class TherapistClientJournalApi(override val authCookie: Cookie) : AuthorizedApi
     fun editJournalEntry(
         clientId: UUID,
         entryId: Long,
-        journalEntry: EditJournalEntryRequest,
+        journalEntry: EditJournalEntryRq,
     ) {
         return postJournalEntryEdit(clientId, entryId, journalEntry) Then {
             statusCode(HttpStatus.OK.value())
@@ -111,7 +111,7 @@ class TherapistClientJournalApi(override val authCookie: Cookie) : AuthorizedApi
     fun editJournalEntryForError(
         clientId: UUID,
         entryId: Long,
-        journalEntry: EditJournalEntryRequest,
+        journalEntry: EditJournalEntryRq,
         expectedStatus: HttpStatus = HttpStatus.OK
     ): Document {
         return postJournalEntryEdit(clientId, entryId, journalEntry) Then {
@@ -124,7 +124,7 @@ class TherapistClientJournalApi(override val authCookie: Cookie) : AuthorizedApi
     private fun postJournalEntryEdit(
         clientId: UUID,
         entryId: Long,
-        journalEntry: EditJournalEntryRequest,
+        journalEntry: EditJournalEntryRq,
     ) = Given {
         authorized()
         formParam(CreateJournalEntryForm.dateInput.name, journalEntry.date.toString())

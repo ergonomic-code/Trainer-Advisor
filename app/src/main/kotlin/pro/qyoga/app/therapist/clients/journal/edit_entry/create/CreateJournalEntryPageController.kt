@@ -10,11 +10,12 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.servlet.ModelAndView
 import pro.azhidkov.platform.kotlin.isFailureOf
 import pro.azhidkov.platform.spring.http.hxRedirect
-import pro.azhidkov.platform.spring.mvc.modelAndView
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.qyoga.app.platform.notFound
-import pro.qyoga.app.therapist.clients.journal.edit_entry.shared.JOURNAL_ENTRY_VIEW_NAME
+import pro.qyoga.app.therapist.clients.journal.edit_entry.edit.EditJournalEntryPageModel
+import pro.qyoga.app.therapist.clients.journal.edit_entry.shared.JOURNAL_ENTRY_FROM
 import pro.qyoga.core.clients.cards.ClientsRepo
-import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRequest
+import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRq
 import pro.qyoga.core.clients.journals.errors.DuplicatedDate
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import java.time.LocalDate
@@ -34,22 +35,20 @@ class CreateJournalEntryPageController(
         val client = clientsRepo.findByIdOrNull(clientId)
             ?: return notFound
 
-        return modelAndView(JOURNAL_ENTRY_VIEW_NAME) {
-            "client" bindTo client
-            "entryDate" bindTo LocalDate.now()
-            "formAction" bindTo createFormAction(clientId)
-        }
+        return CreateJournalEntryPageModel(
+            client.ref(),
+            LocalDate.now(),
+        )
     }
-
 
     @PostMapping(CREATE_JOURNAL_PAGE_URL)
     fun handleCreateJournalEntry(
         @PathVariable clientId: UUID,
-        @ModelAttribute editJournalEntryRequest: EditJournalEntryRequest,
+        @ModelAttribute editJournalEntryRq: EditJournalEntryRq,
         @AuthenticationPrincipal principal: QyogaUserDetails,
     ): Any {
         val result = runCatching {
-            createJournalEntry.createJournalEntry(clientId, editJournalEntryRequest, principal)
+            createJournalEntry.createJournalEntry(clientId, editJournalEntryRq, principal)
         }
 
         return when {
@@ -58,12 +57,13 @@ class CreateJournalEntryPageController(
 
             result.isFailureOf<DuplicatedDate>() -> {
                 val ex = result.exceptionOrNull() as DuplicatedDate
-                modelAndView("$JOURNAL_ENTRY_VIEW_NAME :: journalEntryFrom") {
-                    "client" bindTo ex.duplicatedEntry.clientRef
-                    "entry" bindTo ex.duplicatedEntry
-                    "duplicatedDate" bindTo true
-                    "formAction" bindTo createFormAction(clientId)
-                }
+                EditJournalEntryPageModel(
+                    ex.duplicatedEntry.clientRef,
+                    ex.duplicatedEntry,
+                    createFormAction(ex.duplicatedEntry.clientRef),
+                    JOURNAL_ENTRY_FROM,
+                    true,
+                )
             }
 
             else ->
@@ -71,10 +71,7 @@ class CreateJournalEntryPageController(
         }
     }
 
-    private fun createFormAction(clientId: UUID) = CREATE_JOURNAL_PAGE_URL.replace("{clientId}", clientId.toString())
-
     companion object {
-
         const val CREATE_JOURNAL_PAGE_URL = "/therapist/clients/{clientId}/journal/create"
     }
 

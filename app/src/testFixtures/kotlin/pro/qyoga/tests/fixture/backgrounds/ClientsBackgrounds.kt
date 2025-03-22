@@ -2,9 +2,9 @@ package pro.qyoga.tests.fixture.backgrounds
 
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Component
-import org.springframework.ui.ExtendedModelMap
 import pro.qyoga.app.therapist.clients.ClientsListPageController
 import pro.qyoga.app.therapist.clients.cards.CreateClientCardPageController
+import pro.qyoga.app.therapist.clients.cards.EditClientCardPageController
 import pro.qyoga.core.clients.cards.ClientsRepo
 import pro.qyoga.core.clients.cards.dtos.ClientCardDto
 import pro.qyoga.core.clients.cards.findByPhone
@@ -24,7 +24,8 @@ class ClientsBackgrounds(
     private val clientsRepo: ClientsRepo,
     private val clientsListPageController: ClientsListPageController,
     private val journalBackgrounds: ClientJournalBackgrounds,
-    private val clientsPageController: CreateClientCardPageController
+    private val createClientPageController: CreateClientCardPageController,
+    private val editClientPageController: EditClientCardPageController
 ) {
 
     fun aClient(): Client {
@@ -40,9 +41,10 @@ class ClientsBackgrounds(
     }
 
     fun getAllClients(): List<Client> {
-        val model = ExtendedModelMap()
-        clientsListPageController.getClients(theTherapistUserDetails, Pageable.ofSize(Int.MAX_VALUE), model)
-        return ClientsListPageController.getClients(model).content
+        return clientsListPageController.getClients(
+            theTherapistUserDetails,
+            Pageable.ofSize(Int.MAX_VALUE)
+        ).clients.content
     }
 
     fun createClientWithJournalEntry(therapistId: UUID = THE_THERAPIST_ID): Pair<Client, JournalEntry> {
@@ -62,8 +64,12 @@ class ClientsBackgrounds(
         clientDto: ClientCardDto = ClientsObjectMother.createClientCardDtoMinimal(),
         principal: QyogaUserDetails = theTherapistUserDetails
     ): Client {
-        clientsPageController.createClient(clientDto, principal)
+        createClientPageController.createClient(clientDto, principal)
         return clientsRepo.findByPhone(principal.ref, PhoneNumber.of(clientDto.phoneNumber))!!
+    }
+
+    fun updateClient(clientId: UUID, editClientCardDto: ClientCardDto) {
+        editClientPageController.editClientCard(editClientCardDto, clientId)
     }
 
 }

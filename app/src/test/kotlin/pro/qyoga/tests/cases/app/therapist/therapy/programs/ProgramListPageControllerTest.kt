@@ -17,7 +17,7 @@ class ProgramListPageControllerTest : QYogaAppIntegrationBaseKoTest({
 
     "при наличии в системе нескольких терапевтов с программами" - {
         // Сетап
-        presets.therapistsPreset.createTherapistWithProgram() // второй терапевт с программой
+        presets.therapistsFixturePreset.createTherapistWithProgram() // второй терапевт с программой
 
         val program = backgrounds.programs.createRandomProgram(therapistRef = THE_THERAPIST_REF)
 

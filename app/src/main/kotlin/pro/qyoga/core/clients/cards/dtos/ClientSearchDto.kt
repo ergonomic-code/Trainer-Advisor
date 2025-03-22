@@ -6,6 +6,8 @@ data class ClientSearchDto(
     val phoneNumber: String? = null,
 ) {
 
+    val digitsOnlyPhoneNumber = phoneNumber?.replace("[^0-9]".toRegex(), "")
+
     companion object {
 
         val ALL = ClientSearchDto()

@@ -2,6 +2,7 @@ package pro.qyoga.tests.cases.app.therapist.clients
 
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.shouldHaveSize
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import pro.qyoga.core.clients.cards.dtos.ClientSearchDto
 import pro.qyoga.tests.assertions.shouldBe
@@ -18,10 +19,11 @@ import pro.qyoga.tests.pages.therapist.clients.ClientsListPagination
 import java.time.LocalDate
 
 
+@DisplayName("Страница списка клиентов")
 class ClientsListPageTest : QYogaAppIntegrationBaseTest() {
 
     @Test
-    fun `Clients list page should be correctly rendered when there are no clients`() {
+    fun `должна рендерится корректно с пустым списком`() {
         // Given
         val therapist = TherapistClient.loginAsTheTherapist()
 
@@ -34,12 +36,12 @@ class ClientsListPageTest : QYogaAppIntegrationBaseTest() {
     }
 
     @Test
-    fun `Clients list page should render 10 rows when enough clients exists`() {
+    fun `должна отбражать 10 клиентов, когда в БД более 10 записей`() {
         // Given
         val pageSize = 10
         val therapist = TherapistClient.loginAsTheTherapist()
         val clients = ClientsObjectMother.createClientCardDtos(pageSize + 1)
-        val firstPage = clients.sortedBy { it.lastName.lowercase() }.take(pageSize)
+        val firstPage = clients.reversed().take(pageSize)
         backgrounds.clients.createClients(clients)
 
         // When
@@ -55,7 +57,7 @@ class ClientsListPageTest : QYogaAppIntegrationBaseTest() {
     }
 
     @Test
-    fun `When user submits search from, response should contain only rows matching query`() {
+    fun `при фильтрации должна возвращать только строки соответствуюище фильтру`() {
         // Given
         val firstName = "Иван"
         val lastName = "Иванов"
@@ -94,7 +96,7 @@ class ClientsListPageTest : QYogaAppIntegrationBaseTest() {
     }
 
     @Test
-    fun `After click on deletion button client should disappear from client table`() {
+    fun `должна не содержать клиента после его удаления`() {
         // Given
         backgrounds.clients.createClients(1)
         val therapist = TherapistClient.loginAsTheTherapist()
@@ -109,13 +111,13 @@ class ClientsListPageTest : QYogaAppIntegrationBaseTest() {
     }
 
     @Test
-    fun `Second clients list fragment should be rendered correctly`() {
+    fun `должна корректно рендерить фрагмент второй страницы списка`() {
         // Given
         val page = 2
         val pageSize = 10
         val therapist = TherapistClient.loginAsTheTherapist()
         val clients = ClientsObjectMother.createClientCardDtos(pageSize * 2 + 1)
-        val secondPage = clients.sortedBy { it.lastName.lowercase() }.drop(pageSize).take(pageSize)
+        val secondPage = clients.reversed().drop(pageSize).take(pageSize)
         backgrounds.clients.createClients(clients)
 
         // When

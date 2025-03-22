@@ -11,7 +11,7 @@ import pro.qyoga.tests.fixture.backgrounds.exercises.ExerciseBackgrounds
 
 
 @Component
-class TherapistsPreset(
+class TherapistsFixturePreset(
     private val usersBackgrounds: UsersBackgrounds,
     private val exerciseBackgrounds: ExerciseBackgrounds,
     private val programsBackgrounds: ProgramsBackgrounds,
