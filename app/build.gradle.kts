@@ -46,6 +46,7 @@ dependencies {
 	implementation(libs.minio)
 	implementation(libs.bundles.poi)
     implementation(libs.nanocaptcha)
+	implementation(libs.ical4j)
 
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
@@ -56,12 +57,23 @@ dependencies {
 	testFixturesApi(testLibs.jsoup)
 	testFixturesApi(testLibs.datafaker)
 	testFixturesApi(testLibs.greenmail)
+	testFixturesApi(testLibs.instancio)
+	testFixturesApi(testLibs.wiremock) {
+		exclude("org.eclipse.jetty", "jetty-servlet")
+		exclude("org.eclipse.jetty", "jetty-servlets")
+		exclude("org.eclipse.jetty", "jetty-webapp")
+		exclude("org.eclipse.jetty.http2", "http2-server")
+	}
+	testFixturesApi(testLibs.wiremock.jetty12)
+	testFixturesApi(testLibs.wiremock.kotlin)
 
+	testFixturesImplementation(kotlin("reflect"))
 	testFixturesImplementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 	testFixturesImplementation("org.springframework.boot:spring-boot-starter-web")
 	testFixturesImplementation("org.springframework.boot:spring-boot-starter-security")
 	testFixturesImplementation("com.fasterxml.jackson.core:jackson-databind")
 	testFixturesImplementation(libs.minio)
+	testFixturesImplementation(libs.ical4j)
 
 	testFixturesImplementation("org.springframework.boot:spring-boot-starter-test")
 	testFixturesImplementation("org.testcontainers:junit-jupiter")

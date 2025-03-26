@@ -1,13 +1,17 @@
 package pro.qyoga.app.therapist.appointments.core.schedule
 
 import org.springframework.web.servlet.ModelAndView
+import pro.qyoga.app.therapist.appointments.core.schedule.AppointmentCard.CssClasses.CLIENT_CAME_CARD
+import pro.qyoga.app.therapist.appointments.core.schedule.AppointmentCard.CssClasses.CLIENT_DO_NOT_CAME_CARD
+import pro.qyoga.app.therapist.appointments.core.schedule.AppointmentCard.CssClasses.DRAFT_CARD
+import pro.qyoga.app.therapist.appointments.core.schedule.AppointmentCard.CssClasses.PENDING_CARD
 import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel.Companion.DAYS_IN_CALENDAR
 import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel.Companion.DAYS_IN_WEEK
 import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel.Companion.DEFAULT_END_HOUR
 import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel.Companion.DEFAULT_START_HOUR
 import pro.qyoga.core.appointments.core.AppointmentStatus
 import pro.qyoga.core.appointments.core.LocalizedAppointmentSummary
-import pro.qyoga.core.calendar.LocalCalendarItem
+import pro.qyoga.core.calendar.api.LocalCalendarItem
 import pro.qyoga.l10n.russianDayOfMonthLongFormat
 import pro.qyoga.l10n.russianTimeFormat
 import pro.qyoga.l10n.systemLocale
@@ -159,10 +163,10 @@ data class TimeMark(
  * Высота карточки определяется как процент от высоты строки календаря.
  */
 data class AppointmentCard(
-    val id: UUID,
+    val id: Any,
     val period: String,
-    val client: String,
-    val type: String,
+    val title: String,
+    val description: String,
     val statusClass: String,
     val timeMarkOffsetPercent: Double,
     val timeMarkLengthPercent: Double,
@@ -172,7 +176,7 @@ data class AppointmentCard(
         app: LocalCalendarItem<*>,
         day: LocalDate,
     ) : this(
-        app.id as UUID,
+        app.id as Any,
         app.dateTime.format(russianTimeFormat) + " - " + app.endDateTime.format(russianTimeFormat),
         app.title,
         app.description,
@@ -182,18 +186,25 @@ data class AppointmentCard(
     )
 
     companion object {
+
         fun getCssClass(item: LocalCalendarItem<*>) = when (item) {
-            is LocalizedAppointmentSummary if (item.status == AppointmentStatus.PENDING) -> "pending"
-            is LocalizedAppointmentSummary if (item.status == AppointmentStatus.CLIENT_CAME) -> "client-came"
-            is LocalizedAppointmentSummary if (item.status == AppointmentStatus.CLIENT_DO_NOT_CAME) -> "client-do-not-came"
-            else -> "draft"
+            is LocalizedAppointmentSummary -> appointmentStatusClasses[item.status]!!
+            else -> DRAFT_CARD
         }
+
         val appointmentStatusClasses = mapOf(
-            AppointmentStatus.PENDING to "pending",
-            AppointmentStatus.CLIENT_CAME to "client-came",
-            AppointmentStatus.CLIENT_DO_NOT_CAME to "client-do-not-came",
+            AppointmentStatus.PENDING to PENDING_CARD,
+            AppointmentStatus.CLIENT_CAME to CLIENT_CAME_CARD,
+            AppointmentStatus.CLIENT_DO_NOT_CAME to CLIENT_DO_NOT_CAME_CARD,
         )
 
+    }
+
+    object CssClasses {
+        const val DRAFT_CARD = "draft"
+        const val PENDING_CARD = "pending"
+        const val CLIENT_CAME_CARD = "client-came"
+        const val CLIENT_DO_NOT_CAME_CARD = "client-do-not-came"
     }
 
 }

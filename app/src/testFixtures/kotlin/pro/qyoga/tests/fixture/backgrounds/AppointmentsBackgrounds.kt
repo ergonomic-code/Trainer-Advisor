@@ -7,7 +7,7 @@ import pro.qyoga.app.therapist.appointments.core.edit.CreateAppointmentOp
 import pro.qyoga.app.therapist.appointments.core.schedule.GetCalendarAppointmentsOp
 import pro.qyoga.core.appointments.core.Appointment
 import pro.qyoga.core.appointments.core.AppointmentsRepo
-import pro.qyoga.core.calendar.LocalCalendarItem
+import pro.qyoga.core.calendar.api.LocalCalendarItem
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.TherapistRef

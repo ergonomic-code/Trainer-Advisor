@@ -1,6 +1,6 @@
 package pro.qyoga.core.appointments.core
 
-import pro.qyoga.core.calendar.LocalCalendarItem
+import pro.qyoga.core.calendar.api.LocalCalendarItem
 import java.time.Duration
 import java.time.LocalDateTime
 import java.util.*

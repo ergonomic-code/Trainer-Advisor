@@ -9,7 +9,7 @@ import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
 import pro.qyoga.core.appointments.core.Appointment
 import pro.qyoga.core.appointments.core.EditAppointmentRequest
 import pro.qyoga.core.appointments.core.LocalizedAppointmentSummary
-import pro.qyoga.core.calendar.LocalCalendarItem
+import pro.qyoga.core.calendar.api.LocalCalendarItem
 import java.time.LocalDateTime
 import java.time.ZoneId
 

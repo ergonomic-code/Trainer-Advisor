@@ -7,6 +7,7 @@ import pro.qyoga.tests.fixture.data.resetFaker
 import pro.qyoga.tests.fixture.presets.Presets
 import pro.qyoga.tests.infra.db.setupDb
 import pro.qyoga.tests.infra.test_config.spring.context
+import pro.qyoga.tests.infra.wiremock.WireMock
 import javax.sql.DataSource
 
 
@@ -27,6 +28,7 @@ open class QYogaAppBaseTest {
     fun setupTestData() {
         dataSource.setupDb()
         resetFaker()
+        WireMock.reset()
     }
 
 }

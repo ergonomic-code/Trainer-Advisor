@@ -16,7 +16,12 @@ fun randomRecentLocalDate() =
 fun randomLocalDate(from: LocalDate, period: Duration): LocalDate =
     from.plusDays(faker.random().nextLong(0, period.toDays() + 1))
 
-fun randomTimeZone(): ZoneId = ZoneId.getAvailableZoneIds().randomElement().let { ZoneId.of(it) }
+fun randomTimeZone(): ZoneId = ZoneId
+    .getAvailableZoneIds()
+    .map { ZoneId.of(it) }
+    // Быстрый воркэрануд для того, что ical зачем-то подсовывает сюда пачку непарсибальных зон из-за которых падают тесты
+    .filter { "ical" !in it.id }
+    .let { faker.random().randomElementOf(it) }
 
 val asiaNovosibirskTimeZone: ZoneId = ZoneId.of("Asia/Novosibirsk")
 

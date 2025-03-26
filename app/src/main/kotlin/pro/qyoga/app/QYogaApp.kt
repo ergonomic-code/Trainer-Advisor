@@ -8,6 +8,7 @@ import pro.azhidkov.platform.spring.sdj.ErgoSdjConfig
 import pro.qyoga.app.publc.PublicAppConfig
 import pro.qyoga.app.therapist.TherapistWebAppConfig
 import pro.qyoga.core.appointments.AppointmentsConfig
+import pro.qyoga.core.calendar.ical.ICalCalendarsConfig
 import pro.qyoga.core.clients.ClientsConfig
 import pro.qyoga.core.survey_forms.SurveyFormsSettingsConfig
 import pro.qyoga.core.therapy.TherapyConfig
@@ -32,6 +33,7 @@ import pro.qyoga.tech.captcha.CaptchaConf
     TherapyConfig::class,
     UsersConfig::class,
     SurveyFormsSettingsConfig::class,
+    ICalCalendarsConfig::class,
 
     // I9ns
     EmailsConfig::class,
