@@ -1,10 +1,11 @@
-package pro.qyoga.core.appointments.core
+package pro.qyoga.core.appointments.core.model
 
 import org.springframework.data.annotation.*
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.Table
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.Identifiable
 import pro.azhidkov.platform.uuid.UUIDv7
+import pro.qyoga.core.appointments.core.commands.EditAppointmentRequest
 import pro.qyoga.core.appointments.types.model.AppointmentTypeRef
 import pro.qyoga.core.clients.cards.model.ClientRef
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef

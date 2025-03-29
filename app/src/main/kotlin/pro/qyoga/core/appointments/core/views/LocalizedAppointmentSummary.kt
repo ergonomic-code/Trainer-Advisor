@@ -1,10 +1,10 @@
-package pro.qyoga.core.appointments.core
+package pro.qyoga.core.appointments.core.views
 
+import pro.qyoga.core.appointments.core.model.AppointmentStatus
 import pro.qyoga.core.calendar.api.LocalCalendarItem
 import java.time.Duration
 import java.time.LocalDateTime
 import java.util.*
-
 
 data class LocalizedAppointmentSummary(
     override val id: UUID,

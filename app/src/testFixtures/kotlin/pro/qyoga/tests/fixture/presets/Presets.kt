@@ -12,5 +12,4 @@ class Presets(
     val surveysFixturePresets: SurveysFixturePresets,
     val therapistsFixturePreset: TherapistsFixturePreset,
     val clientsFixturePresets: ClientsFixturePresets,
-    val calendarsFixturePresets: CalendarsFixturePresets
 )

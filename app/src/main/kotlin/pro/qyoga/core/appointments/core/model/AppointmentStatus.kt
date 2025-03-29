@@ -1,4 +1,4 @@
-package pro.qyoga.core.appointments.core
+package pro.qyoga.core.appointments.core.model
 
 import pro.azhidkov.platform.kotlin.LabeledEnum
 

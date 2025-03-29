@@ -21,6 +21,7 @@ object CalendarsObjectMother {
                 this.set(field(LocalizedICalCalendarItem::duration), randomAppointmentDuration())
                 this.configureInstance()
             }
+            .withSeed(0L)
             .create()
     }
 

@@ -12,6 +12,9 @@ import java.time.temporal.Temporal
 import kotlin.jvm.optionals.getOrNull
 
 
+val VEvent.id: ICalEventId
+    get() = ICalEventId(this.uid.get().value, this.recurrenceId)
+
 fun VEvent.toLocalizedICalCalendarItem(
     period: Period<Temporal>,
     zoneId: ZoneId

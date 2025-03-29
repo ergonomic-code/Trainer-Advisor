@@ -3,10 +3,10 @@ package pro.qyoga.tests.fixture.backgrounds
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
-import pro.qyoga.app.therapist.appointments.core.edit.CreateAppointmentOp
+import pro.qyoga.app.therapist.appointments.core.edit.ops.CreateAppointmentOp
 import pro.qyoga.app.therapist.appointments.core.schedule.GetCalendarAppointmentsOp
-import pro.qyoga.core.appointments.core.Appointment
 import pro.qyoga.core.appointments.core.AppointmentsRepo
+import pro.qyoga.core.appointments.core.model.Appointment
 import pro.qyoga.core.calendar.api.LocalCalendarItem
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails

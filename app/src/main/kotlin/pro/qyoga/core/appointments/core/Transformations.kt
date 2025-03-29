@@ -2,6 +2,8 @@ package pro.qyoga.core.appointments.core
 
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrNull
 import pro.azhidkov.timezones.LocalizedTimeZone
+import pro.qyoga.core.appointments.core.commands.EditAppointmentRequest
+import pro.qyoga.core.appointments.core.model.Appointment
 import pro.qyoga.core.appointments.types.model.AppointmentTypeRef
 import java.time.ZoneId
 
@@ -31,6 +33,7 @@ fun Appointment.patchBy(
 fun Appointment.toTimeSpanString() = "$wallClockDateTime - ${wallClockDateTime.plus(duration)} ($timeZone)"
 
 fun Appointment.toEditRequest(resolveTimeZone: (ZoneId) -> LocalizedTimeZone?) = EditAppointmentRequest(
+    null,
     clientRef,
     clientRef.resolveOrNull()?.fullName() ?: clientRef.id.toString(),
     typeRef,

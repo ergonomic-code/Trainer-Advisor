@@ -3,8 +3,8 @@ package pro.qyoga.tests.pages.therapist.appointments
 import io.kotest.matchers.shouldBe
 import pro.azhidkov.platform.java.time.toLocalTimeString
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
-import pro.qyoga.core.appointments.core.AppointmentStatus
-import pro.qyoga.core.appointments.core.EditAppointmentRequest
+import pro.qyoga.core.appointments.core.commands.EditAppointmentRequest
+import pro.qyoga.core.appointments.core.model.AppointmentStatus
 import pro.qyoga.tests.assertions.PageMatcher
 import pro.qyoga.tests.platform.html.*
 
@@ -12,6 +12,7 @@ private const val PATH = "/therapist/appointments"
 
 abstract class AppointmentForm(action: FormAction) : QYogaForm("editAppointmentForm", action) {
 
+    val externalIdInput by component { Input.hidden("externalId", false) }
     val clientInput by component { ComboBox("client", true) }
     val typeInput by component { ComboBox("appointmentType", true) }
     val therapeuticTaskInput by component { ComboBox("therapeuticTask", false) }

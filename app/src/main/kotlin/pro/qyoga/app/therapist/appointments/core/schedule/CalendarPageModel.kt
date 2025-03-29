@@ -9,8 +9,8 @@ import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel.Comp
 import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel.Companion.DAYS_IN_WEEK
 import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel.Companion.DEFAULT_END_HOUR
 import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel.Companion.DEFAULT_START_HOUR
-import pro.qyoga.core.appointments.core.AppointmentStatus
-import pro.qyoga.core.appointments.core.LocalizedAppointmentSummary
+import pro.qyoga.core.appointments.core.model.AppointmentStatus
+import pro.qyoga.core.appointments.core.views.LocalizedAppointmentSummary
 import pro.qyoga.core.calendar.api.LocalCalendarItem
 import pro.qyoga.l10n.russianDayOfMonthLongFormat
 import pro.qyoga.l10n.russianTimeFormat

@@ -9,6 +9,7 @@ import net.fortuna.ical4j.model.property.Uid
 import org.springframework.stereotype.Component
 import pro.azhidkov.platform.uuid.UUIDv7
 import pro.qyoga.core.calendar.ical.model.ICalCalendar
+import pro.qyoga.core.calendar.ical.model.ICalEventId
 import pro.qyoga.core.calendar.ical.model.LocalizedICalCalendarItem
 import pro.qyoga.tests.fixture.backgrounds.ICalCalendarsBackgrounds
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
@@ -20,14 +21,18 @@ class CalendarsFixturePresets(
     private val iCalCalendarsBackgrounds: ICalCalendarsBackgrounds
 ) {
 
-    fun createICalCalendarWithSingleEvent(event: LocalizedICalCalendarItem, calendarZoneId: ZoneId) {
+    fun createICalCalendarWithSingleEvent(
+        event: LocalizedICalCalendarItem,
+        calendarZoneId: ZoneId
+    ): Pair<ICalCalendar, ICalEventId> {
         val calendar = Calendar()
             .withProdId("-//azhidkov.pro//Trainer Advisor Tests//RU")
             .withDefaults()
             .fluentTarget
+        val eventUid = UUIDv7.randomUUID().toString()
         calendar.withComponent(
             VEvent(event.dateTime.atZone(calendarZoneId), event.duration, event.title)
-                .withProperty(Uid(UUIDv7.randomUUID().toString()))
+                .withProperty(Uid(eventUid))
                 .withProperty(Description(event.description)) as CalendarComponent
         )
         val icsFile = StringWriter()
@@ -40,7 +45,9 @@ class CalendarsFixturePresets(
             icsFile.toString(),
         )
 
-        iCalCalendarsBackgrounds.createICalCalendar(iCalCalendar)
+        val ical = iCalCalendarsBackgrounds.createICalCalendar(iCalCalendar)
+
+        return ical to ICalEventId(eventUid)
     }
 
 }

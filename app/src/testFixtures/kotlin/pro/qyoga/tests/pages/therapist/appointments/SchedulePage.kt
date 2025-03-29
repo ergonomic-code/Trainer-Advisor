@@ -13,7 +13,7 @@ import pro.qyoga.app.therapist.appointments.core.schedule.AppointmentCard
 import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
 import pro.qyoga.app.therapist.appointments.core.schedule.TimeMark
-import pro.qyoga.core.appointments.core.Appointment
+import pro.qyoga.core.appointments.core.model.Appointment
 import pro.qyoga.core.calendar.ical.model.LocalizedICalCalendarItem
 import pro.qyoga.l10n.russianTimeFormat
 import pro.qyoga.tests.assertions.*

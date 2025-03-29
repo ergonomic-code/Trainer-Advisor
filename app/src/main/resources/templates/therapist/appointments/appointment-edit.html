@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<!--/*@thymesVar id="appointment" type="pro.qyoga.core.appointments.core.EditAppointmentRequest"*/-->
+<!--/*@thymesVar id="appointment" type="pro.qyoga.core.appointments.core.commands.EditAppointmentRequest"*/-->
 <!--/*@thymesVar id="pageMode" type="java.lang.String"*/-->
 <head>
 
@@ -39,6 +39,11 @@
                       th:fragment="editAppointmentForm"
                       th:x-data="|{'dateTime': '${appointment?.dateTime ?: dateTime}', 'status': 'PENDING', canChangeStatus() { return Date.parse(this.dateTime) <= new Date() } }|"
                 >
+
+                    <input id="externalId"
+                           name="externalId"
+                           th:value="${appointment?.externalId}"
+                           type="hidden">
 
                     <fieldset class="mb-4">
                         <legend class="mb-4 border-bottom">Приём</legend>
@@ -90,7 +95,7 @@
                             <div class="col-12 col-sm-3 mb-3 mb-sm-0">
                                 <div class="form-floating ">
                                     <!--/*@thymesVar id="appointmentsIntersectionError" type="java.lang.String"*/-->
-                                    <!--/*@thymesVar id="existingAppointment" type="pro.qyoga.core.appointments.core.Appointment"*/-->
+                                    <!--/*@thymesVar id="existingAppointment" type="pro.qyoga.core.appointments.core.model.Appointment"*/-->
                                     <input class="form-control"
                                            id="dateTime"
                                            min="2000-01-01"
@@ -220,7 +225,7 @@
                                            name="appointmentStatus"
 
                                            required
-                                           th:checked="${appointment == null || appointment.appointmentStatus.name == 'PENDING'}"
+                                           th:checked="${appointment == null || appointment?.appointmentStatus == null || appointment?.appointmentStatus?.name == 'PENDING'}"
                                            type="radio"
                                            x-model="status"
                                            value="PENDING">

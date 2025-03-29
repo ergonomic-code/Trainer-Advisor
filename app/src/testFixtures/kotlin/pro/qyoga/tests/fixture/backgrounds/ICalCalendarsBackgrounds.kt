@@ -20,13 +20,13 @@ class ICalCalendarsBackgrounds(
     fun aIcsUrl(): URL =
         URI.create(WireMock.wiremock.baseUrl()).resolve("/ics/${UUIDv7.randomUUID()}.ics").toURL()
 
-    fun createICalCalendar(ical: ICalCalendar) {
+    fun createICalCalendar(ical: ICalCalendar): ICalCalendar {
         WireMock.wiremock.get {
             urlEqualTo(ical.icsUrl.toString())
         } returns {
             body = ical.icsFile
         }
-        icalCalendarsRepo.addICal(CreateICalRq(ical.ownerRef, ical.icsUrl, ical.name))
+        return icalCalendarsRepo.addICal(CreateICalRq(ical.ownerRef, ical.icsUrl, ical.name))
     }
 
 }

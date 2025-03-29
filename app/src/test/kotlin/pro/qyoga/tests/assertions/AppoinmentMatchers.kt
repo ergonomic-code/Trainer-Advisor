@@ -6,9 +6,9 @@ import io.kotest.matchers.compose.any
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
-import pro.qyoga.core.appointments.core.Appointment
-import pro.qyoga.core.appointments.core.EditAppointmentRequest
-import pro.qyoga.core.appointments.core.LocalizedAppointmentSummary
+import pro.qyoga.core.appointments.core.commands.EditAppointmentRequest
+import pro.qyoga.core.appointments.core.model.Appointment
+import pro.qyoga.core.appointments.core.views.LocalizedAppointmentSummary
 import pro.qyoga.core.calendar.api.LocalCalendarItem
 import java.time.LocalDateTime
 import java.time.ZoneId

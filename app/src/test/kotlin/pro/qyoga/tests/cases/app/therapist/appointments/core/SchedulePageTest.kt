@@ -12,6 +12,7 @@ import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.fixture.data.asiaNovosibirskTimeZone
 import pro.qyoga.tests.fixture.data.randomWorkingTime
 import pro.qyoga.tests.fixture.object_mothers.calendars.CalendarsObjectMother.aLocalizedCalendarItem
+import pro.qyoga.tests.fixture.presets.CalendarsFixturePresets
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import pro.qyoga.tests.pages.therapist.appointments.CalendarPage
 import pro.qyoga.tests.pages.therapist.appointments.appointmentCards
@@ -22,6 +23,8 @@ import java.time.LocalDate
 
 @DisplayName("Страница календаря")
 class SchedulePageTest : QYogaAppIntegrationBaseTest() {
+
+    private val calendarsFixturePresets = getBean<CalendarsFixturePresets>()
 
     @Test
     fun `должна корректно рендерить пустой календарь за текущую дату`() {
@@ -107,7 +110,7 @@ class SchedulePageTest : QYogaAppIntegrationBaseTest() {
             set(field(LocalizedICalCalendarItem::dateTime), today.atTime(randomWorkingTime()))
         }
 
-        presets.calendarsFixturePresets.createICalCalendarWithSingleEvent(event, asiaNovosibirskTimeZone)
+        calendarsFixturePresets.createICalCalendarWithSingleEvent(event, asiaNovosibirskTimeZone)
 
         // Действие
         val document = theTherapist.appointments.getScheduleForDay(today)

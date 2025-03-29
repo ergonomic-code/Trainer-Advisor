@@ -13,6 +13,8 @@ import pro.azhidkov.platform.java.time.zoneId
 import pro.azhidkov.platform.postgresql.toPGInterval
 import pro.azhidkov.platform.spring.sdj.converters.PGIntervalToDurationConverter
 import pro.azhidkov.platform.spring.sdj.ergo.ErgoRepository
+import pro.qyoga.core.appointments.core.model.Appointment
+import pro.qyoga.core.appointments.core.views.LocalizedAppointmentSummary
 import pro.qyoga.core.calendar.api.CalendarsService
 import pro.qyoga.core.calendar.api.LocalCalendarItem
 import pro.qyoga.core.users.therapists.TherapistRef

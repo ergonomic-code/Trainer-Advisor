@@ -13,33 +13,44 @@ import pro.azhidkov.timezones.TimeZones
 import pro.qyoga.app.platform.EntityPageMode
 import pro.qyoga.app.platform.seeOther
 import pro.qyoga.app.publc.components.toComboBoxItem
+import pro.qyoga.app.therapist.appointments.core.edit.errors.AppointmentsIntersectionException
+import pro.qyoga.app.therapist.appointments.core.edit.ops.CreateAppointmentOp
+import pro.qyoga.app.therapist.appointments.core.edit.ops.GetAppointmentPrefillDataOp
+import pro.qyoga.app.therapist.appointments.core.edit.view_model.SourceItem
+import pro.qyoga.app.therapist.appointments.core.edit.view_model.appointmentPageModelAndView
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController.Companion.calendarForDayWithFocus
-import pro.qyoga.core.appointments.core.AppointmentsIntersectionException
-import pro.qyoga.core.appointments.core.EditAppointmentRequest
+import pro.qyoga.core.appointments.core.commands.EditAppointmentRequest
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.ref
 import java.time.LocalDateTime
 
-
 @Controller
 @RequestMapping(CreateAppointmentPageController.PATH)
 class CreateAppointmentPageController(
+    private val getAppointmentPrefillData: GetAppointmentPrefillDataOp,
     private val createAppointment: CreateAppointmentOp,
     private val timeZones: TimeZones
 ) {
 
     @GetMapping
     fun getAppointmentPage(
-        @RequestParam("dateTime") dateTime: LocalDateTime?
+        @RequestParam(DATE_TIME) dateTime: LocalDateTime?,
+        @RequestParam(SOURCE_ITEM_TYPE) sourceItemType: String?,
+        @RequestParam(SOURCE_ITEM_ID) sourceItemId: String?,
+        @AuthenticationPrincipal therapist: QyogaUserDetails
     ): ModelAndView {
+        val sourceItem = when {
+            sourceItemType != null && sourceItemId != null -> SourceItem(sourceItemType, sourceItemId)
+            else -> null
+        }
+        val prefillData = getAppointmentPrefillData(therapist.ref, sourceItem, dateTime)
         return appointmentPageModelAndView(
             pageMode = EntityPageMode.CREATE,
-            allAvailableTimeZones = timeZones.allTimeZones.map(LocalizedTimeZone::toComboBoxItem)
-        ) {
-            if (dateTime != null) {
-                "dateTime" bindTo dateTime.toString()
-            }
-        }
+            allAvailableTimeZones = timeZones.allTimeZones.map(LocalizedTimeZone::toComboBoxItem),
+            additionalModel = mapOf(
+                "appointment" to prefillData
+            )
+        )
     }
 
     @PostMapping
@@ -53,18 +64,21 @@ class CreateAppointmentPageController(
         } catch (ex: AppointmentsIntersectionException) {
             appointmentPageModelAndView(
                 pageMode = EntityPageMode.CREATE,
-                allAvailableTimeZones = timeZones.allTimeZones.map(LocalizedTimeZone::toComboBoxItem)
-            ) {
-                "appointment" bindTo editAppointmentRequest
-                "appointmentsIntersectionError" bindTo true
-                "existingAppointment" bindTo ex.existingAppointment
-            }
+                allAvailableTimeZones = timeZones.allTimeZones.map(LocalizedTimeZone::toComboBoxItem),
+                additionalModel = mapOf(
+                    "appointment" to editAppointmentRequest,
+                    "appointmentsIntersectionError" to true,
+                    "existingAppointment" to ex.existingAppointment
+                )
+            )
         }
     }
 
     companion object {
         const val PATH = "/therapist/appointments/new"
         const val DATE_TIME = "dateTime"
+        const val SOURCE_ITEM_TYPE = "sourceItemType"
+        const val SOURCE_ITEM_ID = "sourceItemId"
         const val ADD_TO_DATE_TIME_PATH = "/therapist/appointments/new?$DATE_TIME={$DATE_TIME}"
     }
 

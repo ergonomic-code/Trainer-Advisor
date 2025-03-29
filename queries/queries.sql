@@ -1,4 +1,4 @@
--- Недельная статистика
+-- Недельная статистика по терапевтам
 SELECT u.email,
        (max(pl.last_used) AT TIME ZONE 'UTC') AT TIME ZONE 'Asia/Novosibirsk' last_action,
        count(distinct cc.id)                                                  created_clients,
@@ -17,5 +17,14 @@ FROM therapists t
                                           greatest(je.created_at, je.last_modified_at) > NOW() - '1 WEEK'::interval)
          LEFT JOIN journal_entries ttje ON (ttje.client_ref = c.id)
 WHERE pl.last_used > NOW() - '1 WEEK'::interval
-GROUP BY u.id, t.id
-;
+GROUP BY u.id, t.id;
+
+-- Месячная статистика по записям журнала
+SELECT dates,
+       count(je.id),
+       count(distinct c.therapist_ref)
+FROM generate_series(now() - '1 month'::interval, now(), '1 day'::interval) dates
+         LEFT JOIN journal_entries je ON je.date = date_trunc('days', dates.dates)
+         LEFT JOIN clients c ON c.id = je.client_ref
+GROUP by dates.dates
+ORDER BY dates.dates DESC;
