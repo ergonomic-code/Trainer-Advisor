@@ -8,7 +8,7 @@ import java.io.StringReader
 
 fun parseIcs(icsData: String): Calendar {
     CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_PARSING, true)
-    val sin = StringReader(icsData)
+    val sin = StringReader(icsData.replace("\n", "\r\n"))
     val builder = CalendarBuilder()
     return builder.build(sin)
 }

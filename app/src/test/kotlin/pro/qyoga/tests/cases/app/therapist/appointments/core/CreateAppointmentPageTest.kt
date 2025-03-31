@@ -8,17 +8,19 @@ import pro.azhidkov.platform.java.time.toLocalTimeString
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.qyoga.app.therapist.appointments.core.edit.view_model.SourceItem
 import pro.qyoga.app.therapist.appointments.core.edit.view_model.toQueryParamStr
-import pro.qyoga.core.calendar.ical.model.LocalizedICalCalendarItem
+import pro.qyoga.core.calendar.ical.model.ICalCalendarItem
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.assertions.shouldHaveElement
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.fixture.data.asiaNovosibirskTimeZone
+import pro.qyoga.tests.fixture.data.randomSentence
 import pro.qyoga.tests.fixture.data.randomWorkingTime
 import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentsObjectMother
 import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentsObjectMother.randomFullEditAppointmentRequest
-import pro.qyoga.tests.fixture.object_mothers.calendars.CalendarsObjectMother.aLocalizedCalendarItem
+import pro.qyoga.tests.fixture.object_mothers.appointments.randomAppointmentDate
+import pro.qyoga.tests.fixture.object_mothers.calendars.CalendarsObjectMother.aCalendarItem
 import pro.qyoga.tests.fixture.presets.CalendarsFixturePresets
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentForm
@@ -30,6 +32,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit
+import java.util.*
 
 private val aDate = LocalDate.now()
 private val aTime = LocalTime.now()
@@ -108,10 +111,13 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
         // Проверка
         response.statusCode() shouldBe HttpStatus.OK.value()
 
-        val storedAppointment =
-            backgrounds.appointments.getDaySchedule(editAppointmentRequest.dateTime.toLocalDate()).single()
+        val storedAppointment = backgrounds.appointments
+            .getDaySchedule(editAppointmentRequest.dateTime.toLocalDate())
+            .single()
         storedAppointment.shouldMatch(editAppointmentRequest)
-        TODO("externalId")
+
+        val createAppointment = backgrounds.appointments.findById(storedAppointment.id as UUID)!!
+        createAppointment.externalId shouldBe editAppointmentRequest.externalId
     }
 
     @Test
@@ -148,22 +154,25 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
     @DisplayName("должна предзаполнять дату, время, длительность и идентификатор события источника данными из события ics-календаря, если его ид был передан в запросе") // длина имени файла с лямбдой превышает ограничение Линукса
     fun createAppointmentWithIcsEventId() {
         // Сетап
-        val event = aLocalizedCalendarItem {
-            set(field(LocalizedICalCalendarItem::dateTime), aDate.atTime(aTime))
-            set(field(LocalizedICalCalendarItem::duration), Duration.ofMinutes(75))
+        val event = aCalendarItem {
+            set(field(ICalCalendarItem::dateTime), randomAppointmentDate().atZone(asiaNovosibirskTimeZone))
+            set(field(ICalCalendarItem::duration), Duration.ofMinutes(75))
+            set(field(ICalCalendarItem::description), randomSentence())
         }
-        val (_, eventId) = calendarsFixturePresets.createICalCalendarWithSingleEvent(event, asiaNovosibirskTimeZone)
+        calendarsFixturePresets.createICalCalendarWithSingleEvent(event)
 
         // Действие
         val document = theTherapist.appointments.getCreateAppointmentPage(
-            dateTime = event.dateTime,
-            sourceItem = SourceItem.icsEvent(eventId)
+            dateTime = event.dateTime.toLocalDateTime(),
+            sourceItem = SourceItem.icsEvent(event.id)
         )
 
         // Проверка
-        CreateAppointmentForm.dateTime.value(document) shouldBe event.dateTime.toString()
+        CreateAppointmentForm.externalIdInput.value(document) shouldBe event.id.toQueryParamStr()
+        CreateAppointmentForm.dateTime.value(document) shouldBe event.dateTime.toLocalDateTime().toString()
+        CreateAppointmentForm.timeZone.value(document) shouldBe event.dateTime.zone.id
         CreateAppointmentForm.duration.value(document) shouldBe event.duration.toLocalTimeString()
-        CreateAppointmentForm.externalIdInput.value(document) shouldBe eventId.toQueryParamStr()
+        CreateAppointmentForm.comment.value(document) shouldBe event.description
     }
 
 }

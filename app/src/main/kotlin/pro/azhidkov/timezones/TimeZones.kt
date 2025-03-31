@@ -13,7 +13,9 @@ class TimeZones(
     private val locale: Locale
 ) {
 
-    val allTimeZones = ZoneId.getAvailableZoneIds().map { ZoneId.of(it) }
+    val allTimeZones = ZoneId.getAvailableZoneIds()
+        .filter { !it.contains("ical", true) } // ical зачем-то подсовывает сюда пачку еле рабочих зон
+        .map { ZoneId.of(it) }
         .map { LocalizedTimeZone(it, it.getDisplayName(TextStyle.FULL, locale)) }
         .sortedBy { it.displayName }
 
@@ -27,9 +29,8 @@ class TimeZones(
         val searchResultByOffset =
             if (timezoneById != null) {
                 allTimeZones.filter {
-                    it != timezoneById && it.zone.rules.getOffset(now) == timezoneById.zone.rules.getOffset(
-                        now
-                    )
+                    it != timezoneById &&
+                            it.zone.rules.getOffset(now) == timezoneById.zone.rules.getOffset(now)
                 }
             } else {
                 emptyList()

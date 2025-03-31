@@ -16,6 +16,9 @@ data class Interval<T : Temporal> private constructor(
 
         fun of(from: ZonedDateTime, duration: Duration): Interval<ZonedDateTime> = Interval(from, from + duration)
 
+        @Suppress("UNCHECKED_CAST")
+        fun <T : Temporal> of(from: T, duration: Duration): Interval<T> = Interval(from, (from + duration) as T)
+
     }
 
 }

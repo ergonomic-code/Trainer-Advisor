@@ -1,6 +1,9 @@
 package pro.qyoga.app.therapist.appointments.core.schedule
 
 import org.springframework.web.servlet.ModelAndView
+import pro.qyoga.app.therapist.appointments.core.edit.CreateAppointmentPageController
+import pro.qyoga.app.therapist.appointments.core.edit.EditAppointmentPageController
+import pro.qyoga.app.therapist.appointments.core.edit.view_model.SourceItem
 import pro.qyoga.app.therapist.appointments.core.schedule.AppointmentCard.CssClasses.CLIENT_CAME_CARD
 import pro.qyoga.app.therapist.appointments.core.schedule.AppointmentCard.CssClasses.CLIENT_DO_NOT_CAME_CARD
 import pro.qyoga.app.therapist.appointments.core.schedule.AppointmentCard.CssClasses.DRAFT_CARD
@@ -11,7 +14,8 @@ import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel.Comp
 import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel.Companion.DEFAULT_START_HOUR
 import pro.qyoga.core.appointments.core.model.AppointmentStatus
 import pro.qyoga.core.appointments.core.views.LocalizedAppointmentSummary
-import pro.qyoga.core.calendar.api.LocalCalendarItem
+import pro.qyoga.core.calendar.api.CalendarItem
+import pro.qyoga.core.calendar.ical.model.ICalEventId
 import pro.qyoga.l10n.russianDayOfMonthLongFormat
 import pro.qyoga.l10n.russianTimeFormat
 import pro.qyoga.l10n.systemLocale
@@ -53,7 +57,7 @@ data class CalendarPageModel(
 
         fun of(
             date: LocalDate,
-            appointments: Iterable<LocalCalendarItem<*>>,
+            appointments: Iterable<CalendarItem<*, LocalDateTime>>,
             appointmentToFocus: UUID? = null
         ): CalendarPageModel {
             val timeMarks = generateTimeMarks(appointments, date)
@@ -73,7 +77,7 @@ data class CalendarPageModel(
 }
 
 private fun generateTimeMarks(
-    appointments: Iterable<LocalCalendarItem<*>>,
+    appointments: Iterable<CalendarItem<*, LocalDateTime>>,
     date: LocalDate
 ): List<TimeMark> {
     val days = generateSequence(date.minusDays(DAYS_IN_CALENDAR / 2L)) { it.plusDays(DAYS_IN_CALENDAR / 2L) }
@@ -104,7 +108,7 @@ private fun generateTimeMarks(
 }
 
 private fun determineTimeBoundaries(
-    appointments: Iterable<LocalCalendarItem<*>>,
+    appointments: Iterable<CalendarItem<*, LocalDateTime>>,
     daysRange: ClosedRange<LocalDate>
 ): Pair<Int, Int> {
     val minHour = (appointments.minOfOrNull {
@@ -121,17 +125,17 @@ private fun determineTimeBoundaries(
     return Pair(minHour, maxHour)
 }
 
-private fun LocalCalendarItem<*>.startsWithin(daysRange: ClosedRange<LocalDate>): Boolean =
+private fun CalendarItem<*, LocalDateTime>.startsWithin(daysRange: ClosedRange<LocalDate>): Boolean =
     this.dateTime.toLocalDate() in daysRange
 
-private fun LocalCalendarItem<*>.endsWithin(daysRange: ClosedRange<LocalDate>): Boolean =
+private fun CalendarItem<*, LocalDateTime>.endsWithin(daysRange: ClosedRange<LocalDate>): Boolean =
     this.endDateTime.toLocalDate() in daysRange
 
-private fun LocalCalendarItem<*>.shouldHasCardInCell(wallClockDateTime: LocalDateTime, span: Duration) =
+private fun CalendarItem<*, LocalDateTime>.shouldHasCardInCell(wallClockDateTime: LocalDateTime, span: Duration) =
     (this.dateTime >= wallClockDateTime && this.dateTime < wallClockDateTime + span) ||
             (wallClockDateTime.toLocalTime() == LocalTime.MIDNIGHT && this.spansMidnight && this.endDateTime.toLocalDate() == wallClockDateTime.toLocalDate())
 
-private val LocalCalendarItem<*>.spansMidnight
+private val CalendarItem<*, LocalDateTime>.spansMidnight
     get() = this.dateTime.toLocalTime().isAfter(this.endDateTime.toLocalTime())
 
 private fun generateDaysAround(date: LocalDate) =
@@ -170,24 +174,30 @@ data class AppointmentCard(
     val statusClass: String,
     val timeMarkOffsetPercent: Double,
     val timeMarkLengthPercent: Double,
+    val editUri: String
 ) {
 
     constructor(
-        app: LocalCalendarItem<*>,
+        app: CalendarItem<*, LocalDateTime>,
         day: LocalDate,
     ) : this(
         app.id as Any,
-        app.dateTime.format(russianTimeFormat) + " - " + app.endDateTime.format(russianTimeFormat),
+        formatPeriod(app),
         app.title,
         app.description,
         getCssClass(app),
         timeMarkOffsetPercent(app, day),
-        timeMarkLengthPercent(app, day)
+        timeMarkLengthPercent(app, day),
+        app.editUri()
     )
+
 
     companion object {
 
-        fun getCssClass(item: LocalCalendarItem<*>) = when (item) {
+        fun formatPeriod(app: CalendarItem<*, LocalDateTime>): String =
+            app.dateTime.format(russianTimeFormat) + " - " + app.endDateTime.format(russianTimeFormat)
+
+        fun getCssClass(item: CalendarItem<*, LocalDateTime>) = when (item) {
             is LocalizedAppointmentSummary -> appointmentStatusClasses[item.status]!!
             else -> DRAFT_CARD
         }
@@ -209,16 +219,16 @@ data class AppointmentCard(
 
 }
 
-private fun timeMarkOffsetPercent(app: LocalCalendarItem<*>, day: LocalDate) =
+private fun timeMarkOffsetPercent(app: CalendarItem<*, LocalDateTime>, day: LocalDate) =
     if (app.dateTime.dayOfMonth == day.dayOfMonth)
         (app.dateTime.minute % 15) / TimeMark.length.toMinutes().toDouble()
     else
         0.0
 
-private fun timeMarkLengthPercent(app: LocalCalendarItem<*>, day: LocalDate) =
+private fun timeMarkLengthPercent(app: CalendarItem<*, LocalDateTime>, day: LocalDate) =
     app.durationAtDay(day).toMinutes() / TimeMark.length.toMinutes().toDouble()
 
-private fun LocalCalendarItem<*>.durationAtDay(day: LocalDate) =
+private fun CalendarItem<*, LocalDateTime>.durationAtDay(day: LocalDate) =
     when {
         this.dateTime.dayOfMonth == this.endDateTime.dayOfMonth ->
             duration
@@ -248,3 +258,13 @@ data class CalendarDay(
     )
 }
 
+private fun CalendarItem<*, LocalDateTime>.editUri() =
+    when (id) {
+        is UUID -> EditAppointmentPageController.editUri(id as UUID)
+        is ICalEventId -> CreateAppointmentPageController.addFromSourceItemUri(
+            dateTime,
+            SourceItem.icsEvent(id as ICalEventId)
+        )
+
+        else -> error("Unsupported type: $id")
+    }

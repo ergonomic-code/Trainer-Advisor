@@ -123,6 +123,8 @@ object AppointmentsObjectMother {
     fun aAppointmentId(): AppointmentRef =
         AppointmentRef(UUIDv7.randomUUID())
 
+    // Минимальная длина приёма для того, чтобы высота его карточки вмещала все части описания - название, период, описание
+    val fullCardDuration = Duration.ofHours(1)
 }
 
 fun randomAppointmentDate(): LocalDateTime =

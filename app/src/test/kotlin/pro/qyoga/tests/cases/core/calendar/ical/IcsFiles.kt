@@ -110,6 +110,7 @@ object MovedRecurringEvent {
         TRANSP:OPAQUE
         END:VEVENT
         END:VCALENDAR
-    """.trimIndent().replace("\n", "\r\n")
+    """.trimIndent()
+        .replace("\n", "\r\n")
 
 }

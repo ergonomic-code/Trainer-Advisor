@@ -24,6 +24,7 @@ fun Appointment.patchBy(
         editAppointmentRequest.payed ?: false,
         editAppointmentRequest.appointmentStatus,
         editAppointmentRequest.comment,
+        editAppointmentRequest.externalId,
         id,
         createdAt,
         modifiedAt,

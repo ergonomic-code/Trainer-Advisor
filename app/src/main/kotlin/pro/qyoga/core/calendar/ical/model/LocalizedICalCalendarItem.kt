@@ -1,6 +1,6 @@
 package pro.qyoga.core.calendar.ical.model
 
-import pro.qyoga.core.calendar.api.LocalCalendarItem
+import pro.qyoga.core.calendar.api.CalendarItem
 import java.time.Duration
 import java.time.LocalDateTime
 
@@ -11,4 +11,5 @@ data class LocalizedICalCalendarItem(
     override val description: String,
     override val dateTime: LocalDateTime,
     override val duration: Duration,
-) : LocalCalendarItem<ICalEventId>
+    override val location: String?
+) : CalendarItem<ICalEventId, LocalDateTime>

@@ -92,6 +92,8 @@ class EditAppointmentPageController(
         const val PATH = "/therapist/appointments/{appointmentId}"
         const val RETURN_TO = "returnTo"
         const val DELETE_PATH = "$PATH?$RETURN_TO={$RETURN_TO}"
+
+        fun editUri(appointmentId: UUID) = PATH.replace("{appointmentId}", appointmentId.toString())
     }
 
 }

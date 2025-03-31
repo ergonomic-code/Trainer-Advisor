@@ -15,12 +15,13 @@ import pro.azhidkov.platform.spring.sdj.converters.PGIntervalToDurationConverter
 import pro.azhidkov.platform.spring.sdj.ergo.ErgoRepository
 import pro.qyoga.core.appointments.core.model.Appointment
 import pro.qyoga.core.appointments.core.views.LocalizedAppointmentSummary
+import pro.qyoga.core.calendar.api.CalendarItem
 import pro.qyoga.core.calendar.api.CalendarsService
-import pro.qyoga.core.calendar.api.LocalCalendarItem
 import pro.qyoga.core.users.therapists.TherapistRef
 import java.sql.Timestamp
 import java.time.Duration
 import java.time.Instant
+import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.util.*
 
@@ -41,7 +42,7 @@ class AppointmentsRepo(
     override fun findCalendarItemsInInterval(
         therapist: TherapistRef,
         interval: Interval<ZonedDateTime>,
-    ): Iterable<LocalCalendarItem<*>> {
+    ): Iterable<CalendarItem<*, LocalDateTime>> {
         @Language("PostgreSQL") val query = """
         WITH localized_appointment_summary AS
          (SELECT  

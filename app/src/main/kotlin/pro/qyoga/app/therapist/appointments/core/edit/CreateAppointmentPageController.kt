@@ -79,7 +79,15 @@ class CreateAppointmentPageController(
         const val DATE_TIME = "dateTime"
         const val SOURCE_ITEM_TYPE = "sourceItemType"
         const val SOURCE_ITEM_ID = "sourceItemId"
-        const val ADD_TO_DATE_TIME_PATH = "/therapist/appointments/new?$DATE_TIME={$DATE_TIME}"
+        const val CREATE_AT_DATE_TIME_URI = "/therapist/appointments/new?$DATE_TIME={$DATE_TIME}"
+        private const val CREATE_FROM_SOURCE_ITEM_URI =
+            "/therapist/appointments/new?$DATE_TIME={$DATE_TIME}&$SOURCE_ITEM_TYPE={$SOURCE_ITEM_TYPE}&$SOURCE_ITEM_ID={$SOURCE_ITEM_ID}"
+
+        fun addFromSourceItemUri(dateTime: LocalDateTime, sourceItem: SourceItem): String =
+            CREATE_FROM_SOURCE_ITEM_URI
+                .replace("{$DATE_TIME}", dateTime.toString())
+                .replace("{$SOURCE_ITEM_TYPE}", sourceItem.type)
+                .replace("{$SOURCE_ITEM_ID}", sourceItem.id)
     }
 
 }

@@ -3,15 +3,12 @@ package pro.qyoga.app.therapist.appointments.core.schedule
 import org.springframework.stereotype.Component
 import pro.azhidkov.platform.java.time.Interval
 import pro.qyoga.core.appointments.core.AppointmentsRepo
-import pro.qyoga.core.calendar.api.LocalCalendarItem
+import pro.qyoga.core.calendar.api.CalendarItem
 import pro.qyoga.core.calendar.ical.ICalCalendarsRepo
 import pro.qyoga.core.users.auth.model.UserRef
 import pro.qyoga.core.users.settings.UserSettingsRepo
 import pro.qyoga.core.users.therapists.TherapistRef
-import java.time.Duration
-import java.time.LocalDate
-import java.time.ZoneId
-import java.time.ZonedDateTime
+import java.time.*
 
 
 @Component
@@ -19,9 +16,9 @@ class GetCalendarAppointmentsOp(
     private val userSettingsRepo: UserSettingsRepo,
     private val appointmentsRepo: AppointmentsRepo,
     private val iCalCalendarsRepo: ICalCalendarsRepo
-) : (TherapistRef, LocalDate) -> Iterable<LocalCalendarItem<*>> {
+) : (TherapistRef, LocalDate) -> Iterable<CalendarItem<*, LocalDateTime>> {
 
-    override fun invoke(therapist: TherapistRef, date: LocalDate): Iterable<LocalCalendarItem<*>> {
+    override fun invoke(therapist: TherapistRef, date: LocalDate): Iterable<CalendarItem<*, LocalDateTime>> {
         val currentUserTimeZone = userSettingsRepo.getUserTimeZone(UserRef(therapist))
         val interval = calendarIntervalAround(date, currentUserTimeZone)
         val appointments = appointmentsRepo.findCalendarItemsInInterval(therapist, interval)

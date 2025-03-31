@@ -46,7 +46,7 @@ class ComboBox(baseName: String, override val required: Boolean, val items: List
     }
 
     override fun value(element: Element): String =
-        element.select("input[type=hidden]").`val`()
+        element.select("input[type=hidden][name=$name]").`val`()
 
     override fun selector(): String = "div.combo-box-div:has(input[name='${name}'])"
 

@@ -11,7 +11,7 @@
 
         <a class="link-dark text-decoration-none"
            hx-boost="true"
-           th:href="@{/therapist/appointments/{appointmentId}(appointmentId=${appointment.id})}"
+           th:href="${appointment.editUri}"
            th:id="|editAppointmentLink-${appointment.id}|"
         >
 

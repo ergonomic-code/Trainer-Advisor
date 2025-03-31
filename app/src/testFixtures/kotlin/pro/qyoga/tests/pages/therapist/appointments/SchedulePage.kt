@@ -9,12 +9,13 @@ import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
 import pro.qyoga.app.therapist.appointments.core.edit.CreateAppointmentPageController
+import pro.qyoga.app.therapist.appointments.core.edit.view_model.SourceItem
 import pro.qyoga.app.therapist.appointments.core.schedule.AppointmentCard
 import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
 import pro.qyoga.app.therapist.appointments.core.schedule.TimeMark
 import pro.qyoga.core.appointments.core.model.Appointment
-import pro.qyoga.core.calendar.ical.model.LocalizedICalCalendarItem
+import pro.qyoga.core.calendar.ical.model.ICalCalendarItem
 import pro.qyoga.l10n.russianTimeFormat
 import pro.qyoga.tests.assertions.*
 import pro.qyoga.tests.pages.therapist.appointments.CalendarPage.APPOINTMENT_CARD_SELECTOR
@@ -33,7 +34,7 @@ object CalendarPage : HtmlPage {
         override val vars: List<Variable> = listOf(appToFocus)
     }
 
-    val addAppointmentLink = Link("addAppointmentLink-", CreateAppointmentPageController.ADD_TO_DATE_TIME_PATH, "")
+    val addAppointmentLink = Link("addAppointmentLink-", CreateAppointmentPageController.CREATE_AT_DATE_TIME_URI, "")
 
     const val APPOINTMENT_CARD_SELECTOR = ".appointment-card"
 
@@ -74,10 +75,13 @@ infix fun Elements.shouldMatch(appointments: Iterable<Appointment>) {
     }
 }
 
-infix fun Element.shouldMatch(localizedICalCalendarItem: LocalizedICalCalendarItem) {
+infix fun Element.shouldMatch(localizedICalCalendarItem: ICalCalendarItem) {
     this shouldHaveComponent Link(
         "editAppointmentLink",
-        EditAppointmentPage,
+        CreateAppointmentPageController.addFromSourceItemUri(
+            localizedICalCalendarItem.dateTime.toLocalDateTime(),
+            SourceItem.icsEvent(localizedICalCalendarItem.id)
+        ),
         localizedICalCalendarItem.title + " " +
                 russianTimeFormat.format(localizedICalCalendarItem.dateTime) + " - " + russianTimeFormat.format(
             localizedICalCalendarItem.endDateTime

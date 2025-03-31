@@ -35,6 +35,7 @@ data class Appointment(
     val payed: Boolean,
     val status: AppointmentStatus,
     val comment: String?,
+    val externalId: String?,
 
     @Id
     override val id: UUID = UUIDv7.randomUUID(),
@@ -69,6 +70,7 @@ data class Appointment(
         editAppointmentRequest.payed ?: false,
         editAppointmentRequest.appointmentStatus,
         editAppointmentRequest.comment,
+        editAppointmentRequest.externalId
     )
 
     init {
