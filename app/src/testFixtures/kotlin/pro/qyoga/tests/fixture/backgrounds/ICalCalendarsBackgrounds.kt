@@ -29,4 +29,12 @@ class ICalCalendarsBackgrounds(
         return icalCalendarsRepo.addICal(CreateICalRq(ical.ownerRef, ical.icsUrl, ical.name))
     }
 
+    fun updateICalSource(icsUrl: URL, icsFile: String) {
+        WireMock.wiremock.get {
+            urlEqualTo(icsUrl.toString())
+        } returns {
+            body = icsFile
+        }
+    }
+
 }

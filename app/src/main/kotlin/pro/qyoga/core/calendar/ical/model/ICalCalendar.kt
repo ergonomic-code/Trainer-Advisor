@@ -41,6 +41,9 @@ data class ICalCalendar(
         parseIcs(icsFile)
     }
 
+    fun withIcsFile(icsFile: String) =
+        copy(icsFile = icsFile)
+
     companion object {
         const val TYPE = "ICAL"
     }

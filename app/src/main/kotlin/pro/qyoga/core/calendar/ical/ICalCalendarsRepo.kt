@@ -1,5 +1,7 @@
 package pro.qyoga.core.calendar.ical
 
+import org.slf4j.LoggerFactory
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import pro.azhidkov.platform.java.time.Interval
 import pro.qyoga.core.calendar.api.CalendarItem
@@ -19,6 +21,8 @@ import java.time.ZonedDateTime
 class ICalCalendarsRepo(
     private val iCalCalendarsDao: ICalCalendarsDao
 ) : CalendarsService {
+
+    private val log = LoggerFactory.getLogger(javaClass)
 
     fun addICal(createICalRq: CreateICalRq): ICalCalendar {
         val icsData = createICalRq.icsUrl.readText()
@@ -43,6 +47,15 @@ class ICalCalendarsRepo(
             .mapNotNull { it.findById(icsEventId) }
             .firstOrNull()
             ?.toICalCalendarItem()
+    }
+
+
+    @Scheduled(cron = "0 */10 * * * *")
+    fun sync() {
+        log.info("Syncing calendars")
+        iCalCalendarsDao.forAll {
+            Sync.syncCalendar(iCalCalendarsDao, it)
+        }
     }
 
 }
