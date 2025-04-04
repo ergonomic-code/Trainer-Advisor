@@ -11,7 +11,7 @@
 
         <a class="link-dark text-decoration-none"
            hx-boost="true"
-           th:href="@{/therapist/appointments/{appointmentId}(appointmentId=${appointment.id})}"
+           th:href="${appointment.editUri}"
            th:id="|editAppointmentLink-${appointment.id}|"
         >
 
@@ -19,11 +19,12 @@
                  th:style="${'height: ' + (T(java.lang.Math).max(3 * appointment.timeMarkLengthPercent - 0.25, 0.0)) + 'rem; max-height: ' + (3 * appointment.timeMarkLengthPercent) + 'rem; '} "
             >
                 <small>
-                    <span th:if="${appointment.timeMarkLengthPercent > 0.6}" th:text=" ${appointment.client}"></span>
+                    <span th:if="${appointment.timeMarkLengthPercent > 0.6}" th:text=" ${appointment.title}"></span>
                     <br/>
                     <span th:if="${appointment.timeMarkLengthPercent > 1.1}" th:text="${appointment.period}"></span>
                     <br/>
-                    <span th:if="${appointment.timeMarkLengthPercent > 1.6}" th:text="${appointment.type}"></span>
+                    <span th:if="${appointment.timeMarkLengthPercent > 1.6}"
+                          th:text="${appointment.description}"></span>
                 </small>
             </div>
         </a>

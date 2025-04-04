@@ -1,25 +1,38 @@
 package pro.qyoga.tests.cases.app.therapist.appointments.core
 
 import io.kotest.matchers.shouldBe
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
+import pro.azhidkov.platform.java.time.toLocalTimeString
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
+import pro.qyoga.app.therapist.appointments.core.edit.view_model.SourceItem
+import pro.qyoga.app.therapist.appointments.core.edit.view_model.toQueryParamStr
+import pro.qyoga.core.calendar.ical.model.ICalCalendarItem
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.assertions.shouldHaveElement
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
+import pro.qyoga.tests.fixture.data.asiaNovosibirskTimeZone
+import pro.qyoga.tests.fixture.data.randomSentence
 import pro.qyoga.tests.fixture.data.randomWorkingTime
 import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentsObjectMother
+import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentsObjectMother.randomFullEditAppointmentRequest
+import pro.qyoga.tests.fixture.object_mothers.appointments.randomAppointmentDate
+import pro.qyoga.tests.fixture.object_mothers.calendars.CalendarsObjectMother.aCalendarItem
+import pro.qyoga.tests.fixture.presets.CalendarsFixturePresets
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentForm
 import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentPage
 import pro.qyoga.tests.pages.therapist.appointments.EditAppointmentForm
+import pro.qyoga.tests.platform.instancio.KSelect.Companion.field
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
 import java.time.temporal.ChronoUnit
+import java.util.*
 
 private val aDate = LocalDate.now()
 private val aTime = LocalTime.now()
@@ -27,36 +40,39 @@ private val aTime = LocalTime.now()
     .plusHours(3)
 
 
+@DisplayName("Страница создания приёма")
 class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
+    private val calendarsFixturePresets = getBean<CalendarsFixturePresets>()
+
     @Test
-    fun `Create appointment page should be rendered correctly`() {
-        // Given
+    fun `должна рендерится корректно`() {
+        // Сетап
         val therapist = TherapistClient.loginAsTheTherapist()
 
-        // When
+        // Действие
         val document = therapist.appointments.getCreateAppointmentPage()
 
-        // Then
+        // Проверка
         document shouldBePage CreateAppointmentPage
     }
 
     @Test
-    fun `Create appointment page should prefill date and time, if provided`() {
-        // Given
+    fun `должна предзаполнять поля даты и времени, если они были переданы в запросе`() {
+        // Сетап
         val aDateTime = LocalDate.now().atTime(randomWorkingTime())
         val therapist = TherapistClient.loginAsTheTherapist()
 
-        // When
+        // Действие
         val document = therapist.appointments.getCreateAppointmentPage(aDateTime)
 
-        // Then
+        // Проверка
         CreateAppointmentForm.dateTime.value(document) shouldBe aDateTime.toString()
     }
 
     @Test
-    fun `Creation of appointment with required-only fields should be persistent`() {
-        // Given
+    fun `должна сохранять приём только с обязательными полями`() {
+        // Сетап
         val client = backgrounds.clients.createClients(1).single()
         val therapeuticTask = backgrounds.therapeuticTasks.createTherapeuticTask()
         val editAppointmentRequest = AppointmentsObjectMother.randomEditAppointmentRequest(
@@ -66,10 +82,10 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
         val therapist = TherapistClient.loginAsTheTherapist()
 
-        // When
+        // Действие
         val response = therapist.appointments.createAppointment(editAppointmentRequest)
 
-        // Then
+        // Проверка
         response.statusCode() shouldBe HttpStatus.OK.value()
 
         val storedAppointment =
@@ -78,31 +94,35 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
     }
 
     @Test
-    fun `Creation of appointment with all fields should be persistent`() {
-        // Given
+    fun `должна сохранять приём со всеми полями`() {
+        // Сетап
         val client = backgrounds.clients.createClients(1).single()
         val therapeuticTask = backgrounds.therapeuticTasks.createTherapeuticTask()
-        val editAppointmentRequest = AppointmentsObjectMother.randomFullEditAppointmentRequest(
+        val editAppointmentRequest = randomFullEditAppointmentRequest(
             client = client.ref(),
             therapeuticTask = therapeuticTask.ref()
         )
 
         val therapist = TherapistClient.loginAsTheTherapist()
 
-        // When
+        // Действие
         val response = therapist.appointments.createAppointment(editAppointmentRequest)
 
-        // Then
+        // Проверка
         response.statusCode() shouldBe HttpStatus.OK.value()
 
-        val storedAppointment =
-            backgrounds.appointments.getDaySchedule(editAppointmentRequest.dateTime.toLocalDate()).single()
+        val storedAppointment = backgrounds.appointments
+            .getDaySchedule(editAppointmentRequest.dateTime.toLocalDate())
+            .single()
         storedAppointment.shouldMatch(editAppointmentRequest)
+
+        val createAppointment = backgrounds.appointments.findById(storedAppointment.id as UUID)!!
+        createAppointment.externalId shouldBe editAppointmentRequest.externalId
     }
 
     @Test
-    fun `Creation of appointment that intersects with existing should fail with validation error`() {
-        // Given
+    fun `должна возвращять ошибку при попытке создать приём пересекающийся с существующим`() {
+        // Сетап
         val appointmentsDate = aDate
         val appointmentsBaseTime = aTime
         val zoneId = ZoneId.of("Asia/Novosibirsk")
@@ -121,13 +141,38 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
         val therapist = TherapistClient.loginAsTheTherapist()
 
-        // When
+        // Действие
         val document = therapist.appointments.createAppointmentForError(newAppointmentRequest)
 
-        // Then
+        // Проверка
         document shouldBePage CreateAppointmentPage
         document shouldHave EditAppointmentForm.formPrefilledWith(newAppointmentRequest)
         document shouldHaveElement CreateAppointmentForm.appointmentsIntersectionErrorMessage
+    }
+
+    @Test
+    @DisplayName("должна предзаполнять дату, время, длительность и идентификатор события источника данными из события ics-календаря, если его ид был передан в запросе") // длина имени файла с лямбдой превышает ограничение Линукса
+    fun createAppointmentWithIcsEventId() {
+        // Сетап
+        val event = aCalendarItem {
+            set(field(ICalCalendarItem::dateTime), randomAppointmentDate().atZone(asiaNovosibirskTimeZone))
+            set(field(ICalCalendarItem::duration), Duration.ofMinutes(75))
+            set(field(ICalCalendarItem::description), randomSentence())
+        }
+        calendarsFixturePresets.createICalCalendarWithSingleEvent(event)
+
+        // Действие
+        val document = theTherapist.appointments.getCreateAppointmentPage(
+            dateTime = event.dateTime.toLocalDateTime(),
+            sourceItem = SourceItem.icsEvent(event.id)
+        )
+
+        // Проверка
+        CreateAppointmentForm.externalIdInput.value(document) shouldBe event.id.toQueryParamStr()
+        CreateAppointmentForm.dateTime.value(document) shouldBe event.dateTime.toLocalDateTime().toString()
+        CreateAppointmentForm.timeZone.value(document) shouldBe event.dateTime.zone.id
+        CreateAppointmentForm.duration.value(document) shouldBe event.duration.toLocalTimeString()
+        CreateAppointmentForm.comment.value(document) shouldBe event.description
     }
 
 }

@@ -12,8 +12,15 @@ import pro.qyoga.app.platform.EntityPageMode
 import pro.qyoga.app.platform.notFound
 import pro.qyoga.app.platform.seeOther
 import pro.qyoga.app.publc.components.toComboBoxItem
+import pro.qyoga.app.therapist.appointments.core.edit.errors.AppointmentsIntersectionException
+import pro.qyoga.app.therapist.appointments.core.edit.ops.UpdateAppointmentOp
+import pro.qyoga.app.therapist.appointments.core.edit.view_model.appointmentPageModelAndView
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
-import pro.qyoga.core.appointments.core.*
+import pro.qyoga.core.appointments.core.AppointmentsRepo
+import pro.qyoga.core.appointments.core.commands.EditAppointmentRequest
+import pro.qyoga.core.appointments.core.model.Appointment
+import pro.qyoga.core.appointments.core.model.AppointmentRef
+import pro.qyoga.core.appointments.core.toEditRequest
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.ref
 import java.time.LocalDate
@@ -35,11 +42,12 @@ class EditAppointmentPageController(
 
         return appointmentPageModelAndView(
             pageMode = EntityPageMode.EDIT,
-            allAvailableTimeZones = timeZones.allTimeZones.map(LocalizedTimeZone::toComboBoxItem)
-        ) {
-            "appointmentId" bindTo appointmentId
-            "appointment" bindTo appointment.toEditRequest(timeZones::findById)
-        }
+            allAvailableTimeZones = timeZones.allTimeZones.map(LocalizedTimeZone::toComboBoxItem),
+            additionalModel = mapOf(
+                "appointmentId" to appointmentId,
+                "appointment" to appointment.toEditRequest(timeZones::findById),
+            )
+        )
     }
 
     @PutMapping
@@ -61,12 +69,13 @@ class EditAppointmentPageController(
         } catch (ex: AppointmentsIntersectionException) {
             appointmentPageModelAndView(
                 pageMode = EntityPageMode.EDIT,
-                allAvailableTimeZones = timeZones.allTimeZones.map(LocalizedTimeZone::toComboBoxItem)
-            ) {
-                "appointment" bindTo editAppointmentRequest
-                "appointmentsIntersectionError" bindTo true
-                "existingAppointment" bindTo ex.existingAppointment
-            }
+                allAvailableTimeZones = timeZones.allTimeZones.map(LocalizedTimeZone::toComboBoxItem),
+                additionalModel = mapOf(
+                    "appointment" to editAppointmentRequest,
+                    "appointmentsIntersectionError" to true,
+                    "existingAppointment" to ex.existingAppointment
+                )
+            )
         }
     }
 
@@ -83,6 +92,8 @@ class EditAppointmentPageController(
         const val PATH = "/therapist/appointments/{appointmentId}"
         const val RETURN_TO = "returnTo"
         const val DELETE_PATH = "$PATH?$RETURN_TO={$RETURN_TO}"
+
+        fun editUri(appointmentId: UUID) = PATH.replace("{appointmentId}", appointmentId.toString())
     }
 
 }

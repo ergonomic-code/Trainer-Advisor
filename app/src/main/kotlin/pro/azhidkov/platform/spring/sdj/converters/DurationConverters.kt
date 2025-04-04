@@ -1,4 +1,4 @@
-package pro.azhidkov.platform.spring.sdj
+package pro.azhidkov.platform.spring.sdj.converters
 
 import org.postgresql.util.PGInterval
 import org.springframework.core.convert.converter.Converter

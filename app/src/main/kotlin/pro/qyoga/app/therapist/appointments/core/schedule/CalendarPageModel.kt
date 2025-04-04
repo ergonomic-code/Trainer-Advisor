@@ -1,12 +1,21 @@
 package pro.qyoga.app.therapist.appointments.core.schedule
 
 import org.springframework.web.servlet.ModelAndView
+import pro.qyoga.app.therapist.appointments.core.edit.CreateAppointmentPageController
+import pro.qyoga.app.therapist.appointments.core.edit.EditAppointmentPageController
+import pro.qyoga.app.therapist.appointments.core.edit.view_model.SourceItem
+import pro.qyoga.app.therapist.appointments.core.schedule.AppointmentCard.CssClasses.CLIENT_CAME_CARD
+import pro.qyoga.app.therapist.appointments.core.schedule.AppointmentCard.CssClasses.CLIENT_DO_NOT_CAME_CARD
+import pro.qyoga.app.therapist.appointments.core.schedule.AppointmentCard.CssClasses.DRAFT_CARD
+import pro.qyoga.app.therapist.appointments.core.schedule.AppointmentCard.CssClasses.PENDING_CARD
 import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel.Companion.DAYS_IN_CALENDAR
 import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel.Companion.DAYS_IN_WEEK
 import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel.Companion.DEFAULT_END_HOUR
 import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel.Companion.DEFAULT_START_HOUR
-import pro.qyoga.core.appointments.core.AppointmentStatus
-import pro.qyoga.core.appointments.core.LocalizedAppointmentSummary
+import pro.qyoga.core.appointments.core.model.AppointmentStatus
+import pro.qyoga.core.appointments.core.views.LocalizedAppointmentSummary
+import pro.qyoga.core.calendar.api.CalendarItem
+import pro.qyoga.core.calendar.ical.model.ICalEventId
 import pro.qyoga.l10n.russianDayOfMonthLongFormat
 import pro.qyoga.l10n.russianTimeFormat
 import pro.qyoga.l10n.systemLocale
@@ -48,7 +57,7 @@ data class CalendarPageModel(
 
         fun of(
             date: LocalDate,
-            appointments: Iterable<LocalizedAppointmentSummary>,
+            appointments: Iterable<CalendarItem<*, LocalDateTime>>,
             appointmentToFocus: UUID? = null
         ): CalendarPageModel {
             val timeMarks = generateTimeMarks(appointments, date)
@@ -68,7 +77,7 @@ data class CalendarPageModel(
 }
 
 private fun generateTimeMarks(
-    appointments: Iterable<LocalizedAppointmentSummary>,
+    appointments: Iterable<CalendarItem<*, LocalDateTime>>,
     date: LocalDate
 ): List<TimeMark> {
     val days = generateSequence(date.minusDays(DAYS_IN_CALENDAR / 2L)) { it.plusDays(DAYS_IN_CALENDAR / 2L) }
@@ -99,7 +108,7 @@ private fun generateTimeMarks(
 }
 
 private fun determineTimeBoundaries(
-    appointments: Iterable<LocalizedAppointmentSummary>,
+    appointments: Iterable<CalendarItem<*, LocalDateTime>>,
     daysRange: ClosedRange<LocalDate>
 ): Pair<Int, Int> {
     val minHour = (appointments.minOfOrNull {
@@ -116,17 +125,17 @@ private fun determineTimeBoundaries(
     return Pair(minHour, maxHour)
 }
 
-private fun LocalizedAppointmentSummary.startsWithin(daysRange: ClosedRange<LocalDate>): Boolean =
+private fun CalendarItem<*, LocalDateTime>.startsWithin(daysRange: ClosedRange<LocalDate>): Boolean =
     this.dateTime.toLocalDate() in daysRange
 
-private fun LocalizedAppointmentSummary.endsWithin(daysRange: ClosedRange<LocalDate>): Boolean =
+private fun CalendarItem<*, LocalDateTime>.endsWithin(daysRange: ClosedRange<LocalDate>): Boolean =
     this.endDateTime.toLocalDate() in daysRange
 
-private fun LocalizedAppointmentSummary.shouldHasCardInCell(wallClockDateTime: LocalDateTime, span: Duration) =
+private fun CalendarItem<*, LocalDateTime>.shouldHasCardInCell(wallClockDateTime: LocalDateTime, span: Duration) =
     (this.dateTime >= wallClockDateTime && this.dateTime < wallClockDateTime + span) ||
             (wallClockDateTime.toLocalTime() == LocalTime.MIDNIGHT && this.spansMidnight && this.endDateTime.toLocalDate() == wallClockDateTime.toLocalDate())
 
-private val LocalizedAppointmentSummary.spansMidnight
+private val CalendarItem<*, LocalDateTime>.spansMidnight
     get() = this.dateTime.toLocalTime().isAfter(this.endDateTime.toLocalTime())
 
 private fun generateDaysAround(date: LocalDate) =
@@ -158,49 +167,68 @@ data class TimeMark(
  * Высота карточки определяется как процент от высоты строки календаря.
  */
 data class AppointmentCard(
-    val id: UUID,
+    val id: Any,
     val period: String,
-    val client: String,
-    val type: String,
+    val title: String,
+    val description: String,
     val statusClass: String,
     val timeMarkOffsetPercent: Double,
     val timeMarkLengthPercent: Double,
+    val editUri: String
 ) {
 
     constructor(
-        app: LocalizedAppointmentSummary,
+        app: CalendarItem<*, LocalDateTime>,
         day: LocalDate,
     ) : this(
-        app.id,
-        app.dateTime.format(russianTimeFormat) + " - " + app.endDateTime.format(russianTimeFormat),
-        app.clientName,
-        app.typeName,
-        appointmentStatusClasses.getValue(app.status),
+        app.id as Any,
+        formatPeriod(app),
+        app.title,
+        app.description,
+        getCssClass(app),
         timeMarkOffsetPercent(app, day),
-        timeMarkLengthPercent(app, day)
+        timeMarkLengthPercent(app, day),
+        app.editUri()
     )
 
+
     companion object {
+
+        fun formatPeriod(app: CalendarItem<*, LocalDateTime>): String =
+            app.dateTime.format(russianTimeFormat) + " - " + app.endDateTime.format(russianTimeFormat)
+
+        fun getCssClass(item: CalendarItem<*, LocalDateTime>) = when (item) {
+            is LocalizedAppointmentSummary -> appointmentStatusClasses[item.status]!!
+            else -> DRAFT_CARD
+        }
+
         val appointmentStatusClasses = mapOf(
-            AppointmentStatus.PENDING to "pending",
-            AppointmentStatus.CLIENT_CAME to "client-came",
-            AppointmentStatus.CLIENT_DO_NOT_CAME to "client-do-not-came",
+            AppointmentStatus.PENDING to PENDING_CARD,
+            AppointmentStatus.CLIENT_CAME to CLIENT_CAME_CARD,
+            AppointmentStatus.CLIENT_DO_NOT_CAME to CLIENT_DO_NOT_CAME_CARD,
         )
 
     }
 
+    object CssClasses {
+        const val DRAFT_CARD = "draft"
+        const val PENDING_CARD = "pending"
+        const val CLIENT_CAME_CARD = "client-came"
+        const val CLIENT_DO_NOT_CAME_CARD = "client-do-not-came"
+    }
+
 }
 
-private fun timeMarkOffsetPercent(app: LocalizedAppointmentSummary, day: LocalDate) =
+private fun timeMarkOffsetPercent(app: CalendarItem<*, LocalDateTime>, day: LocalDate) =
     if (app.dateTime.dayOfMonth == day.dayOfMonth)
         (app.dateTime.minute % 15) / TimeMark.length.toMinutes().toDouble()
     else
         0.0
 
-private fun timeMarkLengthPercent(app: LocalizedAppointmentSummary, day: LocalDate) =
+private fun timeMarkLengthPercent(app: CalendarItem<*, LocalDateTime>, day: LocalDate) =
     app.durationAtDay(day).toMinutes() / TimeMark.length.toMinutes().toDouble()
 
-private fun LocalizedAppointmentSummary.durationAtDay(day: LocalDate) =
+private fun CalendarItem<*, LocalDateTime>.durationAtDay(day: LocalDate) =
     when {
         this.dateTime.dayOfMonth == this.endDateTime.dayOfMonth ->
             duration
@@ -230,3 +258,13 @@ data class CalendarDay(
     )
 }
 
+private fun CalendarItem<*, LocalDateTime>.editUri() =
+    when (id) {
+        is UUID -> EditAppointmentPageController.editUri(id as UUID)
+        is ICalEventId -> CreateAppointmentPageController.addFromSourceItemUri(
+            dateTime,
+            SourceItem.icsEvent(id as ICalEventId)
+        )
+
+        else -> error("Unsupported type: $id")
+    }

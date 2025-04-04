@@ -44,6 +44,7 @@ dependencyResolutionManagement {
             bundle("poi", listOf("poi-ooxml", "poi-ooxml-lite"))
 
             library("nanocaptcha", "net.logicsquad", "nanocaptcha").version("2.1")
+            library("ical4j", "org.mnode.ical4j", "ical4j").version("4.1.1")
         }
 
         create("testLibs") {
@@ -75,6 +76,11 @@ dependencyResolutionManagement {
 
             library("mockito-kotlin", "org.mockito.kotlin", "mockito-kotlin").version("5.4.0")
             library("archunit", "com.tngtech.archunit", "archunit").version("1.3.0")
+            library("instancio", "org.instancio", "instancio-junit").version("5.4.0")
+
+            library("wiremock", "org.wiremock", "wiremock").version("3.12.1")
+            library("wiremock-jetty12", "org.wiremock", "wiremock-jetty12").version("3.12.1")
+            library("wiremock-kotlin", "com.marcinziolo", "kotlin-wiremock").version("2.1.1")
         }
     }
 }

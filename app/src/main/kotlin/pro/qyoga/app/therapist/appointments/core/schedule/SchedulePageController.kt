@@ -5,8 +5,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.servlet.ModelAndView
-import pro.qyoga.core.appointments.core.AppointmentRef
+import pro.qyoga.core.appointments.core.model.AppointmentRef
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.ref
 import java.time.LocalDate
@@ -24,7 +23,7 @@ class SchedulePageController(
         @RequestParam(DATE) date: LocalDate = LocalDate.now(),
         @RequestParam(FOCUSED_APPOINTMENT) focusedAppointment: UUID? = null,
         @AuthenticationPrincipal therapist: QyogaUserDetails
-    ): ModelAndView {
+    ): CalendarPageModel {
         val appointments = getCalendarAppointments(therapist.ref, date)
         return CalendarPageModel.of(date, appointments, focusedAppointment)
     }

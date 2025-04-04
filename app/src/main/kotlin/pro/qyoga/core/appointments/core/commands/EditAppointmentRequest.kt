@@ -1,5 +1,6 @@
-package pro.qyoga.core.appointments.core
+package pro.qyoga.core.appointments.core.commands
 
+import pro.qyoga.core.appointments.core.model.AppointmentStatus
 import pro.qyoga.core.appointments.types.model.AppointmentTypeRef
 import pro.qyoga.core.clients.cards.model.ClientRef
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
@@ -10,6 +11,7 @@ import java.time.ZoneId
 
 data class EditAppointmentRequest(
 
+    val externalId: String?,
     val client: ClientRef,
     val clientTitle: String,
     val appointmentType: AppointmentTypeRef?,

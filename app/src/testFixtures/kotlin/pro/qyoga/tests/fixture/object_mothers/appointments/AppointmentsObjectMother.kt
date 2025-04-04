@@ -3,7 +3,11 @@ package pro.qyoga.tests.fixture.object_mothers.appointments
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrNull
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
 import pro.azhidkov.platform.uuid.UUIDv7
-import pro.qyoga.core.appointments.core.*
+import pro.qyoga.core.appointments.core.commands.EditAppointmentRequest
+import pro.qyoga.core.appointments.core.model.Appointment
+import pro.qyoga.core.appointments.core.model.AppointmentRef
+import pro.qyoga.core.appointments.core.model.AppointmentStatus
+import pro.qyoga.core.appointments.core.views.LocalizedAppointmentSummary
 import pro.qyoga.core.appointments.types.model.AppointmentTypeRef
 import pro.qyoga.core.clients.cards.model.ClientRef
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
@@ -19,7 +23,6 @@ object AppointmentsObjectMother {
     fun randomLocalizedAppointmentSummary(
         client: ClientRef = ClientsObjectMother.fakeClientRef,
         typeTitle: String = randomCyrillicWord(),
-        therapeuticTask: TherapeuticTaskRef? = null,
         dateTime: LocalDateTime = randomAppointmentDate(),
         duration: Duration = randomAppointmentDuration(),
         appointmentStatus: AppointmentStatus = AppointmentStatus.entries.randomElement(),
@@ -28,7 +31,6 @@ object AppointmentsObjectMother {
             aAppointmentId().id!!,
             client.resolveOrThrow().fullName(),
             typeTitle,
-            therapeuticTask?.resolveOrThrow()?.name,
             dateTime,
             duration,
             appointmentStatus
@@ -47,9 +49,11 @@ object AppointmentsObjectMother {
         cost: Int? = null,
         payed: Boolean? = null,
         appointmentStatus: AppointmentStatus = AppointmentStatus.entries.randomElement(),
-        comment: String? = null
+        comment: String? = null,
+        externalId: String? = null
     ): EditAppointmentRequest {
         return EditAppointmentRequest(
+            externalId,
             client,
             client.resolveOrNull()?.fullName() ?: randomCyrillicWord(),
             typeId,
@@ -98,6 +102,7 @@ object AppointmentsObjectMother {
         comment: String?
     ): EditAppointmentRequest =
         EditAppointmentRequest(
+            null,
             appointment.clientRef,
             appointment.clientRef.resolveOrNull()?.fullName() ?: "",
             appointmentType ?: appointment.typeRef,
@@ -118,6 +123,8 @@ object AppointmentsObjectMother {
     fun aAppointmentId(): AppointmentRef =
         AppointmentRef(UUIDv7.randomUUID())
 
+    // Минимальная длина приёма для того, чтобы высота его карточки вмещала все части описания - название, период, описание
+    val fullCardDuration = Duration.ofHours(1)
 }
 
 fun randomAppointmentDate(): LocalDateTime =

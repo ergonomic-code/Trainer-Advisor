@@ -10,12 +10,12 @@ import org.springframework.data.relational.core.conversion.DbActionExecutionExce
 import org.springframework.data.relational.core.mapping.RelationalMappingContext
 import org.springframework.data.relational.core.mapping.RelationalPersistentEntity
 import org.springframework.data.relational.core.query.Query
-import org.springframework.data.relational.core.sql.SqlIdentifier
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.jdbc.support.GeneratedKeyHolder
+import org.springframework.transaction.annotation.Propagation
 import org.springframework.transaction.annotation.Transactional
 import pro.azhidkov.platform.spring.jdbc.queryForPage
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.FetchSpec
@@ -28,6 +28,7 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KProperty1
 
 
+@Suppress("SqlSourceToSinkFlow")
 class ErgoRepository<T : Any, ID : Any>(
     private val jdbcAggregateTemplate: JdbcAggregateOperations,
     private val namedParameterJdbcOperations: NamedParameterJdbcOperations,
@@ -225,13 +226,20 @@ class ErgoRepository<T : Any, ID : Any>(
         return namedParameterJdbcOperations.query(query, paramMap, rowMapper)
     }
 
-    private fun getColumnNameToSortBy(order: Sort.Order): SqlIdentifier {
-        val propertyToSortBy = relationalPersistentEntity.getPersistentProperty(order.property)
-        if (propertyToSortBy != null) {
-            return propertyToSortBy.columnName
-        }
-
-        TODO("Implement embedded (?) property to column resolution")
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
+    fun forAll(
+        block: (T) -> Unit
+    ) {
+        val firstPage = PageRequest.of(
+            0,
+            1000,
+            Sort.by(relationalPersistentEntity.requiredIdProperty.columnName.reference)
+        )
+        generateSequence(firstPage) { it.next() }
+            .map { pageRequest -> findSlice(pageRequest) }
+            .onEach { slice -> slice.forEach(block) }
+            .takeWhile { it.hasNext() }
+            .lastOrNull()
     }
 
 }

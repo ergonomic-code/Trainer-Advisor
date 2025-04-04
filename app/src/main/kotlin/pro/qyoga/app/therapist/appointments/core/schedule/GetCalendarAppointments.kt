@@ -1,26 +1,37 @@
 package pro.qyoga.app.therapist.appointments.core.schedule
 
 import org.springframework.stereotype.Component
+import pro.azhidkov.platform.java.time.Interval
 import pro.qyoga.core.appointments.core.AppointmentsRepo
-import pro.qyoga.core.appointments.core.LocalizedAppointmentSummary
-import pro.qyoga.core.appointments.core.findAllByInterval
+import pro.qyoga.core.calendar.api.CalendarItem
+import pro.qyoga.core.calendar.ical.ICalCalendarsRepo
 import pro.qyoga.core.users.auth.model.UserRef
 import pro.qyoga.core.users.settings.UserSettingsRepo
 import pro.qyoga.core.users.therapists.TherapistRef
-import java.time.LocalDate
+import java.time.*
 
 
 @Component
 class GetCalendarAppointmentsOp(
     private val userSettingsRepo: UserSettingsRepo,
-    private val appointmentsRepo: AppointmentsRepo
-) : (TherapistRef, LocalDate) -> Iterable<LocalizedAppointmentSummary> {
+    private val appointmentsRepo: AppointmentsRepo,
+    private val iCalCalendarsRepo: ICalCalendarsRepo
+) : (TherapistRef, LocalDate) -> Iterable<CalendarItem<*, LocalDateTime>> {
 
-    override fun invoke(therapist: TherapistRef, date: LocalDate): Iterable<LocalizedAppointmentSummary> {
+    override fun invoke(therapist: TherapistRef, date: LocalDate): Iterable<CalendarItem<*, LocalDateTime>> {
         val currentUserTimeZone = userSettingsRepo.getUserTimeZone(UserRef(therapist))
-        val appointments =
-            appointmentsRepo.findAllByInterval(therapist, date.minusDays(1), date.plusDays(1), currentUserTimeZone)
-        return appointments
+        val interval = calendarIntervalAround(date, currentUserTimeZone)
+        val appointments = appointmentsRepo.findCalendarItemsInInterval(therapist, interval)
+        val drafts = iCalCalendarsRepo.findCalendarItemsInInterval(therapist, interval)
+        return appointments + drafts
     }
 
+}
+
+private fun calendarIntervalAround(
+    date: LocalDate,
+    currentUserTimeZone: ZoneId
+): Interval<ZonedDateTime> {
+    val from = date.minusDays((CalendarPageModel.DAYS_IN_CALENDAR / 2).toLong()).atStartOfDay(currentUserTimeZone)
+    return Interval.of(from, Duration.ofDays(CalendarPageModel.DAYS_IN_CALENDAR.toLong()))
 }

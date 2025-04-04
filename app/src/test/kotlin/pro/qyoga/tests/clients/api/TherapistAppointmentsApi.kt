@@ -14,10 +14,11 @@ import org.springframework.http.HttpStatus
 import pro.azhidkov.platform.java.time.toLocalTimeString
 import pro.qyoga.app.therapist.appointments.core.edit.CreateAppointmentPageController
 import pro.qyoga.app.therapist.appointments.core.edit.EditAppointmentPageController
+import pro.qyoga.app.therapist.appointments.core.edit.view_model.SourceItem
 import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
-import pro.qyoga.core.appointments.core.AppointmentRef
-import pro.qyoga.core.appointments.core.EditAppointmentRequest
+import pro.qyoga.core.appointments.core.commands.EditAppointmentRequest
+import pro.qyoga.core.appointments.core.model.AppointmentRef
 import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentPage
 import pro.qyoga.tests.pages.therapist.appointments.EditAppointmentPage
 import java.time.LocalDate
@@ -45,11 +46,18 @@ class TherapistAppointmentsApi(override val authCookie: Cookie) : AuthorizedApi 
         }
     }
 
-    fun getCreateAppointmentPage(dateTime: LocalDateTime? = null): Document {
+    fun getCreateAppointmentPage(
+        dateTime: LocalDateTime? = null,
+        sourceItem: SourceItem? = null
+    ): Document {
         return Given {
             authorized()
             if (dateTime != null) {
                 queryParam(CreateAppointmentPageController.DATE_TIME, dateTime.toString())
+            }
+            if (sourceItem != null) {
+                queryParam(CreateAppointmentPageController.SOURCE_ITEM_TYPE, sourceItem.type)
+                queryParam(CreateAppointmentPageController.SOURCE_ITEM_ID, sourceItem.id)
             }
             this
         } When {

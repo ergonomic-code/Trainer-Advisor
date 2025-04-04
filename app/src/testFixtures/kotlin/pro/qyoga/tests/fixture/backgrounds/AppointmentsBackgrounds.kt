@@ -3,11 +3,12 @@ package pro.qyoga.tests.fixture.backgrounds
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
-import pro.qyoga.app.therapist.appointments.core.edit.CreateAppointmentOp
+import pro.qyoga.app.therapist.appointments.core.edit.ops.CreateAppointmentOp
 import pro.qyoga.app.therapist.appointments.core.schedule.GetCalendarAppointmentsOp
-import pro.qyoga.core.appointments.core.Appointment
 import pro.qyoga.core.appointments.core.AppointmentsRepo
-import pro.qyoga.core.appointments.core.LocalizedAppointmentSummary
+import pro.qyoga.core.appointments.core.commands.EditAppointmentRequest
+import pro.qyoga.core.appointments.core.model.Appointment
+import pro.qyoga.core.calendar.api.CalendarItem
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.TherapistRef
@@ -46,7 +47,7 @@ class AppointmentsBackgrounds(
     fun getDaySchedule(
         date: LocalDate,
         therapistUserDetails: QyogaUserDetails = theTherapistUserDetails
-    ): Iterable<LocalizedAppointmentSummary> {
+    ): Iterable<CalendarItem<*, LocalDateTime>> {
         return getCalendarAppointments(therapistUserDetails.ref, date)
     }
 
@@ -96,6 +97,11 @@ class AppointmentsBackgrounds(
 
     fun findById(appointmentId: UUID): Appointment? {
         return appointmentsRepo.findByIdOrNull(appointmentId)
+    }
+
+    fun create(editAppointmentRequest: EditAppointmentRequest, therapist: TherapistRef): Appointment {
+        val appointment = createAppointment(therapist, editAppointmentRequest)
+        return appointment
     }
 
 }
