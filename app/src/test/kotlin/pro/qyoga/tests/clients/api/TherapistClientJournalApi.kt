@@ -84,6 +84,7 @@ class TherapistClientJournalApi(override val authCookie: Cookie) : AuthorizedApi
         clientId: UUID
     ) = Given {
         authorized()
+        formParam(CreateJournalEntryForm.version.name, journalEntry.version)
         formParam(CreateJournalEntryForm.dateInput.name, journalEntry.date.toString())
         formParam(
             CreateJournalEntryForm.therapeuticTaskNameInput.name,
@@ -127,6 +128,7 @@ class TherapistClientJournalApi(override val authCookie: Cookie) : AuthorizedApi
         journalEntry: EditJournalEntryRq,
     ) = Given {
         authorized()
+        formParam(CreateJournalEntryForm.version.name, journalEntry.version)
         formParam(CreateJournalEntryForm.dateInput.name, journalEntry.date.toString())
         formParam(
             CreateJournalEntryForm.therapeuticTaskNameInput.name,

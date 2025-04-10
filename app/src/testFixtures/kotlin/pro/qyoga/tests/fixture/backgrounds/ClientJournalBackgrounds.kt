@@ -10,7 +10,7 @@ import pro.qyoga.app.therapist.clients.journal.edit_entry.edit.EditJournalEntryO
 import pro.qyoga.core.clients.cards.model.ClientRef
 import pro.qyoga.core.clients.journals.JournalEntriesRepo
 import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRq
-import pro.qyoga.core.clients.journals.dtos.JournalPageRequest
+import pro.qyoga.core.clients.journals.dtos.JournalPageRq
 import pro.qyoga.core.clients.journals.model.JournalEntry
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.tests.fixture.data.randomRecentLocalDate
@@ -50,7 +50,7 @@ class ClientJournalBackgrounds(
 
     fun getWholeJournal(clientId: UUID): Page<JournalEntry> {
         return journalEntriesRepo.getJournalPage(
-            JournalPageRequest.wholeJournal(
+            JournalPageRq.wholeJournal(
                 clientId,
                 fetch = listOf(JournalEntry::therapeuticTask)
             )

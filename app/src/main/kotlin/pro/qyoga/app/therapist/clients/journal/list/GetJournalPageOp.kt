@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component
 import pro.qyoga.core.clients.cards.ClientsRepo
 import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.core.clients.journals.JournalEntriesRepo
-import pro.qyoga.core.clients.journals.dtos.JournalPageRequest
+import pro.qyoga.core.clients.journals.dtos.JournalPageRq
 import pro.qyoga.core.clients.journals.model.JournalEntry
 
 sealed interface GetJournalPageResult {
@@ -18,13 +18,13 @@ sealed interface GetJournalPageResult {
 class GetJournalPageOp(
     private val clientsRepo: ClientsRepo,
     private val journalEntriesRepo: JournalEntriesRepo
-) : (JournalPageRequest) -> GetJournalPageResult {
+) : (JournalPageRq) -> GetJournalPageResult {
 
-    override fun invoke(journalPageRequest: JournalPageRequest): GetJournalPageResult {
-        val client = clientsRepo.findByIdOrNull(journalPageRequest.clientId)
+    override fun invoke(journalPageRq: JournalPageRq): GetJournalPageResult {
+        val client = clientsRepo.findByIdOrNull(journalPageRq.clientId)
             ?: return GetJournalPageResult.ClientNotFound
 
-        val journal = journalEntriesRepo.getJournalPage(journalPageRequest)
+        val journal = journalEntriesRepo.getJournalPage(journalPageRq)
 
         return GetJournalPageResult.Success(client, journal)
     }

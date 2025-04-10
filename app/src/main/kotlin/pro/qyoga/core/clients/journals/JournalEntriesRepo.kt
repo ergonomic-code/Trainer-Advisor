@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 import pro.azhidkov.platform.spring.sdj.ergo.ErgoRepository
 import pro.azhidkov.platform.spring.sdj.sortBy
-import pro.qyoga.core.clients.journals.dtos.JournalPageRequest
+import pro.qyoga.core.clients.journals.dtos.JournalPageRq
 import pro.qyoga.core.clients.journals.errors.DuplicatedDate
 import pro.qyoga.core.clients.journals.model.JournalEntry
 import java.util.*
@@ -39,13 +39,13 @@ class JournalEntriesRepo(
         }
     }
 
-    fun getJournalPage(journalPageRequest: JournalPageRequest): Page<JournalEntry> {
+    fun getJournalPage(journalPageRq: JournalPageRq): Page<JournalEntry> {
         return findPage(
-            pageRequest = PageRequest.of(0, journalPageRequest.pageSize, sortBy(JournalEntry::date).descending()),
-            fetch = journalPageRequest.fetch,
+            pageRequest = PageRequest.of(0, journalPageRq.pageSize, sortBy(JournalEntry::date).descending()),
+            fetch = journalPageRq.fetch,
         ) {
-            JournalEntry::clientRef isEqual AggregateReference.to(journalPageRequest.clientId)
-            JournalEntry::date isLessThanIfNotNull journalPageRequest.date
+            JournalEntry::clientRef isEqual AggregateReference.to(journalPageRq.clientId)
+            JournalEntry::date isLessThanIfNotNull journalPageRq.date
         }
     }
 

@@ -6,7 +6,7 @@ import java.util.*
 import kotlin.reflect.KProperty1
 
 
-data class JournalPageRequest(
+data class JournalPageRq(
     val clientId: UUID,
     val date: LocalDate? = null,
     val pageSize: Int = 10,
@@ -16,10 +16,10 @@ data class JournalPageRequest(
     companion object {
 
         fun firstPage(clientId: UUID, fetch: Iterable<KProperty1<JournalEntry, *>> = emptySet()) =
-            JournalPageRequest(clientId, fetch = fetch)
+            JournalPageRq(clientId, fetch = fetch)
 
         fun wholeJournal(clientId: UUID, fetch: Iterable<KProperty1<JournalEntry, *>> = emptySet()) =
-            JournalPageRequest(clientId, null, Int.MAX_VALUE, fetch)
+            JournalPageRq(clientId, null, Int.MAX_VALUE, fetch)
 
     }
 

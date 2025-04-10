@@ -8,7 +8,7 @@ import org.springframework.web.servlet.ModelAndView
 import pro.qyoga.app.platform.notFound
 import pro.qyoga.app.therapist.clients.ClientPageTab
 import pro.qyoga.app.therapist.clients.clientPageModel
-import pro.qyoga.core.clients.journals.dtos.JournalPageRequest
+import pro.qyoga.core.clients.journals.dtos.JournalPageRq
 import pro.qyoga.core.clients.journals.model.JournalEntry
 import java.util.*
 
@@ -24,7 +24,7 @@ class JournalPageController(
     fun handleGetJournalPage(
         @PathVariable clientId: UUID
     ): ModelAndView {
-        val firstPage = JournalPageRequest.firstPage(clientId, fetch = listOf(JournalEntry::therapeuticTask))
+        val firstPage = JournalPageRq.firstPage(clientId, fetch = listOf(JournalEntry::therapeuticTask))
         return when (val result = getJournalPage(firstPage)) {
             is GetJournalPageResult.ClientNotFound ->
                 notFound
