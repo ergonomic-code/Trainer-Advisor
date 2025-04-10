@@ -3,6 +3,7 @@ package pro.qyoga.tests.cases.app.therapist.clients.journal
 import io.kotest.inspectors.forAny
 import io.kotest.inspectors.forNone
 import io.kotest.matchers.shouldBe
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import pro.qyoga.l10n.russianDateFormat
@@ -21,27 +22,28 @@ import pro.qyoga.tests.pages.therapist.clients.journal.entry.JournalEntryFrom
 import java.time.LocalDate
 
 
+@DisplayName("Странциа редактирования записи журнала")
 class EditJournalEntryPageTest : QYogaAppIntegrationBaseTest() {
 
     @Test
-    fun `Edit journal entry page should be rendered correctly`() {
-        // Given
+    fun `должна рендериться корректно`() {
+        // Сетап
         val therapist = TherapistClient.loginAsTheTherapist()
         val client = backgrounds.clients.createClients(1, THE_THERAPIST_ID).first()
         val createJournalEntryRequest = journalEntry()
         val entry =
             backgrounds.clientJournal.createJournalEntry(client.id, createJournalEntryRequest, theTherapistUserDetails)
 
-        // When
+        // Действие
         val document = therapist.clientJournal.getEditJournalEntryPage(client.id, entry.id)
 
-        // Then
+        // Проверка
         document shouldBeElement EditJournalEntryPage.pageFor(entry)
     }
 
     @Test
-    fun `Journal entry editing should be persistent`() {
-        // Given
+    fun `должна сохранять изменения`() {
+        // Сетап
         val therapist = TherapistClient.loginAsTheTherapist()
         val client = backgrounds.clients.createClients(1, THE_THERAPIST_ID).first()
         val createJournalEntryRequest = journalEntry()
@@ -49,18 +51,18 @@ class EditJournalEntryPageTest : QYogaAppIntegrationBaseTest() {
             backgrounds.clientJournal.createJournalEntry(client.id, createJournalEntryRequest, theTherapistUserDetails)
         val editedEntry = journalEntry()
 
-        // When
+        // Действие
         therapist.clientJournal.editJournalEntry(client.id, entry.id, editedEntry)
 
-        // Then
+        // Проверка
         val journal = backgrounds.clientJournal.getWholeJournal(client.id).content
         journal.forNone { it shouldBe entry }
         journal.forAny { it shouldMatch editedEntry }
     }
 
     @Test
-    fun `When user sets date of journal entry to existing, prefilled form with validation error should be returned`() {
-        // Given
+    fun `должна отображать ошибку валидации при попытки установить дату записи в дату, для которой уже существует другая запись`() {
+        // Сетап
         val firstEntryDate = LocalDate.now().minusDays(1)
         val secondEntryDate = LocalDate.now()
         val therapist = TherapistClient.loginAsTheTherapist()
@@ -74,14 +76,14 @@ class EditJournalEntryPageTest : QYogaAppIntegrationBaseTest() {
         val editedEntry =
             backgrounds.clientJournal.createJournalEntry(client.id, editJournalEntryRequest, theTherapistUserDetails)
 
-        // When
+        // Действие
         val document = therapist.clientJournal.editJournalEntryForError(
             client.id,
             editedEntry.id,
             editJournalEntryRequest.copy(date = firstEntryDate)
         )
 
-        // Then
+        // Проверка
         document.select("body form").single() shouldBeComponent EditJournalEntryForm
         EditJournalEntryForm.dateInput.value(document) shouldBe russianDateFormat.format(firstEntryDate)
         EditJournalEntryForm.therapeuticTaskNameInput.value(document) shouldBe editJournalEntryRequest.therapeuticTaskName
@@ -90,14 +92,14 @@ class EditJournalEntryPageTest : QYogaAppIntegrationBaseTest() {
     }
 
     @Test
-    fun `Post of edit journal entry request for not existing entry id should return generic error page`() {
-        // Given
+    fun `должна отображать страницу ошибки 500 при попытки отредактировать несуществующую запись`() {
+        // Сетап
         val therapist = TherapistClient.loginAsTheTherapist()
         val notExistingClientId = ClientsObjectMother.randomId()
         val notExistingEntryId: Long = -1
         val anyJournalEntry = journalEntry()
 
-        // When
+        // Действие
         val document = therapist.clientJournal.editJournalEntryForError(
             notExistingClientId,
             notExistingEntryId,
@@ -105,20 +107,20 @@ class EditJournalEntryPageTest : QYogaAppIntegrationBaseTest() {
             expectedStatus = HttpStatus.INTERNAL_SERVER_ERROR
         )
 
-        // Then
+        // Проверка
         document shouldBePage GenericErrorPage
     }
 
     @Test
-    fun `When edit page of not existing entry is requested, generic 404 error page should be returned`() {
-        // Given
+    fun `должна отображать страницу ошибки 404 при попытки отредактировать запись журнала несуществующего клиента`() {
+        // Сетап
         val client = backgrounds.clients.createClients(1).single()
         val therapist = TherapistClient.loginAsTheTherapist()
 
-        // When
+        // Действие
         val document = therapist.clientJournal.getEditJournalEntryPage(client.id, -1, HttpStatus.NOT_FOUND)
 
-        // Then
+        // Проверка
         document shouldBePage NotFoundErrorPage
     }
 
