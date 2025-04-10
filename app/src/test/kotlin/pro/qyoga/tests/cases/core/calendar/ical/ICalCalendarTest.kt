@@ -26,7 +26,7 @@ class ICalCalendarTest : FreeSpec({
 
         "при запросе событий за период включающим это событие" - {
             val interval = Interval.of(ZonedDateTime.now(), Duration.ofDays(7))
-            val events = ical.calendarItemsIn(interval)
+            val events = ical.calendarItemsIn(interval)!!
 
             "должен вернуть одно событие" {
                 events.size shouldBe 1
@@ -57,4 +57,4 @@ class ICalCalendarTest : FreeSpec({
 })
 
 private val ICalCalendar.lastEvent: VEvent
-    get() = vEvents().last()
+    get() = vEvents()!!.last()

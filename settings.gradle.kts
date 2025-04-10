@@ -15,6 +15,9 @@ dependencyResolutionManagement {
 
             // lib versions
             val poiVersion = version("poi", "5.4.1")
+            val googleApiClient = version("google-api-client", "2.0.0")
+            val googleCalendarApi = version("google-calendar-api", "v3-rev20220715-2.0.0")
+            val googleOAuthClientJetty = version("google-oauth-client", "1.34.1")
 
             // plugins
             plugin("kotlin", "org.jetbrains.kotlin.jvm").versionRef(kotlinVersion)
@@ -47,6 +50,14 @@ dependencyResolutionManagement {
 
             library("nanocaptcha", "net.logicsquad", "nanocaptcha").version("2.1")
             library("ical4j", "org.mnode.ical4j", "ical4j").version("4.1.1")
+
+            library("google-api-client", "com.google.api-client", "google-api-client").versionRef(googleApiClient)
+            library("google-oauth-client", "com.google.oauth-client", "google-oauth-client-jetty").versionRef(
+                googleOAuthClientJetty
+            )
+            library("google-calendar-api", "com.google.apis", "google-api-services-calendar").versionRef(
+                googleCalendarApi
+            )
         }
 
         create("testLibs") {

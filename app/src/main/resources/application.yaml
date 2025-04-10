@@ -36,6 +36,24 @@ spring:
         cachecontrol:
           max-age: 1h
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID:client-id}
+            client-secret: ${GOOGLE_CLIENT_SECRET:client-secret}
+            scope:
+              - https://www.googleapis.com/auth/calendar.readonly
+            redirect-uri: "http://localhost:8080/therapist/oauth2/google/callback"
+            authorization-grant-type: authorization_code
+            client-name: Trainer Advisor
+            client-authentication-method: client_secret_post
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth?access_type=offline&prompt=consent
+            token-uri: https://oauth2.googleapis.com/token
+
 management:
   endpoints:
     web:
@@ -76,5 +94,9 @@ minio:
 trainer-advisor:
   admin:
     email: ta@azhidkov.pro
+
+logging:
+  level:
+    org.springframework.security: DEBUG
 
 debug: false

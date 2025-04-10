@@ -22,9 +22,11 @@ GROUP BY u.id, t.id;
 -- Месячная статистика по записям журнала
 SELECT dates                           AS date,
        count(je.id)                    AS entries_count,
-       count(distinct c.therapist_ref) AS therapists_count
+       count(distinct c.therapist_ref) AS therapists_count,
+       array_agg(distinct t.last_name)
 FROM generate_series(now() - '1 month'::interval, now(), '1 day'::interval) dates
          LEFT JOIN journal_entries je ON je.date = date_trunc('days', dates.dates)
          LEFT JOIN clients c ON c.id = je.client_ref
+         LEFT JOIN therapists t ON t.id = c.therapist_ref
 GROUP by dates.dates
 ORDER BY dates.dates DESC;
