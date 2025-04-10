@@ -32,6 +32,24 @@ spring:
           enabled=true
           paths=/**
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: client-id
+            client-secret: client-secret
+            scope:
+              - https://www.googleapis.com/auth/calendar.events.readonly
+              - email
+            redirect-uri: "http://localhost:8080/therapist/oauth2/google/save-tokens"
+            authorization-grant-type: authorization_code
+            client-name: Trainer Advisor
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://openidconnect.googleapis.com/v1/userinfo
 
 management:
   endpoints:
@@ -73,5 +91,9 @@ minio:
 trainer-advisor:
   admin:
     email: ta@azhidkov.pro
+
+logging:
+  level:
+    org.springframework.security: DEBUG
 
 debug: false

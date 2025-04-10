@@ -63,5 +63,5 @@ class ICalCalendarsRepo(
 private fun ICalCalendar.localizedICalCalendarItemsIn(
     interval: Interval<ZonedDateTime>,
 ): List<LocalizedICalCalendarItem> =
-    this.calendarItemsIn(interval)
+    (this.calendarItemsIn(interval) ?: emptyList())
         .map(ICalCalendarItem::toLocalizedICalCalendarItem)
