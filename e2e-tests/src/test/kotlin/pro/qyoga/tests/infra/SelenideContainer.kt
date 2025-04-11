@@ -15,5 +15,5 @@ val container: BrowserWebDriverContainer<*> by lazy {
 }
 
 fun chromeImage(): DockerImageName {
-    return DockerImageName.parse("selenium/standalone-chrome")
+    return DockerImageName.parse("selenium/standalone-chrome:4.30.0-20250323")
 }
