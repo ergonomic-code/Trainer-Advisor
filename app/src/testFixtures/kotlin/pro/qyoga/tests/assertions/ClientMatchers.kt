@@ -5,6 +5,7 @@ import pro.qyoga.core.clients.cards.dtos.ClientCardDto
 import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.core.clients.cards.model.PhoneNumber
 import pro.qyoga.core.clients.cards.model.toE164Format
+import pro.qyoga.core.clients.cards.model.toUIFormat
 
 
 infix fun Client.shouldMatch(clientCardDto: ClientCardDto) {
@@ -19,4 +20,18 @@ infix fun Client.shouldMatch(clientCardDto: ClientCardDto) {
     distributionSource?.comment shouldBe clientCardDto.distributionSourceComment
     complaints shouldBe clientCardDto.complaints
     anamnesis shouldBe clientCardDto.anamnesis
+}
+
+infix fun ClientCardDto.shouldMatch(client: Client) {
+    firstName shouldBe client.firstName
+    lastName shouldBe client.lastName
+    middleName shouldBe client.middleName
+    birthDate shouldBe client.birthDate
+    phoneNumber shouldBe client.phoneNumber.toUIFormat()
+    email shouldBe client.email
+    address shouldBe client.address
+    distributionSource?.type shouldBe client.distributionSource?.type
+    distributionSource?.comment shouldBe client.distributionSource?.comment
+    complaints shouldBe client.complaints
+    anamnesis shouldBe client.anamnesis
 }

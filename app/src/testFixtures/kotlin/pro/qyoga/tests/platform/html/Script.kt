@@ -7,6 +7,7 @@ import io.kotest.matchers.compose.all
 import org.jsoup.nodes.Element
 import pro.qyoga.tests.assertions.htmlMatch
 import pro.qyoga.tests.infra.test_config.spring.context
+import kotlin.reflect.KClass
 
 
 data class Variable(
@@ -14,6 +15,13 @@ data class Variable(
 ) {
 
     fun regex(): Regex = ".*let\\s+$name\\s*=\\s*(.*?)\\s*;.*".toRegex(RegexOption.DOT_MATCHES_ALL)
+
+    fun <T : Any> value(scriptElement: Element, type: KClass<T>): T? {
+        val scriptText = scriptElement.html()
+        val varValue = regex().matchEntire(scriptText)
+        checkNotNull(varValue) { "Cannot extract value of $name in $scriptText" }
+        return context.getBean(ObjectMapper::class.java).readValue(varValue.groupValues[1], type.java)
+    }
 
     fun <T> value(scriptElement: Element, typeReference: TypeReference<T>): T {
         val scriptText = scriptElement.html()
