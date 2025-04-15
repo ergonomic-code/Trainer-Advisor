@@ -12,6 +12,14 @@ abstract class JournalEntryFrom(action: FormAction) : QYogaForm("journalEntryFro
 
     private val addButton = Button("confirmButton", "Сохранить")
 
+    object FormDraftScript : Script("formDraft") {
+        val clientId = Variable("clientId")
+        val entryId = Variable("entryId")
+        val entryDate = Variable("entryDate")
+        val serverState = Variable("serverState")
+        override val vars = listOf(clientId, serverState, entryId, entryDate)
+    }
+
     companion object {
         const val DUPLICATED_DATE_MESSAGE = "div.invalid-feedback:contains(Запись за эту дату уже существует)"
     }
@@ -20,7 +28,8 @@ abstract class JournalEntryFrom(action: FormAction) : QYogaForm("journalEntryFro
         dateInput,
         therapeuticTaskNameInput,
         entryTextInput,
-        addButton
+        addButton,
+        FormDraftScript
     )
 
 }

@@ -1,58 +1,57 @@
-<script src="/js/form-drafts.js"></script>
-
-<script th:inline="javascript">
-    let serverState = /*[[${client}]]*/ null;
-    let clientId = /*[[${clientId}]]*/ null;
-
-    let localStateKey = `qyoga.clientCardForm.${clientId || "new"}`;
-
-    let localState = localStorage.getItem(localStateKey) ? JSON.parse(localStorage.getItem(localStateKey)) : null;
-
-    let formData;
-    if (serverState == null) {
-        formData = localState || {version: 0};
-    } else if (serverState.version === localState?.version) {
-        formData = localState
-    } else {
-        formData = {...serverState}
-    }
-
-    function clientCardData() {
-        let hasUnsavedEdits = serverState != null && localState != null && !shallowEqual(serverState, localState);
-        let newCardWasntSaved = serverState == null && localState != null;
-        return {
-            form: formData,
-            serverState: serverState,
-            hasUnsavedChanges: hasUnsavedEdits || newCardWasntSaved
-        }
-    }
-
-    function saveLocalState(formData) {
-        localStorage.setItem(localStateKey, JSON.stringify(formData));
-    }
-
-    function resetLocalState() {
-        localStorage.removeItem(localStateKey);
-    }
-
-    function isChanged(form, key) {
-        return serverState != null && serverState[key] !== form[key];
-    }
-
-    window.addEventListener("load", () => {
-        document.querySelectorAll(".form-control").forEach(it => {
-            it.setAttribute("x-model", "form." + it.name);
-            it.setAttribute(":class", "isChanged(form, '" + it.name + "') ? 'border-warning' : ''");
-        });
-    });
-
-</script>
-
 <div class="client__container" id="clientCardTab">
     <form class="form__client-card" id="createClientForm" method="post" th:action="${formAction}"
           th:fragment="createClientForm"
           x-data="clientCardData()"
           x-init="$watch('form', (form) => saveLocalState(form))">
+
+        <script src="/js/form-drafts.js"></script>
+        <script id="formDraft" th:inline="javascript">
+            let serverState = /*[[${client}]]*/ null;
+            let clientId = /*[[${clientId}]]*/ null;
+
+            let localStateKey = `qyoga.clientCardForm.${clientId || "new"}`;
+
+            let localState = localStorage.getItem(localStateKey) ? JSON.parse(localStorage.getItem(localStateKey)) : null;
+
+            let formData;
+            if (serverState == null) {
+                formData = localState || {version: 0};
+            } else if (serverState.version === localState?.version) {
+                formData = localState
+            } else {
+                formData = {...serverState}
+            }
+
+            function clientCardData() {
+                let hasUnsavedEdits = serverState != null && localState != null && !shallowEqual(serverState, localState);
+                let newCardWasntSaved = serverState == null && localState != null;
+                return {
+                    form: formData,
+                    serverState: serverState,
+                    hasUnsavedChanges: hasUnsavedEdits || newCardWasntSaved
+                }
+            }
+
+            function saveLocalState(formData) {
+                localStorage.setItem(localStateKey, JSON.stringify(formData));
+            }
+
+            function resetLocalState() {
+                localStorage.removeItem(localStateKey);
+            }
+
+            function isChanged(form, key) {
+                return serverState != null && serverState[key] !== form[key];
+            }
+
+            window.addEventListener("load", () => {
+                document.querySelectorAll(".form-control").forEach(it => {
+                    it.setAttribute("x-model", "form." + it.name);
+                    it.setAttribute(":class", "isChanged(form, '" + it.name + "') ? 'border-warning' : ''");
+                });
+            });
+
+        </script>
 
         <input
                 name="version"

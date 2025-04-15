@@ -1,17 +1,20 @@
 package pro.qyoga.tests.pages.therapist.clients.card
 
 import io.kotest.matchers.shouldBe
+import pro.qyoga.core.clients.cards.dtos.ClientCardDto
 import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.core.clients.cards.model.DistributionSourceType
 import pro.qyoga.core.clients.cards.model.toUIFormat
 import pro.qyoga.l10n.russianDateFormat
 import pro.qyoga.tests.assertions.PageMatcher
 import pro.qyoga.tests.assertions.SelectorOnlyComponent
+import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.platform.html.*
 import pro.qyoga.tests.platform.html.Input.Companion.email
 import pro.qyoga.tests.platform.html.Input.Companion.hidden
 import pro.qyoga.tests.platform.html.Input.Companion.tel
 import pro.qyoga.tests.platform.html.Input.Companion.text
+import java.util.*
 
 abstract class ClientForm(action: FormAction) : QYogaForm("createClientForm", action) {
 
@@ -31,6 +34,12 @@ abstract class ClientForm(action: FormAction) : QYogaForm("createClientForm", ac
     val distributionSourceComment = text("distributionSourceComment", false)
     val version = hidden("version", false)
     val submit = Button("confirmButton", "Сохранить")
+
+    object FormDraftScript : Script("formDraft") {
+        val clientId = Variable("clientId")
+        val serverState = Variable("serverState")
+        override val vars = listOf(clientId, serverState)
+    }
 
     override val components: List<Component> = listOf(
         firstName,
@@ -67,6 +76,14 @@ object EditClientForm : ClientForm(FormAction.classicPost("/therapist/clients/{i
         element.select(distributionSourceComment.selector())
             .`val`() shouldBe (client.distributionSource?.comment ?: "")
         element.select(complaints.selector()).text() shouldBe (client.complaints ?: "")
+        FormDraftScript.clientId.value(
+            element.select(FormDraftScript.selector()).single(),
+            UUID::class
+        ) shouldBe client.id
+        FormDraftScript.serverState.value(
+            element.select(FormDraftScript.selector()).single(),
+            ClientCardDto::class
+        )!! shouldMatch client
     }
 
 }

@@ -38,7 +38,7 @@ class CreateJournalEntryPageTest : QYogaAppIntegrationBaseTest() {
         val document = therapist.clientJournal.getCreateJournalEntryPage(client.id)
 
         // Проверка
-        document shouldBePage CreateJournalEntryPage(client.id)
+        document shouldBePage CreateJournalEntryPage(client.id, LocalDate.now())
     }
 
     @Test

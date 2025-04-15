@@ -1,54 +1,3 @@
-
-<script th:inline="javascript">
-    let serverState = /*[[${entry}]]*/ null;
-    let clientId = /*[[${client.id}]]*/ null;
-    let entryId = /*[[${entryId}]]*/ null;
-    let entryDate = /*[[${#temporals.format((entry?.date ?: entryDate), T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN)}]]*/ null;
-
-    let localStateKey = `qyoga.journalEntryForm.${clientId}.${entryId || "new"}`;
-
-    let localState = localStorage.getItem(localStateKey) ? JSON.parse(localStorage.getItem(localStateKey)) : null;
-
-    let formData;
-    if (serverState == null) {
-        formData = localState || {version: 0, date: entryDate};
-    } else if (serverState.version === localState?.version) {
-        formData = localState
-    } else {
-        formData = {...serverState}
-    }
-
-    function entryData() {
-        let hasUnsavedEdits = serverState != null && localState != null && !shallowEqual(serverState, localState);
-        let newCardWasntSaved = serverState == null && localState != null;
-        return {
-            form: formData,
-            serverState: serverState,
-            hasUnsavedChanges: hasUnsavedEdits || newCardWasntSaved
-        }
-    }
-
-    function saveLocalState(formData) {
-        localStorage.setItem(localStateKey, JSON.stringify(formData));
-    }
-
-    function resetLocalState() {
-        localStorage.removeItem(localStateKey);
-    }
-
-    function isChanged(form, key) {
-        return serverState != null && serverState[key] !== form[key];
-    }
-
-    window.addEventListener("htmx:afterSettle", () => {
-        document.querySelectorAll(".form-control").forEach(it => {
-            it.setAttribute("x-model", "form." + it.name);
-            it.setAttribute(":class", "isChanged(form, '" + it.name + "') ? 'border-warning' : ''");
-        });
-    });
-
-</script>
-
 <div id="createJournalEntryTabContent">
     <style>
         /* For medium screens and larger */
@@ -74,6 +23,56 @@
           th:hx-post="${formAction}"
           x-data="entryData()"
           x-init="$watch('form', (form) => saveLocalState(form))">
+
+        <script id="formDraft" th:inline="javascript">
+            let serverState = /*[[${entry}]]*/ null;
+            let clientId = /*[[${client.id}]]*/ null;
+            let entryId = /*[[${entryId}]]*/ null;
+            let entryDate = /*[[${#temporals.format((entry?.date ?: entryDate), T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN)}]]*/ null;
+
+            let localStateKey = `qyoga.journalEntryForm.${clientId}.${entryId || "new"}`;
+
+            let localState = localStorage.getItem(localStateKey) ? JSON.parse(localStorage.getItem(localStateKey)) : null;
+
+            let formData;
+            if (serverState == null) {
+                formData = localState || {version: 0, date: entryDate};
+            } else if (serverState.version === localState?.version) {
+                formData = localState
+            } else {
+                formData = {...serverState}
+            }
+
+            function entryData() {
+                let hasUnsavedEdits = serverState != null && localState != null && !shallowEqual(serverState, localState);
+                let newCardWasntSaved = serverState == null && localState != null;
+                return {
+                    form: formData,
+                    serverState: serverState,
+                    hasUnsavedChanges: hasUnsavedEdits || newCardWasntSaved
+                }
+            }
+
+            function saveLocalState(formData) {
+                localStorage.setItem(localStateKey, JSON.stringify(formData));
+            }
+
+            function resetLocalState() {
+                localStorage.removeItem(localStateKey);
+            }
+
+            function isChanged(form, key) {
+                return serverState != null && serverState[key] !== form[key];
+            }
+
+            window.addEventListener("htmx:afterSettle", () => {
+                document.querySelectorAll(".form-control").forEach(it => {
+                    it.setAttribute("x-model", "form." + it.name);
+                    it.setAttribute(":class", "isChanged(form, '" + it.name + "') ? 'border-warning' : ''");
+                });
+            });
+
+        </script>
 
         <input
                 name="version"
