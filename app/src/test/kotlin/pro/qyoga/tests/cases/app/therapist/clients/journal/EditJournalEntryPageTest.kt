@@ -1,8 +1,7 @@
 package pro.qyoga.tests.cases.app.therapist.clients.journal
 
-import io.kotest.inspectors.forAny
-import io.kotest.inspectors.forNone
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
@@ -13,6 +12,7 @@ import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
 import pro.qyoga.tests.fixture.object_mothers.clients.JournalEntriesObjectMother.journalEntry
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
 import pro.qyoga.tests.fixture.object_mothers.therapists.theTherapistUserDetails
+import pro.qyoga.tests.fixture.presets.ClientsFixturePresets
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import pro.qyoga.tests.pages.publc.GenericErrorPage
 import pro.qyoga.tests.pages.publc.NotFoundErrorPage
@@ -24,6 +24,8 @@ import java.time.LocalDate
 
 @DisplayName("Странциа редактирования записи журнала")
 class EditJournalEntryPageTest : QYogaAppIntegrationBaseTest() {
+
+    private val clientFixturePresets = getBean<ClientsFixturePresets>()
 
     @Test
     fun `должна рендериться корректно`() {
@@ -44,20 +46,17 @@ class EditJournalEntryPageTest : QYogaAppIntegrationBaseTest() {
     @Test
     fun `должна сохранять изменения`() {
         // Сетап
-        val therapist = TherapistClient.loginAsTheTherapist()
-        val client = backgrounds.clients.createClients(1, THE_THERAPIST_ID).first()
-        val createJournalEntryRequest = journalEntry()
-        val entry =
-            backgrounds.clientJournal.createJournalEntry(client.id, createJournalEntryRequest, theTherapistUserDetails)
-        val editedEntry = journalEntry()
+        val (client, entries) = clientFixturePresets.createAClientWithJournalEntry()
+        val entry = entries.single()
+        val editEntryRq = journalEntry()
 
         // Действие
-        therapist.clientJournal.editJournalEntry(client.id, entry.id, editedEntry)
+        theTherapist.clientJournal.editJournalEntry(client.id, entry.id, editEntryRq)
 
         // Проверка
-        val journal = backgrounds.clientJournal.getWholeJournal(client.id).content
-        journal.forNone { it shouldBe entry }
-        journal.forAny { it shouldMatch editedEntry }
+        val updatedEntry = backgrounds.clientJournal.getWholeJournal(client.id).content.single()
+        updatedEntry shouldMatch editEntryRq
+        updatedEntry.lastModifiedAt shouldNotBe null
     }
 
     @Test
