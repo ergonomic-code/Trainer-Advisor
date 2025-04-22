@@ -58,6 +58,7 @@ dependencyResolutionManagement {
 
             library("kotest-assertions", "io.kotest", "kotest-assertions-core").versionRef(kotestVersion)
             library("kotest-runner", "io.kotest", "kotest-runner-junit5").versionRef(kotestVersion)
+            library("kotest-datatest", "io.kotest", "kotest-framework-datatest").versionRef(kotestVersion)
 
             library("restassured-core", "io.rest-assured", "rest-assured").versionRef(restAssuredVersion)
             library("restassured-kotlin", "io.rest-assured", "kotlin-extensions").versionRef(restAssuredVersion)

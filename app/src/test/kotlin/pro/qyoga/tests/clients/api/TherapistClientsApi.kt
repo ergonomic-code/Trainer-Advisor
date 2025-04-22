@@ -10,8 +10,8 @@ import org.hamcrest.CoreMatchers.endsWith
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
-import pro.qyoga.app.therapist.clients.ClientsListPageController
 import pro.qyoga.app.therapist.clients.components.ClientsComboBoxController
+import pro.qyoga.app.therapist.clients.list.ClientsListPageController
 import pro.qyoga.core.clients.cards.dtos.ClientCardDto
 import pro.qyoga.core.clients.cards.dtos.ClientSearchDto
 import pro.qyoga.tests.pages.therapist.clients.ClientsListPage

@@ -54,6 +54,7 @@ dependencies {
 	testFixturesApi("org.springframework.boot:spring-boot-testcontainers")
 	testFixturesApi(testLibs.kotest.assertions)
     testFixturesApi(testLibs.kotest.runner)
+	testFixturesApi(testLibs.kotest.datatest)
 	testFixturesApi(testLibs.jsoup)
 	testFixturesApi(testLibs.datafaker)
 	testFixturesApi(testLibs.greenmail)

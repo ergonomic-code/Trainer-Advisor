@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Test
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
-import pro.qyoga.app.therapist.clients.ClientsListPageController
+import pro.qyoga.app.therapist.clients.list.ClientListItemView
+import pro.qyoga.app.therapist.clients.list.ClientsListPageController
 import pro.qyoga.core.clients.cards.dtos.ClientSearchDto
-import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother.createClientCardDto
 import pro.qyoga.tests.fixture.object_mothers.clients.JournalEntriesObjectMother.journalEntry
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
@@ -41,7 +41,7 @@ class ClientsListPageControllerTest : QYogaAppIntegrationBaseTest() {
 
         // Проверка
         clients shouldHaveSize clientsCount
-        clients shouldBeSortedWith Comparator.comparing(Client::createdAt).reversed()
+        clients shouldBeSortedWith Comparator.comparing(ClientListItemView::createdAt).reversed()
     }
 
     @Test

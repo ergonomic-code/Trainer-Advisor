@@ -196,6 +196,16 @@ class ErgoRepository<T : Any, ID : Any>(
         pageRequest: Pageable,
         fetch: Iterable<KProperty1<T, *>> = emptySet(),
     ): Page<T> {
+        return findPage(query, paramMap, pageRequest, rowMapper, fetch)
+    }
+
+    fun <V : Any> findPage(
+        query: String,
+        paramMap: Map<String, Any?>,
+        pageRequest: Pageable,
+        rowMapper: RowMapper<V>,
+        fetch: Iterable<KProperty1<V, *>> = emptySet(),
+    ): Page<V> {
         val page = namedParameterJdbcOperations.queryForPage(query, paramMap, pageRequest, rowMapper)
         return page.mapContent { jdbcAggregateTemplate.hydrate(it, FetchSpec(fetch)) }
     }

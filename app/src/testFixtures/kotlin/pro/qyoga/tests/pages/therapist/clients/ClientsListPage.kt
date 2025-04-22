@@ -7,7 +7,8 @@ import io.kotest.matchers.string.shouldMatch
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
-import pro.qyoga.app.therapist.clients.ClientsListPageController
+import pro.qyoga.app.therapist.clients.list.ClientListItemView.Companion.NO_LAST_JOURNAL_ENTRY_DATE
+import pro.qyoga.app.therapist.clients.list.ClientsListPageController
 import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.tests.assertions.*
 import pro.qyoga.tests.pages.therapist.clients.card.CreateClientPage
@@ -62,19 +63,27 @@ object ClientsListPage : QYogaPage {
         return UUID.fromString(matcher.groups[1]!!.value)
     }
 
-    fun clientRow(client: Client): PageMatcher = PageMatcher { element ->
-        element.select(CLIENT_ROW).forAny { row ->
-            row.select("td.nameCell").text() shouldBe client.fullName()
-            val updateUrl = row.select("td a.updateLink").attr("href")
-            updateUrl shouldMatch updateActionPattern
-            val deleteUrl = row.select("td a.deleteClientLink").attr("hx-delete")
-            deleteUrl shouldMatch deleteActionPattern
+    fun clientRow(
+        client: Client,
+        lastJournalEntryDateLabel: String = NO_LAST_JOURNAL_ENTRY_DATE,
+        journalEntriesCount: Int = 0
+    ): PageMatcher =
+        PageMatcher { element ->
+            element.select(CLIENT_ROW).forAny { row ->
+                row.select("td.nameCell a.updateLink").text() shouldBe client.fullName()
+                val updateUrl = row.select("td a.updateLink").attr("href")
+                updateUrl shouldMatch updateActionPattern
+                val deleteUrl = row.select("td a.deleteClientLink").attr("hx-delete")
+                deleteUrl shouldMatch deleteActionPattern
 
-            val deleteClientIdMatcher = deleteActionPattern.matchEntire(deleteUrl)!!
-            val updateClientIdMatcher = updateActionPattern.matchEntire(updateUrl)!!
-            deleteClientIdMatcher.groups[1]!!.value shouldBe updateClientIdMatcher.groups[1]!!.value
+                row.select("span.last-journal-entry-date").text() shouldBe lastJournalEntryDateLabel
+                row.select("span.journal-entries-count").text() shouldBe journalEntriesCount.toString()
+
+                val deleteClientIdMatcher = deleteActionPattern.matchEntire(deleteUrl)!!
+                val updateClientIdMatcher = updateActionPattern.matchEntire(updateUrl)!!
+                deleteClientIdMatcher.groups[1]!!.value shouldBe updateClientIdMatcher.groups[1]!!.value
+            }
         }
-    }
 
     fun clientRows(document: Document): Elements =
         document.select(CLIENT_ROW)

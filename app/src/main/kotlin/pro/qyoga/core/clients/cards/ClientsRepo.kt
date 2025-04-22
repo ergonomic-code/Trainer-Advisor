@@ -1,7 +1,9 @@
 package pro.qyoga.core.clients.cards
 
-import org.intellij.lang.annotations.Language
-import org.springframework.data.domain.*
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Slice
+import org.springframework.data.domain.Sort
 import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.data.jdbc.core.convert.JdbcConverter
 import org.springframework.data.relational.core.mapping.RelationalMappingContext
@@ -11,7 +13,6 @@ import pro.azhidkov.platform.spring.sdj.ergo.ErgoRepository
 import pro.azhidkov.platform.spring.sdj.query.BuildMode
 import pro.azhidkov.platform.spring.sdj.query.query
 import pro.azhidkov.platform.spring.sdj.sortBy
-import pro.qyoga.core.clients.cards.dtos.ClientSearchDto
 import pro.qyoga.core.clients.cards.errors.DuplicatedPhoneException
 import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.core.clients.cards.model.PhoneNumber
@@ -47,31 +48,6 @@ class ClientsRepo(
         val descendingTouchTime = Sort.by(Sort.Direction.DESC, "touch_time")
     }
 
-}
-
-fun ClientsRepo.findTherapistClientsPageBySearchForm(
-    therapistId: UUID,
-    clientSearchDto: ClientSearchDto,
-    pageRequest: Pageable
-): Page<Client> {
-    @Language("PostgreSQL") val query = """
-        SELECT c.*,
-             GREATEST(c.created_at, c.modified_at, le.created_at, le.last_modified_at) touch_time
-        FROM clients c
-            LEFT JOIN client_last_journal_entries le ON le.client_ref = c.id
-        WHERE c.therapist_ref = :therapistRef
-            AND c.first_name ILIKE '%' || :firstName || '%'
-            AND c.last_name ILIKE '%' || :lastName || '%'
-            AND c.phone_number ILIKE '%' || :phoneNumber || '%'
-    """
-
-    val paramMap = mapOf(
-        "therapistRef" to therapistId,
-        "firstName" to (clientSearchDto.firstName ?: ""),
-        "lastName" to (clientSearchDto.lastName ?: ""),
-        "phoneNumber" to (clientSearchDto.digitsOnlyPhoneNumber ?: "")
-    )
-    return findPage(query, paramMap, pageRequest)
 }
 
 fun ClientsRepo.findTherapistClientsSliceBySearchKey(

@@ -1,16 +1,19 @@
-package pro.qyoga.app.therapist.clients
+package pro.qyoga.app.therapist.clients.list
 
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.ResponseBody
 import pro.azhidkov.platform.spring.sdj.withSortBy
 import pro.qyoga.core.clients.cards.ClientsRepo
 import pro.qyoga.core.clients.cards.ClientsRepo.Companion.descendingTouchTime
 import pro.qyoga.core.clients.cards.dtos.ClientSearchDto
-import pro.qyoga.core.clients.cards.findTherapistClientsPageBySearchForm
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
+import java.time.LocalDate
 import java.util.*
 
 @Controller
@@ -18,8 +21,7 @@ class ClientsListPageController(
     private val clientsRepo: ClientsRepo
 ) {
 
-    @GetMapping
-    @RequestMapping(PATH)
+    @GetMapping(PATH)
     fun getClients(
         @AuthenticationPrincipal principal: QyogaUserDetails,
         @PageableDefault(value = 10, page = 0) pageRequest: Pageable,
@@ -31,7 +33,7 @@ class ClientsListPageController(
                 searchDto,
                 pageRequest.withSortBy(descendingTouchTime)
             )
-        return ClientsListPageModel(clients, searchDto)
+        return ClientsListPageModel(clients, LocalDate.now(), searchDto)
     }
 
     @GetMapping(SEARCH_PATH)
@@ -46,7 +48,7 @@ class ClientsListPageController(
                 searchDto,
                 pageRequest.withSortBy(descendingTouchTime)
             )
-        return ClientsListPageModel(clients, searchDto, "clients")
+        return ClientsListPageModel(clients, LocalDate.now(), searchDto, "clients")
     }
 
     @DeleteMapping(DELETE_PATH)

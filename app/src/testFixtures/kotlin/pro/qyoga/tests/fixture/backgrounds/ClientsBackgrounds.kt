@@ -1,8 +1,6 @@
 package pro.qyoga.tests.fixture.backgrounds
 
-import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Component
-import pro.qyoga.app.therapist.clients.ClientsListPageController
 import pro.qyoga.app.therapist.clients.cards.CreateClientCardPageController
 import pro.qyoga.app.therapist.clients.cards.EditClientCardPageController
 import pro.qyoga.core.clients.cards.ClientsRepo
@@ -22,7 +20,6 @@ import java.util.*
 @Component
 class ClientsBackgrounds(
     private val clientsRepo: ClientsRepo,
-    private val clientsListPageController: ClientsListPageController,
     private val journalBackgrounds: ClientJournalBackgrounds,
     private val createClientPageController: CreateClientCardPageController,
     private val editClientPageController: EditClientCardPageController
@@ -41,10 +38,7 @@ class ClientsBackgrounds(
     }
 
     fun getAllClients(): List<Client> {
-        return clientsListPageController.getClients(
-            theTherapistUserDetails,
-            Pageable.ofSize(Int.MAX_VALUE)
-        ).clients.content
+        return clientsRepo.findAll()
     }
 
     fun createClientWithJournalEntry(therapistId: UUID = THE_THERAPIST_ID): Pair<Client, JournalEntry> {

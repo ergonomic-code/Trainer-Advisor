@@ -9,10 +9,13 @@ import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.clients.TherapistClient
+import pro.qyoga.tests.fixture.backgrounds.ClientsBackgrounds
 import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
 import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother.createClient
 import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother.createClientCardDto
+import pro.qyoga.tests.fixture.object_mothers.clients.JournalEntriesObjectMother.journalEntry
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
+import pro.qyoga.tests.fixture.presets.ClientsFixturePresets
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import pro.qyoga.tests.pages.therapist.clients.ClientsListPage
 import pro.qyoga.tests.pages.therapist.clients.ClientsListPagination
@@ -22,32 +25,35 @@ import java.time.LocalDate
 @DisplayName("Страница списка клиентов")
 class ClientsListPageTest : QYogaAppIntegrationBaseTest() {
 
+    private val clientsBackgrounds: ClientsBackgrounds = getBean()
+    private val clientsFixturePresets: ClientsFixturePresets = getBean()
+
     @Test
     fun `должна рендерится корректно с пустым списком`() {
-        // Given
+        // Сетап
         val therapist = TherapistClient.loginAsTheTherapist()
 
-        // When
+        // Действие
         val document = therapist.clients.getClientsListPage()
 
-        // Then
+        // Проверка
         document shouldBe ClientsListPage
         ClientsListPage.clientRows(document) shouldHaveSize 0
     }
 
     @Test
     fun `должна отбражать 10 клиентов, когда в БД более 10 записей`() {
-        // Given
+        // Сетап
         val pageSize = 10
         val therapist = TherapistClient.loginAsTheTherapist()
         val clients = ClientsObjectMother.createClientCardDtos(pageSize + 1)
         val firstPage = clients.reversed().take(pageSize)
         backgrounds.clients.createClients(clients)
 
-        // When
+        // Действие
         val document = therapist.clients.getClientsListPage()
 
-        // Then
+        // Проверка
         document shouldBe ClientsListPage
         ClientsListPage.clientRows(document) shouldHaveSize pageSize
         firstPage.forAll {
@@ -58,7 +64,7 @@ class ClientsListPageTest : QYogaAppIntegrationBaseTest() {
 
     @Test
     fun `при фильтрации должна возвращать только строки соответствуюище фильтру`() {
-        // Given
+        // Сетап
         val firstName = "Иван"
         val lastName = "Иванов"
         val birthDate = LocalDate.of(2000, 1, 12)
@@ -86,10 +92,10 @@ class ClientsListPageTest : QYogaAppIntegrationBaseTest() {
 
         val therapist = TherapistClient.loginAsTheTherapist()
 
-        // When
+        // Действие
         val document = therapist.clients.searchClients(searchForm)
 
-        // Then
+        // Проверка
         ClientsListPage.clientRows(document) shouldHaveSize 2
         document shouldHave ClientsListPage.clientRow(createClient(THE_THERAPIST_ID, fullMatch1))
         document shouldHave ClientsListPage.clientRow(createClient(THE_THERAPIST_ID, fullMatch2))
@@ -97,22 +103,22 @@ class ClientsListPageTest : QYogaAppIntegrationBaseTest() {
 
     @Test
     fun `должна не содержать клиента после его удаления`() {
-        // Given
+        // Сетап
         backgrounds.clients.createClients(1)
         val therapist = TherapistClient.loginAsTheTherapist()
         val document = therapist.clients.getClientsListPage()
         val clientId = ClientsListPage.clientId(document, 0)
 
-        // When
+        // Действие
         therapist.clients.deleteClient(clientId)
 
-        // Then
+        // Проверка
         ClientsListPage.clientRows(therapist.clients.getClientsListPage()) shouldHaveSize 0
     }
 
     @Test
     fun `должна корректно рендерить фрагмент второй страницы списка`() {
-        // Given
+        // Сетап
         val page = 2
         val pageSize = 10
         val therapist = TherapistClient.loginAsTheTherapist()
@@ -120,15 +126,45 @@ class ClientsListPageTest : QYogaAppIntegrationBaseTest() {
         val secondPage = clients.reversed().drop(pageSize).take(pageSize)
         backgrounds.clients.createClients(clients)
 
-        // When
+        // Действие
         val document = therapist.clients.searchClients(page = page)
 
-        // Then
+        // Проверка
         ClientsListPage.clientRows(document) shouldHaveSize pageSize
         secondPage.forAll {
             document shouldHave ClientsListPage.clientRow(createClient(THE_THERAPIST_ID, it))
         }
         document shouldHaveComponent ClientsListPagination(pages = 3, currentPage = page)
+    }
+
+    @Test
+    fun `должна корректно рендерить статистику клиента без записей журнала`() {
+        // Сетап
+        val aClient = clientsBackgrounds.aClient()
+
+        // Действие
+        val document = theTherapist.clients.getClientsListPage()
+
+        // Проверка
+        document shouldHave ClientsListPage.clientRow(aClient)
+    }
+
+    @Test
+    fun `должна корректно рендерить статистику клиента с одной записью журнала`() {
+        // Сетап
+        val entryDate = LocalDate.of(2025, 4, 17)
+        val lastJournalEntryDateLabel = "17.04"
+        val (aClient, journal) = clientsFixturePresets.createAClientWithJournalEntry(createEditJournalEntryRequest = {
+            journalEntry(
+                date = entryDate
+            )
+        })
+
+        // Действие
+        val document = theTherapist.clients.getClientsListPage()
+
+        // Проверка
+        document shouldHave ClientsListPage.clientRow(aClient, lastJournalEntryDateLabel, journalEntriesCount = 1)
     }
 
 }
