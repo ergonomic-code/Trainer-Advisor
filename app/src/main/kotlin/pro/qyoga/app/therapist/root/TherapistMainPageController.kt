@@ -2,7 +2,7 @@ package pro.qyoga.app.therapist.root
 
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
-import pro.qyoga.app.therapist.clients.ClientsListPageController
+import pro.qyoga.app.therapist.clients.list.ClientsListPageController
 
 
 @Controller

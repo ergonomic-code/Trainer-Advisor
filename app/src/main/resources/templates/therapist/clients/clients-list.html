@@ -76,6 +76,21 @@
                                         th:attr="href=@{/therapist/clients/{id}/journal (id=${client.id})}"
                                         th:text="${client.fullName}">
                                 </a>
+                                <br/>
+                                <small>
+                                    <span style="display: inline-block; min-width: 5ch; text-align: left">
+                                   🧘 <span class="journal-entries-count"
+                                           style="display: inline-block; min-width: 2ch; text-align: left"
+                                           th:text="${client.journalEntriesCount}"
+                                    >
+                                        15
+                                    </span>
+
+                                    </span>
+                                    ·
+                                    📅 <span class="last-journal-entry-date"
+                                            th:text="${client.lastJournalEntryDateLabel(today)}">12.04</span>
+                                </small>
                             </td>
                             <td class="text-end">
                                 <a class="deleteClientLink btn btn-outline-danger text"

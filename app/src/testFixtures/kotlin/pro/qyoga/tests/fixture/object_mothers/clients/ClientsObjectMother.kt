@@ -1,15 +1,19 @@
 package pro.qyoga.tests.fixture.object_mothers.clients
 
+import org.springframework.data.jdbc.core.mapping.AggregateReference
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.AggregateReferenceTarget
 import pro.azhidkov.platform.uuid.UUIDv7
+import pro.qyoga.app.therapist.clients.list.ClientListItemView
 import pro.qyoga.core.clients.cards.Client
 import pro.qyoga.core.clients.cards.dtos.ClientCardDto
 import pro.qyoga.core.clients.cards.model.*
+import pro.qyoga.core.users.therapists.Therapist
 import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.tests.fixture.data.*
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
 import java.time.Duration
+import java.time.Instant
 import java.time.LocalDate
 import java.util.*
 
@@ -108,6 +112,27 @@ object ClientsObjectMother {
     val fakeClientRef: ClientRef = AggregateReferenceTarget(
         createClient(THE_THERAPIST_ID, createClientCardDtoMinimal())
     )
+
+    fun aClientListItemView(
+        id: UUID = randomId(),
+        firstName: String = faker.name().firstName(),
+        lastName: String = faker.name().lastName(),
+        middleName: String? = null,
+        journalEntriesCount: Int = 0,
+        lastEntryDate: LocalDate? = null,
+        therapistRef: AggregateReference<Therapist, UUID> = THE_THERAPIST_REF,
+        createdAt: Instant = Instant.now()
+    ) =
+        ClientListItemView(
+            id,
+            firstName,
+            lastName,
+            middleName,
+            journalEntriesCount,
+            lastEntryDate,
+            therapistRef,
+            createdAt
+        )
 
 }
 

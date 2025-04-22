@@ -18,9 +18,9 @@ typealias ClientRef = AggregateReference<Client, UUID>
 
 @Table("clients")
 data class Client(
-    val firstName: String,
-    val lastName: String,
-    val middleName: String?,
+    override val firstName: String,
+    override val lastName: String,
+    override val middleName: String?,
     val birthDate: LocalDate?,
     val phoneNumber: PhoneNumber,
     val email: String?,
@@ -39,11 +39,7 @@ data class Client(
     val modifiedAt: Instant? = null,
     @Version
     val version: Long = 0
-) : Identifiable<UUID> {
-
-    fun fullName() = listOf(lastName, firstName, middleName)
-        .filter { it?.isNotBlank() == true }
-        .joinToString(" ")
+) : Identifiable<UUID>, HasPersonName {
 
     fun prependComplaints(value: String?): Client =
         copy(
