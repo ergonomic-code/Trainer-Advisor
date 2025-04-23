@@ -9,7 +9,8 @@ import pro.qyoga.core.clients.cards.toDto
 enum class ClientPageTab {
     JOURNAL,
     CARD,
-    FILES
+    FILES,
+    ADD_JOURNAL_ENTRY
 }
 
 fun clientPageModel(

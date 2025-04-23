@@ -5,7 +5,9 @@ import pro.qyoga.core.clients.cards.dtos.ClientCardDto
 
 
 fun editClientFormWithValidationError(clientCardDto: ClientCardDto) =
-    modelAndView("therapist/clients/client-create") {
-        "client" bindTo clientCardDto
-        "duplicatedPhone" bindTo true
-    }
+    modelAndView(
+        "therapist/clients/client-create", mapOf(
+            "client" to clientCardDto,
+            "duplicatedPhone" to true
+        )
+    )

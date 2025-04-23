@@ -1,4 +1,4 @@
-package pro.qyoga.tests.cases.app.therapist.clients
+package pro.qyoga.tests.cases.app.therapist.clients.list
 
 import io.kotest.core.annotation.DisplayName
 import io.kotest.core.spec.style.FreeSpec

@@ -7,6 +7,7 @@ import io.kotest.matchers.string.shouldMatch
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
+import pro.qyoga.app.therapist.clients.journal.edit_entry.create.CreateJournalEntryPageController
 import pro.qyoga.app.therapist.clients.list.ClientListItemView.Companion.NO_LAST_JOURNAL_ENTRY_DATE
 import pro.qyoga.app.therapist.clients.list.ClientsListPageController
 import pro.qyoga.core.clients.cards.model.Client
@@ -42,8 +43,12 @@ object ClientsListPage : QYogaPage {
     val updateAction = "$path/{id}/journal"
     private val updateActionPattern = updateAction.replace("{id}", "([a-zA-Z0-9_-]+)").toRegex()
 
-    const val deleteAction = ClientsListPageController.DELETE_PATH
-    private val deleteActionPattern = deleteAction.replace("{id}", "([a-zA-Z0-9_-]+)").toRegex()
+    const val DELETE_ACTION = ClientsListPageController.DELETE_PATH
+    private val deleteActionPattern = DELETE_ACTION.replace("{id}", "([a-zA-Z0-9_-]+)").toRegex()
+
+    private const val CREATE_JOURNAL_ENTRY_ACTION = CreateJournalEntryPageController.CREATE_JOURNAL_PAGE_URL
+    private val createJournalEntryActionPattern =
+        CREATE_JOURNAL_ENTRY_ACTION.replace("{clientId}", "([a-zA-Z0-9_-]+)").toRegex()
 
     private val addLink = Link("createClientLink", CreateClientPage, "Добавить")
 
@@ -73,8 +78,12 @@ object ClientsListPage : QYogaPage {
                 row.select("td.nameCell a.updateLink").text() shouldBe client.fullName()
                 val updateUrl = row.select("td a.updateLink").attr("href")
                 updateUrl shouldMatch updateActionPattern
+
                 val deleteUrl = row.select("td a.deleteClientLink").attr("hx-delete")
                 deleteUrl shouldMatch deleteActionPattern
+
+                val addJournalEntryUrl = row.select("td a.addJournalEntryLink").attr("href")
+                addJournalEntryUrl shouldMatch createJournalEntryActionPattern
 
                 row.select("span.last-journal-entry-date").text() shouldBe lastJournalEntryDateLabel
                 row.select("span.journal-entries-count").text() shouldBe journalEntriesCount.toString()

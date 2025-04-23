@@ -166,7 +166,7 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
             authorized()
             pathParam("id", clientId)
         } When {
-            delete(ClientsListPage.deleteAction)
+            delete(ClientsListPage.DELETE_ACTION)
         } Then {
             statusCode(HttpStatus.OK.value())
         }

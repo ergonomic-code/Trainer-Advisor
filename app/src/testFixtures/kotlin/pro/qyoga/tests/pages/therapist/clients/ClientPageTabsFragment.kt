@@ -28,6 +28,9 @@ object ClientPageTabsFragment : Component {
         haveComponent(filesLink)
     )
 
+    fun mobileTabName(element: Element): String =
+        element.select("#clientPageTab").first()?.text() ?: ""
+
     fun journalLinkClientId(element: Element): UUID? {
         return journalLink.pathParam(element, "clientId")?.let { UUID.fromString(it) }
     }

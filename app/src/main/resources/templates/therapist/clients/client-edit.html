@@ -5,11 +5,6 @@
     <title th:text="${client?.fullName() ?: 'ФИО'}"></title>
     <link href="/styles/therapist/clients/style.css" rel="stylesheet">
     <script defer src="/js/form-drafts.js"></script>
-    <style>
-        .pill {
-            padding: 0.5rem 0;
-        }
-    </style>
 </head>
 
 <body class="sb-nav-fixed">
@@ -58,10 +53,11 @@
 
                 <div class="row d-flex d-sm-none pb-3 mb-4 border-bottom">
                     <div class="btn-group">
-                        <button aria-expanded="false" class="btn btn-outline-primary dropdown-toggle nav-drop"
+                        <button aria-expanded="false"
+                                class="btn btn-outline-primary dropdown-toggle nav-drop" id="clientPageTab"
                                 data-bs-toggle="dropdown"
                                 type="button">
-                            <span th:if="${activeTab.name.equalsIgnoreCase('journal')}">Журнал</span>
+                            <span th:if="${activeTab.name.toLowerCase().contains('journal')}">Журнал</span>
                             <span th:if="${activeTab.name.equalsIgnoreCase('card')}">Карточка</span>
                             <span th:if="${activeTab.name.equalsIgnoreCase('files')}">Файлы</span>
                         </button>
