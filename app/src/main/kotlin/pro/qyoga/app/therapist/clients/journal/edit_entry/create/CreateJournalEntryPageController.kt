@@ -10,8 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.servlet.ModelAndView
 import pro.azhidkov.platform.kotlin.isFailureOf
 import pro.azhidkov.platform.spring.http.hxRedirect
-import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.qyoga.app.platform.notFound
+import pro.qyoga.app.therapist.clients.ClientPageTab
+import pro.qyoga.app.therapist.clients.clientPageModel
 import pro.qyoga.app.therapist.clients.journal.edit_entry.edit.EditJournalEntryPageModel
 import pro.qyoga.app.therapist.clients.journal.edit_entry.shared.JOURNAL_ENTRY_FROM
 import pro.qyoga.core.clients.cards.ClientsRepo
@@ -35,8 +36,22 @@ class CreateJournalEntryPageController(
         val client = clientsRepo.findByIdOrNull(clientId)
             ?: return notFound
 
+        return clientPageModel(
+            client,
+            ClientPageTab.ADD_JOURNAL_ENTRY,
+            CreateJournalEntryPageModel(client, LocalDate.now()).modelMap
+        )
+    }
+
+    @GetMapping(CREATE_JOURNAL_PAGE_URL, headers = ["HX-Request"])
+    fun handleGetCreateJournalEntryFragment(
+        @PathVariable clientId: UUID
+    ): ModelAndView {
+        val client = clientsRepo.findByIdOrNull(clientId)
+            ?: return notFound
+
         return CreateJournalEntryPageModel(
-            client.ref(),
+            client,
             LocalDate.now(),
         )
     }

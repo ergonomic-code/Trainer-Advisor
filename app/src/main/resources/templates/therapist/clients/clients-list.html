@@ -92,7 +92,11 @@
                                             th:text="${client.lastJournalEntryDateLabel(today)}">12.04</span>
                                 </small>
                             </td>
-                            <td class="text-end">
+                            <td class="text-end w-auto text-nowrap">
+                                <a class="addJournalEntryLink btn btn-outline-success me-2"
+                                   th:attr="href=@{/therapist/clients/{id}/journal/create (id=${client.id})}">
+                                    <i class="fas fa-file-edit"></i>
+                                </a>
                                 <a class="deleteClientLink btn btn-outline-danger text"
                                    hx-swap="outerHTML swap:0.2s"
                                    hx-target="closest tr"

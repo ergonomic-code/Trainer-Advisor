@@ -20,6 +20,20 @@ import java.util.*
 
 class TherapistClientJournalApi(override val authCookie: Cookie) : AuthorizedApi {
 
+    fun getCreateJournalEntryFragment(clientId: UUID, expectedStatus: HttpStatus = HttpStatus.OK): Document {
+        return Given {
+            authorized()
+            header("HX-Request", true)
+            pathParam("clientId", clientId)
+        } When {
+            get(CreateJournalEntryPageController.CREATE_JOURNAL_PAGE_URL)
+        } Then {
+            statusCode(expectedStatus.value())
+        } Extract {
+            Jsoup.parse(body().asString())
+        }
+    }
+
     fun getCreateJournalEntryPage(clientId: UUID, expectedStatus: HttpStatus = HttpStatus.OK): Document {
         return Given {
             authorized()

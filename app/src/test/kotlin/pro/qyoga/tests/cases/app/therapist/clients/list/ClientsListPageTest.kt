@@ -1,4 +1,4 @@
-package pro.qyoga.tests.cases.app.therapist.clients
+package pro.qyoga.tests.cases.app.therapist.clients.list
 
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.shouldHaveSize
