@@ -4,7 +4,6 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
-import pro.qyoga.app.therapist.clients.journal.edit_entry.shared.ClientNotFound
 import pro.qyoga.core.clients.cards.ClientsRepo
 import pro.qyoga.core.clients.journals.JournalEntriesRepo
 import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRq
@@ -28,7 +27,7 @@ class CreateJournalEntryOp(
         principal: QyogaUserDetails,
     ): JournalEntry {
         val client = clientsRepo.findByIdOrNull(clientId)
-            ?: throw ClientNotFound(clientId)
+        checkNotNull(client) { "Client for journal entry not found by id=$clientId" }
 
         val therapeuticTask = therapeuticTasksRepo.getOrCreate(
             TherapeuticTask(principal.id, editJournalEntryRq.therapeuticTaskName)

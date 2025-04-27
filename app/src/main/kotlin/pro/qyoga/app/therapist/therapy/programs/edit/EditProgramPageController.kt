@@ -44,9 +44,6 @@ class EditProgramPageController(
                     NOT_EXISTING_THERAPEUTIC_TASK bindTo true
                 }
 
-            is EditProgramResult.ProgramNotFound ->
-                notFound
-
             is EditProgramResult.Success ->
                 hxRedirect("/therapist/programs")
         }

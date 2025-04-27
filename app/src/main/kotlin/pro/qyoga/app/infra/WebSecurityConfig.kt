@@ -64,7 +64,7 @@ class WebSecurityConfig(
                     )
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, "/login", "/register", "/surveys", "/error-p").permitAll()
-                    .requestMatchers("/error").permitAll()
+                    .requestMatchers("/error/**").permitAll()
 
                     .requestMatchers("/**").denyAll()
 

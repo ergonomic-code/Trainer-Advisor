@@ -5,10 +5,9 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.servlet.ModelAndView
-import pro.qyoga.app.platform.notFound
 import pro.qyoga.app.therapist.clients.ClientPageTab
 import pro.qyoga.app.therapist.clients.clientPageModel
-import pro.qyoga.core.clients.journals.dtos.JournalPageRq
+import pro.qyoga.core.clients.journals.dtos.JournalPageRq.Companion.firstPage
 import pro.qyoga.core.clients.journals.model.JournalEntry
 import java.util.*
 
@@ -24,19 +23,13 @@ class JournalPageController(
     fun handleGetJournalPage(
         @PathVariable clientId: UUID
     ): ModelAndView {
-        val firstPage = JournalPageRq.firstPage(clientId, fetch = listOf(JournalEntry::therapeuticTask))
-        return when (val result = getJournalPage(firstPage)) {
-            is GetJournalPageResult.ClientNotFound ->
-                notFound
-
-            is GetJournalPageResult.Success -> {
-                clientPageModel(
-                    result.client, ClientPageTab.JOURNAL, mapOf(
-                        JOURNAL to result.page
-                    )
-                )
-            }
-        }
+        val firstPageRq = firstPage(clientId, fetch = listOf(JournalEntry::therapeuticTask))
+        val (client, journalPage) = getJournalPage(firstPageRq)
+        return clientPageModel(
+            client, ClientPageTab.JOURNAL, mapOf(
+                JOURNAL to journalPage
+            )
+        )
     }
 
     companion object {
