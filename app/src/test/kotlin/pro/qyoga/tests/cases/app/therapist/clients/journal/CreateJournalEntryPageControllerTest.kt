@@ -30,10 +30,11 @@ class CreateJournalEntryPageControllerTest : QYogaAppIntegrationBaseTest() {
         backgrounds.clientJournal.createJournalEntry(client.id, createJournalEntryRequest, theTherapistUserDetails)
 
         // And when
-        val modelAndView = journalPageController.handleGetJournalPage(client.id)
+        val journal = journalPageController.handleGetJournalFragment(client.id).fragmentModel
+            .page
+            .content
 
         // Then
-        val journal = JournalPageController.getJournal(modelAndView.model).content
         journal.forAny { it shouldMatch createJournalEntryRequest }
     }
 

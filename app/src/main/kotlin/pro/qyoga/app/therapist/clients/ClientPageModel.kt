@@ -1,7 +1,8 @@
 package pro.qyoga.app.therapist.clients
 
+import org.springframework.ui.ModelMap
 import org.springframework.web.servlet.ModelAndView
-import pro.azhidkov.platform.spring.mvc.modelAndView
+import pro.azhidkov.platform.spring.mvc.viewId
 import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.core.clients.cards.toDto
 
@@ -13,16 +14,17 @@ enum class ClientPageTab {
     ADD_JOURNAL_ENTRY
 }
 
-fun clientPageModel(
-    client: Client,
-    activeTab: ClientPageTab,
-    fragmentModel: Map<String, Any?>
-): ModelAndView {
-    val modelAndView = modelAndView(
-        "therapist/clients/client-edit", mapOf(
+interface ClientPageFragmentModel {
+    val model: ModelMap
+}
+
+data class ClientPageModel<T : ClientPageFragmentModel>(
+    private val client: Client,
+    private val activeTab: ClientPageTab,
+    val fragmentModel: T
+) : ModelAndView(
+    viewId("therapist/clients/client-edit"), mapOf(
             "client" to client.toDto(),
             "activeTab" to activeTab,
-        ) + fragmentModel
+    ) + fragmentModel.model
     )
-    return modelAndView
-}

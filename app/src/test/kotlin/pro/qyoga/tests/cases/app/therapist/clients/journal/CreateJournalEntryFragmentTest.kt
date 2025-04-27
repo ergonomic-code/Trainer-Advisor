@@ -52,10 +52,12 @@ class CreateJournalEntryFragmentTest : QYogaAppIntegrationBaseTest() {
         therapist.clientJournal.createJournalEntry(client.id, createJournalEntryRequest)
 
         // И действие
-        val modelAndView = getBean<JournalPageController>().handleGetJournalPage(client.id)
+        val journal = getBean<JournalPageController>().handleGetJournalFragment(client.id).fragmentModel
+            .page
+            .content
+
 
         // Проверка
-        val journal = JournalPageController.getJournal(modelAndView.model).content
         journal.forAny { it shouldMatch createJournalEntryRequest }
     }
 
