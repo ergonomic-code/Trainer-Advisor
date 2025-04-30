@@ -27,44 +27,55 @@
             </div>
         </div>
 
-        <div class="journalEntry card mb-5" th:each="entry : ${journal.content}">
-            <div class="row g-0 card-header">
-                <div class="col-12 col-sm-1 d-flex align-items-end mb-3 mt-1 mb-sm-0 card-title me-3 ms-2">
-                    <h6 class="entryDate mb-0"
-                        th:text="${#temporals.format(entry.date, T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN)}"></h6>
-                </div>
-                <div class="col-12 col-sm-9 d-flex align-items-end mb-sm-0 ms-2 ms-sm-0 card-subtitle text-muted">
-                    <h6 class="entryTherapeuticTask mb-0 text-truncate">
-                        <span class="d-none d-sm-inline">Задача: </span>
-                        <span th:text="${entry.therapeuticTask.entity.name}"></span>
-                    </h6>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <p class="entryText" style="white-space: pre-line" th:utext="${entry.entryText}"></p>
+        <div th:fragment="journal-entries">
+            <div class="journalEntry card mb-5" th:each="entry : ${journal.content}">
+                <div class="row g-0 card-header">
+                    <div class="col-12 col-sm-1 d-flex align-items-end mb-3 mt-1 mb-sm-0 card-title me-3 ms-2">
+                        <h6 class="entryDate mb-0"
+                            th:text="${#temporals.format(entry.date, T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN)}"></h6>
+                    </div>
+                    <div class="col-12 col-sm-9 d-flex align-items-end mb-sm-0 ms-2 ms-sm-0 card-subtitle text-muted">
+                        <h6 class="entryTherapeuticTask mb-0 text-truncate">
+                            <span class="d-none d-sm-inline">Задача: </span>
+                            <span th:text="${entry.therapeuticTask.entity.name}"></span>
+                        </h6>
                     </div>
                 </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <p class="entryText" style="white-space: pre-line" th:utext="${entry.entryText}"></p>
+                        </div>
+                    </div>
 
-                <div class="row">
-                    <div class="col-12 d-flex justify-content-end">
-                        <a class="editEntryLink btn btn-outline-success me-3"
-                           hx-target=" #tabContent"
-                           th:hx-get="@{/therapist/clients/{clientId}/journal/{entryId}(clientId=${clientId},entryId=${entry.id})}">
-                            <i class="fas fa-edit"></i>
-                        </a>
-                        <a class="deleteEntryLink btn btn-outline-danger"
-                           hx-swap="outerHTML swap:0.2s"
-                           hx-target="closest div.journalEntry"
-                           th:hx-confirm="'Удалить запись за ' + ${entryDate} + '?'"
-                           th:hx-delete="@{/therapist/clients/{clientId}/journal/{entryId}(clientId=${clientId},entryId=${entry.id})}"
-                           th:with="entryDate=${#temporals.format(entry.date, T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN)}">
-                            <i class="fas fa-trash"></i>
-                        </a>
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-end">
+                            <a class="editEntryLink btn btn-outline-success me-3"
+                               hx-target=" #tabContent"
+                               th:hx-get="@{/therapist/clients/{clientId}/journal/{entryId}(clientId=${clientId},entryId=${entry.id})}">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <a class="deleteEntryLink btn btn-outline-danger"
+                               hx-swap="outerHTML swap:0.2s"
+                               hx-target="closest div.journalEntry"
+                               th:hx-confirm="'Удалить запись за ' + ${entryDate} + '?'"
+                               th:hx-delete="@{/therapist/clients/{clientId}/journal/{entryId}(clientId=${clientId},entryId=${entry.id})}"
+                               th:with="entryDate=${#temporals.format(entry.date, T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN)}">
+                                <i class="fas fa-trash"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <span class="loader"
+                  hx-select=".journalEntry, .loader"
+                  hx-swap="afterend"
+                  hx-trigger="revealed"
+                  style="height: 0"
+                  th:hx-get="@{/therapist/clients/{clientId}/journal/page(clientId=${clientId},after=${lastEntryDate})}"
+                  th:if="${journal.hasNext()}"
+            ></span>
         </div>
 
     </div>

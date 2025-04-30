@@ -14,4 +14,12 @@ object JournalEntriesObjectMother {
         text: String = randomSentence(1, 100)
     ) = EditJournalEntryRq(date, therapeuticTaskName, text, 1)
 
+    fun journalEntriesWithUniqueDate(): () -> EditJournalEntryRq {
+        val datesIterator = generateSequence { randomRecentLocalDate() }
+            .distinct()
+            .iterator()
+
+        return { journalEntry(date = datesIterator.next()) }
+    }
+
 }
