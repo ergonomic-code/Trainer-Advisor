@@ -1,7 +1,7 @@
 package pro.qyoga.core.clients.journals
 
-import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Slice
 import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.data.jdbc.core.convert.JdbcConverter
 import org.springframework.data.jdbc.core.mapping.AggregateReference
@@ -39,8 +39,8 @@ class JournalEntriesRepo(
         }
     }
 
-    fun getJournalPage(journalPageRq: JournalPageRq): Page<JournalEntry> {
-        return findPage(
+    fun getJournalPage(journalPageRq: JournalPageRq): Slice<JournalEntry> {
+        return findSlice(
             pageRequest = PageRequest.of(0, journalPageRq.pageSize, sortBy(JournalEntry::date).descending()),
             fetch = journalPageRq.fetch,
         ) {

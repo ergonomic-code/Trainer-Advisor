@@ -1,6 +1,6 @@
 package pro.qyoga.app.therapist.clients.journal.list
 
-import org.springframework.data.domain.Page
+import org.springframework.data.domain.Slice
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Component
 import pro.azhidkov.platform.errors.ResourceNotFoundException
@@ -10,7 +10,7 @@ import pro.qyoga.core.clients.journals.JournalEntriesRepo
 import pro.qyoga.core.clients.journals.dtos.JournalPageRq
 import pro.qyoga.core.clients.journals.model.JournalEntry
 
-data class ClientJournalPage(val client: Client, val page: Page<JournalEntry>)
+data class ClientJournalPage(val client: Client, val page: Slice<JournalEntry>)
 
 @Component
 class GetJournalPageOp(

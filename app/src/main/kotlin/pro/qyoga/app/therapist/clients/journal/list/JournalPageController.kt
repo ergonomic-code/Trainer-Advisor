@@ -1,6 +1,6 @@
 package pro.qyoga.app.therapist.clients.journal.list
 
-import org.springframework.data.domain.Page
+import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Controller
 import org.springframework.ui.ModelMap
 import org.springframework.web.bind.annotation.GetMapping
@@ -16,7 +16,7 @@ import java.util.*
 
 
 class JournalPageFragmentModel(
-    val page: Page<JournalEntry>
+    val page: Slice<JournalEntry>
 ) :
     ClientPageFragmentModel,
     ModelAndView(
