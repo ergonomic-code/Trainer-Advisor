@@ -75,11 +75,12 @@ class RegisterTherapistOp(
     }
 
     override fun invoke(registerTherapistRequest: RegisterTherapistRequest): Therapist {
-        log.info("Registering new therapist: {}", registerTherapistRequest)
-
         if (captchaService.isInvalid(registerTherapistRequest.captchaAnswer)) {
+            log.info("Register therapist with invalid captcha request terminated")
             throw RegistrationException.invalidCaptcha(newCaptcha = captchaService.generateCaptcha())
         }
+
+        log.info("Registering new therapist: {}", registerTherapistRequest)
 
         val password = generateRandomPassword()
         val therapist = runCatching { createTherapistUser(registerTherapistRequest, password) }
