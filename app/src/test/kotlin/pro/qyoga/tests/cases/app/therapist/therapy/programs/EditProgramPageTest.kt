@@ -10,13 +10,14 @@ import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
 import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
 import pro.qyoga.tests.assertions.shouldBePage
-import pro.qyoga.tests.assertions.shouldHave
+import pro.qyoga.tests.assertions.shouldHaveElement
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
 import pro.qyoga.tests.fixture.object_mothers.therapy.exercises.ExercisesObjectMother
 import pro.qyoga.tests.fixture.object_mothers.therapy.programs.ProgramsObjectMother.randomCreateProgramRequest
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
+import pro.qyoga.tests.pages.publc.GenericErrorPage
 import pro.qyoga.tests.pages.publc.NotFoundErrorPage
 import pro.qyoga.tests.pages.therapist.therapy.programs.CreateProgramForm
 import pro.qyoga.tests.pages.therapist.therapy.programs.EditProgramPage
@@ -103,11 +104,11 @@ class EditProgramPageTest : QYogaAppIntegrationBaseTest() {
         )
 
         // Then
-        document shouldHave CreateProgramForm.notExistingTherapeuticTaskMessage
+        document shouldHaveElement CreateProgramForm.notExistingTherapeuticTaskMessage
     }
 
     @Test
-    fun `Edit of not existing program should return standard 404 error page`() {
+    fun `Edit of not existing program should return standard 500 error page`() {
         // Given
         val therapeuticTask = backgrounds.therapeuticTasks.createTherapeuticTask()
         val therapist = TherapistClient.loginAsTheTherapist()
@@ -117,11 +118,11 @@ class EditProgramPageTest : QYogaAppIntegrationBaseTest() {
             -1,
             randomCreateProgramRequest(exercises = listOf(ExercisesObjectMother.randomExercise().first)),
             therapeuticTask.name,
-            expectedStatus = HttpStatus.NOT_FOUND
+            expectedStatus = HttpStatus.INTERNAL_SERVER_ERROR
         )
 
         // Then
-        document shouldBePage NotFoundErrorPage
+        document shouldBePage GenericErrorPage
     }
 
 }

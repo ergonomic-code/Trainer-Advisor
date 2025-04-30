@@ -49,6 +49,7 @@ class EmptyClientJournalPage(clientId: UUID) : ClientJournalPage(
 class NonEmptyClientJournalPage(
     clientId: UUID,
     private val entries: List<JournalEntry>,
+    private val hasMore: Boolean = false
 ) : ClientJournalPage(
     clientId,
     Link.hxGet("addEntryLink", CreateJournalEntryPageController.CREATE_JOURNAL_PAGE_URL, "Добавить запись")
@@ -56,7 +57,7 @@ class NonEmptyClientJournalPage(
 
     override fun match(element: Element) {
         super.match(element)
-        element shouldHave ClientJournalFragment.fragmentFor(entries)
+        element shouldHave ClientJournalFragment.fragmentFor(entries, hasMore)
     }
 
 

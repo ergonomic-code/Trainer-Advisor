@@ -24,6 +24,7 @@ import pro.azhidkov.platform.spring.sdj.findOneBy
 import pro.azhidkov.platform.spring.sdj.mapContent
 import pro.azhidkov.platform.spring.sdj.query.QueryBuilder
 import pro.azhidkov.platform.spring.sdj.query.query
+import kotlin.math.min
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty1
 
@@ -176,18 +177,23 @@ class ErgoRepository<T : Any, ID : Any>(
         queryBuilder: QueryBuilder.() -> Unit = {}
     ): Slice<T> {
         val query = query(queryBuilder)
+            .with(
+                PageRequest.of(
+                    pageRequest.pageNumber,
+                    min(pageRequest.pageSize, Int.MAX_VALUE - 1) + 1,
+                    pageRequest.sort
+                )
+            )
         val res = jdbcAggregateTemplate.findAll(
             query,
             relationalPersistentEntity.type,
-            PageRequest.of(pageRequest.pageNumber, pageRequest.pageSize + 1, pageRequest.sort)
         )
 
-        val hydratedPage = res.content
+        val hydratedPage = res
             .take(pageRequest.pageSize)
             .let { jdbcAggregateTemplate.hydrate(it, FetchSpec(fetch)) }
-        val hasMore = res.totalElements > pageRequest.pageSize
 
-        return SliceImpl(hydratedPage, pageRequest, hasMore)
+        return SliceImpl(hydratedPage, Pageable.unpaged(), hydratedPage.size < res.size)
     }
 
     fun findPage(

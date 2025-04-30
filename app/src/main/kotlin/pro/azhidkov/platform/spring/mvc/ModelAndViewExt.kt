@@ -28,4 +28,4 @@ fun modelAndView(viewName: String, model: Map<String, Any?>): ModelAndView {
     return modelAndView
 }
 
-fun viewId(viewName: String, fragment: String?) = viewName + (fragment?.let { " :: $it" } ?: "")
+fun viewId(viewName: String, fragment: String? = null) = viewName + (fragment?.let { " :: $it" } ?: "")

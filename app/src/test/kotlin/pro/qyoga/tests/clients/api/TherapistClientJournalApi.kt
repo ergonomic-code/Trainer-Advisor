@@ -15,6 +15,7 @@ import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRq
 import pro.qyoga.tests.pages.therapist.clients.journal.entry.CreateJournalEntryForm
 import pro.qyoga.tests.pages.therapist.clients.journal.entry.EditJournalEntryPage
 import pro.qyoga.tests.platform.pathToRegex
+import java.time.LocalDate
 import java.util.*
 
 
@@ -67,6 +68,20 @@ class TherapistClientJournalApi(override val authCookie: Cookie) : AuthorizedApi
             pathParam("clientId", clientId)
         } When {
             get(JournalPageController.JOURNAL_PAGE_PATH)
+        } Then {
+            statusCode(HttpStatus.OK.value())
+        } Extract {
+            Jsoup.parse(body().asString())
+        }
+    }
+
+    fun getJournalPagePage(clientId: UUID, after: LocalDate): Document {
+        return Given {
+            authorized()
+            pathParam("clientId", clientId)
+            queryParam("after", after.toString())
+        } When {
+            get(JournalPageController.JOURNAL_PAGE_PAGE_PATH)
         } Then {
             statusCode(HttpStatus.OK.value())
         } Extract {

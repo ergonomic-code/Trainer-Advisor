@@ -10,7 +10,6 @@ import pro.qyoga.core.therapy.therapeutic_tasks.findOneByName
 
 sealed interface EditProgramResult {
     data class InvalidTherapeuticTaskName(val therapeuticTaskName: String) : EditProgramResult
-    data class ProgramNotFound(val programId: Long) : EditProgramResult
     data class Success(val program: Program) : EditProgramResult
 }
 
@@ -31,10 +30,7 @@ class EditProgram(
         val updatedProgram = programsRepo.updateById(programId) {
             it.patchBy(updateProgramRequest, therapeuticTask.ref())
         }
-
-        if (updatedProgram == null) {
-            return EditProgramResult.ProgramNotFound(programId)
-        }
+        checkNotNull(updatedProgram) { "Program not found by id=$programId" }
 
         return EditProgramResult.Success(updatedProgram)
     }

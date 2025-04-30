@@ -1,6 +1,6 @@
 package pro.qyoga.tests.fixture.backgrounds
 
-import org.springframework.data.domain.Page
+import org.springframework.data.domain.Slice
 import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.stereotype.Component
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.FetchSpec
@@ -48,7 +48,7 @@ class ClientJournalBackgrounds(
             FetchSpec(JournalEntry::therapeuticTask)
         )
 
-    fun getWholeJournal(clientId: UUID): Page<JournalEntry> {
+    fun getWholeJournal(clientId: UUID): Slice<JournalEntry> {
         return journalEntriesRepo.getJournalPage(
             JournalPageRq.wholeJournal(
                 clientId,
