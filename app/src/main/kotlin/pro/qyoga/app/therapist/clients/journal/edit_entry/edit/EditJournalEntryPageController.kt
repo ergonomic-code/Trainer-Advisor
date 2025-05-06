@@ -47,7 +47,7 @@ class EditJournalEntryPageController(
     ): Any {
         try {
             editJournalEntry(ClientRef.to(clientId), entryId, editJournalEntryRq, principal)
-            return hxRedirect("/therapist/clients/$clientId/journal")
+            return hxRedirect("/therapist/clients/$clientId/journal", "HX-Trigger" to "formSaved")
         } catch (ex: DuplicatedDate) {
             return EditJournalEntryPageModel(
                 ex.duplicatedEntry.clientRef,

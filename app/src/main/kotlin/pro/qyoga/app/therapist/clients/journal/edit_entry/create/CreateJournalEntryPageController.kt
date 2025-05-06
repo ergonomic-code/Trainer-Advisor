@@ -68,7 +68,7 @@ class CreateJournalEntryPageController(
 
         return when {
             result.isSuccess ->
-                hxRedirect("/therapist/clients/$clientId/journal")
+                hxRedirect("/therapist/clients/$clientId/journal", "HX-Trigger" to "formSaved")
 
             result.isFailureOf<DuplicatedDate>() -> {
                 val ex = result.exceptionOrNull() as DuplicatedDate

@@ -72,6 +72,11 @@
                 });
             });
 
+            document.body.addEventListener('formSaved', function () {
+                console.debug('Form saved successfully, resetting local storage');
+                resetLocalState();
+            });
+
         </script>
 
         <input
@@ -136,7 +141,6 @@
             </div>
             <div class="col-6 col-sm-auto text-center">
                 <button
-                        @click="resetLocalState()"
                         class="btn btn-outline-success"
                         name="confirmButton"
                         style="min-width: 110px;">
