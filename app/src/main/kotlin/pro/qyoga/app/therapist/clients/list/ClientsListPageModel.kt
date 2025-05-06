@@ -32,6 +32,9 @@ data class ClientListItemView(
         in ((now - Period.ofMonths(1))..now) ->
             lastJournalEntryDate.format(russianDayOfMonthFormat)
 
+        in (now..(now + Period.ofYears(100))) ->
+            "В будущем"
+
         else ->
             "Более ${PeriodFormatter.formatPeriodInGenitiveCase(Period.between(lastJournalEntryDate, now))} назад"
     }
