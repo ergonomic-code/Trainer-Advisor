@@ -11,7 +11,7 @@ import pro.qyoga.tests.assertions.PageMatcher
 import pro.qyoga.tests.assertions.alwaysSuccess
 import pro.qyoga.tests.assertions.shouldBeComponent
 import pro.qyoga.tests.assertions.shouldMatch
-import pro.qyoga.tests.pages.therapist.clients.journal.entry.JournalEntryFrom.FormDraftScript
+import pro.qyoga.tests.pages.therapist.clients.journal.entry.JournalEntryForm.FormDraftScript
 import pro.qyoga.tests.platform.html.Component
 import java.util.*
 

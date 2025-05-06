@@ -18,7 +18,7 @@ import pro.qyoga.tests.pages.publc.GenericErrorPage
 import pro.qyoga.tests.pages.publc.NotFoundErrorPage
 import pro.qyoga.tests.pages.therapist.clients.journal.entry.EditJournalEntryForm
 import pro.qyoga.tests.pages.therapist.clients.journal.entry.EditJournalEntryPage
-import pro.qyoga.tests.pages.therapist.clients.journal.entry.JournalEntryFrom
+import pro.qyoga.tests.pages.therapist.clients.journal.entry.JournalEntryForm
 import java.time.LocalDate
 
 
@@ -87,7 +87,7 @@ class EditJournalEntryPageTest : QYogaAppIntegrationBaseTest() {
         EditJournalEntryForm.dateInput.value(document) shouldBe russianDateFormat.format(firstEntryDate)
         EditJournalEntryForm.therapeuticTaskNameInput.value(document) shouldBe editJournalEntryRequest.therapeuticTaskName
         EditJournalEntryForm.entryTextInput.value(document) shouldBe editJournalEntryRequest.journalEntryText
-        document shouldHaveElement JournalEntryFrom.DUPLICATED_DATE_MESSAGE
+        document shouldHaveElement JournalEntryForm.DUPLICATED_DATE_MESSAGE
     }
 
     @Test

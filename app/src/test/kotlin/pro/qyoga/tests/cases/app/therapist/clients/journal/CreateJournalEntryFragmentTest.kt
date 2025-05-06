@@ -21,7 +21,7 @@ import pro.qyoga.tests.pages.publc.GenericErrorPage
 import pro.qyoga.tests.pages.publc.NotFoundErrorPage
 import pro.qyoga.tests.pages.therapist.clients.journal.entry.CreateJournalEntryForm
 import pro.qyoga.tests.pages.therapist.clients.journal.entry.CreateJournalEntryFragment
-import pro.qyoga.tests.pages.therapist.clients.journal.entry.JournalEntryFrom
+import pro.qyoga.tests.pages.therapist.clients.journal.entry.JournalEntryForm
 import java.time.LocalDate
 
 
@@ -78,7 +78,7 @@ class CreateJournalEntryFragmentTest : QYogaAppIntegrationBaseTest() {
         CreateJournalEntryForm.dateInput.value(document) shouldBe russianDateFormat.format(LocalDate.now())
         CreateJournalEntryForm.therapeuticTaskNameInput.value(document) shouldBe createJournalEntryRequest.therapeuticTaskName
         CreateJournalEntryForm.entryTextInput.value(document) shouldBe createJournalEntryRequest.journalEntryText
-        document shouldHaveElement JournalEntryFrom.DUPLICATED_DATE_MESSAGE
+        document shouldHaveElement JournalEntryForm.DUPLICATED_DATE_MESSAGE
     }
 
     @Test

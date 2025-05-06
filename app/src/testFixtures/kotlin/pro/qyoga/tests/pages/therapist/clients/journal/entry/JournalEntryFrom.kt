@@ -3,7 +3,7 @@ package pro.qyoga.tests.pages.therapist.clients.journal.entry
 import pro.qyoga.app.therapist.clients.journal.edit_entry.create.CreateJournalEntryPageController
 import pro.qyoga.tests.platform.html.*
 
-abstract class JournalEntryFrom(action: FormAction) : QYogaForm("journalEntryFrom", action) {
+abstract class JournalEntryForm(action: FormAction) : QYogaForm("journalEntryForm", action) {
 
     val version = Input.hidden("version", true)
     val dateInput = Input.text("date", true)
@@ -35,6 +35,6 @@ abstract class JournalEntryFrom(action: FormAction) : QYogaForm("journalEntryFro
 }
 
 object CreateJournalEntryForm :
-    JournalEntryFrom(FormAction.hxPost(CreateJournalEntryPageController.CREATE_JOURNAL_PAGE_URL))
+    JournalEntryForm(FormAction.hxPost(CreateJournalEntryPageController.CREATE_JOURNAL_PAGE_URL))
 
-object EditJournalEntryForm : JournalEntryFrom(FormAction.hxPost(EditJournalEntryPage.PATH))
+object EditJournalEntryForm : JournalEntryForm(FormAction.hxPost(EditJournalEntryPage.PATH))

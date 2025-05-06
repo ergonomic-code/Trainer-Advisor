@@ -20,11 +20,11 @@ class CreateJournalEntryFragment(val clientId: UUID, private val today: LocalDat
         element shouldHaveComponent CreateJournalEntryForm
         CreateJournalEntryForm.actionParam(element, "clientId")?.let { UUID.fromString(it) } shouldBe clientId
         CreateJournalEntryForm.dateInput.value(element) shouldBe russianDateFormat.format(LocalDate.now())
-        JournalEntryFrom.FormDraftScript.clientId.value(
-            element.select(JournalEntryFrom.FormDraftScript.selector()).single(), UUID::class
+        JournalEntryForm.FormDraftScript.clientId.value(
+            element.select(JournalEntryForm.FormDraftScript.selector()).single(), UUID::class
         ) shouldBe clientId
-        JournalEntryFrom.FormDraftScript.entryDate.value(
-            element.select(JournalEntryFrom.FormDraftScript.selector()).single(), String::class
+        JournalEntryForm.FormDraftScript.entryDate.value(
+            element.select(JournalEntryForm.FormDraftScript.selector()).single(), String::class
         ) shouldBe (today.format(russianDateFormat))
     }
 

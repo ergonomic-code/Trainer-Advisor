@@ -18,8 +18,8 @@
         }
     </style>
 
-    <form hx-swap="outerHtml" id="journalEntryFrom"
-          th:fragment="journalEntryFrom"
+    <form hx-swap="outerHtml" id="journalEntryForm"
+          th:fragment="journalEntryForm"
           th:hx-post="${formAction}"
           x-data="entryData()"
           x-init="$watch('form', (form) => saveLocalState(form))">
