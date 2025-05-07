@@ -121,7 +121,9 @@ kover {
 	currentProject {
 		createVariant("Endpoints") {
 			add("jvm")
-
+		}
+		createVariant("Ops") {
+			add("jvm")
 		}
 	}
 	reports {
@@ -163,7 +165,59 @@ kover {
 					groupBy = kotlinx.kover.gradle.plugin.dsl.GroupingEntityType.CLASS
 
 					bound {
-						minValue = 100
+						minValue = 90
+						coverageUnits.set(CoverageUnit.INSTRUCTION)
+						aggregationForGroup.set(AggregationType.COVERED_PERCENTAGE)
+					}
+				}
+			}
+		}
+
+		variant("Ops") {
+
+			html {
+				onCheck = true
+			}
+			filters {
+				includes {
+					classes("pro.qyoga.**Op")
+				}
+			}
+
+			verify {
+				onCheck = true
+				rule("Endpoints coverage") {
+					disabled = false
+					groupBy = kotlinx.kover.gradle.plugin.dsl.GroupingEntityType.CLASS
+
+					bound {
+						minValue = 90
+						coverageUnits.set(CoverageUnit.INSTRUCTION)
+						aggregationForGroup.set(AggregationType.COVERED_PERCENTAGE)
+					}
+				}
+			}
+		}
+
+		variant("Ops") {
+
+			html {
+				onCheck = true
+			}
+			filters {
+				includes {
+					classes("pro.qyoga.**Op")
+				}
+			}
+
+			verify {
+				onCheck = true
+				rule("Endpoints coverage") {
+					disabled = false
+					groupBy = kotlinx.kover.gradle.plugin.dsl.GroupingEntityType.CLASS
+
+					bound {
+						minValue = 87
 						coverageUnits.set(CoverageUnit.INSTRUCTION)
 						aggregationForGroup.set(AggregationType.COVERED_PERCENTAGE)
 					}

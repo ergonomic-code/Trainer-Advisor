@@ -12,14 +12,14 @@ import pro.qyoga.core.clients.cards.model.ClientRef
 import pro.qyoga.core.clients.journals.JournalEntriesRepo
 import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRq
 import pro.qyoga.core.clients.journals.errors.DuplicatedDate
+import pro.qyoga.core.clients.journals.model.JournalEntry
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import java.util.*
 
 
 @Controller
 class EditJournalEntryPageController(
-    private val journalsEntriesRepo: JournalEntriesRepo,
-    private val getJournalEntry: GetJournalEntryOp,
+    private val journalEntriesRepo: JournalEntriesRepo,
     private val editJournalEntry: EditJournalEntryOp,
 ) {
 
@@ -28,7 +28,7 @@ class EditJournalEntryPageController(
         @PathVariable clientId: UUID,
         @PathVariable entryId: Long
     ): ModelAndView {
-        val result = getJournalEntry.getJournalEntry(clientId, entryId)
+        val result = journalEntriesRepo.getEntry(clientId, entryId, fetch = JournalEntry.Fetch.summaryRefs)
             ?: return notFound
 
         return EditJournalEntryPageModel(
@@ -65,7 +65,7 @@ class EditJournalEntryPageController(
         @PathVariable clientId: UUID,
         @PathVariable entryId: Long,
     ) {
-        journalsEntriesRepo.deleteById(entryId)
+        journalEntriesRepo.deleteById(entryId)
     }
 
     companion object {

@@ -6,7 +6,6 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
 import pro.azhidkov.platform.spring.mvc.modelAndView
-import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
 import pro.qyoga.core.therapy.therapeutic_tasks.TherapeuticTasksRepo
 import pro.qyoga.core.therapy.therapeutic_tasks.errors.DuplicatedTherapeuticTaskName
 import pro.qyoga.core.therapy.therapeutic_tasks.findTherapistTasksSliceByName
@@ -133,9 +132,9 @@ class TherapeuticTasksListsPageController(
             is TherapeuticTaskHasReferences ->
                 return modelAndView(
                     "therapist/therapy/therapeutic-tasks/therapeutic-tasks-list :: tasks-list", mapOf(
-                        TASKS to listOf(ex.taskRef.resolveOrThrow()),
+                        TASKS to listOf(ex.taskRef),
                         "taskHasReferencesError" to true,
-                        "references" to ex.references,
+                        "references" to ex.references
                     )
                 )
 
