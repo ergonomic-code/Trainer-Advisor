@@ -7,12 +7,13 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.servlet.ModelAndView
-import pro.azhidkov.platform.kotlin.mapSuccess
-import pro.azhidkov.platform.kotlin.recoverFailure
+import pro.azhidkov.platform.kotlin.value
+import pro.qyoga.app.platform.notFound
 import pro.qyoga.core.clients.cards.Client
 import pro.qyoga.core.clients.cards.ClientsRepo
 import pro.qyoga.core.clients.cards.dtos.ClientCardDto
 import pro.qyoga.core.clients.cards.errors.DuplicatedPhoneException
+import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 
 
@@ -37,16 +38,13 @@ class CreateClientCardPageController(
             clientsRepo.save(Client(principal.id, clientCardDto))
         }
 
-        val modelAndView = res
-            .mapSuccess {
-                ModelAndView("redirect:/therapist/clients")
-            }
-            .recoverFailure { _: DuplicatedPhoneException ->
-                editClientFormWithValidationError(clientCardDto)
-            }
-            .getOrThrow()
+        return when (res.value()) {
+            is Client -> ModelAndView("redirect:/therapist/clients")
 
-        return modelAndView
+            null -> notFound
+            is DuplicatedPhoneException -> editClientFormWithValidationError(clientCardDto)
+            else -> throw res.exceptionOrNull()!!
+        }
     }
 
 }
