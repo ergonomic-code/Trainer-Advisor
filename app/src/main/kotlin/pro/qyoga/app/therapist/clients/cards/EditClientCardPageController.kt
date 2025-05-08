@@ -2,15 +2,13 @@ package pro.qyoga.app.therapist.clients.cards
 
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Controller
-import org.springframework.ui.ModelMap
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.servlet.ModelAndView
 import pro.azhidkov.platform.kotlin.value
-import pro.azhidkov.platform.spring.mvc.viewId
+import pro.azhidkov.platform.spring.http.hxRedirect
 import pro.qyoga.app.platform.notFound
-import pro.qyoga.app.therapist.clients.ClientPageFragmentModel
 import pro.qyoga.app.therapist.clients.ClientPageModel
 import pro.qyoga.app.therapist.clients.ClientPageTab
 import pro.qyoga.core.clients.cards.ClientsRepo
@@ -20,19 +18,6 @@ import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.core.clients.cards.patchedBy
 import java.util.*
 
-data class EditClientCardPageModel(
-    private val formAction: String
-) : ClientPageFragmentModel,
-    ModelAndView(
-        viewId("/therapist/clients/client-edit"),
-        mapOf(
-            "formAction" to formAction
-        )
-    ) {
-
-    override val model: ModelMap = super<ModelAndView>.modelMap
-
-}
 
 @Controller
 class EditClientCardPageController(
@@ -49,9 +34,7 @@ class EditClientCardPageController(
         return ClientPageModel(
             client,
             ClientPageTab.CARD,
-            EditClientCardPageModel(
-                "/therapist/clients/${client.id}/card"
-            )
+            EditClientCardPageModel(formAction(client.id))
         )
     }
 
@@ -59,16 +42,16 @@ class EditClientCardPageController(
     fun editClientCard(
         clientCardDto: ClientCardDto,
         @PathVariable clientId: UUID
-    ): ModelAndView {
+    ): Any {
         val res = runCatching {
             clientsRepo.updateById(clientId) { client -> client.patchedBy(clientCardDto) }
         }
 
         return when (res.value()) {
-            is Client -> ModelAndView("redirect:/therapist/clients")
+            is Client -> hxRedirect("/therapist/clients", "HX-Trigger" to "formSaved")
 
             null -> notFound
-            is DuplicatedPhoneException -> editClientFormWithValidationError(clientCardDto)
+            is DuplicatedPhoneException -> editClientFormWithValidationError(formAction(clientId), clientCardDto)
             else -> throw res.exceptionOrNull()!!
         }
     }
@@ -80,3 +63,5 @@ class EditClientCardPageController(
     }
 
 }
+
+private fun formAction(clientId: UUID): String = "/therapist/clients/${clientId}/card"

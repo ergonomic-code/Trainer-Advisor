@@ -5,12 +5,10 @@ import io.kotest.inspectors.forNone
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
+import pro.qyoga.core.clients.cards.model.PhoneNumber
 import pro.qyoga.core.clients.cards.model.toUIFormat
 import pro.qyoga.core.clients.cards.toDto
-import pro.qyoga.tests.assertions.shouldBe
-import pro.qyoga.tests.assertions.shouldBePage
-import pro.qyoga.tests.assertions.shouldHaveElement
-import pro.qyoga.tests.assertions.shouldMatch
+import pro.qyoga.tests.assertions.*
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
 import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother.createClientCardDto
@@ -19,6 +17,7 @@ import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import pro.qyoga.tests.pages.publc.NotFoundErrorPage
 import pro.qyoga.tests.pages.therapist.clients.card.CreateClientForm
+import pro.qyoga.tests.pages.therapist.clients.card.EditClientForm
 import pro.qyoga.tests.pages.therapist.clients.card.EditClientPage
 
 
@@ -132,6 +131,7 @@ class EditClientCardPageTest : QYogaAppIntegrationBaseTest() {
             therapist.clients.editClientForError(existingClient.id, existingClientDto.copy(phoneNumber = thePhone))
 
         // Проверка
+        document shouldBeElement EditClientForm.clientForm(existingClient.copy(phoneNumber = PhoneNumber.of(thePhone)))
         document shouldHaveElement CreateClientForm.invalidPhoneInput
     }
 

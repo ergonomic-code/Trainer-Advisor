@@ -81,8 +81,9 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
         } When {
             post(CreateClientForm.action.url)
         } Then {
-            statusCode(HttpStatus.FOUND.value())
-            header("Location", endsWith(ClientsListPage.path))
+            statusCode(HttpStatus.OK.value())
+            header("HX-Redirect", endsWith(ClientsListPage.path))
+            header("HX-Trigger", "formSaved")
         }
     }
 
@@ -107,8 +108,9 @@ class TherapistClientsApi(override val authCookie: Cookie) : AuthorizedApi {
         } When {
             post(EditClientPage.PATH)
         } Then {
-            statusCode(HttpStatus.FOUND.value())
-            header("Location", endsWith(ClientsListPage.path))
+            statusCode(HttpStatus.OK.value())
+            header("HX-Redirect", endsWith(ClientsListPage.path))
+            header("HX-Trigger", "formSaved")
         }
     }
 
