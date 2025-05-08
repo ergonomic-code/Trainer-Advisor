@@ -23,9 +23,11 @@ class EditExercisePageController(
         val exercise = exercisesService.findById(exerciseId)
             ?: return notFound
 
-        return modelAndView("therapist/therapy/exercises/exercise-create") {
-            "exercise" bindTo exercise
-        }
+        return modelAndView(
+            "therapist/therapy/exercises/exercise-create", mapOf(
+                "exercise" to exercise
+            )
+        )
     }
 
     @PutMapping

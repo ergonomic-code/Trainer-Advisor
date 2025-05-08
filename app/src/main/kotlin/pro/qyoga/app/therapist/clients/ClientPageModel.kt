@@ -24,7 +24,7 @@ data class ClientPageModel<T : ClientPageFragmentModel>(
     val fragmentModel: T
 ) : ModelAndView(
     viewId("therapist/clients/client-edit"), mapOf(
-            "client" to client.toDto(),
-            "activeTab" to activeTab,
+        "client" to client.toDto(),
+        "activeTab" to activeTab,
     ) + fragmentModel.model
-    )
+)

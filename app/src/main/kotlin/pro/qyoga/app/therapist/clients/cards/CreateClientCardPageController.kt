@@ -6,13 +6,14 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.servlet.ModelAndView
-import pro.azhidkov.platform.kotlin.mapSuccess
-import pro.azhidkov.platform.kotlin.recoverFailure
+import pro.azhidkov.platform.kotlin.value
+import pro.azhidkov.platform.spring.http.hxRedirect
+import pro.qyoga.app.platform.notFound
 import pro.qyoga.core.clients.cards.Client
 import pro.qyoga.core.clients.cards.ClientsRepo
 import pro.qyoga.core.clients.cards.dtos.ClientCardDto
 import pro.qyoga.core.clients.cards.errors.DuplicatedPhoneException
+import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 
 
@@ -24,7 +25,7 @@ class CreateClientCardPageController(
 
     @GetMapping("/create")
     fun getCreateClientPage(model: Model): String {
-        model.addAttribute("formAction", "/therapist/clients/create")
+        model.addAttribute("formAction", FORM_ACTION)
         return "therapist/clients/client-create"
     }
 
@@ -32,21 +33,22 @@ class CreateClientCardPageController(
     fun createClient(
         clientCardDto: ClientCardDto,
         @AuthenticationPrincipal principal: QyogaUserDetails,
-    ): ModelAndView {
+    ): Any {
         val res = runCatching {
             clientsRepo.save(Client(principal.id, clientCardDto))
         }
 
-        val modelAndView = res
-            .mapSuccess {
-                ModelAndView("redirect:/therapist/clients")
-            }
-            .recoverFailure { _: DuplicatedPhoneException ->
-                editClientFormWithValidationError(clientCardDto)
-            }
-            .getOrThrow()
+        return when (res.value()) {
+            is Client -> hxRedirect("/therapist/clients", "HX-Trigger" to "formSaved")
 
-        return modelAndView
+            null -> notFound
+            is DuplicatedPhoneException -> editClientFormWithValidationError(FORM_ACTION, clientCardDto)
+            else -> throw res.exceptionOrNull()!!
+        }
+    }
+
+    companion object {
+        private const val FORM_ACTION = "/therapist/clients/create"
     }
 
 }

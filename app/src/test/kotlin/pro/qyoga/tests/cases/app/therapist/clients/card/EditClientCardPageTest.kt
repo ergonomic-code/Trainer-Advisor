@@ -2,14 +2,13 @@ package pro.qyoga.tests.cases.app.therapist.clients.card
 
 import io.kotest.inspectors.forAny
 import io.kotest.inspectors.forNone
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
+import pro.qyoga.core.clients.cards.model.PhoneNumber
 import pro.qyoga.core.clients.cards.model.toUIFormat
 import pro.qyoga.core.clients.cards.toDto
-import pro.qyoga.tests.assertions.shouldBe
-import pro.qyoga.tests.assertions.shouldBePage
-import pro.qyoga.tests.assertions.shouldHaveElement
-import pro.qyoga.tests.assertions.shouldMatch
+import pro.qyoga.tests.assertions.*
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
 import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother.createClientCardDto
@@ -18,40 +17,42 @@ import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import pro.qyoga.tests.pages.publc.NotFoundErrorPage
 import pro.qyoga.tests.pages.therapist.clients.card.CreateClientForm
+import pro.qyoga.tests.pages.therapist.clients.card.EditClientForm
 import pro.qyoga.tests.pages.therapist.clients.card.EditClientPage
 
 
+@DisplayName("Страница редактирования карточки клиента")
 class EditClientCardPageTest : QYogaAppIntegrationBaseTest() {
 
     @Test
-    fun `Client card page should be rendered correctly`() {
-        // Given
+    fun `должна корректно рендериться`() {
+        // Сетап
         val therapist = TherapistClient.loginAsTheTherapist()
         val client = backgrounds.clients.createClients(1, THE_THERAPIST_ID).first()
 
-        // When
+        // Действие
         val document = therapist.clients.getEditClientCardPage(client.id)
 
-        // Then
+        // Проверка
         document shouldBe EditClientPage.pageFor(client)
     }
 
     @Test
-    fun `Edit client card page should be rendered correctly for minimal client`() {
-        // Given
+    fun `должна корректно рендериться для клиента с заполненными только обязательными полями`() {
+        // Сетап
         val therapist = TherapistClient.loginAsTheTherapist()
         val client = backgrounds.clients.createClients(listOf(ClientsObjectMother.createClientCardDtoMinimal())).first()
 
-        // When
+        // Действие
         val document = therapist.clients.getEditClientCardPage(client.id)
 
-        // Then
+        // Проверка
         document shouldBe EditClientPage.pageFor(client)
     }
 
     @Test
-    fun `Client editing should be persistent`() {
-        // Given
+    fun `должна сохранять изменения`() {
+        // Сетап
         val therapist = TherapistClient.loginAsTheTherapist()
 
         val newClientCardDto = createClientCardDto()
@@ -59,52 +60,52 @@ class EditClientCardPageTest : QYogaAppIntegrationBaseTest() {
 
         val editedClientCardDto = createClientCardDto()
 
-        // When
+        // Действие
         therapist.clients.editClient(client.id, editedClientCardDto)
 
-        // Then
+        // Проверка
         val clients = backgrounds.clients.getAllClients()
         clients.forNone { it shouldMatch newClientCardDto }
         clients.forAny { it shouldMatch editedClientCardDto }
     }
 
     @Test
-    fun `System should accept edit client forms containing only required fields`() {
-        // Given
+    fun `должна сохранять изменения, если указаны только значения обязательных полей`() {
+        // Сетап
         val minimalClient = ClientsObjectMother.createClientCardDtoMinimal()
         val editedMinimalClient = ClientsObjectMother.createClientCardDtoMinimal()
         val minimalClientId = backgrounds.clients.createClients(listOf(minimalClient), THE_THERAPIST_ID).single().id
         val therapist = TherapistClient.loginAsTheTherapist()
 
-        // When
+        // Действие
         therapist.clients.editClient(minimalClientId, editedMinimalClient)
 
-        // Then
+        // Проверка
         val clients = backgrounds.clients.getAllClients()
         clients.forAny { it shouldMatch editedMinimalClient }
     }
 
     @Test
-    fun `Request of edit page for not existing client id should return 404 error page`() {
-        // Given
+    fun `при запросе для не существующего клиента должна возвращать стандартную страницу ошибки 404`() {
+        // Сетап
         val therapist = TherapistClient.loginAsTheTherapist()
         val notExistingClientId = ClientsObjectMother.randomId()
 
-        // When
+        // Действие
         val document =
             therapist.clients.getEditClientCardPage(notExistingClientId, expectedStatus = HttpStatus.NOT_FOUND)
 
-        // Then
+        // Проверка
         document shouldBePage NotFoundErrorPage
     }
 
     @Test
-    fun `Edit of not existing client should return 404 error page`() {
-        // Given
+    fun `при редактировании несуществующего клиента должна возвращать стандартную страницу ошибки 404`() {
+        // Сетап
         val therapist = TherapistClient.loginAsTheTherapist()
         val notExistingClientId = ClientsObjectMother.randomId()
 
-        // When
+        // Действие
         val document =
             therapist.clients.editClientForError(
                 notExistingClientId,
@@ -112,30 +113,31 @@ class EditClientCardPageTest : QYogaAppIntegrationBaseTest() {
                 expectedStatus = HttpStatus.NOT_FOUND
             )
 
-        // Then
+        // Проверка
         document shouldBePage NotFoundErrorPage
     }
 
     @Test
-    fun `System should return page with duplicated phone error message on posting form with duplicated phone`() {
-        // Given
+    fun `должна возвращать форму с сообщением об ошибки дублирования номера телефона при отравке формы с телефоном другого клиента того же терапевта`() {
+        // Сетап
         val thePhone = randomPhoneNumber().toUIFormat()
         backgrounds.clients.createClient(phone = thePhone)
         val existingClient = backgrounds.clients.createClient()
         val existingClientDto = existingClient.toDto()
         val therapist = TherapistClient.loginAsTheTherapist()
 
-        // When
+        // Действие
         val document =
             therapist.clients.editClientForError(existingClient.id, existingClientDto.copy(phoneNumber = thePhone))
 
-        // Then
+        // Проверка
+        document shouldBeElement EditClientForm.clientForm(existingClient.copy(phoneNumber = PhoneNumber.of(thePhone)))
         document shouldHaveElement CreateClientForm.invalidPhoneInput
     }
 
     @Test
-    fun `System should allow to change client phone to phone number of client of another therapist`() {
-        // Given
+    fun `должна сохранять телефон, указанный для другого клиента другого терапевта`() {
+        // Сетап
         val thePhone = randomPhoneNumber().toUIFormat()
         val anotherTherapistId = backgrounds.users.registerNewTherapist().id
         backgrounds.clients.createClient(phone = thePhone, therapistId = anotherTherapistId)
@@ -143,10 +145,10 @@ class EditClientCardPageTest : QYogaAppIntegrationBaseTest() {
         val updatePhoneDto = targetClient.toDto().copy(phoneNumber = thePhone)
         val therapist = TherapistClient.loginAsTheTherapist()
 
-        // When
+        // Действие
         therapist.clients.editClient(targetClient.id, updatePhoneDto)
 
-        // Then
+        // Проверка
         val clients = backgrounds.clients.getAllClients()
         clients.forAny { it shouldMatch updatePhoneDto }
     }

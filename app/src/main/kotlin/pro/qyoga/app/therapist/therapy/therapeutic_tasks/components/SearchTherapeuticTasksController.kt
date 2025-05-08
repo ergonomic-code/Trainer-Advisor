@@ -28,9 +28,11 @@ class SearchTherapeuticTasksController(
                 searchKey,
                 TherapeuticTasksRepo.Page.topFiveByName
             )
-        return modelAndView("therapist/therapy/therapeutic-tasks/therapeutic-tasks-search-result") {
-            "tasks" bindTo tasks
-        }
+        return modelAndView(
+            "therapist/therapy/therapeutic-tasks/therapeutic-tasks-search-result", mapOf(
+                "tasks" to tasks
+            )
+        )
     }
 
 }

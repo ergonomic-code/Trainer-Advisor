@@ -18,8 +18,8 @@
         }
     </style>
 
-    <form hx-swap="outerHtml" id="journalEntryFrom"
-          th:fragment="journalEntryFrom"
+    <form hx-swap="outerHtml" id="journalEntryForm"
+          th:fragment="journalEntryForm"
           th:hx-post="${formAction}"
           x-data="entryData()"
           x-init="$watch('form', (form) => saveLocalState(form))">
@@ -70,6 +70,11 @@
                     it.setAttribute("x-model", "form." + it.name);
                     it.setAttribute(":class", "isChanged(form, '" + it.name + "') ? 'border-warning' : ''");
                 });
+            });
+
+            document.body.addEventListener('formSaved', function () {
+                console.debug('Form saved successfully, resetting local storage');
+                resetLocalState();
             });
 
         </script>
@@ -136,7 +141,6 @@
             </div>
             <div class="col-6 col-sm-auto text-center">
                 <button
-                        @click="resetLocalState()"
                         class="btn btn-outline-success"
                         name="confirmButton"
                         style="min-width: 110px;">

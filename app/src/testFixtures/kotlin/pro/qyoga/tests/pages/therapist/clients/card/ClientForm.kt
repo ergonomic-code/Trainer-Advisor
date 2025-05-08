@@ -8,6 +8,7 @@ import pro.qyoga.core.clients.cards.model.toUIFormat
 import pro.qyoga.l10n.russianDateFormat
 import pro.qyoga.tests.assertions.PageMatcher
 import pro.qyoga.tests.assertions.SelectorOnlyComponent
+import pro.qyoga.tests.assertions.shouldBeElement
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.platform.html.*
 import pro.qyoga.tests.platform.html.Input.Companion.email
@@ -59,11 +60,12 @@ abstract class ClientForm(action: FormAction) : QYogaForm("createClientForm", ac
 
 }
 
-object CreateClientForm : ClientForm(FormAction.classicPost("/therapist/clients/create"))
+object CreateClientForm : ClientForm(FormAction.hxPost("/therapist/clients/create"))
 
-object EditClientForm : ClientForm(FormAction.classicPost("/therapist/clients/{id}")) {
+object EditClientForm : ClientForm(FormAction.hxPost("/therapist/clients/{id}")) {
 
     fun clientForm(client: Client): PageMatcher = PageMatcher { element ->
+        element.select(this.selector()).single() shouldBeElement action
         element.select(firstName.selector()).`val`() shouldBe client.firstName
         element.select(lastName.selector()).`val`() shouldBe client.lastName
         element.select(middleName.selector()).`val`() shouldBe (client.middleName ?: "")

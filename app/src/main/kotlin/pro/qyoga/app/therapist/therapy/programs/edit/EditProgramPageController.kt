@@ -39,10 +39,11 @@ class EditProgramPageController(
                 programPageModelAndView(
                     pageMode = EntityPageMode.EDIT,
                     program = ProgramPageModel(updateProgramRequest, therapeuticTaskName, programId),
-                    fragment = "programForm"
-                ) {
-                    NOT_EXISTING_THERAPEUTIC_TASK bindTo true
-                }
+                    fragment = "programForm",
+                    mapOf(
+                        NOT_EXISTING_THERAPEUTIC_TASK to true
+                    )
+                )
 
             is EditProgramResult.Success ->
                 hxRedirect("/therapist/programs")

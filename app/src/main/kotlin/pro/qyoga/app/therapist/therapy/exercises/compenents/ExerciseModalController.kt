@@ -22,9 +22,11 @@ class ExerciseModalController(
         val exercise = exercisesService.findById(exerciseId)
             ?: return notFound
 
-        return modelAndView("therapist/therapy/exercises/exercise-modal") {
-            "exercise" bindTo exercise
-        }
+        return modelAndView(
+            "therapist/therapy/exercises/exercise-modal", mapOf(
+                "exercise" to exercise
+            )
+        )
     }
 
     companion object {

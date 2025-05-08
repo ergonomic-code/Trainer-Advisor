@@ -24,6 +24,11 @@ class ClientListItemViewTest : FreeSpec({
             aClientListItemView.lastJournalEntryDateLabel(now) shouldBe "Более месяца назад"
         }
 
+        "должна рендерить лейбл даты последней записи в виде 'В будущем' при запросе 15 марта 2025 (в будущем)" {
+            val now = LocalDate.of(2025, 3, 15)
+            aClientListItemView.lastJournalEntryDateLabel(now) shouldBe "В будущем"
+        }
+
     }
 
 })
