@@ -5,6 +5,7 @@ import io.kotest.matchers.collections.shouldHaveSize
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import pro.qyoga.core.clients.cards.dtos.ClientSearchDto
+import pro.qyoga.l10n.russianDayOfMonthFormat
 import pro.qyoga.tests.assertions.shouldBe
 import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.assertions.shouldHaveComponent
@@ -152,8 +153,8 @@ class ClientsListPageTest : QYogaAppIntegrationBaseTest() {
     @Test
     fun `должна корректно рендерить статистику клиента с одной записью журнала`() {
         // Сетап
-        val entryDate = LocalDate.of(2025, 4, 17)
-        val lastJournalEntryDateLabel = "17.04"
+        val entryDate = LocalDate.now()
+        val lastJournalEntryDateLabel = entryDate.format(russianDayOfMonthFormat)
         val (aClient, journal) = clientsFixturePresets.createAClientWithJournalEntry(createEditJournalEntryRequest = {
             journalEntry(
                 date = entryDate
