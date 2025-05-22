@@ -1,11 +1,12 @@
 <div class="dropdown combo-box-div"
-     th:fragment="comboBox(name, fetchUrl, value, valueName, placeholderView)"
+     th:fragment="comboBox(name, fetchUrl, value, valueName, placeholderView, required, selectOnly)"
      x-data="{showComboBox: false, searchKey: $el.querySelector('input[type=text]').value}">
 
-    <input class="idInput"
+    <input class="idInput form-control"
            th:id="${name + 'Id'}"
            th:name="${name}"
            th:value="${value ?: ''}"
+           th:required="${required}"
            type="hidden">
 
     <div class="form-floating">
