@@ -124,12 +124,16 @@
                 <datalist id="therapeuticTasks"></datalist>
             </div>
         </div>
-        <div class="mb-3">
-            <label class="form-label" for="text-input">Запись</label>
+            <div class="mb-3 col">
+
+                <div class="form-floating">
             <textarea class="form-control full-height"
                       id="text-input" name="journalEntryText" required rows="12"
                       th:text="${entry?.journalEntryText ?: ''}"
+                      placeholder=""
             ></textarea>
+                    <label class="form-label" for="text-input">Запись <span class="text-danger">*</span></label>
+                </div>
         </div>
 
         <div class="row g-2 justify-content-end">
