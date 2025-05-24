@@ -1,5 +1,6 @@
 <div class="dropdown combo-box-div"
-     th:fragment="comboBox(name, fetchUrl, value, valueName, placeholderView, required, selectOnly)"
+     th:attr="${'@itemSelected'}=${itemSelected}"
+     th:fragment="comboBox(name, fetchUrl, value, valueName, placeholderView, itemSelected, required, selectOnly)"
      x-data="{showComboBox: false, searchKey: $el.querySelector('input[type=text]').value}">
 
     <input class="idInput form-control"
@@ -85,7 +86,11 @@
                         idInput.value = button.dataset.itemId;
                         idInput.setCustomValidity('');
                         titleInput.value = button.dataset.itemTitle;
+
+                        idInput.setCustomValidity('');
                         titleInput.setCustomValidity('');
+
+                        titleInput.dispatchEvent(new CustomEvent('itemselected', { bubbles: true, detail: { itemId: idInput.value, itemTitle: titleInput.value} }));
                     "
                     th:data-item-id="${item.id}"
                     th:data-item-title="${item.title}"
