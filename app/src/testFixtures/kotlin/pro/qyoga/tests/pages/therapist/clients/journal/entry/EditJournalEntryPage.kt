@@ -29,7 +29,8 @@ object EditJournalEntryPage : Component {
             element.getElementById(EditJournalEntryForm.id)!! shouldBeComponent EditJournalEntryForm
 
             EditJournalEntryForm.dateInput.value(element) shouldBe entry.date.toString()
-            EditJournalEntryForm.therapeuticTaskNameInput.value(element) shouldBe entry.therapeuticTask.resolveOrThrow().name
+            EditJournalEntryForm.therapeuticTaskComboBox.value(element) shouldBe entry.therapeuticTask!!.id.toString()
+            EditJournalEntryForm.therapeuticTaskComboBox.title(element) shouldBe entry.therapeuticTask.resolveOrThrow().name
             EditJournalEntryForm.entryTextInput.value(element) shouldBe entry.entryText
             val scriptElement = element.select(FormDraftScript.selector()).single()
             FormDraftScript.clientId.value(scriptElement, UUID::class) shouldBe entry.clientRef.id

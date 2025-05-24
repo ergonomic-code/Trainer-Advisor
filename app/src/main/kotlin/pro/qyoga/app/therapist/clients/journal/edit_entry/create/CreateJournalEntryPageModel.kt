@@ -21,6 +21,7 @@ data class CreateJournalEntryPageModel(
     ModelAndView(
         viewId(JOURNAL_ENTRY_VIEW_NAME, fragment), mapOf(
             "client" to client,
+            "entry" to null,
             "entryDate" to entryDate,
             "duplicatedDate" to duplicatedDate,
             "formAction" to createFormAction(client.ref())

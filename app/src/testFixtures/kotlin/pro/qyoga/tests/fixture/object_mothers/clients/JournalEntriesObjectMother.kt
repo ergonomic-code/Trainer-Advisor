@@ -12,7 +12,7 @@ object JournalEntriesObjectMother {
         date: LocalDate = randomRecentLocalDate(),
         therapeuticTaskName: String = randomSentence(1, 3),
         text: String = randomSentence(1, 100)
-    ) = EditJournalEntryRq(date, therapeuticTaskName, text, 1)
+    ) = EditJournalEntryRq(date, null, therapeuticTaskName, text, 1)
 
     fun journalEntriesWithUniqueDate(): () -> EditJournalEntryRq {
         val datesIterator = generateSequence { randomRecentLocalDate() }

@@ -7,7 +7,7 @@ abstract class JournalEntryForm(action: FormAction) : QYogaForm("journalEntryFor
 
     val version = Input.hidden("version", true)
     val dateInput = Input.date("date", true)
-    val therapeuticTaskNameInput = Input.text("therapeuticTaskName", true)
+    val therapeuticTaskComboBox = ComboBox("therapeuticTask", true)
     val entryTextInput = TextArea("journalEntryText", true)
 
     private val addButton = Button("confirmButton", "Сохранить")
@@ -26,7 +26,7 @@ abstract class JournalEntryForm(action: FormAction) : QYogaForm("journalEntryFor
 
     override val components = listOf(
         dateInput,
-        therapeuticTaskNameInput,
+        therapeuticTaskComboBox,
         entryTextInput,
         addButton,
         FormDraftScript

@@ -22,7 +22,7 @@
           th:fragment="journalEntryForm"
           th:hx-post="${formAction}"
           x-data="entryData()"
-          x-init="$watch('form', (form) => saveLocalState(form))">
+          x-init="$watch('form', (form) => saveLocalState(form), {deep: true})">
 
         <script id="formDraft" th:inline="javascript">
             let serverState = /*[[${entry}]]*/ null;
@@ -36,7 +36,7 @@
 
             let formData;
             if (serverState == null) {
-                formData = localState || {version: 0, date: entryDate};
+                formData = localState || {version: 0, date: entryDate, therapeuticTask: {id: null}};
             } else if (serverState.version === localState?.version) {
                 formData = localState
             } else {
@@ -49,7 +49,11 @@
                 return {
                     form: formData,
                     serverState: serverState,
-                    hasUnsavedChanges: hasUnsavedEdits || newCardWasntSaved
+                    hasUnsavedChanges: hasUnsavedEdits || newCardWasntSaved,
+                    therapeuticTaskSelected(event) {
+                        this.form.therapeuticTask = {id: event.detail.itemId};
+                        this.form.therapeuticTaskTitle = event.detail.itemTitle;
+                    }
                 }
             }
 
@@ -101,27 +105,34 @@
                            min="2000-01-01"
                            name="date"
                            required
-                       th:classappend="${duplicatedDate} ? 'is-invalid' : ''"
+                           th:classappend="${duplicatedDate} ? 'is-invalid' : ''"
                            th:value="${entry?.date ?: entryDate}"
                            type="date">
                     <label for="date">Дата <span class="text-danger">*</span></label>
-                <div class="invalid-feedback" id="duplicatedDateMessage">
-                    Запись за эту дату уже существует
+                    <div class="invalid-feedback" id="duplicatedDateMessage">
+                        Запись за эту дату уже существует
+                    </div>
                 </div>
             </div>
-            <div class="mb-3 col">
-                <label class="form-label" for="task-input">Терапевтическая задача</label>
-                <input class="form-control"
-                       hx-get="/therapist/therapeutic-tasks/autocomplete-search"
-                       id="task-input" minlength="3" name="therapeuticTaskName" required
-                       hx-swap="outerHTML"
-                       hx-target="#therapeuticTasks"
-                       hx-trigger="input[inputType != 'insertReplacementText' && target.value.length > 2] delay:0.3s"
-                       list="therapeuticTasks"
-                       th:value="${entry?.therapeuticTaskName ?: ''}"
-                       type="text"
+
+            <div @itemSelected="therapeuticTaskSelected($event)" class="mb-3 col">
+                <combo-box-fragment id="therapeuticTask"
+                                    th:replace="~{components/combo-box.html :: comboBox(
+                                                    name='therapeuticTask',
+                                                    fetchUrl='/therapist/therapeutic-tasks/autocomplete-search-combo-box',
+                                                    value=${entry?.therapeuticTask?.id},
+                                                    valueName=${entry?.therapeuticTaskTitle},
+                                                    placeholderView=~{:: #therapeuticTaskPlaceholder},
+                                                    itemSelected='therapeuticTaskSelected($event)',
+                                                    minlength=2,
+                                                    maxlength=50,
+                                                    required=true,
+                                                    selectOnly=false)}"
                 >
-                <datalist id="therapeuticTasks"></datalist>
+                    <label id="therapeuticTaskPlaceholder">Терапевтическая задача <span
+                            class="text-danger">*</span></label>
+                </combo-box-fragment>
+                <div class="form-text">Начните вводить название для поиска</div>
             </div>
         </div>
             <div class="mb-3 col">

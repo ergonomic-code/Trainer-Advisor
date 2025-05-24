@@ -84,7 +84,7 @@ class EditJournalEntryPageTest : QYogaAppIntegrationBaseTest() {
         // Проверка
         document.select("body form").single() shouldBeComponent EditJournalEntryForm
         EditJournalEntryForm.dateInput.value(document) shouldBe firstEntryDate.toString()
-        EditJournalEntryForm.therapeuticTaskNameInput.value(document) shouldBe editJournalEntryRequest.therapeuticTaskName
+        EditJournalEntryForm.therapeuticTaskComboBox.title(document) shouldBe editJournalEntryRequest.therapeuticTaskTitle
         EditJournalEntryForm.entryTextInput.value(document) shouldBe editJournalEntryRequest.journalEntryText
         document shouldHaveElement JournalEntryForm.DUPLICATED_DATE_MESSAGE
     }

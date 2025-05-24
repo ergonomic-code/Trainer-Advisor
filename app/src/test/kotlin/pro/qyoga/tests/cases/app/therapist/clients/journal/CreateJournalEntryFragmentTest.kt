@@ -75,7 +75,7 @@ class CreateJournalEntryFragmentTest : QYogaAppIntegrationBaseTest() {
         // Проверка
         document.select("body form").single() shouldBeComponent CreateJournalEntryForm
         CreateJournalEntryForm.dateInput.value(document) shouldBe LocalDate.now().toString()
-        CreateJournalEntryForm.therapeuticTaskNameInput.value(document) shouldBe createJournalEntryRequest.therapeuticTaskName
+        CreateJournalEntryForm.therapeuticTaskComboBox.title(document) shouldBe createJournalEntryRequest.therapeuticTaskTitle
         CreateJournalEntryForm.entryTextInput.value(document) shouldBe createJournalEntryRequest.journalEntryText
         document shouldHaveElement JournalEntryForm.DUPLICATED_DATE_MESSAGE
     }
