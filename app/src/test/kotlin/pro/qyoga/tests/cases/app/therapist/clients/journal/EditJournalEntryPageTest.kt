@@ -5,7 +5,6 @@ import io.kotest.matchers.shouldNotBe
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
-import pro.qyoga.l10n.russianDateFormat
 import pro.qyoga.tests.assertions.*
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
@@ -84,7 +83,7 @@ class EditJournalEntryPageTest : QYogaAppIntegrationBaseTest() {
 
         // Проверка
         document.select("body form").single() shouldBeComponent EditJournalEntryForm
-        EditJournalEntryForm.dateInput.value(document) shouldBe russianDateFormat.format(firstEntryDate)
+        EditJournalEntryForm.dateInput.value(document) shouldBe firstEntryDate.toString()
         EditJournalEntryForm.therapeuticTaskNameInput.value(document) shouldBe editJournalEntryRequest.therapeuticTaskName
         EditJournalEntryForm.entryTextInput.value(document) shouldBe editJournalEntryRequest.journalEntryText
         document shouldHaveElement JournalEntryForm.DUPLICATED_DATE_MESSAGE

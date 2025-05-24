@@ -28,7 +28,7 @@
             let serverState = /*[[${entry}]]*/ null;
             let clientId = /*[[${client.id}]]*/ null;
             let entryId = /*[[${entryId}]]*/ null;
-            let entryDate = /*[[${#temporals.format((entry?.date ?: entryDate), T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN)}]]*/ null;
+            let entryDate = /*[[${entry?.date ?: entryDate}]]*/ null;
 
             let localStateKey = `qyoga.journalEntryForm.${clientId}.${entryId || "new"}`;
 
@@ -93,16 +93,18 @@
         </div>
 
         <div class="row">
-            <div class="mb-3 col-12 col-md-2">
-                <label class="form-label" for="date-input">Дата</label>
-                <input aria-describedby="duplicatedDateMessage"
-                       class="form-control"
-                       id="date-input"
-                       name="date" pattern="\d{2}\.\d{2}\.\d{4}" required
+            <div class="mb-3 col-12 col-sm-3">
+                <div class="form-floating ">
+                    <input class="form-control"
+                           id="date"
+                           max="2100-01-01"
+                           min="2000-01-01"
+                           name="date"
+                           required
                        th:classappend="${duplicatedDate} ? 'is-invalid' : ''"
-                       th:value="${#temporals.format((entry?.date ?: entryDate), T(pro.qyoga.l10n.DateFormatsKt).RUSSIAN_DATE_FORMAT_PATTERN)}"
-                       type="text"
-                >
+                           th:value="${entry?.date ?: entryDate}"
+                           type="date">
+                    <label for="date">Дата <span class="text-danger">*</span></label>
                 <div class="invalid-feedback" id="duplicatedDateMessage">
                     Запись за эту дату уже существует
                 </div>

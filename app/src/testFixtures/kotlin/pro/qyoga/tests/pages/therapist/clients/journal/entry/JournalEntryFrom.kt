@@ -6,7 +6,7 @@ import pro.qyoga.tests.platform.html.*
 abstract class JournalEntryForm(action: FormAction) : QYogaForm("journalEntryForm", action) {
 
     val version = Input.hidden("version", true)
-    val dateInput = Input.text("date", true)
+    val dateInput = Input.date("date", true)
     val therapeuticTaskNameInput = Input.text("therapeuticTaskName", true)
     val entryTextInput = TextArea("journalEntryText", true)
 
