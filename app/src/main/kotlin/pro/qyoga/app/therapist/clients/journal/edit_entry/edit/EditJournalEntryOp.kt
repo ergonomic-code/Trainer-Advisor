@@ -26,7 +26,7 @@ class EditJournalEntryOp(
         principal: QyogaUserDetails,
     ): JournalEntry? {
         val therapeuticTask = therapeuticTasksRepo.getOrCreate(
-            TherapeuticTask(principal.id, editJournalEntryRq.therapeuticTaskName)
+            TherapeuticTask(principal.id, editJournalEntryRq.therapeuticTaskTitle)
         )
 
         val query = query {

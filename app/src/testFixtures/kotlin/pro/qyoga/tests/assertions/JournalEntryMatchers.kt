@@ -8,12 +8,12 @@ import pro.qyoga.core.clients.journals.model.JournalEntry
 
 infix fun JournalEntry.shouldMatch(editJournalEntryRq: EditJournalEntryRq) {
     date shouldBe editJournalEntryRq.date
-    therapeuticTask.resolveOrThrow().name shouldBe editJournalEntryRq.therapeuticTaskName
+    therapeuticTask.resolveOrThrow().name shouldBe editJournalEntryRq.therapeuticTaskTitle
     entryText shouldBe editJournalEntryRq.journalEntryText
 }
 
 infix fun EditJournalEntryRq.shouldMatch(journalEntry: JournalEntry) {
     date shouldBe journalEntry.date
-    therapeuticTaskName shouldBe journalEntry.therapeuticTask.resolveOrThrow().name
+    therapeuticTaskTitle shouldBe journalEntry.therapeuticTask.resolveOrThrow().name
     journalEntryText shouldBe journalEntryText
 }

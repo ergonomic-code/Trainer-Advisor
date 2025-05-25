@@ -116,8 +116,12 @@ class TherapistClientJournalApi(override val authCookie: Cookie) : AuthorizedApi
         formParam(CreateJournalEntryForm.version.name, journalEntry.version)
         formParam(CreateJournalEntryForm.dateInput.name, journalEntry.date.toString())
         formParam(
-            CreateJournalEntryForm.therapeuticTaskNameInput.name,
-            journalEntry.therapeuticTaskName
+            CreateJournalEntryForm.therapeuticTaskComboBox.name,
+            ""
+        )
+        formParam(
+            CreateJournalEntryForm.therapeuticTaskComboBox.titleInputId,
+            journalEntry.therapeuticTaskTitle
         )
         formParam(CreateJournalEntryForm.entryTextInput.name, journalEntry.journalEntryText)
         pathParam("clientId", clientId)
@@ -160,8 +164,12 @@ class TherapistClientJournalApi(override val authCookie: Cookie) : AuthorizedApi
         formParam(CreateJournalEntryForm.version.name, journalEntry.version)
         formParam(CreateJournalEntryForm.dateInput.name, journalEntry.date.toString())
         formParam(
-            CreateJournalEntryForm.therapeuticTaskNameInput.name,
-            journalEntry.therapeuticTaskName
+            CreateJournalEntryForm.therapeuticTaskComboBox.name,
+            ""
+        )
+        formParam(
+            CreateJournalEntryForm.therapeuticTaskComboBox.titleInputId,
+            journalEntry.therapeuticTaskTitle
         )
         formParam(CreateJournalEntryForm.entryTextInput.name, journalEntry.journalEntryText)
         pathParam("clientId", clientId)

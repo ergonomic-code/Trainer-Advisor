@@ -19,7 +19,7 @@ class SearchTherapeuticTasksController(
 
     @GetMapping
     fun search(
-        @RequestParam("therapeuticTaskName") searchKey: String,
+        @RequestParam(SEARCH_KEY_PARAM_NAME) searchKey: String,
         @AuthenticationPrincipal therapist: QyogaUserDetails,
     ): ModelAndView {
         val tasks =
@@ -33,6 +33,10 @@ class SearchTherapeuticTasksController(
                 "tasks" to tasks
             )
         )
+    }
+
+    companion object {
+        const val SEARCH_KEY_PARAM_NAME = "therapeuticTaskName"
     }
 
 }

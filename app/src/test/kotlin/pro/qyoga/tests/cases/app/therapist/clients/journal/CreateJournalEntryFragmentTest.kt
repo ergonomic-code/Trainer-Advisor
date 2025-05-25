@@ -6,7 +6,6 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import pro.qyoga.app.therapist.clients.journal.list.JournalPageController
-import pro.qyoga.l10n.russianDateFormat
 import pro.qyoga.tests.assertions.shouldBeComponent
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.assertions.shouldHaveElement
@@ -75,8 +74,8 @@ class CreateJournalEntryFragmentTest : QYogaAppIntegrationBaseTest() {
 
         // Проверка
         document.select("body form").single() shouldBeComponent CreateJournalEntryForm
-        CreateJournalEntryForm.dateInput.value(document) shouldBe russianDateFormat.format(LocalDate.now())
-        CreateJournalEntryForm.therapeuticTaskNameInput.value(document) shouldBe createJournalEntryRequest.therapeuticTaskName
+        CreateJournalEntryForm.dateInput.value(document) shouldBe LocalDate.now().toString()
+        CreateJournalEntryForm.therapeuticTaskComboBox.title(document) shouldBe createJournalEntryRequest.therapeuticTaskTitle
         CreateJournalEntryForm.entryTextInput.value(document) shouldBe createJournalEntryRequest.journalEntryText
         document shouldHaveElement JournalEntryForm.DUPLICATED_DATE_MESSAGE
     }

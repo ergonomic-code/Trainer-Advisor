@@ -10,8 +10,8 @@ import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
 import pro.qyoga.app.therapist.therapy.therapeutic_tasks.components.TherapeuticTasksComboBoxController
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTask
-import pro.qyoga.tests.pages.therapist.clients.journal.entry.CreateJournalEntryForm
 import pro.qyoga.tests.pages.therapist.clients.journal.entry.TherapeuticTasksSearchResult
+import pro.qyoga.tests.pages.therapist.therapy.programs.EditProgramForm
 import pro.qyoga.tests.pages.therapist.therapy.therapeutic_tasks.TherapeuticTasksListPage
 
 class TherapistTherapeuticTasksApi(override val authCookie: Cookie) : AuthorizedApi {
@@ -32,7 +32,7 @@ class TherapistTherapeuticTasksApi(override val authCookie: Cookie) : Authorized
     fun autocompleteSearch(searchKey: String): Document {
         return Given {
             authorized()
-            queryParams(CreateJournalEntryForm.therapeuticTaskNameInput.name, searchKey)
+            queryParams(EditProgramForm.therapeuticTaskInput.name, searchKey)
         } When {
             get(TherapeuticTasksSearchResult.PATH)
         } Then {

@@ -30,7 +30,7 @@ class CreateJournalEntryOp(
         checkNotNull(client) { "Client for journal entry not found by id=$clientId" }
 
         val therapeuticTask = therapeuticTasksRepo.getOrCreate(
-            TherapeuticTask(principal.id, editJournalEntryRq.therapeuticTaskName)
+            TherapeuticTask(principal.id, editJournalEntryRq.therapeuticTaskTitle)
         )
         val newEntry = JournalEntry(
             client.ref(),
