@@ -2,6 +2,7 @@ package pro.qyoga.tests.cases.app.therapist.appointments.core
 
 import io.kotest.matchers.collections.shouldBeEmpty
 import io.kotest.matchers.shouldBe
+import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
@@ -31,44 +32,44 @@ import java.time.LocalDate
 import java.time.LocalTime
 import java.time.ZoneId
 
-
+@DisplayName("Страница редактирования записи на прием")
 class EditAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
     private val timeZones = getBean<TimeZones>()
 
     @Test
-    fun `Edit page for minimal appointment page should be correctly rendered and prefilled`() {
-        // Given
+    fun `Страница редактирования только с обязательными полями записи на прием должна корректно отображаться и заполняться`() {
+        // Сетап
         val appointment = backgrounds.appointments.create()
 
         val therapist = TherapistClient.loginAsTheTherapist()
 
-        // When
+        // Действие
         val document = therapist.appointments.getEditAppointmentPage(appointment.ref())
 
-        // Then
+        // Проверка
         document shouldBePage EditAppointmentPage
         document shouldHave EditAppointmentForm.formPrefilledWith(appointment.toEditRequest(timeZones::findById))
     }
 
     @Test
-    fun `Edit page for full appointment page should be correctly rendered and prefilled`() {
-        // Given
+    fun `Страница редактирования со всеми заполененными полями записи на прием должна корректно отображаться и заполняться`() {
+        // Сетап
         val appointment = backgrounds.appointments.createFull()
 
         val therapist = TherapistClient.loginAsTheTherapist()
 
-        // When
+        // Действие
         val document = therapist.appointments.getEditAppointmentPage(appointment.ref())
 
-        // Then
+        // Проверка
         document shouldBePage EditAppointmentPage
         document shouldHave EditAppointmentForm.formPrefilledWith(appointment.toEditRequest(timeZones::findById))
     }
 
     @Test
-    fun `Edit of minimal appointment to full should be persistent`() {
-        // Given
+    fun `Отредактированная запись на прием только с обязательными полями должна сохраняться`() {
+        // Сетап
         val appointment = backgrounds.appointments.create()
         val newAppointmentType = backgrounds.appointmentTypes.createAppointmentType()
         val therapeuticTask = backgrounds.therapeuticTasks.createTherapeuticTask()
@@ -86,10 +87,10 @@ class EditAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
         val therapist = TherapistClient.loginAsTheTherapist()
 
-        // When
+        // Действие
         val response = therapist.appointments.editAppointment(appointment.ref(), editedAppointment)
 
-        // Then
+        // Проверка
         response.statusCode() shouldBe HttpStatus.OK.value()
         response shouldBePage CalendarPage
 
@@ -99,8 +100,8 @@ class EditAppointmentPageTest : QYogaAppIntegrationBaseTest() {
     }
 
     @Test
-    fun `Edit of full appointment to minimal should be persistent`() {
-        // Given
+    fun `Отредактированная запись на прием со всеми полями должна сохраняться`() {
+        // Сетап
         val appointment = backgrounds.appointments.createFull()
         val editedAppointment =
             AppointmentsObjectMother.appointmentPatchRequest(
@@ -116,10 +117,10 @@ class EditAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
         val therapist = TherapistClient.loginAsTheTherapist()
 
-        // When
+        // Действие
         val response = therapist.appointments.editAppointment(appointment.ref(), editedAppointment)
 
-        // Then
+        // Проверка
         response.statusCode() shouldBe HttpStatus.OK.value()
         response shouldBePage CalendarPage
 
@@ -128,38 +129,38 @@ class EditAppointmentPageTest : QYogaAppIntegrationBaseTest() {
     }
 
     @Test
-    fun `On request of edit page of not existing appointment 404 error page should be returned`() {
-        // Given
+    fun `При запросе страницы редактирования несуществующего приема должна возвращаться страница с ошибкой 404`() {
+        // Сетап
         val therapist = TherapistClient.loginAsTheTherapist()
 
-        // When
+        // Действие
         val document =
             therapist.appointments.getEditAppointmentPage(aAppointmentId(), expectedStatus = HttpStatus.NOT_FOUND)
 
-        // Then
+        // Проверка
         document shouldBePage (NotFoundErrorPage as HtmlPage)
     }
 
     @Test
-    fun `On request to edit of not existing appointment 404 error page should be returned`() {
-        // Given
+    fun `При запросе на редактировании несуществующего приема должна возвращаться страница с ошибкой 404`() {
+        // Сетап
         val therapist = TherapistClient.loginAsTheTherapist()
 
         val editAppointmentRequest = randomEditAppointmentRequest()
 
-        // When
+        // Действие
         val response = therapist.appointments.editAppointment(
             aAppointmentId(), editAppointmentRequest
         )
 
-        // Then
+        // Проверка
         response.statusCode() shouldBe HttpStatus.NOT_FOUND.value()
         response shouldBePage NotFoundErrorPage
     }
 
     @Test
-    fun `Creation of appointment that intersects with existing should fail with validation error`() {
-        // Given
+    fun `Создание приема, пересекающегося с существующим, должно завершиться ошибкой проверки`() {
+        // Сетап
         val appointmentsDate = LocalDate.of(2024, 2, 11)
         val appointmentsBaseTime = LocalTime.of(9, 0)
         val zoneId = ZoneId.of("Asia/Novosibirsk")
@@ -180,13 +181,13 @@ class EditAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
         val therapist = TherapistClient.loginAsTheTherapist()
 
-        // When
+        // Действие
         val document = therapist.appointments.editAppointmentForError(
             nextNotRescheduledAppointment.ref(),
             rescheduleAppointmentRequest
         )
 
-        // Then
+        // Проверка
         document shouldBePage EditAppointmentPage
         document shouldHave EditAppointmentForm.formPrefilledWith(rescheduleAppointmentRequest)
         document shouldHaveElement CreateAppointmentForm.appointmentsIntersectionErrorMessage
@@ -196,15 +197,15 @@ class EditAppointmentPageTest : QYogaAppIntegrationBaseTest() {
     }
 
     @Test
-    fun `Deletion of appointment should be persistent and return redirect to specified calendar day`() {
-        // Given
+    fun `Удаление записи на прием должно быть постоянным и перенаправлять на указанный календарный день`() {
+        // Сетап
         val appointment = backgrounds.appointments.create()
         val therapist = TherapistClient.loginAsTheTherapist()
 
-        // When
+        // Действие
         val response = therapist.appointments.delete(appointment.ref(), appointment.wallClockDateTime.toLocalDate())
 
-        // Then
+        // Проверка
         response.statusCode shouldBe HttpStatus.OK.value()
         response.header("HX-Location") shouldBe SchedulePageController.DATE_PATH.replace(
             "{date}",
@@ -212,6 +213,21 @@ class EditAppointmentPageTest : QYogaAppIntegrationBaseTest() {
         )
 
         backgrounds.appointments.getDaySchedule(appointment.wallClockDateTime.toLocalDate()).shouldBeEmpty()
+    }
+
+    @Test
+    fun `Запись на прием со статусом 'Клиент пришел' должна отображаться корректно`() {
+        // Сетап
+        val appointment = backgrounds.appointments.create(appointmentStatus = AppointmentStatus.CLIENT_CAME)
+
+        val therapist = TherapistClient.loginAsTheTherapist()
+
+        // Действие
+        val document = therapist.appointments.getEditAppointmentPage(appointment.ref())
+
+        // Проверка
+        document shouldBePage EditAppointmentPage
+        document shouldHave EditAppointmentForm.formPrefilledWith(appointment.toEditRequest(timeZones::findById))
     }
 
 }
