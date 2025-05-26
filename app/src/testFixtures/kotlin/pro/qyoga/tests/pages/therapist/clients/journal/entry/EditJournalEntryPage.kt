@@ -6,7 +6,6 @@ import org.jsoup.nodes.Element
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
 import pro.qyoga.core.clients.journals.dtos.EditJournalEntryRq
 import pro.qyoga.core.clients.journals.model.JournalEntry
-import pro.qyoga.l10n.russianDateFormat
 import pro.qyoga.tests.assertions.PageMatcher
 import pro.qyoga.tests.assertions.alwaysSuccess
 import pro.qyoga.tests.assertions.shouldBeComponent
@@ -29,8 +28,9 @@ object EditJournalEntryPage : Component {
         override fun match(element: Element) {
             element.getElementById(EditJournalEntryForm.id)!! shouldBeComponent EditJournalEntryForm
 
-            EditJournalEntryForm.dateInput.value(element) shouldBe russianDateFormat.format(entry.date)
-            EditJournalEntryForm.therapeuticTaskNameInput.value(element) shouldBe entry.therapeuticTask.resolveOrThrow().name
+            EditJournalEntryForm.dateInput.value(element) shouldBe entry.date.toString()
+            EditJournalEntryForm.therapeuticTaskComboBox.value(element) shouldBe entry.therapeuticTask!!.id.toString()
+            EditJournalEntryForm.therapeuticTaskComboBox.title(element) shouldBe entry.therapeuticTask.resolveOrThrow().name
             EditJournalEntryForm.entryTextInput.value(element) shouldBe entry.entryText
             val scriptElement = element.select(FormDraftScript.selector()).single()
             FormDraftScript.clientId.value(scriptElement, UUID::class) shouldBe entry.clientRef.id
@@ -38,7 +38,7 @@ object EditJournalEntryPage : Component {
             FormDraftScript.entryDate.value(
                 scriptElement,
                 String::class
-            ) shouldBe (entry.date.format(russianDateFormat))
+            ) shouldBe entry.date.toString()
             FormDraftScript.serverState.value(scriptElement, EditJournalEntryRq::class)!! shouldMatch entry
         }
 

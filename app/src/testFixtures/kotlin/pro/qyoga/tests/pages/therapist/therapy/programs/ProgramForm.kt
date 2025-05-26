@@ -1,5 +1,6 @@
 package pro.qyoga.tests.pages.therapist.therapy.programs
 
+import pro.qyoga.app.therapist.therapy.therapeutic_tasks.components.SearchTherapeuticTasksController
 import pro.qyoga.tests.platform.html.Button
 import pro.qyoga.tests.platform.html.FormAction
 import pro.qyoga.tests.platform.html.Input
@@ -9,7 +10,7 @@ abstract class ProgramForm(action: FormAction) : QYogaForm("programForm", action
 
     val titleInput by component { Input.text("title", true) }
 
-    val therapeuticTaskInput by component { Input.text("therapeuticTaskName", true) }
+    val therapeuticTaskInput by component { Input.text(SearchTherapeuticTasksController.SEARCH_KEY_PARAM_NAME, true) }
 
     val exerciseSearchInput by component { Input.text("searchKey", false, id = "exerciseSearchInput") }
 

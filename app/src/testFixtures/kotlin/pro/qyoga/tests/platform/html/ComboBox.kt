@@ -14,7 +14,7 @@ class ComboBox(baseName: String, override val required: Boolean, val items: List
 
     val titleInputId = baseName + "Title"
 
-    private val valueInput = Input(name, false, "hidden")
+    private val valueInput = Input(name, required, "hidden")
 
     val titleInput = Input.text(titleInputId, required, id = titleInputId)
 
@@ -47,6 +47,9 @@ class ComboBox(baseName: String, override val required: Boolean, val items: List
 
     override fun value(element: Element): String =
         element.select("input[type=hidden][name=$name]").`val`()
+
+    fun title(element: Element): String =
+        element.select("input[type=text][name=$titleInputId]").`val`()
 
     override fun selector(): String = "div.combo-box-div:has(input[name='${name}'])"
 

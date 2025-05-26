@@ -53,9 +53,16 @@
 
                                 <combo-box-fragment id="client"
                                                     th:replace="~{components/combo-box.html :: comboBox(
-                                                    name='client', fetchUrl='/therapist/clients/autocomplete-search',
-                                                    value=${appointment?.client?.id}, valueName=${appointment?.clientTitle},
-                                                    placeholderView=~{:: #clientPlaceholder}, minlength=2, maxlength=100, required=true)}">
+                                                    name='client',
+                                                    fetchUrl='/therapist/clients/autocomplete-search',
+                                                    value=${appointment?.client?.id},
+                                                    valueName=${appointment?.clientTitle},
+                                                    placeholderView=~{:: #clientPlaceholder},
+                                                    itemSelected='',
+                                                    minlength=2,
+                                                    maxlength=100,
+                                                    required=true,
+                                                    selectOnly=true)}">
                                     <label id="clientPlaceholder">Клиент <span class="text-danger">*</span></label>
                                 </combo-box-fragment>
                                 <div class="form-text">Начните вводить имя или телефон для поиска</div>
@@ -65,9 +72,16 @@
                             <div class="col-12 mb-3 mb-sm-0 col-sm-4">
                                 <combo-box-fragment id="appointmentType"
                                                     th:replace="~{components/combo-box.html :: comboBox(
-                                                    name='appointmentType', fetchUrl='/therapist/appointments/types/autocomplete-search',
-                                                    value=${appointment?.appointmentType?.id}, valueName=${appointment?.appointmentTypeTitle},
-                                                    placeholderView=~{:: #typePlaceholder}, minlength=2, maxlength=50, required=true, selectOnly = false)}">
+                                                        name='appointmentType',
+                                                        fetchUrl='/therapist/appointments/types/autocomplete-search',
+                                                        value=${appointment?.appointmentType?.id},
+                                                        valueName=${appointment?.appointmentTypeTitle},
+                                                        placeholderView=~{:: #typePlaceholder},
+                                                        itemSelected='',
+                                                        minlength=2,
+                                                        maxlength=50,
+                                                        required=true,
+                                                        selectOnly=false)}">
                                     <label id="typePlaceholder">Тип приёма <span class="text-danger">*</span></label>
                                 </combo-box-fragment>
                                 <div class="form-text">Начните вводить название для поиска</div>
@@ -77,9 +91,16 @@
                             <div class="col-12 col-sm-4">
                                 <combo-box-fragment id="therapeuticTask"
                                                     th:replace="~{components/combo-box.html :: comboBox(
-                                                    name='therapeuticTask', fetchUrl='/therapist/therapeutic-tasks/autocomplete-search-combo-box',
-                                                    value=${appointment?.therapeuticTask?.id}, valueName=${appointment?.therapeuticTaskTitle},
-                                                    placeholderView=~{:: #therapeuticTaskPlaceholder}, minlength=2, maxlength=50)}">
+                                                        name='therapeuticTask',
+                                                        fetchUrl='/therapist/therapeutic-tasks/autocomplete-search-combo-box',
+                                                        value=${appointment?.therapeuticTask?.id},
+                                                        valueName=${appointment?.therapeuticTaskTitle},
+                                                        placeholderView=~{:: #therapeuticTaskPlaceholder},
+                                                        itemSelected='',
+                                                        minlength=2,
+                                                        maxlength=50,
+                                                        required=false,
+                                                        selectOnly=true)}">
                                     <label id="therapeuticTaskPlaceholder">Терапевтическая задача</label>
                                 </combo-box-fragment>
                                 <div class="form-text">Начните вводить название для поиска</div>
@@ -128,9 +149,17 @@
                             <div class="col-12 col-sm-3 mb-3 mb-sm-0">
                                 <combo-box-fragment id="timeZone"
                                                     th:replace="~{components/combo-box.html :: comboBox(
-                                                    name='timeZone', fetchUrl='/components/time-zone/autocomplete-search',
-                                                    value=${appointment?.timeZone}, valueName=${appointment?.timeZoneTitle},
-                                                    placeholderView=~{:: #timeZonePlaceholder}, required=true, minlength=2, maxlength=50)}">
+                                                        name='timeZone',
+                                                        fetchUrl='/components/time-zone/autocomplete-search',
+                                                        value=${appointment?.timeZone},
+                                                        valueName=${appointment?.timeZoneTitle},
+                                                        placeholderView=~{:: #timeZonePlaceholder},
+                                                        itemSelected='',
+                                                        required=true,
+                                                        minlength=2,
+                                                        maxlength=50,
+                                                        required=true,
+                                                        selectOnly=true)}">
                                     <label id="timeZonePlaceholder">Часововй пояс <span
                                             class="text-danger">*</span></label>
                                 </combo-box-fragment>
