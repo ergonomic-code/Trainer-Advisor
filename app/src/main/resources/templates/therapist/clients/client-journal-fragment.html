@@ -7,9 +7,7 @@
             <br/>
             <a class="link-opacity-100"
                id="addFirstEntryLink"
-               href="#"
-               hx-target="#tabContent"
-               th:hx-get="@{/therapist/clients/{clientId}/journal/create(clientId=${clientId})}"
+               th:href="@{/therapist/clients/{clientId}/journal/create(clientId=${clientId})}"
             >Добавьте первую</a>
         </span>
     </p>
@@ -19,9 +17,8 @@
         <div class="row d-flex mb-4 flex-row-reverse">
             <div class="col col-sm-3 d-flex justify-content-end">
                 <a class="btn btn-outline-success link-opacity-100 w-100" href="#"
-                   hx-target="#tabContent"
                    id="addEntryLink"
-                   th:hx-get="@{/therapist/clients/{clientId}/journal/create(clientId=${clientId})}">
+                   th:href="@{/therapist/clients/{clientId}/journal/create(clientId=${clientId})}">
                     Добавить запись
                 </a>
             </div>

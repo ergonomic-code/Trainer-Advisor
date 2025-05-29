@@ -23,16 +23,12 @@ import pro.qyoga.tests.platform.html.Link
 object ClientJournalFragment {
 
     private val addEntryLink =
-        Link.hxGet("addEntryLink", CreateJournalEntryPageController.CREATE_JOURNAL_PAGE_URL, "Добавить запись")
+        Link("addEntryLink", CreateJournalEntryPageController.CREATE_JOURNAL_PAGE_URL, "Добавить запись")
 
-    fun fragmentFor(entries: List<JournalEntry>, hasMore: Boolean = false): PageMatcher = object : PageMatcher {
+    fun fragmentFor(entries: List<JournalEntry>, hasMore: Boolean = false): PageMatcher = PageMatcher { element ->
+        element shouldHaveComponent addEntryLink
 
-        override fun match(element: Element) {
-            element shouldHaveComponent addEntryLink
-
-            ClientJournalEntriesFragment.fragmentFor(entries, hasMore).match(element)
-        }
-
+        ClientJournalEntriesFragment.fragmentFor(entries, hasMore).match(element)
     }
 
 }
@@ -41,38 +37,34 @@ object ClientJournalEntriesFragment {
 
     private val editEntryLink = Link.hxGet("editEntryLink", EditJournalEntryPage.PATH, "")
     private val deleteEntryLink = Link.hxDelete("deleteEntryLink", EditJournalEntryPage.PATH, "")
-    private val nextPageLoaderHandle = ".loader"
+    private const val NEXT_PAGE_LOADER_HANDLE = ".loader"
 
-    fun fragmentFor(entries: List<JournalEntry>, hasMore: Boolean = false): PageMatcher = object : PageMatcher {
+    fun fragmentFor(entries: List<JournalEntry>, hasMore: Boolean = false): PageMatcher = PageMatcher { element ->
+        val entryElements = element.select("div.journalEntry")
+        entryElements shouldHaveSize entries.size
 
-        override fun match(element: Element) {
-            val entryElements = element.select("div.journalEntry")
-            entryElements shouldHaveSize entries.size
+        entries.zip(entryElements).forAll { (entry, el) ->
 
-            entries.zip(entryElements).forAll { (entry, el) ->
+            val expectedEditLink = editEntryLink.urlPattern
+                .replace("{clientId}", entry.clientRef.id.toString())
+                .replace("{entryId}", entry.id.toString())
+            el.select(".editEntryLink").attr(editEntryLink.targetAttr) shouldBe expectedEditLink
 
-                val expectedEditLink = editEntryLink.urlPattern
-                    .replace("{clientId}", entry.clientRef.id.toString())
-                    .replace("{entryId}", entry.id.toString())
-                el.select(".editEntryLink").attr(editEntryLink.targetAttr) shouldBe expectedEditLink
+            val expectedDeleteLink = deleteEntryLink.urlPattern
+                .replace("{clientId}", entry.clientRef.id.toString())
+                .replace("{entryId}", entry.id.toString())
+            el.select(".deleteEntryLink").attr(deleteEntryLink.targetAttr) shouldBe expectedDeleteLink
 
-                val expectedDeleteLink = deleteEntryLink.urlPattern
-                    .replace("{clientId}", entry.clientRef.id.toString())
-                    .replace("{entryId}", entry.id.toString())
-                el.select(".deleteEntryLink").attr(deleteEntryLink.targetAttr) shouldBe expectedDeleteLink
-
-                el.select(".entryDate").text() shouldBe russianDateFormat.format(entry.date)
-                el.select(".entryTherapeuticTask").text() shouldContain entry.therapeuticTask.resolveOrThrow().name
-                el.select(".entryText").text() shouldBe entry.entryText
-            }
-
-            if (hasMore) {
-                element shouldHaveComponent NextPageLoader(entries.last())
-            } else {
-                element shouldNotHave nextPageLoaderHandle
-            }
+            el.select(".entryDate").text() shouldBe russianDateFormat.format(entry.date)
+            el.select(".entryTherapeuticTask").text() shouldContain entry.therapeuticTask.resolveOrThrow().name
+            el.select(".entryText").text() shouldBe entry.entryText
         }
 
+        if (hasMore) {
+            element shouldHaveComponent NextPageLoader(entries.last())
+        } else {
+            element shouldNotHave NEXT_PAGE_LOADER_HANDLE
+        }
     }
 }
 

@@ -20,9 +20,9 @@ WHERE pl.last_used > NOW() - '1 WEEK'::interval
 GROUP BY u.id, t.id;
 
 -- Месячная статистика по записям журнала
-SELECT dates,
-       count(je.id),
-       count(distinct c.therapist_ref)
+SELECT dates                           AS date,
+       count(je.id)                    AS entries_count,
+       count(distinct c.therapist_ref) AS therapists_count
 FROM generate_series(now() - '1 month'::interval, now(), '1 day'::interval) dates
          LEFT JOIN journal_entries je ON je.date = date_trunc('days', dates.dates)
          LEFT JOIN clients c ON c.id = je.client_ref

@@ -1,6 +1,7 @@
 package pro.qyoga.app.therapist.clients.journal.edit_entry.create
 
 import org.springframework.data.repository.findByIdOrNull
+import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
@@ -9,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.servlet.ModelAndView
 import pro.azhidkov.platform.kotlin.isFailureOf
-import pro.azhidkov.platform.spring.http.hxRedirect
 import pro.qyoga.app.platform.notFound
 import pro.qyoga.app.therapist.clients.ClientPageModel
 import pro.qyoga.app.therapist.clients.ClientPageTab
@@ -68,7 +68,10 @@ class CreateJournalEntryPageController(
 
         return when {
             result.isSuccess ->
-                hxRedirect("/therapist/clients/$clientId/journal", "HX-Trigger" to "formSaved")
+                ResponseEntity
+                    .ok()
+                    .header("HX-Trigger", "formSaved")
+                    .build<Unit>()
 
             result.isFailureOf<DuplicatedDate>() -> {
                 val ex = result.exceptionOrNull() as DuplicatedDate
