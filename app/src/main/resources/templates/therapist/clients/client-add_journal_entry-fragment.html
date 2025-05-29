@@ -69,9 +69,12 @@
                 return serverState != null && serverState[key] !== form[key];
             }
 
-            function closeForm() {
+            function closeForm(event) {
                 resetLocalState();
-                window.location.href = document.referrer;
+                window.location.replace(document.referrer);
+                if (event) {
+                    event.preventDefault();
+                }
             }
 
             window.addEventListener("htmx:afterSettle", () => {
@@ -155,7 +158,7 @@
 
         <div class="row g-2 justify-content-end">
             <div class="col-6 col-sm-auto text-center">
-                <button @click="closeForm()"
+                <button @click="closeForm(event)"
                    class="btn btn-outline-danger"
                         style="min-width: 110px;">
                     Отмена

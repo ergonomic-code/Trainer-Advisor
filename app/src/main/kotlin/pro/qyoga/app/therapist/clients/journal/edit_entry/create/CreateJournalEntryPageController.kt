@@ -69,7 +69,7 @@ class CreateJournalEntryPageController(
         return when {
             result.isSuccess ->
                 ResponseEntity
-                    .ok()
+                    .noContent()
                     .header("HX-Trigger", "formSaved")
                     .build<Unit>()
 
