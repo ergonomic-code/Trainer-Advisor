@@ -27,11 +27,14 @@ spring:
 
   web:
     resources:
-      strategy:
-        content:
-          enabled=true
-          paths=/**
-
+      chain:
+        strategy:
+          content:
+            enabled: true
+            paths: /**
+      cache:
+        cachecontrol:
+          max-age: 1h
 
 management:
   endpoints:
