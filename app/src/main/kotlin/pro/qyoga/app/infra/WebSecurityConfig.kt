@@ -59,7 +59,7 @@ class WebSecurityConfig(
                         "/img/**",
                         "/js/**",
                         "/fonts/**",
-                        "/fontawesome*/**",
+                        "/vendor/**",
                         "/test/*"
                     )
                     .permitAll()
