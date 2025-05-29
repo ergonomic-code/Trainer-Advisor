@@ -12,7 +12,7 @@ import pro.qyoga.tests.platform.kotest.all
 object EmptyClientJournalFragment : Component {
 
     private val addFirstEntryLink =
-        Link.hxGet("addFirstEntryLink", CreateJournalEntryPageController.CREATE_JOURNAL_PAGE_URL, "Добавьте первую")
+        Link("addFirstEntryLink", CreateJournalEntryPageController.CREATE_JOURNAL_PAGE_URL, "Добавьте первую")
 
     override fun selector(): String = "#emptyJournal"
 

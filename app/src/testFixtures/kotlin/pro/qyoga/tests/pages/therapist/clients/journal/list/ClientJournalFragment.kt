@@ -23,7 +23,7 @@ import pro.qyoga.tests.platform.html.Link
 object ClientJournalFragment {
 
     private val addEntryLink =
-        Link.hxGet("addEntryLink", CreateJournalEntryPageController.CREATE_JOURNAL_PAGE_URL, "Добавить запись")
+        Link("addEntryLink", CreateJournalEntryPageController.CREATE_JOURNAL_PAGE_URL, "Добавить запись")
 
     fun fragmentFor(entries: List<JournalEntry>, hasMore: Boolean = false): PageMatcher = PageMatcher { element ->
         element shouldHaveComponent addEntryLink
