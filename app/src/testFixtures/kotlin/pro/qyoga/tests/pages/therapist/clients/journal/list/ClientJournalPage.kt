@@ -12,7 +12,10 @@ import pro.qyoga.tests.platform.html.QYogaPage
 import java.util.*
 
 
-abstract class ClientJournalPage(val clientId: UUID, val addEntryLink: Link) : QYogaPage {
+abstract class ClientJournalPage(
+    val clientId: UUID,
+    private val addEntryLink: Link
+) : QYogaPage {
 
     override val path = "/therapist/clients/{id}/journal"
 
@@ -27,7 +30,7 @@ abstract class ClientJournalPage(val clientId: UUID, val addEntryLink: Link) : Q
         ClientPageTabsFragment.filesLinkClientId(element) shouldBe clientId
     }
 
-    fun addEntryLinkClientId(element: Element): UUID? {
+    private fun addEntryLinkClientId(element: Element): UUID? {
         return addEntryLink.pathParam(element, "clientId")
             ?.let { UUID.fromString(it) }
     }
