@@ -92,7 +92,6 @@ class TherapistClientJournalApi(override val authCookie: Cookie) : AuthorizedApi
     fun createJournalEntry(clientId: UUID, journalEntry: EditJournalEntryRq) {
         postNewJournalEntry(journalEntry, clientId) Then {
             statusCode(HttpStatus.OK.value())
-            header("Hx-Redirect", Matchers.matchesRegex(".*" + JournalPageController.JOURNAL_PAGE_PATH.pathToRegex()))
         }
     }
 
