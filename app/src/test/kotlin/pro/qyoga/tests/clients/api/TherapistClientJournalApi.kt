@@ -91,7 +91,7 @@ class TherapistClientJournalApi(override val authCookie: Cookie) : AuthorizedApi
 
     fun createJournalEntry(clientId: UUID, journalEntry: EditJournalEntryRq) {
         postNewJournalEntry(journalEntry, clientId) Then {
-            statusCode(HttpStatus.OK.value())
+            statusCode(HttpStatus.NO_CONTENT.value())
         }
     }
 
