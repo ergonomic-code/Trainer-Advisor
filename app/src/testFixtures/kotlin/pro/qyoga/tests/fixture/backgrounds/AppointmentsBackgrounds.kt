@@ -8,6 +8,7 @@ import pro.qyoga.app.therapist.appointments.core.schedule.GetCalendarAppointment
 import pro.qyoga.core.appointments.core.AppointmentsRepo
 import pro.qyoga.core.appointments.core.commands.EditAppointmentRequest
 import pro.qyoga.core.appointments.core.model.Appointment
+import pro.qyoga.core.appointments.core.model.AppointmentStatus
 import pro.qyoga.core.calendar.api.CalendarItem
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
@@ -15,6 +16,7 @@ import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.core.users.therapists.ref
 import pro.qyoga.tests.fixture.data.faker
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
+import pro.qyoga.tests.fixture.data.randomElement
 import pro.qyoga.tests.fixture.data.randomSentence
 import pro.qyoga.tests.fixture.data.randomTimeZone
 import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentsObjectMother
@@ -58,12 +60,13 @@ class AppointmentsBackgrounds(
         place: String? = randomCyrillicWord(),
         cost: Int? = randomAppointmentCost(),
         payed: Boolean? = faker.random().nextBoolean(),
+        appointmentStatus: AppointmentStatus = AppointmentStatus.entries.randomElement(),
         comment: String? = randomSentence(),
         therapist: TherapistRef = THE_THERAPIST_REF,
         therapeuticTaskRef: TherapeuticTaskRef? = therapeuticTasksBackgrounds.createTherapeuticTask(therapist.id!!)
             .ref(),
     ): Appointment {
-        return create(dateTime, timeZone, duration, place, cost, payed, comment, therapist, therapeuticTaskRef)
+        return create(dateTime, timeZone, duration, place, cost, payed, appointmentStatus, comment, therapist, therapeuticTaskRef)
     }
 
     fun create(
@@ -73,9 +76,10 @@ class AppointmentsBackgrounds(
         place: String? = null,
         cost: Int? = null,
         payed: Boolean? = null,
+        appointmentStatus: AppointmentStatus = AppointmentStatus.entries.randomElement(),
         comment: String? = null,
         therapist: TherapistRef = THE_THERAPIST_REF,
-        therapeuticTaskRef: TherapeuticTaskRef? = null
+        therapeuticTaskRef: TherapeuticTaskRef? = null,
     ): Appointment {
         val clientRef = clientsBackgrounds.createClients(1, therapist.id!!).single().ref()
         val appointment = createAppointment(
@@ -89,6 +93,7 @@ class AppointmentsBackgrounds(
                 place = place,
                 cost = cost,
                 payed = payed,
+                appointmentStatus = appointmentStatus,
                 comment = comment
             )
         )

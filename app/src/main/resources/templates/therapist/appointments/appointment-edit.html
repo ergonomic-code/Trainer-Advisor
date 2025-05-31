@@ -37,7 +37,7 @@
                       id="editAppointmentForm"
                       th:attr="hx-post=${pageMode == 'CREATE' ? '/therapist/appointments/new' : null},hx-put=${pageMode == 'EDIT' ? '/therapist/appointments/' + appointmentId : null}"
                       th:fragment="editAppointmentForm"
-                      th:x-data="|{'dateTime': '${appointment?.dateTime ?: dateTime}', 'status': 'PENDING', canChangeStatus() { return Date.parse(this.dateTime) <= new Date() } }|"
+                      th:x-data="|{'dateTime': '${appointment?.dateTime ?: dateTime}', 'status': '${appointment?.appointmentStatus ?: 'PENDING'}', canChangeStatus() { return Date.parse(this.dateTime) <= new Date() } }|"
                 >
 
                     <input id="externalId"
