@@ -6,12 +6,14 @@ import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
+import pro.qyoga.core.appointments.core.model.AppointmentStatus
 import pro.qyoga.core.calendar.ical.model.ICalCalendarItem
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.fixture.data.asiaNovosibirskTimeZone
 import pro.qyoga.tests.fixture.data.randomWorkingTime
 import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentsObjectMother
+import pro.qyoga.tests.fixture.object_mothers.appointments.DURATION_FOR_FULL_LABEL
 import pro.qyoga.tests.fixture.object_mothers.calendars.CalendarsObjectMother.aCalendarItem
 import pro.qyoga.tests.fixture.presets.CalendarsFixturePresets
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
@@ -19,6 +21,7 @@ import pro.qyoga.tests.pages.therapist.appointments.CalendarPage
 import pro.qyoga.tests.pages.therapist.appointments.appointmentCards
 import pro.qyoga.tests.pages.therapist.appointments.shouldMatch
 import pro.qyoga.tests.platform.instancio.KSelect.Companion.field
+import java.time.Duration
 import java.time.LocalDate
 
 
@@ -59,15 +62,18 @@ class SchedulePageTest : QYogaAppIntegrationBaseTest() {
         val appointments = listOf(
             backgrounds.appointments.create(
                 dateTime = today.minusDays(1).atTime(randomWorkingTime()),
-                timeZone = timeZone
+                timeZone = timeZone,
+                duration = DURATION_FOR_FULL_LABEL,
             ),
             backgrounds.appointments.create(
                 dateTime = today.atTime(randomWorkingTime()),
-                timeZone = timeZone
+                timeZone = timeZone,
+                duration = DURATION_FOR_FULL_LABEL,
             ),
             backgrounds.appointments.create(
                 dateTime = today.plusDays(1).atTime(randomWorkingTime()),
-                timeZone = timeZone
+                timeZone = timeZone,
+                duration = DURATION_FOR_FULL_LABEL,
             ),
         )
 

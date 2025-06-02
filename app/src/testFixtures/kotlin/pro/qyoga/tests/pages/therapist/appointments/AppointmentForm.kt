@@ -1,6 +1,7 @@
 package pro.qyoga.tests.pages.therapist.appointments
 
 import io.kotest.matchers.shouldBe
+import org.jsoup.nodes.Element
 import pro.azhidkov.platform.java.time.toLocalTimeString
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
 import pro.qyoga.core.appointments.core.commands.EditAppointmentRequest
@@ -78,8 +79,20 @@ object EditAppointmentForm : AppointmentForm(FormAction.hxPut("$PATH/{appointmen
         val payedEl = element.select(payed.selector()).single()
         payed.value(payedEl) shouldBe (editAppointmentRequest.payed == true).toString()
 
+        val status = statusFromXData(element)
+        status shouldBe editAppointmentRequest.appointmentStatus.toString()
+
         val commentEl = element.select(comment.selector()).single()
         comment.value(commentEl) shouldBe (editAppointmentRequest.comment ?: "")
+    }
+
+    fun statusFromXData(element: Element): String? {
+        val formElement = element.select("form[x-data]").single()
+        val xDataValue = formElement?.attr("x-data") ?: return null
+        val regex = """'status':\s'(.*)'""".toRegex()
+        val matchResult = regex.find(xDataValue)
+
+        return matchResult?.groups?.get(1)?.value
     }
 
 }
