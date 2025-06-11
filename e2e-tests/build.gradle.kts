@@ -1,17 +1,7 @@
-import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     alias(libs.plugins.kotlin)
-    alias(libs.plugins.spring.dependencyManagement)
-    // см. https://docs.spring.io/spring-boot/docs/current/gradle-plugin/reference/htmlsingle/#managing-dependencies.dependency-management-plugin.using-in-isolation
-    alias(libs.plugins.spring.boot) apply false
-}
-
-the<DependencyManagementExtension>().apply {
-    imports {
-        mavenBom(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES)
-    }
 }
 
 group = "pro.qyoga.e2e-tests"
@@ -28,6 +18,8 @@ repositories {
 }
 
 dependencies {
+    implementation(platform("org.springframework.boot:spring-boot-dependencies:${libs.versions.springBoot.get()}"))
+
     testImplementation(kotlin("reflect"))
     testImplementation(project(":app"))
     testImplementation(testFixtures(project(":app")))
