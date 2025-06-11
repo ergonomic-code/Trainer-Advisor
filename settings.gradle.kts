@@ -6,14 +6,14 @@ dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
             // plugin versions
-            val kotlinVersion = version("kotlin", "2.1.0")
-            val springBootVersion = version("springBoot", "3.4.0")
-            val springDependencyManagementVersion = version("springDependencyManagement", "1.1.6")
-            val koverVersion = version("kover", "0.8.3")
-            val gitPropertiesVersion = version("gitProperties", "2.4.2")
+            val kotlinVersion = version("kotlin", "2.1.21")
+            val springBootVersion = version("springBoot", "3.5.0")
+            val springDependencyManagementVersion = version("springDependencyManagement", "1.1.7")
+            val koverVersion = version("kover", "0.9.1")
+            val gitPropertiesVersion = version("gitProperties", "2.5.0")
 
             // lib versions
-            val poiVersion = version("poi", "5.3.0")
+            val poiVersion = version("poi", "5.4.1")
 
             // plugins
             plugin("kotlin", "org.jetbrains.kotlin.jvm").versionRef(kotlinVersion)
@@ -28,15 +28,15 @@ dependencyResolutionManagement {
             plugin("gitProperties", "com.gorylenko.gradle-git-properties").versionRef(gitPropertiesVersion)
 
             // libs
-            library("jackarta-validation", "jakarta.validation", "jakarta.validation-api").version("3.1.0")
+            library("jackarta-validation", "jakarta.validation", "jakarta.validation-api").version("3.1.1")
             library(
                 "thymeleaf-extras-java8time",
                 "org.thymeleaf.extras",
                 "thymeleaf-extras-java8time"
             ).version("3.0.4.RELEASE")
 
-            library("postgres", "org.postgresql", "postgresql").version("42.7.4")
-            library("minio", "io.minio", "minio").version("8.5.14")
+            library("postgres", "org.postgresql", "postgresql").version("42.7.6")
+            library("minio", "io.minio", "minio").version("8.5.17")
 
             library("poi-ooxml", "org.apache.poi", "poi-ooxml").versionRef(poiVersion)
             library("poi-ooxml-lite", "org.apache.poi", "poi-ooxml-lite").versionRef(poiVersion)
@@ -48,10 +48,11 @@ dependencyResolutionManagement {
         }
 
         create("testLibs") {
-            val selenideVersion = version("selenide", "7.6.1")
-            val testContainersVersion = version("testcontainers", "1.20.4")
-            val restAssuredVersion = version("restAssured", "5.5.0")
+            val selenideVersion = version("selenide", "7.9.3")
+            val testContainersVersion = version("testcontainers", "1.21.1")
+            val restAssuredVersion = version("restAssured", "5.5.5")
             val kotestVersion = version("kotest", "5.9.1")
+            val wiremockVersion = version("wiremock", "3.13.0")
 
             library("selenide-proxy", "com.codeborne", "selenide-proxy").versionRef(selenideVersion)
             library("testcontainers-selenium", "org.testcontainers", "selenium").versionRef(testContainersVersion)
@@ -69,18 +70,18 @@ dependencyResolutionManagement {
             ).versionRef(restAssuredVersion)
             bundle("restassured", listOf("restassured-core", "restassured-kotlin", "restassured-json-schema"))
 
-            library("jsoup", "org.jsoup", "jsoup").version("1.18.1")
-            library("datafaker", "net.datafaker", "datafaker").version("2.4.2")
-            library("greenmail", "com.icegreen", "greenmail-junit5").version("2.1.2")
+            library("jsoup", "org.jsoup", "jsoup").version("1.20.1")
+            library("datafaker", "net.datafaker", "datafaker").version("2.4.3")
+            library("greenmail", "com.icegreen", "greenmail-junit5").version("2.1.3")
 
             library("testcontainers-minio", "org.testcontainers", "minio").versionRef(testContainersVersion)
 
             library("mockito-kotlin", "org.mockito.kotlin", "mockito-kotlin").version("5.4.0")
-            library("archunit", "com.tngtech.archunit", "archunit").version("1.3.0")
-            library("instancio", "org.instancio", "instancio-junit").version("5.4.0")
+            library("archunit", "com.tngtech.archunit", "archunit").version("1.4.1")
+            library("instancio", "org.instancio", "instancio-junit").version("5.4.1")
 
-            library("wiremock", "org.wiremock", "wiremock").version("3.12.1")
-            library("wiremock-jetty12", "org.wiremock", "wiremock-jetty12").version("3.12.1")
+            library("wiremock", "org.wiremock", "wiremock").versionRef(wiremockVersion)
+            library("wiremock-jetty12", "org.wiremock", "wiremock-jetty12").versionRef(wiremockVersion)
             library("wiremock-kotlin", "com.marcinziolo", "kotlin-wiremock").version("2.1.1")
         }
     }
