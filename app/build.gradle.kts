@@ -210,3 +210,14 @@ gitProperties {
 		this.dotGitDirectory.set(dotGit)
 	}
 }
+
+// см. https://detekt.dev/docs/gettingstarted/gradle/#dependencies
+// https://github.com/detekt/detekt/issues/7384
+configurations.matching { it.name == "detekt" }.all {
+	resolutionStrategy.eachDependency {
+		if (requested.group == "org.jetbrains.kotlin") {
+			@Suppress("UnstableApiUsage")
+			useVersion(io.gitlab.arturbosch.detekt.getSupportedKotlinVersion())
+		}
+	}
+}
