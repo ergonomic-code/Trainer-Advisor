@@ -226,3 +226,7 @@ kover {
 		}
 	}
 }
+
+gitProperties {
+	dotGitDirectory = file("${project.rootDir}/.git")
+}
