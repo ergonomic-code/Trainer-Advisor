@@ -6,7 +6,6 @@ import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
-import pro.qyoga.core.appointments.core.model.AppointmentStatus
 import pro.qyoga.core.calendar.ical.model.ICalCalendarItem
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.clients.TherapistClient
@@ -21,7 +20,6 @@ import pro.qyoga.tests.pages.therapist.appointments.CalendarPage
 import pro.qyoga.tests.pages.therapist.appointments.appointmentCards
 import pro.qyoga.tests.pages.therapist.appointments.shouldMatch
 import pro.qyoga.tests.platform.instancio.KSelect.Companion.field
-import java.time.Duration
 import java.time.LocalDate
 
 

@@ -5,13 +5,16 @@ plugins {
     alias(libs.plugins.kotlin) apply false
     alias(libs.plugins.spring.dependencyManagement) apply false
     alias(libs.plugins.spring.boot) apply false
+    alias(libs.plugins.detekt) apply false
 }
 
 // Почему-то внутри subprojects libs не доступен
-val kotlinPlugin = libs.plugins.kotlin.asProvider().get().pluginId
+val kotlinPlugin = libs.plugins.kotlin.asProvider().get()
+val detektPlugin = libs.plugins.detekt.get()
 
 subprojects {
-    apply(plugin = kotlinPlugin)
+    apply(plugin = kotlinPlugin.pluginId)
+    apply(plugin = detektPlugin.pluginId)
 
     repositories {
         mavenCentral()
@@ -21,6 +24,13 @@ subprojects {
         toolchain {
             languageVersion.set(JavaLanguageVersion.of(21))
         }
+    }
+
+    configure<io.gitlab.arturbosch.detekt.extensions.DetektExtension> {
+        toolVersion = detektPlugin.version.requiredVersion
+
+        config.setFrom(file(rootProject.rootDir.resolve("config/detekt/detekt.yml")))
+        buildUponDefaultConfig = false
     }
 
     tasks.withType<KotlinCompile> {

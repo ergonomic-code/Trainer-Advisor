@@ -11,6 +11,7 @@ dependencyResolutionManagement {
             val springDependencyManagementVersion = version("springDependencyManagement", "1.1.7")
             val koverVersion = version("kover", "0.9.1")
             val gitPropertiesVersion = version("gitProperties", "2.5.0")
+            val detektVersion = version("dekekt", "1.23.8")
 
             // lib versions
             val poiVersion = version("poi", "5.4.1")
@@ -26,6 +27,7 @@ dependencyResolutionManagement {
 
             plugin("kover", "org.jetbrains.kotlinx.kover").versionRef(koverVersion)
             plugin("gitProperties", "com.gorylenko.gradle-git-properties").versionRef(gitPropertiesVersion)
+            plugin("detekt", "io.gitlab.arturbosch.detekt").versionRef(detektVersion)
 
             // libs
             library("jackarta-validation", "jakarta.validation", "jakarta.validation-api").version("3.1.1")
