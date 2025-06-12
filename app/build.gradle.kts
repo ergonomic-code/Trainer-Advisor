@@ -1,10 +1,7 @@
 import kotlinx.kover.gradle.plugin.dsl.AggregationType
 import kotlinx.kover.gradle.plugin.dsl.CoverageUnit
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-	alias(libs.plugins.kotlin)
 	alias(libs.plugins.kotlin.spring)
 
 	alias(libs.plugins.spring.dependencyManagement)
@@ -18,16 +15,6 @@ plugins {
 
 group = "pro.qyoga"
 version = "0.0.1-SNAPSHOT"
-
-java {
-	toolchain {
-		languageVersion.set(JavaLanguageVersion.of(21))
-	}
-}
-
-repositories {
-	mavenCentral()
-}
 
 dependencies {
 	implementation(kotlin("reflect"))
@@ -99,22 +86,8 @@ dependencies {
 	}
 }
 
-tasks.withType<KotlinCompile> {
-	kotlin {
-		compilerOptions {
-			freeCompilerArgs = listOf("-Xjsr305=strict", "-Xjvm-default=all", "-Xwhen-guards")
-			jvmTarget.set(JvmTarget.JVM_21)
-		}
-	}
-}
-
 tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {
    this.archiveFileName.set("qyoga.jar")
-}
-
-tasks.withType<Test> {
-	this.systemProperty("file.encoding", "utf-8")
-	useJUnitPlatform()
 }
 
 kover {
