@@ -53,6 +53,8 @@ class WebSecurityConfig(
                     .requestMatchers(
                         HttpMethod.GET,
                         "/",
+                        "/offline.html",
+                        "/manifest.json",
                         "/register",
                         "/components/**",
                         "/styles/**",
