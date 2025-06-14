@@ -64,3 +64,6 @@ private fun prependTextBlock(value: String?, base: String?): String? {
 
     return value.trimEnd('\n') + "\n\n" + base
 }
+
+fun Client.toLogString() =
+    "$lastName $firstName ($id)"
