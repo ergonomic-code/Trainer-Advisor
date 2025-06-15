@@ -28,9 +28,6 @@ object ClientPageTabsFragment : Component {
         haveComponent(filesLink)
     )
 
-    fun mobileTabName(element: Element): String =
-        element.select("#clientPageTab").first()?.text() ?: ""
-
     fun journalLinkClientId(element: Element): UUID? {
         return journalLink.pathParam(element, "clientId")?.let { UUID.fromString(it) }
     }
@@ -41,6 +38,10 @@ object ClientPageTabsFragment : Component {
 
     fun filesLinkClientId(element: Element): UUID? {
         return filesLink.pathParam(element, "clientId")?.let { UUID.fromString(it) }
+    }
+
+    fun activeTab(element: Element): String? {
+        return element.select("#cardTabs li a.nav-link.active").firstOrNull()?.text()
     }
 
 }

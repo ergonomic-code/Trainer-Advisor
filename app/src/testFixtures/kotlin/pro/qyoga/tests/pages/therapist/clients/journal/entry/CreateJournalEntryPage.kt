@@ -23,7 +23,7 @@ class CreateJournalEntryPage(
     override fun match(element: Element) {
         element shouldHaveComponent ClientPageTabsFragment
         element shouldHave CreateJournalEntryFragment(client.id, entryDate)
-        ClientPageTabsFragment.mobileTabName(element) shouldBe "Журнал"
+        ClientPageTabsFragment.activeTab(element) shouldBe "Журнал"
     }
 
 }
