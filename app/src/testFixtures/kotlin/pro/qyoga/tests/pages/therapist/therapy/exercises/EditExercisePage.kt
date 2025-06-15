@@ -1,6 +1,7 @@
 package pro.qyoga.tests.pages.therapist.therapy.exercises
 
 import io.kotest.matchers.Matcher
+import io.kotest.matchers.shouldBe
 import org.jsoup.nodes.Element
 import pro.qyoga.core.therapy.exercises.model.Exercise
 import pro.qyoga.tests.assertions.PageMatcher
@@ -16,12 +17,10 @@ object EditExercisePage : Component {
 
     override fun matcher(): Matcher<Element> = alwaysSuccess()
 
-    fun pageFor(exercise: Exercise): PageMatcher = object : PageMatcher {
+    fun pageFor(exercise: Exercise): PageMatcher = PageMatcher { element ->
+        element.select("title")[0].text() shouldBe exercise.title
 
-        override fun match(element: Element) {
-            element.getElementById(EditExerciseForm.id)!! shouldBeElement EditExerciseForm.exerciseForm(exercise)
-        }
-
+        element.getElementById(EditExerciseForm.id)!! shouldBeElement EditExerciseForm.exerciseForm(exercise)
     }
 
 }

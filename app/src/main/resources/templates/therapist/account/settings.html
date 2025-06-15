@@ -7,7 +7,7 @@
 
 <body class="sb-nav-fixed">
 
-<div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
+<div th:replace="~{fragments/headerNavPanel :: headerNavPanel(pageName = 'Настройки')}"></div>
 
 <div id="layoutSidenav">
 
@@ -17,8 +17,6 @@
         <main>
             <div class="container px-4">
 
-                <view-title th:replace="~{components/view-title.html :: viewTitle(title='Настройки')}">
-                </view-title>
                 <div hx-get="/therapist/survey-forms/settings" hx-trigger="load" id="surveyFormsSettings"></div>
             </div>
         </main>

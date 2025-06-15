@@ -9,7 +9,7 @@
 
 <body class="sb-nav-fixed">
 
-<div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
+<div th:replace="~{fragments/headerNavPanel :: headerNavPanel (pageName=${client.fullName()})}"></div>
 
 <div id="layoutSidenav">
 
@@ -19,7 +19,6 @@
         <main class="h-100">
 
             <section class="container px-4">
-                <h1 class="mt-4 mb-3" th:text="${client?.fullName() ?: 'ФИО'}">Новый клиент</h1>
 
                 <div class="row g-0 w-100 mb-4 d-none d-sm-flex">
                     <ul class="nav nav-tabs" id="cardTabs">

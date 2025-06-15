@@ -1,9 +1,13 @@
-<div th:fragment="headerNavPanel">
-    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+<div th:fragment="headerNavPanel(pageName)">
+    <nav class="sb-topnav navbar navbar-expand navbar bg-white d-flex align-items-baseline pe-4">
         <button class="btn float-end" id="sidebarToggle" role="button">
-            <i class="fas fa-bars text-white" data-bs-target="#offcanvas"></i>
+            <i class="fas fa-bars text-black" data-bs-target="#offcanvas"></i>
         </button>
 
-        <a class="navbar-brand ps-3">Trainer Advisor</a>
+        <a class="navbar-brand ps-3 text-truncate" th:text="${pageName}"></a>
+
+        <div class="ms-auto" th:if="${controlsView != null}">
+            <span th:replace="${controlsView}"></span>
+        </div>
     </nav>
 </div>
