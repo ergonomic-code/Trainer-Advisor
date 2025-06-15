@@ -72,7 +72,35 @@
 
 <body class="sb-nav-fixed">
 
-<div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
+<div th:replace="~{fragments/headerNavPanel :: headerNavPanel(pageName='Расписание', controlsView=~{:: #datePickerView})}">
+
+    <div class="calendar-header bg-white z-3" id="datePickerView">
+        <button class="btn btn-outline-secondary"
+                name="datePickerButton"
+                onclick="document.getElementById('datePicker').showPicker()"
+                th:href="@{/therapist/schedule?calendar=true&date={date}(date=${today})}"
+
+        >
+                        <span th:text="${selectedDayLabel}">
+                        </span>
+            &nbsp;
+            <i class="fa-solid fa-chevron-down"></i>
+        </button>
+
+        <input class="d-none"
+               hx-push-url="true"
+               hx-select="main"
+               hx-swap="outerHTML"
+               hx-target="main"
+               hx-trigger="change"
+               id="datePicker"
+               name="date"
+               th:hx-get="@{/therapist/schedule}"
+               th:value="${date}"
+               type="date"
+        >
+    </div>
+</div>
 
 <div id="layoutSidenav">
 
@@ -80,38 +108,8 @@
 
     <div id="layoutSidenav_content">
         <main class="container px-4">
-            <h1 class="mt-4 d-flex justify-content-between align-items-baseline calendar-header bg-white z-2">
-                Расписание
 
-                <div class="calendar-header py-3 bg-white z-3 mb-4">
-                    <button class="btn btn-outline-secondary"
-                            name="datePickerButton"
-                            onclick="document.getElementById('datePicker').showPicker()"
-                            th:href="@{/therapist/schedule?calendar=true&date={date}(date=${today})}"
-
-                    >
-                        <span th:text="${selectedDayLabel}">
-                        </span>
-                        &nbsp;
-                        <i class="fa-solid fa-chevron-down"></i>
-                    </button>
-
-                    <input class="d-none"
-                           hx-push-url="true"
-                           hx-select="main"
-                           hx-swap="outerHTML"
-                           hx-target="main"
-                           hx-trigger="change"
-                           id="datePicker"
-                           name="date"
-                           th:hx-get="@{/therapist/schedule}"
-                           th:value="${date}"
-                           type="date"
-                    >
-                </div>
-            </h1>
-
-            <section id="calendar" th:fragment="calendarSchedule" xmlns:th="http://www.w3.org/1999/html">
+            <section class="mt-3" id="calendar" th:fragment="calendarSchedule" xmlns:th="http://www.w3.org/1999/html">
 
                 <div class="calendar-body mb-4">
                     <th:block th:each="mark : ${timeMarks}">

@@ -125,3 +125,13 @@ input[type=number] {
         width: auto !important;
     }
 }
+
+/* "мобилизация" табов в карточке клиента */
+.nav-tabs .nav-link.active {
+    border: 0;
+    border-bottom: 2px solid #20c997 !important;
+}
+
+.nav-tabs .nav-link:hover {
+    border-color: transparent;
+}

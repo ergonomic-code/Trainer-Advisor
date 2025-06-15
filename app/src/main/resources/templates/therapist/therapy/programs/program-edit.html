@@ -6,7 +6,7 @@
 </head>
 <body class="sb-nav-fixed">
 
-<div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
+<div th:replace="~{fragments/headerNavPanel :: headerNavPanel(pageName = ${program?.title ?: 'Новая программа'})}"></div>
 
 <div id="layoutSidenav">
 
@@ -15,10 +15,6 @@
     <div id="layoutSidenav_content">
         <main>
             <section class="container px-4">
-                <h1 class="mt-4 pb-2 mb-3 border-bottom" th:text="${program?.title ?: 'Новая программа'}">
-                    Новая программа
-                </h1>
-
 
                 <script id="programFormScript" th:inline="javascript">
                     let initialExercises = /*[[${program?.exercises ?: new java.util.ArrayList()}]]*/ [];
@@ -119,7 +115,7 @@
 
                 </script>
 
-                <form class="mt-4"
+                <form
                       id="programForm"
                       th:attr="hx-post=${pageMode == 'CREATE' ? '/therapist/programs/create' : null},hx-put=${pageMode == 'EDIT' ? '/therapist/programs/' + program.id : null}"
                       hx-on:htmx:validation:validate="validate(event)"

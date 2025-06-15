@@ -23,7 +23,7 @@ object ClientsListPage : QYogaPage {
 
     override val path = ClientsListPageController.PATH
 
-    override val title = "Список клиентов"
+    override val title = "Клиенты"
 
     object ClientSearchForm :
         QYogaForm("searchClientsFilterForm", FormAction.hxGet(ClientsListPageController.SEARCH_PATH)) {

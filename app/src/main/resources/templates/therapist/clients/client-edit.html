@@ -9,7 +9,7 @@
 
 <body class="sb-nav-fixed">
 
-<div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
+<div th:replace="~{fragments/headerNavPanel :: headerNavPanel (pageName=${client.fullName()})}"></div>
 
 <div id="layoutSidenav">
 
@@ -18,84 +18,32 @@
     <div id="layoutSidenav_content">
         <main class="h-100">
 
+            <div class="row g-0 w-100 mb-4 d-sm-flex">
+
+                <ul class="nav nav-tabs nav-fill" id="cardTabs">
+                    <li class="nav-item">
+                        <a class="nav-link " id="journalLinkSm"
+                           th:classappend="${activeTab.name.contains('JOURNAL')} ? 'active'"
+                           th:href="@{/therapist/clients/{clientId}/journal(clientId=${clientId})}">Журнал</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link " id="cardLinkSm"
+                           th:classappend="${activeTab.name == 'CARD'} ? 'active'"
+                           th:href="@{/therapist/clients/{clientId}/card(clientId=${clientId})}">Карточка</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link"
+                           id="filesLinkSm"
+                           th:classappend="${activeTab.name == 'FILES'} ? 'active'"
+                           th:href="@{/therapist/clients/{clientId}/files(clientId=${clientId})}">Файлы</a>
+                    </li>
+                </ul>
+            </div>
             <section class="container px-4">
-                <h1 class="mt-4 mb-3" th:text="${client?.fullName() ?: 'ФИО'}">Новый клиент</h1>
-
-                <div class="row g-0 w-100 mb-4 d-none d-sm-flex">
-                    <ul class="nav nav-tabs" id="cardTabs">
-                        <li class="nav-item">
-                            <a class="nav-link " id="journalLinkSm"
-                               th:classappend="${activeTab == 'journal'} ? 'active'"
-                               th:href="@{/therapist/clients/{clientId}/journal(clientId=${clientId})}">Журнал</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link disabled " href="#">Особенности</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link " id="cardLinkSm"
-                               th:classappend="${activeTab == 'card'} ? 'active'"
-                               th:href="@{/therapist/clients/{clientId}/card(clientId=${clientId})}">Карточка</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link  disabled" href="#">Объём движений</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link"
-                               id=" filesLinkSm"
-                               th:classappend="${activeTab == 'card'} ? 'active'"
-                               th:href="@{/therapist/clients/{clientId}/files(clientId=${clientId})}">Файлы</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link  disabled" href="#">Программы</a>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="row d-flex d-sm-none pb-3 mb-4 border-bottom">
-                    <div class="btn-group">
-                        <button aria-expanded="false"
-                                class="btn btn-outline-primary dropdown-toggle nav-drop" id="clientPageTab"
-                                data-bs-toggle="dropdown"
-                                type="button">
-                            <span th:if="${activeTab.name.toLowerCase().contains('journal')}">Журнал</span>
-                            <span th:if="${activeTab.name.equalsIgnoreCase('card')}">Карточка</span>
-                            <span th:if="${activeTab.name.equalsIgnoreCase('files')}">Файлы</span>
-                        </button>
-
-                        <ul class="dropdown-menu dropdown-menu-start nav-drop">
-                            <li>
-                                <a class="dropdown-item "
-                                   id="journalLink"
-                                   th:classappend="${activeTab.name.equalsIgnoreCase('journal')} ? 'active'"
-                                   th:href="@{/therapist/clients/{clientId}/journal(clientId=${clientId})}">Журнал</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item disabled " href="#">Особенности</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item "
-                                   id="cardLink"
-                                   th:classappend="${activeTab.name.equalsIgnoreCase('card')} ? 'active'"
-                                   th:href="@{/therapist/clients/{clientId}/card(clientId=${clientId})}">Карточка</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item  disabled" href="#">Объём движений</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item"
-                                   id="filesLink"
-                                   th:classappend="${activeTab.name.equalsIgnoreCase('files')} ? 'active'"
-                                   th:href="@{/therapist/clients/{clientId}/files(clientId=${clientId})}">Файлы</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item  disabled" href="#">Программы</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
 
                 <div id="tabContent"
                      th:insert="~{'therapist/clients/client-' + ${activeTab.name.toLowerCase()} + '-fragment.html'}"></div>
+
             </section>
         </main>
         <footer th:insert="~{fragments/footer.html :: footer}"></footer>

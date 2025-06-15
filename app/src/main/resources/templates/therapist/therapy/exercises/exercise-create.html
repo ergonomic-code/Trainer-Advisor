@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
     <div th:replace="~{fragments/header.html}"></div>
-    <title>Новое упражнение</title>
+    <title th:text="${exercise?.title ?: 'Новое упражнение'}">Новое упражнение</title>
     <link href="/styles/therapist/create-exercise.css" rel="stylesheet"/>
 </head>
 <body class="sb-nav-fixed">
 
-<div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
+<div th:replace="~{fragments/headerNavPanel :: headerNavPanel(pageName = ${exercise?.title ?: 'Новое упражнение'})}"></div>
 
 <div id="layoutSidenav">
 
@@ -16,9 +16,7 @@
     <div id="layoutSidenav_content">
         <main>
             <section class="container px-4">
-                <h1 class="mt-4 pb-2 mb-3 border-bottom" th:text="${exercise?.title ?: 'Новое упражнение'}">Новое
-                    упражнение</h1>
-                <form class="mt-4"
+                <form
                       hx-post=""
                       enctype="multipart/form-data"
                       id="exerciseForm"

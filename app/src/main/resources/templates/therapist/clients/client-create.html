@@ -8,7 +8,7 @@
 
 <body class="sb-nav-fixed">
 
-<div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
+<div th:replace="~{fragments/headerNavPanel :: headerNavPanel(pageName = 'Новый клиент')}"></div>
 
 <div id="layoutSidenav">
 
@@ -18,7 +18,6 @@
         <main>
 
             <section class="container px-4">
-                <h1 class="mt-4 pb-2 mb-3 border-bottom">Новый клиент</h1>
                 <div th:replace="therapist/clients/client-card-fragment.html"></div>
             </section>
         </main>

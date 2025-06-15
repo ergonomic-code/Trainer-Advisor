@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
     <div th:replace="~{fragments/header.html}"></div>
-    <title>Список клиентов</title>
+    <title>Клиенты</title>
 </head>
 
 <body class="sb-nav-fixed">
 
-<div th:replace="~{fragments/headerNavPanel :: headerNavPanel}"></div>
+<div th:replace="~{fragments/headerNavPanel :: headerNavPanel(pageName = 'Клиенты')}"></div>
 
 <div id="layoutSidenav">
 
@@ -16,9 +16,8 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container px-4">
-                <h1 class="mt-4 pb-2 mb-3 border-bottom">Клиенты</h1>
 
-                <form class="row mt-3 mb-3" hx-get="/therapist/clients/search"
+                <form class="row mb-3" hx-get="/therapist/clients/search"
                       hx-target="#tablePagination"
                       hx-trigger="submit"
                       id="searchClientsFilterForm"

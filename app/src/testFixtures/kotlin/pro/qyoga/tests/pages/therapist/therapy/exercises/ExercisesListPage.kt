@@ -19,7 +19,7 @@ object ExercisesListPage : QYogaPage {
 
     override val path = "/therapist/exercises"
 
-    override val title = "Список упражнений"
+    override val title = "Упражнения"
 
     object ExercisesSearchForm : QYogaForm("exercisesSearch", action = hxGet("$path/search")) {
 
