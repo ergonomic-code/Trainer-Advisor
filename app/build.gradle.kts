@@ -70,6 +70,7 @@ dependencies {
 	testFixturesImplementation(libs.ical4j)
 
 	testFixturesImplementation("org.springframework.boot:spring-boot-starter-test")
+    testFixturesImplementation("org.springframework.security:spring-security-test")
 	testFixturesImplementation("org.testcontainers:junit-jupiter")
 	testFixturesImplementation("org.testcontainers:postgresql")
 	testFixturesImplementation(testLibs.testcontainers.minio)

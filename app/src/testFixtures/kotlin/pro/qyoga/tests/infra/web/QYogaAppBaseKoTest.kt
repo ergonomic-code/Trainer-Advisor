@@ -1,7 +1,6 @@
 package pro.qyoga.tests.infra.web
 
 import io.kotest.core.spec.style.FreeSpec
-import org.springframework.boot.autoconfigure.web.ServerProperties
 import pro.qyoga.tests.fixture.backgrounds.Backgrounds
 import pro.qyoga.tests.fixture.data.resetFaker
 import pro.qyoga.tests.fixture.presets.Presets
@@ -14,8 +13,6 @@ import javax.sql.DataSource
 abstract class QYogaAppBaseKoTest(body: QYogaAppBaseKoTest.() -> Unit = {}) : FreeSpec() {
 
     private val dataSource: DataSource = context.getBean(DataSource::class.java)
-
-    protected val port: Int = context.getBean(ServerProperties::class.java).port
 
     val backgrounds: Backgrounds = context.getBean(Backgrounds::class.java)
 
