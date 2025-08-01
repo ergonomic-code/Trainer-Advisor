@@ -13,6 +13,8 @@ import org.openqa.selenium.logging.LogType
 import org.openqa.selenium.remote.RemoteWebDriver
 import org.slf4j.LoggerFactory
 import org.testcontainers.Testcontainers
+import pro.qyoga.tests.infra.test_config.spring.baseUrl
+import pro.qyoga.tests.infra.test_config.spring.context
 import pro.qyoga.tests.infra.web.QYogaAppBaseTest
 
 
@@ -24,7 +26,7 @@ open class QYogaE2EBaseTest : QYogaAppBaseTest() {
 
     private val baseUri =
         if (headless) "http://host.testcontainers.internal:$port"
-        else "http://localhost:$port"
+        else context.baseUrl
 
     @BeforeEach
     fun setUp() {

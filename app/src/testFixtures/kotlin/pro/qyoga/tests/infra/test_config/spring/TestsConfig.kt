@@ -1,6 +1,8 @@
 package pro.qyoga.tests.infra.test_config.spring
 
+import org.springframework.boot.autoconfigure.web.ServerProperties
 import org.springframework.boot.builder.SpringApplicationBuilder
+import org.springframework.context.ApplicationContext
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.Configuration
@@ -21,6 +23,12 @@ val context: ConfigurableApplicationContext by lazy {
         .build()
         .run()
 }
+
+val ApplicationContext.baseUrl: String
+    get() {
+        val port = this.getBean(ServerProperties::class.java).port
+        return "http://localhost:$port"
+    }
 
 @Suppress("unused") // можно использовать для быстрых тестов кода, работающего только с БД
 val sdjContext by lazy {
