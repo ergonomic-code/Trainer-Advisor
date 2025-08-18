@@ -95,7 +95,6 @@ dependencyResolutionManagement {
 
             library("wiremock", "org.wiremock", "wiremock").versionRef(wiremockVersion)
             library("wiremock-jetty12", "org.wiremock", "wiremock-jetty12").versionRef(wiremockVersion)
-            library("wiremock-kotlin", "com.marcinziolo", "kotlin-wiremock").version("2.1.1")
         }
     }
 }

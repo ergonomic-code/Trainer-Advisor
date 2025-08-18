@@ -11,7 +11,7 @@ private val log = LoggerFactory.getLogger(ICalIntegration::class.java)
 
 fun tryParseIcs(icsData: String): Calendar? {
     CompatibilityHints.setHintEnabled(CompatibilityHints.KEY_RELAXED_PARSING, true)
-    val sin = StringReader(icsData.replace("\n", "\r\n"))
+    val sin = StringReader(icsData)
     val builder = CalendarBuilder()
     return try {
         builder.build(sin)

@@ -59,7 +59,6 @@ dependencies {
 		exclude("org.eclipse.jetty.http2", "http2-server")
 	}
 	testFixturesApi(testLibs.wiremock.jetty12)
-	testFixturesApi(testLibs.wiremock.kotlin)
 
 	testFixturesImplementation(kotlin("reflect"))
 	testFixturesImplementation("org.springframework.boot:spring-boot-starter-data-jdbc")
