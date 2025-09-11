@@ -52,7 +52,7 @@ class ICalCalendarsRepo(
 
     @Scheduled(cron = "0 */10 * * * *")
     fun sync() {
-        log.info("Syncing calendars")
+        log.info("Syncing ical calendars")
         iCalCalendarsDao.forAll {
             Sync.syncCalendar(iCalCalendarsDao, it)
         }

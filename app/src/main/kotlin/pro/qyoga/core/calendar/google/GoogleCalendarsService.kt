@@ -43,6 +43,9 @@ class GoogleCalendarsService(
 
     private val googleCalendarsRepo = GoogleCalendarsRepo()
 
+    private val servicesCache = mutableMapOf<GoogleAccount, Calendar>()
+        .withDefault { createCalendarService(it) }
+
     fun addGoogleAccount(googleAccount: GoogleAccount) {
         googleAccountsRepo.addGoogleAccount(googleAccount)
     }
@@ -78,17 +81,7 @@ class GoogleCalendarsService(
         therapist: TherapistRef,
         account: GoogleAccount
     ): List<GoogleCalendar> {
-        val credentials = UserCredentials.newBuilder()
-            .setClientId(googleOAuthProps.registration["google"]!!.clientId)
-            .setClientSecret(googleOAuthProps.registration["google"]!!.clientSecret)
-            .setRefreshToken(account.refreshToken)
-            .setTokenServerUri(tokenUri)
-            .build()
-
-        val service = Calendar.Builder(httpTransport, gsonFactory, HttpCredentialsAdapter(credentials))
-            .setApplicationName(APPLICATION_NAME)
-            .setRootUrl(googleCalendarRootUri.toURL().toString())
-            .build()
+        val service = servicesCache.getValue(account)
 
         return service.CalendarList().list()
             .execute().items.map {
@@ -106,15 +99,7 @@ class GoogleCalendarsService(
         }
 
         val events = accounts.flatMap {
-            val credentials = UserCredentials.newBuilder()
-                .setClientId(googleOAuthProps.registration["google"]!!.clientId)
-                .setClientSecret(googleOAuthProps.registration["google"]!!.clientSecret)
-                .setRefreshToken(it.refreshToken)
-                .build()
-
-            val service = Calendar.Builder(httpTransport, gsonFactory, HttpCredentialsAdapter(credentials))
-                .setApplicationName(APPLICATION_NAME)
-                .build()
+            val service = servicesCache.getValue(it)
 
             val events =
                 service.events().list(it.email) // "primary" refers to the user's primary calendar
@@ -141,6 +126,22 @@ class GoogleCalendarsService(
         return events
     }
 
+    private fun createCalendarService(account: GoogleAccount): Calendar {
+        val credentials = UserCredentials.newBuilder()
+            .setClientId(googleOAuthProps.registration["google"]!!.clientId)
+            .setClientSecret(googleOAuthProps.registration["google"]!!.clientSecret)
+            .setRefreshToken(account.refreshToken)
+            .setRefreshToken(account.refreshToken)
+            .setTokenServerUri(tokenUri)
+            .build()
+
+        val service = Calendar.Builder(httpTransport, gsonFactory, HttpCredentialsAdapter(credentials))
+            .setApplicationName(APPLICATION_NAME)
+            .setRootUrl(googleCalendarRootUri.toURL().toString())
+            .build()
+        return service
+    }
+
     private fun startDate(event: Event): LocalDateTime =
         ZonedDateTime.ofInstant(
             Instant.ofEpochMilli(event.start.dateTime?.value ?: event.start.date?.value ?: 0),
@@ -150,4 +151,5 @@ class GoogleCalendarsService(
     private fun duration(event: Event): Duration =
         Duration.ofMillis(event.end.dateTime?.value ?: event.end.date?.value ?: 0) -
                 Duration.ofMillis(event.start.dateTime?.value ?: event.start.date?.value ?: 0)
+
 }
