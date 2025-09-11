@@ -26,16 +26,15 @@ val httpTransport: NetHttpTransport = GoogleNetHttpTransport.newTrustedTransport
 @Service
 class GoogleCalendarsService(
     private val googleOAuthProps: OAuth2ClientProperties,
+    private val googleAccountsRepo: GoogleAccountsRepo,
     @Value("\${spring.security.oauth2.client.provider.google.token-uri}") private val tokenUri: URI,
     @Value("\${trainer-advisor.integrations.google-calendar.root-url}") private val googleCalendarRootUri: URI
 ) : CalendarsService {
 
-    private val googleAccountsRepo = GoogleAccountsRepo()
-
     private val googleCalendarsRepo = GoogleCalendarsRepo()
 
-    fun addGoogleAccount(therapist: TherapistRef, googleAccount: GoogleAccount) {
-        googleAccountsRepo.addGoogleAccount(therapist, googleAccount)
+    fun addGoogleAccount(googleAccount: GoogleAccount) {
+        googleAccountsRepo.addGoogleAccount(googleAccount)
     }
 
     fun findCalendars(

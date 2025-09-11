@@ -45,8 +45,7 @@ class GoogleOAuthController(
             ?.get("email") as String
 
         googleCalendarsService.addGoogleAccount(
-            therapistId,
-            GoogleAccount(email, authorizedClient.refreshToken!!.tokenValue)
+            GoogleAccount(therapistId, email, authorizedClient.refreshToken!!.tokenValue)
         )
 
         return "redirect:/therapist/schedule?google_connected=true"

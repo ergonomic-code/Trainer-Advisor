@@ -1,18 +1,25 @@
 package pro.qyoga.core.calendar.google
 
+import org.springframework.data.jdbc.core.JdbcAggregateTemplate
+import org.springframework.stereotype.Repository
+import pro.azhidkov.platform.spring.sdj.query.query
 import pro.qyoga.core.users.therapists.TherapistRef
 
 
-class GoogleAccountsRepo {
+@Repository
+class GoogleAccountsRepo(
+    private val jdbcAggregateTemplate: JdbcAggregateTemplate
+) {
 
-    private val repo = HashMap<TherapistRef, List<GoogleAccount>>()
-
-    fun addGoogleAccount(therapist: TherapistRef, googleAccount: GoogleAccount) {
-        repo[therapist] = repo.getOrDefault(therapist, emptyList()) + googleAccount
+    fun addGoogleAccount(googleAccount: GoogleAccount) {
+        jdbcAggregateTemplate.insert(googleAccount)
     }
 
     fun findGoogleAccounts(therapist: TherapistRef): List<GoogleAccount> {
-        return repo[therapist] ?: emptyList()
+        val query = query {
+            GoogleAccount::ownerRef isEqual therapist
+        }
+        return jdbcAggregateTemplate.findAll(query, GoogleAccount::class.java)
     }
 
 }
