@@ -70,9 +70,9 @@ management:
   endpoint:
     configprops:
       show-values: when_authorized
-      enabled: true
+      access: read_only
     env:
-      enabled: true
+      access: read_only
       show-values: when_authorized
 
   info:
@@ -102,7 +102,7 @@ trainer-advisor:
 
   integrations:
     google-calendar:
-      root-url: https://www.googleapis.com/calendar/v3/
+      root-url: https://www.googleapis.com/
 
 logging:
   level:

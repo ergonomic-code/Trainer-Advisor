@@ -23,6 +23,16 @@ const val APPLICATION_NAME = "Trainer Advisor"
 val gsonFactory: GsonFactory = GsonFactory.getDefaultInstance()
 val httpTransport: NetHttpTransport = GoogleNetHttpTransport.newTrustedTransport()
 
+data class GoogleCalendarView(
+    val title: String,
+    val shouldBeShown: Boolean
+)
+
+data class GoogleAccountCalendars(
+    val email: String,
+    val calendars: List<GoogleCalendarView>
+)
+
 @Service
 class GoogleCalendarsService(
     private val googleOAuthProps: OAuth2ClientProperties,
@@ -37,6 +47,20 @@ class GoogleCalendarsService(
         googleAccountsRepo.addGoogleAccount(googleAccount)
     }
 
+    fun findGoogleAccountCalendars(
+        therapist: TherapistRef
+    ): List<GoogleAccountCalendars> {
+        val accounts = googleAccountsRepo.findGoogleAccounts(therapist)
+        return accounts.map {
+            GoogleAccountCalendars(
+                it.email,
+                getAccountCalendars(therapist, it).map {
+                    GoogleCalendarView(it.name, false)
+                }
+            )
+        }
+    }
+
     fun findCalendars(
         therapist: TherapistRef
     ): List<pro.qyoga.core.calendar.api.Calendar> {
@@ -47,6 +71,13 @@ class GoogleCalendarsService(
 
         val account = accounts.single()
 
+        return getAccountCalendars(therapist, account)
+    }
+
+    private fun getAccountCalendars(
+        therapist: TherapistRef,
+        account: GoogleAccount
+    ): List<GoogleCalendar> {
         val credentials = UserCredentials.newBuilder()
             .setClientId(googleOAuthProps.registration["google"]!!.clientId)
             .setClientSecret(googleOAuthProps.registration["google"]!!.clientSecret)

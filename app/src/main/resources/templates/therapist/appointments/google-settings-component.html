@@ -1,6 +1,23 @@
 <div id="google-calendar-settings">
     <h6>Google Calendar</h6>
     <div class="d-grid gap-2">
+        <div th:if="${accounts != null and !#lists.isEmpty(accounts)}">
+            <div class="mb-3" th:each="account : ${accounts}">
+                <div class="fw-semibold" th:text="${account.email}">email@example.com</div>
+                <ul class="list-unstyled ms-3 mb-0">
+                    <li class="d-flex justify-content-between align-items-center" th:each="cal : ${account.calendars}">
+                        <span th:text="${cal.title}">Calendar name</span>
+                        <div class="form-check form-switch m-0">
+                            <input aria-label="Показывать календарь" class="form-check-input"
+                                   th:checked="${cal.shouldBeShown}"
+                                   type="checkbox">
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="d-grid gap-2">
         <a class="btn btn-outline-secondary" href="/oauth2/authorization/google" id="connect-google-calendar">
             <i class="fab fa-google me-2"></i>
             Подключить Google Calendar
