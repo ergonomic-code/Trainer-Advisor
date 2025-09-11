@@ -1,69 +1,123 @@
 package pro.qyoga.core.calendar.google
 
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
+import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
+import com.google.api.client.util.DateTime
 import com.google.api.services.calendar.Calendar
+import com.google.api.services.calendar.model.Event
+import com.google.auth.http.HttpCredentialsAdapter
+import com.google.auth.oauth2.UserCredentials
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties
 import org.springframework.stereotype.Service
 import pro.azhidkov.platform.java.time.Interval
-import pro.azhidkov.platform.uuid.UUIDv7
-import pro.qyoga.app.publc.oauth2.GoogleOAuthController
 import pro.qyoga.core.calendar.api.CalendarItem
 import pro.qyoga.core.calendar.api.CalendarsService
 import pro.qyoga.core.users.therapists.TherapistRef
-import java.time.Duration
-import java.time.LocalDateTime
-import java.time.ZonedDateTime
-import java.util.*
+import java.net.URI
+import java.time.*
 
+
+const val APPLICATION_NAME = "Trainer Advisor"
+val gsonFactory: GsonFactory = GsonFactory.getDefaultInstance()
+val httpTransport: NetHttpTransport = GoogleNetHttpTransport.newTrustedTransport()
 
 @Service
-class GoogleCalendarsService : CalendarsService {
+class GoogleCalendarsService(
+    private val googleOAuthProps: OAuth2ClientProperties,
+    @Value("\${spring.security.oauth2.client.provider.google.token-uri}") private val tokenUri: URI,
+    @Value("\${trainer-advisor.integrations.google-calendar.root-url}") private val googleCalendarRootUri: URI
+) : CalendarsService {
+
+    private val googleAccountsRepo = GoogleAccountsRepo()
+
+    private val googleCalendarsRepo = GoogleCalendarsRepo()
+
+    fun addGoogleAccount(therapist: TherapistRef, googleAccount: GoogleAccount) {
+        googleAccountsRepo.addGoogleAccount(therapist, googleAccount)
+    }
+
+    fun findCalendars(
+        therapist: TherapistRef
+    ): List<pro.qyoga.core.calendar.api.Calendar> {
+        val accounts = googleAccountsRepo.findGoogleAccounts(therapist)
+        if (accounts.isEmpty()) {
+            return emptyList()
+        }
+
+        val account = accounts.single()
+
+        val credentials = UserCredentials.newBuilder()
+            .setClientId(googleOAuthProps.registration["google"]!!.clientId)
+            .setClientSecret(googleOAuthProps.registration["google"]!!.clientSecret)
+            .setRefreshToken(account.refreshToken)
+            .setTokenServerUri(tokenUri)
+            .build()
+
+        val service = Calendar.Builder(httpTransport, gsonFactory, HttpCredentialsAdapter(credentials))
+            .setApplicationName(APPLICATION_NAME)
+            .setRootUrl(googleCalendarRootUri.toURL().toString())
+            .build()
+
+        return service.CalendarList().list()
+            .execute().items.map {
+                GoogleCalendar(therapist, it.id, it.summary)
+            }
+    }
 
     override fun findCalendarItemsInInterval(
         therapist: TherapistRef,
         interval: Interval<ZonedDateTime>
     ): Iterable<CalendarItem<*, LocalDateTime>> {
-        val accessToken = GoogleOAuthController.token
+        val accounts = googleAccountsRepo.findGoogleAccounts(therapist)
+        if (accounts.isEmpty()) {
+            return emptyList()
+        }
 
-        val APPLICATION_NAME = "Trainer Advisor"
-        val JSON_FACTORY = GsonFactory.getDefaultInstance()
-        val httpTransport = GoogleNetHttpTransport.newTrustedTransport()
+        val events = accounts.flatMap {
+            val credentials = UserCredentials.newBuilder()
+                .setClientId(googleOAuthProps.registration["google"]!!.clientId)
+                .setClientSecret(googleOAuthProps.registration["google"]!!.clientSecret)
+                .setRefreshToken(it.refreshToken)
+                .build()
 
-        val service = Calendar.Builder(httpTransport, JSON_FACTORY, null)
-            .setApplicationName(APPLICATION_NAME)
-            .build()
+            val service = Calendar.Builder(httpTransport, gsonFactory, HttpCredentialsAdapter(credentials))
+                .setApplicationName(APPLICATION_NAME)
+                .build()
 
-        service.CalendarList().list()
-            .setOauthToken(accessToken)
-            .execute().items.forEach {
-                println(it.id)
-                println(it.summary)
-                println(it)
-                println()
-            }
+            val events =
+                service.events().list(it.email) // "primary" refers to the user's primary calendar
+                    .setTimeMin(DateTime(interval.from.toInstant().toEpochMilli()))
+                    .setTimeMax(DateTime(interval.to.toInstant().toEpochMilli()))
+                    .setOrderBy("startTime")
+                    .setSingleEvents(true)
+                    .execute()
+                    .items
+                    .map {
+                        println(it)
+                        GoogleCalendarItem(
+                            GoogleCalendarItemId(it.id),
+                            it.summary,
+                            it.description ?: "",
+                            startDate(it),
+                            duration(it),
+                            it.location
+                        )
+                    }
+            events
+        }
 
-        val now = Date()
-        val events =
-            service.events().list("aleksey.zhidkov@gmail.com") // "primary" refers to the user's primary calendar
-                .setTimeMin(com.google.api.client.util.DateTime(interval.from.toInstant().toEpochMilli()))
-                .setTimeMax(com.google.api.client.util.DateTime(interval.to.toInstant().toEpochMilli()))
-                .setOrderBy("startTime")
-                .setSingleEvents(true)
-                .setOauthToken(accessToken) // Set the access token
-                .execute()
-                .items
-                .forEach {
-                    println(it.summary + "\n")
-                }
-
-        return emptyList()
+        return events
     }
 
-}
+    private fun startDate(event: Event): LocalDateTime =
+        ZonedDateTime.ofInstant(
+            Instant.ofEpochMilli(event.start.dateTime?.value ?: event.start.date?.value ?: 0),
+            ZoneId.of(event.start.timeZone)
+        ).toLocalDateTime()
 
-fun main() {
-    GoogleCalendarsService().findCalendarItemsInInterval(
-        TherapistRef.to(UUIDv7.randomUUID()),
-        Interval.of(ZonedDateTime.now(), Duration.ofHours(1))
-    )
+    private fun duration(event: Event): Duration =
+        Duration.ofMillis(event.end.dateTime?.value ?: event.end.date?.value ?: 0) -
+                Duration.ofMillis(event.start.dateTime?.value ?: event.start.date?.value ?: 0)
 }

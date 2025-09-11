@@ -1,5 +1,8 @@
 package pro.qyoga.tests.fixture.data
 
+import net.datafaker.Faker
+import java.util.*
+
 val lowerCaseCyrillicLetters = ('а'..'я').toList()
 val upperCaseCyrillicLetters = ('А'..'Я').toList()
 val cyrillicLetters = lowerCaseCyrillicLetters + upperCaseCyrillicLetters
@@ -40,3 +43,14 @@ fun randomEmail(): String =
     }
 
 fun randomPassword() = randomLatinWord(minLength = 8)
+
+fun Faker.randomBase64String(
+    bytes: Int = 32,
+    urlSafe: Boolean = false,
+    withPadding: Boolean = false
+): String {
+    val data = this.random().nextRandomBytes(bytes)
+    val encoder = if (urlSafe) Base64.getUrlEncoder() else Base64.getEncoder()
+    val finalEncoder = if (withPadding) encoder else encoder.withoutPadding()
+    return finalEncoder.encodeToString(data)
+}

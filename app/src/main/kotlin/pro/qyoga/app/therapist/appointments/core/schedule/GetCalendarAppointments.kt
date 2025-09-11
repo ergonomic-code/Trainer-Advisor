@@ -24,13 +24,8 @@ class GetCalendarAppointmentsOp(
         val currentUserTimeZone = userSettingsRepo.getUserTimeZone(UserRef(therapist))
         val interval = calendarIntervalAround(date, currentUserTimeZone)
         val appointments = appointmentsRepo.findCalendarItemsInInterval(therapist, interval)
-        val drafts = iCalCalendarsRepo.findCalendarItemsInInterval(therapist, interval)
-
-        try {
-            googleCalendarsService.findCalendarItemsInInterval(therapist, interval)
-        } catch (ex: Exception) {
-            ex.printStackTrace()
-        }
+        val drafts = iCalCalendarsRepo.findCalendarItemsInInterval(therapist, interval) +
+                googleCalendarsService.findCalendarItemsInInterval(therapist, interval)
         return appointments + drafts
     }
 

@@ -40,6 +40,7 @@ object CalendarPage : HtmlPage {
 
     override val matcher = Matcher.all(
         haveComponent(datePickerButton),
+        haveComponent(GoogleCalendarSettingsLoaderComponent),
         haveElement("small:contains(07:00)"),
         haveComponents(goToDayLink, CalendarPageModel.DAYS_IN_WEEK),
         haveAtLeastElements(
@@ -60,7 +61,7 @@ infix fun Elements.shouldMatch(appointments: Iterable<Appointment>) {
     this shouldBeSameSizeAs appointments
 
     val timeAndDateComparator = Comparator.comparing<Appointment, LocalTime> { it.wallClockDateTime.toLocalTime() }
-        .thenComparing { it -> it.wallClockDateTime.toLocalDate() }
+        .thenComparing { it.wallClockDateTime.toLocalDate() }
     val appointmentsInHtmlOrder = appointments.sortedWith(timeAndDateComparator)
 
     this.zip(appointmentsInHtmlOrder).forAll { (el, app) ->

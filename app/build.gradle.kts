@@ -42,7 +42,6 @@ dependencies {
     implementation("com.google.auth:google-auth-library-oauth2-http")
 
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
-	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
 	testFixturesApi("org.springframework.boot:spring-boot-testcontainers")
 	testFixturesApi(testLibs.kotest.assertions)
@@ -64,12 +63,14 @@ dependencies {
 	testFixturesImplementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 	testFixturesImplementation("org.springframework.boot:spring-boot-starter-web")
 	testFixturesImplementation("org.springframework.boot:spring-boot-starter-security")
+    testFixturesImplementation("org.springframework.boot:spring-boot-starter-oauth2-client")
 	testFixturesImplementation("com.fasterxml.jackson.core:jackson-databind")
 	testFixturesImplementation(libs.minio)
 	testFixturesImplementation(libs.ical4j)
 
 	testFixturesImplementation("org.springframework.boot:spring-boot-starter-test")
     testFixturesImplementation("org.springframework.security:spring-security-test")
+    testFixturesImplementation("org.springframework.boot:spring-boot-starter-webflux")
 	testFixturesImplementation("org.testcontainers:junit-jupiter")
 	testFixturesImplementation("org.testcontainers:postgresql")
 	testFixturesImplementation(testLibs.testcontainers.minio)

@@ -15,6 +15,7 @@ import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel.Comp
 import pro.qyoga.core.appointments.core.model.AppointmentStatus
 import pro.qyoga.core.appointments.core.views.LocalizedAppointmentSummary
 import pro.qyoga.core.calendar.api.CalendarItem
+import pro.qyoga.core.calendar.google.GoogleCalendarItemId
 import pro.qyoga.core.calendar.ical.model.ICalEventId
 import pro.qyoga.l10n.russianDayOfMonthLongFormat
 import pro.qyoga.l10n.russianTimeFormat
@@ -264,6 +265,10 @@ private fun CalendarItem<*, LocalDateTime>.editUri() =
         is ICalEventId -> CreateAppointmentPageController.addFromSourceItemUri(
             dateTime,
             SourceItem.icsEvent(id as ICalEventId)
+        )
+        is GoogleCalendarItemId -> CreateAppointmentPageController.addFromSourceItemUri(
+            dateTime,
+            SourceItem.googleEvent(id as GoogleCalendarItemId)
         )
 
         else -> error("Unsupported type: $id")

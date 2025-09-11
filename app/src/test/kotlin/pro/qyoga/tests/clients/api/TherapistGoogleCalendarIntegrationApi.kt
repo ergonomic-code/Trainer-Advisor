@@ -1,0 +1,49 @@
+package pro.qyoga.tests.clients.api
+
+import io.restassured.http.Cookie
+import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationResponse
+import org.springframework.test.web.reactive.server.WebTestClient
+import pro.qyoga.tests.platform.spring.web_test_client.redirectLocation
+import java.net.URI
+
+class TherapistGoogleCalendarIntegrationApi(
+    override val authCookie: Cookie,
+    private val webTestClient: WebTestClient
+) : AuthorizedApi {
+
+    fun authorizeInGoogle(): URI {
+        val response = webTestClient.get()
+            .uri("/oauth2/authorization/google")
+            .authorized()
+            .exchange()
+            .expectStatus().isFound
+
+        return response.redirectLocation()
+    }
+
+    // curl 'http://localhost:8080/therapist/oauth2/google/callback?
+    //           state=EWWVlMDBuTT8NzQvO1MZjrpRa3Kr6Jz_8WRkK9d3gBA%3D^&
+    //           code=4/0AVMBsJi2rnHTaWamYvvRVOxmp8CkQQ4ymoRZsiASDMjPnX7phooZ-P5YnOyQuunowx8F2g^&
+    //           scope=https://www.googleapis.com/auth/calendar.readonly' \
+    fun handleOAuthCallbackForResponse(
+        authResponse: OAuth2AuthorizationResponse
+    ): WebTestClient.ResponseSpec {
+        return webTestClient.get()
+            .uri {
+                it.path("/therapist/oauth2/google/callback")
+                    .queryParam("state", authResponse.state)
+                    .queryParam("code", authResponse.code)
+                    .build()
+            }
+            .authorized()
+            .exchange()
+    }
+
+    fun finalizeOAuthCallbackForResponse(): WebTestClient.ResponseSpec {
+        return webTestClient.get()
+            .uri("/therapist/oauth2/google/callback")
+            .authorized()
+            .exchange()
+    }
+
+}

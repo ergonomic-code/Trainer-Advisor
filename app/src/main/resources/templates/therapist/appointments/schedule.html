@@ -75,30 +75,36 @@
 <div th:replace="~{fragments/headerNavPanel :: headerNavPanel(pageName='Расписание', controlsView=~{:: #datePickerView})}">
 
     <div class="calendar-header bg-white z-3" id="datePickerView">
-        <button class="btn btn-outline-secondary"
-                name="datePickerButton"
-                onclick="document.getElementById('datePicker').showPicker()"
-                th:href="@{/therapist/schedule?calendar=true&date={date}(date=${today})}"
+        <div class="position-relative d-inline-block">
+            <button class="btn btn-outline-secondary"
+                    name="datePickerButton"
+                    onclick="document.getElementById('datePicker').showPicker()"
+                    th:href="@{/therapist/schedule?calendar=true&date={date}(date=${today})}"
+            >
+                <i class="fa-solid fa-calendar"></i>
+            </button>
 
+            <input class="position-absolute top-50 opacity-0 pointer-event"
+                   hx-push-url="true"
+                   hx-select="main"
+                   hx-swap="outerHTML"
+                   hx-target="main"
+                   hx-trigger="change"
+                   id="datePicker"
+                   name="date"
+                   style="transform: translateX(-200%);"
+                   th:hx-get="@{/therapist/schedule}"
+                   th:value="${date}"
+                   type="date"
+            >
+        </div>
+
+        <button class="btn btn-outline-secondary ms-2"
+                data-bs-target="#settingsModal"
+                data-bs-toggle="modal"
         >
-                        <span th:text="${selectedDayLabel}">
-                        </span>
-            &nbsp;
-            <i class="fa-solid fa-chevron-down"></i>
+            <i class="fa-solid fa-gear"></i>
         </button>
-
-        <input class="d-none"
-               hx-push-url="true"
-               hx-select="main"
-               hx-swap="outerHTML"
-               hx-target="main"
-               hx-trigger="change"
-               id="datePicker"
-               name="date"
-               th:hx-get="@{/therapist/schedule}"
-               th:value="${date}"
-               type="date"
-        >
     </div>
 </div>
 
@@ -108,7 +114,6 @@
 
     <div id="layoutSidenav_content">
         <main class="container px-4">
-            <a href="/oauth2/authorization/google">Подключить Google Calendar</a>
             <section class="mt-3" id="calendar" th:fragment="calendarSchedule" xmlns:th="http://www.w3.org/1999/html">
 
                 <div class="calendar-body mb-4">
@@ -147,6 +152,31 @@
     </div>
 </div>
 
-</body>
+<div aria-hidden="true" aria-labelledby="settingsModalLabel" class="modal fade" id="settingsModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="settingsModalLabel">Настройки календарей</h5>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+            </div>
+            <div class="modal-body">
+                <div hx-get="/therapist/schedule/settings/google-calendar"
+                     hx-swap="outerHTML"
+                     hx-trigger="intersect once"
+                     id="google-calendar-settings-container">
+                    <div class="text-center py-3">
+                        <div class="mt-2">
+                            <small class="text-muted">Загрузка настроек Google Calendar...</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary" data-bs-dismiss="modal" type="button">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
 
+</body>
 </html>

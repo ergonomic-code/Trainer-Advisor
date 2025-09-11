@@ -14,3 +14,17 @@ spring:
           auth: true
           starttls:
             enable: true
+
+  security:
+    oauth2:
+      client:
+        provider:
+          google:
+            token-uri: http://localhost:8089/google/oauth/token
+            user-info-uri: http://localhost:8089/google/oauth/userinfo
+
+trainer-advisor:
+
+  integrations:
+    google-calendar:
+      root-url: http://localhost:8089/google/

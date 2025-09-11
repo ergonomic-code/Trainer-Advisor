@@ -15,7 +15,7 @@ private val log = LoggerFactory.getLogger(TestDb::class.java)
 private const val DB_USER = "postgres"
 private const val DB_PASSWORD = "password"
 
-val jdbcUrl: String by lazy {
+private val testDbJdbcUrl: String by lazy {
     try {
         log.info("Checking for provided db")
         val con = DriverManager.getConnection(
@@ -41,9 +41,10 @@ val jdbcUrl: String by lazy {
 
 val testDataSource by lazy {
     val config = HikariConfig().apply {
-        this.jdbcUrl = pro.qyoga.tests.infra.db.jdbcUrl
+        this.jdbcUrl = testDbJdbcUrl
         this.username = DB_USER
         this.password = DB_PASSWORD
+        this.minimumIdle = 0
     }
     HikariDataSource(config)
 }
