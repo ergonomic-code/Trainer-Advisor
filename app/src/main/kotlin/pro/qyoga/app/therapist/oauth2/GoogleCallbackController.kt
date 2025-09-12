@@ -37,18 +37,23 @@ class GoogleOAuthController(
     ): String {
         val therapistId = TherapistRef.to<Therapist, UUID>(userDetails.id)
 
-        val email = RestClient.create(googleOicUserInfoUri)
+        val response = RestClient.create(googleOicUserInfoUri)
             .get()
             .headers { it.setBearerAuth(authorizedClient.accessToken.tokenValue) }
             .retrieve()
             .body(Map::class.java)
+        val email = response
             ?.get("email") as String
+        val picture = response["picture"] as String
 
         googleCalendarsService.addGoogleAccount(
             GoogleAccount(therapistId, email, authorizedClient.refreshToken!!.tokenValue)
         )
 
-        return "redirect:/therapist/schedule?google_connected=true"
+        // Греем кэш, чтобы улучшить UX пользователя при возврате на страницу расписания
+        googleCalendarsService.findGoogleAccountCalendars(therapistId)
+
+        return "redirect:/therapist/schedule?google-connected=true"
     }
 
     companion object {

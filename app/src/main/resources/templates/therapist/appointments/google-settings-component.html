@@ -1,11 +1,15 @@
 <div id="google-calendar-settings">
     <h6>Google Calendar</h6>
-    <div class="d-grid gap-2">
-        <div th:if="${accounts != null and !#lists.isEmpty(accounts)}">
-            <div class="mb-3" th:each="account : ${accounts}">
-                <div class="fw-semibold" th:text="${account.email}">email@example.com</div>
-                <ul class="list-unstyled ms-3 mb-0">
-                    <li class="d-flex justify-content-between align-items-center" th:each="cal : ${account.calendars}">
+    <div class="d-grid gap-2 pt-2 pb-3">
+        <div class="text-muted" th:unless="${hasAccounts}">
+            Нет подключенных аккаунтов
+        </div>
+        <div th:if="${hasAccounts}">
+            <div th:each="account : ${accounts}">
+                <div th:text="${account.email}">email@example.com</div>
+                <ul class="list-unstyled ms-3 my-1">
+                    <li class="d-flex justify-content-between align-items-center py-1"
+                        th:each="cal : ${account.calendars}">
                         <span th:text="${cal.title}">Calendar name</span>
                         <div class="form-check form-switch m-0">
                             <input aria-label="Показывать календарь" class="form-check-input"
@@ -17,10 +21,8 @@
             </div>
         </div>
     </div>
-    <div class="d-grid gap-2">
-        <a class="btn btn-outline-secondary" href="/oauth2/authorization/google" id="connect-google-calendar">
-            <i class="fab fa-google me-2"></i>
-            Подключить Google Calendar
-        </a>
-    </div>
+    <a class="btn btn-outline-secondary" href="/oauth2/authorization/google" id="connect-google-calendar">
+        <img alt="G"
+             class="me-2" src="https://www.gstatic.com/marketing-cms/assets/images/d5/dc/cfe9ce8b4425b410b49b7f2dd3f3/g.webp=s48-fcrop64=1,00000000ffffffff-rw" width="20"> Добавить аккаунт
+    </a>
 </div>

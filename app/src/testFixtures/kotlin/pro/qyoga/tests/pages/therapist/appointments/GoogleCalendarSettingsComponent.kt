@@ -2,13 +2,16 @@ package pro.qyoga.tests.pages.therapist.appointments
 
 import io.kotest.matchers.Matcher
 import org.jsoup.nodes.Element
+import pro.qyoga.core.calendar.google.GoogleAccountCalendarsView
 import pro.qyoga.tests.assertions.haveComponent
 import pro.qyoga.tests.platform.html.Component
 import pro.qyoga.tests.platform.html.Link
 import pro.qyoga.tests.platform.kotest.all
 
 
-object GoogleCalendarSettingsComponent : Component {
+class GoogleCalendarSettingsComponent(
+    private val accounts: List<GoogleAccountCalendarsView>
+) : Component {
 
     private val connectButton =
         Link("connect-google-calendar", "/oauth2/authorization/google", "Подключить Google Calendar")

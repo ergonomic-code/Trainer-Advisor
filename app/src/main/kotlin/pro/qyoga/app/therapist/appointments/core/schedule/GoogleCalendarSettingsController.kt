@@ -4,17 +4,18 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.servlet.ModelAndView
-import pro.qyoga.core.calendar.google.GoogleAccountCalendars
+import pro.qyoga.core.calendar.google.GoogleAccountCalendarsView
 import pro.qyoga.core.calendar.google.GoogleCalendarsService
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.ref
 
 data class GoogleCalendarSettingsPageModel(
-    val accounts: List<GoogleAccountCalendars>
+    val accounts: List<GoogleAccountCalendarsView>
 ) : ModelAndView("therapist/appointments/google-settings-component.html") {
 
     init {
         addObject("accounts", accounts)
+        addObject("hasAccounts", accounts.isNotEmpty())
     }
 
 }

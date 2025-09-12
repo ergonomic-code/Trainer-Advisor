@@ -10,6 +10,8 @@ import com.google.auth.http.HttpCredentialsAdapter
 import com.google.auth.oauth2.UserCredentials
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Service
 import pro.azhidkov.platform.java.time.Interval
 import pro.qyoga.core.calendar.api.CalendarItem
@@ -28,7 +30,7 @@ data class GoogleCalendarView(
     val shouldBeShown: Boolean
 )
 
-data class GoogleAccountCalendars(
+data class GoogleAccountCalendarsView(
     val email: String,
     val calendars: List<GoogleCalendarView>
 )
@@ -46,16 +48,24 @@ class GoogleCalendarsService(
     private val servicesCache = mutableMapOf<GoogleAccount, Calendar>()
         .withDefault { createCalendarService(it) }
 
+    @CacheEvict(
+        cacheNames = [GoogleCalendarConf.CacheNames.GOOGLE_ACCOUNT_CALENDARS],
+        key = "#googleAccount.ownerRef.id"
+    )
     fun addGoogleAccount(googleAccount: GoogleAccount) {
         googleAccountsRepo.addGoogleAccount(googleAccount)
     }
 
+    @Cacheable(
+        cacheNames = [GoogleCalendarConf.CacheNames.GOOGLE_ACCOUNT_CALENDARS],
+        key = "#therapist.id"
+    )
     fun findGoogleAccountCalendars(
         therapist: TherapistRef
-    ): List<GoogleAccountCalendars> {
+    ): List<GoogleAccountCalendarsView> {
         val accounts = googleAccountsRepo.findGoogleAccounts(therapist)
         return accounts.map {
-            GoogleAccountCalendars(
+            GoogleAccountCalendarsView(
                 it.email,
                 getAccountCalendars(therapist, it).map {
                     GoogleCalendarView(it.name, false)
@@ -89,6 +99,10 @@ class GoogleCalendarsService(
             }
     }
 
+    @Cacheable(
+        cacheNames = [GoogleCalendarConf.CacheNames.CALENDAR_EVENTS],
+        key = "#therapist.id + ':' + #interval.from.toInstant().toEpochMilli() + ':' + #interval.to.toInstant().toEpochMilli()"
+    )
     override fun findCalendarItemsInInterval(
         therapist: TherapistRef,
         interval: Interval<ZonedDateTime>

@@ -16,6 +16,7 @@ import pro.qyoga.core.therapy.TherapyConfig
 import pro.qyoga.core.users.UsersConfig
 import pro.qyoga.i9ns.email.EmailsConfig
 import pro.qyoga.infra.auth.AuthConfig
+import pro.qyoga.infra.cache.CacheConf
 import pro.qyoga.infra.db.SdjConfig
 import pro.qyoga.infra.minio.MinioConfig
 import pro.qyoga.infra.timezones.TimeZonesConfig
@@ -51,7 +52,8 @@ import pro.qyoga.tech.captcha.CaptchaConf
     ErgoSdjConfig::class,
     MinioConfig::class,
     FilesStorageConfig::class,
-    TimeZonesConfig::class
+    TimeZonesConfig::class,
+    CacheConf::class
 )
 @SpringBootApplication
 class QYogaApp

@@ -65,7 +65,23 @@
 
             revealAppointment();
         });
+    </script>
 
+    <script defer id="autoOpenSettingsModal">
+        function checkForSettingsModal() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('google-connected') === 'true') {
+                const settingsModal = new bootstrap.Modal(document.getElementById('settingsModal'));
+                settingsModal.show();
+
+                // Удаляем параметр из URL
+                urlParams.delete('google-connected');
+                const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+                window.history.replaceState({}, '', newUrl);
+            }
+        }
+
+        window.addEventListener("load", checkForSettingsModal);
     </script>
 
 </head>
