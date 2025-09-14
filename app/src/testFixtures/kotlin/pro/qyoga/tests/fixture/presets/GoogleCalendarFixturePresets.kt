@@ -1,5 +1,6 @@
 package pro.qyoga.tests.fixture.presets
 
+import pro.qyoga.core.calendar.google.GoogleAccount
 import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.tests.fixture.data.faker
 import pro.qyoga.tests.fixture.object_mothers.calendars.google.GoogleCalendarObjectMother.aGoogleCalendar
@@ -14,14 +15,14 @@ class GoogleCalendarFixturePresets(
     private val googleCalendarsService: GoogleCalendarTestApi
 ) {
 
-    fun setupCalendar(therapistRef: TherapistRef, calendarId: String) {
+    fun setupCalendar(therapistRef: TherapistRef, calendarId: String): GoogleAccount {
         val refreshToken = "refreshToken"
         val accessToken = "accessToken"
         mockGoogleOAuthServer.OnRefreshToken(refreshToken).returnsToken(accessToken)
         mockGoogleCalendar.OnGetCalendars(accessToken).returnsCalendars(
             listOf(aGoogleCalendar(ownerRef = therapistRef, externalId = calendarId))
         )
-        googleCalendarsService.addAccount(therapistRef, faker.internet().emailAddress(), refreshToken)
+        return googleCalendarsService.addAccount(therapistRef, faker.internet().emailAddress(), refreshToken)
     }
 
 }

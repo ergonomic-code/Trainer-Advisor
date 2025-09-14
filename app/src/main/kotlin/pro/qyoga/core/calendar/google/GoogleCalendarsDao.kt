@@ -21,16 +21,22 @@ class GoogleCalendarsDao(
 
     private val googleCalendarSettingsRowMapper = taDataClassRowMapper<GoogleCalendarSettings>()
 
-    fun patchCalendarSettings(therapist: TherapistRef, calendarId: String, settingsPatch: GoogleCalendarSettingsPatch) {
+    fun patchCalendarSettings(
+        therapist: TherapistRef,
+        googleAccount: GoogleAccountRef,
+        calendarId: String,
+        settingsPatch: GoogleCalendarSettingsPatch
+    ) {
         val query = """
-            INSERT INTO therapist_google_calendar_settings (id, owner_ref, calendar_id, should_be_shown)
-            VALUES (:id, :ownerRef, :calendarId, :shouldBeShown)
-            ON CONFLICT (owner_ref, calendar_id) DO UPDATE SET should_be_shown = :shouldBeShown
+            INSERT INTO therapist_google_calendar_settings (id, owner_ref, google_account_ref, calendar_id, should_be_shown)
+            VALUES (:id, :ownerRef, :googleAccountRef::uuid, :calendarId, :shouldBeShown)
+            ON CONFLICT (owner_ref, google_account_ref, calendar_id) DO UPDATE SET should_be_shown = EXCLUDED.should_be_shown
         """.trimIndent()
 
         jdbcClient.sql(query)
             .param("id", UUIDv7.randomUUID())
             .param("ownerRef", therapist.id)
+            .param("googleAccountRef", googleAccount.id)
             .param("calendarId", calendarId)
             .param("shouldBeShown", settingsPatch["shouldBeShown"] as Boolean)
             .update()

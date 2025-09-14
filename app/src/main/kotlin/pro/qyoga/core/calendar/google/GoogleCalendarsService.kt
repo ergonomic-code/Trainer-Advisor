@@ -19,6 +19,7 @@ import pro.qyoga.core.calendar.api.CalendarsService
 import pro.qyoga.core.users.therapists.TherapistRef
 import java.net.URI
 import java.time.*
+import java.util.*
 
 
 const val APPLICATION_NAME = "Trainer Advisor"
@@ -32,6 +33,7 @@ data class GoogleCalendarView(
 )
 
 data class GoogleAccountCalendarsView(
+    val id: UUID,
     val email: String,
     val calendars: List<GoogleCalendarView>
 )
@@ -66,6 +68,7 @@ class GoogleCalendarsService(
         val calendarSettings = googleCalendarsDao.findCalendarsSettings(therapist)
         return accounts.zip(accountCalendars).map { (account, calendar) ->
             GoogleAccountCalendarsView(
+                account.id,
                 account.email,
                 calendar.map {
                     GoogleCalendarView(it.externalId, it.name, calendarSettings[it.externalId]?.shouldBeShown ?: false)
@@ -145,10 +148,11 @@ class GoogleCalendarsService(
     )
     fun updateCalendarSettings(
         therapist: TherapistRef,
+        googleAccount: GoogleAccountRef,
         calendarId: String,
         settingsPatch: GoogleCalendarSettingsPatch
     ) {
-        googleCalendarsDao.patchCalendarSettings(therapist, calendarId, settingsPatch)
+        googleCalendarsDao.patchCalendarSettings(therapist, googleAccount, calendarId, settingsPatch)
     }
 
     private fun createCalendarService(account: GoogleAccount): Calendar {

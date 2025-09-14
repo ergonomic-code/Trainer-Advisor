@@ -2,6 +2,7 @@ package pro.qyoga.tests.cases.app.therapist.calendars.google
 
 import io.kotest.core.annotation.DisplayName
 import io.kotest.matchers.shouldBe
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.qyoga.tests.clients.TherapistClient.Companion.loginAsTheTherapist
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
 import pro.qyoga.tests.fixture.presets.GoogleCalendarFixturePresets
@@ -25,10 +26,10 @@ class SetCalendarShouldBeShownTest : QYogaAppIntegrationBaseKoTest({
         // Сетап
         val calendarId = "calendarId"
         val therapist = loginAsTheTherapist()
-        googleCalendarFixturePresets.setupCalendar(THE_THERAPIST_REF, calendarId)
+        val googleAccount = googleCalendarFixturePresets.setupCalendar(THE_THERAPIST_REF, calendarId)
 
         // Действие
-        therapist.googleCalendarIntegration.setShouldBeShown(calendarId, true)
+        therapist.googleCalendarIntegration.setShouldBeShown(googleAccount.ref(), calendarId, true)
 
         // Проверка
         val settings = googleCalendarsTestApi.getGoogleCalendarsSettings(THE_THERAPIST_REF)

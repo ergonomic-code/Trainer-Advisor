@@ -20,7 +20,7 @@
                                    hx-trigger="change"
                                    hx-vals='js:{ "shouldBeShown": !!event.target.checked }'
                                    name="shouldBeShown"
-                                   th:attr="hx-patch=@{/therapist/schedule/settings/google-calendar/calendars/{id}(id=${cal.id})}"
+                                   th:attr="hx-patch=@{/therapist/schedule/settings/google-calendar/{accountId}/calendars/{id}(accountId=${account.id},id=${cal.id})}"
                                    type="checkbox">
                         </div>
                     </li>

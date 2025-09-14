@@ -10,10 +10,11 @@ CREATE TABLE therapist_google_accounts
 
 CREATE TABLE therapist_google_calendar_settings
 (
-    id              UUID PRIMARY KEY,
-    owner_ref       UUID REFERENCES therapists NOT NULL,
-    calendar_id     varchar                    NOT NULL,
-    should_be_shown BOOLEAN                    NOT NULL,
+    id                 UUID PRIMARY KEY,
+    owner_ref          UUID REFERENCES therapists                NOT NULL,
+    google_account_ref UUID REFERENCES therapist_google_accounts NOT NULL,
+    calendar_id        varchar                                   NOT NULL,
+    should_be_shown    BOOLEAN                                   NOT NULL,
 
-    UNIQUE (owner_ref, calendar_id)
+    UNIQUE (owner_ref, google_account_ref, calendar_id)
 );

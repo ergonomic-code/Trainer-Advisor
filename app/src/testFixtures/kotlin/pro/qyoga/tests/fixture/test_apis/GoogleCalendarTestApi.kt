@@ -21,8 +21,10 @@ class GoogleCalendarTestApi(
         ).accounts
     }
 
-    fun addAccount(therapistRef: TherapistRef, email: String, refreshToken: String) {
-        googleCalendarsService.addGoogleAccount(GoogleAccount(therapistRef, email, refreshToken))
+    fun addAccount(therapistRef: TherapistRef, email: String, refreshToken: String): GoogleAccount {
+        val googleAccount = GoogleAccount(therapistRef, email, refreshToken)
+        googleCalendarsService.addGoogleAccount(googleAccount)
+        return googleAccount
     }
 
 }

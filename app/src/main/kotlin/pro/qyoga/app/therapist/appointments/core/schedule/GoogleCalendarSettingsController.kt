@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
 import pro.qyoga.core.calendar.google.GoogleAccountCalendarsView
+import pro.qyoga.core.calendar.google.GoogleAccountRef
 import pro.qyoga.core.calendar.google.GoogleCalendarsService
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.ref
@@ -37,11 +38,12 @@ class GoogleCalendarSettingsController(
     @PatchMapping(UPDATE_CALENDAR_SETTINGS_PATH)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun updateCalendarSettings(
+        @PathVariable googleAccount: GoogleAccountRef,
         @PathVariable calendarId: String,
         @RequestBody settingsPatch: Map<String, Any>,
         @AuthenticationPrincipal therapist: QyogaUserDetails
     ): ModelAndView {
-        googleCalendarsService.updateCalendarSettings(therapist.ref, calendarId, settingsPatch)
+        googleCalendarsService.updateCalendarSettings(therapist.ref, googleAccount, calendarId, settingsPatch)
         return getGoogleCalendarSettingsComponent(therapist)
     }
 
@@ -49,10 +51,12 @@ class GoogleCalendarSettingsController(
 
         const val PATH = "/therapist/schedule/settings/google-calendar"
 
-        const val UPDATE_CALENDAR_SETTINGS_PATH = "$PATH/calendars/{calendarId}"
+        const val UPDATE_CALENDAR_SETTINGS_PATH = "$PATH/{googleAccount}/calendars/{calendarId}"
 
-        fun updateCalendarSettingsPath(calendarId: String): String =
-            UPDATE_CALENDAR_SETTINGS_PATH.replace("{calendarId}", calendarId)
+        fun updateCalendarSettingsPath(googleAccount: GoogleAccountRef, calendarId: String): String =
+            UPDATE_CALENDAR_SETTINGS_PATH
+                .replace("{googleAccount}", googleAccount.id.toString())
+                .replace("{calendarId}", calendarId)
 
     }
 

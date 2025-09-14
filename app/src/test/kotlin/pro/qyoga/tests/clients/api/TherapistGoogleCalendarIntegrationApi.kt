@@ -7,6 +7,7 @@ import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationResp
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.BodyInserters.fromValue
 import pro.qyoga.app.therapist.appointments.core.schedule.GoogleCalendarSettingsController
+import pro.qyoga.core.calendar.google.GoogleAccountRef
 import pro.qyoga.tests.platform.spring.web_test_client.getBodyAsString
 import pro.qyoga.tests.platform.spring.web_test_client.redirectLocation
 import java.net.URI
@@ -61,13 +62,13 @@ class TherapistGoogleCalendarIntegrationApi(
             .let { Jsoup.parse(it) }
     }
 
-    fun setShouldBeShown(calendarId: String, shouldBeShown: Boolean) {
+    fun setShouldBeShown(googleAccount: GoogleAccountRef, calendarId: String, shouldBeShown: Boolean) {
         val body = mapOf(
             "shouldBeShown" to shouldBeShown
         )
 
         webTestClient.patch()
-            .uri(GoogleCalendarSettingsController.updateCalendarSettingsPath(calendarId))
+            .uri(GoogleCalendarSettingsController.updateCalendarSettingsPath(googleAccount, calendarId))
             .body(fromValue(body))
             .authorized()
             .exchange()
