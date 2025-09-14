@@ -14,7 +14,7 @@ import pro.qyoga.tests.fixture.data.randomWorkingTime
 import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentsObjectMother
 import pro.qyoga.tests.fixture.object_mothers.appointments.DURATION_FOR_FULL_LABEL
 import pro.qyoga.tests.fixture.object_mothers.calendars.CalendarsObjectMother.aCalendarItem
-import pro.qyoga.tests.fixture.presets.CalendarsFixturePresets
+import pro.qyoga.tests.fixture.presets.ICalsCalendarsFixturePresets
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import pro.qyoga.tests.pages.therapist.appointments.CalendarPage
 import pro.qyoga.tests.pages.therapist.appointments.appointmentCards
@@ -26,7 +26,7 @@ import java.time.LocalDate
 @DisplayName("Страница календаря")
 class SchedulePageTest : QYogaAppIntegrationBaseTest() {
 
-    private val calendarsFixturePresets = getBean<CalendarsFixturePresets>()
+    private val ICalsCalendarsFixturePresets = getBean<ICalsCalendarsFixturePresets>()
 
     @Test
     fun `должна корректно рендерить пустой календарь за текущую дату`() {
@@ -116,7 +116,7 @@ class SchedulePageTest : QYogaAppIntegrationBaseTest() {
             set(field(ICalCalendarItem::duration), AppointmentsObjectMother.fullCardDuration)
         }
 
-        calendarsFixturePresets.createICalCalendarWithSingleEvent(event)
+        ICalsCalendarsFixturePresets.createICalCalendarWithSingleEvent(event)
 
         // Действие
         val document = theTherapist.appointments.getScheduleForDay(today)

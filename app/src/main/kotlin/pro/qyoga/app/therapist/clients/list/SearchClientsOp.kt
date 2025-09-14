@@ -1,16 +1,15 @@
 package pro.qyoga.app.therapist.clients.list
 
 import org.intellij.lang.annotations.Language
-import org.springframework.core.convert.converter.Converter
-import org.springframework.core.convert.support.DefaultConversionService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
-import org.springframework.data.jdbc.core.mapping.AggregateReference
-import org.springframework.jdbc.core.DataClassRowMapper
+import pro.azhidkov.platform.spring.jdbc.taDataClassRowMapper
 import pro.qyoga.core.clients.cards.ClientsRepo
 import pro.qyoga.core.clients.cards.dtos.ClientSearchDto
-import pro.qyoga.core.users.therapists.Therapist
 import java.util.*
+
+
+val clientListItemViewRowMapper = taDataClassRowMapper<ClientListItemView>()
 
 fun ClientsRepo.findTherapistClientsPageBySearchForm(
     therapistId: UUID,
@@ -36,16 +35,6 @@ fun ClientsRepo.findTherapistClientsPageBySearchForm(
         "lastName" to (clientSearchDto.lastName ?: ""),
         "phoneNumber" to (clientSearchDto.digitsOnlyPhoneNumber ?: "")
     )
-    val clientListItemViewRowMapper = DataClassRowMapper(ClientListItemView::class.java).apply {
-        conversionService = DefaultConversionService().apply {
-            @Suppress("ObjectLiteralToLambda") val converter =
-                object : Converter<UUID, AggregateReference<Therapist, UUID>> {
-                    override fun convert(source: UUID): AggregateReference<Therapist, UUID>? {
-                        return AggregateReference.to(source)
-                    }
-                }
-            addConverter(converter)
-        }
-    }
+
     return findPage(query, paramMap, pageRequest, clientListItemViewRowMapper)
 }

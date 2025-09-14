@@ -4,6 +4,7 @@
         <div class="text-muted" th:unless="${hasAccounts}">
             Нет подключенных аккаунтов
         </div>
+
         <div th:if="${hasAccounts}">
             <div th:each="account : ${accounts}">
                 <div th:text="${account.email}">email@example.com</div>
@@ -14,6 +15,12 @@
                         <div class="form-check form-switch m-0">
                             <input aria-label="Показывать календарь" class="form-check-input"
                                    th:checked="${cal.shouldBeShown}"
+                                   hx-ext="json-enc"
+                                   hx-swap="none"
+                                   hx-trigger="change"
+                                   hx-vals='js:{ "shouldBeShown": !!event.target.checked }'
+                                   name="shouldBeShown"
+                                   th:attr="hx-patch=@{/therapist/schedule/settings/google-calendar/calendars/{id}(id=${cal.id})}"
                                    type="checkbox">
                         </div>
                     </li>

@@ -26,6 +26,13 @@ spring:
           starttls:
             enable: true
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            redirect-uri: "http://localhost:${server.port:8080}/therapist/oauth2/google/callback"
+
 management:
   health:
     mail:

@@ -17,7 +17,7 @@ class GetGoogleCalendarsSettingsEndpointTest : QYogaAppIntegrationBaseKoTest({
         val accounts = emptyList<GoogleAccountCalendarsView>()
 
         // Действие
-        val res = therapist.appointments.getGoogleCalendarComponent()
+        val res = therapist.googleCalendarIntegration.getGoogleCalendarComponent()
 
         // Проверка
         res shouldHaveComponent GoogleCalendarSettingsComponent(accounts)

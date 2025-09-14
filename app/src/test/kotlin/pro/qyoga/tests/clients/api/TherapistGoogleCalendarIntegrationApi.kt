@@ -1,8 +1,13 @@
 package pro.qyoga.tests.clients.api
 
 import io.restassured.http.Cookie
+import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationResponse
 import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.web.reactive.function.BodyInserters.fromValue
+import pro.qyoga.app.therapist.appointments.core.schedule.GoogleCalendarSettingsController
+import pro.qyoga.tests.platform.spring.web_test_client.getBodyAsString
 import pro.qyoga.tests.platform.spring.web_test_client.redirectLocation
 import java.net.URI
 
@@ -44,6 +49,29 @@ class TherapistGoogleCalendarIntegrationApi(
             .uri("/therapist/oauth2/google/callback")
             .authorized()
             .exchange()
+    }
+
+    fun getGoogleCalendarComponent(): Document {
+        return webTestClient.get()
+            .uri(GoogleCalendarSettingsController.PATH)
+            .authorized()
+            .exchange()
+            .expectStatus().isOk
+            .getBodyAsString()
+            .let { Jsoup.parse(it) }
+    }
+
+    fun setShouldBeShown(calendarId: String, shouldBeShown: Boolean) {
+        val body = mapOf(
+            "shouldBeShown" to shouldBeShown
+        )
+
+        webTestClient.patch()
+            .uri(GoogleCalendarSettingsController.updateCalendarSettingsPath(calendarId))
+            .body(fromValue(body))
+            .authorized()
+            .exchange()
+            .expectStatus().isNoContent
     }
 
 }

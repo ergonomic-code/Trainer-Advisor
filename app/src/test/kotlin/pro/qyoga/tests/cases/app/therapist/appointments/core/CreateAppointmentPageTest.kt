@@ -21,7 +21,7 @@ import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentsObjectMot
 import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentsObjectMother.randomFullEditAppointmentRequest
 import pro.qyoga.tests.fixture.object_mothers.appointments.randomAppointmentDate
 import pro.qyoga.tests.fixture.object_mothers.calendars.CalendarsObjectMother.aCalendarItem
-import pro.qyoga.tests.fixture.presets.CalendarsFixturePresets
+import pro.qyoga.tests.fixture.presets.ICalsCalendarsFixturePresets
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentForm
 import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentPage
@@ -43,7 +43,7 @@ private val aTime = LocalTime.now()
 @DisplayName("Страница создания приёма")
 class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
-    private val calendarsFixturePresets = getBean<CalendarsFixturePresets>()
+    private val ICalsCalendarsFixturePresets = getBean<ICalsCalendarsFixturePresets>()
 
     @Test
     fun `должна рендерится корректно`() {
@@ -159,7 +159,7 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
             set(field(ICalCalendarItem::duration), Duration.ofMinutes(75))
             set(field(ICalCalendarItem::description), randomSentence())
         }
-        calendarsFixturePresets.createICalCalendarWithSingleEvent(event)
+        ICalsCalendarsFixturePresets.createICalCalendarWithSingleEvent(event)
 
         // Действие
         val document = theTherapist.appointments.getCreateAppointmentPage(

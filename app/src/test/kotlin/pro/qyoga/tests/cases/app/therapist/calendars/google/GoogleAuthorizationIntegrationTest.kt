@@ -5,7 +5,7 @@ import io.kotest.matchers.shouldBe
 import org.springframework.core.env.get
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
 import pro.qyoga.app.therapist.oauth2.GoogleOAuthController
-import pro.qyoga.core.calendar.api.Calendar
+import pro.qyoga.core.calendar.google.GoogleCalendar
 import pro.qyoga.core.calendar.google.GoogleCalendarsService
 import pro.qyoga.tests.assertions.shouldBeRedirectToGoogleOAuth
 import pro.qyoga.tests.clients.TherapistClient
@@ -65,37 +65,37 @@ class GoogleAuthorizationIntegrationTest : QYogaAppIntegrationBaseKoTest({
             // Сетап
             val googleEmail = faker.internet().emailAddress()
             val mockGoogleOAuthServer = MockGoogleOAuthServer(WireMock.wiremock)
+            val mockGoogleCalendar = MockGoogleCalendar(WireMock.wiremock)
             val oAuthRequest = therapist.googleCalendarIntegration.authorizeInGoogle()
                 .let { OAuthObjectMother.oAuth2AuthorizationRequest(it) }
             val aOAuthResponse = aOAuth2AuthorizationResponse(oAuthRequest.state)
             val accessToken = "accessToken"
             val refreshToken = "refreshToken"
+            val calendars = emptyList<GoogleCalendar>()
             mockGoogleOAuthServer.OnGetToken(clientId, clientSecret, aOAuthResponse.code)
                 .returnsToken(accessToken, refreshToken)
             mockGoogleOAuthServer.OnGetUserInfo(accessToken).returnsUserInfo(googleEmail)
+            mockGoogleOAuthServer.OnRefreshToken(refreshToken).returnsToken(accessToken)
+            mockGoogleCalendar.OnGetCalendars(accessToken).returnsCalendars(calendars)
 
-            val calendars = emptyList<Calendar>()
             therapist.googleCalendarIntegration.handleOAuthCallbackForResponse(aOAuthResponse)
 
             // Действие
             val response = therapist.googleCalendarIntegration.finalizeOAuthCallbackForResponse()
 
             // Проверка
-            "обеспечивать возможность дальнейших запросов к Google Calendar" {
-                val mockGoogleCalendar = MockGoogleCalendar(WireMock.wiremock)
-                mockGoogleOAuthServer.OnRefreshToken(refreshToken).returnsToken(accessToken)
-                mockGoogleCalendar.OnGetCalendars(accessToken).returnsCalendars(calendars)
+            "возвращать редирект на страницу календаря с параметром google-connected=true" {
+                with(response.redirectLocation()) {
+                    path shouldBe SchedulePageController.PATH
+                    query shouldBe "google-connected=true"
+                }
+            }
 
+            "обеспечивать возможность дальнейших запросов к Google Calendar" {
                 val gotCalendars = googleCalendarsService.findCalendars(THE_THERAPIST_REF)
                 gotCalendars shouldBe calendars
             }
 
-            "возвращать редирект на страницу календаря с параметром google-connected=true" {
-                with(response.redirectLocation()) {
-                    path shouldBe SchedulePageController.PATH
-                    query shouldBe "google_connected=true"
-                }
-            }
         }
     }
 

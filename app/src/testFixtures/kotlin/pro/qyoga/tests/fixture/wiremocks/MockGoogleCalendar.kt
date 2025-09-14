@@ -5,7 +5,7 @@ import com.github.tomakehurst.wiremock.client.WireMock
 import com.github.tomakehurst.wiremock.client.WireMock.aResponse
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
 import org.springframework.http.HttpStatus
-import pro.qyoga.core.calendar.api.Calendar
+import pro.qyoga.core.calendar.google.GoogleCalendar
 
 
 class MockGoogleCalendar(
@@ -16,7 +16,7 @@ class MockGoogleCalendar(
         private val accessToken: String
     ) {
         fun returnsCalendars(
-            calendars: List<Calendar>
+            calendars: List<GoogleCalendar>
         ) {
             wiremockServer.stubFor(
                 WireMock.get(
@@ -43,8 +43,10 @@ class MockGoogleCalendar(
 
 }
 
-private fun Calendar.toJson(): String =
+private fun GoogleCalendar.toJson(): String =
     """
         {
+            "id": "${this.externalId}",
+            "summary": "${this.name}"
         }
     """.trimIndent()

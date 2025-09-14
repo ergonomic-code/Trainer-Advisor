@@ -26,6 +26,7 @@ val gsonFactory: GsonFactory = GsonFactory.getDefaultInstance()
 val httpTransport: NetHttpTransport = GoogleNetHttpTransport.newTrustedTransport()
 
 data class GoogleCalendarView(
+    val id: String,
     val title: String,
     val shouldBeShown: Boolean
 )
@@ -38,12 +39,11 @@ data class GoogleAccountCalendarsView(
 @Service
 class GoogleCalendarsService(
     private val googleOAuthProps: OAuth2ClientProperties,
-    private val googleAccountsRepo: GoogleAccountsRepo,
+    private val googleAccountsDao: GoogleAccountsDao,
+    private val googleCalendarsDao: GoogleCalendarsDao,
     @Value("\${spring.security.oauth2.client.provider.google.token-uri}") private val tokenUri: URI,
     @Value("\${trainer-advisor.integrations.google-calendar.root-url}") private val googleCalendarRootUri: URI
 ) : CalendarsService {
-
-    private val googleCalendarsRepo = GoogleCalendarsRepo()
 
     private val servicesCache = mutableMapOf<GoogleAccount, Calendar>()
         .withDefault { createCalendarService(it) }
@@ -53,22 +53,22 @@ class GoogleCalendarsService(
         key = "#googleAccount.ownerRef.id"
     )
     fun addGoogleAccount(googleAccount: GoogleAccount) {
-        googleAccountsRepo.addGoogleAccount(googleAccount)
+        googleAccountsDao.addGoogleAccount(googleAccount)
     }
 
-    @Cacheable(
-        cacheNames = [GoogleCalendarConf.CacheNames.GOOGLE_ACCOUNT_CALENDARS],
-        key = "#therapist.id"
-    )
     fun findGoogleAccountCalendars(
         therapist: TherapistRef
     ): List<GoogleAccountCalendarsView> {
-        val accounts = googleAccountsRepo.findGoogleAccounts(therapist)
-        return accounts.map {
+        val accounts = googleAccountsDao.findGoogleAccounts(therapist)
+        val accountCalendars = accounts.map {
+            getAccountCalendars(therapist, it)
+        }
+        val calendarSettings = googleCalendarsDao.findCalendarsSettings(therapist)
+        return accounts.zip(accountCalendars).map { (account, calendar) ->
             GoogleAccountCalendarsView(
-                it.email,
-                getAccountCalendars(therapist, it).map {
-                    GoogleCalendarView(it.name, false)
+                account.email,
+                calendar.map {
+                    GoogleCalendarView(it.externalId, it.name, calendarSettings[it.externalId]?.shouldBeShown ?: false)
                 }
             )
         }
@@ -77,7 +77,7 @@ class GoogleCalendarsService(
     fun findCalendars(
         therapist: TherapistRef
     ): List<pro.qyoga.core.calendar.api.Calendar> {
-        val accounts = googleAccountsRepo.findGoogleAccounts(therapist)
+        val accounts = googleAccountsDao.findGoogleAccounts(therapist)
         if (accounts.isEmpty()) {
             return emptyList()
         }
@@ -107,7 +107,7 @@ class GoogleCalendarsService(
         therapist: TherapistRef,
         interval: Interval<ZonedDateTime>
     ): Iterable<CalendarItem<*, LocalDateTime>> {
-        val accounts = googleAccountsRepo.findGoogleAccounts(therapist)
+        val accounts = googleAccountsDao.findGoogleAccounts(therapist)
         if (accounts.isEmpty()) {
             return emptyList()
         }
@@ -116,7 +116,7 @@ class GoogleCalendarsService(
             val service = servicesCache.getValue(it)
 
             val events =
-                service.events().list(it.email) // "primary" refers to the user's primary calendar
+                service.events().list(it.email)
                     .setTimeMin(DateTime(interval.from.toInstant().toEpochMilli()))
                     .setTimeMax(DateTime(interval.to.toInstant().toEpochMilli()))
                     .setOrderBy("startTime")
@@ -124,7 +124,6 @@ class GoogleCalendarsService(
                     .execute()
                     .items
                     .map {
-                        println(it)
                         GoogleCalendarItem(
                             GoogleCalendarItemId(it.id),
                             it.summary,
@@ -140,11 +139,22 @@ class GoogleCalendarsService(
         return events
     }
 
+    @CacheEvict(
+        cacheNames = [GoogleCalendarConf.CacheNames.GOOGLE_ACCOUNT_CALENDARS],
+        key = "#therapist.id"
+    )
+    fun updateCalendarSettings(
+        therapist: TherapistRef,
+        calendarId: String,
+        settingsPatch: GoogleCalendarSettingsPatch
+    ) {
+        googleCalendarsDao.patchCalendarSettings(therapist, calendarId, settingsPatch)
+    }
+
     private fun createCalendarService(account: GoogleAccount): Calendar {
         val credentials = UserCredentials.newBuilder()
             .setClientId(googleOAuthProps.registration["google"]!!.clientId)
             .setClientSecret(googleOAuthProps.registration["google"]!!.clientSecret)
-            .setRefreshToken(account.refreshToken)
             .setRefreshToken(account.refreshToken)
             .setTokenServerUri(tokenUri)
             .build()

@@ -14,7 +14,7 @@ class GoogleCalendarSettingsComponent(
 ) : Component {
 
     private val connectButton =
-        Link("connect-google-calendar", "/oauth2/authorization/google", "Подключить Google Calendar")
+        Link("connect-google-calendar", "/oauth2/authorization/google", "Добавить аккаунт")
 
     override fun selector(): String =
         "#google-calendar-settings"

@@ -9,7 +9,7 @@ import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
 
 
 @Component
-class CalendarsFixturePresets(
+class ICalsCalendarsFixturePresets(
     private val iCalCalendarsBackgrounds: ICalCalendarsBackgrounds
 ) {
 

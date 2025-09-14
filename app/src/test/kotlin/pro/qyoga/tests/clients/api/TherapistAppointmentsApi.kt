@@ -17,13 +17,11 @@ import pro.qyoga.app.therapist.appointments.core.edit.CreateAppointmentPageContr
 import pro.qyoga.app.therapist.appointments.core.edit.EditAppointmentPageController
 import pro.qyoga.app.therapist.appointments.core.edit.view_model.SourceItem
 import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel
-import pro.qyoga.app.therapist.appointments.core.schedule.GoogleCalendarSettingsController
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
 import pro.qyoga.core.appointments.core.commands.EditAppointmentRequest
 import pro.qyoga.core.appointments.core.model.AppointmentRef
 import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentPage
 import pro.qyoga.tests.pages.therapist.appointments.EditAppointmentPage
-import pro.qyoga.tests.platform.spring.web_test_client.getBodyAsString
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -192,16 +190,6 @@ class TherapistAppointmentsApi(
         } When {
             delete(EditAppointmentPageController.PATH)
         }
-    }
-
-    fun getGoogleCalendarComponent(): Document {
-        return webTestClient.get()
-            .uri(GoogleCalendarSettingsController.PATH)
-            .authorized()
-            .exchange()
-            .expectStatus().isOk
-            .getBodyAsString()
-            .let { Jsoup.parse(it) }
     }
 
 }

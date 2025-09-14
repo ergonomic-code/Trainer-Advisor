@@ -7,7 +7,7 @@ import pro.qyoga.core.users.therapists.TherapistRef
 
 
 @Repository
-class GoogleAccountsRepo(
+class GoogleAccountsDao(
     private val jdbcAggregateTemplate: JdbcAggregateTemplate
 ) {
 

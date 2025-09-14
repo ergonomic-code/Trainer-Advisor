@@ -47,7 +47,7 @@ spring:
               - openid
               - email
               - https://www.googleapis.com/auth/calendar.readonly
-            redirect-uri: "http://localhost:${server.port:8080}/therapist/oauth2/google/callback"
+            redirect-uri: "https://trainer-advisor.pro/therapist/oauth2/google/callback"
             authorization-grant-type: authorization_code
             client-name: Trainer Advisor
             client-authentication-method: client_secret_post
