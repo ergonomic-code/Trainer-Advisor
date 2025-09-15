@@ -1,6 +1,7 @@
 package pro.qyoga.core.calendar.google
 
 import org.springframework.data.jdbc.core.JdbcAggregateTemplate
+import org.springframework.data.jdbc.core.findAllById
 import org.springframework.stereotype.Repository
 import pro.azhidkov.platform.spring.sdj.query.query
 import pro.qyoga.core.users.therapists.TherapistRef
@@ -20,6 +21,10 @@ class GoogleAccountsDao(
             GoogleAccount::ownerRef isEqual therapist
         }
         return jdbcAggregateTemplate.findAll(query, GoogleAccount::class.java)
+    }
+
+    fun findGoogleAccounts(accountIds: List<GoogleAccountRef>): List<GoogleAccount> {
+        return jdbcAggregateTemplate.findAllById(accountIds.map { it.id })
     }
 
 }

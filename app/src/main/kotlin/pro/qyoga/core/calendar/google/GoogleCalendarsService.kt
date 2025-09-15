@@ -12,8 +12,10 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
+import org.springframework.cache.annotation.Caching
 import org.springframework.stereotype.Service
 import pro.azhidkov.platform.java.time.Interval
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.qyoga.core.calendar.api.CalendarItem
 import pro.qyoga.core.calendar.api.CalendarsService
 import pro.qyoga.core.users.therapists.TherapistRef
@@ -110,41 +112,63 @@ class GoogleCalendarsService(
         therapist: TherapistRef,
         interval: Interval<ZonedDateTime>
     ): Iterable<CalendarItem<*, LocalDateTime>> {
-        val accounts = googleAccountsDao.findGoogleAccounts(therapist)
-        if (accounts.isEmpty()) {
+        val googleCalendarSettings = googleCalendarsDao.findCalendarsSettings(therapist)
+        if (googleCalendarSettings.isEmpty()) {
             return emptyList()
         }
+        val accountCalendars = googleCalendarSettings.values.groupBy { it.googleAccountRef.id }
+        val accountIds = googleCalendarSettings.values.map { it.googleAccountRef }
+            .distinct()
+        val accounts = googleAccountsDao.findGoogleAccounts(accountIds)
 
-        val events = accounts.flatMap {
-            val service = servicesCache.getValue(it)
+        val events = accounts
+            .flatMap { account ->
+                val service = servicesCache.getValue(account)
 
-            val events =
-                service.events().list(it.email)
-                    .setTimeMin(DateTime(interval.from.toInstant().toEpochMilli()))
-                    .setTimeMax(DateTime(interval.to.toInstant().toEpochMilli()))
-                    .setOrderBy("startTime")
-                    .setSingleEvents(true)
-                    .execute()
-                    .items
-                    .map {
-                        GoogleCalendarItem(
-                            GoogleCalendarItemId(it.id),
-                            it.summary,
-                            it.description ?: "",
-                            startDate(it),
-                            duration(it),
-                            it.location
-                        )
+                val settings = accountCalendars[account.ref().id]
+                    ?: return@flatMap emptyList()
+
+                settings
+                    .filter { it.shouldBeShown }
+                    .flatMap { calendarSettings ->
+                        val events =
+                            service.events().list(calendarSettings.calendarId)
+                                .setTimeMin(DateTime(interval.from.toInstant().toEpochMilli()))
+                                .setTimeMax(DateTime(interval.to.toInstant().toEpochMilli()))
+                                .setOrderBy("startTime")
+                                .setSingleEvents(true)
+                                .execute()
+                                .items
+                                .map {
+                                    GoogleCalendarItem(
+                                        GoogleCalendarItemId(it.id),
+                                        it.summary,
+                                        it.description ?: "",
+                                        startDate(it),
+                                        duration(it),
+                                        it.location
+                                    )
+                                }
+                        events
                     }
-            events
-        }
+            }
 
         return events
     }
 
-    @CacheEvict(
-        cacheNames = [GoogleCalendarConf.CacheNames.GOOGLE_ACCOUNT_CALENDARS],
-        key = "#therapist.id"
+    @Caching(
+        evict = [
+            CacheEvict(
+                cacheNames = [GoogleCalendarConf.CacheNames.GOOGLE_ACCOUNT_CALENDARS],
+                key = "#therapist.id",
+                beforeInvocation = true
+            ),
+            CacheEvict(
+                cacheNames = [GoogleCalendarConf.CacheNames.CALENDAR_EVENTS],
+                allEntries = true,
+                beforeInvocation = true
+            )
+        ]
     )
     fun updateCalendarSettings(
         therapist: TherapistRef,

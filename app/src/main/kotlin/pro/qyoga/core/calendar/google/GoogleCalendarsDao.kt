@@ -10,6 +10,7 @@ typealias GoogleCalendarSettingsPatch = Map<String, Any>
 
 data class GoogleCalendarSettings(
     val ownerRef: TherapistRef,
+    val googleAccountRef: GoogleAccountRef,
     val calendarId: String,
     val shouldBeShown: Boolean,
 )
