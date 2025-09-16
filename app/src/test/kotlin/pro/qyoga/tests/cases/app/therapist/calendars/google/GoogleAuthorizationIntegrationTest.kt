@@ -92,8 +92,8 @@ class GoogleAuthorizationIntegrationTest : QYogaAppIntegrationBaseKoTest({
             }
 
             "обеспечивать возможность дальнейших запросов к Google Calendar" {
-                val gotCalendars = googleCalendarsService.findCalendars(THE_THERAPIST_REF)
-                gotCalendars shouldBe calendars
+                val gotCalendars = googleCalendarsService.findGoogleAccountCalendars(THE_THERAPIST_REF)
+                gotCalendars.single().calendars shouldBe calendars
             }
 
         }
