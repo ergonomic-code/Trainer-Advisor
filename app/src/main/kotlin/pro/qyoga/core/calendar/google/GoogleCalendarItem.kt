@@ -1,17 +1,31 @@
 package pro.qyoga.core.calendar.google
 
+import pro.azhidkov.platform.java.time.toLocalDateTime
 import pro.qyoga.core.calendar.api.CalendarItem
 import java.time.Duration
-import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.temporal.Temporal
 
 @JvmInline
 value class GoogleCalendarItemId(val value: String)
 
-data class GoogleCalendarItem(
+data class GoogleCalendarItem<DATE : Temporal>(
     override val id: GoogleCalendarItemId,
     override val title: String,
     override val description: String,
-    override val dateTime: LocalDateTime,
+    override val dateTime: DATE,
     override val duration: Duration,
     override val location: String?
-) : CalendarItem<GoogleCalendarItemId, LocalDateTime>
+) : CalendarItem<GoogleCalendarItemId, DATE> {
+
+    fun toLocalizedCalendarItem(zoneId: ZoneId) =
+        GoogleCalendarItem(
+            id,
+            title,
+            description,
+            dateTime.toLocalDateTime(zoneId),
+            duration,
+            location
+        )
+
+}

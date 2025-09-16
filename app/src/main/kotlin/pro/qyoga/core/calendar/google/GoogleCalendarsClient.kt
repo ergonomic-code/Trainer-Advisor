@@ -12,7 +12,10 @@ import org.springframework.stereotype.Component
 import pro.azhidkov.platform.java.time.Interval
 import pro.qyoga.core.users.therapists.TherapistRef
 import java.net.URI
-import java.time.*
+import java.time.Duration
+import java.time.Instant
+import java.time.ZoneId
+import java.time.ZonedDateTime
 
 
 @Component
@@ -33,7 +36,7 @@ class GoogleCalendarsClient(
         account: GoogleAccount,
         calendarSettings: GoogleCalendarSettings,
         interval: Interval<ZonedDateTime>
-    ): List<GoogleCalendarItem> {
+    ): List<GoogleCalendarItem<ZonedDateTime>> {
         val service = servicesCache.getValue(account)
         val events =
             service.events().list(calendarSettings.calendarId)
@@ -56,11 +59,11 @@ class GoogleCalendarsClient(
         return events
     }
 
-    private fun startDate(event: Event): LocalDateTime =
+    private fun startDate(event: Event): ZonedDateTime =
         ZonedDateTime.ofInstant(
             Instant.ofEpochMilli(event.start.dateTime?.value ?: event.start.date?.value ?: 0),
             ZoneId.of(event.start.timeZone)
-        ).toLocalDateTime()
+        )
 
     private fun duration(event: Event): Duration =
         Duration.ofMillis(event.end.dateTime?.value ?: event.end.date?.value ?: 0) -

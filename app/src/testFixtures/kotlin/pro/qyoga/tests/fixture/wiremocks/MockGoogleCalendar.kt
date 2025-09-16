@@ -1,11 +1,16 @@
 package pro.qyoga.tests.fixture.wiremocks
 
 import com.github.tomakehurst.wiremock.WireMockServer
+import com.github.tomakehurst.wiremock.client.MappingBuilder
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import org.springframework.http.HttpStatus
+import org.springframework.web.util.UriUtils
 import pro.qyoga.core.calendar.google.GoogleCalendar
 import pro.qyoga.core.calendar.google.GoogleCalendarItem
 import pro.qyoga.tests.fixture.data.asiaNovosibirskTimeZone
+import java.nio.charset.StandardCharsets.UTF_8
+import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 /**
@@ -49,7 +54,7 @@ class MockGoogleCalendar(
         private val calendarId: String
     ) {
 
-        fun returnsEvents(vararg events: GoogleCalendarItem) {
+        fun returnsEvents(vararg events: GoogleCalendarItem<*>) {
             wiremockServer.stubFor(
                 get(
                     urlPathEqualTo("/google/calendar/v3/calendars/$calendarId/events")
@@ -82,9 +87,11 @@ private fun GoogleCalendar.toJson(): String =
         }
     """
 
-private fun GoogleCalendarItem.toJson(): String {
-    val start = dateTime.atZone(asiaNovosibirskTimeZone).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
-    val end = endDateTime.atZone(asiaNovosibirskTimeZone).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+private fun GoogleCalendarItem<*>.toJson(): String {
+    val start = ((dateTime as? ZonedDateTime) ?: (dateTime as LocalDateTime).atZone(asiaNovosibirskTimeZone))
+        .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+    val end = ((endDateTime as? ZonedDateTime) ?: (endDateTime as LocalDateTime).atZone(asiaNovosibirskTimeZone))
+        .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
     return """
         {
             "id": "$id",

@@ -1,5 +1,6 @@
 package pro.qyoga.tests.fixture.presets
 
+import org.springframework.context.ApplicationContext
 import pro.qyoga.core.calendar.google.GoogleAccount
 import pro.qyoga.core.calendar.google.GoogleCalendarItem
 import pro.qyoga.core.users.therapists.TherapistRef
@@ -8,6 +9,8 @@ import pro.qyoga.tests.fixture.object_mothers.calendars.google.GoogleCalendarObj
 import pro.qyoga.tests.fixture.test_apis.GoogleCalendarTestApi
 import pro.qyoga.tests.fixture.wiremocks.MockGoogleCalendar
 import pro.qyoga.tests.fixture.wiremocks.MockGoogleOAuthServer
+import pro.qyoga.tests.infra.wiremock.WireMock
+import pro.qyoga.tests.platform.spring.context.getBean
 
 
 class GoogleCalendarFixturePresets(
@@ -19,7 +22,7 @@ class GoogleCalendarFixturePresets(
     fun setupCalendar(
         therapistRef: TherapistRef,
         calendarId: String,
-        vararg events: GoogleCalendarItem,
+        vararg events: GoogleCalendarItem<*>,
         shouldBeShown: Boolean = false,
     ): GoogleAccount {
         val refreshToken = "refreshToken"
@@ -35,3 +38,9 @@ class GoogleCalendarFixturePresets(
     }
 
 }
+
+fun ApplicationContext.googleCalendarFixturePresets() = GoogleCalendarFixturePresets(
+    MockGoogleOAuthServer(WireMock.wiremock),
+    MockGoogleCalendar(WireMock.wiremock),
+    getBean()
+)

@@ -5,6 +5,7 @@ import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
 import org.springframework.stereotype.Service
 import pro.azhidkov.platform.java.time.Interval
+import pro.azhidkov.platform.java.time.zoneId
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.qyoga.core.calendar.api.CalendarItem
 import pro.qyoga.core.calendar.api.CalendarsService
@@ -96,6 +97,7 @@ class GoogleCalendarsService(
                         googleCalendarsClient.getEvents(account, calendarSettings, interval)
                     }
             }
+            .map { it.toLocalizedCalendarItem(interval.zoneId) }
 
         return events
     }

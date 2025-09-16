@@ -44,7 +44,7 @@ class GoogleOAuthController(
             .body(Map::class.java)
         val email = response
             ?.get("email") as String
-        val picture = response["picture"] as String?
+        val picture = response["picture"] as? String?
 
         googleCalendarsService.addGoogleAccount(
             GoogleAccount(therapistId, email, authorizedClient.refreshToken!!.tokenValue)
