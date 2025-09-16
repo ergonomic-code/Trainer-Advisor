@@ -5,6 +5,7 @@ import com.google.api.services.calendar.Calendar
 import com.google.api.services.calendar.model.Event
 import com.google.auth.http.HttpCredentialsAdapter
 import com.google.auth.oauth2.UserCredentials
+import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties
 import org.springframework.cache.annotation.Cacheable
@@ -25,6 +26,8 @@ class GoogleCalendarsClient(
     @Value("\${trainer-advisor.integrations.google-calendar.root-url}") private val googleCalendarRootUri: URI
 ) {
 
+    private val log = LoggerFactory.getLogger(javaClass)
+
     private val servicesCache = mutableMapOf<GoogleAccount, Calendar>()
         .withDefault { createCalendarService(it) }
 
@@ -37,6 +40,8 @@ class GoogleCalendarsClient(
         calendarSettings: GoogleCalendarSettings,
         interval: Interval<ZonedDateTime>
     ): List<GoogleCalendarItem<ZonedDateTime>> {
+        log.info("Fetching events in {} for calendar {} using {}", interval, calendarSettings.calendarId, account)
+
         val service = servicesCache.getValue(account)
         val events =
             service.events().list(calendarSettings.calendarId)
@@ -77,6 +82,7 @@ class GoogleCalendarsClient(
         therapist: TherapistRef,
         account: GoogleAccount
     ): List<GoogleCalendar> {
+        log.info("Fetching calendars for therapist {} using {}", therapist, account)
         val service = servicesCache.getValue(account)
 
         return service.CalendarList().list()
@@ -89,7 +95,7 @@ class GoogleCalendarsClient(
         val credentials = UserCredentials.newBuilder()
             .setClientId(googleOAuthProps.registration["google"]!!.clientId)
             .setClientSecret(googleOAuthProps.registration["google"]!!.clientSecret)
-            .setRefreshToken(account.refreshToken)
+            .setRefreshToken(String(account.refreshToken))
             .setTokenServerUri(tokenUri)
             .build()
 
