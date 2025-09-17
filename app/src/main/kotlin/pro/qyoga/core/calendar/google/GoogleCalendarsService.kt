@@ -25,24 +25,47 @@ data class GoogleCalendarView(
     val shouldBeShown: Boolean
 )
 
+private const val DEFAULT_CALENDAR_VISIBILITY = false
+
+sealed interface GoogleAccountContentView {
+    data class Calendars(val calendars: List<GoogleCalendarView>) : GoogleAccountContentView
+    data object Error : GoogleAccountContentView
+
+    companion object {
+        operator fun invoke(
+            calendars: Result<List<GoogleCalendar>>,
+            calendarSettings: Map<String, GoogleCalendarSettings>
+        ): GoogleAccountContentView =
+            if (calendars.isSuccess) {
+                Calendars(calendars.getOrThrow().map {
+                    GoogleCalendarView(
+                        it.externalId,
+                        it.name,
+                        calendarSettings[it.externalId]?.shouldBeShown ?: DEFAULT_CALENDAR_VISIBILITY
+                    )
+                })
+            } else {
+                Error
+            }
+    }
+}
+
 data class GoogleAccountCalendarsView(
     val id: UUID,
     val email: String,
-    val calendars: List<GoogleCalendarView>
+    val content: GoogleAccountContentView
 ) {
 
     companion object {
 
         fun of(
             account: GoogleAccount,
-            calendars: List<GoogleCalendar>,
+            calendars: Result<List<GoogleCalendar>>,
             calendarSettings: Map<String, GoogleCalendarSettings>
         ): GoogleAccountCalendarsView = GoogleAccountCalendarsView(
             account.id,
             account.email,
-            calendars.map {
-                GoogleCalendarView(it.externalId, it.name, calendarSettings[it.externalId]?.shouldBeShown ?: false)
-            }
+            GoogleAccountContentView(calendars, calendarSettings)
         )
     }
 

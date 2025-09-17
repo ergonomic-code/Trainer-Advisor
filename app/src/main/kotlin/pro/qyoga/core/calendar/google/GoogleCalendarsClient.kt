@@ -12,11 +12,14 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Component
 import pro.azhidkov.platform.java.time.Interval
 import pro.qyoga.core.users.therapists.TherapistRef
+import java.io.IOException
 import java.net.URI
 import java.time.Duration
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import kotlin.Result.Companion.failure
+import kotlin.Result.Companion.success
 
 
 @Component
@@ -81,21 +84,27 @@ class GoogleCalendarsClient(
     fun getAccountCalendars(
         therapist: TherapistRef,
         account: GoogleAccount
-    ): List<GoogleCalendar> {
+    ): Result<List<GoogleCalendar>> {
         log.info("Fetching calendars for therapist {} using {}", therapist, account)
         val service = servicesCache.getValue(account)
 
-        return service.CalendarList().list()
-            .execute().items.map {
-                GoogleCalendar(therapist, it.id, it.summary)
-            }
+        val getCalendarsListRequest = service.CalendarList().list()
+
+        val calendarListDto = tryExecute { getCalendarsListRequest.execute() }
+            .getOrElse { return failure(it) }
+
+        val calendarsList = calendarListDto.items.map {
+            GoogleCalendar(therapist, it.id, it.summary)
+        }
+
+        return success(calendarsList)
     }
 
     private fun createCalendarService(account: GoogleAccount): Calendar {
         val credentials = UserCredentials.newBuilder()
             .setClientId(googleOAuthProps.registration["google"]!!.clientId)
             .setClientSecret(googleOAuthProps.registration["google"]!!.clientSecret)
-            .setRefreshToken(String(account.refreshToken))
+            .setRefreshToken(String(account.refreshToken.value))
             .setTokenServerUri(tokenUri)
             .build()
 
@@ -107,3 +116,10 @@ class GoogleCalendarsClient(
     }
 
 }
+
+private fun <T> tryExecute(eventsRequest: () -> T): Result<T> =
+    try {
+        success(eventsRequest())
+    } catch (e: IOException) {
+        failure(e)
+    }

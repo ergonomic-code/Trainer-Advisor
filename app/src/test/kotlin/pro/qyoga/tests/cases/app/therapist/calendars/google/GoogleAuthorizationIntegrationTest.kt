@@ -5,6 +5,7 @@ import io.kotest.matchers.shouldBe
 import org.springframework.core.env.get
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
 import pro.qyoga.app.therapist.oauth2.GoogleOAuthController
+import pro.qyoga.core.calendar.google.GoogleAccountContentView
 import pro.qyoga.core.calendar.google.GoogleCalendar
 import pro.qyoga.core.calendar.google.GoogleCalendarsService
 import pro.qyoga.tests.assertions.shouldBeRedirectToGoogleOAuth
@@ -93,7 +94,7 @@ class GoogleAuthorizationIntegrationTest : QYogaAppIntegrationBaseKoTest({
 
             "обеспечивать возможность дальнейших запросов к Google Calendar" {
                 val gotCalendars = googleCalendarsService.findGoogleAccountCalendars(THE_THERAPIST_REF)
-                gotCalendars.single().calendars shouldBe calendars
+                (gotCalendars.single().content as GoogleAccountContentView.Calendars).calendars shouldBe calendars
             }
 
         }

@@ -18,6 +18,8 @@ class SdjConfig(
             PGIntervalToDurationConverter(),
             URLToStringConverter(),
             StringToURLConverter(),
+            SecretCharsToString(),
+            StringToSecretChars(),
             *modulesConverters.flatMap { it.converters() }.toTypedArray()
         )
     }

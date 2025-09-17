@@ -47,7 +47,7 @@ class GoogleOAuthController(
         val picture = response["picture"] as? String?
 
         googleCalendarsService.addGoogleAccount(
-            GoogleAccount(therapistId, email, authorizedClient.refreshToken!!.tokenValue.toCharArray())
+            GoogleAccount(therapistId, email, authorizedClient.refreshToken!!.tokenValue)
         )
 
         // Греем кэш, чтобы улучшить UX пользователя при возврате на страницу расписания

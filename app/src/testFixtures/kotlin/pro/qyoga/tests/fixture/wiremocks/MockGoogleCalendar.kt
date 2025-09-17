@@ -8,10 +8,10 @@ import org.springframework.web.util.UriUtils
 import pro.qyoga.core.calendar.google.GoogleCalendar
 import pro.qyoga.core.calendar.google.GoogleCalendarItem
 import pro.qyoga.tests.fixture.data.asiaNovosibirskTimeZone
-import java.nio.charset.StandardCharsets.UTF_8
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.text.Charsets.UTF_8
 
 /**
  * Mock implementation of Google Calendar API for testing purposes.
@@ -23,15 +23,12 @@ class MockGoogleCalendar(
     inner class OnGetCalendars(
         private val accessToken: String
     ) {
+
         fun returnsCalendars(
             calendars: List<GoogleCalendar>
         ) {
             wiremockServer.stubFor(
-                get(
-                    urlEqualTo(
-                        "/google/calendar/v3/users/me/calendarList"
-                    )
-                )
+                getCalendarsRequest()
                     .withHeader("Authorization", equalTo("Bearer $accessToken"))
                     .willReturn(
                         aResponse()
@@ -47,6 +44,46 @@ class MockGoogleCalendar(
                     )
             )
         }
+
+        fun returnsForbidden() {
+            wiremockServer.stubFor(
+                getCalendarsRequest()
+                    .willReturn(
+                        aResponse()
+                            .withStatus(HttpStatus.FORBIDDEN.value())
+                            .withHeader("Content-Type", "application/json")
+                            .withBody(
+                                """
+                                    {
+                                        "code": 403,
+                                        "details": [
+                                        {
+                                            "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+                                            "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT"
+                                        }
+                                        ],
+                                        "errors": [
+                                        {
+                                            "domain": "global",
+                                            "message": "Insufficient Permission",
+                                            "reason": "insufficientPermissions"
+                                        }
+                                        ],
+                                        "message": "Request had insufficient authentication scopes.",
+                                        "status": "PERMISSION_DENIED"
+                                    }
+                          """
+                            )
+                    )
+            )
+        }
+
+        private fun getCalendarsRequest(): MappingBuilder = get(
+            urlEqualTo(
+                "/google/calendar/v3/users/me/calendarList"
+            )
+        )
+
     }
 
     inner class OnGetEvents(
@@ -57,7 +94,14 @@ class MockGoogleCalendar(
         fun returnsEvents(vararg events: GoogleCalendarItem<*>) {
             wiremockServer.stubFor(
                 get(
-                    urlPathEqualTo("/google/calendar/v3/calendars/$calendarId/events")
+                    urlPathEqualTo(
+                        "/google/calendar/v3/calendars/${
+                            UriUtils.encodePathSegment(
+                                calendarId,
+                                UTF_8
+                            )
+                        }/events"
+                    )
                 )
                     .withHeader("Authorization", equalTo("Bearer $accessToken"))
                     .willReturn(

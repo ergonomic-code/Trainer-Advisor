@@ -5,6 +5,7 @@ import pro.qyoga.core.calendar.google.GoogleAccount
 import pro.qyoga.core.calendar.google.GoogleCalendarItem
 import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.tests.fixture.data.faker
+import pro.qyoga.tests.fixture.object_mothers.calendars.google.GoogleCalendarObjectMother.aCalendarName
 import pro.qyoga.tests.fixture.object_mothers.calendars.google.GoogleCalendarObjectMother.aGoogleCalendar
 import pro.qyoga.tests.fixture.test_apis.GoogleCalendarTestApi
 import pro.qyoga.tests.fixture.wiremocks.MockGoogleCalendar
@@ -21,12 +22,12 @@ class GoogleCalendarFixturePresets(
 
     fun setupCalendar(
         therapistRef: TherapistRef,
-        calendarId: String,
+        calendarId: String = aCalendarName(),
         vararg events: GoogleCalendarItem<*>,
         shouldBeShown: Boolean = false,
+        accessToken: String = "accessToken"
     ): GoogleAccount {
         val refreshToken = "refreshToken"
-        val accessToken = "accessToken"
         mockGoogleOAuthServer.OnRefreshToken(refreshToken).returnsToken(accessToken)
         mockGoogleCalendar.OnGetCalendars(accessToken).returnsCalendars(
             listOf(aGoogleCalendar(ownerRef = therapistRef, externalId = calendarId))

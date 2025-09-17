@@ -6,30 +6,55 @@
         </div>
 
         <div th:if="${hasAccounts}">
-            <div th:each="account : ${accounts}">
-                <div th:text="${account.email}">email@example.com</div>
-                <ul class="list-unstyled ms-3 my-1">
-                    <li class="d-flex justify-content-between align-items-center py-1"
-                        th:each="cal : ${account.calendars}">
-                        <span th:text="${cal.title}">Calendar name</span>
-                        <div class="form-check form-switch m-0">
-                            <input aria-label="Показывать календарь" class="form-check-input"
-                                   th:checked="${cal.shouldBeShown}"
-                                   hx-ext="json-enc"
-                                   hx-swap="none"
-                                   hx-trigger="change"
-                                   hx-vals='js:{ "shouldBeShown": !!event.target.checked }'
-                                   name="shouldBeShown"
-                                   th:attr="hx-patch=@{/therapist/schedule/settings/google-calendar/{accountId}/calendars/{id}(accountId=${account.id},id=${cal.id})}"
-                                   type="checkbox">
-                        </div>
-                    </li>
-                </ul>
+            <div class="mb-2 google-account-item" th:each="account : ${accounts}">
+                <div class=" border-bottom pb-1 mb-2 text-body-secondary small" th:text="${account.email}">
+                    email@example.com
+                </div>
+                <div th:if="${account.content instanceof T(pro.qyoga.core.calendar.google.GoogleAccountContentView$Calendars)}">
+                    <ul class="list-unstyled ms-3 my-1">
+                        <li class="d-flex justify-content-between align-items-center py-2"
+                            th:each="cal : ${account.content.calendars}">
+                            <span th:text="${cal.title}">Calendar name</span>
+                            <div class="form-check form-switch m-0">
+                                <input
+                                        aria-label="Показывать календарь"
+                                        class="form-check-input"
+                                        hx-ext="json-enc"
+                                        hx-swap="none"
+                                        hx-trigger="change"
+                                        hx-vals='js:{ "shouldBeShown": !!event.target.checked }'
+                                        name="shouldBeShown"
+                                        style="height: 22px;width: 44px;"
+                                        th:attr="hx-patch=@{/therapist/schedule/settings/google-calendar/{accountId}/calendars/{id}(accountId=${account.id},id=${cal.id})}"
+                                        th:checked="${cal.shouldBeShown}"
+                                        type="checkbox"
+                                >
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div
+                        class="text-danger ms-3 my-1 google-account-error-content d-inline-flex align-items-center"
+                        th:if="${account.content instanceof T(pro.qyoga.core.calendar.google.GoogleAccountContentView$Error)}"
+                >
+                    <svg aria-hidden="true" class="me-2 align-middle" height="14" style="fill: currentColor;"
+                         viewBox="0 0 16 16" width="14" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                        <path d="M7.002 11a1 1 0 1 0 2 0 1 1 0 0 0-2 0M7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.555.555 0 0 1-1.1 0z"/>
+                    </svg>
+                    Ошибка получения календарей аккаунта
+                </div>
             </div>
         </div>
     </div>
-    <a class="btn btn-outline-secondary" href="/oauth2/authorization/google" id="connect-google-calendar">
+    <a
+            class="btn btn-outline-secondary"
+            href="/oauth2/authorization/google"
+            id="connect-google-calendar"
+    >
         <img alt="G"
-             class="me-2" src="https://www.gstatic.com/marketing-cms/assets/images/d5/dc/cfe9ce8b4425b410b49b7f2dd3f3/g.webp=s48-fcrop64=1,00000000ffffffff-rw" width="20"> Добавить аккаунт
+             class="me-2"
+             src="https://www.gstatic.com/marketing-cms/assets/images/d5/dc/cfe9ce8b4425b410b49b7f2dd3f3/g.webp=s48-fcrop64=1,00000000ffffffff-rw"
+             width="20"> Добавить аккаунт
     </a>
 </div>

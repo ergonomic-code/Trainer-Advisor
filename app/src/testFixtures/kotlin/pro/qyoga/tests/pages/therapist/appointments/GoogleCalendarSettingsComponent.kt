@@ -21,8 +21,22 @@ class GoogleCalendarSettingsComponent(
 
     override fun matcher(): Matcher<Element> {
         return Matcher.all(
-            haveComponent(connectButton)
+            haveComponent(connectButton),
+            *(accounts.map { haveComponent(GoogleAccountComponent(it)) }.toTypedArray())
         )
+    }
+
+    class GoogleAccountComponent(
+        private val account: GoogleAccountCalendarsView
+    ) : Component {
+
+        override fun selector(): String =
+            ".google-account-item"
+
+        override fun matcher(): Matcher<Element> {
+            return haveComponent(".google-account-error-content")
+        }
+
     }
 
 }
