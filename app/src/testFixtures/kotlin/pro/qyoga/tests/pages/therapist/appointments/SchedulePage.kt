@@ -14,6 +14,7 @@ import pro.qyoga.app.therapist.appointments.core.schedule.AppointmentCard
 import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
 import pro.qyoga.app.therapist.appointments.core.schedule.TimeMark
+import pro.qyoga.core.appointments.core.commands.EditAppointmentRequest
 import pro.qyoga.core.appointments.core.model.Appointment
 import pro.qyoga.core.calendar.ical.model.ICalCalendarItem
 import pro.qyoga.l10n.russianTimeFormat
@@ -28,6 +29,8 @@ object CalendarPage : HtmlPage {
     private val datePickerButton = Button("datePickerButton", "")
 
     private val goToDayLink = Link("goToDayLink-", SchedulePageController.DATE_PATH, "")
+
+    const val SYNC_ERROR_ICON_SELECTOR = ".sync-error-icon"
 
     object RevealAppointmentScript : Script("revealAppointment") {
         val appToFocus = Variable(CalendarPageModel.FOCUSED_APPOINTMENT)
@@ -74,6 +77,17 @@ infix fun Elements.shouldMatch(appointments: Iterable<Appointment>) {
         el.select("div.appointment-card")
             .single() shouldHaveClass AppointmentCard.appointmentStatusClasses[app.status]!!
     }
+}
+
+infix fun Element.shouldMatch(app: EditAppointmentRequest) {
+    this shouldHaveComponent Link(
+        "editAppointmentLink",
+        EditAppointmentPage,
+        app.client.resolveOrThrow().fullName() + " " +
+                russianTimeFormat.format(app.dateTime) + " - " + russianTimeFormat.format(app.dateTime + app.duration) + " " + app.appointmentTypeTitle
+    )
+    select("div.appointment-card")
+        .single() shouldHaveClass AppointmentCard.appointmentStatusClasses[app.appointmentStatus]!!
 }
 
 infix fun Element.shouldMatch(localizedICalCalendarItem: ICalCalendarItem) {

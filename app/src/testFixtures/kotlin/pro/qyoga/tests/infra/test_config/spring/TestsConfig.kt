@@ -13,6 +13,7 @@ import pro.qyoga.tests.fixture.FailingController
 import pro.qyoga.tests.fixture.backgrounds.BackgroundsConfig
 import pro.qyoga.tests.fixture.presets.Presets
 import pro.qyoga.tests.fixture.test_apis.TestApisConf
+import pro.qyoga.tests.fixture.wiremocks.MockServersConf
 import pro.qyoga.tests.infra.test_config.spring.auth.TestPasswordEncoderConfig
 import pro.qyoga.tests.infra.test_config.spring.db.TestDataSourceConfig
 import pro.qyoga.tests.infra.test_config.spring.minio.TestMinioConfig
@@ -44,7 +45,9 @@ val sdjContext by lazy {
     TestPasswordEncoderConfig::class,
     TestDataSourceConfig::class,
     TestMinioConfig::class,
-    FailingController::class
+    FailingController::class,
+    WireMockConf::class,
+    MockServersConf::class,
 )
 @Configuration
 class TestsConfig

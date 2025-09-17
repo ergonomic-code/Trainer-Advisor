@@ -92,10 +92,11 @@
 
     <div class="calendar-header bg-white z-3" id="datePickerView">
         <div class="position-relative d-inline-block">
-            <button class="btn btn-outline-secondary"
+            <button
+                    class="btn btn-outline-secondary"
                     name="datePickerButton"
-                    onclick="document.getElementById('datePicker').showPicker()"
                     th:href="@{/therapist/schedule?calendar=true&date={date}(date=${today})}"
+                    onclick="document.getElementById('datePicker').showPicker()"
             >
                 <i class="fa-solid fa-calendar"></i>
             </button>
@@ -115,11 +116,22 @@
             >
         </div>
 
-        <button class="btn btn-outline-secondary ms-2"
+        <button
+                class="btn btn-outline-secondary ms-2 position-relative"
                 data-bs-target="#settingsModal"
                 data-bs-toggle="modal"
         >
             <i class="fa-solid fa-gear"></i>
+            <i
+                    aria-hidden="true"
+                    class="sync-error-icon
+                           fa-solid fa-circle-exclamation text-danger bg-white
+                           position-absolute top-0 start-0 translate-middle
+                           "
+                    style="border-radius: 50%;"
+                    th:if="${hasSyncErrors}"
+                    title="Ошибки синхронизации"
+            ></i>
         </button>
     </div>
 </div>

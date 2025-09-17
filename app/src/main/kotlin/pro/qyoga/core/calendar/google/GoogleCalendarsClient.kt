@@ -11,8 +11,8 @@ import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2Clien
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.stereotype.Component
 import pro.azhidkov.platform.java.time.Interval
+import pro.azhidkov.platform.kotlin.tryExecute
 import pro.qyoga.core.users.therapists.TherapistRef
-import java.io.IOException
 import java.net.URI
 import java.time.Duration
 import java.time.Instant
@@ -116,10 +116,3 @@ class GoogleCalendarsClient(
     }
 
 }
-
-private fun <T> tryExecute(eventsRequest: () -> T): Result<T> =
-    try {
-        success(eventsRequest())
-    } catch (e: IOException) {
-        failure(e)
-    }

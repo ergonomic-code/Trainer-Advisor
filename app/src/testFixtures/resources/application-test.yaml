@@ -2,6 +2,9 @@ server:
   port: 10803
 
 spring:
+  main:
+    lazy-initialization: true
+
   mail:
     username: qyogapro@yandex.ru
     password: password

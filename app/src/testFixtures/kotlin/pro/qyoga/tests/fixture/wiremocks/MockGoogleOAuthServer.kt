@@ -3,9 +3,11 @@ package pro.qyoga.tests.fixture.wiremocks
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import org.springframework.http.HttpStatus
+import org.springframework.stereotype.Component
 import pro.qyoga.app.therapist.oauth2.GoogleOAuthController
 
 
+@Component
 class MockGoogleOAuthServer(
     private val wiremockServer: WireMockServer
 ) {

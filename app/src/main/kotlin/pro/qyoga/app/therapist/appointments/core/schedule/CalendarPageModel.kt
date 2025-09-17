@@ -45,7 +45,8 @@ data class CalendarPageModel(
     val date: LocalDate,
     val timeMarks: List<TimeMark>,
     val calendarDays: Collection<CalendarDay>,
-    val appointmentToFocus: UUID?
+    val appointmentToFocus: UUID?,
+    val hasSyncErrors: Boolean
 ) : ModelAndView("therapist/appointments/schedule.html") {
 
     init {
@@ -54,18 +55,19 @@ data class CalendarPageModel(
         addObject("calendarDays", calendarDays)
         addObject("selectedDayLabel", date.format(russianDayOfMonthLongFormat))
         addObject(FOCUSED_APPOINTMENT, appointmentToFocus)
+        addObject("hasSyncErrors", hasSyncErrors)
     }
 
     companion object {
 
         fun of(
             date: LocalDate,
-            appointments: Iterable<CalendarItem<*, LocalDateTime>>,
+            appointments: GetCalendarAppointmentsRs,
             appointmentToFocus: UUID? = null
         ): CalendarPageModel {
-            val timeMarks = generateTimeMarks(appointments, date)
+            val timeMarks = generateTimeMarks(appointments.appointments, date)
             val weekCalendar = generateDaysAround(date)
-            return CalendarPageModel(date, timeMarks, weekCalendar, appointmentToFocus)
+            return CalendarPageModel(date, timeMarks, weekCalendar, appointmentToFocus, appointments.hasErrors)
         }
 
         const val FOCUSED_APPOINTMENT = "focusedAppointment"

@@ -1,10 +1,10 @@
 package pro.qyoga.tests.fixture.test_apis
 
 import org.springframework.stereotype.Component
-import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.qyoga.app.therapist.appointments.core.schedule.GoogleCalendarSettingsController
 import pro.qyoga.core.calendar.google.GoogleAccount
 import pro.qyoga.core.calendar.google.GoogleAccountCalendarsView
+import pro.qyoga.core.calendar.google.GoogleAccountRef
 import pro.qyoga.core.calendar.google.GoogleCalendarsService
 import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.tests.fixture.object_mothers.therapists.idOnlyUserDetails
@@ -22,21 +22,20 @@ class GoogleCalendarTestApi(
         ).accounts
     }
 
-    fun addAccount(therapistRef: TherapistRef, email: String, refreshToken: String): GoogleAccount {
-        val googleAccount = GoogleAccount(therapistRef, email, refreshToken)
+    fun addAccount(googleAccount: GoogleAccount): GoogleAccount {
         googleCalendarsService.addGoogleAccount(googleAccount)
         return googleAccount
     }
 
     fun setShouldBeShown(
         therapistRef: TherapistRef,
-        account: GoogleAccount,
+        accountRef: GoogleAccountRef,
         calendarId: String,
         shouldBeShown: Boolean
     ) {
         googleCalendarsService.updateCalendarSettings(
             therapistRef,
-            account.ref(),
+            accountRef,
             calendarId,
             mapOf("shouldBeShown" to shouldBeShown)
         )

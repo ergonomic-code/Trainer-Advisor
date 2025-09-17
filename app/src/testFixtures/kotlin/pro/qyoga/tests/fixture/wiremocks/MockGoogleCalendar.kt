@@ -4,6 +4,7 @@ import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.MappingBuilder
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import org.springframework.http.HttpStatus
+import org.springframework.stereotype.Component
 import org.springframework.web.util.UriUtils
 import pro.qyoga.core.calendar.google.GoogleCalendar
 import pro.qyoga.core.calendar.google.GoogleCalendarItem
@@ -16,6 +17,7 @@ import kotlin.text.Charsets.UTF_8
 /**
  * Mock implementation of Google Calendar API for testing purposes.
  */
+@Component
 class MockGoogleCalendar(
     private val wiremockServer: WireMockServer
 ) {
