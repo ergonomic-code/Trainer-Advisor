@@ -10,6 +10,11 @@ data class GoogleCalendar(
     override val name: String,
 ) : Calendar {
 
-    override val type: String = "Google"
+    override val type: String = TYPE
+
+    companion object {
+
+        const val TYPE = "Google"
+    }
 
 }

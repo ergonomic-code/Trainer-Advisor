@@ -3,6 +3,12 @@ package pro.qyoga.core.calendar.api
 import java.time.Duration
 import java.time.temporal.Temporal
 
+interface CalendarItemId {
+
+    fun toQueryParamStr(): String
+
+}
+
 interface CalendarItem<ID, DATE : Temporal> {
     val id: ID
     val title: String

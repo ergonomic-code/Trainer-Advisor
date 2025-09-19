@@ -7,6 +7,7 @@ import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.jdbc.core.DataClassRowMapper
 import org.springframework.jdbc.core.RowMapper
 import pro.azhidkov.platform.spring.sdj.converters.PGIntervalToDurationConverter
+import pro.azhidkov.platform.spring.sdj.converters.StringToSecretChars
 import java.util.*
 
 
@@ -29,5 +30,6 @@ inline fun <reified T> taDataClassRowMapper() = DataClassRowMapper.newInstance(T
     conversionService = DefaultConversionService().apply {
         addConverter(PGIntervalToDurationConverter())
         addConverter(UuidToAggregateReferenceConverter)
+        addConverter(StringToSecretChars())
     }
 }

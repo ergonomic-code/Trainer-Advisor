@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus
 import pro.azhidkov.platform.java.time.toLocalTimeString
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.qyoga.app.therapist.appointments.core.edit.view_model.SourceItem
-import pro.qyoga.app.therapist.appointments.core.edit.view_model.toQueryParamStr
 import pro.qyoga.core.calendar.ical.model.ICalCalendarItem
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.assertions.shouldHave
@@ -21,6 +20,8 @@ import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentsObjectMot
 import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentsObjectMother.randomFullEditAppointmentRequest
 import pro.qyoga.tests.fixture.object_mothers.appointments.randomAppointmentDate
 import pro.qyoga.tests.fixture.object_mothers.calendars.CalendarsObjectMother.aCalendarItem
+import pro.qyoga.tests.fixture.object_mothers.calendars.google.GoogleCalendarObjectMother
+import pro.qyoga.tests.fixture.presets.GoogleCalendarFixturePresets
 import pro.qyoga.tests.fixture.presets.ICalsCalendarsFixturePresets
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentForm
@@ -43,7 +44,8 @@ private val aTime = LocalTime.now()
 @DisplayName("Страница создания приёма")
 class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
-    private val ICalsCalendarsFixturePresets = getBean<ICalsCalendarsFixturePresets>()
+    private val iCalsCalendarsFixturePresets = getBean<ICalsCalendarsFixturePresets>()
+    private val googleCalendarsFixturePresets = getBean<GoogleCalendarFixturePresets>()
 
     @Test
     fun `должна рендерится корректно`() {
@@ -159,7 +161,7 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
             set(field(ICalCalendarItem::duration), Duration.ofMinutes(75))
             set(field(ICalCalendarItem::description), randomSentence())
         }
-        ICalsCalendarsFixturePresets.createICalCalendarWithSingleEvent(event)
+        iCalsCalendarsFixturePresets.createICalCalendarWithSingleEvent(event)
 
         // Действие
         val document = theTherapist.appointments.getCreateAppointmentPage(
@@ -173,6 +175,23 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
         CreateAppointmentForm.timeZone.value(document) shouldBe event.dateTime.zone.id
         CreateAppointmentForm.duration.value(document) shouldBe event.duration.toLocalTimeString()
         CreateAppointmentForm.comment.value(document) shouldBe event.description
+    }
+
+    @Test
+    @DisplayName("должна предзаполнять дату, время, длительность и идентификатор события источника данными из события goolge-календаря, если его ид был передан в запросе") // длина имени файла с лямбдой превышает ограничение Линукса
+    fun createAppointmentWithGoogleEventId() {
+        // Сетап
+        val event = GoogleCalendarObjectMother.aGoogleCalendarItem(date = { randomAppointmentDate() })
+        googleCalendarsFixturePresets.setupCalendar(event)
+
+        // Действие
+        val document = theTherapist.appointments.getCreateAppointmentPage(
+            dateTime = event.dateTime,
+            sourceItem = SourceItem.googleEvent(event.id)
+        )
+
+        // Проверка
+        CreateAppointmentForm.externalIdInput.value(document) shouldBe event.id.toQueryParamStr()
     }
 
 }

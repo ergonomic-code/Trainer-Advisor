@@ -10,7 +10,6 @@ import pro.qyoga.tests.fixture.data.faker
 import pro.qyoga.tests.fixture.data.randomWorkingTime
 import pro.qyoga.tests.fixture.object_mothers.appointments.randomAppointmentDuration
 import pro.qyoga.tests.fixture.object_mothers.calendars.CalendarsObjectMother.aAppointmentEventTitle
-import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
 import pro.qyoga.tests.fixture.object_mothers.therapists.theTherapistUserDetails
 import pro.qyoga.tests.fixture.presets.AppointmentsFixturePresets
 import pro.qyoga.tests.fixture.presets.GoogleCalendarFixturePresets
@@ -54,14 +53,14 @@ class SchedulePageControllerTest : QYogaAppIntegrationBaseKoTest({
         val date = LocalDate.of(2025, 9, 14)
         val calendarId = "calendarId"
         val event = GoogleCalendarItem(
-            GoogleCalendarItemId(faker.internet().uuid()),
+            GoogleCalendarItemId(calendarId, faker.internet().uuid()),
             aAppointmentEventTitle(),
             "",
             date.atTime(randomWorkingTime()),
             randomAppointmentDuration(),
             null
         )
-        googleCalendarFixturePresets.setupCalendar(THE_THERAPIST_REF, calendarId, event)
+        googleCalendarFixturePresets.setupCalendar(event, calendarId = calendarId)
 
         // Действие
         val calendarPageModel =
@@ -76,14 +75,14 @@ class SchedulePageControllerTest : QYogaAppIntegrationBaseKoTest({
         val date = LocalDate.of(2025, 9, 14)
         val calendarId = "calendarId"
         val event = GoogleCalendarItem(
-            GoogleCalendarItemId(faker.internet().uuid()),
+            GoogleCalendarItemId(calendarId, faker.internet().uuid()),
             aAppointmentEventTitle(),
             "",
             date.atTime(randomWorkingTime()),
             randomAppointmentDuration(),
             null
         )
-        googleCalendarFixturePresets.setupCalendar(THE_THERAPIST_REF, calendarId, event, shouldBeShown = true)
+        googleCalendarFixturePresets.setupCalendar(event, calendarId = calendarId, shouldBeShown = true)
 
         // Действие
         val calendarPageModel =

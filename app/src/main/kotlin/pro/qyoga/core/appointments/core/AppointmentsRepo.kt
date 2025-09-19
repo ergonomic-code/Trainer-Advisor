@@ -15,11 +15,11 @@ import pro.qyoga.core.appointments.core.model.Appointment
 import pro.qyoga.core.appointments.core.views.LocalizedAppointmentSummary
 import pro.qyoga.core.calendar.api.CalendarItem
 import pro.qyoga.core.calendar.api.CalendarsService
+import pro.qyoga.core.calendar.api.SearchResult
 import pro.qyoga.core.users.therapists.TherapistRef
 import java.sql.Timestamp
 import java.time.Duration
 import java.time.Instant
-import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.util.*
 
@@ -35,12 +35,12 @@ class AppointmentsRepo(
     Appointment::class,
     jdbcConverter,
     relationalMappingContext
-), CalendarsService {
+), CalendarsService<UUID> {
 
     override fun findCalendarItemsInInterval(
         therapist: TherapistRef,
         interval: Interval<ZonedDateTime>,
-    ): Iterable<CalendarItem<*, LocalDateTime>> {
+    ): SearchResult<UUID> {
         @Language("PostgreSQL") val query = """
         WITH localized_appointment_summary AS
          (SELECT  
@@ -70,7 +70,14 @@ class AppointmentsRepo(
             "to" to interval.to.toLocalDateTime(),
             "localTimeZone" to interval.zoneId.id
         )
-        return findAll(query, params, localizedAppointmentSummaryRowMapper)
+        return SearchResult(findAll(query, params, localizedAppointmentSummaryRowMapper))
+    }
+
+    override fun findById(
+        therapistRef: TherapistRef,
+        eventId: UUID
+    ): CalendarItem<UUID, ZonedDateTime>? {
+        TODO()
     }
 
 }

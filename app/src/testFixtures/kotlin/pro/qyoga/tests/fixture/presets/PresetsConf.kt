@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration
 @TestConfiguration
 @ComponentScan
 @Configuration
-class Presets(
+class PresetsConf(
     val surveysFixturePresets: SurveysFixturePresets,
     val therapistsFixturePreset: TherapistsFixturePreset,
     val clientsFixturePresets: ClientsFixturePresets,

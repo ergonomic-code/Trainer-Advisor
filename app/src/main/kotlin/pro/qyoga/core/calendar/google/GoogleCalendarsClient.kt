@@ -1,5 +1,6 @@
 package pro.qyoga.core.calendar.google
 
+import com.google.api.client.googleapis.json.GoogleJsonResponseException
 import com.google.api.client.util.DateTime
 import com.google.api.services.calendar.Calendar
 import com.google.api.services.calendar.model.Event
@@ -9,9 +10,12 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties
 import org.springframework.cache.annotation.Cacheable
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import pro.azhidkov.platform.java.time.Interval
 import pro.azhidkov.platform.kotlin.tryExecute
+import pro.azhidkov.platform.kotlin.tryRecover
+import pro.qyoga.core.calendar.api.CalendarItem
 import pro.qyoga.core.users.therapists.TherapistRef
 import java.net.URI
 import java.time.Duration
@@ -54,28 +58,9 @@ class GoogleCalendarsClient(
                 .setSingleEvents(true)
                 .execute()
                 .items
-                .map {
-                    GoogleCalendarItem(
-                        GoogleCalendarItemId(it.id),
-                        it.summary,
-                        it.description ?: "",
-                        startDate(it),
-                        duration(it),
-                        it.location
-                    )
-                }
+                .map { mapToCalendarItem(calendarSettings.calendarId, it) }
         return events
     }
-
-    private fun startDate(event: Event): ZonedDateTime =
-        ZonedDateTime.ofInstant(
-            Instant.ofEpochMilli(event.start.dateTime?.value ?: event.start.date?.value ?: 0),
-            ZoneId.of(event.start.timeZone)
-        )
-
-    private fun duration(event: Event): Duration =
-        Duration.ofMillis(event.end.dateTime?.value ?: event.end.date?.value ?: 0) -
-                Duration.ofMillis(event.start.dateTime?.value ?: event.start.date?.value ?: 0)
 
     @Cacheable(
         cacheNames = [GoogleCalendarConf.CacheNames.GOOGLE_ACCOUNT_CALENDARS],
@@ -100,6 +85,31 @@ class GoogleCalendarsClient(
         return success(calendarsList)
     }
 
+    @Cacheable(
+        cacheNames = [GoogleCalendarConf.CacheNames.CALENDAR_EVENTS],
+        key = "#eventId"
+    )
+    fun findById(
+        account: GoogleAccount,
+        eventId: GoogleCalendarItemId
+    ): CalendarItem<GoogleCalendarItemId, ZonedDateTime>? {
+        val service = servicesCache.getValue(account)
+
+        val getEventRequest = service.events().get(eventId.calendarId, eventId.itemId)
+
+        val event = tryExecute { getEventRequest.execute() }
+            .tryRecover<GoogleJsonResponseException, _, _> {
+                if (it.statusCode == HttpStatus.NOT_FOUND.value()) {
+                    success(null)
+                } else {
+                    failure(it)
+                }
+            }
+            .getOrThrow()
+
+        return event?.let { mapToCalendarItem(eventId.calendarId, it) }
+    }
+
     private fun createCalendarService(account: GoogleAccount): Calendar {
         val credentials = UserCredentials.newBuilder()
             .setClientId(googleOAuthProps.registration["google"]!!.clientId)
@@ -116,3 +126,22 @@ class GoogleCalendarsClient(
     }
 
 }
+
+private fun mapToCalendarItem(calendarId: String, event: Event): GoogleCalendarItem<ZonedDateTime> = GoogleCalendarItem(
+    GoogleCalendarItemId(calendarId, event.id),
+    event.summary,
+    event.description ?: "",
+    startDate(event),
+    duration(event),
+    event.location
+)
+
+private fun startDate(event: Event): ZonedDateTime =
+    ZonedDateTime.ofInstant(
+        Instant.ofEpochMilli(event.start.dateTime?.value ?: event.start.date?.value ?: 0),
+        ZoneId.of(event.start.timeZone)
+    )
+
+private fun duration(event: Event): Duration =
+    Duration.ofMillis(event.end.dateTime?.value ?: event.end.date?.value ?: 0) -
+            Duration.ofMillis(event.start.dateTime?.value ?: event.start.date?.value ?: 0)

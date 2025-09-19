@@ -2,12 +2,20 @@ package pro.qyoga.core.calendar.google
 
 import pro.azhidkov.platform.java.time.toLocalDateTime
 import pro.qyoga.core.calendar.api.CalendarItem
+import pro.qyoga.core.calendar.api.CalendarItemId
 import java.time.Duration
 import java.time.ZoneId
 import java.time.temporal.Temporal
 
-@JvmInline
-value class GoogleCalendarItemId(val value: String)
+data class GoogleCalendarItemId(
+    val calendarId: String,
+    val itemId: String
+) : CalendarItemId {
+
+    override fun toQueryParamStr(): String =
+        "$calendarId,$itemId"
+
+}
 
 data class GoogleCalendarItem<DATE : Temporal>(
     override val id: GoogleCalendarItemId,

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component
 import pro.azhidkov.platform.java.time.Interval
 import pro.qyoga.core.calendar.api.CalendarItem
 import pro.qyoga.core.calendar.api.CalendarsService
+import pro.qyoga.core.calendar.api.SearchResult
 import pro.qyoga.core.calendar.ical.commands.CreateICalRq
 import pro.qyoga.core.calendar.ical.commands.createFrom
 import pro.qyoga.core.calendar.ical.model.*
@@ -13,14 +14,13 @@ import pro.qyoga.core.calendar.ical.persistance.ICalCalendarsDao
 import pro.qyoga.core.calendar.ical.persistance.findAllByOwner
 import pro.qyoga.core.calendar.ical.platform.ical4j.toICalCalendarItem
 import pro.qyoga.core.users.therapists.TherapistRef
-import java.time.LocalDateTime
 import java.time.ZonedDateTime
 
 
 @Component
 class ICalCalendarsRepo(
     private val iCalCalendarsDao: ICalCalendarsDao
-) : CalendarsService {
+) : CalendarsService<ICalEventId> {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
@@ -33,18 +33,21 @@ class ICalCalendarsRepo(
     override fun findCalendarItemsInInterval(
         therapist: TherapistRef,
         interval: Interval<ZonedDateTime>
-    ): Iterable<CalendarItem<*, LocalDateTime>> {
+    ): SearchResult<ICalEventId> {
         val res = iCalCalendarsDao
             .findAllByOwner(therapist)
             .flatMap { ical -> ical.localizedICalCalendarItemsIn(interval) }
 
-        return res
+        return SearchResult(res)
     }
 
-    fun findById(therapist: TherapistRef, icsEventId: ICalEventId): CalendarItem<ICalEventId, ZonedDateTime>? {
-        return iCalCalendarsDao.findAllByOwner(therapist)
+    override fun findById(
+        therapistRef: TherapistRef,
+        eventId: ICalEventId
+    ): CalendarItem<ICalEventId, ZonedDateTime>? {
+        return iCalCalendarsDao.findAllByOwner(therapistRef)
             .asSequence()
-            .mapNotNull { it.findById(icsEventId) }
+            .mapNotNull { it.findById(eventId) }
             .firstOrNull()
             ?.toICalCalendarItem()
     }

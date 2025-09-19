@@ -1,10 +1,9 @@
 package pro.qyoga.app.therapist.appointments.core.edit.forms
 
-import pro.qyoga.app.therapist.appointments.core.edit.view_model.toQueryParamStr
 import pro.qyoga.core.appointments.core.model.AppointmentStatus
 import pro.qyoga.core.appointments.types.model.AppointmentTypeRef
 import pro.qyoga.core.calendar.api.CalendarItem
-import pro.qyoga.core.calendar.ical.model.ICalEventId
+import pro.qyoga.core.calendar.api.CalendarItemId
 import pro.qyoga.core.clients.cards.model.ClientRef
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
 import java.time.Duration
@@ -33,7 +32,7 @@ data class CreateAppointmentForm(
 ) {
 
     constructor(
-        iCalEvent: CalendarItem<ICalEventId, ZonedDateTime>?,
+        iCalEvent: CalendarItem<out CalendarItemId, ZonedDateTime>?,
         dateTime: LocalDateTime?,
         timeZone: ZoneId,
         timeZoneTitle: String?

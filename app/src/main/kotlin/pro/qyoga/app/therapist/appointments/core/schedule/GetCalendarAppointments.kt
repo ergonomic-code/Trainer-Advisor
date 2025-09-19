@@ -5,6 +5,7 @@ import pro.azhidkov.platform.java.time.Interval
 import pro.azhidkov.platform.kotlin.tryExecute
 import pro.qyoga.core.appointments.core.AppointmentsRepo
 import pro.qyoga.core.calendar.api.CalendarItem
+import pro.qyoga.core.calendar.api.SearchResult
 import pro.qyoga.core.calendar.google.GoogleCalendarsService
 import pro.qyoga.core.calendar.ical.ICalCalendarsRepo
 import pro.qyoga.core.users.auth.model.UserRef
@@ -37,11 +38,10 @@ class GetCalendarAppointmentsOp(
         val googleCalendarEventsResult =
             tryExecute { googleCalendarsService.findCalendarItemsInInterval(therapist, interval) }
 
-        val drafts =
-            iCalEventsResult.getOrElse { emptyList() } +
-                    googleCalendarEventsResult.getOrElse { emptyList() }
+        val drafts = iCalEventsResult.items() + googleCalendarEventsResult.items()
 
-        val hasErrors = iCalEventsResult.isFailure || googleCalendarEventsResult.isFailure
+        val hasErrors = iCalEventsResult.hasErrors() || googleCalendarEventsResult.hasErrors()
+
         return GetCalendarAppointmentsRs(appointments + drafts, hasErrors)
     }
 
@@ -54,3 +54,9 @@ private fun calendarIntervalAround(
     val from = date.minusDays((CalendarPageModel.DAYS_IN_CALENDAR / 2).toLong()).atStartOfDay(currentUserTimeZone)
     return Interval.of(from, Duration.ofDays(CalendarPageModel.DAYS_IN_CALENDAR.toLong()))
 }
+
+private fun Result<SearchResult<*>>.items(): Iterable<CalendarItem<out Any?, LocalDateTime>> =
+    this.getOrNull() ?: emptyList()
+
+private fun Result<SearchResult<*>>.hasErrors() =
+    this.isFailure || this.getOrThrow().hasErrors

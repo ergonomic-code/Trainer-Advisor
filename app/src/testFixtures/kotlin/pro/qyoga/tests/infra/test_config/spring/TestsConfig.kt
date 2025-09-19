@@ -11,7 +11,7 @@ import pro.qyoga.app.QYogaApp
 import pro.qyoga.infra.db.SdjConfig
 import pro.qyoga.tests.fixture.FailingController
 import pro.qyoga.tests.fixture.backgrounds.BackgroundsConfig
-import pro.qyoga.tests.fixture.presets.Presets
+import pro.qyoga.tests.fixture.presets.PresetsConf
 import pro.qyoga.tests.fixture.test_apis.TestApisConf
 import pro.qyoga.tests.fixture.wiremocks.MockServersConf
 import pro.qyoga.tests.infra.test_config.spring.auth.TestPasswordEncoderConfig
@@ -41,7 +41,7 @@ val sdjContext by lazy {
     QYogaApp::class,
     BackgroundsConfig::class,
     TestApisConf::class,
-    Presets::class,
+    PresetsConf::class,
     TestPasswordEncoderConfig::class,
     TestDataSourceConfig::class,
     TestMinioConfig::class,

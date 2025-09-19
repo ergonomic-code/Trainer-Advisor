@@ -3,16 +3,19 @@ package pro.qyoga.core.calendar.google
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
+import org.apache.tomcat.util.threads.VirtualThreadExecutor
 import org.springframework.stereotype.Service
 import pro.azhidkov.platform.java.time.Interval
 import pro.azhidkov.platform.java.time.zoneId
+import pro.azhidkov.platform.kotlin.tryExecute
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.qyoga.core.calendar.api.CalendarItem
 import pro.qyoga.core.calendar.api.CalendarsService
+import pro.qyoga.core.calendar.api.SearchResult
 import pro.qyoga.core.users.therapists.TherapistRef
-import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.util.*
+import java.util.concurrent.CompletableFuture
 
 
 const val APPLICATION_NAME = "Trainer Advisor"
@@ -76,7 +79,9 @@ class GoogleCalendarsService(
     private val googleAccountsDao: GoogleAccountsDao,
     private val googleCalendarsDao: GoogleCalendarsDao,
     private val googleCalendarsClient: GoogleCalendarsClient,
-) : CalendarsService {
+) : CalendarsService<GoogleCalendarItemId> {
+
+    private val executor = VirtualThreadExecutor("google-calendar-events-fetcher")
 
     fun addGoogleAccount(googleAccount: GoogleAccount) {
         googleAccountsDao.addGoogleAccount(googleAccount)
@@ -98,17 +103,17 @@ class GoogleCalendarsService(
     override fun findCalendarItemsInInterval(
         therapist: TherapistRef,
         interval: Interval<ZonedDateTime>
-    ): Iterable<CalendarItem<*, LocalDateTime>> {
+    ): SearchResult<GoogleCalendarItemId> {
         val googleCalendarSettings = googleCalendarsDao.findCalendarsSettings(therapist)
         if (googleCalendarSettings.isEmpty()) {
-            return emptyList()
+            return SearchResult(emptyList())
         }
         val accountCalendars = googleCalendarSettings.values.groupBy { it.googleAccountRef.id }
         val accountIds = googleCalendarSettings.values.map { it.googleAccountRef }
             .distinct()
         val accounts = googleAccountsDao.findGoogleAccounts(accountIds)
 
-        val events = accounts
+        val fetchTasks = accounts
             .flatMap { account ->
 
                 val settings = accountCalendars[account.ref().id]
@@ -116,13 +121,32 @@ class GoogleCalendarsService(
 
                 settings
                     .filter { it.shouldBeShown }
-                    .flatMap { calendarSettings ->
-                        googleCalendarsClient.getEvents(account, calendarSettings, interval)
+                    .map { calendarSettings ->
+                        CompletableFuture.supplyAsync(
+                            {
+                                googleCalendarsClient.getEvents(account, calendarSettings, interval)
+                            }, executor
+                        )
                     }
             }
+        val calendarEventsResults = fetchTasks.map {
+            tryExecute { it.get() }
+        }
+
+        val events = calendarEventsResults
+            .mapNotNull { it.getOrNull() }
+            .flatMap { it }
             .map { it.toLocalizedCalendarItem(interval.zoneId) }
 
-        return events
+        return SearchResult(events, hasErrors = calendarEventsResults.any { it.isFailure })
+    }
+
+    override fun findById(
+        therapistRef: TherapistRef,
+        eventId: GoogleCalendarItemId
+    ): CalendarItem<GoogleCalendarItemId, ZonedDateTime>? {
+        val account = googleAccountsDao.findGoogleAccount(therapistRef, eventId.calendarId).first()
+        return googleCalendarsClient.findById(account, eventId)
     }
 
     fun updateCalendarSettings(

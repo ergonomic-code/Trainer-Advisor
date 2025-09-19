@@ -27,7 +27,7 @@ class SetCalendarShouldBeShownTest : QYogaAppIntegrationBaseKoTest({
         // Сетап
         val calendarId = "calendarId"
         val therapist = loginAsTheTherapist()
-        val googleAccount = googleCalendarFixturePresets.setupCalendar(THE_THERAPIST_REF, calendarId)
+        val googleAccount = googleCalendarFixturePresets.setupCalendar(calendarId = calendarId)
 
         // Действие
         therapist.googleCalendarIntegration.setShouldBeShown(googleAccount.ref(), calendarId, true)

@@ -6,7 +6,6 @@ import io.kotest.matchers.shouldBe
 import pro.azhidkov.platform.java.time.Interval
 import pro.qyoga.core.calendar.google.GoogleCalendarsService
 import pro.qyoga.tests.fixture.data.asiaNovosibirskTimeZone
-import pro.qyoga.tests.fixture.object_mothers.calendars.google.GoogleCalendarObjectMother
 import pro.qyoga.tests.fixture.object_mothers.calendars.google.GoogleCalendarObjectMother.aGoogleCalendarItem
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
 import pro.qyoga.tests.fixture.presets.googleCalendarFixturePresets
@@ -29,7 +28,6 @@ class GoogleCalendarsServiceTest : QYogaAppIntegrationBaseKoTest({
         "должен возвращать события приведённые к таймзоне запрошенного интервала" {
             // Сетап
             googleCalendarFixturePresets.setupCalendar(
-                THE_THERAPIST_REF, GoogleCalendarObjectMother.aCalendarName(),
                 aGoogleCalendarItem(
                     date = { ZonedDateTime.of(2025, 9, 16, 6, 0, 0, 0, ZoneId.of("Europe/Moscow")) },
                     duration = Duration.ofMinutes(60)

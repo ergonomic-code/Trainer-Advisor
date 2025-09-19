@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component
 import org.springframework.web.util.UriUtils
 import pro.qyoga.core.calendar.google.GoogleCalendar
 import pro.qyoga.core.calendar.google.GoogleCalendarItem
+import pro.qyoga.core.calendar.google.GoogleCalendarItemId
 import pro.qyoga.tests.fixture.data.asiaNovosibirskTimeZone
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
@@ -123,6 +124,30 @@ class MockGoogleCalendar(
 
     }
 
+    inner class OnGetEventById(
+        private val accessToken: String,
+        private val id: GoogleCalendarItemId
+    ) {
+
+        fun returnsEvent(event: GoogleCalendarItem<*>) {
+            val encodedCalendarId = UriUtils.encodePathSegment(id.calendarId, UTF_8)
+            val encodedEventId = UriUtils.encodePathSegment(id.itemId, UTF_8)
+            wiremockServer.stubFor(
+                get(
+                    urlPathEqualTo("/google/calendar/v3/calendars/$encodedCalendarId/events/$encodedEventId")
+                )
+                    .withHeader("Authorization", equalTo("Bearer $accessToken"))
+                    .willReturn(
+                        aResponse()
+                            .withStatus(HttpStatus.OK.value())
+                            .withHeader("Content-Type", "application/json")
+                            .withBody(event.toJson())
+                    )
+            )
+        }
+
+    }
+
 }
 
 private fun GoogleCalendar.toJson(): String =
@@ -140,7 +165,7 @@ private fun GoogleCalendarItem<*>.toJson(): String {
         .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
     return """
         {
-            "id": "$id",
+            "id": "${id.itemId}",
             "summary": "$title",
             "description": "$description",
             "start": {

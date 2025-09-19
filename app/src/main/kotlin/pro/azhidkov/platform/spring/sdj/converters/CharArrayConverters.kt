@@ -22,6 +22,10 @@ data class SecretChars(val value: CharArray) {
         return value.contentHashCode()
     }
 
+    override fun toString(): String {
+        return "<hidden>"
+    }
+
 }
 
 @WritingConverter

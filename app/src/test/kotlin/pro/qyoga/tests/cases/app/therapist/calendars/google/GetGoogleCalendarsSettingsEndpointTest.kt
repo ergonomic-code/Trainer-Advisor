@@ -35,7 +35,7 @@ class GetGoogleCalendarsSettingsEndpointTest : QYogaAppIntegrationBaseKoTest({
         // Сетап
         val therapist = TherapistClient.loginAsTheTherapist()
         val accessToken = "accessToken"
-        val account = googleCalendarsFixturePresets.setupCalendar(THE_THERAPIST_REF)
+        val account = googleCalendarsFixturePresets.setupCalendar(therapistRef = THE_THERAPIST_REF)
         googleCalendarsFixturePresets.mockGoogleCalendar.OnGetCalendars(accessToken)
             .returnsForbidden()
         val accounts = listOf(

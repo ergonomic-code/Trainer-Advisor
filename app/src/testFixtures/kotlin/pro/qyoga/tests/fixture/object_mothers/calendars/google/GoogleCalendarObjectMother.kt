@@ -38,11 +38,12 @@ object GoogleCalendarObjectMother {
     )
 
     fun <DATE : Temporal> aGoogleCalendarItem(
+        calendarId: String = faker.random().randomElementOf(googleCalendarIds),
         date: () -> DATE,
         duration: Duration = randomAppointmentDuration()
     ) =
         GoogleCalendarItem(
-            GoogleCalendarItemId(faker.internet().uuid()),
+            GoogleCalendarItemId(calendarId, faker.internet().uuid()),
             aAppointmentEventTitle(),
             "",
             date(),
@@ -78,3 +79,14 @@ object GoogleCalendarObjectMother {
         )
 
 }
+
+val googleCalendarIds = listOf(
+    "primary",
+    "calendar1@gmail.com",
+    "calendar2@gmail.com",
+    "work.calendar@company.com",
+    "personal.events@gmail.com",
+    "yoga.sessions@studio.com",
+    "therapy.appointments@clinic.com",
+    "group.classes@fitness.com"
+)
