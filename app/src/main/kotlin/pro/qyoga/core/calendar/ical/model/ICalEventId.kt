@@ -8,6 +8,8 @@ data class ICalEventId(
     val recurrenceId: String? = null
 ) : CalendarItemId {
 
+    override val type: String = ICalCalendar.TYPE
+
     override fun toQueryParamStr(): String =
         "uid=${uid},rid=${recurrenceId ?: ""}"
 

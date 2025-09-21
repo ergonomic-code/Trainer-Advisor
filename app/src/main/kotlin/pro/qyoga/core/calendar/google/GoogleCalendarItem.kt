@@ -12,6 +12,8 @@ data class GoogleCalendarItemId(
     val itemId: String
 ) : CalendarItemId {
 
+    override val type: String = GoogleCalendar.TYPE
+
     override fun toQueryParamStr(): String =
         "$calendarId,$itemId"
 

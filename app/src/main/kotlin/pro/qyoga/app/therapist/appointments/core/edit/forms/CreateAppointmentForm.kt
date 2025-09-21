@@ -32,18 +32,18 @@ data class CreateAppointmentForm(
 ) {
 
     constructor(
-        iCalEvent: CalendarItem<out CalendarItemId, ZonedDateTime>?,
+        externalEvent: CalendarItem<out CalendarItemId, ZonedDateTime>?,
         dateTime: LocalDateTime?,
         timeZone: ZoneId,
         timeZoneTitle: String?
     ) : this(
-        externalId = iCalEvent?.id?.toQueryParamStr(),
+        externalId = externalEvent?.id?.toQueryParamStr(),
         dateTime = dateTime,
         timeZone = timeZone,
         timeZoneTitle = timeZoneTitle,
-        duration = iCalEvent?.duration,
-        comment = iCalEvent?.description,
-        place = iCalEvent?.location,
+        duration = externalEvent?.duration,
+        comment = formatCommentFor(externalEvent),
+        place = externalEvent?.location,
         client = null,
         clientTitle = null,
         appointmentType = null,
@@ -56,3 +56,10 @@ data class CreateAppointmentForm(
     )
 
 }
+
+private fun formatCommentFor(externalEvent: CalendarItem<out CalendarItemId, ZonedDateTime>?): String =
+    listOfNotNull(
+        externalEvent?.title?.takeIf { !it.isBlank() },
+        externalEvent?.description?.takeIf { !it.isBlank() }
+    )
+        .joinToString("\n\n")

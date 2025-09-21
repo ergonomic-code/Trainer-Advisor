@@ -1,5 +1,6 @@
 package pro.qyoga.app.therapist.appointments.core.edit.view_model
 
+import pro.qyoga.core.calendar.api.CalendarItemId
 import pro.qyoga.core.calendar.google.GoogleCalendar
 import pro.qyoga.core.calendar.google.GoogleCalendarItemId
 import pro.qyoga.core.calendar.ical.model.ICalCalendar
@@ -9,6 +10,8 @@ data class SourceItem(
     val type: String,
     val id: String
 ) {
+
+    constructor(eventId: CalendarItemId) : this(eventId.type, eventId.toQueryParamStr())
 
     companion object {
         fun icsEvent(eventId: ICalEventId): SourceItem =

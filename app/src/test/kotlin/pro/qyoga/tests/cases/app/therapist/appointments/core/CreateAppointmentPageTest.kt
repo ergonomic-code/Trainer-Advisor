@@ -186,7 +186,6 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
         // Действие
         val document = theTherapist.appointments.getCreateAppointmentPage(
-            dateTime = event.dateTime,
             sourceItem = SourceItem.googleEvent(event.id)
         )
 

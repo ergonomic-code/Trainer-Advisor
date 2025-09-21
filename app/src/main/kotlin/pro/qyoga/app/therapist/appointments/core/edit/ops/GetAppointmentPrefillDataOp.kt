@@ -42,11 +42,9 @@ class GetAppointmentPrefillDataOp(
                 null
         }
 
-        val timeZone = sourceEvent?.dateTime?.zone
-            ?: currentUserTimeZone
-        val timeZoneTitle = timeZones.findById(timeZone)?.displayName
+        val timeZoneTitle = timeZones.findById(currentUserTimeZone)?.displayName
 
-        return CreateAppointmentForm(sourceEvent, dateTime, timeZone, timeZoneTitle)
+        return CreateAppointmentForm(sourceEvent, dateTime, currentUserTimeZone, timeZoneTitle)
     }
 
 }
