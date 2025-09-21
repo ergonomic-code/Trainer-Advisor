@@ -4,6 +4,16 @@ on:
   push:
     branches:
       - 'master'
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 'Git ref (branch or tag) to build'
+        required: false
+        default: 'master'
+      image_tag:
+        description: 'Docker image tag to push (defaults to <branch>-<short-sha>)'
+        required: false
+        default: ''
 
 jobs:
   build-docker-image:
@@ -22,7 +32,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Set up JDK 21
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
@@ -43,10 +53,42 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Compute image tag
+        id: meta
+        shell: bash
+        run: |
+          REF_INPUT='${{ inputs.ref }}'
+          if [ -n "$REF_INPUT" ]; then
+            REF="$REF_INPUT"
+          else
+            REF='${{ github.ref }}'
+          fi
+          # normalize to short branch/tag name
+          REF_NAME="${REF##*/}"
+          SHORT_SHA="${GITHUB_SHA::7}"
+          if [ -n '${{ inputs.image_tag }}' ]; then
+            TAG='${{ inputs.image_tag }}'
+          else
+            TAG="${REF_NAME}-${SHORT_SHA}"
+          fi
+          echo "IMAGE_TAG=$TAG" >> "$GITHUB_ENV"
+          echo "REF_NAME=$REF_NAME" >> "$GITHUB_ENV"
+
       - name: Build and push
         uses: docker/build-push-action@v4
         with:
           context: '.'
           file: deploy/qyoga/Dockerfile
           push: true
-          tags: ghcr.io/ergonomic-code/trainer-advisor:latest
+          tags: |
+            ghcr.io/ergonomic-code/trainer-advisor:${{ env.IMAGE_TAG }}
+
+      - name: Also tag as latest (master only)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: docker/build-push-action@v4
+        with:
+          context: '.'
+          file: deploy/qyoga/Dockerfile
+          push: true
+          tags: |
+            ghcr.io/ergonomic-code/trainer-advisor:latest
