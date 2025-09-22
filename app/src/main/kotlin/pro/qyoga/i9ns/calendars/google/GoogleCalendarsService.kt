@@ -1,4 +1,4 @@
-package pro.qyoga.core.calendar.google
+package pro.qyoga.i9ns.calendars.google
 
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.http.javanet.NetHttpTransport

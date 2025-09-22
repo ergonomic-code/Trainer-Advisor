@@ -1,4 +1,4 @@
-package pro.qyoga.core.calendar.google
+package pro.qyoga.i9ns.calendars.google
 
 import org.springframework.jdbc.core.simple.JdbcClient
 import org.springframework.stereotype.Repository

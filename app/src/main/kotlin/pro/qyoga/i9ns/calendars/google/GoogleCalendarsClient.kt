@@ -1,4 +1,4 @@
-package pro.qyoga.core.calendar.google
+package pro.qyoga.i9ns.calendars.google
 
 import com.google.api.client.googleapis.json.GoogleJsonResponseException
 import com.google.api.client.util.DateTime

@@ -7,11 +7,11 @@ import org.springframework.security.oauth2.client.annotation.RegisteredOAuth2Aut
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.client.RestClient
-import pro.qyoga.core.calendar.google.GoogleAccount
-import pro.qyoga.core.calendar.google.GoogleCalendarsService
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.Therapist
 import pro.qyoga.core.users.therapists.TherapistRef
+import pro.qyoga.i9ns.calendars.google.GoogleAccount
+import pro.qyoga.i9ns.calendars.google.GoogleCalendarsService
 import java.util.*
 
 /**

@@ -1,10 +1,10 @@
 package pro.qyoga.app.therapist.appointments.core.edit.view_model
 
 import pro.qyoga.core.calendar.api.CalendarItemId
-import pro.qyoga.core.calendar.google.GoogleCalendar
-import pro.qyoga.core.calendar.google.GoogleCalendarItemId
 import pro.qyoga.core.calendar.ical.model.ICalCalendar
 import pro.qyoga.core.calendar.ical.model.ICalEventId
+import pro.qyoga.i9ns.calendars.google.GoogleCalendar
+import pro.qyoga.i9ns.calendars.google.GoogleCalendarItemId
 
 data class SourceItem(
     val type: String,

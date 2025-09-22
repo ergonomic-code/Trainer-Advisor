@@ -6,9 +6,9 @@ import com.github.tomakehurst.wiremock.client.WireMock.*
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import org.springframework.web.util.UriUtils
-import pro.qyoga.core.calendar.google.GoogleCalendar
-import pro.qyoga.core.calendar.google.GoogleCalendarItem
-import pro.qyoga.core.calendar.google.GoogleCalendarItemId
+import pro.qyoga.i9ns.calendars.google.GoogleCalendar
+import pro.qyoga.i9ns.calendars.google.GoogleCalendarItem
+import pro.qyoga.i9ns.calendars.google.GoogleCalendarItemId
 import pro.qyoga.tests.fixture.data.asiaNovosibirskTimeZone
 import java.time.LocalDateTime
 import java.time.ZonedDateTime

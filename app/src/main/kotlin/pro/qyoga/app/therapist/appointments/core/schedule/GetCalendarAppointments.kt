@@ -6,11 +6,11 @@ import pro.azhidkov.platform.kotlin.tryExecute
 import pro.qyoga.core.appointments.core.AppointmentsRepo
 import pro.qyoga.core.calendar.api.CalendarItem
 import pro.qyoga.core.calendar.api.SearchResult
-import pro.qyoga.core.calendar.google.GoogleCalendarsService
 import pro.qyoga.core.calendar.ical.ICalCalendarsRepo
 import pro.qyoga.core.users.auth.model.UserRef
 import pro.qyoga.core.users.settings.UserSettingsRepo
 import pro.qyoga.core.users.therapists.TherapistRef
+import pro.qyoga.i9ns.calendars.google.GoogleCalendarsService
 import java.time.*
 
 

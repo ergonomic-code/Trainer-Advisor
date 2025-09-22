@@ -1,4 +1,4 @@
-package pro.qyoga.core.calendar.google
+package pro.qyoga.i9ns.calendars.google
 
 import com.github.benmanes.caffeine.cache.Caffeine
 import org.springframework.cache.CacheManager

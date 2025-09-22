@@ -1,4 +1,4 @@
-package pro.qyoga.core.calendar.google
+package pro.qyoga.i9ns.calendars.google
 
 import org.springframework.data.jdbc.core.JdbcAggregateTemplate
 import org.springframework.data.jdbc.core.findAllById

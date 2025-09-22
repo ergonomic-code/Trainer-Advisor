@@ -3,7 +3,7 @@ package pro.qyoga.tests.cases.app.therapist.calendars.google
 import io.kotest.core.annotation.DisplayName
 import io.kotest.matchers.shouldBe
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
-import pro.qyoga.core.calendar.google.GoogleAccountContentView
+import pro.qyoga.i9ns.calendars.google.GoogleAccountContentView
 import pro.qyoga.tests.clients.TherapistClient.Companion.loginAsTheTherapist
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
 import pro.qyoga.tests.fixture.presets.GoogleCalendarFixturePresets

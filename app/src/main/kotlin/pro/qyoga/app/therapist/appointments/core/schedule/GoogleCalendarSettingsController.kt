@@ -5,11 +5,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
-import pro.qyoga.core.calendar.google.GoogleAccountCalendarsView
-import pro.qyoga.core.calendar.google.GoogleAccountRef
-import pro.qyoga.core.calendar.google.GoogleCalendarsService
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.ref
+import pro.qyoga.i9ns.calendars.google.GoogleAccountCalendarsView
+import pro.qyoga.i9ns.calendars.google.GoogleAccountRef
+import pro.qyoga.i9ns.calendars.google.GoogleCalendarsService
 
 data class GoogleCalendarSettingsPageModel(
     val accounts: List<GoogleAccountCalendarsView>

@@ -2,11 +2,11 @@ package pro.qyoga.tests.fixture.test_apis
 
 import org.springframework.stereotype.Component
 import pro.qyoga.app.therapist.appointments.core.schedule.GoogleCalendarSettingsController
-import pro.qyoga.core.calendar.google.GoogleAccount
-import pro.qyoga.core.calendar.google.GoogleAccountCalendarsView
-import pro.qyoga.core.calendar.google.GoogleAccountRef
-import pro.qyoga.core.calendar.google.GoogleCalendarsService
 import pro.qyoga.core.users.therapists.TherapistRef
+import pro.qyoga.i9ns.calendars.google.GoogleAccount
+import pro.qyoga.i9ns.calendars.google.GoogleAccountCalendarsView
+import pro.qyoga.i9ns.calendars.google.GoogleAccountRef
+import pro.qyoga.i9ns.calendars.google.GoogleCalendarsService
 import pro.qyoga.tests.fixture.object_mothers.therapists.idOnlyUserDetails
 
 

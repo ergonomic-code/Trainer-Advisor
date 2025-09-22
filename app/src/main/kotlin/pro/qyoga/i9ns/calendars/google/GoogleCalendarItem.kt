@@ -1,4 +1,4 @@
-package pro.qyoga.core.calendar.google
+package pro.qyoga.i9ns.calendars.google
 
 import pro.azhidkov.platform.java.time.toLocalDateTime
 import pro.qyoga.core.calendar.api.CalendarItem

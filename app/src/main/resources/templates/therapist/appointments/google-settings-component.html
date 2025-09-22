@@ -10,7 +10,7 @@
                 <div class=" border-bottom pb-1 mb-2 text-body-secondary small" th:text="${account.email}">
                     email@example.com
                 </div>
-                <div th:if="${account.content instanceof T(pro.qyoga.core.calendar.google.GoogleAccountContentView$Calendars)}">
+                <div th:if="${account.content instanceof T(pro.qyoga.i9ns.calendars.google.GoogleAccountContentView$Calendars)}">
                     <ul class="list-unstyled ms-3 my-1">
                         <li class="d-flex justify-content-between align-items-center py-2"
                             th:each="cal : ${account.content.calendars}">
@@ -35,7 +35,7 @@
                 </div>
                 <div
                         class="text-danger ms-3 my-1 google-account-error-content d-inline-flex align-items-center"
-                        th:if="${account.content instanceof T(pro.qyoga.core.calendar.google.GoogleAccountContentView$Error)}"
+                        th:if="${account.content instanceof T(pro.qyoga.i9ns.calendars.google.GoogleAccountContentView$Error)}"
                 >
                     <svg aria-hidden="true" class="me-2 align-middle" height="14" style="fill: currentColor;"
                          viewBox="0 0 16 16" width="14" xmlns="http://www.w3.org/2000/svg">

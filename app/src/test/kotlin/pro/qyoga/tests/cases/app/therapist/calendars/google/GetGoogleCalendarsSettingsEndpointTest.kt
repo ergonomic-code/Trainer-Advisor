@@ -1,8 +1,8 @@
 package pro.qyoga.tests.cases.app.therapist.calendars.google
 
 import io.kotest.core.annotation.DisplayName
-import pro.qyoga.core.calendar.google.GoogleAccountCalendarsView
-import pro.qyoga.core.calendar.google.GoogleAccountContentView
+import pro.qyoga.i9ns.calendars.google.GoogleAccountCalendarsView
+import pro.qyoga.i9ns.calendars.google.GoogleAccountContentView
 import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.fixture.data.faker

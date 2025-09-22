@@ -2,7 +2,7 @@ package pro.qyoga.tests.pages.therapist.appointments
 
 import io.kotest.matchers.Matcher
 import org.jsoup.nodes.Element
-import pro.qyoga.core.calendar.google.GoogleAccountCalendarsView
+import pro.qyoga.i9ns.calendars.google.GoogleAccountCalendarsView
 import pro.qyoga.tests.assertions.haveComponent
 import pro.qyoga.tests.platform.html.Component
 import pro.qyoga.tests.platform.html.Link
