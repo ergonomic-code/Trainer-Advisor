@@ -16,7 +16,7 @@ import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
 import pro.qyoga.app.therapist.appointments.core.schedule.TimeMark
 import pro.qyoga.core.appointments.core.commands.EditAppointmentRequest
 import pro.qyoga.core.appointments.core.model.Appointment
-import pro.qyoga.core.calendar.ical.model.ICalCalendarItem
+import pro.qyoga.i9ns.calendars.ical.model.ICalCalendarItem
 import pro.qyoga.l10n.russianTimeFormat
 import pro.qyoga.tests.assertions.*
 import pro.qyoga.tests.pages.therapist.appointments.CalendarPage.APPOINTMENT_CARD_SELECTOR

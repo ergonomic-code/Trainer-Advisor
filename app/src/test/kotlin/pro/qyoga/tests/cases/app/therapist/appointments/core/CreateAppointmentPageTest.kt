@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus
 import pro.azhidkov.platform.java.time.toLocalTimeString
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.qyoga.app.therapist.appointments.core.edit.view_model.SourceItem
-import pro.qyoga.core.calendar.ical.model.ICalCalendarItem
+import pro.qyoga.i9ns.calendars.ical.model.ICalCalendarItem
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.assertions.shouldHaveElement

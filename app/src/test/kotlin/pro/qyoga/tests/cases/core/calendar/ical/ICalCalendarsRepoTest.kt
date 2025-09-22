@@ -2,8 +2,8 @@ package pro.qyoga.tests.cases.core.calendar.ical
 
 import io.kotest.core.annotation.DisplayName
 import io.kotest.matchers.shouldBe
-import pro.qyoga.core.calendar.ical.ICalCalendarsRepo
-import pro.qyoga.core.calendar.ical.model.ICalCalendarItem
+import pro.qyoga.i9ns.calendars.ical.ICalCalendarsRepo
+import pro.qyoga.i9ns.calendars.ical.model.ICalCalendarItem
 import pro.qyoga.tests.fixture.backgrounds.ICalCalendarsBackgrounds
 import pro.qyoga.tests.fixture.object_mothers.calendars.CalendarsObjectMother.aCalendarItem
 import pro.qyoga.tests.fixture.object_mothers.calendars.ical.ICalCalendarsObjectMother

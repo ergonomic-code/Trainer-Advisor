@@ -1,4 +1,4 @@
-package pro.qyoga.core.calendar.ical
+package pro.qyoga.i9ns.calendars.ical
 
 import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
@@ -7,13 +7,13 @@ import pro.azhidkov.platform.java.time.Interval
 import pro.qyoga.core.calendar.api.CalendarItem
 import pro.qyoga.core.calendar.api.CalendarsService
 import pro.qyoga.core.calendar.api.SearchResult
-import pro.qyoga.core.calendar.ical.commands.CreateICalRq
-import pro.qyoga.core.calendar.ical.commands.createFrom
-import pro.qyoga.core.calendar.ical.model.*
-import pro.qyoga.core.calendar.ical.persistance.ICalCalendarsDao
-import pro.qyoga.core.calendar.ical.persistance.findAllByOwner
-import pro.qyoga.core.calendar.ical.platform.ical4j.toICalCalendarItem
 import pro.qyoga.core.users.therapists.TherapistRef
+import pro.qyoga.i9ns.calendars.ical.commands.CreateICalRq
+import pro.qyoga.i9ns.calendars.ical.commands.createFrom
+import pro.qyoga.i9ns.calendars.ical.ical4j.toICalCalendarItem
+import pro.qyoga.i9ns.calendars.ical.model.*
+import pro.qyoga.i9ns.calendars.ical.persistance.ICalCalendarsDao
+import pro.qyoga.i9ns.calendars.ical.persistance.findAllByOwner
 import java.time.ZonedDateTime
 
 

@@ -2,8 +2,8 @@ package pro.qyoga.tests.fixture.object_mothers.calendars
 
 import org.instancio.Instancio
 import org.instancio.InstancioApi
-import pro.qyoga.core.calendar.ical.model.ICalCalendarItem
-import pro.qyoga.core.calendar.ical.model.ICalEventId
+import pro.qyoga.i9ns.calendars.ical.model.ICalCalendarItem
+import pro.qyoga.i9ns.calendars.ical.model.ICalEventId
 import pro.qyoga.tests.fixture.data.asiaNovosibirskTimeZone
 import pro.qyoga.tests.fixture.data.faker
 import pro.qyoga.tests.fixture.data.randomElementOf

@@ -1,4 +1,4 @@
-package pro.qyoga.core.calendar.ical.persistance
+package pro.qyoga.i9ns.calendars.ical.persistance
 
 import org.slf4j.LoggerFactory
 import org.springframework.data.domain.PageRequest
@@ -8,8 +8,8 @@ import org.springframework.data.relational.core.mapping.RelationalMappingContext
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
 import pro.azhidkov.platform.spring.sdj.ergo.ErgoRepository
-import pro.qyoga.core.calendar.ical.model.ICalCalendar
 import pro.qyoga.core.users.therapists.TherapistRef
+import pro.qyoga.i9ns.calendars.ical.model.ICalCalendar
 
 
 private val log = LoggerFactory.getLogger(ICalCalendarsDao::class.java)

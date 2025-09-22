@@ -1,8 +1,8 @@
-package pro.qyoga.core.calendar.ical
+package pro.qyoga.i9ns.calendars.ical
 
 import org.slf4j.LoggerFactory
-import pro.qyoga.core.calendar.ical.model.ICalCalendar
-import pro.qyoga.core.calendar.ical.persistance.ICalCalendarsDao
+import pro.qyoga.i9ns.calendars.ical.model.ICalCalendar
+import pro.qyoga.i9ns.calendars.ical.persistance.ICalCalendarsDao
 import java.io.IOException
 
 

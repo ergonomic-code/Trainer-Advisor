@@ -1,4 +1,4 @@
-package pro.qyoga.core.calendar.ical.platform.ical4j
+package pro.qyoga.i9ns.calendars.ical.ical4j
 
 import net.fortuna.ical4j.data.CalendarBuilder
 import net.fortuna.ical4j.data.ParserException

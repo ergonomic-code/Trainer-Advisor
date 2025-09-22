@@ -6,13 +6,13 @@ import pro.qyoga.app.therapist.appointments.core.edit.forms.CreateAppointmentFor
 import pro.qyoga.app.therapist.appointments.core.edit.view_model.SourceItem
 import pro.qyoga.app.therapist.appointments.core.edit.view_model.googleEventId
 import pro.qyoga.app.therapist.appointments.core.edit.view_model.icsEventId
-import pro.qyoga.core.calendar.ical.ICalCalendarsRepo
-import pro.qyoga.core.calendar.ical.model.ICalCalendar
 import pro.qyoga.core.users.auth.model.UserRef
 import pro.qyoga.core.users.settings.UserSettingsRepo
 import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.i9ns.calendars.google.GoogleCalendar
 import pro.qyoga.i9ns.calendars.google.GoogleCalendarsService
+import pro.qyoga.i9ns.calendars.ical.ICalCalendarsRepo
+import pro.qyoga.i9ns.calendars.ical.model.ICalCalendar
 import java.time.LocalDateTime
 
 

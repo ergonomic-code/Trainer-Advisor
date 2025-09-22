@@ -1,4 +1,4 @@
-package pro.qyoga.core.calendar.ical.model
+package pro.qyoga.i9ns.calendars.ical.model
 
 import net.fortuna.ical4j.model.component.VEvent
 import org.springframework.data.annotation.*
@@ -6,11 +6,11 @@ import org.springframework.data.relational.core.mapping.Table
 import pro.azhidkov.platform.java.time.Interval
 import pro.azhidkov.platform.uuid.UUIDv7
 import pro.qyoga.core.calendar.api.Calendar
-import pro.qyoga.core.calendar.ical.platform.ical4j.recurrenceId
-import pro.qyoga.core.calendar.ical.platform.ical4j.toICalCalendarItem
-import pro.qyoga.core.calendar.ical.platform.ical4j.toICalPeriod
-import pro.qyoga.core.calendar.ical.platform.ical4j.tryParseIcs
 import pro.qyoga.core.users.therapists.TherapistRef
+import pro.qyoga.i9ns.calendars.ical.ical4j.recurrenceId
+import pro.qyoga.i9ns.calendars.ical.ical4j.toICalCalendarItem
+import pro.qyoga.i9ns.calendars.ical.ical4j.toICalPeriod
+import pro.qyoga.i9ns.calendars.ical.ical4j.tryParseIcs
 import java.net.URL
 import java.time.Instant
 import java.time.ZonedDateTime

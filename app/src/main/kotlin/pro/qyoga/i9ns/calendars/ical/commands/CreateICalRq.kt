@@ -1,7 +1,7 @@
-package pro.qyoga.core.calendar.ical.commands
+package pro.qyoga.i9ns.calendars.ical.commands
 
-import pro.qyoga.core.calendar.ical.model.ICalCalendar
 import pro.qyoga.core.users.therapists.TherapistRef
+import pro.qyoga.i9ns.calendars.ical.model.ICalCalendar
 import java.net.URL
 
 data class CreateICalRq(

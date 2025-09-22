@@ -9,8 +9,8 @@ import net.fortuna.ical4j.model.property.Location
 import net.fortuna.ical4j.model.property.RecurrenceId
 import net.fortuna.ical4j.model.property.Uid
 import pro.azhidkov.platform.kotlin.ifNotNull
-import pro.qyoga.core.calendar.ical.model.ICalCalendar
-import pro.qyoga.core.calendar.ical.model.ICalCalendarItem
+import pro.qyoga.i9ns.calendars.ical.model.ICalCalendar
+import pro.qyoga.i9ns.calendars.ical.model.ICalCalendarItem
 import pro.qyoga.tests.fixture.data.faker
 import pro.qyoga.tests.fixture.object_mothers.calendars.CalendarsObjectMother
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF

@@ -1,4 +1,4 @@
-package pro.qyoga.core.calendar.ical.model
+package pro.qyoga.i9ns.calendars.ical.model
 
 import pro.qyoga.core.calendar.api.CalendarItemId
 

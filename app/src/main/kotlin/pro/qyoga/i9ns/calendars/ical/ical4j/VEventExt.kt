@@ -1,4 +1,4 @@
-package pro.qyoga.core.calendar.ical.platform.ical4j
+package pro.qyoga.i9ns.calendars.ical.ical4j
 
 import net.fortuna.ical4j.model.Period
 import net.fortuna.ical4j.model.component.VEvent
@@ -6,8 +6,8 @@ import net.fortuna.ical4j.model.parameter.TzId
 import net.fortuna.ical4j.model.property.DtStart
 import net.fortuna.ical4j.model.property.RecurrenceId
 import pro.azhidkov.platform.java.time.toLocalDateTime
-import pro.qyoga.core.calendar.ical.model.ICalCalendarItem
-import pro.qyoga.core.calendar.ical.model.ICalEventId
+import pro.qyoga.i9ns.calendars.ical.model.ICalCalendarItem
+import pro.qyoga.i9ns.calendars.ical.model.ICalEventId
 import java.time.Duration
 import java.time.ZoneId
 import java.time.ZonedDateTime

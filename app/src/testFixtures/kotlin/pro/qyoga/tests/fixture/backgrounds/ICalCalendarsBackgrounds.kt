@@ -3,9 +3,9 @@ package pro.qyoga.tests.fixture.backgrounds
 import com.github.tomakehurst.wiremock.client.WireMock.*
 import org.springframework.stereotype.Component
 import pro.azhidkov.platform.uuid.UUIDv7
-import pro.qyoga.core.calendar.ical.ICalCalendarsRepo
-import pro.qyoga.core.calendar.ical.commands.CreateICalRq
-import pro.qyoga.core.calendar.ical.model.ICalCalendar
+import pro.qyoga.i9ns.calendars.ical.ICalCalendarsRepo
+import pro.qyoga.i9ns.calendars.ical.commands.CreateICalRq
+import pro.qyoga.i9ns.calendars.ical.model.ICalCalendar
 import pro.qyoga.tests.infra.wiremock.WireMock
 import java.net.URI
 import java.net.URL

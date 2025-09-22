@@ -7,11 +7,11 @@ import io.kotest.matchers.date.shouldBeBefore
 import io.kotest.matchers.shouldBe
 import net.fortuna.ical4j.model.component.VEvent
 import pro.azhidkov.platform.java.time.Interval
-import pro.qyoga.core.calendar.ical.model.ICalCalendar
-import pro.qyoga.core.calendar.ical.model.calendarItemsIn
-import pro.qyoga.core.calendar.ical.model.findById
-import pro.qyoga.core.calendar.ical.model.vEvents
-import pro.qyoga.core.calendar.ical.platform.ical4j.id
+import pro.qyoga.i9ns.calendars.ical.ical4j.id
+import pro.qyoga.i9ns.calendars.ical.model.ICalCalendar
+import pro.qyoga.i9ns.calendars.ical.model.calendarItemsIn
+import pro.qyoga.i9ns.calendars.ical.model.findById
+import pro.qyoga.i9ns.calendars.ical.model.vEvents
 import pro.qyoga.tests.fixture.object_mothers.calendars.ical.ICalCalendarsObjectMother.aICalCalendar
 import java.time.Duration
 import java.time.ZonedDateTime

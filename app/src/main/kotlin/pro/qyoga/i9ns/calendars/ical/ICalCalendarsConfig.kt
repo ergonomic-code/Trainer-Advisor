@@ -1,4 +1,4 @@
-package pro.qyoga.core.calendar.ical
+package pro.qyoga.i9ns.calendars.ical
 
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration
