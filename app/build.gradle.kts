@@ -26,7 +26,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-cache")
-    implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
+    implementation(libs.caffeine)
 
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.flywaydb:flyway-database-postgresql")
@@ -40,7 +40,7 @@ dependencies {
     implementation(libs.google.api.client)
     implementation(libs.google.calendar.api)
     implementation(libs.google.oauth.client)
-    implementation(platform("com.google.auth:google-auth-library-bom:1.30.1"))
+    implementation(platform(libs.google.auth.bom))
     implementation("com.google.auth:google-auth-library-oauth2-http")
 
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")

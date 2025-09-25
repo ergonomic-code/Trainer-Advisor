@@ -57,7 +57,7 @@ data class CreateAppointmentForm(
 
 }
 
-private fun formatCommentFor(externalEvent: CalendarItem<out CalendarItemId, ZonedDateTime>?): String =
+fun formatCommentFor(externalEvent: CalendarItem<out CalendarItemId, ZonedDateTime>?): String =
     listOfNotNull(
         externalEvent?.title?.takeIf { !it.isBlank() },
         externalEvent?.description?.takeIf { !it.isBlank() }

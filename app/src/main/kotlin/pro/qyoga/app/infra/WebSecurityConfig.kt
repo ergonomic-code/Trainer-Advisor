@@ -51,11 +51,6 @@ class WebSecurityConfig(
                     // Therapist
                     .requestMatchers("/therapist/**").hasAnyAuthority(Role.ROLE_THERAPIST.toString())
 
-
-                    // OAuth2
-                    .requestMatchers("/oauth2/**", "/therapist/oauth").permitAll()
-
-
                     // Public
                     .requestMatchers(
                         HttpMethod.GET,
@@ -87,7 +82,7 @@ class WebSecurityConfig(
                     .failureForwardUrl("/error-p")
                     .permitAll()
             }
-            .oauth2Client(withDefaults()) // Добавьте эту строку!
+            .oauth2Client(withDefaults())
             .logout { logout: LogoutConfigurer<HttpSecurity?> -> logout.permitAll() }
             .rememberMe { rememberMeConfigurer ->
                 rememberMeConfigurer

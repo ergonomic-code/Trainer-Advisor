@@ -3,7 +3,7 @@ package pro.qyoga.i9ns.calendars.google
 import org.springframework.data.annotation.Id
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.Table
-import pro.azhidkov.platform.spring.sdj.converters.SecretChars
+import pro.azhidkov.platform.secrets.SecretChars
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.Identifiable
 import pro.azhidkov.platform.uuid.UUIDv7
 import pro.qyoga.core.users.therapists.TherapistRef
