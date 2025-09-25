@@ -13,8 +13,6 @@ import pro.azhidkov.platform.spring.jdbc.taDataClassRowMapper
 import pro.azhidkov.platform.spring.sdj.ergo.ErgoRepository
 import pro.qyoga.core.appointments.core.model.Appointment
 import pro.qyoga.core.appointments.core.views.LocalizedAppointmentSummary
-import pro.qyoga.core.calendar.api.CalendarItem
-import pro.qyoga.core.calendar.api.CalendarsService
 import pro.qyoga.core.calendar.api.SearchResult
 import pro.qyoga.core.users.therapists.TherapistRef
 import java.sql.Timestamp
@@ -35,9 +33,9 @@ class AppointmentsRepo(
     Appointment::class,
     jdbcConverter,
     relationalMappingContext
-), CalendarsService<UUID> {
+) {
 
-    override fun findCalendarItemsInInterval(
+    fun findCalendarItemsInInterval(
         therapist: TherapistRef,
         interval: Interval<ZonedDateTime>,
     ): SearchResult<UUID> {
@@ -71,13 +69,6 @@ class AppointmentsRepo(
             "localTimeZone" to interval.zoneId.id
         )
         return SearchResult(findAll(query, params, localizedAppointmentSummaryRowMapper))
-    }
-
-    override fun findById(
-        therapistRef: TherapistRef,
-        eventId: UUID
-    ): CalendarItem<UUID, ZonedDateTime>? {
-        TODO()
     }
 
 }
