@@ -6,6 +6,7 @@ import org.springframework.data.relational.core.mapping.Table
 import pro.azhidkov.platform.java.time.Interval
 import pro.azhidkov.platform.uuid.UUIDv7
 import pro.qyoga.core.calendar.api.Calendar
+import pro.qyoga.core.calendar.api.CalendarType
 import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.i9ns.calendars.ical.ical4j.recurrenceId
 import pro.qyoga.i9ns.calendars.ical.ical4j.toICalCalendarItem
@@ -35,7 +36,7 @@ data class ICalCalendar(
 ) : Calendar {
 
     @Transient
-    override val type: String = TYPE
+    override val type: CalendarType = Type
 
     val calendar: net.fortuna.ical4j.model.Calendar? by lazy {
         tryParseIcs(icsFile)
@@ -44,9 +45,11 @@ data class ICalCalendar(
     fun withIcsFile(icsFile: String) =
         copy(icsFile = icsFile)
 
-    companion object {
-        const val TYPE = "ICAL"
+    object Type : CalendarType {
+        override val name = "ICAL"
     }
+
+    companion object
 
 }
 

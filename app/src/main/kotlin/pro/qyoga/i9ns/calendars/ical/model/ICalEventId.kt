@@ -1,6 +1,7 @@
 package pro.qyoga.i9ns.calendars.ical.model
 
 import pro.qyoga.core.calendar.api.CalendarItemId
+import pro.qyoga.core.calendar.api.CalendarType
 
 
 data class ICalEventId(
@@ -8,10 +9,9 @@ data class ICalEventId(
     val recurrenceId: String? = null
 ) : CalendarItemId {
 
-    override val type: String = ICalCalendar.TYPE
+    override val type: CalendarType = ICalCalendar.Type
 
     override fun toQueryParamStr(): String =
         "uid=${uid},rid=${recurrenceId ?: ""}"
-
 
 }

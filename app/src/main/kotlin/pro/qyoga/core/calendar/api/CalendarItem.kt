@@ -5,7 +5,7 @@ import java.time.temporal.Temporal
 
 interface CalendarItemId {
 
-    val type: String
+    val type: CalendarType
 
     fun toQueryParamStr(): String
 

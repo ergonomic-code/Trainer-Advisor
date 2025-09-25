@@ -10,6 +10,7 @@ import pro.azhidkov.platform.java.time.zoneId
 import pro.azhidkov.platform.kotlin.tryExecute
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.qyoga.core.calendar.api.CalendarItem
+import pro.qyoga.core.calendar.api.CalendarType
 import pro.qyoga.core.calendar.api.CalendarsService
 import pro.qyoga.core.calendar.api.SearchResult
 import pro.qyoga.core.users.therapists.TherapistRef
@@ -80,6 +81,8 @@ class GoogleCalendarsService(
     private val googleCalendarsDao: GoogleCalendarsDao,
     private val googleCalendarsClient: GoogleCalendarsClient,
 ) : CalendarsService<GoogleCalendarItemId> {
+
+    override val type: CalendarType = GoogleCalendar.Type
 
     private val executor = VirtualThreadExecutor("google-calendar-events-fetcher")
 

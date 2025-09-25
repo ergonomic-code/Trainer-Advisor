@@ -32,10 +32,10 @@ class GetAppointmentPrefillDataOp(
         val currentUserTimeZone = userSettingsRepo.getUserTimeZone(UserRef(therapistRef))
 
         val sourceEvent = when (sourceItem?.type) {
-            ICalCalendar.TYPE ->
+            ICalCalendar.Type.name ->
                 iCalCalendarsRepo.findById(therapistRef, sourceItem.icsEventId())
 
-            GoogleCalendar.TYPE ->
+            GoogleCalendar.Type.name ->
                 googleCalendarsService.findById(therapistRef, sourceItem.googleEventId())
 
             else ->

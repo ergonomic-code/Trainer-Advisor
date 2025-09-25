@@ -3,16 +3,18 @@ package pro.qyoga.i9ns.calendars.google
 import pro.azhidkov.platform.java.time.toLocalDateTime
 import pro.qyoga.core.calendar.api.CalendarItem
 import pro.qyoga.core.calendar.api.CalendarItemId
+import pro.qyoga.core.calendar.api.CalendarType
 import java.time.Duration
 import java.time.ZoneId
 import java.time.temporal.Temporal
+
 
 data class GoogleCalendarItemId(
     val calendarId: String,
     val itemId: String
 ) : CalendarItemId {
 
-    override val type: String = GoogleCalendar.TYPE
+    override val type: CalendarType = GoogleCalendar.Type
 
     override fun toQueryParamStr(): String =
         "$calendarId,$itemId"

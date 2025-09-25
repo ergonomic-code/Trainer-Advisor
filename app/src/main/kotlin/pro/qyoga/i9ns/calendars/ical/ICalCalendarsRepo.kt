@@ -5,6 +5,7 @@ import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import pro.azhidkov.platform.java.time.Interval
 import pro.qyoga.core.calendar.api.CalendarItem
+import pro.qyoga.core.calendar.api.CalendarType
 import pro.qyoga.core.calendar.api.CalendarsService
 import pro.qyoga.core.calendar.api.SearchResult
 import pro.qyoga.core.users.therapists.TherapistRef
@@ -23,6 +24,8 @@ class ICalCalendarsRepo(
 ) : CalendarsService<ICalEventId> {
 
     private val log = LoggerFactory.getLogger(javaClass)
+
+    override val type: CalendarType = ICalCalendar.Type
 
     fun addICal(createICalRq: CreateICalRq): ICalCalendar {
         val icsData = createICalRq.icsUrl.readText()

@@ -13,6 +13,8 @@ data class SearchResult<ID>(
 
 interface CalendarsService<ID> {
 
+    val type: CalendarType
+
     fun findCalendarItemsInInterval(
         therapist: TherapistRef,
         interval: Interval<ZonedDateTime>

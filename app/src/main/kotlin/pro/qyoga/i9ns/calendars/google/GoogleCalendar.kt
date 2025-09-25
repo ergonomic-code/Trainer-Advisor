@@ -1,6 +1,7 @@
 package pro.qyoga.i9ns.calendars.google
 
 import pro.qyoga.core.calendar.api.Calendar
+import pro.qyoga.core.calendar.api.CalendarType
 import pro.qyoga.core.users.therapists.TherapistRef
 
 
@@ -10,11 +11,10 @@ data class GoogleCalendar(
     override val name: String,
 ) : Calendar {
 
-    override val type: String = TYPE
+    override val type: CalendarType = Type
 
-    companion object {
-
-        const val TYPE = "Google"
+    object Type : CalendarType {
+        override val name = "Google"
     }
 
 }

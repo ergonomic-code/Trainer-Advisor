@@ -11,11 +11,11 @@ data class SourceItem(
     val id: String
 ) {
 
-    constructor(eventId: CalendarItemId) : this(eventId.type, eventId.toQueryParamStr())
+    constructor(eventId: CalendarItemId) : this(eventId.type.name, eventId.toQueryParamStr())
 
     companion object {
         fun icsEvent(eventId: ICalEventId): SourceItem =
-            SourceItem(ICalCalendar.TYPE, eventId.toQueryParamStr())
+            SourceItem(ICalCalendar.Type.name, eventId.toQueryParamStr())
 
         fun googleEvent(eventId: GoogleCalendarItemId): SourceItem =
             SourceItem("Google", eventId.toQueryParamStr())
@@ -25,7 +25,7 @@ data class SourceItem(
 }
 
 fun SourceItem.icsEventId(): ICalEventId {
-    check(type == ICalCalendar.TYPE)
+    check(type == ICalCalendar.Type.name)
     val matcher = "uid=(.+),rid=(.*)".toRegex().matchEntire(id)
     check(matcher != null)
     val uid = matcher.groups[1]!!.value
@@ -34,7 +34,7 @@ fun SourceItem.icsEventId(): ICalEventId {
 }
 
 fun SourceItem.googleEventId(): GoogleCalendarItemId {
-    check(type == GoogleCalendar.TYPE)
+    check(type == GoogleCalendar.Type.name)
     val matcher = "(.+),(.+)".toRegex().matchEntire(id)
     check(matcher != null)
     return GoogleCalendarItemId(matcher.groups[1]!!.value, matcher.groups[2]!!.value)
