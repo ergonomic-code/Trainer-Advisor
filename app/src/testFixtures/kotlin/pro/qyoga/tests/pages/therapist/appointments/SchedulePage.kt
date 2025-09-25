@@ -9,13 +9,13 @@ import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
 import pro.qyoga.app.therapist.appointments.core.edit.CreateAppointmentPageController
-import pro.qyoga.app.therapist.appointments.core.edit.view_model.SourceItem
 import pro.qyoga.app.therapist.appointments.core.schedule.AppointmentCard
 import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
 import pro.qyoga.app.therapist.appointments.core.schedule.TimeMark
 import pro.qyoga.core.appointments.core.commands.EditAppointmentRequest
 import pro.qyoga.core.appointments.core.model.Appointment
+import pro.qyoga.core.calendar.api.SourceItem
 import pro.qyoga.i9ns.calendars.ical.model.ICalCalendarItem
 import pro.qyoga.l10n.russianTimeFormat
 import pro.qyoga.tests.assertions.*
@@ -95,7 +95,7 @@ infix fun Element.shouldMatch(localizedICalCalendarItem: ICalCalendarItem) {
         "editAppointmentLink",
         CreateAppointmentPageController.addFromSourceItemUri(
             localizedICalCalendarItem.dateTime.toLocalDateTime(),
-            SourceItem.icsEvent(localizedICalCalendarItem.id)
+            SourceItem(localizedICalCalendarItem.id)
         ),
         localizedICalCalendarItem.title + " " +
                 russianTimeFormat.format(localizedICalCalendarItem.dateTime) + " - " + russianTimeFormat.format(

@@ -9,10 +9,7 @@ import pro.azhidkov.platform.java.time.Interval
 import pro.azhidkov.platform.java.time.zoneId
 import pro.azhidkov.platform.kotlin.tryExecute
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
-import pro.qyoga.core.calendar.api.CalendarItem
-import pro.qyoga.core.calendar.api.CalendarType
-import pro.qyoga.core.calendar.api.CalendarsService
-import pro.qyoga.core.calendar.api.SearchResult
+import pro.qyoga.core.calendar.api.*
 import pro.qyoga.core.users.therapists.TherapistRef
 import java.time.ZonedDateTime
 import java.util.*
@@ -152,6 +149,9 @@ class GoogleCalendarsService(
         return googleCalendarsClient.findById(account, eventId)
     }
 
+    override fun parseStringId(sourceItem: SourceItem): GoogleCalendarItemId =
+        sourceItem.googleEventId()
+
     fun updateCalendarSettings(
         therapist: TherapistRef,
         googleAccount: GoogleAccountRef,
@@ -161,4 +161,11 @@ class GoogleCalendarsService(
         googleCalendarsDao.patchCalendarSettings(therapist, googleAccount, calendarId, settingsPatch)
     }
 
+}
+
+fun SourceItem.googleEventId(): GoogleCalendarItemId {
+    check(type == GoogleCalendar.Type.name)
+    val matcher = "(.+),(.+)".toRegex().matchEntire(id)
+    check(matcher != null)
+    return GoogleCalendarItemId(matcher.groups[1]!!.value, matcher.groups[2]!!.value)
 }

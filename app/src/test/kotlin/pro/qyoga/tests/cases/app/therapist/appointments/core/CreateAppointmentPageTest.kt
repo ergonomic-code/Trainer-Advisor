@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus
 import pro.azhidkov.platform.java.time.toLocalTimeString
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.qyoga.app.therapist.appointments.core.edit.forms.formatCommentFor
-import pro.qyoga.app.therapist.appointments.core.edit.view_model.SourceItem
+import pro.qyoga.core.calendar.api.SourceItem
 import pro.qyoga.i9ns.calendars.ical.model.ICalCalendarItem
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.assertions.shouldHave
@@ -167,7 +167,7 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
         // Действие
         val document = theTherapist.appointments.getCreateAppointmentPage(
             dateTime = event.dateTime.toLocalDateTime(),
-            sourceItem = SourceItem.icsEvent(event.id)
+            sourceItem = SourceItem(event.id)
         )
 
         // Проверка
@@ -190,7 +190,7 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
         // Действие
         val document = theTherapist.appointments.getCreateAppointmentPage(
             dateTime = event.dateTime.toLocalDateTime(),
-            sourceItem = SourceItem.googleEvent(event.id)
+            sourceItem = SourceItem(event.id)
         )
 
         // Проверка

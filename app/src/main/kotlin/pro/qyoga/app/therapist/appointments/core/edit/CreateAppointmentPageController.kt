@@ -16,10 +16,10 @@ import pro.qyoga.app.publc.components.toComboBoxItem
 import pro.qyoga.app.therapist.appointments.core.edit.errors.AppointmentsIntersectionException
 import pro.qyoga.app.therapist.appointments.core.edit.ops.CreateAppointmentOp
 import pro.qyoga.app.therapist.appointments.core.edit.ops.GetAppointmentPrefillDataOp
-import pro.qyoga.app.therapist.appointments.core.edit.view_model.SourceItem
 import pro.qyoga.app.therapist.appointments.core.edit.view_model.appointmentPageModelAndView
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController.Companion.calendarForDayWithFocus
 import pro.qyoga.core.appointments.core.commands.EditAppointmentRequest
+import pro.qyoga.core.calendar.api.SourceItem
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.ref
 import java.time.LocalDateTime

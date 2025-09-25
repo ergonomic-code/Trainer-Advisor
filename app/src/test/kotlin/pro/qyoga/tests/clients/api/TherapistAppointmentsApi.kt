@@ -11,15 +11,14 @@ import org.hamcrest.CoreMatchers.nullValue
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
-import org.springframework.test.web.reactive.server.WebTestClient
 import pro.azhidkov.platform.java.time.toLocalTimeString
 import pro.qyoga.app.therapist.appointments.core.edit.CreateAppointmentPageController
 import pro.qyoga.app.therapist.appointments.core.edit.EditAppointmentPageController
-import pro.qyoga.app.therapist.appointments.core.edit.view_model.SourceItem
 import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
 import pro.qyoga.core.appointments.core.commands.EditAppointmentRequest
 import pro.qyoga.core.appointments.core.model.AppointmentRef
+import pro.qyoga.core.calendar.api.SourceItem
 import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentPage
 import pro.qyoga.tests.pages.therapist.appointments.EditAppointmentPage
 import java.time.LocalDate
@@ -27,8 +26,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class TherapistAppointmentsApi(
-    override val authCookie: Cookie,
-    private val webTestClient: WebTestClient
+    override val authCookie: Cookie
 ) : AuthorizedApi {
 
     fun getScheduleForDay(date: LocalDate? = null, appointmentToFocus: AppointmentRef? = null): Document {

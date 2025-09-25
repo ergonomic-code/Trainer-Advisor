@@ -21,7 +21,7 @@ class TherapistClient(
 ) {
 
     // Work
-    val appointments = TherapistAppointmentsApi(authCookie, webTestClient)
+    val appointments = TherapistAppointmentsApi(authCookie)
     val googleCalendarIntegration = TherapistGoogleCalendarIntegrationApi(authCookie, webTestClient)
     val clients = TherapistClientsApi(authCookie)
     val clientJournal = TherapistClientJournalApi(authCookie)

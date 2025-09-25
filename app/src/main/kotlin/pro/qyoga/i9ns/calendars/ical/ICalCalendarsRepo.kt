@@ -4,10 +4,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import pro.azhidkov.platform.java.time.Interval
-import pro.qyoga.core.calendar.api.CalendarItem
-import pro.qyoga.core.calendar.api.CalendarType
-import pro.qyoga.core.calendar.api.CalendarsService
-import pro.qyoga.core.calendar.api.SearchResult
+import pro.qyoga.core.calendar.api.*
 import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.i9ns.calendars.ical.commands.CreateICalRq
 import pro.qyoga.i9ns.calendars.ical.commands.createFrom
@@ -55,6 +52,9 @@ class ICalCalendarsRepo(
             ?.toICalCalendarItem()
     }
 
+    override fun parseStringId(sourceItem: SourceItem): ICalEventId =
+        sourceItem.icsEventId()
+
 
     @Scheduled(cron = "0 */10 * * * *")
     fun sync() {
@@ -71,3 +71,12 @@ private fun ICalCalendar.localizedICalCalendarItemsIn(
 ): List<LocalizedICalCalendarItem> =
     (this.calendarItemsIn(interval) ?: emptyList())
         .map(ICalCalendarItem::toLocalizedICalCalendarItem)
+
+fun SourceItem.icsEventId(): ICalEventId {
+    check(type == ICalCalendar.Type.name)
+    val matcher = "uid=(.+),rid=(.*)".toRegex().matchEntire(id)
+    check(matcher != null)
+    val uid = matcher.groups[1]!!.value
+    val rid = matcher.groups[2]!!.value.takeIf { it.isNotBlank() }
+    return ICalEventId(uid, rid)
+}
