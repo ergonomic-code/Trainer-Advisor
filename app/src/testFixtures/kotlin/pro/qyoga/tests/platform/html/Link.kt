@@ -2,12 +2,12 @@ package pro.qyoga.tests.platform.html
 
 import io.kotest.matchers.Matcher
 import org.jsoup.nodes.Element
+import org.springframework.web.util.UriTemplate
 import pro.qyoga.tests.assertions.haveAttribute
 import pro.qyoga.tests.assertions.haveAttributeValueMatching
 import pro.qyoga.tests.assertions.haveText
 import pro.qyoga.tests.assertions.isTag
 import pro.qyoga.tests.platform.kotest.all
-import pro.qyoga.tests.platform.pathToRegex
 
 class Link(
     val id: String,
@@ -16,7 +16,7 @@ class Link(
     val targetAttr: String = "href"
 ) : Component {
 
-    val urlRegex = urlPattern.pathToRegex().toRegex()
+    val urlRegex = UriTemplate(urlPattern)
 
     constructor(id: String, page: HtmlPageCompat, text: String) : this(id, page.path, text)
 
@@ -36,12 +36,8 @@ class Link(
 
     fun pathParam(element: Element, paramName: String): String? {
         val actualUrl = element.select(selector()).attr(targetAttr)
-        val paramIdx = "\\{.*?}".toRegex().findAll(urlPattern)
-            .indexOfFirst { it.value == "{$paramName}" }
-            .takeIf { it >= 0 }
-            ?: return null
-
-        return urlRegex.matchEntire(actualUrl)!!.groupValues[paramIdx + 1]
+        val vars = urlRegex.match(actualUrl)
+        return vars[paramName]
     }
 
     companion object {
