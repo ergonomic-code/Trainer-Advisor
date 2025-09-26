@@ -9,13 +9,14 @@ import net.fortuna.ical4j.model.property.Location
 import net.fortuna.ical4j.model.property.RecurrenceId
 import net.fortuna.ical4j.model.property.Uid
 import pro.azhidkov.platform.kotlin.ifNotNull
-import pro.qyoga.core.calendar.ical.model.ICalCalendar
-import pro.qyoga.core.calendar.ical.model.ICalCalendarItem
+import pro.qyoga.i9ns.calendars.ical.model.ICalCalendar
+import pro.qyoga.i9ns.calendars.ical.model.ICalCalendarItem
 import pro.qyoga.tests.fixture.data.faker
 import pro.qyoga.tests.fixture.object_mothers.calendars.CalendarsObjectMother
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
 import java.io.StringWriter
 import java.net.URI
+import java.time.ZonedDateTime
 import java.time.temporal.Temporal
 
 
@@ -30,14 +31,14 @@ object ICalCalendarsObjectMother {
         )
     }
 
-    fun aIcsFile(event: ICalCalendarItem): String {
+    fun aIcsFile(event: ICalCalendarItem<ZonedDateTime>): String {
         val calendar = aICalCalendar(event)
         val icsFile = StringWriter()
         CalendarOutputter().output(calendar, icsFile)
         return icsFile.toString()
     }
 
-    fun aICalCalendar(event: ICalCalendarItem): Calendar {
+    fun aICalCalendar(event: ICalCalendarItem<ZonedDateTime>): Calendar {
         val calendar = Calendar()
             .withProdId("-//azhidkov.pro//Trainer Advisor Tests//RU")
             .withDefaults()

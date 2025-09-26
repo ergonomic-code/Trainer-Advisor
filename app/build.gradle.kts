@@ -1,5 +1,6 @@
 import kotlinx.kover.gradle.plugin.dsl.AggregationType
 import kotlinx.kover.gradle.plugin.dsl.CoverageUnit
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
 	alias(libs.plugins.kotlin.spring)
@@ -21,11 +22,14 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
 	implementation("org.springframework.boot:spring-boot-starter-mail")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("org.springframework.boot:spring-boot-starter-cache")
+    implementation(libs.caffeine)
 
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.flywaydb:flyway-database-postgresql")
 	implementation(libs.jackarta.validation)
 	implementation(libs.thymeleaf.extras.java8time)
@@ -34,9 +38,13 @@ dependencies {
 	implementation(libs.bundles.poi)
     implementation(libs.nanocaptcha)
 	implementation(libs.ical4j)
+    implementation(libs.google.api.client)
+    implementation(libs.google.calendar.api)
+    implementation(libs.google.oauth.client)
+    implementation(platform(libs.google.auth.bom))
+    implementation("com.google.auth:google-auth-library-oauth2-http")
 
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
-	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
 	testFixturesApi("org.springframework.boot:spring-boot-testcontainers")
 	testFixturesApi(testLibs.kotest.assertions)
@@ -53,17 +61,19 @@ dependencies {
 		exclude("org.eclipse.jetty.http2", "http2-server")
 	}
 	testFixturesApi(testLibs.wiremock.jetty12)
-	testFixturesApi(testLibs.wiremock.kotlin)
 
 	testFixturesImplementation(kotlin("reflect"))
 	testFixturesImplementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 	testFixturesImplementation("org.springframework.boot:spring-boot-starter-web")
 	testFixturesImplementation("org.springframework.boot:spring-boot-starter-security")
+    testFixturesImplementation("org.springframework.boot:spring-boot-starter-oauth2-client")
 	testFixturesImplementation("com.fasterxml.jackson.core:jackson-databind")
 	testFixturesImplementation(libs.minio)
 	testFixturesImplementation(libs.ical4j)
 
 	testFixturesImplementation("org.springframework.boot:spring-boot-starter-test")
+    testFixturesImplementation("org.springframework.security:spring-security-test")
+    testFixturesImplementation("org.springframework.boot:spring-boot-starter-webflux")
 	testFixturesImplementation("org.testcontainers:junit-jupiter")
 	testFixturesImplementation("org.testcontainers:postgresql")
 	testFixturesImplementation(testLibs.testcontainers.minio)
@@ -220,4 +230,8 @@ configurations.matching { it.name == "detekt" }.all {
 			useVersion(io.gitlab.arturbosch.detekt.getSupportedKotlinVersion())
 		}
 	}
+}
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.compilerOptions {
+    freeCompilerArgs.set(listOf("-Xannotation-default-target=param-property"))
 }

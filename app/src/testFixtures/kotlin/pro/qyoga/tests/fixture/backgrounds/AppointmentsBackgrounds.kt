@@ -14,11 +14,7 @@ import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.core.users.therapists.ref
-import pro.qyoga.tests.fixture.data.faker
-import pro.qyoga.tests.fixture.data.randomCyrillicWord
-import pro.qyoga.tests.fixture.data.randomElement
-import pro.qyoga.tests.fixture.data.randomSentence
-import pro.qyoga.tests.fixture.data.randomTimeZone
+import pro.qyoga.tests.fixture.data.*
 import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentsObjectMother
 import pro.qyoga.tests.fixture.object_mothers.appointments.randomAppointmentCost
 import pro.qyoga.tests.fixture.object_mothers.appointments.randomAppointmentDate
@@ -50,7 +46,7 @@ class AppointmentsBackgrounds(
         date: LocalDate,
         therapistUserDetails: QyogaUserDetails = theTherapistUserDetails
     ): Iterable<CalendarItem<*, LocalDateTime>> {
-        return getCalendarAppointments(therapistUserDetails.ref, date)
+        return getCalendarAppointments(therapistUserDetails.ref, date).appointments
     }
 
     fun createFull(

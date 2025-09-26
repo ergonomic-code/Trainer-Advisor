@@ -1,9 +1,10 @@
+@file:Suppress("IDENTITY_SENSITIVE_OPERATIONS_WITH_VALUE_TYPE")
+
 package pro.qyoga.app.therapist.appointments.core.schedule
 
 import org.springframework.web.servlet.ModelAndView
 import pro.qyoga.app.therapist.appointments.core.edit.CreateAppointmentPageController
 import pro.qyoga.app.therapist.appointments.core.edit.EditAppointmentPageController
-import pro.qyoga.app.therapist.appointments.core.edit.view_model.SourceItem
 import pro.qyoga.app.therapist.appointments.core.schedule.AppointmentCard.CssClasses.CLIENT_CAME_CARD
 import pro.qyoga.app.therapist.appointments.core.schedule.AppointmentCard.CssClasses.CLIENT_DO_NOT_CAME_CARD
 import pro.qyoga.app.therapist.appointments.core.schedule.AppointmentCard.CssClasses.DRAFT_CARD
@@ -15,7 +16,7 @@ import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel.Comp
 import pro.qyoga.core.appointments.core.model.AppointmentStatus
 import pro.qyoga.core.appointments.core.views.LocalizedAppointmentSummary
 import pro.qyoga.core.calendar.api.CalendarItem
-import pro.qyoga.core.calendar.ical.model.ICalEventId
+import pro.qyoga.core.calendar.api.CalendarItemId
 import pro.qyoga.l10n.russianDayOfMonthLongFormat
 import pro.qyoga.l10n.russianTimeFormat
 import pro.qyoga.l10n.systemLocale
@@ -42,7 +43,8 @@ data class CalendarPageModel(
     val date: LocalDate,
     val timeMarks: List<TimeMark>,
     val calendarDays: Collection<CalendarDay>,
-    val appointmentToFocus: UUID?
+    val appointmentToFocus: UUID?,
+    val hasSyncErrors: Boolean
 ) : ModelAndView("therapist/appointments/schedule.html") {
 
     init {
@@ -51,18 +53,19 @@ data class CalendarPageModel(
         addObject("calendarDays", calendarDays)
         addObject("selectedDayLabel", date.format(russianDayOfMonthLongFormat))
         addObject(FOCUSED_APPOINTMENT, appointmentToFocus)
+        addObject("hasSyncErrors", hasSyncErrors)
     }
 
     companion object {
 
         fun of(
             date: LocalDate,
-            appointments: Iterable<CalendarItem<*, LocalDateTime>>,
+            appointments: GetCalendarAppointmentsRs,
             appointmentToFocus: UUID? = null
         ): CalendarPageModel {
-            val timeMarks = generateTimeMarks(appointments, date)
+            val timeMarks = generateTimeMarks(appointments.appointments, date)
             val weekCalendar = generateDaysAround(date)
-            return CalendarPageModel(date, timeMarks, weekCalendar, appointmentToFocus)
+            return CalendarPageModel(date, timeMarks, weekCalendar, appointmentToFocus, appointments.hasErrors)
         }
 
         const val FOCUSED_APPOINTMENT = "focusedAppointment"
@@ -261,10 +264,9 @@ data class CalendarDay(
 private fun CalendarItem<*, LocalDateTime>.editUri() =
     when (id) {
         is UUID -> EditAppointmentPageController.editUri(id as UUID)
-        is ICalEventId -> CreateAppointmentPageController.addFromSourceItemUri(
+        is CalendarItemId -> CreateAppointmentPageController.addFromSourceItemUri(
             dateTime,
-            SourceItem.icsEvent(id as ICalEventId)
+            (id as CalendarItemId).toUri()
         )
-
         else -> error("Unsupported type: $id")
     }

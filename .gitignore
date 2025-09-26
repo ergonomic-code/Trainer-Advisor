@@ -16,3 +16,4 @@ out/
 /build/
 
 /deploy/host/secrets.sh
+/app/src/main/resources/application-local-dev-secrets.yaml

@@ -6,11 +6,22 @@ import java.time.LocalDateTime
 import java.time.ZonedDateTime
 
 
-interface CalendarsService {
+data class SearchResult<ID>(
+    val items: Iterable<CalendarItem<ID, LocalDateTime>>,
+    val hasErrors: Boolean = false
+) : Iterable<CalendarItem<ID, LocalDateTime>> by items
+
+interface CalendarsService<ID> {
+
+    val type: CalendarType
 
     fun findCalendarItemsInInterval(
         therapist: TherapistRef,
         interval: Interval<ZonedDateTime>
-    ): Iterable<CalendarItem<*, LocalDateTime>>
+    ): SearchResult<ID>
+
+    fun findById(therapistRef: TherapistRef, eventId: ID): CalendarItem<ID, ZonedDateTime>?
+
+    fun createItemId(itemId: Map<String, String?>): ID
 
 }

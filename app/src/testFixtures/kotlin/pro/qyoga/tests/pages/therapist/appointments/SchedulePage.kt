@@ -9,18 +9,19 @@ import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
 import pro.qyoga.app.therapist.appointments.core.edit.CreateAppointmentPageController
-import pro.qyoga.app.therapist.appointments.core.edit.view_model.SourceItem
 import pro.qyoga.app.therapist.appointments.core.schedule.AppointmentCard
 import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
 import pro.qyoga.app.therapist.appointments.core.schedule.TimeMark
+import pro.qyoga.core.appointments.core.commands.EditAppointmentRequest
 import pro.qyoga.core.appointments.core.model.Appointment
-import pro.qyoga.core.calendar.ical.model.ICalCalendarItem
+import pro.qyoga.i9ns.calendars.ical.model.ICalCalendarItem
 import pro.qyoga.l10n.russianTimeFormat
 import pro.qyoga.tests.assertions.*
 import pro.qyoga.tests.pages.therapist.appointments.CalendarPage.APPOINTMENT_CARD_SELECTOR
 import pro.qyoga.tests.platform.html.*
 import java.time.LocalTime
+import java.time.ZonedDateTime
 
 
 object CalendarPage : HtmlPage {
@@ -28,6 +29,8 @@ object CalendarPage : HtmlPage {
     private val datePickerButton = Button("datePickerButton", "")
 
     private val goToDayLink = Link("goToDayLink-", SchedulePageController.DATE_PATH, "")
+
+    const val SYNC_ERROR_ICON_SELECTOR = ".sync-error-icon"
 
     object RevealAppointmentScript : Script("revealAppointment") {
         val appToFocus = Variable(CalendarPageModel.FOCUSED_APPOINTMENT)
@@ -40,6 +43,7 @@ object CalendarPage : HtmlPage {
 
     override val matcher = Matcher.all(
         haveComponent(datePickerButton),
+        haveComponent(GoogleCalendarSettingsLoaderComponent),
         haveElement("small:contains(07:00)"),
         haveComponents(goToDayLink, CalendarPageModel.DAYS_IN_WEEK),
         haveAtLeastElements(
@@ -60,7 +64,7 @@ infix fun Elements.shouldMatch(appointments: Iterable<Appointment>) {
     this shouldBeSameSizeAs appointments
 
     val timeAndDateComparator = Comparator.comparing<Appointment, LocalTime> { it.wallClockDateTime.toLocalTime() }
-        .thenComparing { it -> it.wallClockDateTime.toLocalDate() }
+        .thenComparing { it.wallClockDateTime.toLocalDate() }
     val appointmentsInHtmlOrder = appointments.sortedWith(timeAndDateComparator)
 
     this.zip(appointmentsInHtmlOrder).forAll { (el, app) ->
@@ -75,12 +79,23 @@ infix fun Elements.shouldMatch(appointments: Iterable<Appointment>) {
     }
 }
 
-infix fun Element.shouldMatch(localizedICalCalendarItem: ICalCalendarItem) {
+infix fun Element.shouldMatch(app: EditAppointmentRequest) {
+    this shouldHaveComponent Link(
+        "editAppointmentLink",
+        EditAppointmentPage,
+        app.client.resolveOrThrow().fullName() + " " +
+                russianTimeFormat.format(app.dateTime) + " - " + russianTimeFormat.format(app.dateTime + app.duration) + " " + app.appointmentTypeTitle
+    )
+    select("div.appointment-card")
+        .single() shouldHaveClass AppointmentCard.appointmentStatusClasses[app.appointmentStatus]!!
+}
+
+infix fun Element.shouldMatch(localizedICalCalendarItem: ICalCalendarItem<ZonedDateTime>) {
     this shouldHaveComponent Link(
         "editAppointmentLink",
         CreateAppointmentPageController.addFromSourceItemUri(
             localizedICalCalendarItem.dateTime.toLocalDateTime(),
-            SourceItem.icsEvent(localizedICalCalendarItem.id)
+            localizedICalCalendarItem.id.toUri()
         ),
         localizedICalCalendarItem.title + " " +
                 russianTimeFormat.format(localizedICalCalendarItem.dateTime) + " - " + russianTimeFormat.format(

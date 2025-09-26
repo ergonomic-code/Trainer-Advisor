@@ -107,7 +107,7 @@ object ClientsObjectMother {
     )
 
     fun randomId() =
-        UUIDv7.randomUUID()
+        UUID.fromString(UUIDv7.randomUUID().toString())
 
     val fakeClientRef: ClientRef = AggregateReferenceTarget(
         createClient(THE_THERAPIST_ID, createClientCardDtoMinimal())

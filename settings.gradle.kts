@@ -15,6 +15,8 @@ dependencyResolutionManagement {
 
             // lib versions
             val poiVersion = version("poi", "5.4.1")
+            val caffeineVersion = version("caffeine", "3.1.8")
+            val googleAuthBomVersion = version("google-auth-bom", "1.30.1")
 
             // plugins
             plugin("kotlin", "org.jetbrains.kotlin.jvm").versionRef(kotlinVersion)
@@ -39,6 +41,7 @@ dependencyResolutionManagement {
 
             library("postgres", "org.postgresql", "postgresql").version("42.7.6")
             library("minio", "io.minio", "minio").version("8.5.17")
+            library("caffeine", "com.github.ben-manes.caffeine", "caffeine").versionRef(caffeineVersion)
 
             library("poi-ooxml", "org.apache.poi", "poi-ooxml").versionRef(poiVersion)
             library("poi-ooxml-lite", "org.apache.poi", "poi-ooxml-lite").versionRef(poiVersion)
@@ -47,6 +50,19 @@ dependencyResolutionManagement {
 
             library("nanocaptcha", "net.logicsquad", "nanocaptcha").version("2.1")
             library("ical4j", "org.mnode.ical4j", "ical4j").version("4.1.1")
+
+            library("google-api-client", "com.google.api-client", "google-api-client").version("2.0.0")
+            library(
+                "google-oauth-client",
+                "com.google.oauth-client",
+                "google-oauth-client-jetty"
+            ).version("1.34.1")
+            library(
+                "google-calendar-api",
+                "com.google.apis",
+                "google-api-services-calendar"
+            ).version("v3-rev20220715-2.0.0")
+            library("google.auth.bom", "com.google.auth", "google-auth-library-bom").versionRef(googleAuthBomVersion)
         }
 
         create("testLibs") {
@@ -84,7 +100,6 @@ dependencyResolutionManagement {
 
             library("wiremock", "org.wiremock", "wiremock").versionRef(wiremockVersion)
             library("wiremock-jetty12", "org.wiremock", "wiremock-jetty12").versionRef(wiremockVersion)
-            library("wiremock-kotlin", "com.marcinziolo", "kotlin-wiremock").version("2.1.1")
         }
     }
 }

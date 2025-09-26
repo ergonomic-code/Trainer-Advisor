@@ -2,6 +2,9 @@ server:
   port: 10803
 
 spring:
+  main:
+    lazy-initialization: true
+
   mail:
     username: qyogapro@yandex.ru
     password: password
@@ -14,3 +17,20 @@ spring:
           auth: true
           starttls:
             enable: true
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            redirect-uri: "http://localhost:${server.port:8080}/therapist/oauth2/google/callback"
+        provider:
+          google:
+            token-uri: http://localhost:8089/google/oauth/token
+            user-info-uri: http://localhost:8089/google/oauth/userinfo
+
+trainer-advisor:
+
+  integrations:
+    google-calendar:
+      root-url: http://localhost:8089/google/

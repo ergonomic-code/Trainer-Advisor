@@ -1,12 +1,12 @@
 package pro.qyoga.app.therapist.appointments.core.edit.forms
 
-import pro.qyoga.app.therapist.appointments.core.edit.view_model.toQueryParamStr
 import pro.qyoga.core.appointments.core.model.AppointmentStatus
 import pro.qyoga.core.appointments.types.model.AppointmentTypeRef
 import pro.qyoga.core.calendar.api.CalendarItem
-import pro.qyoga.core.calendar.ical.model.ICalEventId
+import pro.qyoga.core.calendar.api.CalendarItemId
 import pro.qyoga.core.clients.cards.model.ClientRef
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
+import java.net.URI
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -29,22 +29,22 @@ data class CreateAppointmentForm(
     val payed: Boolean?,
     val appointmentStatus: AppointmentStatus?,
     val comment: String?,
-    val externalId: String?
+    val externalId: URI?
 ) {
 
     constructor(
-        iCalEvent: CalendarItem<ICalEventId, ZonedDateTime>?,
+        externalEvent: CalendarItem<out CalendarItemId, ZonedDateTime>?,
         dateTime: LocalDateTime?,
         timeZone: ZoneId,
         timeZoneTitle: String?
     ) : this(
-        externalId = iCalEvent?.id?.toQueryParamStr(),
+        externalId = externalEvent?.id?.toUri(),
         dateTime = dateTime,
         timeZone = timeZone,
         timeZoneTitle = timeZoneTitle,
-        duration = iCalEvent?.duration,
-        comment = iCalEvent?.description,
-        place = iCalEvent?.location,
+        duration = externalEvent?.duration,
+        comment = formatCommentFor(externalEvent),
+        place = externalEvent?.location,
         client = null,
         clientTitle = null,
         appointmentType = null,
@@ -57,3 +57,10 @@ data class CreateAppointmentForm(
     )
 
 }
+
+fun formatCommentFor(externalEvent: CalendarItem<out CalendarItemId, ZonedDateTime>?): String =
+    listOfNotNull(
+        externalEvent?.title?.takeIf { !it.isBlank() },
+        externalEvent?.description?.takeIf { !it.isBlank() }
+    )
+        .joinToString("\n\n")

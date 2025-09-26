@@ -6,7 +6,9 @@ TRUNCATE
     programs, program_exercises,
     appointments, appointment_types,
     survey_forms_settings,
-    ical_calendars
+    ical_calendars,
+    therapist_google_accounts,
+    therapist_google_calendar_settings
     RESTART IDENTITY;
 
 INSERT INTO users (id, email, password_hash, roles, created_at, version)

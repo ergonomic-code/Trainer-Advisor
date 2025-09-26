@@ -6,6 +6,7 @@ import io.kotest.matchers.compose.all
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldNot
 import org.jsoup.nodes.Element
+import org.springframework.web.util.UriTemplate
 import pro.qyoga.tests.platform.html.Component
 import pro.qyoga.tests.platform.html.HtmlPage
 import pro.qyoga.tests.platform.html.Input
@@ -101,6 +102,14 @@ fun haveAttributeValueMatching(attr: String, valueRegex: Regex) = Matcher { elem
         element.attr(attr).matches(valueRegex),
         { "Element ${element.descr} has $attr=\"${element.attr(attr)}\" but `$attr` value matching \"$valueRegex\" is expected" },
         { "Element ${element.descr} should not have attribute `$attr` value matching \"$valueRegex\"" },
+    )
+}
+
+fun haveAttributeValueMatching(attr: String, uriTemplate: UriTemplate) = Matcher { element: Element ->
+    MatcherResult.invoke(
+        uriTemplate.matches(element.attr(attr)),
+        { "Element ${element.descr} has $attr=\"${element.attr(attr)}\" but `$attr` value matching \"${uriTemplate}}\" is expected" },
+        { "Element ${element.descr} should not have attribute `$attr` value matching \"${uriTemplate}}\"" },
     )
 }
 

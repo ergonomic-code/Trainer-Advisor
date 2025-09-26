@@ -8,13 +8,16 @@ import pro.azhidkov.platform.spring.sdj.ErgoSdjConfig
 import pro.qyoga.app.publc.PublicAppConfig
 import pro.qyoga.app.therapist.TherapistWebAppConfig
 import pro.qyoga.core.appointments.AppointmentsConfig
-import pro.qyoga.core.calendar.ical.ICalCalendarsConfig
+import pro.qyoga.core.calendar.gateways.CalendarGatewaysConf
 import pro.qyoga.core.clients.ClientsConfig
 import pro.qyoga.core.survey_forms.SurveyFormsSettingsConfig
 import pro.qyoga.core.therapy.TherapyConfig
 import pro.qyoga.core.users.UsersConfig
+import pro.qyoga.i9ns.calendars.google.GoogleCalendarConf
+import pro.qyoga.i9ns.calendars.ical.ICalCalendarsConfig
 import pro.qyoga.i9ns.email.EmailsConfig
 import pro.qyoga.infra.auth.AuthConfig
+import pro.qyoga.infra.cache.CacheConf
 import pro.qyoga.infra.db.SdjConfig
 import pro.qyoga.infra.minio.MinioConfig
 import pro.qyoga.infra.timezones.TimeZonesConfig
@@ -33,10 +36,12 @@ import pro.qyoga.tech.captcha.CaptchaConf
     TherapyConfig::class,
     UsersConfig::class,
     SurveyFormsSettingsConfig::class,
-    ICalCalendarsConfig::class,
+    CalendarGatewaysConf::class,
 
     // I9ns
     EmailsConfig::class,
+    ICalCalendarsConfig::class,
+    GoogleCalendarConf::class,
 
     // Tech
     CaptchaConf::class,
@@ -49,7 +54,8 @@ import pro.qyoga.tech.captcha.CaptchaConf
     ErgoSdjConfig::class,
     MinioConfig::class,
     FilesStorageConfig::class,
-    TimeZonesConfig::class
+    TimeZonesConfig::class,
+    CacheConf::class
 )
 @SpringBootApplication
 class QYogaApp
