@@ -18,9 +18,9 @@ import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
 import pro.qyoga.core.appointments.core.commands.EditAppointmentRequest
 import pro.qyoga.core.appointments.core.model.AppointmentRef
-import pro.qyoga.core.calendar.api.SourceItem
 import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentPage
 import pro.qyoga.tests.pages.therapist.appointments.EditAppointmentPage
+import java.net.URI
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -50,7 +50,7 @@ class TherapistAppointmentsApi(
 
     fun getCreateAppointmentPage(
         dateTime: LocalDateTime? = null,
-        sourceItem: SourceItem? = null
+        sourceItem: URI? = null
     ): Document {
         return Given {
             authorized()
@@ -58,8 +58,7 @@ class TherapistAppointmentsApi(
                 queryParam(CreateAppointmentPageController.DATE_TIME, dateTime.toString())
             }
             if (sourceItem != null) {
-                queryParam(CreateAppointmentPageController.SOURCE_ITEM_TYPE, sourceItem.type)
-                queryParam(CreateAppointmentPageController.SOURCE_ITEM_ID, sourceItem.id)
+                queryParam(CreateAppointmentPageController.SOURCE_ITEM, sourceItem.toASCIIString())
             }
             this
         } When {

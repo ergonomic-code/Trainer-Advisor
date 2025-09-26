@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.servlet.ModelAndView
+import org.springframework.web.util.UriComponentsBuilder
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.azhidkov.timezones.LocalizedTimeZone
 import pro.azhidkov.timezones.TimeZones
@@ -19,9 +20,9 @@ import pro.qyoga.app.therapist.appointments.core.edit.ops.GetAppointmentPrefillD
 import pro.qyoga.app.therapist.appointments.core.edit.view_model.appointmentPageModelAndView
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController.Companion.calendarForDayWithFocus
 import pro.qyoga.core.appointments.core.commands.EditAppointmentRequest
-import pro.qyoga.core.calendar.api.SourceItem
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.ref
+import java.net.URI
 import java.time.LocalDateTime
 
 @Controller
@@ -35,14 +36,9 @@ class CreateAppointmentPageController(
     @GetMapping
     fun getAppointmentPage(
         @RequestParam(DATE_TIME) dateTime: LocalDateTime?,
-        @RequestParam(SOURCE_ITEM_TYPE) sourceItemType: String?,
-        @RequestParam(SOURCE_ITEM_ID) sourceItemId: String?,
+        @RequestParam(SOURCE_ITEM) sourceItem: URI?,
         @AuthenticationPrincipal therapist: QyogaUserDetails
     ): ModelAndView {
-        val sourceItem = when {
-            sourceItemType != null && sourceItemId != null -> SourceItem(sourceItemType, sourceItemId)
-            else -> null
-        }
         val prefillData = getAppointmentPrefillData(therapist.ref, sourceItem, dateTime)
         return appointmentPageModelAndView(
             pageMode = EntityPageMode.CREATE,
@@ -77,17 +73,19 @@ class CreateAppointmentPageController(
     companion object {
         const val PATH = "/therapist/appointments/new"
         const val DATE_TIME = "dateTime"
-        const val SOURCE_ITEM_TYPE = "sourceItemType"
-        const val SOURCE_ITEM_ID = "sourceItemId"
+        const val SOURCE_ITEM = "sourceItem"
         const val CREATE_AT_DATE_TIME_URI = "/therapist/appointments/new?$DATE_TIME={$DATE_TIME}"
         private const val CREATE_FROM_SOURCE_ITEM_URI =
-            "/therapist/appointments/new?$DATE_TIME={$DATE_TIME}&$SOURCE_ITEM_TYPE={$SOURCE_ITEM_TYPE}&$SOURCE_ITEM_ID={$SOURCE_ITEM_ID}"
+            "/therapist/appointments/new"
 
-        fun addFromSourceItemUri(dateTime: LocalDateTime, sourceItem: SourceItem): String =
-            CREATE_FROM_SOURCE_ITEM_URI
-                .replace("{$DATE_TIME}", dateTime.toString())
-                .replace("{$SOURCE_ITEM_TYPE}", sourceItem.type)
-                .replace("{$SOURCE_ITEM_ID}", sourceItem.id)
+        fun addFromSourceItemUri(dateTime: LocalDateTime, sourceItem: URI): String =
+            UriComponentsBuilder
+                .fromPath(CREATE_FROM_SOURCE_ITEM_URI)
+                .queryParam("dateTime", dateTime)
+                .queryParam("sourceItem", sourceItem.toString())
+                .encode()
+                .build()
+                .toUriString()
     }
 
 }

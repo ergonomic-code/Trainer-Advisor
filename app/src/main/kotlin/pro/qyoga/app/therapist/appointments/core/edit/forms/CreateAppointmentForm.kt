@@ -6,6 +6,7 @@ import pro.qyoga.core.calendar.api.CalendarItem
 import pro.qyoga.core.calendar.api.CalendarItemId
 import pro.qyoga.core.clients.cards.model.ClientRef
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
+import java.net.URI
 import java.time.Duration
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -28,7 +29,7 @@ data class CreateAppointmentForm(
     val payed: Boolean?,
     val appointmentStatus: AppointmentStatus?,
     val comment: String?,
-    val externalId: String?
+    val externalId: URI?
 ) {
 
     constructor(
@@ -37,7 +38,7 @@ data class CreateAppointmentForm(
         timeZone: ZoneId,
         timeZoneTitle: String?
     ) : this(
-        externalId = externalEvent?.id?.toQueryParamStr(),
+        externalId = externalEvent?.id?.toUri(),
         dateTime = dateTime,
         timeZone = timeZone,
         timeZoneTitle = timeZoneTitle,

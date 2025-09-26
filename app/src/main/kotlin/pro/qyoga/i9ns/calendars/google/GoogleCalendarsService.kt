@@ -4,12 +4,16 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.gson.GsonFactory
 import org.apache.tomcat.util.threads.VirtualThreadExecutor
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import pro.azhidkov.platform.java.time.Interval
 import pro.azhidkov.platform.java.time.zoneId
 import pro.azhidkov.platform.kotlin.tryExecute
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
-import pro.qyoga.core.calendar.api.*
+import pro.qyoga.core.calendar.api.CalendarItem
+import pro.qyoga.core.calendar.api.CalendarType
+import pro.qyoga.core.calendar.api.CalendarsService
+import pro.qyoga.core.calendar.api.SearchResult
 import pro.qyoga.core.users.therapists.TherapistRef
 import java.time.ZonedDateTime
 import java.util.*
@@ -79,9 +83,11 @@ class GoogleCalendarsService(
     private val googleCalendarsClient: GoogleCalendarsClient,
 ) : CalendarsService<GoogleCalendarItemId> {
 
-    override val type: CalendarType = GoogleCalendar.Type
+    private val log = LoggerFactory.getLogger(javaClass)
 
     private val executor = VirtualThreadExecutor("google-calendar-events-fetcher")
+
+    override val type: CalendarType = GoogleCalendar.Type
 
     fun addGoogleAccount(googleAccount: GoogleAccount) {
         googleAccountsDao.addGoogleAccount(googleAccount)
@@ -134,7 +140,12 @@ class GoogleCalendarsService(
         }
 
         val events = calendarEventsResults
-            .mapNotNull { it.getOrNull() }
+            .mapNotNull {
+                if (it.isFailure) {
+                    log.warn("Failed to fetch events for account", it.exceptionOrNull())
+                }
+                it.getOrNull()
+            }
             .flatMap { it }
             .map { it.toLocalizedCalendarItem(interval.zoneId) }
 
@@ -149,8 +160,9 @@ class GoogleCalendarsService(
         return googleCalendarsClient.findById(account, eventId)
     }
 
-    override fun parseStringId(sourceItem: SourceItem): GoogleCalendarItemId =
-        sourceItem.googleEventId()
+    override fun createItemId(itemId: Map<String, String?>): GoogleCalendarItemId {
+        return GoogleCalendarItemId(itemId["cid"]!!, itemId["eid"]!!)
+    }
 
     fun updateCalendarSettings(
         therapist: TherapistRef,
@@ -161,11 +173,4 @@ class GoogleCalendarsService(
         googleCalendarsDao.patchCalendarSettings(therapist, googleAccount, calendarId, settingsPatch)
     }
 
-}
-
-fun SourceItem.googleEventId(): GoogleCalendarItemId {
-    check(type == GoogleCalendar.Type.name)
-    val matcher = "(.+),(.+)".toRegex().matchEntire(id)
-    check(matcher != null)
-    return GoogleCalendarItemId(matcher.groups[1]!!.value, matcher.groups[2]!!.value)
 }

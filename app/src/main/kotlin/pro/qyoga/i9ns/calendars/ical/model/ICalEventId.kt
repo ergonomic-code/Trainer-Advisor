@@ -11,7 +11,9 @@ data class ICalEventId(
 
     override val type: CalendarType = ICalCalendar.Type
 
-    override fun toQueryParamStr(): String =
-        "uid=${uid},rid=${recurrenceId ?: ""}"
+    override fun toMap(): Map<String, String?> = mapOf(
+        "uid" to uid,
+        "rid" to recurrenceId
+    )
 
 }

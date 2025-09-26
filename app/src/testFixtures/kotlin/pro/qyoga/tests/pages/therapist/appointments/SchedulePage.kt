@@ -15,7 +15,6 @@ import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
 import pro.qyoga.app.therapist.appointments.core.schedule.TimeMark
 import pro.qyoga.core.appointments.core.commands.EditAppointmentRequest
 import pro.qyoga.core.appointments.core.model.Appointment
-import pro.qyoga.core.calendar.api.SourceItem
 import pro.qyoga.i9ns.calendars.ical.model.ICalCalendarItem
 import pro.qyoga.l10n.russianTimeFormat
 import pro.qyoga.tests.assertions.*
@@ -95,7 +94,7 @@ infix fun Element.shouldMatch(localizedICalCalendarItem: ICalCalendarItem) {
         "editAppointmentLink",
         CreateAppointmentPageController.addFromSourceItemUri(
             localizedICalCalendarItem.dateTime.toLocalDateTime(),
-            SourceItem(localizedICalCalendarItem.id)
+            localizedICalCalendarItem.id.toUri()
         ),
         localizedICalCalendarItem.title + " " +
                 russianTimeFormat.format(localizedICalCalendarItem.dateTime) + " - " + russianTimeFormat.format(

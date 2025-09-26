@@ -1,5 +1,6 @@
 import kotlinx.kover.gradle.plugin.dsl.AggregationType
 import kotlinx.kover.gradle.plugin.dsl.CoverageUnit
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
 	alias(libs.plugins.kotlin.spring)
@@ -229,4 +230,8 @@ configurations.matching { it.name == "detekt" }.all {
 			useVersion(io.gitlab.arturbosch.detekt.getSupportedKotlinVersion())
 		}
 	}
+}
+val compileKotlin: KotlinCompile by tasks
+compileKotlin.compilerOptions {
+    freeCompilerArgs.set(listOf("-Xannotation-default-target=param-property"))
 }

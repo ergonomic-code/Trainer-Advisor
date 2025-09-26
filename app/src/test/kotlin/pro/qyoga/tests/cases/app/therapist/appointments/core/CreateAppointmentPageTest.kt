@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus
 import pro.azhidkov.platform.java.time.toLocalTimeString
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.qyoga.app.therapist.appointments.core.edit.forms.formatCommentFor
-import pro.qyoga.core.calendar.api.SourceItem
 import pro.qyoga.i9ns.calendars.ical.model.ICalCalendarItem
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.assertions.shouldHave
@@ -167,11 +166,11 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
         // Действие
         val document = theTherapist.appointments.getCreateAppointmentPage(
             dateTime = event.dateTime.toLocalDateTime(),
-            sourceItem = SourceItem(event.id)
+            sourceItem = event.id.toUri()
         )
 
         // Проверка
-        CreateAppointmentForm.externalIdInput.value(document) shouldBe event.id.toQueryParamStr()
+        CreateAppointmentForm.externalIdInput.value(document) shouldBe event.id.toUri().toString()
         CreateAppointmentForm.dateTime.value(document) shouldBe event.dateTime.toLocalDateTime().toString()
         CreateAppointmentForm.timeZone.value(document) shouldBe event.dateTime.zone.id
         CreateAppointmentForm.duration.value(document) shouldBe event.duration.toLocalTimeString()
@@ -190,11 +189,11 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
         // Действие
         val document = theTherapist.appointments.getCreateAppointmentPage(
             dateTime = event.dateTime.toLocalDateTime(),
-            sourceItem = SourceItem(event.id)
+            sourceItem = event.id.toUri()
         )
 
         // Проверка
-        CreateAppointmentForm.externalIdInput.value(document) shouldBe event.id.toQueryParamStr()
+        CreateAppointmentForm.externalIdInput.value(document) shouldBe event.id.toUri().toString()
         CreateAppointmentForm.dateTime.value(document) shouldBe event.dateTime.toLocalDateTime().toString()
         CreateAppointmentForm.timeZone.value(document) shouldBe asiaNovosibirskTimeZone.id
         CreateAppointmentForm.duration.value(document) shouldBe event.duration.toLocalTimeString()

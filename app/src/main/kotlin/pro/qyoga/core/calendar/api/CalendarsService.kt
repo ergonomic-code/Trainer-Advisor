@@ -22,6 +22,6 @@ interface CalendarsService<ID> {
 
     fun findById(therapistRef: TherapistRef, eventId: ID): CalendarItem<ID, ZonedDateTime>?
 
-    fun parseStringId(sourceItem: SourceItem): ID
+    fun createItemId(itemId: Map<String, String?>): ID
 
 }

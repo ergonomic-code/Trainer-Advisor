@@ -17,7 +17,6 @@ import pro.qyoga.core.appointments.core.model.AppointmentStatus
 import pro.qyoga.core.appointments.core.views.LocalizedAppointmentSummary
 import pro.qyoga.core.calendar.api.CalendarItem
 import pro.qyoga.core.calendar.api.CalendarItemId
-import pro.qyoga.core.calendar.api.SourceItem
 import pro.qyoga.l10n.russianDayOfMonthLongFormat
 import pro.qyoga.l10n.russianTimeFormat
 import pro.qyoga.l10n.systemLocale
@@ -267,7 +266,7 @@ private fun CalendarItem<*, LocalDateTime>.editUri() =
         is UUID -> EditAppointmentPageController.editUri(id as UUID)
         is CalendarItemId -> CreateAppointmentPageController.addFromSourceItemUri(
             dateTime,
-            SourceItem(id as CalendarItemId)
+            (id as CalendarItemId).toUri()
         )
         else -> error("Unsupported type: $id")
     }

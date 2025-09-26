@@ -16,8 +16,10 @@ data class GoogleCalendarItemId(
 
     override val type: CalendarType = GoogleCalendar.Type
 
-    override fun toQueryParamStr(): String =
-        "$calendarId,$itemId"
+    override fun toMap(): Map<String, String> = mapOf(
+        "cid" to calendarId,
+        "eid" to itemId
+    )
 
 }
 

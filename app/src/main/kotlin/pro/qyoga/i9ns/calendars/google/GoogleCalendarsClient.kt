@@ -76,7 +76,10 @@ class GoogleCalendarsClient(
         val getCalendarsListRequest = service.CalendarList().list()
 
         val calendarListDto = tryExecute { getCalendarsListRequest.execute() }
-            .getOrElse { return failure(it) }
+            .getOrElse {
+                log.warn("Failed to fetch calendars for therapist {} using {}", therapist, account, it)
+                return failure(it)
+            }
 
         val calendarsList = calendarListDto.items.map {
             GoogleCalendar(therapist, it.id, it.summary)
