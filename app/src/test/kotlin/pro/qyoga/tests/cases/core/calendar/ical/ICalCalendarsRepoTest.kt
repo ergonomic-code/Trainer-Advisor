@@ -11,6 +11,7 @@ import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
 import pro.qyoga.tests.fixture.presets.ICalsCalendarsFixturePresets
 import pro.qyoga.tests.infra.web.QYogaAppBaseKoTest
 import pro.qyoga.tests.platform.instancio.KSelect.Companion.field
+import java.time.ZonedDateTime
 
 
 @DisplayName("Репозиторий ical-календарей")
@@ -25,7 +26,7 @@ class ICalCalendarsRepoTest : QYogaAppBaseKoTest({
             val iCalEvent = aCalendarItem()
             val iCal = getBean<ICalsCalendarsFixturePresets>().createICalCalendarWithSingleEvent(iCalEvent)
             val updatedEvent = aCalendarItem {
-                set(field(ICalCalendarItem::id), iCalEvent.id)
+                set(field(ICalCalendarItem<ZonedDateTime>::id), iCalEvent.id)
             }
             getBean<ICalCalendarsBackgrounds>().updateICalSource(
                 iCal.icsUrl,

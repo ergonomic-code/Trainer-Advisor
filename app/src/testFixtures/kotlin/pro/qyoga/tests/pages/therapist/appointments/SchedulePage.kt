@@ -21,6 +21,7 @@ import pro.qyoga.tests.assertions.*
 import pro.qyoga.tests.pages.therapist.appointments.CalendarPage.APPOINTMENT_CARD_SELECTOR
 import pro.qyoga.tests.platform.html.*
 import java.time.LocalTime
+import java.time.ZonedDateTime
 
 
 object CalendarPage : HtmlPage {
@@ -89,7 +90,7 @@ infix fun Element.shouldMatch(app: EditAppointmentRequest) {
         .single() shouldHaveClass AppointmentCard.appointmentStatusClasses[app.appointmentStatus]!!
 }
 
-infix fun Element.shouldMatch(localizedICalCalendarItem: ICalCalendarItem) {
+infix fun Element.shouldMatch(localizedICalCalendarItem: ICalCalendarItem<ZonedDateTime>) {
     this shouldHaveComponent Link(
         "editAppointmentLink",
         CreateAppointmentPageController.addFromSourceItemUri(

@@ -28,10 +28,7 @@ import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentForm
 import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentPage
 import pro.qyoga.tests.pages.therapist.appointments.EditAppointmentForm
 import pro.qyoga.tests.platform.instancio.KSelect.Companion.field
-import java.time.Duration
-import java.time.LocalDate
-import java.time.LocalTime
-import java.time.ZoneId
+import java.time.*
 import java.time.temporal.ChronoUnit
 import java.util.*
 
@@ -157,9 +154,12 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
     fun createAppointmentWithIcsEventId() {
         // Сетап
         val event = aCalendarItem {
-            set(field(ICalCalendarItem::dateTime), randomAppointmentDate().atZone(asiaNovosibirskTimeZone))
-            set(field(ICalCalendarItem::duration), Duration.ofMinutes(75))
-            set(field(ICalCalendarItem::description), randomSentence())
+            set(
+                field(ICalCalendarItem<ZonedDateTime>::dateTime),
+                randomAppointmentDate().atZone(asiaNovosibirskTimeZone)
+            )
+            set(field(ICalCalendarItem<ZonedDateTime>::duration), Duration.ofMinutes(75))
+            set(field(ICalCalendarItem<ZonedDateTime>::description), randomSentence())
         }
         iCalsCalendarsFixturePresets.createICalCalendarWithSingleEvent(event)
 

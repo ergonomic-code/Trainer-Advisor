@@ -6,6 +6,7 @@ import pro.qyoga.i9ns.calendars.ical.model.ICalCalendarItem
 import pro.qyoga.tests.fixture.backgrounds.ICalCalendarsBackgrounds
 import pro.qyoga.tests.fixture.object_mothers.calendars.ical.ICalCalendarsObjectMother.aIcsFile
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
+import java.time.ZonedDateTime
 
 
 @Component
@@ -14,7 +15,7 @@ class ICalsCalendarsFixturePresets(
 ) {
 
     fun createICalCalendarWithSingleEvent(
-        event: ICalCalendarItem,
+        event: ICalCalendarItem<ZonedDateTime>,
     ): ICalCalendar {
         val icsFile = aIcsFile(event)
 

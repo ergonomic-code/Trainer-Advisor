@@ -14,13 +14,13 @@ import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
 class AppointmentsFixturePresets(
     private val appointmentsBackgrounds: AppointmentsBackgrounds,
     private val clientBackgrounds: ClientsBackgrounds,
-    private val ICalsCalendarsFixturePresets: ICalsCalendarsFixturePresets
+    private val iCalsCalendarsFixturePresets: ICalsCalendarsFixturePresets
 ) {
 
     fun createAppointmentFromIcsEvent(): Appointment {
         val client = clientBackgrounds.aClient()
         val icsEvent = aCalendarItem()
-        ICalsCalendarsFixturePresets.createICalCalendarWithSingleEvent(icsEvent)
+        iCalsCalendarsFixturePresets.createICalCalendarWithSingleEvent(icsEvent)
         val app = appointmentsBackgrounds.create(
             randomEditAppointmentRequest(
                 client = client.ref(),

@@ -15,6 +15,7 @@ import pro.qyoga.i9ns.calendars.ical.ical4j.toICalCalendarItem
 import pro.qyoga.i9ns.calendars.ical.model.*
 import pro.qyoga.i9ns.calendars.ical.persistance.ICalCalendarsDao
 import pro.qyoga.i9ns.calendars.ical.persistance.findAllByOwner
+import java.time.LocalDateTime
 import java.time.ZonedDateTime
 
 
@@ -71,6 +72,6 @@ class ICalCalendarsRepo(
 
 private fun ICalCalendar.localizedICalCalendarItemsIn(
     interval: Interval<ZonedDateTime>,
-): List<LocalizedICalCalendarItem> =
+): List<ICalCalendarItem<LocalDateTime>> =
     (this.calendarItemsIn(interval) ?: emptyList())
-        .map(ICalCalendarItem::toLocalizedICalCalendarItem)
+        .map { it.toLocalizedICalCalendarItem() }

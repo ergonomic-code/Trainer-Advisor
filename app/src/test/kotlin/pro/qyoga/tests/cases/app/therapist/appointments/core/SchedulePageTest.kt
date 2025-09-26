@@ -24,6 +24,7 @@ import pro.qyoga.tests.pages.therapist.appointments.appointmentCards
 import pro.qyoga.tests.pages.therapist.appointments.shouldMatch
 import pro.qyoga.tests.platform.instancio.KSelect.Companion.field
 import java.time.LocalDate
+import java.time.ZonedDateTime
 
 
 @DisplayName("Страница календаря")
@@ -115,8 +116,11 @@ class SchedulePageTest : QYogaAppIntegrationBaseTest() {
         // Сетап
         val today = LocalDate.now()
         val event = aCalendarItem {
-            set(field(ICalCalendarItem::dateTime), today.atTime(randomWorkingTime()).atZone(asiaNovosibirskTimeZone))
-            set(field(ICalCalendarItem::duration), AppointmentsObjectMother.fullCardDuration)
+            set(
+                field(ICalCalendarItem<ZonedDateTime>::dateTime),
+                today.atTime(randomWorkingTime()).atZone(asiaNovosibirskTimeZone)
+            )
+            set(field(ICalCalendarItem<ZonedDateTime>::duration), AppointmentsObjectMother.fullCardDuration)
         }
 
         ICalsCalendarsFixturePresets.createICalCalendarWithSingleEvent(event)

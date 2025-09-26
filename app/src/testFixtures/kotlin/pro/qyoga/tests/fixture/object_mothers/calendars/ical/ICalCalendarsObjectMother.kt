@@ -16,6 +16,7 @@ import pro.qyoga.tests.fixture.object_mothers.calendars.CalendarsObjectMother
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
 import java.io.StringWriter
 import java.net.URI
+import java.time.ZonedDateTime
 import java.time.temporal.Temporal
 
 
@@ -30,14 +31,14 @@ object ICalCalendarsObjectMother {
         )
     }
 
-    fun aIcsFile(event: ICalCalendarItem): String {
+    fun aIcsFile(event: ICalCalendarItem<ZonedDateTime>): String {
         val calendar = aICalCalendar(event)
         val icsFile = StringWriter()
         CalendarOutputter().output(calendar, icsFile)
         return icsFile.toString()
     }
 
-    fun aICalCalendar(event: ICalCalendarItem): Calendar {
+    fun aICalCalendar(event: ICalCalendarItem<ZonedDateTime>): Calendar {
         val calendar = Calendar()
             .withProdId("-//azhidkov.pro//Trainer Advisor Tests//RU")
             .withDefaults()

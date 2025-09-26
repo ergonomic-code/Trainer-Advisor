@@ -55,10 +55,10 @@ val VEvent.geographicsPosOrNull: String?
 val VEvent.locationOrNull: String?
     get() = this.location?.value
 
-fun VEvent.toICalCalendarItem(): ICalCalendarItem =
+fun VEvent.toICalCalendarItem(): ICalCalendarItem<ZonedDateTime> =
     toICalCalendarItem(Period(startDateTime, startDateTime + javaDuration))
 
-fun VEvent.toICalCalendarItem(period: Period<ZonedDateTime>): ICalCalendarItem = ICalCalendarItem(
+fun VEvent.toICalCalendarItem(period: Period<ZonedDateTime>): ICalCalendarItem<ZonedDateTime> = ICalCalendarItem(
     id,
     title,
     descriptionOrNull ?: "",
