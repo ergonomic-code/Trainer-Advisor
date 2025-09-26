@@ -56,6 +56,7 @@ class WebSecurityConfig(
                         HttpMethod.GET,
                         "/",
                         "/offline.html",
+                        "/privacy-policy.html",
                         "/manifest.json",
                         "/register",
                         "/oauth2/**",
@@ -101,7 +102,7 @@ class WebSecurityConfig(
     @Bean
     fun tokenRepository(): PersistentTokenRepository {
         val jdbcTokenRepositoryImpl = JdbcTokenRepositoryImpl()
-        jdbcTokenRepositoryImpl.setDataSource(dataSource)
+        jdbcTokenRepositoryImpl.dataSource = dataSource
         return jdbcTokenRepositoryImpl
     }
 
