@@ -49,25 +49,25 @@ class GoogleCalendarsClient(
 
     @Cacheable(
         cacheNames = [GoogleCalendarConf.CacheNames.CALENDAR_EVENTS],
-        key = "#calendarSettings.calendarId + ':' + #interval.from.toInstant().toEpochMilli() + ':' + #interval.to.toInstant().toEpochMilli()"
+        key = "#calendarId + ':' + #interval.from.toInstant().toEpochMilli() + ':' + #interval.to.toInstant().toEpochMilli()"
     )
     fun getEvents(
         account: GoogleAccount,
-        calendarSettings: GoogleCalendarSettings,
-        interval: Interval<ZonedDateTime>
+        interval: Interval<ZonedDateTime>,
+        calendarId: String
     ): List<GoogleCalendarItem<ZonedDateTime>> {
-        log.info("Fetching events in {} for calendar {} using {}", interval, calendarSettings.calendarId, account)
+        log.info("Fetching events in {} for calendar {} using {}", interval, calendarId, account)
 
         val service = calendarServicesCache.getValue(account)
         val events =
-            service.events().list(calendarSettings.calendarId)
+            service.events().list(calendarId)
                 .setTimeMin(DateTime(interval.from.toInstant().toEpochMilli()))
                 .setTimeMax(DateTime(interval.to.toInstant().toEpochMilli()))
                 .setOrderBy("startTime")
                 .setSingleEvents(true)
                 .execute()
                 .items
-                .map { mapToCalendarItem(calendarSettings.calendarId, it) }
+                .map { mapToCalendarItem(calendarId, it) }
         return events
     }
 

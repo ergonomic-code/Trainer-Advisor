@@ -5,6 +5,6 @@ import pro.qyoga.core.users.therapists.TherapistRef
 data class GoogleCalendarSettings(
     val ownerRef: TherapistRef,
     val googleAccountRef: GoogleAccountRef,
-    val calendarId: String,
+    val calendarId: GoogleCalendarId,
     val shouldBeShown: Boolean,
 )

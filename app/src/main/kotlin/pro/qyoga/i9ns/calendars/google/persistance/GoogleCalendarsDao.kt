@@ -6,7 +6,6 @@ import pro.azhidkov.platform.spring.jdbc.taDataClassRowMapper
 import pro.azhidkov.platform.uuid.UUIDv7
 import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.i9ns.calendars.google.model.GoogleAccountRef
-import pro.qyoga.i9ns.calendars.google.model.GoogleCalendarId
 import pro.qyoga.i9ns.calendars.google.model.GoogleCalendarSettings
 
 typealias GoogleCalendarSettingsPatch = Map<String, Any>
@@ -39,16 +38,23 @@ class GoogleCalendarsDao(
             .update()
     }
 
-    fun findCalendarsSettings(therapist: TherapistRef): Map<GoogleCalendarId, GoogleCalendarSettings> {
+    fun findCalendarsSettings(
+        therapist: TherapistRef,
+        shouldBeShown: Boolean? = null
+    ): List<GoogleCalendarSettings> {
         val query = """
-            SELECT * FROM therapist_google_calendar_settings WHERE owner_ref = :ownerRef
+            SELECT * 
+            FROM therapist_google_calendar_settings 
+            WHERE owner_ref = :ownerRef
+                ${shouldBeShown?.let { "AND should_be_shown = :shouldBeShown" } ?: ""}
         """
 
+        @Suppress("SqlSourceToSinkFlow")
         return jdbcClient.sql(query)
             .param("ownerRef", therapist.id)
+            .param("shouldBeShown", shouldBeShown)
             .query(googleCalendarSettingsRowMapper)
             .list()
-            .associateBy(GoogleCalendarSettings::calendarId)
     }
 
 }

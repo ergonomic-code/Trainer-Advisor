@@ -1,6 +1,6 @@
 package pro.qyoga.i9ns.calendars.google
 
-import org.apache.tomcat.util.threads.VirtualThreadExecutor
+import jakarta.annotation.PreDestroy
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import pro.azhidkov.platform.java.time.Interval
@@ -13,17 +13,22 @@ import pro.qyoga.core.calendar.api.CalendarsService
 import pro.qyoga.core.calendar.api.SearchResult
 import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.i9ns.calendars.google.client.GoogleCalendarsClient
-import pro.qyoga.i9ns.calendars.google.model.GoogleAccount
-import pro.qyoga.i9ns.calendars.google.model.GoogleAccountRef
-import pro.qyoga.i9ns.calendars.google.model.GoogleCalendar
-import pro.qyoga.i9ns.calendars.google.model.GoogleCalendarItemId
+import pro.qyoga.i9ns.calendars.google.model.*
 import pro.qyoga.i9ns.calendars.google.persistance.GoogleAccountsDao
 import pro.qyoga.i9ns.calendars.google.persistance.GoogleCalendarSettingsPatch
 import pro.qyoga.i9ns.calendars.google.persistance.GoogleCalendarsDao
 import pro.qyoga.i9ns.calendars.google.views.GoogleAccountCalendarsSettingsView
 import java.time.ZonedDateTime
+import java.util.*
 import java.util.concurrent.CompletableFuture
+import java.util.concurrent.CompletableFuture.supplyAsync
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
 
+
+private typealias GoogleCalendarItemsFetchResult = Result<List<GoogleCalendarItem<ZonedDateTime>>>
+
+private val log = LoggerFactory.getLogger(GoogleCalendarsService::class.java)
 
 @Service
 class GoogleCalendarsService(
@@ -32,11 +37,14 @@ class GoogleCalendarsService(
     private val googleCalendarsClient: GoogleCalendarsClient,
 ) : CalendarsService<GoogleCalendarItemId> {
 
-    private val log = LoggerFactory.getLogger(javaClass)
-
-    private val executor = VirtualThreadExecutor("google-calendar-events-fetcher")
+    private val executor = Executors.newVirtualThreadPerTaskExecutor()
 
     override val type: CalendarType = GoogleCalendar.Type
+
+    @PreDestroy
+    fun tearDown() {
+        executor.shutdown()
+    }
 
     fun addGoogleAccount(googleAccount: GoogleAccount) {
         googleAccountsDao.addGoogleAccount(googleAccount)
@@ -52,6 +60,7 @@ class GoogleCalendarsService(
         }
 
         val calendarSettings = googleCalendarsDao.findCalendarsSettings(therapist)
+            .associateBy { it.calendarId }
 
         return accountCalendars.map { (account, calendars) ->
             GoogleAccountCalendarsSettingsView.of(account, calendars, calendarSettings)
@@ -62,46 +71,39 @@ class GoogleCalendarsService(
         therapist: TherapistRef,
         interval: Interval<ZonedDateTime>
     ): SearchResult<GoogleCalendarItemId> {
-        val googleCalendarSettings = googleCalendarsDao.findCalendarsSettings(therapist)
-        if (googleCalendarSettings.isEmpty()) {
+        val enabledGoogleCalendars = googleCalendarsDao.findCalendarsSettings(
+            therapist = therapist,
+            shouldBeShown = true
+        )
+        if (enabledGoogleCalendars.isEmpty()) {
             return SearchResult(emptyList())
         }
-        val accountCalendars = googleCalendarSettings.values.groupBy { it.googleAccountRef.id }
-        val accountIds = googleCalendarSettings.values.map { it.googleAccountRef }
+
+        val accountCalendars = enabledGoogleCalendars.groupBy { it.googleAccountRef.id!! }
+        val accountIds = enabledGoogleCalendars.map { it.googleAccountRef }
             .distinct()
         val accounts = googleAccountsDao.findGoogleAccounts(accountIds)
 
-        val fetchTasks = accounts
-            .flatMap { account ->
-
-                val settings = accountCalendars[account.ref().id]
-                    ?: return@flatMap emptyList()
-
-                settings
-                    .filter { it.shouldBeShown }
-                    .map { calendarSettings ->
-                        CompletableFuture.supplyAsync(
-                            {
-                                googleCalendarsClient.getEvents(account, calendarSettings, interval)
-                            }, executor
-                        )
-                    }
-            }
-        val calendarEventsResults = fetchTasks.map {
-            tryExecute { it.get() }
-        }
-
-        val events = calendarEventsResults
-            .mapNotNull {
-                if (it.isFailure) {
-                    log.warn("Failed to fetch events for account", it.exceptionOrNull())
+        val calendarEventsFetchResults: List<GoogleCalendarItemsFetchResult> =
+            createFetchTasks(accounts, accountCalendars, interval) { account, interval, calendarId ->
+                tryExecute {
+                    googleCalendarsClient.getEvents(account, interval, calendarId)
+                }.onFailure {
+                    log.warn("Failed to fetch events for account", it)
                 }
-                it.getOrNull()
             }
-            .flatMap { it }
+                .submitAll(executor)
+                .awaitAll()
+
+        val items = calendarEventsFetchResults
+            .mapNotNull { it.getOrNull() }
+            .flatten()
             .map { it.toLocalizedCalendarItem(interval.zoneId) }
 
-        return SearchResult(events, hasErrors = calendarEventsResults.any { it.isFailure })
+        return SearchResult(
+            items = items,
+            hasErrors = calendarEventsFetchResults.any { it.isFailure }
+        )
     }
 
     override fun findById(
@@ -128,3 +130,25 @@ class GoogleCalendarsService(
     }
 
 }
+
+private fun createFetchTasks(
+    accounts: List<GoogleAccount>,
+    settingsByAccount: Map<UUID, List<GoogleCalendarSettings>>,
+    interval: Interval<ZonedDateTime>,
+    fetch: (GoogleAccount, Interval<ZonedDateTime>, GoogleCalendarId) -> GoogleCalendarItemsFetchResult
+): List<() -> GoogleCalendarItemsFetchResult> =
+    accounts.flatMap { account ->
+        val settings = settingsByAccount[account.ref().id!!]
+            ?: return@flatMap emptyList()
+
+        settings
+            .map { settings -> { fetch(account, interval, settings.calendarId) } }
+    }
+
+private fun List<() -> GoogleCalendarItemsFetchResult>.submitAll(executor: Executor): List<CompletableFuture<GoogleCalendarItemsFetchResult>> =
+    this.map { task ->
+        supplyAsync(task, executor)
+    }
+
+private fun List<CompletableFuture<GoogleCalendarItemsFetchResult>>.awaitAll(): List<GoogleCalendarItemsFetchResult> =
+    this.map(CompletableFuture<GoogleCalendarItemsFetchResult>::get)
