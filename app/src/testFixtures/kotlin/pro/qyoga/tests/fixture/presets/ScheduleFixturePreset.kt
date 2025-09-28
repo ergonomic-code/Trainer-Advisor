@@ -4,11 +4,8 @@ import org.springframework.stereotype.Component
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.qyoga.core.appointments.core.commands.EditAppointmentRequest
 import pro.qyoga.core.clients.cards.model.Client
-import pro.qyoga.core.clients.cards.model.ClientId
 import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.i9ns.calendars.google.model.GoogleAccount
-import pro.qyoga.i9ns.calendars.google.model.GoogleAccountId
-import pro.qyoga.i9ns.calendars.google.model.GoogleAccountRef
 import pro.qyoga.i9ns.calendars.google.model.GoogleCalendarSettings
 import pro.qyoga.tests.fixture.backgrounds.AppointmentsBackgrounds
 import pro.qyoga.tests.fixture.backgrounds.ClientsBackgrounds
@@ -19,22 +16,21 @@ import pro.qyoga.tests.fixture.object_mothers.calendars.google.GoogleCalendarObj
 import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
 import pro.qyoga.tests.fixture.test_apis.GoogleCalendarTestApi
+import pro.qyoga.tests.fixture.wiremocks.GoogleAccessToken
 import pro.qyoga.tests.fixture.wiremocks.MockGoogleCalendar
 import pro.qyoga.tests.fixture.wiremocks.MockGoogleOAuthServer
 
 
-typealias GoogleAccessToken = String
-
 data class ScheduleFixture(
-    val clients: Map<ClientId, Client>,
-    val appointments: Map<ClientId, List<EditAppointmentRequest>>,
+    val clients: List<Client>,
+    val appointments: List<EditAppointmentRequest>,
     val googleAccounts: List<Pair<GoogleAccount, GoogleAccessToken>>,
-    val googleCalendars: Map<GoogleAccountId, List<GoogleCalendarSettings>>,
+    val googleCalendars: List<GoogleCalendarSettings>,
     val therapist: TherapistRef = THE_THERAPIST_REF
 ) {
 
     fun theAppointment() =
-        appointments.values.single().single()
+        appointments.single()
 
 }
 
@@ -48,12 +44,10 @@ class ScheduleFixturePreset(
 ) {
 
     fun insertFixture(scheduleFixture: ScheduleFixture) {
-        clientsBackgrounds.createClients(scheduleFixture.clients.values)
+        clientsBackgrounds.createClients(scheduleFixture.clients)
 
-        scheduleFixture.appointments.forEach { (clientId, appointments) ->
-            appointments.forEach {
-                appointmentsBackgrounds.create(it, scheduleFixture.therapist)
-            }
+        scheduleFixture.appointments.forEach {
+            appointmentsBackgrounds.create(it, scheduleFixture.therapist)
         }
         scheduleFixture.googleAccounts.forEach { (acc, accessToken) ->
             googleCalendarTestApi.addAccount(acc)
@@ -61,17 +55,14 @@ class ScheduleFixturePreset(
             mockGoogleCalendar.OnGetCalendars(accessToken)
         }
         scheduleFixture.googleCalendars
-            .forEach { (accountId, calendars) ->
-                calendars
-                    .filter { it.shouldBeShown }
-                    .forEach {
-                        googleCalendarTestApi.setShouldBeShown(
-                            scheduleFixture.therapist,
-                            GoogleAccountRef.to(accountId),
-                            it.calendarId,
-                            true
-                        )
-                    }
+            .filter { it.shouldBeShown }
+            .forEach {
+                googleCalendarTestApi.setShouldBeShown(
+                    scheduleFixture.therapist,
+                    it.googleAccountRef,
+                    it.calendarId,
+                    true
+                )
             }
     }
 
@@ -89,10 +80,10 @@ class ScheduleFixturePreset(
             )
 
             return ScheduleFixture(
-                mapOf(client.id to client),
-                mapOf(client.id to listOf(appointment)),
+                listOf(client),
+                listOf(appointment),
                 listOf(googleAccount to aGoogleToken()),
-                mapOf(googleAccount.id to listOf(googleCalendar))
+                listOf(googleCalendar)
             )
         }
 

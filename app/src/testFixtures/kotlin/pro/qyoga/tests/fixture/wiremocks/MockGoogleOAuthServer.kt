@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component
 import pro.qyoga.app.therapist.oauth2.GoogleOAuthController
 
 
+typealias GoogleAccessToken = String
+
 @Component
 class MockGoogleOAuthServer(
     private val wiremockServer: WireMockServer
@@ -52,7 +54,7 @@ class MockGoogleOAuthServer(
 
     }
 
-    inner class OnGetUserInfo(private val accessToken: String) {
+    inner class OnGetUserInfo(private val accessToken: GoogleAccessToken) {
 
         fun returnsUserInfo(googleEmail: String) {
             wiremockServer.stubFor(
@@ -78,7 +80,7 @@ class MockGoogleOAuthServer(
     inner class OnRefreshToken(private val refreshToken: String) {
 
         fun returnsToken(
-            authToken: String = "authToken"
+            accessToken: GoogleAccessToken = "authToken"
         ) {
             wiremockServer
                 .stubFor(
@@ -92,7 +94,7 @@ class MockGoogleOAuthServer(
                                 .withBody(
                                     """
                                           {
-                                              "access_token": "$authToken",
+                                              "access_token": "$accessToken",
                                               "token_type": "Bearer",
                                               "expires_in": 3599,
                                               "refresh_token": "$refreshToken",
