@@ -1,19 +1,15 @@
-package pro.qyoga.i9ns.calendars.google
+package pro.qyoga.i9ns.calendars.google.persistance
 
 import org.springframework.jdbc.core.simple.JdbcClient
 import org.springframework.stereotype.Repository
 import pro.azhidkov.platform.spring.jdbc.taDataClassRowMapper
 import pro.azhidkov.platform.uuid.UUIDv7
 import pro.qyoga.core.users.therapists.TherapistRef
+import pro.qyoga.i9ns.calendars.google.model.GoogleAccountRef
+import pro.qyoga.i9ns.calendars.google.model.GoogleCalendarId
+import pro.qyoga.i9ns.calendars.google.model.GoogleCalendarSettings
 
 typealias GoogleCalendarSettingsPatch = Map<String, Any>
-
-data class GoogleCalendarSettings(
-    val ownerRef: TherapistRef,
-    val googleAccountRef: GoogleAccountRef,
-    val calendarId: String,
-    val shouldBeShown: Boolean,
-)
 
 @Repository
 class GoogleCalendarsDao(
@@ -43,7 +39,7 @@ class GoogleCalendarsDao(
             .update()
     }
 
-    fun findCalendarsSettings(therapist: TherapistRef): Map<String, GoogleCalendarSettings> {
+    fun findCalendarsSettings(therapist: TherapistRef): Map<GoogleCalendarId, GoogleCalendarSettings> {
         val query = """
             SELECT * FROM therapist_google_calendar_settings WHERE owner_ref = :ownerRef
         """

@@ -10,8 +10,8 @@ import org.springframework.web.client.RestClient
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.Therapist
 import pro.qyoga.core.users.therapists.TherapistRef
-import pro.qyoga.i9ns.calendars.google.GoogleAccount
 import pro.qyoga.i9ns.calendars.google.GoogleCalendarsService
+import pro.qyoga.i9ns.calendars.google.model.GoogleAccount
 import java.util.*
 
 /**
@@ -28,7 +28,6 @@ class GoogleOAuthController(
     private val googleCalendarsService: GoogleCalendarsService
 ) {
 
-    // Этот endpoint теперь будет работать с oauth2Client
     @GetMapping(PATH)
     fun handleOAuthCallback(
         @RegisteredOAuth2AuthorizedClient("google") authorizedClient: OAuth2AuthorizedClient,
@@ -44,7 +43,6 @@ class GoogleOAuthController(
             .body(Map::class.java)
         val email = response
             ?.get("email") as String
-        val picture = response["picture"] as? String?
 
         googleCalendarsService.addGoogleAccount(
             GoogleAccount(therapistId, email, authorizedClient.refreshToken!!.tokenValue)

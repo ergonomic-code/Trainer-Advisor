@@ -10,8 +10,8 @@ import org.jsoup.select.Elements
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
 import pro.qyoga.app.therapist.appointments.core.edit.CreateAppointmentPageController
 import pro.qyoga.app.therapist.appointments.core.schedule.AppointmentCard
-import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
+import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageModel
 import pro.qyoga.app.therapist.appointments.core.schedule.TimeMark
 import pro.qyoga.core.appointments.core.commands.EditAppointmentRequest
 import pro.qyoga.core.appointments.core.model.Appointment
@@ -33,7 +33,7 @@ object CalendarPage : HtmlPage {
     const val SYNC_ERROR_ICON_SELECTOR = ".sync-error-icon"
 
     object RevealAppointmentScript : Script("revealAppointment") {
-        val appToFocus = Variable(CalendarPageModel.FOCUSED_APPOINTMENT)
+        val appToFocus = Variable(SchedulePageModel.FOCUSED_APPOINTMENT)
         override val vars: List<Variable> = listOf(appToFocus)
     }
 
@@ -45,10 +45,10 @@ object CalendarPage : HtmlPage {
         haveComponent(datePickerButton),
         haveComponent(GoogleCalendarSettingsLoaderComponent),
         haveElement("small:contains(07:00)"),
-        haveComponents(goToDayLink, CalendarPageModel.DAYS_IN_WEEK),
+        haveComponents(goToDayLink, SchedulePageModel.DAYS_IN_WEEK),
         haveAtLeastElements(
             addAppointmentLink,
-            CalendarPageModel.DAYS_IN_CALENDAR * TimeMark.marksPerHour * (CalendarPageModel.DEFAULT_END_HOUR - CalendarPageModel.DEFAULT_START_HOUR)
+            SchedulePageModel.DAYS_IN_CALENDAR * TimeMark.marksPerHour * (SchedulePageModel.DEFAULT_END_HOUR - SchedulePageModel.DEFAULT_START_HOUR)
         )
     )
 

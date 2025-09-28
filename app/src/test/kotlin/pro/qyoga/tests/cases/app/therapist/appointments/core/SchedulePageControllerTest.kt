@@ -3,8 +3,8 @@ package pro.qyoga.tests.cases.app.therapist.appointments.core
 import io.kotest.core.annotation.DisplayName
 import io.kotest.matchers.collections.shouldHaveSize
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
-import pro.qyoga.i9ns.calendars.google.GoogleCalendarItem
-import pro.qyoga.i9ns.calendars.google.GoogleCalendarItemId
+import pro.qyoga.i9ns.calendars.google.model.GoogleCalendarItem
+import pro.qyoga.i9ns.calendars.google.model.GoogleCalendarItemId
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.fixture.data.faker
 import pro.qyoga.tests.fixture.data.randomWorkingTime

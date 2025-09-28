@@ -51,8 +51,8 @@ private fun calendarIntervalAround(
     date: LocalDate,
     currentUserTimeZone: ZoneId
 ): Interval<ZonedDateTime> {
-    val from = date.minusDays((CalendarPageModel.DAYS_IN_CALENDAR / 2).toLong()).atStartOfDay(currentUserTimeZone)
-    return Interval.of(from, Duration.ofDays(CalendarPageModel.DAYS_IN_CALENDAR.toLong()))
+    val from = date.minusDays((SchedulePageModel.DAYS_IN_CALENDAR / 2).toLong()).atStartOfDay(currentUserTimeZone)
+    return Interval.of(from, Duration.ofDays(SchedulePageModel.DAYS_IN_CALENDAR.toLong()))
 }
 
 private fun Result<SearchResult<*>>.items(): Iterable<CalendarItem<out Any?, LocalDateTime>> =

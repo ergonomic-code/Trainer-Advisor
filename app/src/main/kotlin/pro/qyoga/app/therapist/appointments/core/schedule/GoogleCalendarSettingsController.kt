@@ -7,20 +7,8 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.ref
-import pro.qyoga.i9ns.calendars.google.GoogleAccountCalendarsView
-import pro.qyoga.i9ns.calendars.google.GoogleAccountRef
 import pro.qyoga.i9ns.calendars.google.GoogleCalendarsService
-
-data class GoogleCalendarSettingsPageModel(
-    val accounts: List<GoogleAccountCalendarsView>
-) : ModelAndView("therapist/appointments/google-settings-component.html") {
-
-    init {
-        addObject("accounts", accounts)
-        addObject("hasAccounts", accounts.isNotEmpty())
-    }
-
-}
+import pro.qyoga.i9ns.calendars.google.model.GoogleAccountRef
 
 @Controller
 class GoogleCalendarSettingsController(
@@ -55,7 +43,7 @@ class GoogleCalendarSettingsController(
 
         fun updateCalendarSettingsPath(googleAccount: GoogleAccountRef, calendarId: String): String =
             UPDATE_CALENDAR_SETTINGS_PATH
-                .replace("{googleAccount}", googleAccount.id.toString())
+                .replace("{googleAccount}", googleAccount.id?.toString() ?: "")
                 .replace("{calendarId}", calendarId)
 
     }

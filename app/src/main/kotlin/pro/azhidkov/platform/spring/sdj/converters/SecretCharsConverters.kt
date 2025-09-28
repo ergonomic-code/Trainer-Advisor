@@ -7,7 +7,7 @@ import pro.azhidkov.platform.secrets.SecretChars
 
 @WritingConverter
 class SecretCharsToString : Converter<SecretChars, String> {
-    override fun convert(source: SecretChars) = String(source.value)
+    override fun convert(source: SecretChars) = source.show()
 }
 
 @ReadingConverter

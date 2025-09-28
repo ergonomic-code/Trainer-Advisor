@@ -1,6 +1,8 @@
 package pro.azhidkov.platform.secrets
 
-data class SecretChars(val value: CharArray) {
+data class SecretChars(
+    private val value: CharArray
+) {
 
     fun show() =
         String(value)

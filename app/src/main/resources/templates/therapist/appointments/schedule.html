@@ -58,7 +58,8 @@
 
         window.addEventListener("load", () => {
             document.body.addEventListener('htmx:afterSwap', function (evt) {
-                if (evt.detail.xhr.status === 200) {
+                const openedUrl = new URL(evt.detail.requestConfig.path, window.location.origin);
+                if (evt.detail.xhr.status === 200 && openedUrl.pathname === '/therapist/schedule') {
                     revealAppointment();
                 }
             })
@@ -68,20 +69,20 @@
     </script>
 
     <script defer id="autoOpenSettingsModal">
-        function checkForSettingsModal() {
+        function autoOpenSettingsModal() {
             const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('google-connected') === 'true') {
-                const settingsModal = new bootstrap.Modal(document.getElementById('settingsModal'));
-                settingsModal.show();
-
-                // Удаляем параметр из URL
-                urlParams.delete('google-connected');
-                const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
-                window.history.replaceState({}, '', newUrl);
+            if (urlParams.get('google-connected') !== 'true') {
+                return;
             }
+
+            const settingsModal = new bootstrap.Modal(document.getElementById('settingsModal'));
+            settingsModal.show();
+            urlParams.delete('google-connected');
+            const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+            window.history.replaceState({}, '', newUrl);
         }
 
-        window.addEventListener("load", checkForSettingsModal);
+        window.addEventListener("load", autoOpenSettingsModal);
     </script>
 
 </head>
@@ -189,8 +190,8 @@
             </div>
             <div class="modal-body">
                 <div hx-get="/therapist/schedule/settings/google-calendar"
-                     hx-swap="outerHTML"
-                     hx-trigger="intersect once"
+                     hx-swap="innerHTML"
+                     hx-trigger="intersect"
                      id="google-calendar-settings-container">
                     <div class="text-center py-3">
                         <div class="mt-2">

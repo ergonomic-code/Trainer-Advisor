@@ -2,7 +2,6 @@ package pro.qyoga.tests.fixture.object_mothers.clients
 
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.AggregateReferenceTarget
-import pro.azhidkov.platform.uuid.UUIDv7
 import pro.qyoga.app.therapist.clients.list.ClientListItemView
 import pro.qyoga.core.clients.cards.Client
 import pro.qyoga.core.clients.cards.dtos.ClientCardDto
@@ -107,7 +106,7 @@ object ClientsObjectMother {
     )
 
     fun randomId() =
-        UUID.fromString(UUIDv7.randomUUID().toString())
+        faker.randomUUID()
 
     val fakeClientRef: ClientRef = AggregateReferenceTarget(
         createClient(THE_THERAPIST_ID, createClientCardDtoMinimal())

@@ -7,7 +7,7 @@ import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationResp
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.BodyInserters.fromValue
 import pro.qyoga.app.therapist.appointments.core.schedule.GoogleCalendarSettingsController
-import pro.qyoga.i9ns.calendars.google.GoogleAccountRef
+import pro.qyoga.i9ns.calendars.google.model.GoogleAccountRef
 import pro.qyoga.tests.platform.spring.web_test_client.getBodyAsString
 import pro.qyoga.tests.platform.spring.web_test_client.redirectLocation
 import java.net.URI

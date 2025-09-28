@@ -14,8 +14,8 @@ import org.springframework.http.HttpStatus
 import pro.azhidkov.platform.java.time.toLocalTimeString
 import pro.qyoga.app.therapist.appointments.core.edit.CreateAppointmentPageController
 import pro.qyoga.app.therapist.appointments.core.edit.EditAppointmentPageController
-import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
+import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageModel
 import pro.qyoga.core.appointments.core.commands.EditAppointmentRequest
 import pro.qyoga.core.appointments.core.model.AppointmentRef
 import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentPage
@@ -36,7 +36,7 @@ class TherapistAppointmentsApi(
                 queryParam(SchedulePageController.DATE, date.toString())
             }
             if (appointmentToFocus != null) {
-                queryParam(CalendarPageModel.FOCUSED_APPOINTMENT, appointmentToFocus.id.toString())
+                queryParam(SchedulePageModel.FOCUSED_APPOINTMENT, appointmentToFocus.id.toString())
             }
             this
         } When {

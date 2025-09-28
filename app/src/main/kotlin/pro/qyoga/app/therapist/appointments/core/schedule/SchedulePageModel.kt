@@ -9,10 +9,10 @@ import pro.qyoga.app.therapist.appointments.core.schedule.AppointmentCard.CssCla
 import pro.qyoga.app.therapist.appointments.core.schedule.AppointmentCard.CssClasses.CLIENT_DO_NOT_CAME_CARD
 import pro.qyoga.app.therapist.appointments.core.schedule.AppointmentCard.CssClasses.DRAFT_CARD
 import pro.qyoga.app.therapist.appointments.core.schedule.AppointmentCard.CssClasses.PENDING_CARD
-import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel.Companion.DAYS_IN_CALENDAR
-import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel.Companion.DAYS_IN_WEEK
-import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel.Companion.DEFAULT_END_HOUR
-import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel.Companion.DEFAULT_START_HOUR
+import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageModel.Companion.DAYS_IN_CALENDAR
+import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageModel.Companion.DAYS_IN_WEEK
+import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageModel.Companion.DEFAULT_END_HOUR
+import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageModel.Companion.DEFAULT_START_HOUR
 import pro.qyoga.core.appointments.core.model.AppointmentStatus
 import pro.qyoga.core.appointments.core.views.LocalizedAppointmentSummary
 import pro.qyoga.core.calendar.api.CalendarItem
@@ -39,12 +39,12 @@ import java.util.*
  * Контрол быстрого выбора дня состоит из строки с 7 днями - выбранный день +/- 3 дня
  *
  */
-data class CalendarPageModel(
+data class SchedulePageModel(
     val date: LocalDate,
     val timeMarks: List<TimeMark>,
-    val calendarDays: Collection<CalendarDay>,
-    val appointmentToFocus: UUID?,
-    val hasSyncErrors: Boolean
+    private val calendarDays: Collection<CalendarDay>,
+    private val appointmentToFocus: UUID?,
+    private val hasSyncErrors: Boolean
 ) : ModelAndView("therapist/appointments/schedule.html") {
 
     init {
@@ -60,12 +60,12 @@ data class CalendarPageModel(
 
         fun of(
             date: LocalDate,
-            appointments: GetCalendarAppointmentsRs,
+            getAppointments: GetCalendarAppointmentsRs,
             appointmentToFocus: UUID? = null
-        ): CalendarPageModel {
-            val timeMarks = generateTimeMarks(appointments.appointments, date)
+        ): SchedulePageModel {
+            val timeMarks = generateTimeMarks(getAppointments.appointments, date)
             val weekCalendar = generateDaysAround(date)
-            return CalendarPageModel(date, timeMarks, weekCalendar, appointmentToFocus, appointments.hasErrors)
+            return SchedulePageModel(date, timeMarks, weekCalendar, appointmentToFocus, getAppointments.hasErrors)
         }
 
         const val FOCUSED_APPOINTMENT = "focusedAppointment"

@@ -6,18 +6,15 @@ import com.github.tomakehurst.wiremock.client.WireMock.*
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Component
 import org.springframework.web.util.UriUtils
-import pro.qyoga.i9ns.calendars.google.GoogleCalendar
-import pro.qyoga.i9ns.calendars.google.GoogleCalendarItem
-import pro.qyoga.i9ns.calendars.google.GoogleCalendarItemId
+import pro.qyoga.i9ns.calendars.google.model.GoogleCalendar
+import pro.qyoga.i9ns.calendars.google.model.GoogleCalendarItem
+import pro.qyoga.i9ns.calendars.google.model.GoogleCalendarItemId
 import pro.qyoga.tests.fixture.data.asiaNovosibirskTimeZone
 import java.time.LocalDateTime
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.text.Charsets.UTF_8
 
-/**
- * Mock implementation of Google Calendar API for testing purposes.
- */
 @Component
 class MockGoogleCalendar(
     private val wiremockServer: WireMockServer
@@ -32,7 +29,6 @@ class MockGoogleCalendar(
         ) {
             wiremockServer.stubFor(
                 getCalendarsRequest()
-                    .withHeader("Authorization", equalTo("Bearer $accessToken"))
                     .willReturn(
                         aResponse()
                             .withStatus(HttpStatus.OK.value())
@@ -86,6 +82,7 @@ class MockGoogleCalendar(
                 "/google/calendar/v3/users/me/calendarList"
             )
         )
+            .withHeader("Authorization", equalTo("Bearer $accessToken"))
 
     }
 

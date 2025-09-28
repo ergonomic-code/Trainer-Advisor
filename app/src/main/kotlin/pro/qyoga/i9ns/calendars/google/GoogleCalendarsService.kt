@@ -1,8 +1,5 @@
 package pro.qyoga.i9ns.calendars.google
 
-import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
-import com.google.api.client.http.javanet.NetHttpTransport
-import com.google.api.client.json.gson.GsonFactory
 import org.apache.tomcat.util.threads.VirtualThreadExecutor
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
@@ -15,66 +12,18 @@ import pro.qyoga.core.calendar.api.CalendarType
 import pro.qyoga.core.calendar.api.CalendarsService
 import pro.qyoga.core.calendar.api.SearchResult
 import pro.qyoga.core.users.therapists.TherapistRef
+import pro.qyoga.i9ns.calendars.google.client.GoogleCalendarsClient
+import pro.qyoga.i9ns.calendars.google.model.GoogleAccount
+import pro.qyoga.i9ns.calendars.google.model.GoogleAccountRef
+import pro.qyoga.i9ns.calendars.google.model.GoogleCalendar
+import pro.qyoga.i9ns.calendars.google.model.GoogleCalendarItemId
+import pro.qyoga.i9ns.calendars.google.persistance.GoogleAccountsDao
+import pro.qyoga.i9ns.calendars.google.persistance.GoogleCalendarSettingsPatch
+import pro.qyoga.i9ns.calendars.google.persistance.GoogleCalendarsDao
+import pro.qyoga.i9ns.calendars.google.views.GoogleAccountCalendarsSettingsView
 import java.time.ZonedDateTime
-import java.util.*
 import java.util.concurrent.CompletableFuture
 
-
-const val APPLICATION_NAME = "Trainer Advisor"
-val gsonFactory: GsonFactory = GsonFactory.getDefaultInstance()
-val httpTransport: NetHttpTransport = GoogleNetHttpTransport.newTrustedTransport()
-
-data class GoogleCalendarView(
-    val id: String,
-    val title: String,
-    val shouldBeShown: Boolean
-)
-
-private const val DEFAULT_CALENDAR_VISIBILITY = false
-
-sealed interface GoogleAccountContentView {
-    data class Calendars(val calendars: List<GoogleCalendarView>) : GoogleAccountContentView
-    data object Error : GoogleAccountContentView
-
-    companion object {
-        operator fun invoke(
-            calendars: Result<List<GoogleCalendar>>,
-            calendarSettings: Map<String, GoogleCalendarSettings>
-        ): GoogleAccountContentView =
-            if (calendars.isSuccess) {
-                Calendars(calendars.getOrThrow().map {
-                    GoogleCalendarView(
-                        it.externalId,
-                        it.name,
-                        calendarSettings[it.externalId]?.shouldBeShown ?: DEFAULT_CALENDAR_VISIBILITY
-                    )
-                })
-            } else {
-                Error
-            }
-    }
-}
-
-data class GoogleAccountCalendarsView(
-    val id: UUID,
-    val email: String,
-    val content: GoogleAccountContentView
-) {
-
-    companion object {
-
-        fun of(
-            account: GoogleAccount,
-            calendars: Result<List<GoogleCalendar>>,
-            calendarSettings: Map<String, GoogleCalendarSettings>
-        ): GoogleAccountCalendarsView = GoogleAccountCalendarsView(
-            account.id,
-            account.email,
-            GoogleAccountContentView(calendars, calendarSettings)
-        )
-    }
-
-}
 
 @Service
 class GoogleCalendarsService(
@@ -95,14 +44,17 @@ class GoogleCalendarsService(
 
     fun findGoogleAccountCalendars(
         therapist: TherapistRef
-    ): List<GoogleAccountCalendarsView> {
+    ): List<GoogleAccountCalendarsSettingsView> {
         val accounts = googleAccountsDao.findGoogleAccounts(therapist)
-        val accountCalendars = accounts.map {
-            googleCalendarsClient.getAccountCalendars(therapist, it)
+
+        val accountCalendars = accounts.map { acc ->
+            acc to googleCalendarsClient.getAccountCalendars(therapist, acc)
         }
+
         val calendarSettings = googleCalendarsDao.findCalendarsSettings(therapist)
-        return accounts.zip(accountCalendars).map { (account, calendars) ->
-            GoogleAccountCalendarsView.of(account, calendars, calendarSettings)
+
+        return accountCalendars.map { (account, calendars) ->
+            GoogleAccountCalendarsSettingsView.of(account, calendars, calendarSettings)
         }
     }
 
@@ -156,7 +108,9 @@ class GoogleCalendarsService(
         therapistRef: TherapistRef,
         eventId: GoogleCalendarItemId
     ): CalendarItem<GoogleCalendarItemId, ZonedDateTime>? {
-        val account = googleAccountsDao.findGoogleAccount(therapistRef, eventId.calendarId).first()
+        // Выбирается список, потому что один терапевт может подключить несколько аккаунтов, между которыми
+        // подключен один календарь. И для чтения события можно воспользоватья любым из этих аккаунтов
+        val account = googleAccountsDao.findGoogleAccounts(therapistRef, eventId.calendarId).first()
         return googleCalendarsClient.findById(account, eventId)
     }
 

@@ -7,14 +7,15 @@ import pro.qyoga.core.clients.cards.Client
 import pro.qyoga.core.clients.cards.dtos.ClientCardDto
 import pro.qyoga.core.clients.cards.model.ClientId
 import pro.qyoga.core.users.therapists.TherapistRef
-import pro.qyoga.i9ns.calendars.google.GoogleAccount
-import pro.qyoga.i9ns.calendars.google.GoogleAccountId
-import pro.qyoga.i9ns.calendars.google.GoogleAccountRef
-import pro.qyoga.i9ns.calendars.google.GoogleCalendarSettings
+import pro.qyoga.i9ns.calendars.google.model.GoogleAccount
+import pro.qyoga.i9ns.calendars.google.model.GoogleAccountId
+import pro.qyoga.i9ns.calendars.google.model.GoogleAccountRef
+import pro.qyoga.i9ns.calendars.google.model.GoogleCalendarSettings
 import pro.qyoga.tests.fixture.backgrounds.AppointmentsBackgrounds
 import pro.qyoga.tests.fixture.backgrounds.ClientsBackgrounds
 import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentsObjectMother
 import pro.qyoga.tests.fixture.object_mothers.calendars.google.GoogleCalendarObjectMother
+import pro.qyoga.tests.fixture.object_mothers.calendars.google.GoogleCalendarObjectMother.aGoogleAccount
 import pro.qyoga.tests.fixture.object_mothers.calendars.google.GoogleCalendarObjectMother.aGoogleToken
 import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother.createClientCardDtoMinimal
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_ID
@@ -87,7 +88,7 @@ class ScheduleFixturePreset(
 
             val appointment = AppointmentsObjectMother.randomEditAppointmentRequest(client1.ref())
 
-            val googleAccount = GoogleCalendarObjectMother.aGoogleAccount(THE_THERAPIST_REF)
+            val googleAccount = aGoogleAccount(therapist = THE_THERAPIST_REF)
             val googleCalendar = GoogleCalendarObjectMother.aGoogleCalendarSettings(
                 googleAccountRef = googleAccount.ref(),
                 shouldBeShown = true

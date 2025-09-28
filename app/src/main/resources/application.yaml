@@ -104,8 +104,4 @@ trainer-advisor:
     google-calendar:
       root-url: https://www.googleapis.com/
 
-logging:
-  level:
-    org.springframework.security: WARN
-
 debug: false

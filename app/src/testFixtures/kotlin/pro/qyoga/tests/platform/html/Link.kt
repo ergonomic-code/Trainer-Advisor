@@ -16,7 +16,7 @@ class Link(
     val targetAttr: String = "href"
 ) : Component {
 
-    val urlRegex = UriTemplate(urlPattern)
+    private val urlTemplate = UriTemplate(urlPattern)
 
     constructor(id: String, page: HtmlPageCompat, text: String) : this(id, page.path, text)
 
@@ -29,14 +29,14 @@ class Link(
         return Matcher.all(
             isTag("a"),
             haveAttribute(targetAttr),
-            haveAttributeValueMatching(targetAttr, urlRegex),
+            haveAttributeValueMatching(targetAttr, urlTemplate),
             if (text.isNotEmpty()) haveText(text) else null
         )
     }
 
     fun pathParam(element: Element, paramName: String): String? {
         val actualUrl = element.select(selector()).attr(targetAttr)
-        val vars = urlRegex.match(actualUrl)
+        val vars = urlTemplate.match(actualUrl)
         return vars[paramName]
     }
 

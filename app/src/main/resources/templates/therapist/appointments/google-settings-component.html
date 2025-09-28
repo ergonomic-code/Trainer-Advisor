@@ -7,10 +7,10 @@
 
         <div th:if="${hasAccounts}">
             <div class="mb-2 google-account-item" th:each="account : ${accounts}">
-                <div class=" border-bottom pb-1 mb-2 text-body-secondary small" th:text="${account.email}">
+                <div class="border-bottom pb-1 mb-2 text-body-secondary small" th:text="${account.email}">
                     email@example.com
                 </div>
-                <div th:if="${account.content instanceof T(pro.qyoga.i9ns.calendars.google.GoogleAccountContentView$Calendars)}">
+                <div th:if="${!account.content.isError}">
                     <ul class="list-unstyled ms-3 my-1">
                         <li class="d-flex justify-content-between align-items-center py-2"
                             th:each="cal : ${account.content.calendars}">
@@ -35,7 +35,7 @@
                 </div>
                 <div
                         class="text-danger ms-3 my-1 google-account-error-content d-inline-flex align-items-center"
-                        th:if="${account.content instanceof T(pro.qyoga.i9ns.calendars.google.GoogleAccountContentView$Error)}"
+                        th:if="${account.content.isError}"
                 >
                     <svg aria-hidden="true" class="me-2 align-middle" height="14" style="fill: currentColor;"
                          viewBox="0 0 16 16" width="14" xmlns="http://www.w3.org/2000/svg">
@@ -49,7 +49,7 @@
     </div>
     <a
             class="btn btn-outline-secondary"
-            href="/oauth2/authorization/google"
+            th:href="@{/oauth2/authorization/google}"
             id="connect-google-calendar"
     >
         <img alt="G"
@@ -57,4 +57,5 @@
              src="https://www.gstatic.com/marketing-cms/assets/images/d5/dc/cfe9ce8b4425b410b49b7f2dd3f3/g.webp=s48-fcrop64=1,00000000ffffffff-rw"
              width="20"> Добавить аккаунт
     </a>
+
 </div>

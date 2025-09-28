@@ -1,4 +1,4 @@
-package pro.qyoga.i9ns.calendars.google
+package pro.qyoga.i9ns.calendars.google.model
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.jdbc.core.mapping.AggregateReference

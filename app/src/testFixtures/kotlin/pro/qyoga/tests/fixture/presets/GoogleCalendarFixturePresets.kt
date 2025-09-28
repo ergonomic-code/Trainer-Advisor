@@ -4,8 +4,8 @@ import org.springframework.context.ApplicationContext
 import org.springframework.stereotype.Component
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.qyoga.core.users.therapists.TherapistRef
-import pro.qyoga.i9ns.calendars.google.GoogleAccount
-import pro.qyoga.i9ns.calendars.google.GoogleCalendarItem
+import pro.qyoga.i9ns.calendars.google.model.GoogleAccount
+import pro.qyoga.i9ns.calendars.google.model.GoogleCalendarItem
 import pro.qyoga.tests.fixture.data.faker
 import pro.qyoga.tests.fixture.object_mothers.calendars.google.GoogleCalendarObjectMother.aCalendarName
 import pro.qyoga.tests.fixture.object_mothers.calendars.google.GoogleCalendarObjectMother.aGoogleCalendar

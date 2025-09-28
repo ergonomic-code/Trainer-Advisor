@@ -1,8 +1,8 @@
 package pro.qyoga.tests.cases.app.therapist.calendars.google
 
 import io.kotest.core.annotation.DisplayName
-import pro.qyoga.i9ns.calendars.google.GoogleAccountCalendarsView
-import pro.qyoga.i9ns.calendars.google.GoogleAccountContentView
+import pro.qyoga.i9ns.calendars.google.views.GoogleAccountCalendarsSettingsView
+import pro.qyoga.i9ns.calendars.google.views.GoogleCalendarsSettingsView
 import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.fixture.data.faker
@@ -22,7 +22,7 @@ class GetGoogleCalendarsSettingsEndpointTest : QYogaAppIntegrationBaseKoTest({
     "должен возвращать пустой список аккаунтов для терапевта без настроенной интеграции" {
         // Сетап
         val therapist = TherapistClient.loginAsTheTherapist()
-        val accounts = emptyList<GoogleAccountCalendarsView>()
+        val accounts = emptyList<GoogleAccountCalendarsSettingsView>()
 
         // Действие
         val res = therapist.googleCalendarIntegration.getGoogleCalendarComponent()
@@ -39,10 +39,10 @@ class GetGoogleCalendarsSettingsEndpointTest : QYogaAppIntegrationBaseKoTest({
         googleCalendarsFixturePresets.mockGoogleCalendar.OnGetCalendars(accessToken)
             .returnsForbidden()
         val accounts = listOf(
-            GoogleAccountCalendarsView(
+            GoogleAccountCalendarsSettingsView(
                 UUID.fromString(faker.internet().uuid()),
                 account.email,
-                GoogleAccountContentView.Error
+                GoogleCalendarsSettingsView.Error
             )
         )
 

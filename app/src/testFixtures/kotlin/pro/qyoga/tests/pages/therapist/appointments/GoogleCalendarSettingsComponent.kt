@@ -2,7 +2,7 @@ package pro.qyoga.tests.pages.therapist.appointments
 
 import io.kotest.matchers.Matcher
 import org.jsoup.nodes.Element
-import pro.qyoga.i9ns.calendars.google.GoogleAccountCalendarsView
+import pro.qyoga.i9ns.calendars.google.views.GoogleAccountCalendarsSettingsView
 import pro.qyoga.tests.assertions.haveComponent
 import pro.qyoga.tests.platform.html.Component
 import pro.qyoga.tests.platform.html.Link
@@ -10,7 +10,7 @@ import pro.qyoga.tests.platform.kotest.all
 
 
 class GoogleCalendarSettingsComponent(
-    private val accounts: List<GoogleAccountCalendarsView>
+    private val accounts: List<GoogleAccountCalendarsSettingsView>
 ) : Component {
 
     private val connectButton =
@@ -22,13 +22,11 @@ class GoogleCalendarSettingsComponent(
     override fun matcher(): Matcher<Element> {
         return Matcher.all(
             haveComponent(connectButton),
-            *(accounts.map { haveComponent(GoogleAccountComponent(it)) }.toTypedArray())
+            *(accounts.map { haveComponent(GoogleAccountComponent()) }.toTypedArray())
         )
     }
 
-    class GoogleAccountComponent(
-        private val account: GoogleAccountCalendarsView
-    ) : Component {
+    class GoogleAccountComponent : Component {
 
         override fun selector(): String =
             ".google-account-item"

@@ -1,4 +1,4 @@
-package pro.qyoga.i9ns.calendars.google
+package pro.qyoga.i9ns.calendars.google.persistance
 
 import org.springframework.data.jdbc.core.JdbcAggregateTemplate
 import org.springframework.data.jdbc.core.findAllById
@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository
 import pro.azhidkov.platform.spring.jdbc.taDataClassRowMapper
 import pro.azhidkov.platform.spring.sdj.query.query
 import pro.qyoga.core.users.therapists.TherapistRef
+import pro.qyoga.i9ns.calendars.google.model.GoogleAccount
+import pro.qyoga.i9ns.calendars.google.model.GoogleAccountRef
 
 
 private val googleAccountRowMapper = taDataClassRowMapper<GoogleAccount>()
@@ -32,7 +34,7 @@ class GoogleAccountsDao(
         return jdbcAggregateTemplate.findAllById(accountIds.map { it.id })
     }
 
-    fun findGoogleAccount(therapistRef: TherapistRef, calendarId: String): List<GoogleAccount> {
+    fun findGoogleAccounts(therapistRef: TherapistRef, calendarId: String): List<GoogleAccount> {
         val query = """
             SELECT *
             FROM therapist_google_accounts

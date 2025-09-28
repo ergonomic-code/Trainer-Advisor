@@ -1,7 +1,7 @@
 package pro.qyoga.tests.fixture.object_mothers.calendars.google
 
 import pro.qyoga.core.users.therapists.TherapistRef
-import pro.qyoga.i9ns.calendars.google.*
+import pro.qyoga.i9ns.calendars.google.model.*
 import pro.qyoga.tests.fixture.data.faker
 import pro.qyoga.tests.fixture.data.randomElementOf
 import pro.qyoga.tests.fixture.object_mothers.appointments.randomAppointmentDuration

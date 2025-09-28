@@ -1,6 +1,9 @@
-package pro.qyoga.i9ns.calendars.google
+package pro.qyoga.i9ns.calendars.google.client
 
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport
 import com.google.api.client.googleapis.json.GoogleJsonResponseException
+import com.google.api.client.http.javanet.NetHttpTransport
+import com.google.api.client.json.gson.GsonFactory
 import com.google.api.client.util.DateTime
 import com.google.api.services.calendar.Calendar
 import com.google.api.services.calendar.model.Event
@@ -17,6 +20,8 @@ import pro.azhidkov.platform.kotlin.tryExecute
 import pro.azhidkov.platform.kotlin.tryRecover
 import pro.qyoga.core.calendar.api.CalendarItem
 import pro.qyoga.core.users.therapists.TherapistRef
+import pro.qyoga.i9ns.calendars.google.GoogleCalendarConf
+import pro.qyoga.i9ns.calendars.google.model.*
 import java.net.URI
 import java.time.Duration
 import java.time.Instant
@@ -25,6 +30,10 @@ import java.time.ZonedDateTime
 import kotlin.Result.Companion.failure
 import kotlin.Result.Companion.success
 
+
+private const val APPLICATION_NAME = "Trainer Advisor"
+private val gsonFactory: GsonFactory = GsonFactory.getDefaultInstance()
+private val httpTransport: NetHttpTransport = GoogleNetHttpTransport.newTrustedTransport()
 
 @Component
 class GoogleCalendarsClient(
@@ -35,7 +44,7 @@ class GoogleCalendarsClient(
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    private val servicesCache = mutableMapOf<GoogleAccount, Calendar>()
+    private val calendarServicesCache = mutableMapOf<GoogleAccount, Calendar>()
         .withDefault { createCalendarService(it) }
 
     @Cacheable(
@@ -49,7 +58,7 @@ class GoogleCalendarsClient(
     ): List<GoogleCalendarItem<ZonedDateTime>> {
         log.info("Fetching events in {} for calendar {} using {}", interval, calendarSettings.calendarId, account)
 
-        val service = servicesCache.getValue(account)
+        val service = calendarServicesCache.getValue(account)
         val events =
             service.events().list(calendarSettings.calendarId)
                 .setTimeMin(DateTime(interval.from.toInstant().toEpochMilli()))
@@ -71,7 +80,7 @@ class GoogleCalendarsClient(
         account: GoogleAccount
     ): Result<List<GoogleCalendar>> {
         log.info("Fetching calendars for therapist {} using {}", therapist, account)
-        val service = servicesCache.getValue(account)
+        val service = calendarServicesCache.getValue(account)
 
         val getCalendarsListRequest = service.CalendarList().list()
 
@@ -96,7 +105,7 @@ class GoogleCalendarsClient(
         account: GoogleAccount,
         eventId: GoogleCalendarItemId
     ): CalendarItem<GoogleCalendarItemId, ZonedDateTime>? {
-        val service = servicesCache.getValue(account)
+        val service = calendarServicesCache.getValue(account)
 
         val getEventRequest = service.events().get(eventId.calendarId, eventId.itemId)
 
@@ -117,7 +126,7 @@ class GoogleCalendarsClient(
         val credentials = UserCredentials.newBuilder()
             .setClientId(googleOAuthProps.registration["google"]!!.clientId)
             .setClientSecret(googleOAuthProps.registration["google"]!!.clientSecret)
-            .setRefreshToken(String(account.refreshToken.value))
+            .setRefreshToken(account.refreshToken.show())
             .setTokenServerUri(tokenUri)
             .build()
 
