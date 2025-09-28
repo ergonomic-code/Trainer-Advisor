@@ -29,6 +29,10 @@ class ClientsBackgrounds(
         return createClients(1, THE_THERAPIST_ID).single()
     }
 
+    fun createClients(clients: Collection<Client>): Iterable<Client> {
+        return clientsRepo.saveAll(clients)
+    }
+
     fun createClients(clients: Collection<ClientCardDto>, therapistId: UUID = THE_THERAPIST_ID): Iterable<Client> {
         return clientsRepo.saveAll(clients.map { ClientsObjectMother.createClient(therapistId, it) })
     }

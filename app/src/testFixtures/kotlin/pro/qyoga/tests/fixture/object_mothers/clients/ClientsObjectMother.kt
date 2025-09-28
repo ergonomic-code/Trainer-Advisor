@@ -73,7 +73,10 @@ object ClientsObjectMother {
         version
     )
 
-    fun createClient(therapistId: UUID, clientCardDto: ClientCardDto): Client =
+    fun createClient(
+        therapistId: UUID = THE_THERAPIST_ID,
+        clientCardDto: ClientCardDto = createClientCardDtoMinimal()
+    ): Client =
         Client(therapistId, clientCardDto)
 
     fun aClientMinimal(
