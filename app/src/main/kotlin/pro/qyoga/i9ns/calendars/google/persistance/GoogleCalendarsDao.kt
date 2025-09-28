@@ -1,18 +1,23 @@
 package pro.qyoga.i9ns.calendars.google.persistance
 
+import org.springframework.data.jdbc.core.JdbcAggregateTemplate
 import org.springframework.jdbc.core.simple.JdbcClient
 import org.springframework.stereotype.Repository
 import pro.azhidkov.platform.spring.jdbc.taDataClassRowMapper
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.FetchSpec
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.hydrate
 import pro.azhidkov.platform.uuid.UUIDv7
 import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.i9ns.calendars.google.model.GoogleAccountRef
 import pro.qyoga.i9ns.calendars.google.model.GoogleCalendarSettings
+import kotlin.reflect.KProperty1
 
 typealias GoogleCalendarSettingsPatch = Map<String, Any>
 
 @Repository
 class GoogleCalendarsDao(
-    private val jdbcClient: JdbcClient
+    private val jdbcClient: JdbcClient,
+    private val jdbcAggregateTemplate: JdbcAggregateTemplate
 ) {
 
     private val googleCalendarSettingsRowMapper = taDataClassRowMapper<GoogleCalendarSettings>()
@@ -40,7 +45,8 @@ class GoogleCalendarsDao(
 
     fun findCalendarsSettings(
         therapist: TherapistRef,
-        shouldBeShown: Boolean? = null
+        shouldBeShown: Boolean? = null,
+        fetch: Iterable<KProperty1<GoogleCalendarSettings, *>> = emptyList()
     ): List<GoogleCalendarSettings> {
         val query = """
             SELECT * 
@@ -50,11 +56,14 @@ class GoogleCalendarsDao(
         """
 
         @Suppress("SqlSourceToSinkFlow")
-        return jdbcClient.sql(query)
+        var calendars = jdbcClient.sql(query)
             .param("ownerRef", therapist.id)
             .param("shouldBeShown", shouldBeShown)
             .query(googleCalendarSettingsRowMapper)
             .list()
+
+        calendars = jdbcAggregateTemplate.hydrate(calendars, FetchSpec(fetch))
+        return calendars
     }
 
 }
