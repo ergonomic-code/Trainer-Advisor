@@ -1,0 +1,21 @@
+= Гайдлайн разработки
+
+В целом проект разрабатывается согласно https://ergowiki.azhidkov.pro[Эргономичному подходу].
+В этом документе собраны локальные для проекта дополнения.
+
+== HTML
+
+=== Порядок указания атрибутов тэгов
+
+* id
+* class
+* name
+* type/value/for/href/src/action/method (основные семантические)
+* data-*
+* hx-* (htmx)
+* aria-* и role
+* autocomplete/tabindex
+* булевы: required, disabled, readonly, checked, multiple
+* валидация/формат: pattern, min, max, step, placeholder
+* style
+* шаблонные/фреймворк-специфичные: th:, v-, ng:* (в конце)

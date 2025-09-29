@@ -6,10 +6,10 @@ import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.i9ns.calendars.google.model.GoogleAccount
 import pro.qyoga.i9ns.calendars.google.model.GoogleCalendarItem
 import pro.qyoga.i9ns.calendars.google.model.GoogleCalendarSettings
-import pro.qyoga.tests.fixture.object_mothers.calendars.google.GoogleCalendarObjectMother
 import pro.qyoga.tests.fixture.object_mothers.calendars.google.GoogleCalendarObjectMother.aCalendarName
 import pro.qyoga.tests.fixture.object_mothers.calendars.google.GoogleCalendarObjectMother.aGoogleAccount
 import pro.qyoga.tests.fixture.object_mothers.calendars.google.GoogleCalendarObjectMother.aGoogleCalendar
+import pro.qyoga.tests.fixture.object_mothers.calendars.google.GoogleCalendarObjectMother.aGoogleCalendarSettings
 import pro.qyoga.tests.fixture.object_mothers.calendars.google.GoogleCalendarObjectMother.aGoogleToken
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
 import pro.qyoga.tests.fixture.test_apis.GoogleCalendarTestApi
@@ -37,9 +37,11 @@ data class TherapistGoogleCalendarsFixture(
         aGoogleCalendar(it.ownerRef, it.calendarId, aCalendarName())
     }
 
+    val calendarsAndSettings = calendars.zip(calendarsSettings)
+
     val theGoogleAccount: GoogleAccount = accounts.single().first
 
-    val theCalendar = calendarsSettings.single()
+    val theCalendar by lazy { calendarsSettings.single() }
 
 }
 
@@ -100,7 +102,7 @@ class GoogleCalendarsFixturePresets(
             shouldBeShown: Boolean = false
         ): TherapistGoogleCalendarsFixture {
             val googleAccount = aGoogleAccount(therapist = THE_THERAPIST_REF)
-            val googleCalendar = GoogleCalendarObjectMother.aGoogleCalendarSettings(
+            val googleCalendar = aGoogleCalendarSettings(
                 googleAccountRef = googleAccount.ref(),
                 shouldBeShown = shouldBeShown
             )
@@ -113,12 +115,31 @@ class GoogleCalendarsFixturePresets(
             )
         }
 
+        fun withTwoCalendars(
+            shouldBeShown: List<Boolean>
+        ): TherapistGoogleCalendarsFixture {
+            val googleAccount = aGoogleAccount(therapist = THE_THERAPIST_REF)
+            val googleCalendars = shouldBeShown.map {
+                aGoogleCalendarSettings(
+                    googleAccountRef = googleAccount.ref(),
+                    shouldBeShown = it
+                )
+            }
+
+            return TherapistGoogleCalendarsFixture(
+                accounts = listOf(googleAccount to aGoogleToken()),
+                calendarsSettings = googleCalendars,
+                events = emptyList(),
+                therapist = THE_THERAPIST_REF
+            )
+        }
+
         fun withSingleCalendarAndEvent(
             event: GoogleCalendarItem<*>,
             shouldBeShown: Boolean = true
         ): TherapistGoogleCalendarsFixture {
             val googleAccount = aGoogleAccount(therapist = THE_THERAPIST_REF)
-            val googleCalendar = GoogleCalendarObjectMother.aGoogleCalendarSettings(
+            val googleCalendar = aGoogleCalendarSettings(
                 externalId = event.id.calendarId,
                 googleAccountRef = googleAccount.ref(),
                 shouldBeShown = shouldBeShown

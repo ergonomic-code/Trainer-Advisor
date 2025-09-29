@@ -175,6 +175,22 @@ fun haveInputWithValue(input: Input, value: String) = Matcher { element: Element
     )
 }
 
+fun haveCheckboxChecked(
+    selector: String = "input.form-check-input[type=checkbox][name=shouldBeShown]",
+    expected: Boolean
+): Matcher<Element> = Matcher { el ->
+    val checkbox = el.select(selector).first()
+    val actual = checkbox?.hasAttr("checked") == true
+    MatcherResult(
+        checkbox != null && actual == expected,
+        {
+            val found = if (checkbox == null) "not found" else if (actual) "checked" else "unchecked"
+            "Expected checkbox '$selector' to be ${if (expected) "checked" else "unchecked"}, but $found"
+        },
+        { "Checkbox '$selector' unexpectedly matches expected=${expected}" }
+    )
+}
+
 val Element.descr
     get() = "<${this.tag().name} id=\"${this.id()}\">" +
             this.text().take(32) +
@@ -218,7 +234,7 @@ infix fun Element.shouldBePage(page: HtmlPage): Element {
     return this
 }
 
-fun alwaysSuccess(): Matcher<Element> = Matcher { element ->
+fun alwaysSuccess(): Matcher<Element> = Matcher { _ ->
     MatcherResult(true, { "" }, { "" })
 }
 
