@@ -6,7 +6,8 @@ import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import pro.qyoga.app.therapist.appointments.core.schedule.AppointmentCard
-import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel
+import pro.qyoga.app.therapist.appointments.core.schedule.GetCalendarAppointmentsRs
+import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageModel
 import pro.qyoga.app.therapist.appointments.core.schedule.TimeMark
 import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentsObjectMother.randomLocalizedAppointmentSummary
 import java.time.Duration
@@ -31,10 +32,10 @@ class CalendarPageModelTest {
         )
 
         // Действие
-        val calendarPageModel = CalendarPageModel.of(today, appointments)
+        val schedulePageModel = SchedulePageModel.of(today, GetCalendarAppointmentsRs(appointments, false))
 
         // Проверка
-        calendarPageModel.timeMarks.first().time shouldBe firstAppointmentStartTime
+        schedulePageModel.timeMarks.first().time shouldBe firstAppointmentStartTime
     }
 
 
@@ -56,10 +57,10 @@ class CalendarPageModelTest {
         )
 
         // Действие
-        val calendarPageModel = CalendarPageModel.of(today, appointments)
+        val schedulePageModel = SchedulePageModel.of(today, GetCalendarAppointmentsRs(appointments, false))
 
         // Проверка
-        val lastTimeMark = calendarPageModel.timeMarks.last()
+        val lastTimeMark = schedulePageModel.timeMarks.last()
         (lastTimeMark.time + TimeMark.length) shouldBeGreaterThanOrEqualTo (lastAppointmentStartTime + lastAppointmentDuration)
     }
 
@@ -78,10 +79,10 @@ class CalendarPageModelTest {
         )
 
         // Действие
-        val calendarPageModel = CalendarPageModel.of(today, appointments)
+        val schedulePageModel = SchedulePageModel.of(today, GetCalendarAppointmentsRs(appointments, false))
 
         // Проверка
-        calendarPageModel.timeMarks.first().time shouldBe LocalTime.MIDNIGHT
+        schedulePageModel.timeMarks.first().time shouldBe LocalTime.MIDNIGHT
     }
 
     @Test
@@ -99,10 +100,10 @@ class CalendarPageModelTest {
         )
 
         // Действие
-        val calendarPageModel = CalendarPageModel.of(yesterday, appointments)
+        val schedulePageModel = SchedulePageModel.of(yesterday, GetCalendarAppointmentsRs(appointments, false))
 
         // Проверка
-        calendarPageModel.timeMarks.first().time shouldBe LocalTime.MIDNIGHT
+        schedulePageModel.timeMarks.first().time shouldBe LocalTime.MIDNIGHT
     }
 
     @Test
@@ -121,11 +122,11 @@ class CalendarPageModelTest {
         )
 
         // Действие
-        val calendarPageModel = CalendarPageModel.of(today, appointments)
+        val schedulePageModel = SchedulePageModel.of(today, GetCalendarAppointmentsRs(appointments, false))
 
         // Проверка
-        calendarPageModel.timeMarks.first().time.hour shouldBe CalendarPageModel.DEFAULT_START_HOUR
-        calendarPageModel.timeMarks.last().time.hour shouldBe 23
+        schedulePageModel.timeMarks.first().time.hour shouldBe SchedulePageModel.DEFAULT_START_HOUR
+        schedulePageModel.timeMarks.last().time.hour shouldBe 23
     }
 
     @Test
@@ -144,11 +145,11 @@ class CalendarPageModelTest {
         )
 
         // Действие
-        val calendarPageModel = CalendarPageModel.of(today, appointments)
+        val schedulePageModel = SchedulePageModel.of(today, GetCalendarAppointmentsRs(appointments, false))
 
         // Проверка
-        calendarPageModel.timeMarks.first().time shouldBe LocalTime.MIDNIGHT
-        calendarPageModel.timeMarks.last().time.hour shouldBe CalendarPageModel.DEFAULT_END_HOUR
+        schedulePageModel.timeMarks.first().time shouldBe LocalTime.MIDNIGHT
+        schedulePageModel.timeMarks.last().time.hour shouldBe SchedulePageModel.DEFAULT_END_HOUR
     }
 
     @Test
@@ -185,13 +186,13 @@ class CalendarPageModelTest {
         )
 
         // Действие
-        val calendarPageModel = CalendarPageModel.of(today, appointments)
+        val schedulePageModel = SchedulePageModel.of(today, GetCalendarAppointmentsRs(appointments, false))
 
         // Проверка
-        calendarPageModel.appointmentCards() shouldHaveSize 2
+        schedulePageModel.appointmentCards() shouldHaveSize 2
     }
 
 }
 
-fun CalendarPageModel.appointmentCards() =
+fun SchedulePageModel.appointmentCards() =
     timeMarks.flatMap { it.days }.mapNotNull { it.second }

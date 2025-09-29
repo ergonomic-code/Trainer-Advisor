@@ -3,12 +3,14 @@ package pro.qyoga.infra.web
 import com.fasterxml.jackson.databind.ObjectMapper
 import jakarta.annotation.PostConstruct
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Lazy
 import org.thymeleaf.spring6.SpringTemplateEngine
 import org.thymeleaf.standard.StandardDialect
 import org.thymeleaf.standard.serializer.IStandardJavaScriptSerializer
 
 
 @Configuration
+@Lazy(false)
 class ThymeleafConfig(
     private val objectMapper: ObjectMapper,
     private val engine: SpringTemplateEngine

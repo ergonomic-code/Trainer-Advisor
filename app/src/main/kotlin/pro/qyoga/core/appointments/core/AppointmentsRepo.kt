@@ -1,22 +1,19 @@
 package pro.qyoga.core.appointments.core
 
 import org.intellij.lang.annotations.Language
-import org.springframework.core.convert.support.DefaultConversionService
 import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.data.jdbc.core.convert.JdbcConverter
 import org.springframework.data.relational.core.mapping.RelationalMappingContext
-import org.springframework.jdbc.core.DataClassRowMapper
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations
 import org.springframework.stereotype.Repository
 import pro.azhidkov.platform.java.time.Interval
 import pro.azhidkov.platform.java.time.zoneId
 import pro.azhidkov.platform.postgresql.toPGInterval
-import pro.azhidkov.platform.spring.sdj.converters.PGIntervalToDurationConverter
+import pro.azhidkov.platform.spring.jdbc.taDataClassRowMapper
 import pro.azhidkov.platform.spring.sdj.ergo.ErgoRepository
 import pro.qyoga.core.appointments.core.model.Appointment
 import pro.qyoga.core.appointments.core.views.LocalizedAppointmentSummary
 import pro.qyoga.core.calendar.api.CalendarItem
-import pro.qyoga.core.calendar.api.CalendarsService
 import pro.qyoga.core.users.therapists.TherapistRef
 import java.sql.Timestamp
 import java.time.Duration
@@ -37,9 +34,9 @@ class AppointmentsRepo(
     Appointment::class,
     jdbcConverter,
     relationalMappingContext
-), CalendarsService {
+) {
 
-    override fun findCalendarItemsInInterval(
+    fun findCalendarItemsInInterval(
         therapist: TherapistRef,
         interval: Interval<ZonedDateTime>,
     ): Iterable<CalendarItem<*, LocalDateTime>> {
@@ -98,9 +95,4 @@ fun AppointmentsRepo.findIntersectingAppointment(
     return findOne(query, params, Appointment.Fetch.summaryRefs)
 }
 
-private val localizedAppointmentSummaryRowMapper =
-    DataClassRowMapper(LocalizedAppointmentSummary::class.java).apply {
-        conversionService = DefaultConversionService().apply {
-            addConverter(PGIntervalToDurationConverter())
-        }
-    }
+private val localizedAppointmentSummaryRowMapper = taDataClassRowMapper<LocalizedAppointmentSummary>()

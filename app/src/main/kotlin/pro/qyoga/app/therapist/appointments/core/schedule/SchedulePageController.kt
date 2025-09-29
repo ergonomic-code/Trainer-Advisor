@@ -23,21 +23,21 @@ class SchedulePageController(
         @RequestParam(DATE) date: LocalDate = LocalDate.now(),
         @RequestParam(FOCUSED_APPOINTMENT) focusedAppointment: UUID? = null,
         @AuthenticationPrincipal therapist: QyogaUserDetails
-    ): CalendarPageModel {
+    ): SchedulePageModel {
         val appointments = getCalendarAppointments(therapist.ref, date)
-        return CalendarPageModel.of(date, appointments, focusedAppointment)
+        return SchedulePageModel.of(date, appointments, focusedAppointment)
     }
 
     companion object {
         const val PATH = "/therapist/schedule"
         const val DATE = "date"
-        const val FOCUSED_APPOINTMENT = CalendarPageModel.FOCUSED_APPOINTMENT
+        const val FOCUSED_APPOINTMENT = SchedulePageModel.FOCUSED_APPOINTMENT
         const val DATE_PATH = "$PATH?$DATE={$DATE}"
         const val DATE_APPOINTMENT_PATH = "$PATH?$DATE={$DATE}&$FOCUSED_APPOINTMENT={$FOCUSED_APPOINTMENT}"
         fun calendarForDateUrl(date: LocalDate) = DATE_PATH.replace("{$DATE}", date.toString())
         fun calendarForDayWithFocus(date: LocalDate, appointmentRef: AppointmentRef) = DATE_APPOINTMENT_PATH
             .replace("{$DATE}", date.toString())
-            .replace("{$FOCUSED_APPOINTMENT}", appointmentRef.id.toString())
+            .replace("{$FOCUSED_APPOINTMENT}", appointmentRef.id?.toString() ?: "")
     }
 
 }

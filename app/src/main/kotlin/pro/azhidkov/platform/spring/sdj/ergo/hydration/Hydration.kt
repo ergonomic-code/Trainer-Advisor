@@ -38,6 +38,10 @@ fun <T : Any> JdbcAggregateOperations.hydrate(
     entities: Iterable<T>,
     fetchSpec: FetchSpec<T>
 ): List<T> {
+    if (fetchSpec.propertyFetchSpecs.isEmpty()) {
+        return (entities as? List<T>) ?: entities.toList()
+    }
+
     val refs: Map<KProperty1<*, AggregateReference<*, *>?>, Map<Any, Any>> =
         fetchSpec.propertyFetchSpecs.filter {
             detectRefType(

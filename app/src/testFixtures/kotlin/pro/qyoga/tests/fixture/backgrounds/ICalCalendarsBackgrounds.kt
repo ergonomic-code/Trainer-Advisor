@@ -1,13 +1,11 @@
 package pro.qyoga.tests.fixture.backgrounds
 
-import com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo
-import com.marcinziolo.kotlin.wiremock.get
-import com.marcinziolo.kotlin.wiremock.returns
+import com.github.tomakehurst.wiremock.client.WireMock.*
 import org.springframework.stereotype.Component
 import pro.azhidkov.platform.uuid.UUIDv7
-import pro.qyoga.core.calendar.ical.ICalCalendarsRepo
-import pro.qyoga.core.calendar.ical.commands.CreateICalRq
-import pro.qyoga.core.calendar.ical.model.ICalCalendar
+import pro.qyoga.i9ns.calendars.ical.ICalCalendarsRepo
+import pro.qyoga.i9ns.calendars.ical.commands.CreateICalRq
+import pro.qyoga.i9ns.calendars.ical.model.ICalCalendar
 import pro.qyoga.tests.infra.wiremock.WireMock
 import java.net.URI
 import java.net.URL
@@ -21,20 +19,22 @@ class ICalCalendarsBackgrounds(
         URI.create(WireMock.wiremock.baseUrl()).resolve("/ics/${UUIDv7.randomUUID()}.ics").toURL()
 
     fun createICalCalendar(ical: ICalCalendar): ICalCalendar {
-        WireMock.wiremock.get {
-            urlEqualTo(ical.icsUrl.toString())
-        } returns {
-            body = ical.icsFile
-        }
+        WireMock.wiremock.stubFor(
+            get(urlEqualTo(ical.icsUrl.path))
+                .willReturn(
+                    aResponse()
+                        .withHeader("Content-Type", "text/calendar")
+                        .withBody(ical.icsFile)
+                )
+        )
         return icalCalendarsRepo.addICal(CreateICalRq(ical.ownerRef, ical.icsUrl, ical.name))
     }
 
     fun updateICalSource(icsUrl: URL, icsFile: String) {
-        WireMock.wiremock.get {
-            urlEqualTo(icsUrl.toString())
-        } returns {
-            body = icsFile
-        }
+        WireMock.wiremock.stubFor(
+            get(urlEqualTo(icsUrl.path.toString()))
+                .willReturn(aResponse().withBody(icsFile))
+        )
     }
 
 }

@@ -9,6 +9,8 @@ import org.springframework.security.config.Customizer.withDefaults
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configurers.FormLoginConfigurer
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer
+import org.springframework.security.oauth2.client.web.HttpSessionOAuth2AuthorizedClientRepository
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository
@@ -54,8 +56,10 @@ class WebSecurityConfig(
                         HttpMethod.GET,
                         "/",
                         "/offline.html",
+                        "/privacy-policy.html",
                         "/manifest.json",
                         "/register",
+                        "/oauth2/**",
                         "/components/**",
                         "/styles/**",
                         "/img/**",
@@ -79,6 +83,7 @@ class WebSecurityConfig(
                     .failureForwardUrl("/error-p")
                     .permitAll()
             }
+            .oauth2Client(withDefaults())
             .logout { logout: LogoutConfigurer<HttpSecurity?> -> logout.permitAll() }
             .rememberMe { rememberMeConfigurer ->
                 rememberMeConfigurer
@@ -90,9 +95,14 @@ class WebSecurityConfig(
     }
 
     @Bean
+    fun authorizedClientRepository(): OAuth2AuthorizedClientRepository {
+        return HttpSessionOAuth2AuthorizedClientRepository()
+    }
+
+    @Bean
     fun tokenRepository(): PersistentTokenRepository {
         val jdbcTokenRepositoryImpl = JdbcTokenRepositoryImpl()
-        jdbcTokenRepositoryImpl.setDataSource(dataSource)
+        jdbcTokenRepositoryImpl.dataSource = dataSource
         return jdbcTokenRepositoryImpl
     }
 

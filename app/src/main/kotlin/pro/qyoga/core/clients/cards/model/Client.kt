@@ -15,6 +15,7 @@ import java.time.LocalDate
 import java.util.*
 
 typealias ClientRef = AggregateReference<Client, UUID>
+typealias ClientId = UUID
 
 @Table("clients")
 data class Client(
@@ -32,7 +33,7 @@ data class Client(
     val therapistRef: TherapistRef,
 
     @Id
-    override val id: UUID = UUIDv7.randomUUID(),
+    override val id: ClientId = UUIDv7.randomUUID(),
     @CreatedDate
     val createdAt: Instant = Instant.now(),
     @LastModifiedDate

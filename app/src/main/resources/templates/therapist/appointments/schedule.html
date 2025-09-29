@@ -58,14 +58,31 @@
 
         window.addEventListener("load", () => {
             document.body.addEventListener('htmx:afterSwap', function (evt) {
-                if (evt.detail.xhr.status === 200) {
+                const openedUrl = new URL(evt.detail.requestConfig.path, window.location.origin);
+                if (evt.detail.xhr.status === 200 && openedUrl.pathname === '/therapist/schedule') {
                     revealAppointment();
                 }
             })
 
             revealAppointment();
         });
+    </script>
 
+    <script defer id="autoOpenSettingsModal">
+        function autoOpenSettingsModal() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('google-connected') !== 'true') {
+                return;
+            }
+
+            const settingsModal = new bootstrap.Modal(document.getElementById('settingsModal'));
+            settingsModal.show();
+            urlParams.delete('google-connected');
+            const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+            window.history.replaceState({}, '', newUrl);
+        }
+
+        window.addEventListener("load", autoOpenSettingsModal);
     </script>
 
 </head>
@@ -75,30 +92,48 @@
 <div th:replace="~{fragments/headerNavPanel :: headerNavPanel(pageName='Расписание', controlsView=~{:: #datePickerView})}">
 
     <div class="calendar-header bg-white z-3" id="datePickerView">
-        <button class="btn btn-outline-secondary"
-                name="datePickerButton"
-                onclick="document.getElementById('datePicker').showPicker()"
-                th:href="@{/therapist/schedule?calendar=true&date={date}(date=${today})}"
+        <div class="position-relative d-inline-block">
+            <button
+                    class="btn btn-outline-secondary"
+                    name="datePickerButton"
+                    th:href="@{/therapist/schedule?calendar=true&date={date}(date=${today})}"
+                    onclick="document.getElementById('datePicker').showPicker()"
+            >
+                <i class="fa-solid fa-calendar"></i>
+            </button>
 
+            <input class="position-absolute top-50 opacity-0 pointer-event"
+                   hx-push-url="true"
+                   hx-select="main"
+                   hx-swap="outerHTML"
+                   hx-target="main"
+                   hx-trigger="change"
+                   id="datePicker"
+                   name="date"
+                   style="transform: translateX(-200%);"
+                   th:hx-get="@{/therapist/schedule}"
+                   th:value="${date}"
+                   type="date"
+            >
+        </div>
+
+        <button
+                class="btn btn-outline-secondary ms-2 position-relative"
+                data-bs-target="#settingsModal"
+                data-bs-toggle="modal"
         >
-                        <span th:text="${selectedDayLabel}">
-                        </span>
-            &nbsp;
-            <i class="fa-solid fa-chevron-down"></i>
+            <i class="fa-solid fa-gear"></i>
+            <i
+                    aria-hidden="true"
+                    class="sync-error-icon
+                           fa-solid fa-circle-exclamation text-danger bg-white
+                           position-absolute top-0 start-0 translate-middle
+                           "
+                    style="border-radius: 50%;"
+                    th:if="${hasSyncErrors}"
+                    title="Ошибки синхронизации"
+            ></i>
         </button>
-
-        <input class="d-none"
-               hx-push-url="true"
-               hx-select="main"
-               hx-swap="outerHTML"
-               hx-target="main"
-               hx-trigger="change"
-               id="datePicker"
-               name="date"
-               th:hx-get="@{/therapist/schedule}"
-               th:value="${date}"
-               type="date"
-        >
     </div>
 </div>
 
@@ -108,7 +143,6 @@
 
     <div id="layoutSidenav_content">
         <main class="container px-4">
-
             <section class="mt-3" id="calendar" th:fragment="calendarSchedule" xmlns:th="http://www.w3.org/1999/html">
 
                 <div class="calendar-body mb-4">
@@ -147,6 +181,31 @@
     </div>
 </div>
 
-</body>
+<div aria-hidden="true" aria-labelledby="settingsModalLabel" class="modal fade" id="settingsModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="settingsModalLabel">Настройки календарей</h5>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
+            </div>
+            <div class="modal-body">
+                <div hx-get="/therapist/schedule/settings/google-calendar"
+                     hx-swap="innerHTML"
+                     hx-trigger="intersect"
+                     id="google-calendar-settings-container">
+                    <div class="text-center py-3">
+                        <div class="mt-2">
+                            <small class="text-muted">Загрузка настроек Google Calendar...</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-secondary" data-bs-dismiss="modal" type="button">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
 
+</body>
 </html>

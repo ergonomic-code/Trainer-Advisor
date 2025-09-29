@@ -24,14 +24,16 @@ class ArchTest {
             .consideringAllDependencies()
             .layer(testsAbstractionLayer).definedBy("pro.qyoga.tests.(assertions|clients|fixture|infra|pages|platform)..")
             .layer("App").definedBy("pro.qyoga.app..")
+            .layer("I9ns").definedBy("pro.qyoga.i9ns..")
             .layer("Core").definedBy("pro.qyoga.core..")
             .layer("Infra").definedBy("pro.qyoga.infra..")
             .layer("Platform").definedBy("pro.azhidkov.platform..")
 
             .whereLayer("App").mayOnlyBeAccessedByLayers(testsAbstractionLayer)
-            .whereLayer("Core").mayOnlyBeAccessedByLayers("App", testsAbstractionLayer)
+            .whereLayer("I9ns").mayOnlyBeAccessedByLayers("App", testsAbstractionLayer)
+            .whereLayer("Core").mayOnlyBeAccessedByLayers("App", "I9ns", testsAbstractionLayer)
             .whereLayer("Infra").mayOnlyBeAccessedByLayers("Core", "App", testsAbstractionLayer)
-            .whereLayer("Platform").mayOnlyBeAccessedByLayers("App", "Core", "Infra", testsAbstractionLayer)
+            .whereLayer("Platform").mayOnlyBeAccessedByLayers("App", "I9ns", "Core", "Infra", testsAbstractionLayer)
             .check(qyogaClasses)
     }
 

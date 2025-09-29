@@ -6,6 +6,7 @@ import io.kotest.matchers.compose.all
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldNot
 import org.jsoup.nodes.Element
+import org.springframework.web.util.UriTemplate
 import pro.qyoga.tests.platform.html.Component
 import pro.qyoga.tests.platform.html.HtmlPage
 import pro.qyoga.tests.platform.html.Input
@@ -104,6 +105,14 @@ fun haveAttributeValueMatching(attr: String, valueRegex: Regex) = Matcher { elem
     )
 }
 
+fun haveAttributeValueMatching(attr: String, uriTemplate: UriTemplate) = Matcher { element: Element ->
+    MatcherResult.invoke(
+        uriTemplate.matches(element.attr(attr)),
+        { "Element ${element.descr} has $attr=\"${element.attr(attr)}\" but `$attr` value matching \"${uriTemplate}}\" is expected" },
+        { "Element ${element.descr} should not have attribute `$attr` value matching \"${uriTemplate}}\"" },
+    )
+}
+
 fun haveAttributeValue(attr: String, value: String, ignoreCase: Boolean = false) = Matcher { element: Element ->
     MatcherResult.invoke(
         element.attr(attr).equals(value, ignoreCase = ignoreCase),
@@ -166,6 +175,22 @@ fun haveInputWithValue(input: Input, value: String) = Matcher { element: Element
     )
 }
 
+fun haveCheckboxChecked(
+    selector: String = "input.form-check-input[type=checkbox][name=shouldBeShown]",
+    expected: Boolean
+): Matcher<Element> = Matcher { el ->
+    val checkbox = el.select(selector).first()
+    val actual = checkbox?.hasAttr("checked") == true
+    MatcherResult(
+        checkbox != null && actual == expected,
+        {
+            val found = if (checkbox == null) "not found" else if (actual) "checked" else "unchecked"
+            "Expected checkbox '$selector' to be ${if (expected) "checked" else "unchecked"}, but $found"
+        },
+        { "Checkbox '$selector' unexpectedly matches expected=${expected}" }
+    )
+}
+
 val Element.descr
     get() = "<${this.tag().name} id=\"${this.id()}\">" +
             this.text().take(32) +
@@ -209,7 +234,7 @@ infix fun Element.shouldBePage(page: HtmlPage): Element {
     return this
 }
 
-fun alwaysSuccess(): Matcher<Element> = Matcher { element ->
+fun alwaysSuccess(): Matcher<Element> = Matcher { _ ->
     MatcherResult(true, { "" }, { "" })
 }
 

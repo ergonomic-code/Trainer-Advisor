@@ -6,15 +6,19 @@ import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
-import pro.qyoga.core.calendar.ical.model.ICalCalendarItem
+import pro.qyoga.i9ns.calendars.ical.model.ICalZonedCalendarItem
+import pro.qyoga.tests.assertions.SelectorOnlyComponent
 import pro.qyoga.tests.assertions.shouldBePage
+import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.fixture.data.asiaNovosibirskTimeZone
 import pro.qyoga.tests.fixture.data.randomWorkingTime
 import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentsObjectMother
 import pro.qyoga.tests.fixture.object_mothers.appointments.DURATION_FOR_FULL_LABEL
 import pro.qyoga.tests.fixture.object_mothers.calendars.CalendarsObjectMother.aCalendarItem
-import pro.qyoga.tests.fixture.presets.CalendarsFixturePresets
+import pro.qyoga.tests.fixture.presets.GoogleCalendarsFixturePresets
+import pro.qyoga.tests.fixture.presets.ICalsCalendarsFixturePresets
+import pro.qyoga.tests.fixture.presets.ScheduleFixturePreset
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import pro.qyoga.tests.pages.therapist.appointments.CalendarPage
 import pro.qyoga.tests.pages.therapist.appointments.appointmentCards
@@ -26,7 +30,7 @@ import java.time.LocalDate
 @DisplayName("Страница календаря")
 class SchedulePageTest : QYogaAppIntegrationBaseTest() {
 
-    private val calendarsFixturePresets = getBean<CalendarsFixturePresets>()
+    private val iCalsCalendarsFixturePresets = getBean<ICalsCalendarsFixturePresets>()
 
     @Test
     fun `должна корректно рендерить пустой календарь за текущую дату`() {
@@ -112,11 +116,14 @@ class SchedulePageTest : QYogaAppIntegrationBaseTest() {
         // Сетап
         val today = LocalDate.now()
         val event = aCalendarItem {
-            set(field(ICalCalendarItem::dateTime), today.atTime(randomWorkingTime()).atZone(asiaNovosibirskTimeZone))
-            set(field(ICalCalendarItem::duration), AppointmentsObjectMother.fullCardDuration)
+            set(
+                field(ICalZonedCalendarItem::dateTime),
+                today.atTime(randomWorkingTime()).atZone(asiaNovosibirskTimeZone)
+            )
+            set(field(ICalZonedCalendarItem::duration), AppointmentsObjectMother.fullCardDuration)
         }
 
-        calendarsFixturePresets.createICalCalendarWithSingleEvent(event)
+        iCalsCalendarsFixturePresets.createICalCalendarWithSingleEvent(event)
 
         // Действие
         val document = theTherapist.appointments.getScheduleForDay(today)
@@ -125,6 +132,27 @@ class SchedulePageTest : QYogaAppIntegrationBaseTest() {
         document shouldBePage CalendarPage
         document.appointmentCards() shouldHaveSize 1
         document.appointmentCards().single() shouldMatch event
+    }
+
+    @Test
+    fun `должна рендериться корректно, даже если у терапевта есть подключенный Google-календарь и запрос событий из него приводит к ошибке`() {
+        // Arrange
+        val fixture = ScheduleFixturePreset.withSingleAppointmentAndEnabledGoogleCalendar()
+        val appointment = fixture.theAppointment()
+        val day = appointment.dateTime.toLocalDate()
+        val scheduleFixturePresets = getBean<ScheduleFixturePreset>()
+        scheduleFixturePresets.insertFixture(fixture)
+        val googleCalendarsFixturePresets = getBean<GoogleCalendarsFixturePresets>()
+        googleCalendarsFixturePresets.setFailureOnRequestForEvents(fixture.googleCalendarsFixture)
+
+        // Act
+        val document = theTherapist.appointments.getScheduleForDay(day)
+
+        // Assert
+        document shouldBePage CalendarPage
+        document.appointmentCards() shouldHaveSize 1
+        document.appointmentCards().single() shouldMatch appointment
+        document shouldHaveComponent SelectorOnlyComponent(CalendarPage.SYNC_ERROR_ICON_SELECTOR)
     }
 
 }

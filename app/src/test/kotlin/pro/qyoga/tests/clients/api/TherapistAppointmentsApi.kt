@@ -14,18 +14,20 @@ import org.springframework.http.HttpStatus
 import pro.azhidkov.platform.java.time.toLocalTimeString
 import pro.qyoga.app.therapist.appointments.core.edit.CreateAppointmentPageController
 import pro.qyoga.app.therapist.appointments.core.edit.EditAppointmentPageController
-import pro.qyoga.app.therapist.appointments.core.edit.view_model.SourceItem
-import pro.qyoga.app.therapist.appointments.core.schedule.CalendarPageModel
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
+import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageModel
 import pro.qyoga.core.appointments.core.commands.EditAppointmentRequest
 import pro.qyoga.core.appointments.core.model.AppointmentRef
 import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentPage
 import pro.qyoga.tests.pages.therapist.appointments.EditAppointmentPage
+import java.net.URI
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class TherapistAppointmentsApi(override val authCookie: Cookie) : AuthorizedApi {
+class TherapistAppointmentsApi(
+    override val authCookie: Cookie
+) : AuthorizedApi {
 
     fun getScheduleForDay(date: LocalDate? = null, appointmentToFocus: AppointmentRef? = null): Document {
         return Given {
@@ -34,7 +36,7 @@ class TherapistAppointmentsApi(override val authCookie: Cookie) : AuthorizedApi 
                 queryParam(SchedulePageController.DATE, date.toString())
             }
             if (appointmentToFocus != null) {
-                queryParam(CalendarPageModel.FOCUSED_APPOINTMENT, appointmentToFocus.id.toString())
+                queryParam(SchedulePageModel.FOCUSED_APPOINTMENT, appointmentToFocus.id.toString())
             }
             this
         } When {
@@ -48,7 +50,7 @@ class TherapistAppointmentsApi(override val authCookie: Cookie) : AuthorizedApi 
 
     fun getCreateAppointmentPage(
         dateTime: LocalDateTime? = null,
-        sourceItem: SourceItem? = null
+        sourceItem: URI? = null
     ): Document {
         return Given {
             authorized()
@@ -56,8 +58,7 @@ class TherapistAppointmentsApi(override val authCookie: Cookie) : AuthorizedApi 
                 queryParam(CreateAppointmentPageController.DATE_TIME, dateTime.toString())
             }
             if (sourceItem != null) {
-                queryParam(CreateAppointmentPageController.SOURCE_ITEM_TYPE, sourceItem.type)
-                queryParam(CreateAppointmentPageController.SOURCE_ITEM_ID, sourceItem.id)
+                queryParam(CreateAppointmentPageController.SOURCE_ITEM, sourceItem.toASCIIString())
             }
             this
         } When {
