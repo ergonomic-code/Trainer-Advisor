@@ -5,7 +5,6 @@ import io.kotest.matchers.shouldBe
 import org.springframework.core.env.get
 import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageController
 import pro.qyoga.app.therapist.oauth2.GoogleOAuthController
-import pro.qyoga.i9ns.calendars.google.GoogleCalendarsService
 import pro.qyoga.i9ns.calendars.google.model.GoogleCalendar
 import pro.qyoga.i9ns.calendars.google.views.GoogleCalendarsSettingsView
 import pro.qyoga.tests.assertions.shouldBeRedirectToGoogleOAuth
@@ -30,7 +29,6 @@ class GoogleAuthorizationIntegrationTest : QYogaAppIntegrationBaseKoTest({
     val therapist by lazy { TherapistClient.loginAsTheTherapist() }
     val clientId = context.environment["spring.security.oauth2.client.registration.google.client-id"]!!
     val clientSecret = context.environment["spring.security.oauth2.client.registration.google.client-secret"]!!
-    val googleCalendarsService = getBean<GoogleCalendarsService>()
     val googleCalendarsTestApi = getBean<GoogleCalendarTestApi>()
 
     "Spring Security" - {
@@ -96,7 +94,7 @@ class GoogleAuthorizationIntegrationTest : QYogaAppIntegrationBaseKoTest({
             }
 
             "обеспечивать возможность дальнейших запросов к Google Calendar" {
-                val gotCalendars = googleCalendarsService.findGoogleAccountCalendars(THE_THERAPIST_REF)
+                val gotCalendars = googleCalendarsTestApi.getGoogleCalendarsSettings(THE_THERAPIST_REF)
                 (gotCalendars.single().content as GoogleCalendarsSettingsView.Calendars).calendars shouldBe calendars
             }
 
@@ -135,7 +133,7 @@ class GoogleAuthorizationIntegrationTest : QYogaAppIntegrationBaseKoTest({
             }
 
             "обеспечивать возможность дальнейших запросов к Google Calendar" {
-                val gotCalendars = googleCalendarsService.findGoogleAccountCalendars(THE_THERAPIST_REF)
+                val gotCalendars = googleCalendarsTestApi.getGoogleCalendarsSettings(THE_THERAPIST_REF)
                 (gotCalendars.single().content as GoogleCalendarsSettingsView.Calendars).calendars shouldBe calendars
             }
 

@@ -30,7 +30,7 @@ import java.time.LocalDate
 @DisplayName("Страница календаря")
 class SchedulePageTest : QYogaAppIntegrationBaseTest() {
 
-    private val ICalsCalendarsFixturePresets = getBean<ICalsCalendarsFixturePresets>()
+    private val iCalsCalendarsFixturePresets = getBean<ICalsCalendarsFixturePresets>()
 
     @Test
     fun `должна корректно рендерить пустой календарь за текущую дату`() {
@@ -123,7 +123,7 @@ class SchedulePageTest : QYogaAppIntegrationBaseTest() {
             set(field(ICalZonedCalendarItem::duration), AppointmentsObjectMother.fullCardDuration)
         }
 
-        ICalsCalendarsFixturePresets.createICalCalendarWithSingleEvent(event)
+        iCalsCalendarsFixturePresets.createICalCalendarWithSingleEvent(event)
 
         // Действие
         val document = theTherapist.appointments.getScheduleForDay(today)

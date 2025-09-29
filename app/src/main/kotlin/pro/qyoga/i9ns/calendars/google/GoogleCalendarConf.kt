@@ -28,7 +28,6 @@ class GoogleCalendarConf {
             Caffeine.newBuilder()
                 .expireAfterWrite(5, TimeUnit.MINUTES)
                 .maximumSize(5_000)
-                .recordStats()
                 .build()
         )
 
@@ -37,7 +36,6 @@ class GoogleCalendarConf {
             Caffeine.newBuilder()
                 .expireAfterWrite(30, TimeUnit.MINUTES)
                 .maximumSize(1_000)
-                .recordStats()
                 .build()
         )
 

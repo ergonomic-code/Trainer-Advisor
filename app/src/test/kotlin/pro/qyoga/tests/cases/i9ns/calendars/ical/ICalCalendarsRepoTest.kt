@@ -1,4 +1,4 @@
-package pro.qyoga.tests.cases.core.calendar.ical
+package pro.qyoga.tests.cases.i9ns.calendars.ical
 
 import io.kotest.core.annotation.DisplayName
 import io.kotest.matchers.shouldBe

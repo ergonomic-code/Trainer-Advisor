@@ -60,12 +60,12 @@ data class SchedulePageModel(
 
         fun of(
             date: LocalDate,
-            getAppointments: GetCalendarAppointmentsRs,
+            getAppointmentsRs: GetCalendarAppointmentsRs,
             appointmentToFocus: UUID? = null
         ): SchedulePageModel {
-            val timeMarks = generateTimeMarks(getAppointments.appointments, date)
+            val timeMarks = generateTimeMarks(getAppointmentsRs.appointments, date)
             val weekCalendar = generateDaysAround(date)
-            return SchedulePageModel(date, timeMarks, weekCalendar, appointmentToFocus, getAppointments.hasErrors)
+            return SchedulePageModel(date, timeMarks, weekCalendar, appointmentToFocus, getAppointmentsRs.hasErrors)
         }
 
         const val FOCUSED_APPOINTMENT = "focusedAppointment"

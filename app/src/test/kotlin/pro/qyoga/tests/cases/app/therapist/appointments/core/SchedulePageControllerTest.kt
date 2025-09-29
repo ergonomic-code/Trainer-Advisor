@@ -9,11 +9,7 @@ import pro.qyoga.tests.fixture.object_mothers.calendars.google.GoogleCalendarObj
 import pro.qyoga.tests.fixture.object_mothers.therapists.theTherapistUserDetails
 import pro.qyoga.tests.fixture.presets.AppointmentsFixturePresets
 import pro.qyoga.tests.fixture.presets.GoogleCalendarsFixturePresets
-import pro.qyoga.tests.fixture.test_apis.GoogleCalendarTestApi
-import pro.qyoga.tests.fixture.wiremocks.MockGoogleCalendar
-import pro.qyoga.tests.fixture.wiremocks.MockGoogleOAuthServer
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseKoTest
-import pro.qyoga.tests.infra.wiremock.WireMock
 import java.time.LocalDate
 
 
@@ -21,13 +17,9 @@ import java.time.LocalDate
 class SchedulePageControllerTest : QYogaAppIntegrationBaseKoTest({
 
     val appointmentsFixturePresets = getBean<AppointmentsFixturePresets>()
-    val schedulePageController = getBean<SchedulePageController>()
+    val googleCalendarsFixturePresets = getBean<GoogleCalendarsFixturePresets>()
 
-    val googleCalendarsTestApi = getBean<GoogleCalendarTestApi>()
-    val mockGoogleOAuthServer = MockGoogleOAuthServer(WireMock.wiremock)
-    val mockGoogleCalendar = MockGoogleCalendar(WireMock.wiremock)
-    val googleCalendarsFixturePresets =
-        GoogleCalendarsFixturePresets(mockGoogleOAuthServer, mockGoogleCalendar, googleCalendarsTestApi)
+    val schedulePageController = getBean<SchedulePageController>()
 
     "при наличии приёма, созданного на базе события ics-календаря" - {
         // Сетап

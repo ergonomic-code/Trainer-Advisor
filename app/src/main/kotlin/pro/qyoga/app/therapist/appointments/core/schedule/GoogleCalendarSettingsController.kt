@@ -4,7 +4,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
-import org.springframework.web.servlet.ModelAndView
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.ref
 import pro.qyoga.i9ns.calendars.google.GoogleCalendarsService
@@ -30,9 +29,8 @@ class GoogleCalendarSettingsController(
         @PathVariable calendarId: String,
         @RequestBody settingsPatch: Map<String, Any>,
         @AuthenticationPrincipal therapist: QyogaUserDetails
-    ): ModelAndView {
+    ) {
         googleCalendarsService.updateCalendarSettings(therapist.ref, googleAccount, calendarId, settingsPatch)
-        return getGoogleCalendarSettingsComponent(therapist)
     }
 
     companion object {

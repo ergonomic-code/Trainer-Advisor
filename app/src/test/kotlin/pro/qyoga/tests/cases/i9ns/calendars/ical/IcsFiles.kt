@@ -1,4 +1,4 @@
-package pro.qyoga.tests.cases.core.calendar.ical
+package pro.qyoga.tests.cases.i9ns.calendars.ical
 
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter

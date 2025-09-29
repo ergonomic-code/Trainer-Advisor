@@ -8,20 +8,14 @@ import pro.qyoga.tests.clients.TherapistClient.Companion.loginAsTheTherapist
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
 import pro.qyoga.tests.fixture.presets.GoogleCalendarsFixturePresets
 import pro.qyoga.tests.fixture.test_apis.GoogleCalendarTestApi
-import pro.qyoga.tests.fixture.wiremocks.MockGoogleCalendar
-import pro.qyoga.tests.fixture.wiremocks.MockGoogleOAuthServer
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseKoTest
-import pro.qyoga.tests.infra.wiremock.WireMock
 
 
 @DisplayName("Эндпоинт установки флага отображения Google-календаря")
 class SetCalendarShouldBeShownTest : QYogaAppIntegrationBaseKoTest({
 
     val googleCalendarsTestApi = getBean<GoogleCalendarTestApi>()
-    val mockGoogleOAuthServer = MockGoogleOAuthServer(WireMock.wiremock)
-    val mockGoogleCalendar = MockGoogleCalendar(WireMock.wiremock)
-    val googleCalendarsFixturePresets =
-        GoogleCalendarsFixturePresets(mockGoogleOAuthServer, mockGoogleCalendar, googleCalendarsTestApi)
+    val googleCalendarsFixturePresets = getBean<GoogleCalendarsFixturePresets>()
 
     "должен сохранять заданное значение в БД" {
         // Сетап

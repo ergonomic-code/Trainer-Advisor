@@ -1,4 +1,4 @@
-package pro.qyoga.tests.cases.i9ns.calendar.google
+package pro.qyoga.tests.cases.i9ns.calendars.google
 
 import io.kotest.core.annotation.DisplayName
 import io.kotest.matchers.collections.shouldHaveSize

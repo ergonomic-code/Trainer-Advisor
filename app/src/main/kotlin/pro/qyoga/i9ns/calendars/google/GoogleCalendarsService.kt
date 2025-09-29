@@ -28,14 +28,14 @@ import java.util.function.Supplier
 
 private typealias GoogleCalendarItemsFetchResult = Result<List<GoogleCalendarItem<ZonedDateTime>>>
 
-private val log = LoggerFactory.getLogger(GoogleCalendarsService::class.java)
-
 @Service
 class GoogleCalendarsService(
     private val googleAccountsDao: GoogleAccountsDao,
     private val googleCalendarsDao: GoogleCalendarsDao,
     private val googleCalendarsClient: GoogleCalendarsClient,
 ) : CalendarsService<GoogleCalendarItemId> {
+
+    private val log = LoggerFactory.getLogger(GoogleCalendarsService::class.java)
 
     private val executor = Executors.newVirtualThreadPerTaskExecutor()
 
