@@ -7,7 +7,7 @@ import org.springframework.http.HttpStatus
 import pro.azhidkov.platform.java.time.toLocalTimeString
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.qyoga.app.therapist.appointments.core.edit.forms.formatCommentFor
-import pro.qyoga.i9ns.calendars.ical.model.ICalCalendarItem
+import pro.qyoga.i9ns.calendars.ical.model.ICalZonedCalendarItem
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.assertions.shouldHaveElement
@@ -28,7 +28,10 @@ import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentForm
 import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentPage
 import pro.qyoga.tests.pages.therapist.appointments.EditAppointmentForm
 import pro.qyoga.tests.platform.instancio.KSelect.Companion.field
-import java.time.*
+import java.time.Duration
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.ZoneId
 import java.time.temporal.ChronoUnit
 import java.util.*
 
@@ -155,11 +158,11 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
         // Сетап
         val event = aCalendarItem {
             set(
-                field(ICalCalendarItem<ZonedDateTime>::dateTime),
+                field(ICalZonedCalendarItem::dateTime),
                 randomAppointmentDate().atZone(asiaNovosibirskTimeZone)
             )
-            set(field(ICalCalendarItem<ZonedDateTime>::duration), Duration.ofMinutes(75))
-            set(field(ICalCalendarItem<ZonedDateTime>::description), randomSentence())
+            set(field(ICalZonedCalendarItem::duration), Duration.ofMinutes(75))
+            set(field(ICalZonedCalendarItem::description), randomSentence())
         }
         iCalsCalendarsFixturePresets.createICalCalendarWithSingleEvent(event)
 

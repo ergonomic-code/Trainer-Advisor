@@ -15,14 +15,13 @@ import pro.qyoga.app.therapist.appointments.core.schedule.SchedulePageModel
 import pro.qyoga.app.therapist.appointments.core.schedule.TimeMark
 import pro.qyoga.core.appointments.core.commands.EditAppointmentRequest
 import pro.qyoga.core.appointments.core.model.Appointment
-import pro.qyoga.i9ns.calendars.ical.model.ICalCalendarItem
+import pro.qyoga.i9ns.calendars.ical.model.ICalZonedCalendarItem
 import pro.qyoga.l10n.russianTimeFormat
 import pro.qyoga.tests.assertions.*
 import pro.qyoga.tests.pages.therapist.appointments.CalendarPage.APPOINTMENT_CARD_SELECTOR
 import pro.qyoga.tests.pages.therapist.appointments.google_calendars.GoogleCalendarsSettingsLoaderComponent
 import pro.qyoga.tests.platform.html.*
 import java.time.LocalTime
-import java.time.ZonedDateTime
 
 
 object CalendarPage : HtmlPage {
@@ -91,7 +90,7 @@ infix fun Element.shouldMatch(app: EditAppointmentRequest) {
         .single() shouldHaveClass AppointmentCard.appointmentStatusClasses[app.appointmentStatus]!!
 }
 
-infix fun Element.shouldMatch(localizedICalCalendarItem: ICalCalendarItem<ZonedDateTime>) {
+infix fun Element.shouldMatch(localizedICalCalendarItem: ICalZonedCalendarItem) {
     this shouldHaveComponent Link(
         "editAppointmentLink",
         CreateAppointmentPageController.addFromSourceItemUri(

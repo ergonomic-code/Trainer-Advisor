@@ -7,6 +7,8 @@ import java.time.ZonedDateTime
 import java.time.temporal.Temporal
 
 
+typealias ICalZonedCalendarItem = ICalCalendarItem<ZonedDateTime>
+
 data class ICalCalendarItem<DATE : Temporal>(
     override val id: ICalEventId,
     override val title: String,
@@ -16,7 +18,7 @@ data class ICalCalendarItem<DATE : Temporal>(
     override val location: String?
 ) : CalendarItem<ICalEventId, DATE>
 
-fun ICalCalendarItem<ZonedDateTime>.toLocalizedICalCalendarItem(): ICalCalendarItem<LocalDateTime> =
+fun ICalZonedCalendarItem.toLocalizedICalCalendarItem(): ICalCalendarItem<LocalDateTime> =
     ICalCalendarItem(
         this.id,
         this.title,

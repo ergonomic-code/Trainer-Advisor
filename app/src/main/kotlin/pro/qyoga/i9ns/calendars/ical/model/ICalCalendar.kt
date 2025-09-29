@@ -62,7 +62,7 @@ fun ICalCalendar.findById(eventId: ICalEventId) =
 
 fun ICalCalendar.calendarItemsIn(
     interval: Interval<ZonedDateTime>
-): List<ICalCalendarItem<ZonedDateTime>>? =
+): List<ICalZonedCalendarItem>? =
     vEvents()
         ?.flatMap { ve: VEvent ->
             ve.calculateRecurrenceSet<ZonedDateTime>(interval.toICalPeriod())

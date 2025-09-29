@@ -6,7 +6,7 @@ import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
-import pro.qyoga.i9ns.calendars.ical.model.ICalCalendarItem
+import pro.qyoga.i9ns.calendars.ical.model.ICalZonedCalendarItem
 import pro.qyoga.tests.assertions.SelectorOnlyComponent
 import pro.qyoga.tests.assertions.shouldBePage
 import pro.qyoga.tests.assertions.shouldHaveComponent
@@ -25,7 +25,6 @@ import pro.qyoga.tests.pages.therapist.appointments.appointmentCards
 import pro.qyoga.tests.pages.therapist.appointments.shouldMatch
 import pro.qyoga.tests.platform.instancio.KSelect.Companion.field
 import java.time.LocalDate
-import java.time.ZonedDateTime
 
 
 @DisplayName("Страница календаря")
@@ -118,10 +117,10 @@ class SchedulePageTest : QYogaAppIntegrationBaseTest() {
         val today = LocalDate.now()
         val event = aCalendarItem {
             set(
-                field(ICalCalendarItem<ZonedDateTime>::dateTime),
+                field(ICalZonedCalendarItem::dateTime),
                 today.atTime(randomWorkingTime()).atZone(asiaNovosibirskTimeZone)
             )
-            set(field(ICalCalendarItem<ZonedDateTime>::duration), AppointmentsObjectMother.fullCardDuration)
+            set(field(ICalZonedCalendarItem::duration), AppointmentsObjectMother.fullCardDuration)
         }
 
         ICalsCalendarsFixturePresets.createICalCalendarWithSingleEvent(event)

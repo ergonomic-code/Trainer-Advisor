@@ -8,6 +8,7 @@ import net.fortuna.ical4j.model.property.RecurrenceId
 import pro.azhidkov.platform.java.time.toLocalDateTime
 import pro.qyoga.i9ns.calendars.ical.model.ICalCalendarItem
 import pro.qyoga.i9ns.calendars.ical.model.ICalEventId
+import pro.qyoga.i9ns.calendars.ical.model.ICalZonedCalendarItem
 import java.time.Duration
 import java.time.ZoneId
 import java.time.ZonedDateTime
@@ -55,10 +56,10 @@ val VEvent.geographicsPosOrNull: String?
 val VEvent.locationOrNull: String?
     get() = this.location?.value
 
-fun VEvent.toICalCalendarItem(): ICalCalendarItem<ZonedDateTime> =
+fun VEvent.toICalCalendarItem(): ICalZonedCalendarItem =
     toICalCalendarItem(Period(startDateTime, startDateTime + javaDuration))
 
-fun VEvent.toICalCalendarItem(period: Period<ZonedDateTime>): ICalCalendarItem<ZonedDateTime> = ICalCalendarItem(
+fun VEvent.toICalCalendarItem(period: Period<ZonedDateTime>): ICalZonedCalendarItem = ICalCalendarItem(
     id,
     title,
     descriptionOrNull ?: "",
