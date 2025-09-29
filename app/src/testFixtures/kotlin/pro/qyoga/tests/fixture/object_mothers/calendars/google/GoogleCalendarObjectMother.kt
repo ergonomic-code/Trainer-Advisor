@@ -14,10 +14,13 @@ import java.util.*
 
 object GoogleCalendarObjectMother {
 
-    fun aGoogleAccount(therapist: TherapistRef): GoogleAccount =
+    fun aGoogleAccount(
+        therapist: TherapistRef,
+        email: String = faker.internet().emailAddress()
+    ): GoogleAccount =
         GoogleAccount(
             therapist,
-            faker.internet().emailAddress(),
+            email,
             aGoogleToken()
         )
 

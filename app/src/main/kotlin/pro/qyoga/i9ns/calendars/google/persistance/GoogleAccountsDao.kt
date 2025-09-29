@@ -1,14 +1,12 @@
 package pro.qyoga.i9ns.calendars.google.persistance
 
 import org.springframework.data.jdbc.core.JdbcAggregateTemplate
-import org.springframework.data.jdbc.core.findAllById
 import org.springframework.jdbc.core.simple.JdbcClient
 import org.springframework.stereotype.Repository
 import pro.azhidkov.platform.spring.jdbc.taDataClassRowMapper
 import pro.azhidkov.platform.spring.sdj.query.query
 import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.i9ns.calendars.google.model.GoogleAccount
-import pro.qyoga.i9ns.calendars.google.model.GoogleAccountRef
 
 
 private val googleAccountRowMapper = taDataClassRowMapper<GoogleAccount>()
@@ -20,7 +18,17 @@ class GoogleAccountsDao(
 ) {
 
     fun addGoogleAccount(googleAccount: GoogleAccount) {
-        jdbcAggregateTemplate.insert(googleAccount)
+        val sql = """
+            INSERT INTO therapist_google_accounts (id, owner_ref, refresh_token, email)
+            VALUES (:id, :ownerRef, :refreshToken, :email)
+            ON CONFLICT (owner_ref, email) DO UPDATE SET refresh_token = :refreshToken
+        """.trimIndent()
+        jdbcClient.sql(sql)
+            .param("id", googleAccount.id)
+            .param("ownerRef", googleAccount.ownerRef.id)
+            .param("refreshToken", googleAccount.refreshToken.show())
+            .param("email", googleAccount.email)
+            .update()
     }
 
     fun findGoogleAccounts(therapist: TherapistRef): List<GoogleAccount> {
@@ -28,10 +36,6 @@ class GoogleAccountsDao(
             GoogleAccount::ownerRef isEqual therapist
         }
         return jdbcAggregateTemplate.findAll(query, GoogleAccount::class.java)
-    }
-
-    fun findGoogleAccounts(accountIds: List<GoogleAccountRef>): List<GoogleAccount> {
-        return jdbcAggregateTemplate.findAllById(accountIds.map { it.id })
     }
 
     fun findGoogleAccounts(therapistRef: TherapistRef, calendarId: String): List<GoogleAccount> {
