@@ -16,6 +16,7 @@ import pro.qyoga.tests.fixture.data.randomWorkingTime
 import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentsObjectMother
 import pro.qyoga.tests.fixture.object_mothers.appointments.DURATION_FOR_FULL_LABEL
 import pro.qyoga.tests.fixture.object_mothers.calendars.CalendarsObjectMother.aCalendarItem
+import pro.qyoga.tests.fixture.presets.GoogleCalendarsFixturePresets
 import pro.qyoga.tests.fixture.presets.ICalsCalendarsFixturePresets
 import pro.qyoga.tests.fixture.presets.ScheduleFixturePreset
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
@@ -137,11 +138,13 @@ class SchedulePageTest : QYogaAppIntegrationBaseTest() {
     @Test
     fun `должна рендериться корректно, даже если у терапевта есть подключенный Google-календарь и запрос событий из него приводит к ошибке`() {
         // Arrange
-        val fixture = ScheduleFixturePreset.fixtureWithAppointmentAndGoogleCalendar()
+        val fixture = ScheduleFixturePreset.withSingleAppointmentAndEnabledGoogleCalendar()
         val appointment = fixture.theAppointment()
         val day = appointment.dateTime.toLocalDate()
-        getBean<ScheduleFixturePreset>().insertFixture(fixture)
-        // в моке не установлен ответ на запрос получения событий
+        val scheduleFixturePresets = getBean<ScheduleFixturePreset>()
+        scheduleFixturePresets.insertFixture(fixture)
+        val googleCalendarsFixturePresets = getBean<GoogleCalendarsFixturePresets>()
+        googleCalendarsFixturePresets.setFailureOnRequestForEvents(fixture.googleCalendarsFixture)
 
         // Act
         val document = theTherapist.appointments.getScheduleForDay(day)

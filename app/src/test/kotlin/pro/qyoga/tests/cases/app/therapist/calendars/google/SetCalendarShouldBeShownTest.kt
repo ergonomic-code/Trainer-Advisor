@@ -6,7 +6,7 @@ import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
 import pro.qyoga.i9ns.calendars.google.views.GoogleCalendarsSettingsView
 import pro.qyoga.tests.clients.TherapistClient.Companion.loginAsTheTherapist
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
-import pro.qyoga.tests.fixture.presets.GoogleCalendarFixturePresets
+import pro.qyoga.tests.fixture.presets.GoogleCalendarsFixturePresets
 import pro.qyoga.tests.fixture.test_apis.GoogleCalendarTestApi
 import pro.qyoga.tests.fixture.wiremocks.MockGoogleCalendar
 import pro.qyoga.tests.fixture.wiremocks.MockGoogleOAuthServer
@@ -20,17 +20,22 @@ class SetCalendarShouldBeShownTest : QYogaAppIntegrationBaseKoTest({
     val googleCalendarsTestApi = getBean<GoogleCalendarTestApi>()
     val mockGoogleOAuthServer = MockGoogleOAuthServer(WireMock.wiremock)
     val mockGoogleCalendar = MockGoogleCalendar(WireMock.wiremock)
-    val googleCalendarFixturePresets =
-        GoogleCalendarFixturePresets(mockGoogleOAuthServer, mockGoogleCalendar, googleCalendarsTestApi)
+    val googleCalendarsFixturePresets =
+        GoogleCalendarsFixturePresets(mockGoogleOAuthServer, mockGoogleCalendar, googleCalendarsTestApi)
 
     "должен сохранять заданное значение в БД" {
         // Сетап
-        val calendarId = "calendarId"
         val therapist = loginAsTheTherapist()
-        val googleAccount = googleCalendarFixturePresets.setupCalendar(calendarId = calendarId)
+        val singleDisabledCalendarFixture = GoogleCalendarsFixturePresets.withSingleCalendar(shouldBeShown = false)
+        val calendarId = singleDisabledCalendarFixture.theCalendar.calendarId
+        googleCalendarsFixturePresets.insertFixture(singleDisabledCalendarFixture)
 
         // Действие
-        therapist.googleCalendarIntegration.setShouldBeShown(googleAccount.ref(), calendarId, true)
+        therapist.googleCalendarIntegration.setShouldBeShown(
+            googleAccount = singleDisabledCalendarFixture.theGoogleAccount.ref(),
+            calendarId = calendarId,
+            shouldBeShown = true
+        )
 
         // Проверка
         val settings = googleCalendarsTestApi.getGoogleCalendarsSettings(THE_THERAPIST_REF)

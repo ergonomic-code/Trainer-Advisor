@@ -8,8 +8,7 @@ import pro.qyoga.i9ns.calendars.google.GoogleCalendarsService
 import pro.qyoga.tests.fixture.data.asiaNovosibirskTimeZone
 import pro.qyoga.tests.fixture.object_mothers.calendars.google.GoogleCalendarObjectMother.aGoogleCalendarItem
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
-import pro.qyoga.tests.fixture.presets.googleCalendarFixturePresets
-import pro.qyoga.tests.infra.test_config.spring.context
+import pro.qyoga.tests.fixture.presets.GoogleCalendarsFixturePresets
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseKoTest
 import java.time.Duration
 import java.time.LocalDateTime
@@ -21,19 +20,18 @@ import java.time.ZonedDateTime
 class GoogleCalendarsServiceTest : QYogaAppIntegrationBaseKoTest({
 
     val googleCalendarsService = getBean<GoogleCalendarsService>()
-    val googleCalendarFixturePresets = context.googleCalendarFixturePresets()
+    val googleCalendarsFixturePresets = getBean<GoogleCalendarsFixturePresets>()
 
     "метод получения событий в интервале" - {
 
         "должен возвращать события приведённые к таймзоне запрошенного интервала" {
             // Сетап
-            googleCalendarFixturePresets.setupCalendar(
-                aGoogleCalendarItem(
-                    date = { ZonedDateTime.of(2025, 9, 16, 6, 0, 0, 0, ZoneId.of("Europe/Moscow")) },
-                    duration = Duration.ofMinutes(60)
-                ),
-                shouldBeShown = true
+            val event = aGoogleCalendarItem(
+                date = { ZonedDateTime.of(2025, 9, 16, 6, 0, 0, 0, ZoneId.of("Europe/Moscow")) },
+                duration = Duration.ofMinutes(60)
             )
+            val singleEventFixture = GoogleCalendarsFixturePresets.withSingleCalendarAndEvent(event)
+            googleCalendarsFixturePresets.insertFixture(singleEventFixture)
 
             // Действие
             val items = googleCalendarsService.findCalendarItemsInInterval(

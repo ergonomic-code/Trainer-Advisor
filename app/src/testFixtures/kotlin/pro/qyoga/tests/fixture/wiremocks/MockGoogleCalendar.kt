@@ -15,6 +15,7 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.text.Charsets.UTF_8
 
+
 @Component
 class MockGoogleCalendar(
     private val wiremockServer: WireMockServer
@@ -51,28 +52,7 @@ class MockGoogleCalendar(
                         aResponse()
                             .withStatus(HttpStatus.FORBIDDEN.value())
                             .withHeader("Content-Type", "application/json")
-                            .withBody(
-                                """
-                                    {
-                                        "code": 403,
-                                        "details": [
-                                        {
-                                            "@type": "type.googleapis.com/google.rpc.ErrorInfo",
-                                            "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT"
-                                        }
-                                        ],
-                                        "errors": [
-                                        {
-                                            "domain": "global",
-                                            "message": "Insufficient Permission",
-                                            "reason": "insufficientPermissions"
-                                        }
-                                        ],
-                                        "message": "Request had insufficient authentication scopes.",
-                                        "status": "PERMISSION_DENIED"
-                                    }
-                          """
-                            )
+                            .withBody(FORBIDDEN)
                     )
             )
         }
@@ -93,17 +73,7 @@ class MockGoogleCalendar(
 
         fun returnsEvents(vararg events: GoogleCalendarItem<*>) {
             wiremockServer.stubFor(
-                get(
-                    urlPathEqualTo(
-                        "/google/calendar/v3/calendars/${
-                            UriUtils.encodePathSegment(
-                                calendarId,
-                                UTF_8
-                            )
-                        }/events"
-                    )
-                )
-                    .withHeader("Authorization", equalTo("Bearer $accessToken"))
+                getEventsRequest()
                     .willReturn(
                         aResponse()
                             .withStatus(HttpStatus.OK.value())
@@ -118,6 +88,30 @@ class MockGoogleCalendar(
                     )
             )
         }
+
+        fun returnsForbidden() {
+            wiremockServer.stubFor(
+                getEventsRequest()
+                    .willReturn(
+                        aResponse()
+                            .withStatus(HttpStatus.FORBIDDEN.value())
+                            .withHeader("Content-Type", "application/json")
+                            .withBody(FORBIDDEN)
+                    )
+            )
+        }
+
+        private fun getEventsRequest(): MappingBuilder = get(
+            urlPathEqualTo(
+                "/google/calendar/v3/calendars/${
+                    UriUtils.encodePathSegment(
+                        calendarId,
+                        UTF_8
+                    )
+                }/events"
+            )
+        )
+            .withHeader("Authorization", equalTo("Bearer $accessToken"))
 
     }
 
@@ -176,3 +170,24 @@ private fun GoogleCalendarItem<*>.toJson(): String {
         }
     """.trimIndent()
 }
+
+private const val FORBIDDEN = """
+                                    {
+                                        "code": 403,
+                                        "details": [
+                                        {
+                                            "@type": "type.googleapis.com/google.rpc.ErrorInfo",
+                                            "reason": "ACCESS_TOKEN_SCOPE_INSUFFICIENT"
+                                        }
+                                        ],
+                                        "errors": [
+                                        {
+                                            "domain": "global",
+                                            "message": "Insufficient Permission",
+                                            "reason": "insufficientPermissions"
+                                        }
+                                        ],
+                                        "message": "Request had insufficient authentication scopes.",
+                                        "status": "PERMISSION_DENIED"
+                                    }
+                          """

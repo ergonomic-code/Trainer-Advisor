@@ -21,7 +21,7 @@ import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentsObjectMot
 import pro.qyoga.tests.fixture.object_mothers.appointments.randomAppointmentDate
 import pro.qyoga.tests.fixture.object_mothers.calendars.CalendarsObjectMother.aCalendarItem
 import pro.qyoga.tests.fixture.object_mothers.calendars.google.GoogleCalendarObjectMother
-import pro.qyoga.tests.fixture.presets.GoogleCalendarFixturePresets
+import pro.qyoga.tests.fixture.presets.GoogleCalendarsFixturePresets
 import pro.qyoga.tests.fixture.presets.ICalsCalendarsFixturePresets
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentForm
@@ -42,7 +42,7 @@ private val aTime = LocalTime.now()
 class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
     private val iCalsCalendarsFixturePresets = getBean<ICalsCalendarsFixturePresets>()
-    private val googleCalendarsFixturePresets = getBean<GoogleCalendarFixturePresets>()
+    private val googleCalendarsFixturePresets = getBean<GoogleCalendarsFixturePresets>()
 
     @Test
     fun `должна рендерится корректно`() {
@@ -181,10 +181,11 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
     @DisplayName("должна предзаполнять дату, время, длительность и идентификатор события источника данными из события goolge-календаря, если его ид был передан в запросе") // длина имени файла с лямбдой превышает ограничение Линукса
     fun createAppointmentWithGoogleEventId() {
         // Сетап
-        val event = GoogleCalendarObjectMother.aGoogleCalendarItem(date = {
-            randomAppointmentDate().atZone(asiaNovosibirskTimeZone)
-        })
-        googleCalendarsFixturePresets.setupCalendar(event)
+        val event = GoogleCalendarObjectMother.aGoogleCalendarItem(
+            date = { randomAppointmentDate().atZone(asiaNovosibirskTimeZone) }
+        )
+        val singleEventFixture = GoogleCalendarsFixturePresets.withSingleCalendarAndEvent(event)
+        googleCalendarsFixturePresets.insertFixture(singleEventFixture)
 
         // Действие
         val document = theTherapist.appointments.getCreateAppointmentPage(
