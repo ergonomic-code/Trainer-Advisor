@@ -209,17 +209,6 @@ kover {
 		}
 	}
 }
-gitProperties {
-	val dotGit = project.rootDir.resolve(".git")
-	if (dotGit.isFile) {
-		// Костыль для работы gitProperties в директории дополнительного worktree (см. https://git-scm.com/docs/git-worktree)
-		// ВАЖНО: данные для git.properties будут взяты из основной директории репозитория
-		val actualGitDir = dotGit.readText().substringAfter("gitdir: ").substringBefore("/worktrees")
-		this.dotGitDirectory.set(File(actualGitDir))
-	} else {
-		this.dotGitDirectory.set(dotGit)
-	}
-}
 
 // см. https://detekt.dev/docs/gettingstarted/gradle/#dependencies
 // https://github.com/detekt/detekt/issues/7384
