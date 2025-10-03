@@ -9,7 +9,7 @@ dependencyResolutionManagement {
             val kotlinVersion = version("kotlin", "2.2.10")
             val springBootVersion = version("springBoot", "3.5.6")
             val springDependencyManagementVersion = version("springDependencyManagement", "1.1.7")
-            val koverVersion = version("kover", "0.9.1")
+            val koverVersion = version("kover", "0.9.2")
             val gitPropertiesVersion = version("gitProperties", "2.5.3")
             val detektVersion = version("dekekt", "1.23.8")
 
