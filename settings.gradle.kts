@@ -39,8 +39,8 @@ dependencyResolutionManagement {
                 "thymeleaf-extras-java8time"
             ).version("3.0.4.RELEASE")
 
-            library("postgres", "org.postgresql", "postgresql").version("42.7.6")
-            library("minio", "io.minio", "minio").version("8.5.17")
+            library("postgres", "org.postgresql", "postgresql").version("42.7.8")
+            library("minio", "io.minio", "minio").version("8.6.0")
             library("caffeine", "com.github.ben-manes.caffeine", "caffeine").versionRef(caffeineVersion)
 
             library("poi-ooxml", "org.apache.poi", "poi-ooxml").versionRef(poiVersion)
@@ -51,26 +51,26 @@ dependencyResolutionManagement {
             library("nanocaptcha", "net.logicsquad", "nanocaptcha").version("2.1")
             library("ical4j", "org.mnode.ical4j", "ical4j").version("4.1.1")
 
-            library("google-api-client", "com.google.api-client", "google-api-client").version("2.0.0")
+            library("google-api-client", "com.google.api-client", "google-api-client").version("2.8.1")
             library(
                 "google-oauth-client",
                 "com.google.oauth-client",
                 "google-oauth-client-jetty"
-            ).version("1.34.1")
+            ).version("1.39.0")
             library(
                 "google-calendar-api",
                 "com.google.apis",
                 "google-api-services-calendar"
-            ).version("v3-rev20220715-2.0.0")
+            ).version("v3-rev20250404-2.0.0")
             library("google.auth.bom", "com.google.auth", "google-auth-library-bom").versionRef(googleAuthBomVersion)
         }
 
         create("testLibs") {
-            val selenideVersion = version("selenide", "7.9.3")
-            val testContainersVersion = version("testcontainers", "1.21.1")
-            val restAssuredVersion = version("restAssured", "5.5.5")
+            val selenideVersion = version("selenide", "7.10.1")
+            val testContainersVersion = version("testcontainers", "1.21.3")
+            val restAssuredVersion = version("restAssured", "5.5.6")
             val kotestVersion = version("kotest", "5.9.1")
-            val wiremockVersion = version("wiremock", "3.13.0")
+            val wiremockVersion = version("wiremock", "3.13.1")
 
             library("selenide-proxy", "com.codeborne", "selenide-proxy").versionRef(selenideVersion)
             library("testcontainers-selenium", "org.testcontainers", "selenium").versionRef(testContainersVersion)
@@ -88,15 +88,15 @@ dependencyResolutionManagement {
             ).versionRef(restAssuredVersion)
             bundle("restassured", listOf("restassured-core", "restassured-kotlin", "restassured-json-schema"))
 
-            library("jsoup", "org.jsoup", "jsoup").version("1.20.1")
-            library("datafaker", "net.datafaker", "datafaker").version("2.4.3")
-            library("greenmail", "com.icegreen", "greenmail-junit5").version("2.1.3")
+            library("jsoup", "org.jsoup", "jsoup").version("1.21.2")
+            library("datafaker", "net.datafaker", "datafaker").version("2.5.1")
+            library("greenmail", "com.icegreen", "greenmail-junit5").version("2.1.6")
 
             library("testcontainers-minio", "org.testcontainers", "minio").versionRef(testContainersVersion)
 
-            library("mockito-kotlin", "org.mockito.kotlin", "mockito-kotlin").version("5.4.0")
+            library("mockito-kotlin", "org.mockito.kotlin", "mockito-kotlin").version("6.1.0")
             library("archunit", "com.tngtech.archunit", "archunit").version("1.4.1")
-            library("instancio", "org.instancio", "instancio-junit").version("5.4.1")
+            library("instancio", "org.instancio", "instancio-junit").version("5.5.1")
 
             library("wiremock", "org.wiremock", "wiremock").versionRef(wiremockVersion)
             library("wiremock-jetty12", "org.wiremock", "wiremock-jetty12").versionRef(wiremockVersion)
