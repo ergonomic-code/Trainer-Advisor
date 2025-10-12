@@ -15,7 +15,7 @@ val pgContainer: PostgreSQLContainer<*> by lazy {
         .withReuse(true)
         .withInitScript("db/qyoga-db-init.sql")
         .withCopyFileToContainer(
-            MountableFile.forClasspathResource("db/pg-initdb.d/qyoga-baseline-250302.psql"),
+            MountableFile.forClasspathResource("/db/pg-initdb.d/qyoga-baseline-250302.psql"),
             "/docker-entrypoint-initdb.d/qyoga-baseline-250302.psql"
         )
         .withCopyFileToContainer(

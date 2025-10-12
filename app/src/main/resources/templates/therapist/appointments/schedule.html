@@ -189,6 +189,11 @@
                 <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
             </div>
             <div class="modal-body">
+
+                <div th:replace="~{therapist/appointments/notifications-settings-component.html}"></div>
+
+                <hr/>
+
                 <div hx-get="/therapist/schedule/settings/google-calendar"
                      hx-swap="innerHTML"
                      hx-trigger="intersect"

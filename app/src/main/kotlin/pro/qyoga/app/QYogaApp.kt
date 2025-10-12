@@ -16,6 +16,7 @@ import pro.qyoga.core.users.UsersConfig
 import pro.qyoga.i9ns.calendars.google.GoogleCalendarConf
 import pro.qyoga.i9ns.calendars.ical.ICalCalendarsConfig
 import pro.qyoga.i9ns.email.EmailsConfig
+import pro.qyoga.i9ns.pushes.web.WebPushesConf
 import pro.qyoga.infra.auth.AuthConfig
 import pro.qyoga.infra.cache.CacheConf
 import pro.qyoga.infra.db.SdjConfig
@@ -42,6 +43,7 @@ import pro.qyoga.tech.captcha.CaptchaConf
     EmailsConfig::class,
     ICalCalendarsConfig::class,
     GoogleCalendarConf::class,
+    WebPushesConf::class,
 
     // Tech
     CaptchaConf::class,

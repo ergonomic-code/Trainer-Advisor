@@ -1,0 +1,155 @@
+<div class="mb-3"
+     id="notifications-settings"
+     x-cloak
+     x-data="notificationsSettings()"
+     x-init="init()">
+    <h6>Настройки напоминаний</h6>
+
+    <div class="border rounded-3 p-3 bg-white mb-4"
+         x-show="!isActive"
+    >
+        <div class="d-flex align-items-center justify-content-between mb-2">
+            <span class="badge bg-secondary">Отключено</span>
+        </div>
+        <div class="text-muted small mb-3" style="height: 2.5em">
+            Напоминания не активированы на этом устройстве.
+        </div>
+        <button @click="enable()"
+                class="btn btn-outline-secondary w-100">
+            Включить напоминания
+        </button>
+    </div>
+
+    <div class="border rounded-3 p-3 bg-white mb-4"
+         x-show="isActive"
+    >
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="badge bg-success">Активно</span>
+        </div>
+        <div class="text-muted small mb-3" style="height: 2.5em">
+            Напоминания о планировании приёмов: каждый понедельник, 09:00 утра
+        </div>
+        <button @click="disable()"
+                class="btn btn-outline-danger w-100">
+            Отключить напоминания
+        </button>
+    </div>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('notificationsSettings', () => ({
+                isActive: false,
+
+                async init() {
+                    if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+                        console.warn("Push isn't supported by the browser");
+                        return;
+                    }
+
+                    const existing = await this.getSubscription();
+                    if (!existing) {
+                        this.isActive = false;
+                        return;
+                    }
+
+                    this.isActive = true;
+                },
+
+                async enable() {
+                    const perm = await this.ensurePermission();
+                    if (perm !== 'granted') {
+                        return;
+                    }
+
+                    const sub = await this.subscribe();
+                    if (!sub) {
+                        return;
+                    }
+
+                    const saved = await this.saveSubscription(sub);
+                    if (!saved) {
+                        return;
+                    }
+
+                    this.isActive = true;
+                },
+
+                async disable() {
+                    const swReg = await navigator.serviceWorker.ready;
+                    const sub = await swReg.pushManager.getSubscription();
+                    if (!sub) {
+                        this.isActive = false;
+                        return;
+                    }
+
+                    const {keys} = sub.toJSON();
+                    const p256dh = keys?.p256dh;
+                    await fetch(`/pushes/web/subscriptions/${p256dh}`, {
+                        method: 'DELETE',
+                    });
+
+                    await sub.unsubscribe();
+                    this.isActive = false;
+                },
+
+                async ensurePermission() {
+                    if (Notification.permission === 'denied') {
+                        console.info('Notifications are denied');
+                        return 'denied';
+                    }
+                    if (Notification.permission === 'default') {
+                        return await Notification.requestPermission();
+                    }
+                    return Notification.permission;
+                },
+
+                async subscribe() {
+                    if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+                        return null;
+                    }
+
+                    try {
+                        const vapidKey = (await (await fetch('/pushes/web/public-key')).text()).trim();
+                        const swReg = await navigator.serviceWorker.ready;
+                        return await swReg.pushManager.subscribe({
+                            userVisibleOnly: true,
+                            applicationServerKey: urlBase64ToUint8Array(vapidKey)
+                        });
+                    } catch (e) {
+                        console.error('Push subscription failed', e);
+                        return null;
+                    }
+                },
+
+                async saveSubscription(sub) {
+                    const response = await fetch('/pushes/web/subscriptions', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify(sub)
+                    });
+                    if (!response.ok || response.redirected) {
+                        return false;
+                    }
+                    return true;
+                },
+
+                async getSubscription() {
+                    const swReg = await navigator.serviceWorker.ready;
+                    return swReg.pushManager.getSubscription();
+                },
+
+            }));
+        });
+
+        function urlBase64ToUint8Array(base64String) {
+            const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+            const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+            const rawData = atob(base64);
+            const outputArray = new Uint8Array(rawData.length);
+            for (let i = 0; i < rawData.length; ++i) {
+                outputArray[i] = rawData.charCodeAt(i);
+            }
+            return outputArray;
+        }
+    </script>
+</div>
