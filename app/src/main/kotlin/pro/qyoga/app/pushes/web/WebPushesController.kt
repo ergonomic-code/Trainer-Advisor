@@ -12,7 +12,8 @@ import pro.qyoga.i9ns.pushes.web.WebPushSubscriptionsRepo
 
 @RestController
 class WebPushesController(
-    private val webPushSubscriptionsRepo: WebPushSubscriptionsRepo
+    private val webPushSubscriptionsRepo: WebPushSubscriptionsRepo,
+    private val registerSubscriptionOp: RegisterSubscriptionOp
 ) {
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -21,7 +22,7 @@ class WebPushesController(
         @RequestBody @Valid subscription: WebPushSubscription,
         @AuthenticationPrincipal therapist: QyogaUserDetails
     ) {
-        webPushSubscriptionsRepo.addSubscription(therapist.ref, subscription)
+        registerSubscriptionOp(therapist.ref, subscription)
     }
 
     @ResponseStatus(HttpStatus.NO_CONTENT)
