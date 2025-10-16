@@ -1,4 +1,4 @@
-const CACHE_NAME = 'trainer-advisor-v25.1';
+const CACHE_NAME = "trainer-advisor-${APP_VERSION}";
 const OFFLINE_URL = '/offline.html';
 
 const urlsToCache = [
