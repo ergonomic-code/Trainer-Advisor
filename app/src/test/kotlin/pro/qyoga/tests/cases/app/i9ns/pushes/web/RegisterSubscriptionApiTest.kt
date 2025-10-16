@@ -1,4 +1,4 @@
-package pro.qyoga.tests.cases.app.i8ns.pushes.web
+package pro.qyoga.tests.cases.app.i9ns.pushes.web
 
 import io.kotest.inspectors.forAll
 import io.kotest.inspectors.forAny

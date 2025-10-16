@@ -2,8 +2,8 @@ package pro.qyoga.tests.fixture.test_apis
 
 import org.springframework.stereotype.Component
 import pro.qyoga.core.users.therapists.TherapistRef
-import pro.qyoga.i9ns.pushes.web.WebPushSubscription
 import pro.qyoga.i9ns.pushes.web.WebPushSubscriptionsRepo
+import pro.qyoga.i9ns.pushes.web.model.WebPushSubscription
 
 
 @Component

@@ -4,7 +4,7 @@ import io.restassured.http.Cookie
 import org.springframework.test.web.reactive.server.WebTestClient
 import org.springframework.web.reactive.function.BodyInserters.fromValue
 import pro.qyoga.app.pushes.web.WebPushesController
-import pro.qyoga.i9ns.pushes.web.WebPushSubscription
+import pro.qyoga.i9ns.pushes.web.model.WebPushSubscription
 
 class WebPushesTherapistApi(
     override val authCookie: Cookie,

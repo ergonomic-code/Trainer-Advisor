@@ -1,4 +1,4 @@
-package pro.qyoga.i9ns.pushes.web
+package pro.qyoga.i9ns.pushes.web.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import jakarta.validation.constraints.NotBlank

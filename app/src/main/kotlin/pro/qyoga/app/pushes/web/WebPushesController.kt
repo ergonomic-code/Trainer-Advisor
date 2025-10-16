@@ -6,8 +6,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
 import pro.qyoga.core.users.therapists.ref
-import pro.qyoga.i9ns.pushes.web.WebPushSubscription
 import pro.qyoga.i9ns.pushes.web.WebPushSubscriptionsRepo
+import pro.qyoga.i9ns.pushes.web.model.WebPushSubscription
 
 
 @RestController

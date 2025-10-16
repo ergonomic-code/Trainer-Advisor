@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.simple.JdbcClient
 import org.springframework.stereotype.Repository
 import pro.qyoga.core.users.therapists.TherapistRef
+import pro.qyoga.i9ns.pushes.web.model.WebPushSubscription
 
 
 @Repository

@@ -2,11 +2,14 @@ package pro.qyoga.tests.fixture.presets
 
 import org.springframework.stereotype.Component
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
+import pro.qyoga.core.appointments.core.commands.EditAppointmentRequest
 import pro.qyoga.core.appointments.core.model.Appointment
+import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.tests.fixture.backgrounds.AppointmentsBackgrounds
 import pro.qyoga.tests.fixture.backgrounds.ClientsBackgrounds
 import pro.qyoga.tests.fixture.object_mothers.appointments.AppointmentsObjectMother.randomEditAppointmentRequest
 import pro.qyoga.tests.fixture.object_mothers.calendars.CalendarsObjectMother.aCalendarItem
+import pro.qyoga.tests.fixture.object_mothers.clients.ClientsObjectMother
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
 
 
@@ -31,6 +34,14 @@ class AppointmentsFixturePresets(
         )
 
         return app
+    }
+
+    fun createAppointment(therapistRef: TherapistRef, editAppointmentRequest: EditAppointmentRequest): Appointment {
+        val existingClients = clientBackgrounds.getAllClients().map { it.id }.toSet()
+        if (editAppointmentRequest.client.id !in existingClients) {
+            clientBackgrounds.createClients(listOf(ClientsObjectMother.aClientMinimal(id = editAppointmentRequest.client)))
+        }
+        return appointmentsBackgrounds.create(editAppointmentRequest, therapistRef)
     }
 
 }

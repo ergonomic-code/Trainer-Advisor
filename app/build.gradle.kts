@@ -43,6 +43,8 @@ dependencies {
     implementation(libs.google.oauth.client)
     implementation(platform(libs.google.auth.bom))
     implementation("com.google.auth:google-auth-library-oauth2-http")
+    implementation(libs.web.push)
+    implementation(libs.bouncycastle)
 
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 

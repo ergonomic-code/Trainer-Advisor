@@ -100,6 +100,11 @@ trainer-advisor:
   admin:
     email: ta@azhidkov.pro
 
+  appointments:
+    notifications:
+      fill-schedule:
+        window-size: 10m
+
   integrations:
     google-calendar:
       root-url: https://www.googleapis.com/

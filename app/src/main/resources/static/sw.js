@@ -78,6 +78,7 @@ self.addEventListener('fetch', (event) => {
 })
 
 self.addEventListener('push', event => {
+    console.debug("Got push event: ", event.data?.json())
     let payload = event.data?.json() ?? {};
 
     const title = payload.title;
@@ -91,8 +92,6 @@ self.addEventListener('push', event => {
         icon: '/img/icon-192x192.png',
         data: payload.data || {},
     };
-
-    console.debug('Push received:', title, options);
 
     event.waitUntil(self.registration.showNotification(title, options));
 });

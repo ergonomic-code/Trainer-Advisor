@@ -63,6 +63,9 @@ dependencyResolutionManagement {
                 "google-api-services-calendar"
             ).version("v3-rev20250404-2.0.0")
             library("google.auth.bom", "com.google.auth", "google-auth-library-bom").versionRef(googleAuthBomVersion)
+
+            library("web-push", "nl.martijndwars", "web-push").version("5.1.2")
+            library("bouncycastle", "org.bouncycastle", "bcprov-jdk18on").version("1.82")
         }
 
         create("testLibs") {

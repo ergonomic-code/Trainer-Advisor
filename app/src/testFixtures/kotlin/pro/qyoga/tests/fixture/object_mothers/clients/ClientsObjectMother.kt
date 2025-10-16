@@ -92,8 +92,10 @@ object ClientsObjectMother {
         anamnesis: String? = null,
         distributionSource: DistributionSource? = null,
         version: Long = faker.random().nextLong(0, Long.MAX_VALUE),
+        id: ClientRef = ClientRef.to(faker.randomUUID())
     ) = Client(
-        therapistRef.id!!, createClientCardDtoMinimal(
+        therapistRef.id,
+        createClientCardDtoMinimal(
             firstName,
             lastName,
             middleName,
@@ -106,7 +108,7 @@ object ClientsObjectMother {
             distributionSource,
             version
         )
-    )
+    ).copy(id = id.id)
 
     fun randomId() =
         faker.randomUUID()

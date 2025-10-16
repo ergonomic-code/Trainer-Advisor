@@ -45,6 +45,10 @@ class GetCalendarAppointmentsOp(
         return GetCalendarAppointmentsRs(appointments + drafts, hasErrors)
     }
 
+    companion object {
+        const val PATH = "/therapist/schedule"
+    }
+
 }
 
 private fun calendarIntervalAround(
