@@ -6,5 +6,6 @@ import java.net.URI
 data class WebPush(
     val title: String,
     val body: String,
-    val deepLink: URI
+    val deepLink: URI,
+    val topic: String
 )

@@ -14,9 +14,10 @@ import java.time.ZoneOffset
 
 
 val fillScheduleWebPush = WebPush(
-    "Не забудьте заполнить расписание",
-    "Открыть приложение",
-    URI.create(GetCalendarAppointmentsOp.PATH)
+    title = "Не забудьте заполнить расписание",
+    body = "Открыть приложение",
+    deepLink = URI.create(GetCalendarAppointmentsOp.PATH),
+    topic = "fill-schedule"
 )
 
 @Component

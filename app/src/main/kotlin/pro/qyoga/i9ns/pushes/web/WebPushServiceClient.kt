@@ -1,8 +1,7 @@
 package pro.qyoga.i9ns.pushes.web
 
-import nl.martijndwars.webpush.Encoding
-import nl.martijndwars.webpush.Notification
-import nl.martijndwars.webpush.PushService
+import nl.martijndwars.webpush.*
+import org.bouncycastle.jce.interfaces.ECPublicKey
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -10,6 +9,8 @@ import org.springframework.stereotype.Component
 import pro.qyoga.i9ns.pushes.web.model.WebPush
 import pro.qyoga.i9ns.pushes.web.model.WebPushSubscription
 import java.security.Security
+import java.time.Duration
+import java.util.*
 
 
 @Component
@@ -31,12 +32,7 @@ class WebPushServiceClient(
     )
 
     fun sendPush(subscription: WebPushSubscription, push: WebPush) {
-        val notification = Notification(
-            subscription.endpoint,
-            subscription.keys.p256dh,
-            subscription.keys.auth,
-            push.toPayloadJson()
-        )
+        val notification = createNotification(subscription, push)
 
         val resp = pushService.send(notification, Encoding.AES128GCM)
         if (resp.statusLine.statusCode != 201) {
@@ -49,6 +45,19 @@ class WebPushServiceClient(
     }
 
 }
+
+private fun createNotification(
+    subscription: WebPushSubscription,
+    push: WebPush
+): Notification = Notification(
+    /* endpoint = */ subscription.endpoint,
+    /* userPublicKey = */ Utils.loadPublicKey(subscription.keys.p256dh) as ECPublicKey,
+    /* userAuth = */ Base64.getUrlDecoder().decode(subscription.keys.auth),
+    /* payload = */ push.toPayloadJson().toByteArray(),
+    /* ttl = */ Duration.ofDays(7).toSeconds().toInt(),
+    /* urgency = */ Urgency.NORMAL,
+    /* topic = */ push.topic
+)
 
 private fun WebPush.toPayloadJson() =
     """
