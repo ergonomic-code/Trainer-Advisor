@@ -110,16 +110,26 @@
 
                 async subscribe() {
                     if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+                        console.debug('subscribe(): PushManager unavailable');
                         return null;
                     }
 
                     try {
-                        const vapidKey = (await (await fetch('/pushes/web/public-key')).text()).trim();
+                        console.debug('subscribe(): fetching VAPID key');
+                        let resp = await fetch('/pushes/web/public-key');
+                        const vapidKey = (await resp.text()).trim();
+                        console.debug('subscribe(): fetch status', resp.status, resp.redirected);
+
                         const swReg = await navigator.serviceWorker.ready;
-                        return await swReg.pushManager.subscribe({
+                        console.debug('subscribe(): service worker scope', swReg.scope);
+
+                        let subscription = await swReg.pushManager.subscribe({
                             userVisibleOnly: true,
                             applicationServerKey: urlBase64ToUint8Array(vapidKey)
                         });
+                        console.debug('subscribe(): success');
+
+                        return subscription;
                     } catch (e) {
                         console.error('Push subscription failed', e);
                         return null;
