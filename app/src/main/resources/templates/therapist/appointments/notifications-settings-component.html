@@ -53,20 +53,25 @@
                     }
 
                     this.isActive = true;
+                    console.info("Notification settings initialized")
                 },
 
                 async enable() {
+                    console.info("Enabling notifications")
                     const perm = await this.ensurePermission();
+                    console.debug('enable(): permission', perm);
                     if (perm !== 'granted') {
                         return;
                     }
 
                     const sub = await this.subscribe();
+                    console.debug('enable(): sub', sub);
                     if (!sub) {
                         return;
                     }
 
                     const saved = await this.saveSubscription(sub);
+                    console.debug('enable(): savedSub', saved);
                     if (!saved) {
                         return;
                     }
