@@ -1,3 +1,5 @@
+importScripts('/js/pwa/open-window.js');
+
 const CACHE_NAME = "trainer-advisor-${APP_VERSION}";
 const OFFLINE_URL = '/offline.html';
 
@@ -107,40 +109,6 @@ self.addEventListener('notificationclick', (event) => {
     const targetUrl = new URL(deepLink, self.location.origin).href;
 
     event.waitUntil((async () => {
-        const clientList = await clients.matchAll({
-            type: 'window',
-            includeUncontrolled: true
-        });
-
-        const exactMatch = clientList.find(c => c.url && c.url.endsWith(targetUrl));
-        if (exactMatch) {
-            try {
-                await exactMatch.focus();
-                return;
-            } catch (ignore) {
-            }
-        }
-
-        const anyWindow = clientList.find(c => c.type === 'window');
-        if (!anyWindow) {
-            await clients.openWindow(targetUrl);
-        }
-
-        try {
-            await anyWindow.focus();
-
-            if (typeof anyWindow.navigate === 'function') {
-                await anyWindow.navigate(targetUrl);
-            } else {
-                try {
-                    anyWindow.postMessage({action: 'navigate', targetUrl}, '*');
-                } catch (_) {
-                    /* noop */
-                }
-            }
-        } catch (e) {
-            await clients.openWindow(targetUrl);
-        }
-
+        await openOrFocusWindow(targetUrl);
     })());
 });
