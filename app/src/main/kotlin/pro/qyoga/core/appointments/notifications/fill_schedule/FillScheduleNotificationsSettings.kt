@@ -17,7 +17,7 @@ class FillScheduleNotificationsSettings(
 
     companion object {
 
-        fun defaultSettings(therapistRef: TherapistRef) = FillScheduleNotificationsSettings(
+        fun defaultSettingsFor(therapistRef: TherapistRef) = FillScheduleNotificationsSettings(
             id = therapistRef,
             enabled = true,
             dayOfWeek = DayOfWeek.MONDAY,

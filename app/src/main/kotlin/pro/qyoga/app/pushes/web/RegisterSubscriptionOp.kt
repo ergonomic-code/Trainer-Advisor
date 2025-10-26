@@ -5,6 +5,7 @@ import pro.qyoga.core.appointments.notifications.fill_schedule.FillScheduleNotif
 import pro.qyoga.core.appointments.notifications.fill_schedule.FillScheduleNotificationsSettingsRepo
 import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.i9ns.pushes.web.WebPushSubscriptionsRepo
+import pro.qyoga.i9ns.pushes.web.model.TherapistWebPushSubscription
 import pro.qyoga.i9ns.pushes.web.model.WebPushSubscription
 
 
@@ -18,11 +19,9 @@ class RegisterSubscriptionOp(
         therapistRef: TherapistRef,
         subscription: WebPushSubscription,
     ) {
-        webPushSubscriptionsRepo.addSubscription(therapistRef, subscription)
+        webPushSubscriptionsRepo.addSubscription(TherapistWebPushSubscription(therapistRef, subscription))
         fillScheduleNotificationsSettingsRepo.createIfNotExists(
-            FillScheduleNotificationsSettings.defaultSettings(
-                therapistRef
-            )
+            FillScheduleNotificationsSettings.defaultSettingsFor(therapistRef)
         )
     }
 

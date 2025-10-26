@@ -1,11 +1,9 @@
 package pro.qyoga.i9ns.pushes.web.model
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Size
 
 
-@JsonIgnoreProperties(ignoreUnknown = true)
 data class WebPushSubscription(
     @field:NotBlank
     @field:Size(max = 2048)

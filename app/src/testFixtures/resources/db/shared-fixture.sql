@@ -9,6 +9,7 @@ TRUNCATE
     ical_calendars,
     therapist_google_accounts,
     therapist_google_calendar_settings,
+    therapist_web_push_subscriptions,
     therapist_fill_schedule_notifications_settings
     RESTART IDENTITY;
 

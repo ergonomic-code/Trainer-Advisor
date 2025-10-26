@@ -1,60 +1,45 @@
 package pro.qyoga.i9ns.pushes.web
 
-import org.springframework.jdbc.core.RowMapper
+import com.fasterxml.jackson.databind.ObjectMapper
+import org.springframework.data.jdbc.core.JdbcAggregateTemplate
 import org.springframework.jdbc.core.simple.JdbcClient
 import org.springframework.stereotype.Repository
+import pro.azhidkov.platform.spring.sdj.query.query
 import pro.qyoga.core.users.therapists.TherapistRef
-import pro.qyoga.i9ns.pushes.web.model.WebPushSubscription
+import pro.qyoga.i9ns.pushes.web.model.TherapistWebPushSubscription
 
 
 @Repository
 class WebPushSubscriptionsRepo(
-    private val jdbcClient: JdbcClient
+    private val jdbcClient: JdbcClient,
+    private val jdbcAggregateTemplate: JdbcAggregateTemplate,
+    private val objectMapper: ObjectMapper,
 ) {
 
-    private val webPushSubscriptionRowMapper = RowMapper { rs, _ ->
-        WebPushSubscription(
-            rs.getString("endpoint"),
-            rs.getTimestamp("expiration_time")?.time,
-            WebPushSubscription.Keys(
-                rs.getString("p256dh"),
-                rs.getString("auth")
-            )
-        )
-    }
-
-    fun addSubscription(therapistRef: TherapistRef, subscription: WebPushSubscription) {
+    fun addSubscription(therapistSubscription: TherapistWebPushSubscription) {
         val query = """
-            INSERT INTO therapist_web_push_subscriptions (therapist_ref, p256dh, auth, endpoint, expiration_time)
-            VALUES (:therapistRef::uuid, :p256dh, :auth, :endpoint, :expirationTime)
+            INSERT INTO therapist_web_push_subscriptions (id, therapist_ref, subscription)
+            VALUES (:id::uuid, :therapistRef::uuid, :subscription::jsonb)
             ON CONFLICT (therapist_ref, p256dh) 
             DO UPDATE SET 
-                endpoint = excluded.endpoint, 
-                auth = excluded.auth, 
-                expiration_time = excluded.expiration_time,
+                subscription = excluded.subscription, 
                 updated_at = CURRENT_TIMESTAMP, 
                 version = therapist_web_push_subscriptions.version + 1
         """.trimIndent()
 
         jdbcClient.sql(query)
-            .param("therapistRef", therapistRef.id.toString())
-            .param("p256dh", subscription.keys.p256dh)
-            .param("auth", subscription.keys.auth)
-            .param("endpoint", subscription.endpoint)
-            .param("expirationTime", subscription.expirationTime)
+            .param("id", therapistSubscription.id)
+            .param("therapistRef", therapistSubscription.therapistRef.id.toString())
+            .param("subscription", objectMapper.writeValueAsString(therapistSubscription.subscription))
             .update()
     }
 
-    fun findTherapistSubscriptions(therapistRef: TherapistRef): List<WebPushSubscription> {
-        val query = """
-            SELECT * FROM therapist_web_push_subscriptions
-            WHERE therapist_ref = :therapistRef::uuid
-        """.trimIndent()
+    fun findTherapistSubscriptions(therapistRef: TherapistRef): List<TherapistWebPushSubscription> {
+        val query = query {
+            TherapistWebPushSubscription::therapistRef isEqual therapistRef
+        }
 
-        return jdbcClient.sql(query)
-            .param("therapistRef", therapistRef.id.toString())
-            .query(webPushSubscriptionRowMapper)
-            .list()
+        return jdbcAggregateTemplate.findAll(query, TherapistWebPushSubscription::class.java)
     }
 
     fun deleteSubscription(therapistRef: TherapistRef, p256dh: String) {

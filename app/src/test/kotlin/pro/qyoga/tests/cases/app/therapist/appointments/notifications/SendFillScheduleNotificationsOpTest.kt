@@ -2,6 +2,7 @@ package pro.qyoga.tests.cases.app.therapist.appointments.notifications
 
 import io.kotest.matchers.collections.shouldHaveSize
 import org.junit.jupiter.api.DisplayName
+import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import pro.qyoga.app.therapist.appointments.notifications.SendFillScheduleNotificationsOp
 import pro.qyoga.tests.fixture.data.asiaNovosibirskTimeZone
@@ -10,11 +11,13 @@ import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
 import pro.qyoga.tests.fixture.test_apis.NotificationsTestApi
 import pro.qyoga.tests.fixture.test_apis.WebPushesTestApi
 import pro.qyoga.tests.fixture.wiremocks.MockWebPushServer
+import pro.qyoga.tests.infra.junit.SLOW_TEST
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import java.time.*
 
 
 @DisplayName("Операция отправки уведомлений о заполнении расписания")
+@Tag(SLOW_TEST)
 class SendFillScheduleNotificationsOpTest : QYogaAppIntegrationBaseTest() {
 
     private val notificationsTestApi = getBean<NotificationsTestApi>()

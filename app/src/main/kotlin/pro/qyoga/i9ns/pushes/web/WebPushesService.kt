@@ -17,9 +17,9 @@ class WebPushesService(
     fun sendPush(therapistRef: TherapistRef, push: WebPush) {
         val webPushSubscriptions = webPushSubscriptionsRepo.findTherapistSubscriptions(therapistRef)
 
-        webPushSubscriptions.forEach { subscription ->
+        webPushSubscriptions.forEach { therapistSubscription ->
             try {
-                webPushServiceClient.sendPush(subscription, push)
+                webPushServiceClient.sendPush(therapistSubscription.subscription, push)
             } catch (e: Exception) {
                 log.warn("Fill schedule push notification sending failed", e)
             }

@@ -1,6 +1,6 @@
 CREATE TABLE therapist_fill_schedule_notifications_settings
 (
-    id             UUID PRIMARY KEY REFERENCES therapists,
+    id UUID PRIMARY KEY REFERENCES therapists ON DELETE CASCADE ON UPDATE CASCADE,
     enabled        BOOLEAN NOT NULL,
     day_of_week    VARCHAR NOT NULL,
     scheduled_time TIME    NOT NULL
