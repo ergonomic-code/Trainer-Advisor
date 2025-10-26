@@ -34,9 +34,12 @@ class WebPushSubscriptionsRepo(
             .update()
     }
 
-    fun findTherapistSubscriptions(therapistRef: TherapistRef): List<TherapistWebPushSubscription> {
+    fun findTherapistsSubscriptions(therapistRefs: Iterable<TherapistRef>): List<TherapistWebPushSubscription> {
+        if (therapistRefs.count() == 0) {
+            return emptyList()
+        }
         val query = query {
-            TherapistWebPushSubscription::therapistRef isEqual therapistRef
+            TherapistWebPushSubscription::therapistRef `in` therapistRefs.map { it.id }
         }
 
         return jdbcAggregateTemplate.findAll(query, TherapistWebPushSubscription::class.java)

@@ -14,8 +14,8 @@ class WebPushesService(
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    fun sendPush(therapistRef: TherapistRef, push: WebPush) {
-        val webPushSubscriptions = webPushSubscriptionsRepo.findTherapistSubscriptions(therapistRef)
+    fun sendPush(push: WebPush, therapists: List<TherapistRef>) {
+        val webPushSubscriptions = webPushSubscriptionsRepo.findTherapistsSubscriptions(therapists)
 
         webPushSubscriptions.forEach { therapistSubscription ->
             try {

@@ -50,6 +50,10 @@ class QueryBuilder {
         }
     }
 
+    infix fun <T : Any> KProperty1<*, T?>.`in`(value: Iterable<T>) {
+        criteria.addLast(Criteria.where(this.name).`in`(value))
+    }
+
     fun build() = Query.query(toCriteriaDefinition())
 
     private fun toCriteriaDefinition() =

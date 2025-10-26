@@ -43,9 +43,7 @@ class SendFillScheduleNotificationsOp(
             notificationInterval = Interval.of(time, windowSize)
         )
 
-        therapistsToNotify.forEach {
-            webPushesService.sendPush(it, fillScheduleWebPush)
-        }
+        webPushesService.sendPush(fillScheduleWebPush, therapistsToNotify)
     }
 
 }

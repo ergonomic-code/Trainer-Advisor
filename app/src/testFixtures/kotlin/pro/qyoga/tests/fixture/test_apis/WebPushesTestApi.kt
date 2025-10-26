@@ -17,7 +17,7 @@ class WebPushesTestApi(
     }
 
     fun getTherapistSubscriptions(therapistRef: TherapistRef): List<WebPushSubscription> {
-        return webPushSubscriptionsRepo.findTherapistSubscriptions(therapistRef)
+        return webPushSubscriptionsRepo.findTherapistsSubscriptions(listOf(therapistRef))
             .map { it.subscription }
     }
 
