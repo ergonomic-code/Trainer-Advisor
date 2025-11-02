@@ -3,7 +3,9 @@ package pro.qyoga.core.appointments.notifications.fill_schedule
 import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.jdbc.core.simple.JdbcClient
 import org.springframework.stereotype.Repository
+import pro.azhidkov.platform.java.sql.get
 import pro.azhidkov.platform.java.time.Interval
+import pro.qyoga.core.users.therapists.Therapist
 import pro.qyoga.core.users.therapists.TherapistRef
 import java.time.DayOfWeek
 import java.time.LocalTime
@@ -62,9 +64,8 @@ class FillScheduleNotificationsSettingsRepo(
             .param("dayOfWeek", dayOfWeek.name)
             .param("startTime", notificationInterval.from)
             .param("endTime", notificationInterval.to)
-            .query(UUID::class.java)
+            .query { rs, _ -> TherapistRef.to<Therapist, UUID>(rs[1]) }
             .list()
-            .map { TherapistRef.to(it) }
     }
 
 }

@@ -30,7 +30,7 @@ val pgContainer: PostgreSQLContainer<*> by lazy {
 }
 
 val minioContainer: MinIOContainer by lazy {
-    MinIOContainer("minio/minio")
+    MinIOContainer("minio/minio:RELEASE.2024-01-16T16-07-38Z")
         .withExposedPorts(9000)
         .withUserName("user")
         .withPassword("password")

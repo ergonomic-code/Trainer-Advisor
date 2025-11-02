@@ -42,3 +42,13 @@ abstract class JacksonJsonbToObjectReader<T : Any>(
         }
 
 }
+
+object ObjectToJsonbConverters {
+
+    inline fun <reified T : Any> convertersFor(objectMapper: ObjectMapper) =
+        setOf(
+            object : JacksonObjectToJsonbWriter<T>(objectMapper) {},
+            object : JacksonJsonbToObjectReader<T>(objectMapper, T::class) {},
+        )
+
+}

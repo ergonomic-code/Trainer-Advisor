@@ -13,3 +13,7 @@ inline operator fun <reified T> ResultSet.get(colName: String): T = when (T::cla
     List::class -> (this.getArray(colName).array as Array<*>).toList()
     else -> this.getObject(colName)
 } as T
+
+inline operator fun <reified T> ResultSet.get(colIdx: Int): T =
+    this.metaData.getColumnName(colIdx)
+        .let { colName -> this[colName] }
