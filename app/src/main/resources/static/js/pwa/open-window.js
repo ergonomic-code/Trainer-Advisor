@@ -1,4 +1,4 @@
-self.openOrFocusWindow = async function openOrFocusWindow(url) {
+self.focusOrOpenWindow = async function focusOrOpenWindow(url) {
     const clientList = await clients.matchAll({
         type: 'window',
         includeUncontrolled: true

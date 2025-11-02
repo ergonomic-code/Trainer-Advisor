@@ -1,7 +1,7 @@
 importScripts('/js/pwa/open-window.js');
+importScripts('/js/pwa/resolve.js');
 
 const CACHE_NAME = "trainer-advisor-${APP_VERSION}";
-const OFFLINE_URL = '/offline.html';
 
 const urlsToCache = [
     '/',
@@ -9,6 +9,10 @@ const urlsToCache = [
     '/styles/styles-qyoga.css',
     '/vendor/bootstrap/css/bootstrap.css',
     '/vendor/bootstrap/js/bootstrap.bundle.min.js',
+    '/vendor/fontawesome-6.5.2/css/all.min.css',
+    '/vendor/fontawesome-6.5.2/webfonts/fa-solid-900.woff2',
+    '/vendor/fontawesome-6.5.2/webfonts/fa-regular-400.woff2',
+    '/vendor/fontawesome-6.5.2/js/fontawesome.min.js',
     '/img/icon.png',
     '/img/icon-192x192.png',
     '/img/icon-512x512.png',
@@ -32,51 +36,13 @@ self.addEventListener('activate', (event) => {
 })
 
 self.addEventListener('fetch', (event) => {
-    const req = event.request
-    if (req.method !== 'GET') {
-        return
+    if (event.request.method !== 'GET') {
+        return;
     }
 
-    if (req.mode === 'navigate' || (req.destination === 'document')) {
-        event.respondWith((async () => {
-            try {
-                const fresh = await fetch(req)
-                if (fresh && (fresh.ok || fresh.type === 'opaqueredirect' || (fresh.status >= 300 && fresh.status < 400))) {
-                    return fresh
-                }
+    const resp = resolveRequest(event.request);
 
-                const cached = await caches.match(req)
-                if (cached) {
-                    return cached
-                }
-                return await caches.match(OFFLINE_URL)
-            } catch (_) {
-                const cached = await caches.match(req)
-                if (cached) {
-                    return cached
-                }
-                return await caches.match(OFFLINE_URL)
-            }
-        })())
-        return
-    }
-
-    event.respondWith((async () => {
-        try {
-            const fresh = await fetch(req)
-            const cache = await caches.open(CACHE_NAME)
-            cache.put(req, fresh.clone())
-                .catch(() => {
-                })
-            return fresh
-        } catch (_) {
-            const cached = await caches.match(req)
-            if (cached) {
-                return cached
-            }
-            return new Response('Offline', {status: 503})
-        }
-    })())
+    event.respondWith(resp);
 })
 
 self.addEventListener('push', event => {
@@ -109,6 +75,6 @@ self.addEventListener('notificationclick', (event) => {
     const targetUrl = new URL(deepLink, self.location.origin).href;
 
     event.waitUntil((async () => {
-        await openOrFocusWindow(targetUrl);
+        await focusOrOpenWindow(targetUrl);
     })());
 });
