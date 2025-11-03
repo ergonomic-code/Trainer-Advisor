@@ -6,8 +6,8 @@
         </div>
 
         <div th:if="${hasAccounts}">
-            <div class="mb-2 google-account-item" th:each="account : ${accounts}">
-                <div class="border-bottom pb-1 mb-2 text-body-secondary small" th:text="${account.email}">
+            <div class="google-account-item mb-2" th:each="account : ${accounts}">
+                <div class="account-email border-bottom pb-1 mb-2 text-body-secondary small" th:text="${account.email}">
                     email@example.com
                 </div>
                 <div th:if="${!account.content.isError}">
@@ -42,7 +42,7 @@
                     </ul>
                 </div>
                 <div
-                        class="text-danger ms-3 my-1 google-account-error-content d-inline-flex align-items-center"
+                        class="google-account-error-content text-danger ms-3 my-1 d-inline-flex align-items-center"
                         th:if="${account.content.isError}"
                 >
                     <svg aria-hidden="true" class="me-2 align-middle" height="14" style="fill: currentColor;"

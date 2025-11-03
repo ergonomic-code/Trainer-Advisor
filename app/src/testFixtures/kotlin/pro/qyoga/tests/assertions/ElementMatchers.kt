@@ -1,11 +1,11 @@
 package pro.qyoga.tests.assertions
 
-import io.kotest.matchers.Matcher
-import io.kotest.matchers.MatcherResult
+import io.kotest.assertions.fail
+import io.kotest.inspectors.forAll
+import io.kotest.matchers.*
 import io.kotest.matchers.compose.all
-import io.kotest.matchers.should
-import io.kotest.matchers.shouldNot
 import org.jsoup.nodes.Element
+import org.jsoup.select.Elements
 import org.springframework.web.util.UriTemplate
 import pro.qyoga.tests.platform.html.Component
 import pro.qyoga.tests.platform.html.HtmlPage
@@ -176,26 +176,32 @@ fun haveInputWithValue(input: Input, value: String) = Matcher { element: Element
 }
 
 fun haveCheckboxChecked(
-    selector: String = "input.form-check-input[type=checkbox][name=shouldBeShown]",
     expected: Boolean
-): Matcher<Element> = Matcher { el ->
-    val checkbox = el.select(selector).first()
-    val actual = checkbox?.hasAttr("checked") == true
+): Matcher<Element> = Matcher { checkbox ->
+    val actual = checkbox.hasAttr("checked")
     MatcherResult(
-        checkbox != null && actual == expected,
+        actual == expected,
         {
-            val found = if (checkbox == null) "not found" else if (actual) "checked" else "unchecked"
-            "Expected checkbox '$selector' to be ${if (expected) "checked" else "unchecked"}, but $found"
+            "Expected checkbox to be $expected, but $actual"
         },
-        { "Checkbox '$selector' unexpectedly matches expected=${expected}" }
+        { "Checkbox unexpectedly checked=${expected}" }
     )
 }
 
-val Element.descr
-    get() = "<${this.tag().name} id=\"${this.id()}\">" +
-            this.text().take(32) +
-            ("...".takeIf { this.text().length > 32 } ?: "") +
-            "</${this.tag().name}>"
+val Element.descr: String
+    get() {
+        val selector = if (this.id().isNotEmpty()) {
+            "id=\"${this.id()}\""
+        } else if (this.classNames().isNotEmpty()) {
+            "class=\"${this.classNames().first()}\" ..."
+        } else {
+            ""
+        }
+        return "<${this.tag().name} $selector>" +
+                this.text().take(32) +
+                ("...".takeIf { this.text().length > 32 } ?: "") +
+                "</${this.tag().name}>"
+    }
 
 infix fun Element.shouldHaveComponent(component: Component): Element {
     this should haveComponent(component)
@@ -302,4 +308,19 @@ data class SelectorOnlyComponent(val selector: String) : Component {
 
     override fun matcher(): Matcher<Element> = alwaysSuccess()
 
+}
+
+fun <T> Elements.shouldMatch(data: List<T>, elementMatcher: (Element, T) -> Unit) {
+    this.size shouldBe data.size
+    this.zip(data).forAll { (el, item) -> elementMatcher(el, item) }
+}
+
+operator fun Element.get(selector: String) = this.select(selector)
+
+operator fun Element.invoke(selector: String): Element {
+    val element = this.select(selector)
+    if (element.size != 1) {
+        fail("Single $selector element expected, but found ${element.size}")
+    }
+    return element.single()
 }

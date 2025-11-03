@@ -19,9 +19,9 @@ fun div(id: String? = null, clazz: String? = null, text: String) = TextElement(
 )
 
 data class TextElement(
-    val tag: String,
+    private val tag: String,
     val selector: String,
-    val textMatcher: Matcher<Element>?
+    private val textMatcher: Matcher<Element>?
 ) : Component {
 
     override fun selector() = selector
