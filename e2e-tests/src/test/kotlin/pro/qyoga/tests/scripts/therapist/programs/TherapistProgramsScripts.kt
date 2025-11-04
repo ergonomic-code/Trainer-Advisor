@@ -1,20 +1,21 @@
 package pro.qyoga.tests.scripts.therapist.programs
 
 import com.codeborne.selenide.Condition.text
-import com.codeborne.selenide.Selenide
 import com.codeborne.selenide.Selenide.`$$`
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
 import pro.qyoga.core.therapy.exercises.model.Exercise
 import pro.qyoga.core.therapy.programs.model.Program
+import pro.qyoga.core.therapy.programs.model.ProgramRef
 import pro.qyoga.tests.pages.therapist.therapy.programs.EditProgramForm
 import pro.qyoga.tests.pages.therapist.therapy.programs.EditProgramPage
 import pro.qyoga.tests.pages.therapist.therapy.programs.ProgramsListPage
 import pro.qyoga.tests.platform.selenide.await
 import pro.qyoga.tests.platform.selenide.click
+import pro.qyoga.tests.platform.selenide.open
 import pro.qyoga.tests.platform.selenide.typeInto
 
-fun goToEditProgramPage(programId: Long) {
-    Selenide.open(ProgramsListPage.editProgramPath(programId))
+fun goToEditProgramPage(programRef: ProgramRef) {
+    open(EditProgramPage.forProgram(programRef))
 }
 
 fun editProgramTo(program: Program) {

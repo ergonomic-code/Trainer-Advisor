@@ -15,9 +15,10 @@ fun beEmptyInput() = Matcher { element: SelenideElement ->
             { "Element ${element.descr()} should not be an input element" })
     }
 
+    val value = element.`val`()
     return@Matcher MatcherResult(
-        element.`val`().isNullOrEmpty(),
-        { "Element ${element.descr()} should be empty" },
+        value.isNullOrEmpty(),
+        { "Element ${element.descr()} should be empty but have value=$value" },
         { "Element ${element.descr()} should not be empty" }
     )
 }
@@ -30,4 +31,15 @@ fun SelenideElement.shouldNotBeEmptyInput() {
     this koshouldNot beEmptyInput()
 }
 
-fun SelenideElement.descr() = "<${this.tagName} ${this.getAttribute("id")}/>"
+fun SelenideElement.descr(): String {
+    val id = this.getAttribute("id")
+        ?.takeIf { it.isNotBlank() }
+        ?.let { "id=\"$it\"" } ?: ""
+    val elClass = this.getAttribute("class")
+        ?.takeIf { it.isNotBlank() }
+        ?.let { "class=\"${it.split(" ").first()} ...\"" } ?: ""
+    val name = this.getAttribute("name")
+        ?.takeIf { it.isNotBlank() }
+        ?.let { "name=\"$it\"" } ?: ""
+    return "<${this.tagName} $id $elClass $name/>"
+}

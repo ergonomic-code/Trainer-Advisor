@@ -9,4 +9,5 @@ interface Identifiable<T : Any> {
 
 }
 
-fun <E : Identifiable<T>, T : Any> E.ref(): AggregateReference<E, T> = AggregateReferenceTarget(this)
+fun <E : Identifiable<T>, T : Any> E.ref(): AggregateReference<E, T> =
+    AggregateReferenceTarget(this)

@@ -1,11 +1,15 @@
 package pro.qyoga.tests.platform.selenide
 
 import com.codeborne.selenide.Condition.attribute
+import com.codeborne.selenide.Condition.visible
 import com.codeborne.selenide.Selenide
 import com.codeborne.selenide.Selenide.`$`
 import com.codeborne.selenide.SelenideElement
 import com.codeborne.selenide.TypeOptions
-import pro.qyoga.tests.platform.html.*
+import pro.qyoga.tests.platform.html.ComboBox
+import pro.qyoga.tests.platform.html.Component
+import pro.qyoga.tests.platform.html.HtmlPageCompat
+import pro.qyoga.tests.platform.html.Select
 import java.time.Duration
 
 
@@ -48,8 +52,13 @@ fun selectIn(comboBox: ComboBox, option: String?) {
 fun find(component: Component): SelenideElement =
     `$`(component.selector())
 
-fun open(page: QYogaPage) {
+fun open(page: HtmlPageCompat) {
     Selenide.open(page.path)
+    if (page.title != null) {
+        await(page)
+    } else {
+        `$`("#sidebarToggle").shouldBe(visible)
+    }
 }
 
 fun click(component: Component) {

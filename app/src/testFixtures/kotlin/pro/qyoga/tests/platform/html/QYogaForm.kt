@@ -21,7 +21,7 @@ abstract class QYogaForm(
         } else if (!elementClass.isNullOrEmpty()) {
             "form.$elementClass"
         } else {
-            error("Now selector for $this")
+            error("No selector for $this")
         }
 
     override fun matcher(): Matcher<Element> {

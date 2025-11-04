@@ -5,8 +5,11 @@ import io.kotest.matchers.compose.all
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import org.jsoup.nodes.Element
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrNull
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
+import pro.qyoga.app.therapist.therapy.programs.edit.EditProgramPageController
 import pro.qyoga.core.therapy.programs.model.Program
+import pro.qyoga.core.therapy.programs.model.ProgramRef
 import pro.qyoga.tests.assertions.*
 import pro.qyoga.tests.platform.html.*
 
@@ -79,6 +82,11 @@ object EditProgramPage : ProgramPage(EditProgramForm.action.url, "", EditProgram
             )
         }
 
+    }
+
+    fun forProgram(programRef: ProgramRef): HtmlPageCompat = object : HtmlPageCompat {
+        override val path: String = EditProgramPageController.editUrlFor(programRef)
+        override val title: String? = programRef.resolveOrNull()?.title
     }
 
 }

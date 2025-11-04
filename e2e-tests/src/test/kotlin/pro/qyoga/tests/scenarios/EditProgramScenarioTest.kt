@@ -35,14 +35,14 @@ class EditProgramScenarioTest : QYogaE2EBaseTest() {
         loginAsTheTherapist()
 
         // Терапевт переходит на страницу редактирования программы
-        goToEditProgramPage(program.id)
+        goToEditProgramPage(program.ref())
 
         // И видит корректно заполненную форму программы
         currentPageShouldMatch(program)
 
         // Редактирует программу и открывает её заново
         editProgramTo(editedProgram)
-        goToEditProgramPage(program.id)
+        goToEditProgramPage(editedProgram.ref())
 
         // И видит форму программы, заполненную обновлёнными данными
         currentPageShouldMatch(editedProgram)
