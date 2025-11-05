@@ -11,10 +11,7 @@ import pro.qyoga.app.therapist.clients.journal.edit_entry.create.CreateJournalEn
 import pro.qyoga.app.therapist.clients.journal.list.JournalPageController
 import pro.qyoga.core.clients.journals.model.JournalEntry
 import pro.qyoga.l10n.russianDateFormat
-import pro.qyoga.tests.assertions.PageMatcher
-import pro.qyoga.tests.assertions.haveAttributeValue
-import pro.qyoga.tests.assertions.shouldHaveComponent
-import pro.qyoga.tests.assertions.shouldNotHave
+import pro.qyoga.tests.assertions.*
 import pro.qyoga.tests.pages.therapist.clients.journal.entry.EditJournalEntryPage
 import pro.qyoga.tests.platform.html.Component
 import pro.qyoga.tests.platform.html.Link
@@ -25,7 +22,8 @@ object ClientJournalFragment {
     private val addEntryLink =
         Link("addEntryLink", CreateJournalEntryPageController.CREATE_JOURNAL_PAGE_URL, "Добавить запись")
 
-    fun fragmentFor(entries: List<JournalEntry>, hasMore: Boolean = false): PageMatcher = PageMatcher { element ->
+    fun fragmentFor(entries: List<JournalEntry>, hasMore: Boolean = false): ComponentMatcher =
+        ComponentMatcher("#journal-fragment") { element ->
         element shouldHaveComponent addEntryLink
 
         ClientJournalEntriesFragment.fragmentFor(entries, hasMore).match(element)
