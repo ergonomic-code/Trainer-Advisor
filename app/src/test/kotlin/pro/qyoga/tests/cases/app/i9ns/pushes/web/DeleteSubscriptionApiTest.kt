@@ -5,6 +5,7 @@ import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import pro.qyoga.tests.clients.api.TrainerAdvisorApis
+import pro.qyoga.tests.clients.api.WebPushes
 import pro.qyoga.tests.fixture.object_mothers.pushes.web.WebPushesObjectMother.aWebPushSubscription
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
 import pro.qyoga.tests.fixture.test_apis.WebPushesTestApi

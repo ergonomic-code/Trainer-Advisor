@@ -8,7 +8,7 @@ import pro.qyoga.app.therapist.appointments.core.schedule.settings.Notifications
 import pro.qyoga.tests.infra.web.mainWebTestClient
 import pro.qyoga.tests.platform.spring.web_test_client.getBodyAsString
 
-object Notifications {
+object NotificationsApiFactory {
 
     fun therapistApi(
         principal: Cookie,
@@ -16,9 +16,9 @@ object Notifications {
 
 }
 
-@Suppress("UnusedReceiverParameter", "RemoveRedundantQualifierName")
+@Suppress("UnusedReceiverParameter")
 val TrainerAdvisorApis.Notifications
-    get() = pro.qyoga.tests.clients.api.Notifications
+    get() = NotificationsApiFactory
 
 class NotificationsTherapistApi(
     override val authCookie: Cookie,

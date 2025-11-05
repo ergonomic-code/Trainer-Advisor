@@ -4,6 +4,7 @@ import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import pro.qyoga.tests.clients.api.TrainerAdvisorApis
+import pro.qyoga.tests.clients.api.WebPushes
 import pro.qyoga.tests.infra.test_config.spring.context
 import pro.qyoga.tests.infra.web.QYogaAppBaseTest
 

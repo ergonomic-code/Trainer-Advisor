@@ -24,10 +24,10 @@ object ClientJournalFragment {
 
     fun fragmentFor(entries: List<JournalEntry>, hasMore: Boolean = false): ComponentMatcher =
         ComponentMatcher("#journal-fragment") { element ->
-        element shouldHaveComponent addEntryLink
+            element shouldHaveComponent addEntryLink
 
-        ClientJournalEntriesFragment.fragmentFor(entries, hasMore).match(element)
-    }
+            ClientJournalEntriesFragment.fragmentFor(entries, hasMore).match(element)
+        }
 
 }
 
