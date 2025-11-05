@@ -1,8 +1,12 @@
 package pro.qyoga.tests.platform.html
 
+import io.kotest.inspectors.forAll
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.compose.all
+import io.kotest.matchers.should
+import io.kotest.matchers.shouldHave
 import org.jsoup.nodes.Element
+import pro.qyoga.tests.assertions.ComponentMatcher
 import pro.qyoga.tests.assertions.haveComponent
 import kotlin.reflect.KProperty
 
@@ -11,7 +15,7 @@ abstract class QYogaForm(
     val id: String,
     val action: FormAction,
     private val elementClass: String? = null
-) : Component {
+) : Component, ComponentMatcher {
 
     open val components: List<Component> = arrayListOf()
 
@@ -32,6 +36,12 @@ abstract class QYogaForm(
         )
     }
 
+    override fun match(element: Element) {
+        element shouldHave action.matcher()
+        components.forAll {
+            element should haveComponent(it)
+        }
+    }
 
     fun <T : Component> component(factory: () -> T): ComponentDelegate<T> {
         val comp = factory()

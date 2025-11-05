@@ -6,7 +6,7 @@ import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.core.clients.cards.model.DistributionSourceType
 import pro.qyoga.core.clients.cards.model.toUIFormat
 import pro.qyoga.l10n.russianDateFormat
-import pro.qyoga.tests.assertions.PageMatcher
+import pro.qyoga.tests.assertions.ComponentMatcher
 import pro.qyoga.tests.assertions.SelectorOnlyComponent
 import pro.qyoga.tests.assertions.shouldBeElement
 import pro.qyoga.tests.assertions.shouldMatch
@@ -52,7 +52,7 @@ object CreateClientForm : ClientForm(FormAction.hxPost("/therapist/clients/creat
 
 object EditClientForm : ClientForm(FormAction.hxPost("/therapist/clients/{id}")) {
 
-    fun clientForm(client: Client): PageMatcher = PageMatcher { element ->
+    fun clientForm(client: Client): ComponentMatcher = ComponentMatcher(selector()) { element ->
         element.select(this.selector()).single() shouldBeElement action
         element.select(firstName.selector()).`val`() shouldBe client.firstName
         element.select(lastName.selector()).`val`() shouldBe client.lastName
