@@ -10,6 +10,7 @@ import org.springframework.web.util.UriTemplate
 import pro.qyoga.tests.platform.html.Component
 import pro.qyoga.tests.platform.html.HtmlPage
 import pro.qyoga.tests.platform.html.Input
+import pro.qyoga.tests.platform.html.elementDescr
 
 
 fun beComponent(component: Component) = Matcher<Element> { element ->
@@ -189,19 +190,14 @@ fun haveCheckboxChecked(
 }
 
 val Element.descr: String
-    get() {
-        val selector = if (this.id().isNotEmpty()) {
-            "id=\"${this.id()}\""
-        } else if (this.classNames().isNotEmpty()) {
-            "class=\"${this.classNames().first()}\" ..."
-        } else {
-            ""
-        }
-        return "<${this.tag().name} $selector>" +
-                this.text().take(32) +
-                ("...".takeIf { this.text().length > 32 } ?: "") +
-                "</${this.tag().name}>"
-    }
+    get() =
+        elementDescr(
+            this.tag().name,
+            this.id(),
+            this.classNames().firstOrNull(),
+            this.attr("name"),
+            this.text()
+        )
 
 infix fun Element.shouldHaveComponent(component: Component): Element {
     this should haveComponent(component)
