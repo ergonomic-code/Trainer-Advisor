@@ -1,4 +1,4 @@
-package pro.qyoga.app.therapist.appointments.core.schedule
+package pro.qyoga.app.therapist.appointments.core.schedule.settings
 
 import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -41,7 +41,7 @@ class GoogleCalendarSettingsController(
 
         fun updateCalendarSettingsPath(googleAccount: GoogleAccountRef, calendarId: String): String =
             UPDATE_CALENDAR_SETTINGS_PATH
-                .replace("{googleAccount}", googleAccount.id?.toString() ?: "")
+                .replace("{googleAccount}", googleAccount.id.toString())
                 .replace("{calendarId}", calendarId)
 
     }
