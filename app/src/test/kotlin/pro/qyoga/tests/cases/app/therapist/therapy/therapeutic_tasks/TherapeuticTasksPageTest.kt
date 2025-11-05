@@ -88,7 +88,7 @@ class TherapeuticTasksPageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         document shouldHaveComponent TherapeuticTasksListPage.AddTaskForm
-        document shouldHave TherapeuticTasksListPage.AddTaskForm.DUPLICATED_NAME_MESSAGE
+        document shouldHaveElement TherapeuticTasksListPage.AddTaskForm.DUPLICATED_NAME_MESSAGE
         document shouldNotHave TherapeuticTasksListPage.taskRow
     }
 
@@ -107,7 +107,7 @@ class TherapeuticTasksPageTest : QYogaAppIntegrationBaseTest() {
         val document = therapist.therapeuticTasks.edit(updatedTask)
 
         // Then
-        document shouldHave TherapeuticTasksListPage.EditTaskForm.SUCCESS_MESSAGE
+        document shouldHaveElement TherapeuticTasksListPage.EditTaskForm.SUCCESS_MESSAGE
         backgrounds.therapeuticTasks.findById(task.id) shouldMatch updatedTask
     }
 
@@ -126,7 +126,7 @@ class TherapeuticTasksPageTest : QYogaAppIntegrationBaseTest() {
 
         // Then
         document shouldHaveComponent TherapeuticTasksListPage.EditTaskForm
-        document shouldHave TherapeuticTasksListPage.EditTaskForm.DUPLICATED_EDITED_NAME_MESSAGE
+        document shouldHaveElement TherapeuticTasksListPage.EditTaskForm.DUPLICATED_EDITED_NAME_MESSAGE
         backgrounds.therapeuticTasks.findById(task2.id) shouldMatch task2
     }
 
@@ -155,7 +155,7 @@ class TherapeuticTasksPageTest : QYogaAppIntegrationBaseTest() {
         val document = therapist.therapeuticTasks.delete(therapeuticTask.id)
 
         // Then
-        document shouldHave TherapeuticTasksListPage.EditTaskForm.TASK_HAS_REFERENCES_ERROR_MESSAGE
+        document shouldHaveElement TherapeuticTasksListPage.EditTaskForm.TASK_HAS_REFERENCES_ERROR_MESSAGE
         backgrounds.therapeuticTasks.findById(therapeuticTask.id) shouldMatch therapeuticTask
     }
 

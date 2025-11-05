@@ -31,16 +31,17 @@ open class QYogaE2EBaseTest : QYogaAppBaseTest() {
     @BeforeEach
     fun setUp() {
         Configuration.baseUrl = baseUri
-        if (headless) {
-            Testcontainers.exposeHostPorts(port)
-            val url = container.seleniumAddress
-            WebDriverRunner.setWebDriver(RemoteWebDriver(url, ChromeOptions()))
-        } else {
-            WebDriverRunner.setWebDriver(ChromeDriver(ChromeOptions()))
-        }
+        Configuration.timeout = 5_000
+        Configuration.pageLoadTimeout = 3_000
 
-        Configuration.timeout = 10_000
-        Configuration.pageLoadTimeout = 30_000
+        val webDriver =
+            if (headless) {
+                Testcontainers.exposeHostPorts(port)
+                RemoteWebDriver(container.seleniumAddress, ChromeOptions())
+            } else {
+                ChromeDriver(ChromeOptions())
+            }
+        WebDriverRunner.setWebDriver(webDriver)
     }
 
     @AfterEach

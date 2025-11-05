@@ -189,6 +189,20 @@
                 <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
             </div>
             <div class="modal-body">
+
+                <div hx-get="/therapist/schedule/settings/notifications"
+                     hx-swap="innerHTML"
+                     hx-trigger="intersect"
+                     id="notifications-settings-container">
+                    <div class="text-center py-3">
+                        <div class="mt-2">
+                            <small class="text-muted">Загрузка настроек напоминаний...</small>
+                        </div>
+                    </div>
+                </div>
+
+                <hr/>
+
                 <div hx-get="/therapist/schedule/settings/google-calendar"
                      hx-swap="innerHTML"
                      hx-trigger="intersect"

@@ -7,8 +7,8 @@ import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
 import pro.qyoga.core.clients.files.model.ClientFile
 import pro.qyoga.l10n.russianDateFormat
 import pro.qyoga.tests.assertions.PageMatcher
-import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.assertions.shouldHaveComponent
+import pro.qyoga.tests.assertions.shouldHaveElement
 import pro.qyoga.tests.pages.therapist.clients.ClientPageTabsFragment
 import pro.qyoga.tests.platform.html.*
 import java.time.ZoneId
@@ -61,7 +61,7 @@ object ClientFilesPage : QYogaPage {
 
 private infix fun Element.shouldBeRowFor(file: FileMetaData) {
     this shouldHaveComponent ClientFilesPage.downloadFileLink(file)
-    this shouldHave "small:contains(${
+    this shouldHaveElement "small:contains(${
         "Загружен ${
             russianDateFormat.format(
                 file.createdAt.atZone(ZoneId.systemDefault()).toLocalDate()

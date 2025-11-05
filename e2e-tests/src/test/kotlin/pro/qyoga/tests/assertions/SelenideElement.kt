@@ -3,6 +3,7 @@ package pro.qyoga.tests.assertions
 import com.codeborne.selenide.SelenideElement
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.MatcherResult
+import pro.qyoga.tests.platform.html.elementDescr
 import io.kotest.matchers.should as koshould
 import io.kotest.matchers.shouldNot as koshouldNot
 
@@ -15,9 +16,10 @@ fun beEmptyInput() = Matcher { element: SelenideElement ->
             { "Element ${element.descr()} should not be an input element" })
     }
 
+    val value = element.`val`()
     return@Matcher MatcherResult(
-        element.`val`().isNullOrEmpty(),
-        { "Element ${element.descr()} should be empty" },
+        value.isNullOrEmpty(),
+        { "Element ${element.descr()} should be empty but have value=$value" },
         { "Element ${element.descr()} should not be empty" }
     )
 }
@@ -30,4 +32,12 @@ fun SelenideElement.shouldNotBeEmptyInput() {
     this koshouldNot beEmptyInput()
 }
 
-fun SelenideElement.descr() = "<${this.tagName} ${this.getAttribute("id")}/>"
+fun SelenideElement.descr(): String {
+    return elementDescr(
+        this.tagName,
+        getAttribute("id"),
+        getAttribute("class"),
+        getAttribute("name"),
+        this.text
+    )
+}

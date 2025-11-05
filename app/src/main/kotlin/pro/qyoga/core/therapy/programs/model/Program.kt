@@ -4,10 +4,14 @@ import org.springframework.data.annotation.*
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import org.springframework.data.relational.core.mapping.MappedCollection
 import org.springframework.data.relational.core.mapping.Table
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.Identifiable
 import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
 import pro.qyoga.core.therapy.therapeutic_tasks.model.TherapeuticTaskRef
 import pro.qyoga.core.users.therapists.TherapistRef
 import java.time.Instant
+
+
+typealias ProgramRef = AggregateReference<Program, Long>
 
 @Immutable
 @Table("programs")
@@ -19,14 +23,14 @@ data class Program(
     val exercises: List<ProgramExercise>,
 
     @Id
-    val id: Long = 0,
+    override val id: Long = 0,
     @CreatedDate
     val createdAt: Instant = Instant.now(),
     @LastModifiedDate
     val modifiedAt: Instant? = null,
     @Version
     val version: Long = 0
-) {
+) : Identifiable<Long> {
 
     fun patchBy(updateProgramRequest: CreateProgramRequest, therapeuticTaskRef: TherapeuticTaskRef): Program {
         val updatedExercises = updateProgramRequest.exerciseIds.map {

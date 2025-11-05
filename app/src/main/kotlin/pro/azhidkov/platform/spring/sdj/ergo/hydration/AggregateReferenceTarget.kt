@@ -12,8 +12,24 @@ data class AggregateReferenceTarget<T : Identifiable<ID>, ID : Any>(
     @JsonIgnore
     override fun getId(): ID = entity.id
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is AggregateReference<*, *>) return false
+
+        return if (other is AggregateReferenceTarget<*, *>) {
+            entity == other.entity
+        } else {
+            getId() == other.getId()
+        }
+    }
+
+    override fun hashCode(): Int {
+        return entity.id.hashCode()
+    }
+
 }
 
+@Suppress("UNCHECKED_CAST")
 fun <R : AggregateReference<T, ID>?, ID : Any, T : Identifiable<ID>> R.resolveOrThrow(): T =
     (this as? AggregateReferenceTarget<T, ID>)?.entity
         ?: error("$this is not instance of AggregateReferenceTarget")

@@ -1,7 +1,7 @@
 package pro.qyoga.tests.fixture.test_apis
 
 import org.springframework.stereotype.Component
-import pro.qyoga.app.therapist.appointments.core.schedule.GoogleCalendarSettingsController
+import pro.qyoga.app.therapist.appointments.core.schedule.settings.GoogleCalendarSettingsController
 import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.i9ns.calendars.google.GoogleCalendarsService
 import pro.qyoga.i9ns.calendars.google.model.GoogleAccount
@@ -18,7 +18,7 @@ class GoogleCalendarTestApi(
 
     fun getGoogleCalendarsSettings(therapistRef: TherapistRef): List<GoogleAccountCalendarsSettingsView> {
         return googleCalendarSettingsController.getGoogleCalendarSettingsComponent(
-            idOnlyUserDetails(therapistRef.id!!)
+            idOnlyUserDetails(therapistRef.id)
         ).accounts
     }
 

@@ -1,4 +1,4 @@
-package pro.qyoga.app.therapist.appointments.core.schedule
+package pro.qyoga.app.therapist.appointments.core.schedule.settings
 
 import org.springframework.web.servlet.ModelAndView
 import pro.qyoga.i9ns.calendars.google.views.GoogleAccountCalendarsSettingsView

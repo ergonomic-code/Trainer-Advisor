@@ -8,7 +8,9 @@ TRUNCATE
     survey_forms_settings,
     ical_calendars,
     therapist_google_accounts,
-    therapist_google_calendar_settings
+    therapist_google_calendar_settings,
+    therapist_web_push_subscriptions,
+    therapist_fill_schedule_notifications_settings
     RESTART IDENTITY;
 
 INSERT INTO users (id, email, password_hash, roles, created_at, version)

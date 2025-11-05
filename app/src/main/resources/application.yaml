@@ -100,8 +100,17 @@ trainer-advisor:
   admin:
     email: ta@azhidkov.pro
 
+  appointments:
+    notifications:
+      fill-schedule:
+        window-size: 10m
+
   integrations:
     google-calendar:
       root-url: https://www.googleapis.com/
+
+    web-pushes:
+      public-key: ${WEB_PUSH_PUBLIC_KEY:BL9_fj0Tg7FEwYM7iqMcIsQshqcgMjN40qTbAZYWYTt2mGjBjwIJFQc6pWoFlNsWMO8VBA9GH_FrAiSXHHyFMBo}
+      private-key: ${WEB_PUSH_PRIVATE_KEY:uhUKe8yBIz8_LY4pc72bfxePSjQ7ch5EpKpoqVbvZfo}
 
 debug: false

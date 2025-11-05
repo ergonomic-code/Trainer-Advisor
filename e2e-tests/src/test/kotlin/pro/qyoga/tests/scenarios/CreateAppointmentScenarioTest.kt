@@ -8,12 +8,8 @@ import pro.qyoga.tests.assertions.shouldNotBeEmptyInput
 import pro.qyoga.tests.infra.QYogaE2EBaseTest
 import pro.qyoga.tests.pages.therapist.appointments.CalendarPage
 import pro.qyoga.tests.pages.therapist.appointments.CreateAppointmentForm
-import pro.qyoga.tests.platform.selenide.click
-import pro.qyoga.tests.platform.selenide.find
-import pro.qyoga.tests.platform.selenide.selectIn
-import pro.qyoga.tests.platform.selenide.typeInto
+import pro.qyoga.tests.platform.selenide.*
 import pro.qyoga.tests.scripts.loginAsTheTherapist
-import pro.qyoga.tests.scripts.therapist.appointemnts.goToSchedulePage
 
 
 @DisplayName("Создание приёма")
@@ -25,7 +21,7 @@ class CreateAppointmentScenarioTest : QYogaE2EBaseTest() {
         // Фикстура
         val aClient = backgrounds.clients.aClient()
         loginAsTheTherapist()
-        goToSchedulePage()
+        open(CalendarPage)
 
         // Терапевт кликает по ячейке календаря
         click(CalendarPage.addAppointmentLink)

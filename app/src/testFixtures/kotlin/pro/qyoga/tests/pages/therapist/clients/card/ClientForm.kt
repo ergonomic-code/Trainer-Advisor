@@ -6,7 +6,7 @@ import pro.qyoga.core.clients.cards.model.Client
 import pro.qyoga.core.clients.cards.model.DistributionSourceType
 import pro.qyoga.core.clients.cards.model.toUIFormat
 import pro.qyoga.l10n.russianDateFormat
-import pro.qyoga.tests.assertions.PageMatcher
+import pro.qyoga.tests.assertions.ComponentMatcher
 import pro.qyoga.tests.assertions.SelectorOnlyComponent
 import pro.qyoga.tests.assertions.shouldBeElement
 import pro.qyoga.tests.assertions.shouldMatch
@@ -19,22 +19,26 @@ import java.util.*
 
 abstract class ClientForm(action: FormAction) : QYogaForm("createClientForm", action) {
 
-    val firstName = text("firstName", true)
-    val lastName = text("lastName", true)
-    val middleName = text("middleName", false)
-    val birthDate = text("birthDate", false)
-    val phoneNumber = tel("phoneNumber", true)
-    val invalidPhoneInput = "${phoneNumber.selector()}.is-invalid"
-    val duplicatedPhoneErrorMessage = "#duplicatedPhoneErrorMessage"
-    val email = email("email", false)
-    val address = text("address", false)
-    val complaints = TextArea("complaints", false)
-    val anamnesis = TextArea("anamnesis", false)
-    val distributionSourceType =
+    val firstName by component { text("firstName", true) }
+    val lastName by component { text("lastName", true) }
+    val middleName by component { text("middleName", false) }
+    val birthDate by component { text("birthDate", false) }
+    val phoneNumber by component { tel("phoneNumber", true) }
+    val email by component { email("email", false) }
+    val address by component { text("address", false) }
+    val complaints by component { TextArea("complaints", false) }
+    val anamnesis by component { TextArea("anamnesis", false) }
+    val distributionSourceType by component {
         Select("distributionSourceType", false, DistributionSourceType.entries.map { Option.of(it) })
-    val distributionSourceComment = text("distributionSourceComment", false)
-    val version = hidden("version", false)
-    val submit = Button("confirmButton", "Сохранить")
+    }
+    val distributionSourceComment by component { text("distributionSourceComment", false) }
+    val version by component { hidden("version", false) }
+    val submit by component { Button("confirmButton", "Сохранить") }
+
+    val invalidPhoneInput = "${phoneNumber.selector()}.is-invalid"
+
+    @Suppress("unused") // верифицируется через components
+    val duplicatedPhoneErrorMessage by component { SelectorOnlyComponent("#duplicatedPhoneErrorMessage") }
 
     object FormDraftScript : Script("formDraft") {
         val clientId = Variable("clientId")
@@ -42,29 +46,13 @@ abstract class ClientForm(action: FormAction) : QYogaForm("createClientForm", ac
         override val vars = listOf(clientId, serverState)
     }
 
-    override val components: List<Component> = listOf(
-        firstName,
-        lastName,
-        middleName,
-        birthDate,
-        phoneNumber,
-        email,
-        address,
-        complaints,
-        anamnesis,
-        distributionSourceType,
-        distributionSourceComment,
-        SelectorOnlyComponent(duplicatedPhoneErrorMessage),
-        submit
-    )
-
 }
 
 object CreateClientForm : ClientForm(FormAction.hxPost("/therapist/clients/create"))
 
 object EditClientForm : ClientForm(FormAction.hxPost("/therapist/clients/{id}")) {
 
-    fun clientForm(client: Client): PageMatcher = PageMatcher { element ->
+    fun clientForm(client: Client): ComponentMatcher = ComponentMatcher(selector()) { element ->
         element.select(this.selector()).single() shouldBeElement action
         element.select(firstName.selector()).`val`() shouldBe client.firstName
         element.select(lastName.selector()).`val`() shouldBe client.lastName

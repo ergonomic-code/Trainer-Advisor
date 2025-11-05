@@ -3,6 +3,8 @@ package pro.qyoga.tests.pages.therapist.therapy.programs
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import org.jsoup.nodes.Element
+import pro.azhidkov.platform.spring.sdj.ergo.hydration.ref
+import pro.qyoga.app.therapist.therapy.programs.edit.EditProgramPageController
 import pro.qyoga.core.therapy.programs.model.Program
 import pro.qyoga.tests.assertions.PageMatcher
 import pro.qyoga.tests.assertions.shouldHaveComponent
@@ -37,9 +39,8 @@ object ProgramsListPage : QYogaPage {
 
     }
 
-    fun editProgramLink(program: Program) = Link("editProgram${program.id}", programPath, program.title)
-
-    fun editProgramPath(programId: Long) = programPath.replace("{programId}", programId.toString())
+    fun editProgramLink(program: Program) =
+        Link("editProgram${program.id}", EditProgramPageController.editUrlFor(program.ref()), program.title)
 
     fun downloadProgramDocxButton(programId: Long) = Link("downloadProgramDocx${programId}", programDocxPath, "")
 

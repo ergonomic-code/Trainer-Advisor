@@ -1,6 +1,7 @@
 package pro.qyoga.tests.scenarios
 
-import com.codeborne.selenide.Selenide.*
+import com.codeborne.selenide.Selenide.`$`
+import com.codeborne.selenide.Selenide.title
 import com.codeborne.selenide.conditions.Visible
 import com.icegreen.greenmail.configuration.GreenMailConfiguration
 import com.icegreen.greenmail.junit5.GreenMailExtension
@@ -16,13 +17,10 @@ import pro.qyoga.tests.fixture.data.randomCyrillicWord
 import pro.qyoga.tests.fixture.data.randomEmail
 import pro.qyoga.tests.fixture.object_mothers.therapists.TherapistsObjectMother.registerTherapistRequest
 import pro.qyoga.tests.infra.QYogaE2EBaseTest
-import pro.qyoga.tests.pages.publc.LoginPage
 import pro.qyoga.tests.pages.publc.RegisterPage
 import pro.qyoga.tests.pages.therapist.clients.ClientsListPage
-import pro.qyoga.tests.platform.selenide.`$`
-import pro.qyoga.tests.platform.selenide.await
-import pro.qyoga.tests.platform.selenide.click
-import pro.qyoga.tests.platform.selenide.typeInto
+import pro.qyoga.tests.platform.selenide.*
+import pro.qyoga.tests.scripts.login
 import java.util.*
 
 
@@ -40,7 +38,7 @@ class RegisterUserScenarioTest : QYogaE2EBaseTest() {
         )
 
         // Пользователь переходит по урлу страницы регистрации
-        open(RegisterPage.path)
+        open(RegisterPage)
 
         // И видит страницу регистрации
         title() shouldBe (RegisterPage.title)
@@ -66,10 +64,7 @@ class RegisterUserScenarioTest : QYogaE2EBaseTest() {
         val password = passwordEmailPattern.matchEntire(receivedMessages[0].content as String)!!.groupValues[2]
 
         // Затем пользователь входит
-        open(LoginPage.path)
-        typeInto(LoginPage.LoginForm.username, registerTherapistRequest.email)
-        typeInto(LoginPage.LoginForm.password, password)
-        click(LoginPage.LoginForm.submit)
+        login(registerTherapistRequest.email, password)
 
         // И видит страницу расписания
         await(ClientsListPage)

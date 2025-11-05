@@ -50,22 +50,36 @@ class WebSecurityConfig(
                 requests
                     // Therapist
                     .requestMatchers("/therapist/**").hasAnyAuthority(Role.ROLE_THERAPIST.toString())
+                    .requestMatchers(HttpMethod.POST, "/pushes/web/subscriptions")
+                    .hasAnyAuthority(Role.ROLE_THERAPIST.toString())
+                    .requestMatchers(HttpMethod.DELETE, "/pushes/web/subscriptions/*")
+                    .hasAnyAuthority(Role.ROLE_THERAPIST.toString())
 
                     // Public
                     .requestMatchers(
                         HttpMethod.GET,
                         "/",
-                        "/offline.html",
-                        "/privacy-policy.html",
+
                         "/manifest.json",
+                        "/sw.js",
+                        "/offline.html",
+
+                        "/privacy-policy.html",
+
                         "/register",
+
                         "/oauth2/**",
+
+                        "/pushes/web/public-key",
+
                         "/components/**",
+
                         "/styles/**",
                         "/img/**",
                         "/js/**",
                         "/fonts/**",
                         "/vendor/**",
+
                         "/test/*"
                     )
                     .permitAll()

@@ -3,7 +3,6 @@ package pro.qyoga.app.therapist.appointments.core.schedule
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import pro.qyoga.core.appointments.core.model.AppointmentRef
 import pro.qyoga.core.users.auth.dtos.QyogaUserDetails
@@ -13,12 +12,11 @@ import java.util.*
 
 
 @Controller
-@RequestMapping(SchedulePageController.PATH)
 class SchedulePageController(
     private val getCalendarAppointments: GetCalendarAppointmentsOp
 ) {
 
-    @GetMapping
+    @GetMapping(PATH)
     fun getCalendarPage(
         @RequestParam(DATE) date: LocalDate = LocalDate.now(),
         @RequestParam(FOCUSED_APPOINTMENT) focusedAppointment: UUID? = null,
@@ -29,7 +27,7 @@ class SchedulePageController(
     }
 
     companion object {
-        const val PATH = "/therapist/schedule"
+        const val PATH = GetCalendarAppointmentsOp.PATH
         const val DATE = "date"
         const val FOCUSED_APPOINTMENT = SchedulePageModel.FOCUSED_APPOINTMENT
         const val DATE_PATH = "$PATH?$DATE={$DATE}"
@@ -37,7 +35,7 @@ class SchedulePageController(
         fun calendarForDateUrl(date: LocalDate) = DATE_PATH.replace("{$DATE}", date.toString())
         fun calendarForDayWithFocus(date: LocalDate, appointmentRef: AppointmentRef) = DATE_APPOINTMENT_PATH
             .replace("{$DATE}", date.toString())
-            .replace("{$FOCUSED_APPOINTMENT}", appointmentRef.id?.toString() ?: "")
+            .replace("{$FOCUSED_APPOINTMENT}", appointmentRef.id.toString())
     }
 
 }

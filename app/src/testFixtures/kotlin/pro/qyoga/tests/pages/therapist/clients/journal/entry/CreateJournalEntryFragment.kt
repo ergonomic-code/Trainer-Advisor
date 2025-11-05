@@ -3,13 +3,17 @@ package pro.qyoga.tests.pages.therapist.clients.journal.entry
 import io.kotest.matchers.shouldBe
 import org.jsoup.nodes.Element
 import pro.qyoga.app.therapist.clients.journal.edit_entry.create.CreateJournalEntryPageController
+import pro.qyoga.tests.assertions.ComponentMatcher
 import pro.qyoga.tests.assertions.shouldHaveComponent
 import pro.qyoga.tests.platform.html.QYogaPage
 import java.time.LocalDate
 import java.util.*
 
 
-class CreateJournalEntryFragment(val clientId: UUID, private val today: LocalDate) : QYogaPage {
+class CreateJournalEntryFragment(val clientId: UUID, private val today: LocalDate) : QYogaPage, ComponentMatcher {
+
+    override fun selector(): String =
+        "#createJournalEntryTabContent"
 
     override val path: String = CreateJournalEntryPageController.CREATE_JOURNAL_PAGE_URL
 

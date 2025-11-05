@@ -1,6 +1,8 @@
+import com.gorylenko.GenerateGitPropertiesTask
 import kotlinx.kover.gradle.plugin.dsl.AggregationType
 import kotlinx.kover.gradle.plugin.dsl.CoverageUnit
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import java.util.*
 
 plugins {
 	alias(libs.plugins.kotlin.spring)
@@ -43,6 +45,8 @@ dependencies {
     implementation(libs.google.oauth.client)
     implementation(platform(libs.google.auth.bom))
     implementation("com.google.auth:google-auth-library-oauth2-http")
+    implementation(libs.web.push)
+    implementation(libs.bouncycastle)
 
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
 
@@ -223,4 +227,21 @@ configurations.matching { it.name == "detekt" }.all {
 val compileKotlin: KotlinCompile by tasks
 compileKotlin.compilerOptions {
     freeCompilerArgs.set(listOf("-Xannotation-default-target=param-property"))
+}
+
+val generateGitProperties = tasks.named<GenerateGitPropertiesTask>("generateGitProperties")
+
+val gitHash: Provider<String> = generateGitProperties.map { task ->
+    val props = Properties()
+    task.output.get().asFile.inputStream().use(props::load)
+    props.getProperty("git.commit.id.abbrev")
+}
+
+tasks.processResources {
+    dependsOn(generateGitProperties)
+    filesMatching("static/sw.js") {
+        expand(
+            "APP_VERSION" to gitHash.get()
+        )
+    }
 }

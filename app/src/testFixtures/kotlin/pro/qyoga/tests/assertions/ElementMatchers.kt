@@ -1,15 +1,16 @@
 package pro.qyoga.tests.assertions
 
-import io.kotest.matchers.Matcher
-import io.kotest.matchers.MatcherResult
+import io.kotest.assertions.fail
+import io.kotest.inspectors.forAll
+import io.kotest.matchers.*
 import io.kotest.matchers.compose.all
-import io.kotest.matchers.should
-import io.kotest.matchers.shouldNot
 import org.jsoup.nodes.Element
+import org.jsoup.select.Elements
 import org.springframework.web.util.UriTemplate
 import pro.qyoga.tests.platform.html.Component
 import pro.qyoga.tests.platform.html.HtmlPage
 import pro.qyoga.tests.platform.html.Input
+import pro.qyoga.tests.platform.html.elementDescr
 
 
 fun beComponent(component: Component) = Matcher<Element> { element ->
@@ -176,26 +177,27 @@ fun haveInputWithValue(input: Input, value: String) = Matcher { element: Element
 }
 
 fun haveCheckboxChecked(
-    selector: String = "input.form-check-input[type=checkbox][name=shouldBeShown]",
     expected: Boolean
-): Matcher<Element> = Matcher { el ->
-    val checkbox = el.select(selector).first()
-    val actual = checkbox?.hasAttr("checked") == true
+): Matcher<Element> = Matcher { checkbox ->
+    val actual = checkbox.hasAttr("checked")
     MatcherResult(
-        checkbox != null && actual == expected,
+        actual == expected,
         {
-            val found = if (checkbox == null) "not found" else if (actual) "checked" else "unchecked"
-            "Expected checkbox '$selector' to be ${if (expected) "checked" else "unchecked"}, but $found"
+            "Expected checkbox to be $expected, but $actual"
         },
-        { "Checkbox '$selector' unexpectedly matches expected=${expected}" }
+        { "Checkbox unexpectedly checked=${expected}" }
     )
 }
 
-val Element.descr
-    get() = "<${this.tag().name} id=\"${this.id()}\">" +
-            this.text().take(32) +
-            ("...".takeIf { this.text().length > 32 } ?: "") +
-            "</${this.tag().name}>"
+val Element.descr: String
+    get() =
+        elementDescr(
+            this.tag().name,
+            this.id(),
+            this.classNames().firstOrNull(),
+            this.attr("name"),
+            this.text()
+        )
 
 infix fun Element.shouldHaveComponent(component: Component): Element {
     this should haveComponent(component)
@@ -221,7 +223,8 @@ infix fun Element.shouldNotHave(selector: String) {
 
 fun bePage(page: HtmlPage) = Matcher.all(
     Matcher { element: Element ->
-        MatcherResult(element.root() == element,
+        MatcherResult(
+            element.root() == element,
             { "Element ${element.descr} should be root element but it isn't" },
             { "Element ${element.descr} should not be root element" }
         )
@@ -246,12 +249,12 @@ fun haveElements(selector: String, count: Int): Matcher<Element> = Matcher { ele
     MatcherResult(
         actualCount == count,
         {
-            "Element ${element.descr} have ${actualCount} elements matching $selector but $count is expected.\nElements: \n${
+            "Element ${element.descr} have $actualCount elements matching $selector but $count is expected.\nElements: \n${
                 elements.joinToString("\n") { it.descr }
             }"
         },
         {
-            "Element ${element.descr} should not have ${actualCount} elements matching $selector.\nElements: \n${
+            "Element ${element.descr} should not have $actualCount elements matching $selector.\nElements: \n${
                 elements.joinToString("\n") { it.descr }
             }"
         }
@@ -289,11 +292,6 @@ fun Element.shouldHaveElements(selector: String, count: Int): Element {
     return this
 }
 
-@Deprecated("Use shouldHaveElements")
-infix fun Element.shouldHave(selector: String) {
-    this should haveElement(selector)
-}
-
 fun haveElement(selector: String) = haveElements(selector, 1)
 
 data class SelectorOnlyComponent(val selector: String) : Component {
@@ -302,4 +300,19 @@ data class SelectorOnlyComponent(val selector: String) : Component {
 
     override fun matcher(): Matcher<Element> = alwaysSuccess()
 
+}
+
+fun <T> Elements.shouldMatch(data: List<T>, elementMatcher: (Element, T) -> Unit) {
+    this.size shouldBe data.size
+    this.zip(data).forAll { (el, item) -> elementMatcher(el, item) }
+}
+
+operator fun Element.get(selector: String) = this.select(selector)
+
+operator fun Element.invoke(selector: String): Element {
+    val element = this.select(selector)
+    if (element.size != 1) {
+        fail("Single $selector element expected, but found ${element.size}")
+    }
+    return element.single()
 }
