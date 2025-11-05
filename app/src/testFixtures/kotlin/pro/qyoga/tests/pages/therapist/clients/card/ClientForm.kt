@@ -19,44 +19,32 @@ import java.util.*
 
 abstract class ClientForm(action: FormAction) : QYogaForm("createClientForm", action) {
 
-    val firstName = text("firstName", true)
-    val lastName = text("lastName", true)
-    val middleName = text("middleName", false)
-    val birthDate = text("birthDate", false)
-    val phoneNumber = tel("phoneNumber", true)
-    val invalidPhoneInput = "${phoneNumber.selector()}.is-invalid"
-    val duplicatedPhoneErrorMessage = "#duplicatedPhoneErrorMessage"
-    val email = email("email", false)
-    val address = text("address", false)
-    val complaints = TextArea("complaints", false)
-    val anamnesis = TextArea("anamnesis", false)
-    val distributionSourceType =
+    val firstName by component { text("firstName", true) }
+    val lastName by component { text("lastName", true) }
+    val middleName by component { text("middleName", false) }
+    val birthDate by component { text("birthDate", false) }
+    val phoneNumber by component { tel("phoneNumber", true) }
+    val email by component { email("email", false) }
+    val address by component { text("address", false) }
+    val complaints by component { TextArea("complaints", false) }
+    val anamnesis by component { TextArea("anamnesis", false) }
+    val distributionSourceType by component {
         Select("distributionSourceType", false, DistributionSourceType.entries.map { Option.of(it) })
-    val distributionSourceComment = text("distributionSourceComment", false)
-    val version = hidden("version", false)
-    val submit = Button("confirmButton", "Сохранить")
+    }
+    val distributionSourceComment by component { text("distributionSourceComment", false) }
+    val version by component { hidden("version", false) }
+    val submit by component { Button("confirmButton", "Сохранить") }
+
+    val invalidPhoneInput = "${phoneNumber.selector()}.is-invalid"
+
+    @Suppress("unused") // верифицируется через components
+    val duplicatedPhoneErrorMessage by component { SelectorOnlyComponent("#duplicatedPhoneErrorMessage") }
 
     object FormDraftScript : Script("formDraft") {
         val clientId = Variable("clientId")
         val serverState = Variable("serverState")
         override val vars = listOf(clientId, serverState)
     }
-
-    override val components: List<Component> = listOf(
-        firstName,
-        lastName,
-        middleName,
-        birthDate,
-        phoneNumber,
-        email,
-        address,
-        complaints,
-        anamnesis,
-        distributionSourceType,
-        distributionSourceComment,
-        SelectorOnlyComponent(duplicatedPhoneErrorMessage),
-        submit
-    )
 
 }
 

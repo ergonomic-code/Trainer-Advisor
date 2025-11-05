@@ -12,7 +12,7 @@ import pro.qyoga.tests.platform.selenide.find
 
 fun CreateClientForm.shouldBeEmpty() {
     components
-        .filterIsInstance<InputBase>()
+        .filter { it is InputBase && it != CreateClientForm.version }
         .forEach { component ->
             find(component).shouldBeEmptyInput()
         }
