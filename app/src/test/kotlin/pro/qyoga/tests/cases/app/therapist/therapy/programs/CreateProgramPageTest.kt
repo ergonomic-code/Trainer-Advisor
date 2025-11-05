@@ -7,8 +7,8 @@ import io.kotest.matchers.shouldBe
 import io.kotest.matchers.string.shouldContain
 import org.junit.jupiter.api.Test
 import pro.qyoga.tests.assertions.shouldBePage
-import pro.qyoga.tests.assertions.shouldHave
 import pro.qyoga.tests.assertions.shouldHaveComponent
+import pro.qyoga.tests.assertions.shouldHaveElement
 import pro.qyoga.tests.assertions.shouldMatch
 import pro.qyoga.tests.clients.TherapistClient
 import pro.qyoga.tests.fixture.data.randomCyrillicWord
@@ -71,7 +71,7 @@ class CreateProgramPageTest : QYogaAppIntegrationBaseTest() {
         document shouldHaveComponent CreateProgramForm
         CreateProgramForm.titleInput.value(document) shouldBe createProgramRequest.title
         CreateProgramForm.therapeuticTaskInput.value(document) shouldBe notExistingTherapeuticTask
-        document shouldHave CreateProgramForm.notExistingTherapeuticTaskMessage
+        document shouldHaveElement CreateProgramForm.notExistingTherapeuticTaskMessage
     }
 
     @Test

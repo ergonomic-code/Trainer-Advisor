@@ -252,12 +252,12 @@ fun haveElements(selector: String, count: Int): Matcher<Element> = Matcher { ele
     MatcherResult(
         actualCount == count,
         {
-            "Element ${element.descr} have ${actualCount} elements matching $selector but $count is expected.\nElements: \n${
+            "Element ${element.descr} have $actualCount elements matching $selector but $count is expected.\nElements: \n${
                 elements.joinToString("\n") { it.descr }
             }"
         },
         {
-            "Element ${element.descr} should not have ${actualCount} elements matching $selector.\nElements: \n${
+            "Element ${element.descr} should not have $actualCount elements matching $selector.\nElements: \n${
                 elements.joinToString("\n") { it.descr }
             }"
         }
@@ -293,11 +293,6 @@ infix fun Element.shouldHaveElement(selector: String): Element {
 fun Element.shouldHaveElements(selector: String, count: Int): Element {
     this should haveElements(selector, count)
     return this
-}
-
-@Deprecated("Use shouldHaveElements")
-infix fun Element.shouldHave(selector: String) {
-    this should haveElement(selector)
 }
 
 fun haveElement(selector: String) = haveElements(selector, 1)
