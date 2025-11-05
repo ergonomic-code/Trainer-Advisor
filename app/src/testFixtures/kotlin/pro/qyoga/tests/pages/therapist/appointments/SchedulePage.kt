@@ -20,6 +20,7 @@ import pro.qyoga.l10n.russianTimeFormat
 import pro.qyoga.tests.assertions.*
 import pro.qyoga.tests.pages.therapist.appointments.CalendarPage.APPOINTMENT_CARD_SELECTOR
 import pro.qyoga.tests.pages.therapist.appointments.google_calendars.GoogleCalendarsSettingsLoaderComponent
+import pro.qyoga.tests.pages.therapist.appointments.notifications.NotificationsSettingsLoaderComponent
 import pro.qyoga.tests.platform.html.*
 import java.time.LocalTime
 
@@ -43,6 +44,7 @@ object CalendarPage : HtmlPage {
 
     override val matcher = Matcher.all(
         haveComponent(datePickerButton),
+        haveComponent(NotificationsSettingsLoaderComponent),
         haveComponent(GoogleCalendarsSettingsLoaderComponent),
         haveElement("small:contains(07:00)"),
         haveComponents(goToDayLink, SchedulePageModel.DAYS_IN_WEEK),

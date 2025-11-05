@@ -223,7 +223,8 @@ infix fun Element.shouldNotHave(selector: String) {
 
 fun bePage(page: HtmlPage) = Matcher.all(
     Matcher { element: Element ->
-        MatcherResult(element.root() == element,
+        MatcherResult(
+            element.root() == element,
             { "Element ${element.descr} should be root element but it isn't" },
             { "Element ${element.descr} should not be root element" }
         )

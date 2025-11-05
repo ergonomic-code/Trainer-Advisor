@@ -12,7 +12,10 @@ class WebPushesTestApi(
     private val webPushSubscriptionsRepo: WebPushSubscriptionsRepo
 ) {
 
-    fun createSubscription(therapistRef: TherapistRef, webPushSubscription: WebPushSubscription) {
+    fun createSubscription(
+        therapistRef: TherapistRef,
+        webPushSubscription: WebPushSubscription
+    ) {
         webPushSubscriptionsRepo.addSubscription(TherapistWebPushSubscription(therapistRef, webPushSubscription))
     }
 
