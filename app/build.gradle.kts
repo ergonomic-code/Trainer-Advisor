@@ -78,8 +78,8 @@ dependencies {
 	testFixturesImplementation("org.springframework.boot:spring-boot-starter-test")
     testFixturesImplementation("org.springframework.security:spring-security-test")
     testFixturesImplementation("org.springframework.boot:spring-boot-starter-webflux")
-	testFixturesImplementation("org.testcontainers:junit-jupiter")
-	testFixturesImplementation("org.testcontainers:postgresql")
+	testFixturesImplementation("org.testcontainers:testcontainers-junit-jupiter")
+	testFixturesImplementation("org.testcontainers:testcontainers-postgresql")
 	testFixturesImplementation(testLibs.testcontainers.minio)
 
 	testImplementation(testFixtures(project(":app")))

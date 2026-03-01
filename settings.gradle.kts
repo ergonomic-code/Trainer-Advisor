@@ -70,13 +70,15 @@ dependencyResolutionManagement {
 
         create("testLibs") {
             val selenideVersion = version("selenide", "7.10.1")
-            val testContainersVersion = version("testcontainers", "1.21.3")
+            val testContainersVersion = version("testcontainers", "2.0.3")
             val restAssuredVersion = version("restAssured", "5.5.6")
             val kotestVersion = version("kotest", "5.9.1")
             val wiremockVersion = version("wiremock", "3.13.1")
 
             library("selenide-proxy", "com.codeborne", "selenide-proxy").versionRef(selenideVersion)
-            library("testcontainers-selenium", "org.testcontainers", "selenium").versionRef(testContainersVersion)
+            library("testcontainers-selenium", "org.testcontainers", "testcontainers-selenium").versionRef(
+                testContainersVersion
+            )
 
             library("kotest-assertions", "io.kotest", "kotest-assertions-core").versionRef(kotestVersion)
             library("kotest-runner", "io.kotest", "kotest-runner-junit5").versionRef(kotestVersion)
@@ -95,7 +97,9 @@ dependencyResolutionManagement {
             library("datafaker", "net.datafaker", "datafaker").version("2.5.1")
             library("greenmail", "com.icegreen", "greenmail-junit5").version("2.1.6")
 
-            library("testcontainers-minio", "org.testcontainers", "minio").versionRef(testContainersVersion)
+            library("testcontainers-minio", "org.testcontainers", "testcontainers-minio").versionRef(
+                testContainersVersion
+            )
 
             library("mockito-kotlin", "org.mockito.kotlin", "mockito-kotlin").version("6.1.0")
             library("archunit", "com.tngtech.archunit", "archunit").version("1.4.1")

@@ -1,10 +1,10 @@
 package pro.qyoga.tests.infra.db
 
 import org.testcontainers.containers.MinIOContainer
-import org.testcontainers.containers.PostgreSQLContainer
+import org.testcontainers.postgresql.PostgreSQLContainer
 import org.testcontainers.utility.MountableFile
 
-val pgContainer: PostgreSQLContainer<*> by lazy {
+val pgContainer: PostgreSQLContainer by lazy {
     PostgreSQLContainer("postgres:15.2")
         .withExposedPorts(5432)
         .withUsername("postgres")
