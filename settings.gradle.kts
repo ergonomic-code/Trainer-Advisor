@@ -71,7 +71,7 @@ dependencyResolutionManagement {
         create("testLibs") {
             val selenideVersion = version("selenide", "7.10.1")
             val testContainersVersion = version("testcontainers", "2.0.3")
-            val restAssuredVersion = version("restAssured", "5.5.6")
+            val restAssuredVersion = version("restAssured", "6.0.0")
             val kotestVersion = version("kotest", "5.9.1")
             val wiremockVersion = version("wiremock", "3.13.1")
 
