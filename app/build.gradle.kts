@@ -29,9 +29,10 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-cache")
+	implementation("org.springframework.boot:spring-boot-starter-flyway")
     implementation(libs.caffeine)
 
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("tools.jackson.module:jackson-module-kotlin")
 	implementation("org.flywaydb:flyway-database-postgresql")
 	implementation(libs.jackarta.validation)
 	implementation(libs.thymeleaf.extras.java8time)
@@ -71,7 +72,7 @@ dependencies {
 	testFixturesImplementation("org.springframework.boot:spring-boot-starter-web")
 	testFixturesImplementation("org.springframework.boot:spring-boot-starter-security")
     testFixturesImplementation("org.springframework.boot:spring-boot-starter-oauth2-client")
-	testFixturesImplementation("com.fasterxml.jackson.core:jackson-databind")
+	testFixturesImplementation("tools.jackson.core:jackson-databind")
 	testFixturesImplementation(libs.minio)
 	testFixturesImplementation(libs.ical4j)
 
