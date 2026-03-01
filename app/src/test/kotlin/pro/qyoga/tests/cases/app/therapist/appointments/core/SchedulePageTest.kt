@@ -1,6 +1,5 @@
 package pro.qyoga.tests.cases.app.therapist.appointments.core
 
-import com.fasterxml.jackson.core.type.TypeReference
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
@@ -24,6 +23,7 @@ import pro.qyoga.tests.pages.therapist.appointments.CalendarPage
 import pro.qyoga.tests.pages.therapist.appointments.appointmentCards
 import pro.qyoga.tests.pages.therapist.appointments.shouldMatch
 import pro.qyoga.tests.platform.instancio.KSelect.Companion.field
+import tools.jackson.core.type.TypeReference
 import java.time.LocalDate
 
 

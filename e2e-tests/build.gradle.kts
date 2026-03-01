@@ -1,6 +1,12 @@
 group = "pro.qyoga.e2e-tests"
 version = "0.0.1-SNAPSHOT"
 
+configurations.matching { it.name in setOf("compileClasspath", "testCompileClasspath", "testFixturesCompileClasspath") }
+    .all {
+        exclude(group = "com.fasterxml.jackson")
+        exclude(group = "com.fasterxml.jackson.core")
+    }
+
 dependencies {
     implementation(platform("org.springframework.boot:spring-boot-dependencies:${libs.versions.springBoot.get()}"))
 

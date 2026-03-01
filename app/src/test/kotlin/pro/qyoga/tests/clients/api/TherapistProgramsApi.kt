@@ -1,8 +1,5 @@
 package pro.qyoga.tests.clients.api
 
-import com.fasterxml.jackson.databind.ObjectMapper
-import com.fasterxml.jackson.databind.node.ObjectNode
-import com.fasterxml.jackson.module.kotlin.convertValue
 import io.restassured.http.ContentType
 import io.restassured.http.Cookie
 import io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath
@@ -24,6 +21,9 @@ import pro.qyoga.tests.pages.therapist.therapy.programs.CreateProgramForm
 import pro.qyoga.tests.pages.therapist.therapy.programs.CreateProgramPage
 import pro.qyoga.tests.pages.therapist.therapy.programs.EditProgramPage
 import pro.qyoga.tests.pages.therapist.therapy.programs.ProgramsListPage
+import tools.jackson.databind.ObjectMapper
+import tools.jackson.databind.node.ObjectNode
+import tools.jackson.module.kotlin.convertValue
 
 class TherapistProgramsApi(override val authCookie: Cookie) : AuthorizedApi {
 

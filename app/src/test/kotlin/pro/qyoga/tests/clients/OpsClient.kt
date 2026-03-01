@@ -1,12 +1,12 @@
 package pro.qyoga.tests.clients
 
-import com.fasterxml.jackson.databind.JsonNode
 import io.restassured.http.ContentType
 import io.restassured.module.kotlin.extensions.Extract
 import io.restassured.module.kotlin.extensions.Given
 import io.restassured.module.kotlin.extensions.Then
 import io.restassured.module.kotlin.extensions.When
 import org.springframework.http.HttpStatus
+import tools.jackson.databind.JsonNode
 
 val actuatorPath = "ops/actuator"
 

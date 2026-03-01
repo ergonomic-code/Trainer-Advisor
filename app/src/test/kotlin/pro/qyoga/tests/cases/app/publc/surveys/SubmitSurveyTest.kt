@@ -1,8 +1,5 @@
 package pro.qyoga.tests.cases.app.publc.surveys
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.node.ObjectNode
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.kotest.core.annotation.DisplayName
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.shouldBe
@@ -23,6 +20,9 @@ import pro.qyoga.tests.fixture.object_mothers.therapists.THE_ADMIN_LOGIN
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseKoTest
 import pro.qyoga.tests.infra.web.mainWebTestClient
+import tools.jackson.databind.JsonNode
+import tools.jackson.databind.node.ObjectNode
+import tools.jackson.module.kotlin.jacksonObjectMapper
 
 
 @DisplayName("Операция создания анкеты")
@@ -34,7 +34,7 @@ class SubmitSurveyTest : QYogaAppIntegrationBaseKoTest({
         // Сетап
         val entranceSurveyJson = jacksonObjectMapper().readTree(entranceSurveyJsonStr)
 
-        val yandexAdminEmail = entranceSurveyJson["yandexAdminEmail"].textValue()
+        val yandexAdminEmail = entranceSurveyJson["yandexAdminEmail"].stringValue()
         backgrounds.settingsBackgrounds.createSurveyFormsSettings(
             THE_THERAPIST_REF,
             SurveyFormsSettingsObjectMother.aSurveyFromsSettingsFrom(yandexAdminEmail)
@@ -55,7 +55,7 @@ class SubmitSurveyTest : QYogaAppIntegrationBaseKoTest({
         }
 
         "заполнять поле 'Жалобы' ответом из соответствующего поля" {
-            client?.complaints shouldContain entranceSurveyJson["survey"]["answer"]["data"][Survey.COMPLAINTS_FIELD]["value"].textValue()
+            client?.complaints shouldContain entranceSurveyJson["survey"]["answer"]["data"][Survey.COMPLAINTS_FIELD]["value"].stringValue()
         }
 
         "заполнять поле 'Анамнез' карточки клиента корректным строковым представлением ответов на пользовательские вопросы" {
@@ -68,7 +68,7 @@ class SubmitSurveyTest : QYogaAppIntegrationBaseKoTest({
         val phoneAndNameOnlySurveyJsonStr = phoneAndNameOnlySurveyJsonStr(THE_ADMIN_LOGIN)
         val phoneAndNameOnlyEntranceSurveyJson = jacksonObjectMapper().readTree(phoneAndNameOnlySurveyJsonStr)
 
-        val yandexAdminEmail = phoneAndNameOnlyEntranceSurveyJson["yandexAdminEmail"].textValue()
+        val yandexAdminEmail = phoneAndNameOnlyEntranceSurveyJson["yandexAdminEmail"].stringValue()
         backgrounds.settingsBackgrounds.createSurveyFormsSettings(
             THE_THERAPIST_REF,
             SurveyFormsSettingsObjectMother.aSurveyFromsSettingsFrom(yandexAdminEmail)
@@ -226,12 +226,12 @@ private infix fun Client?.shouldMatch(surveyRqJson: JsonNode) {
     this shouldNotBe null
     this!!
     val answerData = surveyRqJson["survey"]["answer"]["data"]
-    phoneNumber shouldBe PhoneNumber.of(answerData[Survey.PHONE_NUMBER_FIELD]["value"].textValue())
-    firstName shouldBe answerData[Survey.FIRST_NAME_FIELD]["value"].textValue()
-    lastName shouldBe answerData[Survey.LAST_NAME_FIELD]["value"].textValue()
-    middleName shouldBe answerData[Survey.MIDDLE_NAME_FIELD]?.get("value")?.textValue()
-    birthDate?.toString() shouldBe answerData[Survey.BIRTH_DATE_FIELD]?.get("value")?.textValue()
-    address shouldBe answerData[Survey.LOCATION_FIELD]?.get("value")?.get(0)?.get("text")?.textValue()
+    phoneNumber shouldBe PhoneNumber.of(answerData[Survey.PHONE_NUMBER_FIELD]["value"].stringValue())
+    firstName shouldBe answerData[Survey.FIRST_NAME_FIELD]["value"].stringValue()
+    lastName shouldBe answerData[Survey.LAST_NAME_FIELD]["value"].stringValue()
+    middleName shouldBe answerData[Survey.MIDDLE_NAME_FIELD]?.get("value")?.stringValue()
+    birthDate?.toString() shouldBe answerData[Survey.BIRTH_DATE_FIELD]?.get("value")?.stringValue()
+    address shouldBe answerData[Survey.LOCATION_FIELD]?.get("value")?.get(0)?.get("text")?.stringValue()
 }
 
 private infix fun String?.shouldContainAllCustomAnswersFrom(surveyRqJson: JsonNode) {
@@ -241,6 +241,7 @@ private infix fun String?.shouldContainAllCustomAnswersFrom(surveyRqJson: JsonNo
     answerData.properties()
         .filter { it.key !in Survey.standardFields }
         .forAll {
-            this shouldContain it.value.asText()
+            val answerValue = it.value["value"].stringValue()
+            this shouldContain answerValue
         }
 }

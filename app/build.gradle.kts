@@ -19,6 +19,16 @@ plugins {
 group = "pro.qyoga"
 version = "0.0.1-SNAPSHOT"
 
+configurations.matching { it.name == "compileClasspath" }.all {
+	exclude(group = "com.fasterxml.jackson.core", module = "jackson-core")
+	exclude(group = "com.fasterxml.jackson.core", module = "jackson-databind")
+}
+
+configurations.matching { it.name in setOf("testCompileClasspath", "testFixturesCompileClasspath") }.all {
+	exclude(group = "com.fasterxml.jackson")
+	exclude(group = "com.fasterxml.jackson.core")
+}
+
 dependencies {
 	implementation(kotlin("reflect"))
 	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
@@ -50,6 +60,9 @@ dependencies {
     implementation(libs.bouncycastle)
 
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
+	runtimeOnly(platform("com.fasterxml.jackson:jackson-bom:2.20.2"))
+	runtimeOnly("com.fasterxml.jackson.core:jackson-core")
+	runtimeOnly("com.fasterxml.jackson.core:jackson-databind")
 
 	testFixturesApi("org.springframework.boot:spring-boot-testcontainers")
 	testFixturesApi(testLibs.kotest.assertions)
