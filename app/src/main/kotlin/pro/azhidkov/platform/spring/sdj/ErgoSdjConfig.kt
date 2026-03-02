@@ -3,7 +3,6 @@ package pro.azhidkov.platform.spring.sdj
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.data.jdbc.core.mapping.AggregateReference
-import pro.azhidkov.platform.spring.sdj.ergo.ErgoPersistenceExceptionTranslator
 import tools.jackson.databind.JacksonModule
 import tools.jackson.databind.module.SimpleModule
 
@@ -20,9 +19,5 @@ class ErgoSdjConfig {
     @Bean
     fun aggregateReferenceBindingAdvice() =
         AggregateReferenceBindingAdvice()
-
-    @Bean
-    fun persistenceExceptionTranslator() =
-        ErgoPersistenceExceptionTranslator()
 
 }
