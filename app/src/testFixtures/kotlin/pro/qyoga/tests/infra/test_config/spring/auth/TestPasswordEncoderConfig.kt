@@ -24,8 +24,8 @@ class TestPasswordEncoderConfig(
 
     @Bean
     fun daoAuthenticationProvider(): DaoAuthenticationProvider {
-        val daoAuthenticationProvider = DaoAuthenticationProvider(fastPasswordEncoder())
-        daoAuthenticationProvider.setUserDetailsService(userDetailsService)
+        val daoAuthenticationProvider = DaoAuthenticationProvider(userDetailsService)
+        daoAuthenticationProvider.setPasswordEncoder(fastPasswordEncoder())
         return daoAuthenticationProvider
     }
 
