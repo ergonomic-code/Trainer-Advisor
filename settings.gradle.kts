@@ -74,6 +74,7 @@ dependencyResolutionManagement {
             val restAssuredVersion = version("restAssured", "6.0.0")
             val kotestVersion = version("kotest", "5.9.1")
             val wiremockVersion = version("wiremock", "3.13.1")
+            val jettyVersion = version("jetty", "12.1.0")
 
             library("selenide-proxy", "com.codeborne", "selenide-proxy").versionRef(selenideVersion)
             library("testcontainers-selenium", "org.testcontainers", "testcontainers-selenium").versionRef(
@@ -107,6 +108,8 @@ dependencyResolutionManagement {
 
             library("wiremock", "org.wiremock", "wiremock").versionRef(wiremockVersion)
             library("wiremock-jetty12", "org.wiremock", "wiremock-jetty12").versionRef(wiremockVersion)
+            library("jetty", "org.eclipse.jetty", "jetty-bom").versionRef(jettyVersion)
+            library("jetty-ee10", "org.eclipse.jetty.ee10", "jetty-ee10-bom").versionRef(jettyVersion)
         }
     }
 }

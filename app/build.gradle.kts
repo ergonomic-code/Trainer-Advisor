@@ -85,6 +85,8 @@ dependencies {
 	testFixturesImplementation("org.springframework.boot:spring-boot-starter-web")
 	testFixturesImplementation("org.springframework.boot:spring-boot-starter-security")
     testFixturesImplementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+	testFixturesImplementation(enforcedPlatform(testLibs.jetty))
+	testFixturesImplementation(enforcedPlatform(testLibs.jetty.ee10))
 	testFixturesImplementation("tools.jackson.core:jackson-databind")
 	testFixturesImplementation(libs.minio)
 	testFixturesImplementation(libs.ical4j)
@@ -97,6 +99,8 @@ dependencies {
 	testFixturesImplementation(testLibs.testcontainers.minio)
 
 	testImplementation(testFixtures(project(":app")))
+	testImplementation(enforcedPlatform(testLibs.jetty))
+	testImplementation(enforcedPlatform(testLibs.jetty.ee10))
 	testImplementation(testLibs.bundles.restassured)
 	testImplementation(testLibs.archunit)
 	testImplementation(testLibs.mockito.kotlin)
