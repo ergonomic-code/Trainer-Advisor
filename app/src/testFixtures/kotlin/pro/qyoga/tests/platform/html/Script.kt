@@ -1,12 +1,12 @@
 package pro.qyoga.tests.platform.html
 
-import com.fasterxml.jackson.core.type.TypeReference
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.kotest.matchers.Matcher
 import io.kotest.matchers.compose.all
 import org.jsoup.nodes.Element
 import pro.qyoga.tests.assertions.htmlMatch
 import pro.qyoga.tests.infra.test_config.spring.context
+import tools.jackson.core.type.TypeReference
+import tools.jackson.databind.ObjectMapper
 import kotlin.reflect.KClass
 
 

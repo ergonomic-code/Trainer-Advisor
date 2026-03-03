@@ -1,6 +1,5 @@
 package pro.qyoga.tests.cases.app.therapist.therapy.programs
 
-import com.fasterxml.jackson.core.type.TypeReference
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
@@ -24,6 +23,7 @@ import pro.qyoga.tests.pages.therapist.therapy.programs.EditProgramPage
 import pro.qyoga.tests.pages.therapist.therapy.programs.PROGRAM_FORM_SCRIPT
 import pro.qyoga.tests.pages.therapist.therapy.programs.ProgramPage.ProgramFormScript
 import pro.qyoga.tests.pages.therapist.therapy.programs.ProgramsListPage
+import tools.jackson.core.type.TypeReference
 
 
 class EditProgramPageTest : QYogaAppIntegrationBaseTest() {
@@ -99,7 +99,7 @@ class EditProgramPageTest : QYogaAppIntegrationBaseTest() {
         // When
         val document = therapist.programs.updateProgramForError(
             program.id,
-            CreateProgramRequest(program.title, program.exercises.map { it.exerciseRef.id!! }),
+            CreateProgramRequest(program.title, program.exercises.map { it.exerciseRef.id }),
             notExistingTherapeuticTask
         )
 

@@ -19,6 +19,16 @@ plugins {
 group = "pro.qyoga"
 version = "0.0.1-SNAPSHOT"
 
+configurations.matching { it.name == "compileClasspath" }.all {
+	exclude(group = "com.fasterxml.jackson.core", module = "jackson-core")
+	exclude(group = "com.fasterxml.jackson.core", module = "jackson-databind")
+}
+
+configurations.matching { it.name in setOf("testCompileClasspath", "testFixturesCompileClasspath") }.all {
+	exclude(group = "com.fasterxml.jackson")
+	exclude(group = "com.fasterxml.jackson.core")
+}
+
 dependencies {
 	implementation(kotlin("reflect"))
 	implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
@@ -29,11 +39,12 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-cache")
+	implementation("org.springframework.boot:spring-boot-starter-flyway")
     implementation(libs.caffeine)
 
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
+    implementation("tools.jackson.module:jackson-module-kotlin")
 	implementation("org.flywaydb:flyway-database-postgresql")
-	implementation(libs.jackarta.validation)
+	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation(libs.thymeleaf.extras.java8time)
 	implementation(libs.postgres)
 	implementation(libs.minio)
@@ -49,6 +60,9 @@ dependencies {
     implementation(libs.bouncycastle)
 
 	developmentOnly("org.springframework.boot:spring-boot-docker-compose")
+	runtimeOnly(platform("com.fasterxml.jackson:jackson-bom:2.20.2"))
+	runtimeOnly("com.fasterxml.jackson.core:jackson-core")
+	runtimeOnly("com.fasterxml.jackson.core:jackson-databind")
 
 	testFixturesApi("org.springframework.boot:spring-boot-testcontainers")
 	testFixturesApi(testLibs.kotest.assertions)
@@ -71,18 +85,22 @@ dependencies {
 	testFixturesImplementation("org.springframework.boot:spring-boot-starter-web")
 	testFixturesImplementation("org.springframework.boot:spring-boot-starter-security")
     testFixturesImplementation("org.springframework.boot:spring-boot-starter-oauth2-client")
-	testFixturesImplementation("com.fasterxml.jackson.core:jackson-databind")
+	testFixturesImplementation(enforcedPlatform(testLibs.jetty))
+	testFixturesImplementation(enforcedPlatform(testLibs.jetty.ee10))
+	testFixturesImplementation("tools.jackson.core:jackson-databind")
 	testFixturesImplementation(libs.minio)
 	testFixturesImplementation(libs.ical4j)
 
 	testFixturesImplementation("org.springframework.boot:spring-boot-starter-test")
     testFixturesImplementation("org.springframework.security:spring-security-test")
     testFixturesImplementation("org.springframework.boot:spring-boot-starter-webflux")
-	testFixturesImplementation("org.testcontainers:junit-jupiter")
-	testFixturesImplementation("org.testcontainers:postgresql")
+	testFixturesImplementation("org.testcontainers:testcontainers-junit-jupiter")
+	testFixturesImplementation("org.testcontainers:testcontainers-postgresql")
 	testFixturesImplementation(testLibs.testcontainers.minio)
 
 	testImplementation(testFixtures(project(":app")))
+	testImplementation(enforcedPlatform(testLibs.jetty))
+	testImplementation(enforcedPlatform(testLibs.jetty.ee10))
 	testImplementation(testLibs.bundles.restassured)
 	testImplementation(testLibs.archunit)
 	testImplementation(testLibs.mockito.kotlin)
@@ -220,7 +238,7 @@ configurations.matching { it.name == "detekt" }.all {
 	resolutionStrategy.eachDependency {
 		if (requested.group == "org.jetbrains.kotlin") {
 			@Suppress("UnstableApiUsage")
-			useVersion(io.gitlab.arturbosch.detekt.getSupportedKotlinVersion())
+			useVersion(dev.detekt.gradle.plugin.getSupportedKotlinVersion())
 		}
 	}
 }

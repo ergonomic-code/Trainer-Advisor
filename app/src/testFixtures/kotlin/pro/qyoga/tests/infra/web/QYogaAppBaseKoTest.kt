@@ -18,10 +18,10 @@ abstract class QYogaAppBaseKoTest(body: QYogaAppBaseKoTest.() -> Unit = {}) : Fr
 
     val presets: PresetsConf = context.getBean(PresetsConf::class.java)
 
-    inline fun <reified T> getBean(): T =
+    inline fun <reified T : Any> getBean(): T =
         context.getBean(T::class.java)
 
-    inline fun <reified T> getBean(name: String): T =
+    inline fun <reified T : Any> getBean(name: String): T =
         context.getBean(name, T::class.java)
 
     init {

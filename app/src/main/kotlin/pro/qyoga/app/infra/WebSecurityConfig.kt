@@ -116,7 +116,10 @@ class WebSecurityConfig(
     @Bean
     fun tokenRepository(): PersistentTokenRepository {
         val jdbcTokenRepositoryImpl = JdbcTokenRepositoryImpl()
-        jdbcTokenRepositoryImpl.dataSource = dataSource
+        // JdbcDaoSupport хоть и помечен для удаления, но иного способа датасорс сейчас нет
+        // property access syntax почему-то перестал комплироваться после переезда на Spring Boot 4
+        @Suppress("removal", "UsePropertyAccessSyntax")
+        jdbcTokenRepositoryImpl.setDataSource(dataSource)
         return jdbcTokenRepositoryImpl
     }
 

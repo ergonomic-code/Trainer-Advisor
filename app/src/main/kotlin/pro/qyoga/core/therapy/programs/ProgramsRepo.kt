@@ -1,6 +1,5 @@
 package pro.qyoga.core.therapy.programs
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.intellij.lang.annotations.Language
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
@@ -16,6 +15,7 @@ import pro.qyoga.core.therapy.programs.dtos.ProgramsSearchFilter
 import pro.qyoga.core.therapy.programs.model.DocxProgram
 import pro.qyoga.core.therapy.programs.model.Program
 import pro.qyoga.core.therapy.programs.views.ProgramSummaryView
+import tools.jackson.databind.ObjectMapper
 import kotlin.reflect.KProperty1
 
 @Repository

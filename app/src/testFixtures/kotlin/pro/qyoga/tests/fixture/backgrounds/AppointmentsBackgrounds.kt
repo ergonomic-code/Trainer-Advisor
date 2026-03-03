@@ -59,7 +59,7 @@ class AppointmentsBackgrounds(
         appointmentStatus: AppointmentStatus = AppointmentStatus.entries.randomElement(),
         comment: String? = randomSentence(),
         therapist: TherapistRef = THE_THERAPIST_REF,
-        therapeuticTaskRef: TherapeuticTaskRef? = therapeuticTasksBackgrounds.createTherapeuticTask(therapist.id!!)
+        therapeuticTaskRef: TherapeuticTaskRef? = therapeuticTasksBackgrounds.createTherapeuticTask(therapist.id)
             .ref(),
     ): Appointment {
         return create(dateTime, timeZone, duration, place, cost, payed, appointmentStatus, comment, therapist, therapeuticTaskRef)
@@ -77,7 +77,7 @@ class AppointmentsBackgrounds(
         therapist: TherapistRef = THE_THERAPIST_REF,
         therapeuticTaskRef: TherapeuticTaskRef? = null,
     ): Appointment {
-        val clientRef = clientsBackgrounds.createClients(1, therapist.id!!).single().ref()
+        val clientRef = clientsBackgrounds.createClients(1, therapist.id).single().ref()
         val appointment = createAppointment(
             therapist,
             AppointmentsObjectMother.randomEditAppointmentRequest(

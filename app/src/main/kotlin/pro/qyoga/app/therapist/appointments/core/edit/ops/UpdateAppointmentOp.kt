@@ -38,7 +38,7 @@ class UpdateAppointmentOp(
 
         val typeRef = appointmentTypesRepo.createTypeIfNew(therapistRef, editAppointmentRequest)
 
-        return appointmentsRepo.updateById(appointmentRef.id!!) { appointment ->
+        return appointmentsRepo.updateById(appointmentRef.id) { appointment ->
             appointment.patchBy(editAppointmentRequest, typeRef)
         }
     }

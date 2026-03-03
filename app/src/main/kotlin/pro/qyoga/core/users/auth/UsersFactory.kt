@@ -12,7 +12,7 @@ class UsersFactory(
 ) {
 
     fun createUser(email: String, plainPassword: CharSequence, roles: Set<Role>): User {
-        val passwordHash = passwordEncoder.encode(plainPassword)
+        val passwordHash = passwordEncoder.encode(plainPassword)!!
         return User(email, passwordHash, roles.toTypedArray(), enabled = true)
     }
 

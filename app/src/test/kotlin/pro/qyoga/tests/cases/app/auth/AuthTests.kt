@@ -1,6 +1,5 @@
 package pro.qyoga.tests.cases.app.auth
 
-import com.fasterxml.jackson.databind.JsonNode
 import io.kotest.matchers.shouldNotBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.restassured.http.ContentType
@@ -27,6 +26,7 @@ import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_PASSWORD
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseTest
 import pro.qyoga.tests.pages.publc.LoginPage
 import pro.qyoga.tests.pages.therapist.clients.ClientsListPage
+import tools.jackson.databind.JsonNode
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.*

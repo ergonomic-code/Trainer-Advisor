@@ -1,7 +1,5 @@
 package pro.qyoga.tests.pages.therapist.survey_forms
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.ObjectMapper
 import io.kotest.matchers.Matcher
 import org.jsoup.nodes.Element
 import pro.qyoga.app.therapist.survey_forms.settings.SurveyFormsSettingsComponentController
@@ -10,6 +8,8 @@ import pro.qyoga.tests.assertions.isTag
 import pro.qyoga.tests.infra.test_config.spring.context
 import pro.qyoga.tests.platform.html.*
 import pro.qyoga.tests.platform.kotest.all
+import tools.jackson.databind.JsonNode
+import tools.jackson.databind.ObjectMapper
 
 
 object SurveyFormsSettingsComponent : Component {
@@ -35,7 +35,7 @@ object SurveyFormsSettingsComponent : Component {
             val formEl = element.select("#$id").single()
             val formModelJson = formEl.attr("x-data").replace("'", "\"")
             val formModel = mapper.readValue(formModelJson, JsonNode::class.java)
-            return formModel.get(yandexAdminEmail.name).asText()
+            return formModel.get(yandexAdminEmail.name).asString()
         }
 
     }

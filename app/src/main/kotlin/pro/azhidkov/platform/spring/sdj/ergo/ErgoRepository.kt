@@ -6,7 +6,6 @@ import org.springframework.data.jdbc.core.JdbcAggregateOperations
 import org.springframework.data.jdbc.core.convert.EntityRowMapper
 import org.springframework.data.jdbc.core.convert.JdbcConverter
 import org.springframework.data.jdbc.repository.support.SimpleJdbcRepository
-import org.springframework.data.relational.core.conversion.DbActionExecutionException
 import org.springframework.data.relational.core.mapping.RelationalMappingContext
 import org.springframework.data.relational.core.mapping.RelationalPersistentEntity
 import org.springframework.data.relational.core.query.Query
@@ -48,7 +47,7 @@ class ErgoRepository<T : Any, ID : Any>(
 
     protected fun <S : T> saveAndMapDuplicatedKeyException(aggregate: T, map: (DuplicateKeyException) -> Throwable): S {
         val res = runCatching { super.save(aggregate) }
-        when (val ex = (res.exceptionOrNull() as? DbActionExecutionException)?.cause as? DuplicateKeyException) {
+        when (val ex = res.exceptionOrNull() as? DuplicateKeyException) {
             is DuplicateKeyException -> throw map(ex)
         }
 
@@ -162,13 +161,19 @@ class ErgoRepository<T : Any, ID : Any>(
         queryBuilder: QueryBuilder.() -> Unit = {}
     ): Page<T> {
         val query = query(queryBuilder)
-        val res = jdbcAggregateTemplate.findAll(query, relationalPersistentEntity.type, pageRequest)
-        return res.mapContent {
-            jdbcAggregateTemplate.hydrate(
-                res,
-                FetchSpec(fetch)
-            )
-        }
+
+        val content = jdbcAggregateTemplate.findAll(query.with(pageRequest), relationalPersistentEntity.type)
+            .let { jdbcAggregateTemplate.hydrate(it, FetchSpec(fetch)) }
+
+        val total = jdbcAggregateTemplate.count(query, relationalPersistentEntity.type)
+
+        val page = PageImpl(
+            content,
+            pageRequest,
+            total
+        )
+
+        return page
     }
 
     fun findSlice(

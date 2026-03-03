@@ -50,9 +50,7 @@ class ICalCalendarsRepo(
         eventId: ICalEventId
     ): CalendarItem<ICalEventId, ZonedDateTime>? {
         return iCalCalendarsDao.findAllByOwner(therapistRef)
-            .asSequence()
-            .mapNotNull { it.findById(eventId) }
-            .firstOrNull()
+            .firstNotNullOfOrNull { it.findById(eventId) }
             ?.toICalCalendarItem()
     }
 

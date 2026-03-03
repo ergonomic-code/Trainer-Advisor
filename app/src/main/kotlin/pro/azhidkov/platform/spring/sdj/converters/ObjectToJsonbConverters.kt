@@ -1,10 +1,10 @@
 package pro.azhidkov.platform.spring.sdj.converters
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.postgresql.util.PGobject
 import org.springframework.core.convert.converter.Converter
 import org.springframework.data.convert.ReadingConverter
 import org.springframework.data.convert.WritingConverter
+import tools.jackson.databind.ObjectMapper
 import kotlin.reflect.KClass
 
 
@@ -12,7 +12,7 @@ import kotlin.reflect.KClass
 fun interface ObjectToJsonbWriter<T : Any> : Converter<T, PGobject>
 
 @ReadingConverter
-fun interface JsonbToObjectReader<T : Any> : Converter<PGobject, T>
+fun interface JsonbToObjectReader<T> : Converter<PGobject, T?>
 
 abstract class JacksonObjectToJsonbWriter<T : Any>(
     private val objectMapper: ObjectMapper

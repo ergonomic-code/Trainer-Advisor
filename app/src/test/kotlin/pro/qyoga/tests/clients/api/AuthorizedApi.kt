@@ -2,7 +2,7 @@ package pro.qyoga.tests.clients.api
 
 import io.restassured.http.Cookie
 import io.restassured.specification.RequestSpecification
-import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.test.web.servlet.client.RestTestClient
 
 
 interface AuthorizedApi {
@@ -13,7 +13,7 @@ interface AuthorizedApi {
         return cookie(authCookie)
     }
 
-    fun WebTestClient.RequestHeadersSpec<*>.authorized(): WebTestClient.RequestHeadersSpec<*> {
+    fun RestTestClient.RequestHeadersSpec<*>.authorized(): RestTestClient.RequestHeadersSpec<*> {
         return cookie(authCookie.name, authCookie.value)
     }
 

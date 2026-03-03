@@ -20,7 +20,7 @@ import pro.qyoga.tests.fixture.wiremocks.MockGoogleOAuthServer
 import pro.qyoga.tests.infra.test_config.spring.context
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseKoTest
 import pro.qyoga.tests.infra.wiremock.WireMock
-import pro.qyoga.tests.platform.spring.web_test_client.redirectLocation
+import pro.qyoga.tests.platform.spring.rest_test_client.redirectLocation
 
 
 @DisplayName("Интеграция с Google OAuth")

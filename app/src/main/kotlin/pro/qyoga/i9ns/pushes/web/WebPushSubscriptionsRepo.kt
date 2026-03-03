@@ -1,12 +1,12 @@
 package pro.qyoga.i9ns.pushes.web
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.data.jdbc.core.JdbcAggregateTemplate
 import org.springframework.jdbc.core.simple.JdbcClient
 import org.springframework.stereotype.Repository
 import pro.azhidkov.platform.spring.sdj.query.query
 import pro.qyoga.core.users.therapists.TherapistRef
 import pro.qyoga.i9ns.pushes.web.model.TherapistWebPushSubscription
+import tools.jackson.databind.ObjectMapper
 
 
 @Repository

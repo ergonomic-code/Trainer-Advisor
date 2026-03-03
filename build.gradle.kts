@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmDefaultMode
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
@@ -26,7 +27,7 @@ subprojects {
         }
     }
 
-    configure<io.gitlab.arturbosch.detekt.extensions.DetektExtension> {
+    configure<dev.detekt.gradle.extensions.DetektExtension> {
         toolVersion = detektPlugin.version.requiredVersion
 
         config.setFrom(file(rootProject.rootDir.resolve("config/detekt/detekt.yml")))
@@ -35,8 +36,10 @@ subprojects {
 
     tasks.withType<KotlinCompile> {
         compilerOptions {
-            freeCompilerArgs = listOf("-Xjsr305=strict", "-Xjvm-default=all", "-Xwhen-guards")
+            freeCompilerArgs = listOf("-Xjsr305=strict", "-Xwhen-guards")
             jvmTarget.set(JvmTarget.JVM_21)
+            jvmDefault.set(JvmDefaultMode.NO_COMPATIBILITY)
+            allWarningsAsErrors = true
         }
     }
 

@@ -1,7 +1,7 @@
 package pro.qyoga.tests.infra.web
 
 import org.junit.jupiter.api.BeforeEach
-import org.springframework.boot.autoconfigure.web.ServerProperties
+import org.springframework.boot.web.server.autoconfigure.ServerProperties
 import pro.qyoga.tests.fixture.backgrounds.Backgrounds
 import pro.qyoga.tests.fixture.data.resetFaker
 import pro.qyoga.tests.fixture.presets.PresetsConf
@@ -15,13 +15,13 @@ open class QYogaAppBaseTest {
 
     private val dataSource: DataSource = context.getBean(DataSource::class.java)
 
-    protected val port: Int = context.getBean(ServerProperties::class.java).port
+    protected val port: Int = requireNotNull(context.getBean(ServerProperties::class.java).port)
 
     protected val backgrounds: Backgrounds = context.getBean(Backgrounds::class.java)
 
     protected val presets: PresetsConf = context.getBean(PresetsConf::class.java)
 
-    inline fun <reified T> getBean(): T =
+    inline fun <reified T : Any> getBean(): T =
         context.getBean(T::class.java)
 
     @BeforeEach

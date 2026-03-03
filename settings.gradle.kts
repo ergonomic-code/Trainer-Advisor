@@ -6,12 +6,12 @@ dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
             // plugin versions
-            val kotlinVersion = version("kotlin", "2.2.10")
-            val springBootVersion = version("springBoot", "3.5.6")
+            val kotlinVersion = version("kotlin", "2.3.10")
+            val springBootVersion = version("springBoot", "4.0.3")
             val springDependencyManagementVersion = version("springDependencyManagement", "1.1.7")
             val koverVersion = version("kover", "0.9.2")
             val gitPropertiesVersion = version("gitProperties", "2.5.3")
-            val detektVersion = version("dekekt", "1.23.8")
+            val detektVersion = version("dekekt", "2.0.0-alpha.1")
 
             // lib versions
             val poiVersion = version("poi", "5.4.1")
@@ -29,10 +29,9 @@ dependencyResolutionManagement {
 
             plugin("kover", "org.jetbrains.kotlinx.kover").versionRef(koverVersion)
             plugin("gitProperties", "com.gorylenko.gradle-git-properties").versionRef(gitPropertiesVersion)
-            plugin("detekt", "io.gitlab.arturbosch.detekt").versionRef(detektVersion)
+            plugin("detekt", "dev.detekt").versionRef(detektVersion)
 
             // libs
-            library("jackarta-validation", "jakarta.validation", "jakarta.validation-api").version("3.1.1")
             library(
                 "thymeleaf-extras-java8time",
                 "org.thymeleaf.extras",
@@ -70,13 +69,16 @@ dependencyResolutionManagement {
 
         create("testLibs") {
             val selenideVersion = version("selenide", "7.10.1")
-            val testContainersVersion = version("testcontainers", "1.21.3")
-            val restAssuredVersion = version("restAssured", "5.5.6")
+            val testContainersVersion = version("testcontainers", "2.0.3")
+            val restAssuredVersion = version("restAssured", "6.0.0")
             val kotestVersion = version("kotest", "5.9.1")
             val wiremockVersion = version("wiremock", "3.13.1")
+            val jettyVersion = version("jetty", "12.1.0")
 
             library("selenide-proxy", "com.codeborne", "selenide-proxy").versionRef(selenideVersion)
-            library("testcontainers-selenium", "org.testcontainers", "selenium").versionRef(testContainersVersion)
+            library("testcontainers-selenium", "org.testcontainers", "testcontainers-selenium").versionRef(
+                testContainersVersion
+            )
 
             library("kotest-assertions", "io.kotest", "kotest-assertions-core").versionRef(kotestVersion)
             library("kotest-runner", "io.kotest", "kotest-runner-junit5").versionRef(kotestVersion)
@@ -95,7 +97,9 @@ dependencyResolutionManagement {
             library("datafaker", "net.datafaker", "datafaker").version("2.5.1")
             library("greenmail", "com.icegreen", "greenmail-junit5").version("2.1.6")
 
-            library("testcontainers-minio", "org.testcontainers", "minio").versionRef(testContainersVersion)
+            library("testcontainers-minio", "org.testcontainers", "testcontainers-minio").versionRef(
+                testContainersVersion
+            )
 
             library("mockito-kotlin", "org.mockito.kotlin", "mockito-kotlin").version("6.1.0")
             library("archunit", "com.tngtech.archunit", "archunit").version("1.4.1")
@@ -103,6 +107,8 @@ dependencyResolutionManagement {
 
             library("wiremock", "org.wiremock", "wiremock").versionRef(wiremockVersion)
             library("wiremock-jetty12", "org.wiremock", "wiremock-jetty12").versionRef(wiremockVersion)
+            library("jetty", "org.eclipse.jetty", "jetty-bom").versionRef(jettyVersion)
+            library("jetty-ee10", "org.eclipse.jetty.ee10", "jetty-ee10-bom").versionRef(jettyVersion)
         }
     }
 }

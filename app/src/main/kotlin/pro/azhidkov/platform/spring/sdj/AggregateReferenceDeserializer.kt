@@ -1,22 +1,21 @@
 package pro.azhidkov.platform.spring.sdj
 
-import com.fasterxml.jackson.core.JsonParser
-import com.fasterxml.jackson.databind.*
-import com.fasterxml.jackson.databind.deser.ContextualDeserializer
-import com.fasterxml.jackson.databind.type.TypeFactory
 import org.springframework.data.jdbc.core.mapping.AggregateReference
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.AggregateReferenceTarget
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.Identifiable
+import tools.jackson.core.JsonParser
+import tools.jackson.databind.*
+import tools.jackson.databind.type.TypeFactory
 import kotlin.reflect.full.memberProperties
 import kotlin.reflect.jvm.jvmErasure
 
 
 class AggregateReferenceDeserializer(
     private var type: JavaType = TypeFactory.unknownType()
-) : JsonDeserializer<AggregateReference<*, *>>(), ContextualDeserializer {
+) : ValueDeserializer<AggregateReference<*, *>>() {
 
     override fun deserialize(parser: JsonParser, context: DeserializationContext): AggregateReference<*, *>? {
-        val node = parser.codec.readTree<JsonNode>(parser)
+        val node = parser.readValueAsTree<JsonNode>()
         val propertyNames = node.properties().map { it.key }.toSet()
         return if (propertyNames == setOf(ID_FIELD_NAME)) {
             val idType = getIdType(type)
@@ -28,7 +27,7 @@ class AggregateReferenceDeserializer(
         }
     }
 
-    override fun createContextual(ctx: DeserializationContext, property: BeanProperty): JsonDeserializer<*> {
+    override fun createContextual(ctx: DeserializationContext, property: BeanProperty): ValueDeserializer<*> {
         return AggregateReferenceDeserializer(property.type.containedType(0))
     }
 
