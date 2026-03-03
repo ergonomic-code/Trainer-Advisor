@@ -14,6 +14,7 @@ import pro.qyoga.i9ns.calendars.ical.model.findById
 import pro.qyoga.i9ns.calendars.ical.model.vEvents
 import pro.qyoga.tests.fixture.object_mothers.calendars.ical.ICalCalendarsObjectMother.aICalCalendar
 import java.time.Duration
+import java.time.ZoneId
 import java.time.ZonedDateTime
 
 
@@ -25,7 +26,10 @@ class ICalCalendarTest : FreeSpec({
         val ical = aICalCalendar(singleWeeklyEvent)
 
         "при запросе событий за период включающим это событие" - {
-            val interval = Interval.of(ZonedDateTime.now(), Duration.ofDays(7))
+            val interval = Interval.of(
+                ZonedDateTime.of(2025, 3, 26, 0, 0, 0, 0, ZoneId.of("Asia/Novosibirsk")),
+                Duration.ofDays(7)
+            )
             val events = ical.calendarItemsIn(interval)!!
 
             "должен вернуть одно событие" {
