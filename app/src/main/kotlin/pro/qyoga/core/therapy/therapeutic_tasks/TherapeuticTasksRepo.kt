@@ -1,5 +1,6 @@
 package pro.qyoga.core.therapy.therapeutic_tasks
 
+import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice
 import org.springframework.data.jdbc.core.JdbcAggregateOperations
@@ -31,12 +32,12 @@ class TherapeuticTasksRepo(
 ) {
 
     object Page {
-        val topFiveByName = Pageable.ofSize(5).withSortBy(TherapeuticTask::name)
-        val topTenByName = Pageable.ofSize(10).withSortBy(TherapeuticTask::name)
+        val topFiveByName: PageRequest = Pageable.ofSize(5).withSortBy(TherapeuticTask::name)
+        val topTenByName: PageRequest = Pageable.ofSize(10).withSortBy(TherapeuticTask::name)
     }
 
     @Transactional
-    override fun <S : TherapeuticTask?> save(instance: S & Any): S & Any {
+    override fun <S : TherapeuticTask> save(instance: S): S {
         return saveAndMapDuplicatedKeyException(instance) { ex ->
             DuplicatedTherapeuticTaskName(instance, ex)
         }

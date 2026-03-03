@@ -12,7 +12,7 @@ import kotlin.reflect.KClass
 fun interface ObjectToJsonbWriter<T : Any> : Converter<T, PGobject>
 
 @ReadingConverter
-fun interface JsonbToObjectReader<T : Any> : Converter<PGobject, T?>
+fun interface JsonbToObjectReader<T> : Converter<PGobject, T?>
 
 abstract class JacksonObjectToJsonbWriter<T : Any>(
     private val objectMapper: ObjectMapper

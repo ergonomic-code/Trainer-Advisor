@@ -55,7 +55,7 @@ interface CalendarItemId {
         .buildAndExpand(type.name)
         .toUri()
 
-    fun toMap(): Map<String, String?>
+    fun toMap(): Map<String, String>
 
 }
 

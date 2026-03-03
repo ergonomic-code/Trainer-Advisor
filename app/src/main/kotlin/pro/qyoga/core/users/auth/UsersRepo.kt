@@ -26,7 +26,7 @@ class UsersRepo(
 ) {
 
     @Transactional
-    override fun <S : User?> save(instance: S & Any): S & Any {
+    override fun <S : User> save(instance: S): S {
         return saveAndMapDuplicatedKeyException(instance) { ex ->
             DuplicatedEmailException(instance, ex)
         }

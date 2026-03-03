@@ -217,7 +217,7 @@ class SubmitSurveyTest : QYogaAppIntegrationBaseKoTest({
 
         // Проверка
         errorResponse.status shouldBe HttpStatus.CONFLICT.value()
-        errorResponse.type.path shouldBe InvalidSurveyException.SURVEY_SETTINGS_NOT_FOUND_FOR_ADMIN_EMAIL
+        errorResponse.type?.path shouldBe InvalidSurveyException.SURVEY_SETTINGS_NOT_FOUND_FOR_ADMIN_EMAIL
     }
 
 })

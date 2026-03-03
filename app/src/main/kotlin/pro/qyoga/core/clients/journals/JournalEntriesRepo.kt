@@ -33,7 +33,7 @@ class JournalEntriesRepo(
 ) {
 
     @Transactional
-    override fun <S : JournalEntry?> save(instance: S & Any): S & Any {
+    override fun <S : JournalEntry> save(instance: S): S {
         return saveAndMapDuplicatedKeyException(instance) { ex ->
             DuplicatedDate(instance, ex)
         }

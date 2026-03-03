@@ -10,7 +10,7 @@ class WebConfig(
     private val handlerMethodArgumentResolvers: List<HandlerMethodArgumentResolver>
 ) : WebMvcConfigurer {
 
-    override fun addArgumentResolvers(argumentResolvers: MutableList<HandlerMethodArgumentResolver?>) {
+    override fun addArgumentResolvers(argumentResolvers: MutableList<HandlerMethodArgumentResolver>) {
         handlerMethodArgumentResolvers.forEach {
             argumentResolvers.add(it)
         }

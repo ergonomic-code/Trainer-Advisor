@@ -5,7 +5,7 @@ import io.kotest.matchers.maps.shouldContainKey
 import org.springframework.util.MultiValueMap
 
 
-fun <K, V> MultiValueMap<K, V>.shouldContainValue(key: K, value: V) {
+fun <K : Any, V> MultiValueMap<K, V>.shouldContainValue(key: K, value: V) {
     this shouldContainKey key
     this[key]!! shouldContain value
 }

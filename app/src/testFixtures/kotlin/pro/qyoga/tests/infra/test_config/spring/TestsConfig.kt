@@ -1,7 +1,7 @@
 package pro.qyoga.tests.infra.test_config.spring
 
-import org.springframework.boot.autoconfigure.web.ServerProperties
 import org.springframework.boot.builder.SpringApplicationBuilder
+import org.springframework.boot.web.server.autoconfigure.ServerProperties
 import org.springframework.context.ApplicationContext
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.context.annotation.AnnotationConfigApplicationContext

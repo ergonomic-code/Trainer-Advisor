@@ -38,7 +38,7 @@ class ClientsRepo(
         val topFiveByLastName = PageRequest.of(0, 5, sortBy(Client::lastName))
     }
 
-    override fun <S : Client?> save(instance: S & Any): S & Any {
+    override fun <S : Client> save(instance: S): S {
         return saveAndMapDuplicatedKeyException(instance) { ex ->
             DuplicatedPhoneException(instance, ex)
         }
