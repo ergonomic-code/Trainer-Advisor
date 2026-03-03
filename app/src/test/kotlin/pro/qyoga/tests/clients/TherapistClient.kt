@@ -8,21 +8,21 @@ import io.restassured.module.kotlin.extensions.When
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.http.HttpStatus
-import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.test.web.servlet.client.RestTestClient
 import pro.qyoga.tests.clients.api.*
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_LOGIN
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_PASSWORD
-import pro.qyoga.tests.infra.web.mainWebTestClient
+import pro.qyoga.tests.infra.web.mainRestTestClient
 
 
 class TherapistClient(
     val authCookie: Cookie,
-    webTestClient: WebTestClient = mainWebTestClient
+    restTestClient: RestTestClient = mainRestTestClient
 ) {
 
     // Work
     val appointments = TherapistAppointmentsApi(authCookie)
-    val googleCalendarIntegration = TherapistGoogleCalendarIntegrationApi(authCookie, webTestClient)
+    val googleCalendarIntegration = TherapistGoogleCalendarIntegrationApi(authCookie, restTestClient)
     val clients = TherapistClientsApi(authCookie)
     val clientJournal = TherapistClientJournalApi(authCookie)
     val clientFiles = TherapistClientFilesApi(authCookie)

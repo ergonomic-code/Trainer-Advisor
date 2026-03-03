@@ -4,21 +4,20 @@ import io.restassured.http.Cookie
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationResponse
-import org.springframework.test.web.reactive.server.WebTestClient
-import org.springframework.web.reactive.function.BodyInserters.fromValue
+import org.springframework.test.web.servlet.client.RestTestClient
 import pro.qyoga.app.therapist.appointments.core.schedule.settings.GoogleCalendarSettingsController
 import pro.qyoga.i9ns.calendars.google.model.GoogleAccountRef
-import pro.qyoga.tests.platform.spring.web_test_client.getBodyAsString
-import pro.qyoga.tests.platform.spring.web_test_client.redirectLocation
+import pro.qyoga.tests.platform.spring.rest_test_client.getBodyAsString
+import pro.qyoga.tests.platform.spring.rest_test_client.redirectLocation
 import java.net.URI
 
 class TherapistGoogleCalendarIntegrationApi(
     override val authCookie: Cookie,
-    private val webTestClient: WebTestClient
+    private val restTestClient: RestTestClient
 ) : AuthorizedApi {
 
     fun authorizeInGoogle(): URI {
-        val response = webTestClient.get()
+        val response = restTestClient.get()
             .uri("/oauth2/authorization/google")
             .authorized()
             .exchange()
@@ -33,8 +32,8 @@ class TherapistGoogleCalendarIntegrationApi(
     //           scope=https://www.googleapis.com/auth/calendar.readonly' \
     fun handleOAuthCallbackForResponse(
         authResponse: OAuth2AuthorizationResponse
-    ): WebTestClient.ResponseSpec {
-        return webTestClient.get()
+    ): RestTestClient.ResponseSpec {
+        return restTestClient.get()
             .uri {
                 it.path("/therapist/oauth2/google/callback")
                     .queryParam("state", authResponse.state)
@@ -45,15 +44,15 @@ class TherapistGoogleCalendarIntegrationApi(
             .exchange()
     }
 
-    fun finalizeOAuthCallbackForResponse(): WebTestClient.ResponseSpec {
-        return webTestClient.get()
+    fun finalizeOAuthCallbackForResponse(): RestTestClient.ResponseSpec {
+        return restTestClient.get()
             .uri("/therapist/oauth2/google/callback")
             .authorized()
             .exchange()
     }
 
     fun getGoogleCalendarComponent(): Document {
-        return webTestClient.get()
+        return restTestClient.get()
             .uri(GoogleCalendarSettingsController.PATH)
             .authorized()
             .exchange()
@@ -67,9 +66,9 @@ class TherapistGoogleCalendarIntegrationApi(
             "shouldBeShown" to shouldBeShown
         )
 
-        webTestClient.patch()
+        restTestClient.patch()
             .uri(GoogleCalendarSettingsController.updateCalendarSettingsPath(googleAccount, calendarId))
-            .body(fromValue(body))
+            .body(body)
             .authorized()
             .exchange()
             .expectStatus().isNoContent

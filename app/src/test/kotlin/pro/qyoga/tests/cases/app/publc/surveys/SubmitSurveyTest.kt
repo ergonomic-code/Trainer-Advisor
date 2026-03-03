@@ -19,7 +19,7 @@ import pro.qyoga.tests.fixture.object_mothers.survey_forms.SurveyFormsSettingsOb
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_ADMIN_LOGIN
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_REF
 import pro.qyoga.tests.infra.web.QYogaAppIntegrationBaseKoTest
-import pro.qyoga.tests.infra.web.mainWebTestClient
+import pro.qyoga.tests.infra.web.mainRestTestClient
 import tools.jackson.databind.JsonNode
 import tools.jackson.databind.node.ObjectNode
 import tools.jackson.module.kotlin.jacksonObjectMapper
@@ -28,7 +28,7 @@ import tools.jackson.module.kotlin.jacksonObjectMapper
 @DisplayName("Операция создания анкеты")
 class SubmitSurveyTest : QYogaAppIntegrationBaseKoTest({
 
-    val yandexFormsClient by lazy { YandexFormsClient(mainWebTestClient) }
+    val yandexFormsClient by lazy { YandexFormsClient(mainRestTestClient) }
 
     "при отправке новым клиентом корректного запроса со всеми значениями карточки должна" - {
         // Сетап

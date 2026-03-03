@@ -3,16 +3,16 @@ package pro.qyoga.tests.clients.api
 import io.restassured.http.Cookie
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
-import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.test.web.servlet.client.RestTestClient
 import pro.qyoga.app.therapist.appointments.core.schedule.settings.NotificationsSettingsController
-import pro.qyoga.tests.infra.web.mainWebTestClient
-import pro.qyoga.tests.platform.spring.web_test_client.getBodyAsString
+import pro.qyoga.tests.infra.web.mainRestTestClient
+import pro.qyoga.tests.platform.spring.rest_test_client.getBodyAsString
 
 object NotificationsApiFactory {
 
     fun therapistApi(
         principal: Cookie,
-    ) = NotificationsTherapistApi(principal, mainWebTestClient)
+    ) = NotificationsTherapistApi(principal, mainRestTestClient)
 
 }
 
@@ -22,11 +22,11 @@ val TrainerAdvisorApis.Notifications
 
 class NotificationsTherapistApi(
     override val authCookie: Cookie,
-    private val webTestClient: WebTestClient
+    private val restTestClient: RestTestClient
 ) : AuthorizedApi {
 
     fun getNotificationsSettings(): Document {
-        return webTestClient.get()
+        return restTestClient.get()
             .uri(NotificationsSettingsController.PATH)
             .authorized()
             .exchange()

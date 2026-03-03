@@ -1,27 +1,26 @@
 package pro.qyoga.tests.clients.api
 
 import io.restassured.http.Cookie
-import org.springframework.test.web.reactive.server.WebTestClient
-import org.springframework.web.reactive.function.BodyInserters.fromValue
+import org.springframework.test.web.servlet.client.RestTestClient
 import pro.qyoga.app.pushes.web.WebPushesController
 import pro.qyoga.i9ns.pushes.web.model.WebPushSubscription
 
 class WebPushesTherapistApi(
     override val authCookie: Cookie,
-    private val webTestClient: WebTestClient
+    private val restTestClient: RestTestClient
 ) : AuthorizedApi {
 
     fun createSubscription(subscription: WebPushSubscription) {
-        webTestClient.post()
+        restTestClient.post()
             .uri(WebPushesController.PATH)
-            .body(fromValue(subscription))
+            .body(subscription)
             .authorized()
             .exchange()
             .expectStatus().isNoContent
     }
 
     fun deleteSubscription(p256dh: String) {
-        webTestClient.delete()
+        restTestClient.delete()
             .uri(WebPushesController.DELETE_SUBSCRIPTION_PATH, p256dh)
             .authorized()
             .exchange()
