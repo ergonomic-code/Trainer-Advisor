@@ -32,7 +32,6 @@ dependencyResolutionManagement {
             plugin("detekt", "io.gitlab.arturbosch.detekt").versionRef(detektVersion)
 
             // libs
-            library("jackarta-validation", "jakarta.validation", "jakarta.validation-api").version("3.1.1")
             library(
                 "thymeleaf-extras-java8time",
                 "org.thymeleaf.extras",

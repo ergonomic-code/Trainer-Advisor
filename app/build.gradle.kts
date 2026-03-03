@@ -44,7 +44,7 @@ dependencies {
 
     implementation("tools.jackson.module:jackson-module-kotlin")
 	implementation("org.flywaydb:flyway-database-postgresql")
-	implementation(libs.jackarta.validation)
+	implementation("org.springframework.boot:spring-boot-starter-validation")
 	implementation(libs.thymeleaf.extras.java8time)
 	implementation(libs.postgres)
 	implementation(libs.minio)
