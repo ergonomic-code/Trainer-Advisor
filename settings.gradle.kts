@@ -6,7 +6,7 @@ dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
             // plugin versions
-            val kotlinVersion = version("kotlin", "2.2.10")
+            val kotlinVersion = version("kotlin", "2.3.10")
             val springBootVersion = version("springBoot", "4.0.3")
             val springDependencyManagementVersion = version("springDependencyManagement", "1.1.7")
             val koverVersion = version("kover", "0.9.2")
