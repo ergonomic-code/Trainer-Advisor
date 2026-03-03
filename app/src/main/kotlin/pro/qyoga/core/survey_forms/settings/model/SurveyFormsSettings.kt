@@ -18,7 +18,7 @@ data class SurveyFormsSettings(
 ) : Identifiable<UUID> {
 
     @Transient
-    override val id: UUID = therapistRef.id!!
+    override val id: UUID = therapistRef.id
 
     companion object {
 

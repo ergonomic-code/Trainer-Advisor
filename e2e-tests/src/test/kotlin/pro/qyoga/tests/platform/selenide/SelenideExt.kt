@@ -4,6 +4,7 @@ import com.codeborne.selenide.Condition.attribute
 import com.codeborne.selenide.Condition.visible
 import com.codeborne.selenide.Selenide
 import com.codeborne.selenide.Selenide.`$`
+import com.codeborne.selenide.Selenide.executeJavaScript
 import com.codeborne.selenide.SelenideElement
 import com.codeborne.selenide.TypeOptions
 import pro.qyoga.tests.platform.html.ComboBox
@@ -63,14 +64,22 @@ fun open(page: HtmlPageCompat) {
 
 fun click(component: Component) {
     `$`(component.selector())
-        .scrollIntoView("{behavior: \"instant\", block: \"center\", inline: \"center\"}")
+        .scrollToCenter()
         .click()
 }
 
 fun SelenideElement.click(selector: String) {
     `$`(selector)
-        .scrollIntoView("{behavior: \"instant\", block: \"center\", inline: \"center\"}")
+        .scrollToCenter()
         .click()
+}
+
+private fun SelenideElement.scrollToCenter(): SelenideElement {
+    executeJavaScript<Any>(
+        "arguments[0].scrollIntoView({behavior: 'instant', block: 'center', inline: 'center'})",
+        this
+    )
+    return this
 }
 
 fun await(page: HtmlPageCompat) {

@@ -161,13 +161,19 @@ class ErgoRepository<T : Any, ID : Any>(
         queryBuilder: QueryBuilder.() -> Unit = {}
     ): Page<T> {
         val query = query(queryBuilder)
-        val res = jdbcAggregateTemplate.findAll(query, relationalPersistentEntity.type, pageRequest)
-        return res.mapContent {
-            jdbcAggregateTemplate.hydrate(
-                res,
-                FetchSpec(fetch)
-            )
-        }
+
+        val content = jdbcAggregateTemplate.findAll(query.with(pageRequest), relationalPersistentEntity.type)
+            .let { jdbcAggregateTemplate.hydrate(it, FetchSpec(fetch)) }
+
+        val total = jdbcAggregateTemplate.count(query, relationalPersistentEntity.type)
+
+        val page = PageImpl(
+            content,
+            pageRequest,
+            total
+        )
+
+        return page
     }
 
     fun findSlice(

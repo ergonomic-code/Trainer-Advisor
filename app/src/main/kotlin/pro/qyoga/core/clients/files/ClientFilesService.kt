@@ -40,7 +40,7 @@ class ClientFilesService(
         val clientFile = clientFilesRepo.findFile(clientId, fileId)
             ?: return null
 
-        return clientFilesStorage.findByIdOrNull(clientFile.fileRef.id!!)
+        return clientFilesStorage.findByIdOrNull(clientFile.fileRef.id)
     }
 
     fun deleteFile(clientId: UUID, fileId: Long): ClientFile? {
@@ -50,7 +50,7 @@ class ClientFilesService(
         clientFilesRepo.deleteById(clientFile.id)
 
         try {
-            clientFilesStorage.deleteById(clientFile.fileRef.id!!)
+            clientFilesStorage.deleteById(clientFile.fileRef.id)
         } catch (ex: Exception) {
             log.warn("Client file deletion failed", ex)
         }

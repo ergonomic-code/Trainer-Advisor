@@ -11,7 +11,7 @@ dependencyResolutionManagement {
             val springDependencyManagementVersion = version("springDependencyManagement", "1.1.7")
             val koverVersion = version("kover", "0.9.2")
             val gitPropertiesVersion = version("gitProperties", "2.5.3")
-            val detektVersion = version("dekekt", "1.23.8")
+            val detektVersion = version("dekekt", "2.0.0-alpha.1")
 
             // lib versions
             val poiVersion = version("poi", "5.4.1")
@@ -29,7 +29,7 @@ dependencyResolutionManagement {
 
             plugin("kover", "org.jetbrains.kotlinx.kover").versionRef(koverVersion)
             plugin("gitProperties", "com.gorylenko.gradle-git-properties").versionRef(gitPropertiesVersion)
-            plugin("detekt", "io.gitlab.arturbosch.detekt").versionRef(detektVersion)
+            plugin("detekt", "dev.detekt").versionRef(detektVersion)
 
             // libs
             library(

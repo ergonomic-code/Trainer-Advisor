@@ -238,7 +238,7 @@ configurations.matching { it.name == "detekt" }.all {
 	resolutionStrategy.eachDependency {
 		if (requested.group == "org.jetbrains.kotlin") {
 			@Suppress("UnstableApiUsage")
-			useVersion(io.gitlab.arturbosch.detekt.getSupportedKotlinVersion())
+			useVersion(dev.detekt.gradle.plugin.getSupportedKotlinVersion())
 		}
 	}
 }

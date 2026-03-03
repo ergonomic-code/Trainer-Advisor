@@ -11,7 +11,7 @@ import kotlin.reflect.jvm.jvmErasure
 
 data class PropertyFetchSpec<T : Any?, V>(
     val property: KProperty1<T, V?>,
-    val fetchSpec: FetchSpec<*> = FetchSpec(
+    val fetchSpec: FetchSpec<out Any> = FetchSpec(
         emptyList<PropertyFetchSpec<Any, Any>>()
     )
 )
@@ -42,15 +42,14 @@ fun <T : Any> JdbcAggregateOperations.hydrate(
         return (entities as? List<T>) ?: entities.toList()
     }
 
-    val refs: Map<KProperty1<*, AggregateReference<*, *>?>, Map<Any, Any>> =
+    val refs: Map<KProperty1<*, *>, Map<Any, Any>> =
         fetchSpec.propertyFetchSpecs.filter {
             detectRefType(
                 it.property
             ) != null
         }
             .associate { it: PropertyFetchSpec<T, *> ->
-                val property = it.property as KProperty1<*, AggregateReference<*, *>?>
-                property to fetchPropertyRefs(entities, it)
+                it.property to fetchPropertyRefs(entities, it)
             }
 
     if (refs.isEmpty()) {
@@ -69,9 +68,17 @@ private fun <T : Any> JdbcAggregateOperations.fetchPropertyRefs(
     val property = propertyFetchSpec.property
     val ids = fetchIds(entities, property)
     val targetType = (property.returnType.arguments[0].type!!.classifier!! as KClass<*>).java
-    val refs = hydrate(this.findAllById(ids, targetType), propertyFetchSpec.fetchSpec as FetchSpec<Any>)
+    val refs = hydrateAny(this.findAllById(ids, targetType), propertyFetchSpec.fetchSpec)
         .associateBy { (it as Identifiable<*>).id }
     return refs
+}
+
+@Suppress("UNCHECKED_CAST")
+private fun JdbcAggregateOperations.hydrateAny(
+    entities: Iterable<*>,
+    fetchSpec: FetchSpec<out Any>
+): List<Any> {
+    return hydrate(entities as Iterable<Any>, fetchSpec as FetchSpec<Any>)
 }
 
 private fun <T : Any> fetchIds(
@@ -87,12 +94,12 @@ private fun <T : Any> fetchIds(
     else -> error("Unsupported property type: $property")
 }
 
-private fun <T : Any> hydrateEntity(entity: T, refs: Map<KProperty1<*, AggregateReference<*, *>?>, Map<Any, Any>>): T {
+private fun <T : Any> hydrateEntity(entity: T, refs: Map<KProperty1<*, *>, Map<Any, Any>>): T {
     val constructorParams = entity::class.primaryConstructor!!.parameters
     val paramValues = constructorParams.associateWith { param ->
         val prop =
-            entity::class.memberProperties.find { prop -> param.name == prop.name }!! as KProperty1<T, AggregateReference<*, *>?>
-        val currentValue: Any? = prop.invoke(entity)
+            entity::class.memberProperties.find { prop -> param.name == prop.name }!!
+        val currentValue = prop.getter.call(entity)
         val newValue = if (prop in refs) {
             val id = (currentValue as AggregateReference<*, *>?)?.id
             if (id != null) {

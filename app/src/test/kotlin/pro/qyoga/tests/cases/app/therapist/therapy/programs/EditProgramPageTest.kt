@@ -99,7 +99,7 @@ class EditProgramPageTest : QYogaAppIntegrationBaseTest() {
         // When
         val document = therapist.programs.updateProgramForError(
             program.id,
-            CreateProgramRequest(program.title, program.exercises.map { it.exerciseRef.id!! }),
+            CreateProgramRequest(program.title, program.exercises.map { it.exerciseRef.id }),
             notExistingTherapeuticTask
         )
 

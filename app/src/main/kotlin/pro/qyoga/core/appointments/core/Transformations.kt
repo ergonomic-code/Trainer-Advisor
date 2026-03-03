@@ -38,7 +38,7 @@ fun Appointment.toEditRequest(resolveTimeZone: (ZoneId) -> LocalizedTimeZone?) =
     clientRef,
     clientRef.resolveOrNull()?.fullName() ?: clientRef.id.toString(),
     typeRef,
-    typeRef.resolveOrNull()?.name ?: typeRef.id?.toString() ?: "",
+    typeRef.resolveOrNull()?.name ?: typeRef.id.toString(),
     therapeuticTaskRef,
     therapeuticTaskRef?.resolveOrNull()?.name ?: therapeuticTaskRef?.id?.toString() ?: "",
     wallClockDateTime,

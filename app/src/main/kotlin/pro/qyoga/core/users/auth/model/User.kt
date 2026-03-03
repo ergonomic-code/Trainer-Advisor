@@ -13,7 +13,7 @@ import java.util.*
 
 typealias UserRef = AggregateReference<User, UUID>
 
-fun UserRef(therapistRef: TherapistRef): UserRef = AggregateReference.to(therapistRef.id!!)
+fun UserRef(therapistRef: TherapistRef): UserRef = AggregateReference.to(therapistRef.id)
 
 @Table("users")
 data class User(

@@ -40,7 +40,7 @@ class ExercisesService(
         val stepIdxToStepImageId = exerciseStepsImagesStorage.uploadAllStepImages(stepImages)
             .mapValues { it.value.id }
 
-        val exercise = Exercise.of(createExerciseRequest, stepIdxToStepImageId, therapistRef.id!!)
+        val exercise = Exercise.of(createExerciseRequest, stepIdxToStepImageId, therapistRef.id)
 
         return exercisesRepo.save(exercise)
     }
@@ -86,7 +86,7 @@ class ExercisesService(
         val imageId = exercise.steps[stepIdx].imageId
             ?: return null
 
-        return exerciseStepsImagesStorage.findByIdOrNull(imageId.id!!)
+        return exerciseStepsImagesStorage.findByIdOrNull(imageId.id)
     }
 
     fun deleteById(exerciseId: Long) {

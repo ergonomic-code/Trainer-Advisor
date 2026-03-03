@@ -28,7 +28,7 @@ object AppointmentsObjectMother {
         appointmentStatus: AppointmentStatus = AppointmentStatus.entries.randomElement(),
     ): LocalizedAppointmentSummary {
         return LocalizedAppointmentSummary(
-            aAppointmentId().id!!,
+            aAppointmentId().id,
             client.resolveOrThrow().fullName(),
             typeTitle,
             dateTime,

@@ -88,7 +88,7 @@ object EditAppointmentForm : AppointmentForm(FormAction.hxPut("$PATH/{appointmen
 
     fun statusFromXData(element: Element): String? {
         val formElement = element.select("form[x-data]").single()
-        val xDataValue = formElement?.attr("x-data") ?: return null
+        val xDataValue = formElement.attr("x-data")
         val regex = """'status':\s'(.*)'""".toRegex()
         val matchResult = regex.find(xDataValue)
 

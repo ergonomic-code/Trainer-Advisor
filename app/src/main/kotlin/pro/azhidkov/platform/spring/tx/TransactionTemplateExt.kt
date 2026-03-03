@@ -7,11 +7,9 @@ interface TransactionalService {
     val transactionTemplate: TransactionTemplate
 
     fun <T : Any?> transaction(body: () -> T): T {
-        val res = transactionTemplate.execute {
+        return transactionTemplate.execute {
             body()
         }
-        @Suppress("UNCHECKED_CAST")
-        return res as T
     }
 
 }
