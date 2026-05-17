@@ -3,6 +3,7 @@ package pro.qyoga.tests.infra.db
 import io.minio.ListObjectsArgs
 import io.minio.MinioClient
 import io.minio.RemoveObjectArgs
+import io.minio.errors.MinioException
 import org.slf4j.LoggerFactory
 import java.net.ConnectException
 
@@ -30,20 +31,26 @@ val minioUrl: String by lazy {
 
         MINIO_URL
     } catch (e: ConnectException) {
-        log.info("minio container not found: ${e.message}")
-        log.info("http://" + minioContainer.host + ":" + minioContainer.firstMappedPort)
-
-        log.info("Cleaning testcontainers minio")
-        dropBuckets(
-            MinioClient.builder()
-                .endpoint(minioContainer.s3URL)
-                .credentials(minioContainer.userName, minioContainer.password)
-                .build()
-        )
-        log.info("Minio cleaned")
-
-        "http://" + minioContainer.host + ":" + minioContainer.firstMappedPort
+        fallbackToTestcontainersMinio(e)
+    } catch (e: MinioException) {
+        fallbackToTestcontainersMinio(e)
     }
+}
+
+private fun fallbackToTestcontainersMinio(e: Exception): String {
+    log.info("minio container not found: ${e.message}")
+    log.info("http://" + minioContainer.host + ":" + minioContainer.firstMappedPort)
+
+    log.info("Cleaning testcontainers minio")
+    dropBuckets(
+        MinioClient.builder()
+            .endpoint(minioContainer.s3URL)
+            .credentials(minioContainer.userName, minioContainer.password)
+            .build()
+    )
+    log.info("Minio cleaned")
+
+    return "http://" + minioContainer.host + ":" + minioContainer.firstMappedPort
 }
 
 val testMinioClient: MinioClient by lazy {
@@ -63,4 +70,3 @@ fun dropBuckets(client: MinioClient) {
         }
     }
 }
-
