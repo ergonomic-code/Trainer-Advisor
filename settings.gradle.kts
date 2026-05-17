@@ -6,12 +6,12 @@ dependencyResolutionManagement {
     versionCatalogs {
         create("libs") {
             // plugin versions
-            val kotlinVersion = version("kotlin", "2.3.10")
-            val springBootVersion = version("springBoot", "4.0.3")
+            val kotlinVersion = version("kotlin", "2.3.21")
+            val springBootVersion = version("springBoot", "4.0.6")
             val springDependencyManagementVersion = version("springDependencyManagement", "1.1.7")
-            val koverVersion = version("kover", "0.9.2")
-            val gitPropertiesVersion = version("gitProperties", "2.5.3")
-            val detektVersion = version("dekekt", "2.0.0-alpha.1")
+            val koverVersion = version("kover", "0.9.8")
+            val gitPropertiesVersion = version("gitProperties", "2.5.7")
+            val detektVersion = version("dekekt", "2.0.0-alpha.2")
 
             // lib versions
             val poiVersion = version("poi", "5.4.1")

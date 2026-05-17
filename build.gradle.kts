@@ -36,7 +36,7 @@ subprojects {
 
     tasks.withType<KotlinCompile> {
         compilerOptions {
-            freeCompilerArgs = listOf("-Xjsr305=strict", "-Xwhen-guards")
+            freeCompilerArgs = listOf("-Xjsr305=strict")
             jvmTarget.set(JvmTarget.JVM_21)
             jvmDefault.set(JvmDefaultMode.NO_COMPATIBILITY)
             allWarningsAsErrors = true

@@ -1,5 +1,5 @@
 <div class="dropdown combo-box-div"
-     th:attr="${'@itemSelected'}=${itemSelected}"
+     th:attr="${'x-on:itemselected'}=${#strings.isEmpty(itemSelected) ? null : itemSelected}"
      th:fragment="comboBox(name, fetchUrl, value, valueName, placeholderView, itemSelected, required, selectOnly)"
      x-data="{showComboBox: false, searchKey: $el.querySelector('input[type=text]').value}">
 
