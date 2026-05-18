@@ -23,7 +23,7 @@ subprojects {
 
     configure<JavaPluginExtension> {
         toolchain {
-            languageVersion.set(JavaLanguageVersion.of(21))
+            languageVersion.set(JavaLanguageVersion.of(25))
         }
     }
 
@@ -36,8 +36,8 @@ subprojects {
 
     tasks.withType<KotlinCompile> {
         compilerOptions {
-            freeCompilerArgs = listOf("-Xjsr305=strict", "-Xwhen-guards")
-            jvmTarget.set(JvmTarget.JVM_21)
+            freeCompilerArgs = listOf("-Xjsr305=strict")
+            jvmTarget.set(JvmTarget.JVM_25)
             jvmDefault.set(JvmDefaultMode.NO_COMPATIBILITY)
             allWarningsAsErrors = true
         }
