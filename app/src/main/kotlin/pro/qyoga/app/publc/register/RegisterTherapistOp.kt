@@ -1,7 +1,6 @@
 package pro.qyoga.app.publc.register
 
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import pro.azhidkov.platform.errors.DomainError
 import pro.azhidkov.platform.kotlin.mapFailure
@@ -10,8 +9,8 @@ import pro.qyoga.core.users.auth.errors.DuplicatedEmailException
 import pro.qyoga.core.users.therapists.CreateTherapistUserOp
 import pro.qyoga.core.users.therapists.RegisterTherapistRequest
 import pro.qyoga.core.users.therapists.Therapist
-import pro.qyoga.i9ns.email.Email
-import pro.qyoga.i9ns.email.EmailSender
+import pro.qyoga.i9ns.email.NewUserRegisteredMessageChannel
+import pro.qyoga.i9ns.email.WelcomeMessageChannel
 import pro.qyoga.tech.captcha.CaptchaService
 import java.awt.image.BufferedImage
 import java.util.*
@@ -52,15 +51,14 @@ class RegistrationException(
 @Component
 class RegisterTherapistOp(
     private val createTherapistUser: CreateTherapistUserOp,
-    private val emailSender: EmailSender,
     private val captchaService: CaptchaService,
-    @Value("\${spring.mail.username}") private val fromEmail: String,
-    @Value("\${trainer-advisor.admin.email}") private val adminEmail: String
-) : (RegisterTherapistRequest) -> Therapist {
+    private val welcomeMessageChannel: WelcomeMessageChannel,
+    private val newUserRegisteredMessageChannel: NewUserRegisteredMessageChannel,
+) {
 
     private val log = LoggerFactory.getLogger(javaClass)
 
-    override fun invoke(registerTherapistRequest: RegisterTherapistRequest): Therapist {
+    operator fun invoke(registerTherapistRequest: RegisterTherapistRequest): Therapist {
         if (captchaService.isInvalid(registerTherapistRequest.captchaAnswer)) {
             log.info("Register therapist with invalid captcha request terminated")
             throw RegistrationException.invalidCaptcha(newCaptcha = captchaService.generateCaptcha())
@@ -79,42 +77,18 @@ class RegisterTherapistOp(
             }
             .getOrThrow()
 
-        emailSender.sendEmail(
-            welcomeEmail(to = registerTherapistRequest.email, password = password)
+        welcomeMessageChannel.sendWelcomeMessage(
+            therapistEmail = registerTherapistRequest.email,
+            password = password
         )
-        emailSender.sendEmail(newRegistrationEmail(to = adminEmail, therapistEmail = registerTherapistRequest.email))
+        newUserRegisteredMessageChannel.sendNewUserRegisteredMessage(
+            therapistEmail = registerTherapistRequest.email
+        )
 
         log.info("Therapist for {} registered", registerTherapistRequest.email)
 
         return therapist
     }
-
-    private fun welcomeEmail(to: String, password: SecretChars) =
-        Email(
-            fromEmail,
-            to,
-            "Добро пожаловать в Trainer Advisor",
-            """
-                Здравствуйте!
-                
-                Вы зарегистрировались в Trainer Advisor.
-                Логин от вашего аккаунта: $to. 
-                Пароль от вашего аккаунта: ${password.show()}.
-                
-                Теперь вы можете войти в систему на странице https://trainer-advisor.pro/login используя email и пароль из этого письма.
-                
-                С уважением, команда Trainer Advisor.
-            """.trimIndent()
-        )
-
-    private fun newRegistrationEmail(to: String, therapistEmail: String) = Email(
-        fromEmail,
-        to,
-        "Новый терапевт добавлен в систему",
-        """
-                Email: $therapistEmail
-            """.trimIndent()
-    )
 
 }
 
