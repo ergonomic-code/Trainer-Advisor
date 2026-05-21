@@ -1,4 +1,4 @@
-package pro.qyoga.i9ns.email
+package pro.qyoga.infra.email
 
 import org.slf4j.LoggerFactory
 import org.springframework.mail.javamail.JavaMailSender

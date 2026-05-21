@@ -1,4 +1,4 @@
-package pro.qyoga.i9ns.email
+package pro.qyoga.infra.email
 
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Configuration

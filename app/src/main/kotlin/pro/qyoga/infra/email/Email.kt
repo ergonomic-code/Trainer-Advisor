@@ -1,4 +1,4 @@
-package pro.qyoga.i9ns.email
+package pro.qyoga.infra.email
 
 data class Email(
     val from: String,

@@ -47,7 +47,7 @@ class FillScheduleNotificationsRepoTest : QYogaAppBaseTest() {
                 LocalTime.of(10, 0)
             )
 
-            val moscowTherapist = usersBackgrounds.registerNewTherapist().ref()
+            val moscowTherapist = usersBackgrounds.createNewTherapist().ref()
             userTimeZonesTestApi.setTimeZone(moscowTherapist, ZoneId.of("Europe/Moscow"))
             notificationsTestApi.createFillScheduleSettings(
                 moscowTherapist,
@@ -253,7 +253,7 @@ class FillScheduleNotificationsRepoTest : QYogaAppBaseTest() {
             )
 
             // Токио UTC+9
-            val tokyoTherapist = usersBackgrounds.registerNewTherapist().ref()
+            val tokyoTherapist = usersBackgrounds.createNewTherapist().ref()
             userTimeZonesTestApi.setTimeZone(tokyoTherapist, ZoneId.of("Asia/Tokyo"))
             notificationsTestApi.createFillScheduleSettings(
                 tokyoTherapist,
@@ -262,7 +262,7 @@ class FillScheduleNotificationsRepoTest : QYogaAppBaseTest() {
             )
 
             // Нью-Йорк UTC-4/-5
-            val nyTherapist = usersBackgrounds.registerNewTherapist().ref()
+            val nyTherapist = usersBackgrounds.createNewTherapist().ref()
             userTimeZonesTestApi.setTimeZone(nyTherapist, ZoneId.of("America/New_York"))
             notificationsTestApi.createFillScheduleSettings(
                 nyTherapist,

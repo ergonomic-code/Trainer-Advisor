@@ -139,7 +139,7 @@ class EditClientCardPageTest : QYogaAppIntegrationBaseTest() {
     fun `должна сохранять телефон, указанный для другого клиента другого терапевта`() {
         // Сетап
         val thePhone = randomPhoneNumber().toUIFormat()
-        val anotherTherapistId = backgrounds.users.registerNewTherapist().id
+        val anotherTherapistId = backgrounds.users.createNewTherapist().id
         backgrounds.clients.createClient(phone = thePhone, therapistId = anotherTherapistId)
         val targetClient = backgrounds.clients.createClient()
         val updatePhoneDto = targetClient.toDto().copy(phoneNumber = thePhone)

@@ -1,6 +1,7 @@
 package pro.qyoga.tests.fixture.data
 
 import net.datafaker.Faker
+import pro.azhidkov.platform.secrets.SecretChars
 import java.util.*
 
 val lowerCaseCyrillicLetters = ('а'..'я').toList()
@@ -42,7 +43,7 @@ fun randomEmail(): String =
         append(randomWord(lowerCaseLatinLetters, 2, 3))
     }
 
-fun randomPassword() = randomLatinWord(minLength = 8)
+fun randomPassword() = SecretChars(randomLatinWord(minLength = 8).toCharArray())
 
 fun Faker.randomBase64String(
     bytes: Int = 32,

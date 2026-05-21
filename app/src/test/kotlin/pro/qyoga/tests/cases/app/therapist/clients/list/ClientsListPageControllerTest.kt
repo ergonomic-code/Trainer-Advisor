@@ -50,7 +50,7 @@ class ClientsListPageControllerTest : QYogaAppIntegrationBaseTest() {
         val ownClientsCount = 5
         val alienClientsCount = 5
 
-        val anotherTherapist = backgrounds.users.registerNewTherapist()
+        val anotherTherapist = backgrounds.users.createNewTherapist()
 
         backgrounds.clients.createClients(ownClientsCount, THE_THERAPIST_ID)
         backgrounds.clients.createClients(alienClientsCount, anotherTherapist.id)
@@ -73,7 +73,7 @@ class ClientsListPageControllerTest : QYogaAppIntegrationBaseTest() {
         val ownClientsCount = 5
         val alienClientsCount = 5
 
-        val anotherTherapist = backgrounds.users.registerNewTherapist()
+        val anotherTherapist = backgrounds.users.createNewTherapist()
 
         backgrounds.clients.createClients(ownClientsCount, THE_THERAPIST_ID)
         backgrounds.clients.createClients(alienClientsCount, anotherTherapist.id)

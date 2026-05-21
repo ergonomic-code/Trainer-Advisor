@@ -15,11 +15,12 @@ import pro.qyoga.core.therapy.TherapyConfig
 import pro.qyoga.core.users.UsersConfig
 import pro.qyoga.i9ns.calendars.google.GoogleCalendarConf
 import pro.qyoga.i9ns.calendars.ical.ICalCalendarsConfig
-import pro.qyoga.i9ns.email.EmailsConfig
+import pro.qyoga.i9ns.email.EmailI9nsConf
 import pro.qyoga.i9ns.pushes.web.WebPushesConf
 import pro.qyoga.infra.auth.AuthConfig
 import pro.qyoga.infra.cache.CacheConf
 import pro.qyoga.infra.db.SdjConfig
+import pro.qyoga.infra.email.EmailsConfig
 import pro.qyoga.infra.minio.MinioConfig
 import pro.qyoga.infra.timezones.TimeZonesConfig
 import pro.qyoga.infra.web.ThymeleafConfig
@@ -40,7 +41,7 @@ import pro.qyoga.tech.captcha.CaptchaConf
     CalendarGatewaysConf::class,
 
     // I9ns
-    EmailsConfig::class,
+    EmailI9nsConf::class,
     ICalCalendarsConfig::class,
     GoogleCalendarConf::class,
     WebPushesConf::class,
@@ -57,7 +58,8 @@ import pro.qyoga.tech.captcha.CaptchaConf
     MinioConfig::class,
     FilesStorageConfig::class,
     TimeZonesConfig::class,
-    CacheConf::class
+    CacheConf::class,
+    EmailsConfig::class,
 )
 @SpringBootApplication
 class QYogaApp

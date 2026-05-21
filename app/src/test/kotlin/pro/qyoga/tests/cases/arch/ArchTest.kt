@@ -32,7 +32,7 @@ class ArchTest {
             .whereLayer("App").mayOnlyBeAccessedByLayers(testsAbstractionLayer)
             .whereLayer("I9ns").mayOnlyBeAccessedByLayers("App", testsAbstractionLayer)
             .whereLayer("Core").mayOnlyBeAccessedByLayers("App", "I9ns", testsAbstractionLayer)
-            .whereLayer("Infra").mayOnlyBeAccessedByLayers("Core", "App", testsAbstractionLayer)
+            .whereLayer("Infra").mayOnlyBeAccessedByLayers("Core", "App", "I9ns", testsAbstractionLayer)
             .whereLayer("Platform").mayOnlyBeAccessedByLayers("App", "I9ns", "Core", "Infra", testsAbstractionLayer)
             .check(qyogaClasses)
     }
