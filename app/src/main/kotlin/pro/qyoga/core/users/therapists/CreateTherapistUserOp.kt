@@ -3,6 +3,7 @@ package pro.qyoga.core.users.therapists
 import org.slf4j.LoggerFactory
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Component
+import pro.azhidkov.platform.secrets.SecretChars
 import pro.qyoga.core.users.auth.UsersRepo
 import pro.qyoga.core.users.auth.model.Role
 import pro.qyoga.core.users.auth.model.User
@@ -17,7 +18,7 @@ class CreateTherapistUserOp(
 
     operator fun invoke(
         registerTherapistRequest: RegisterTherapistRequest,
-        password: CharSequence
+        password: SecretChars
     ): Therapist {
         log.info("Creating new therapist user for {}", registerTherapistRequest.email)
 
@@ -32,8 +33,8 @@ class CreateTherapistUserOp(
         return therapist
     }
 
-    private fun createUser(email: String, plainPassword: CharSequence, roles: Set<Role>): User {
-        val passwordHash = passwordEncoder.encode(plainPassword)!!
+    private fun createUser(email: String, plainPassword: SecretChars, roles: Set<Role>): User {
+        val passwordHash = passwordEncoder.encode(plainPassword.show())!!
         return User(email, passwordHash, roles.toTypedArray(), enabled = true)
     }
 

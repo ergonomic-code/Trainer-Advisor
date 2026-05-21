@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import pro.azhidkov.platform.errors.DomainError
 import pro.azhidkov.platform.kotlin.mapFailure
+import pro.azhidkov.platform.secrets.SecretChars
 import pro.qyoga.core.users.auth.errors.DuplicatedEmailException
 import pro.qyoga.core.users.therapists.CreateTherapistUserOp
 import pro.qyoga.core.users.therapists.RegisterTherapistRequest
@@ -88,7 +89,7 @@ class RegisterTherapistOp(
         return therapist
     }
 
-    private fun welcomeEmail(to: String, password: String) =
+    private fun welcomeEmail(to: String, password: SecretChars) =
         Email(
             fromEmail,
             to,
@@ -98,7 +99,7 @@ class RegisterTherapistOp(
                 
                 Вы зарегистрировались в Trainer Advisor.
                 Логин от вашего аккаунта: $to. 
-                Пароль от вашего аккаунта: $password.
+                Пароль от вашего аккаунта: ${password.show()}.
                 
                 Теперь вы можете войти в систему на странице https://trainer-advisor.pro/login используя email и пароль из этого письма.
                 
@@ -127,3 +128,4 @@ private fun generateRandomPassword() =
             append(passwordChars[Random.nextInt(passwordChars.size)])
         }
     }
+        .let { SecretChars(it.toCharArray()) }
