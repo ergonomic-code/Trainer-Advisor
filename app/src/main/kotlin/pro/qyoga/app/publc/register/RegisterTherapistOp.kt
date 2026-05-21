@@ -5,13 +5,10 @@ import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import pro.azhidkov.platform.errors.DomainError
 import pro.azhidkov.platform.kotlin.mapFailure
-import pro.qyoga.core.users.auth.UsersFactory
-import pro.qyoga.core.users.auth.UsersRepo
 import pro.qyoga.core.users.auth.errors.DuplicatedEmailException
+import pro.qyoga.core.users.therapists.CreateTherapistUserOp
 import pro.qyoga.core.users.therapists.RegisterTherapistRequest
 import pro.qyoga.core.users.therapists.Therapist
-import pro.qyoga.core.users.therapists.TherapistsRepo
-import pro.qyoga.core.users.therapists.createTherapistUser
 import pro.qyoga.i9ns.email.Email
 import pro.qyoga.i9ns.email.EmailSender
 import pro.qyoga.tech.captcha.CaptchaService
@@ -53,9 +50,7 @@ class RegistrationException(
 
 @Component
 class RegisterTherapistOp(
-    private val usersRepo: UsersRepo,
-    private val therapistsRepo: TherapistsRepo,
-    private val usersFactory: UsersFactory,
+    private val createTherapistUser: CreateTherapistUserOp,
     private val emailSender: EmailSender,
     private val captchaService: CaptchaService,
     @Value("\${spring.mail.username}") private val fromEmail: String,
@@ -63,16 +58,6 @@ class RegisterTherapistOp(
 ) : (RegisterTherapistRequest) -> Therapist {
 
     private val log = LoggerFactory.getLogger(javaClass)
-
-    private val createTherapistUser = { registerTherapistRequest: RegisterTherapistRequest, password: CharSequence ->
-        createTherapistUser(
-            usersRepo,
-            therapistsRepo,
-            usersFactory,
-            registerTherapistRequest,
-            password
-        )
-    }
 
     override fun invoke(registerTherapistRequest: RegisterTherapistRequest): Therapist {
         if (captchaService.isInvalid(registerTherapistRequest.captchaAnswer)) {
@@ -142,4 +127,3 @@ private fun generateRandomPassword() =
             append(passwordChars[Random.nextInt(passwordChars.size)])
         }
     }
-

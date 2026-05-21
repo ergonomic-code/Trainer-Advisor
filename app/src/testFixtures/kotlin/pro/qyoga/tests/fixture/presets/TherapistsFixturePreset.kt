@@ -19,7 +19,7 @@ class TherapistsFixturePreset(
 ) {
 
     fun createTherapistWithExercise(): Pair<Therapist, Exercise> {
-        val therapist = usersBackgrounds.registerNewTherapist()
+        val therapist = usersBackgrounds.createNewTherapist()
         val exercise = exerciseBackgrounds.createExercise(ownerRef = therapist.ref())
         return therapist to exercise
     }

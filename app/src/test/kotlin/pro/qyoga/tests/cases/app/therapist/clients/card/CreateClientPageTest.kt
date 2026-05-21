@@ -92,7 +92,7 @@ class CreateClientPageTest : QYogaAppIntegrationBaseTest() {
     fun `System should allow to create client with existing phone number for another therapist`() {
         // Given
         val thePhone = randomPhoneNumber().toUIFormat()
-        val anotherTherapistId = backgrounds.users.registerNewTherapist().id
+        val anotherTherapistId = backgrounds.users.createNewTherapist().id
         backgrounds.clients.createClient(phone = thePhone, therapistId = anotherTherapistId)
         val duplicatedClient = ClientsObjectMother.createClientCardDto(phone = thePhone)
         val therapist = TherapistClient.loginAsTheTherapist()

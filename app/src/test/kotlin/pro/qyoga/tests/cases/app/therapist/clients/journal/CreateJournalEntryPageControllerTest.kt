@@ -67,7 +67,7 @@ class CreateJournalEntryPageControllerTest : QYogaAppIntegrationBaseTest() {
     fun createJournalEntryWithTaskExistingForAnotherTherapist() {
         // Given
         val taskName = "Йогатерапия гастрита"
-        val anotherTherapist = backgrounds.users.registerNewTherapist()
+        val anotherTherapist = backgrounds.users.createNewTherapist()
         val anotherTherapeuticTask = backgrounds.therapeuticTasks.createTherapeuticTask(anotherTherapist.id, taskName)
         val client = backgrounds.clients.aClient()
 
