@@ -1,0 +1,16 @@
+# Конфигурация Ergocode.
+# `artifact_language` — ISO 639-1 язык человекочитаемых артефактов, например `ru` или `en`.
+# `modules` — подтверждённый набор доступных проекту модулей фреймворка.
+
+artifact_language: ru
+modules:
+  - core
+  - database
+  - http-api
+  - kotlin
+  - spring
+  - junit
+  - kotest
+  - ergonomic-architecture
+  - ergonomic-testing
+  - tdd

@@ -1,0 +1,3 @@
+[submodule ".agents/ergo"]
+	path = .agents/ergo
+	url = https://github.com/ergonomic-code/dot-agents

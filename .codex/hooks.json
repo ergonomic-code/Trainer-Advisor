@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$(git rev-parse --show-toplevel)/.codex/session_start_load_project_baseline.py\" --agents-md-path \"AGENTS.md\" --framework-config-path \".agents/ergo-config.yaml\"",
+            "statusMessage": "Загрузка базового контекста проекта"
+          }
+        ]
+      }
+    ]
+  }
+}
