@@ -2,7 +2,6 @@ package pro.qyoga.tests.cases.app.therapist.therapy.programs
 
 import io.kotest.inspectors.forAll
 import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
 import pro.azhidkov.platform.spring.sdj.ergo.hydration.resolveOrThrow
@@ -69,8 +68,8 @@ class EditProgramPageTest : QYogaAppIntegrationBaseTest() {
         val response = therapist.programs.updateProgram(program.id, updateProgramRequest, newTherapeuticTask.name)
 
         // Then
-        response.statusCode() shouldBe HttpStatus.OK.value()
-        response.header("HX-Redirect") shouldBe ProgramsListPage.path
+        response.expectStatus().isEqualTo(HttpStatus.OK)
+        response.expectHeader().valueEquals("HX-Redirect", ProgramsListPage.path)
 
         val updatedProgram = backgrounds.programs.findAll().single()
         updatedProgram shouldMatch (updateProgramRequest to newTherapeuticTask.name)

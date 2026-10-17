@@ -70,7 +70,6 @@ dependencyResolutionManagement {
         create("testLibs") {
             val selenideVersion = version("selenide", "7.10.1")
             val testContainersVersion = version("testcontainers", "2.0.3")
-            val restAssuredVersion = version("restAssured", "6.0.0")
             val kotestVersion = version("kotest", "5.9.1")
             val wiremockVersion = version("wiremock", "3.13.1")
             val jettyVersion = version("jetty", "12.1.0")
@@ -83,15 +82,6 @@ dependencyResolutionManagement {
             library("kotest-assertions", "io.kotest", "kotest-assertions-core").versionRef(kotestVersion)
             library("kotest-runner", "io.kotest", "kotest-runner-junit5").versionRef(kotestVersion)
             library("kotest-datatest", "io.kotest", "kotest-framework-datatest").versionRef(kotestVersion)
-
-            library("restassured-core", "io.rest-assured", "rest-assured").versionRef(restAssuredVersion)
-            library("restassured-kotlin", "io.rest-assured", "kotlin-extensions").versionRef(restAssuredVersion)
-            library(
-                "restassured-json-schema",
-                "io.rest-assured",
-                "json-schema-validator"
-            ).versionRef(restAssuredVersion)
-            bundle("restassured", listOf("restassured-core", "restassured-kotlin", "restassured-json-schema"))
 
             library("jsoup", "org.jsoup", "jsoup").version("1.21.2")
             library("datafaker", "net.datafaker", "datafaker").version("2.5.1")

@@ -1,6 +1,6 @@
 package pro.qyoga.tests.clients.api
 
-import io.restassured.http.Cookie
+import org.springframework.http.HttpCookie
 import org.springframework.test.web.servlet.client.RestTestClient
 import org.springframework.test.web.servlet.client.returnResult
 import pro.qyoga.app.publc.pushes.web.PushesPublicKeyController
@@ -12,7 +12,7 @@ object WebPushesApiFactory {
     val publicApi = WebPushesPublicApi(mainRestTestClient)
 
     fun therapistApi(
-        principal: Cookie,
+        principal: HttpCookie,
     ) = WebPushesTherapistApi(principal, mainRestTestClient)
 
 }

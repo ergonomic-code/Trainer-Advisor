@@ -1,12 +1,12 @@
 package pro.qyoga.tests.clients
 
-import io.restassured.http.ContentType
-import io.restassured.module.kotlin.extensions.Extract
-import io.restassured.module.kotlin.extensions.Given
-import io.restassured.module.kotlin.extensions.Then
-import io.restassured.module.kotlin.extensions.When
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.test.web.servlet.client.RestTestClient
+import org.springframework.test.web.servlet.client.returnResult
+import pro.qyoga.tests.infra.web.mainRestTestClient
 import tools.jackson.databind.JsonNode
+
 
 val actuatorPath = "ops/actuator"
 
@@ -16,20 +16,21 @@ class OpsClient(
 ) {
 
     fun getActuatorEntryPoint(expectedStatus: HttpStatus = HttpStatus.OK): JsonNode? {
-        return Given {
-            auth().preemptive().basic(login, password)
-            accept(ContentType.JSON)
-        } When {
-            get(actuatorPath)
-        } Then {
-            statusCode(expectedStatus.value())
-        } Extract {
-            if (statusCode() == HttpStatus.OK.value()) {
-                body().`as`(JsonNode::class.java)
-            } else {
-                null
-            }
+        val response = getActuatorEntryPointForResponse()
+            .expectStatus().isEqualTo(expectedStatus.value())
+        return if (expectedStatus == HttpStatus.OK) {
+            response.returnResult<JsonNode>().responseBody
+        } else {
+            null
         }
+    }
+
+    fun getActuatorEntryPointForResponse(): RestTestClient.ResponseSpec {
+        return mainRestTestClient.get()
+            .uri("/$actuatorPath")
+            .headers { it.setBasicAuth(login, password) }
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
     }
 
 }

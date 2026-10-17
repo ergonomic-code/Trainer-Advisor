@@ -74,7 +74,7 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
     @Test
     fun `должна сохранять приём только с обязательными полями`() {
-        // Сетап
+        // Given
         val client = backgrounds.clients.createClients(1).single()
         val therapeuticTask = backgrounds.therapeuticTasks.createTherapeuticTask()
         val editAppointmentRequest = AppointmentsObjectMother.randomEditAppointmentRequest(
@@ -84,11 +84,11 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
         val therapist = TherapistClient.loginAsTheTherapist()
 
-        // Действие
+        // When
         val response = therapist.appointments.createAppointment(editAppointmentRequest)
 
-        // Проверка
-        response.statusCode() shouldBe HttpStatus.OK.value()
+        // Then
+        response.expectStatus().isEqualTo(HttpStatus.OK)
 
         val storedAppointment =
             backgrounds.appointments.getDaySchedule(editAppointmentRequest.dateTime.toLocalDate()).single()
@@ -97,7 +97,7 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
     @Test
     fun `должна сохранять приём со всеми полями`() {
-        // Сетап
+        // Given
         val client = backgrounds.clients.createClients(1).single()
         val therapeuticTask = backgrounds.therapeuticTasks.createTherapeuticTask()
         val editAppointmentRequest = randomFullEditAppointmentRequest(
@@ -107,11 +107,11 @@ class CreateAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
         val therapist = TherapistClient.loginAsTheTherapist()
 
-        // Действие
+        // When
         val response = therapist.appointments.createAppointment(editAppointmentRequest)
 
-        // Проверка
-        response.statusCode() shouldBe HttpStatus.OK.value()
+        // Then
+        response.expectStatus().isEqualTo(HttpStatus.OK)
 
         val storedAppointment = backgrounds.appointments
             .getDaySchedule(editAppointmentRequest.dateTime.toLocalDate())

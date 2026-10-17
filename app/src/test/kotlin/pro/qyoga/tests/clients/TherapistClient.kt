@@ -1,22 +1,21 @@
 package pro.qyoga.tests.clients
 
-import io.restassured.http.Cookie
-import io.restassured.module.kotlin.extensions.Extract
-import io.restassured.module.kotlin.extensions.Given
-import io.restassured.module.kotlin.extensions.Then
-import io.restassured.module.kotlin.extensions.When
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import org.springframework.http.HttpCookie
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.client.RestTestClient
 import pro.qyoga.tests.clients.api.*
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_LOGIN
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_PASSWORD
 import pro.qyoga.tests.infra.web.mainRestTestClient
+import pro.qyoga.tests.infra.web.pageRestTestClient
+import pro.qyoga.tests.platform.spring.rest_test_client.getBodyAsString
 
 
 class TherapistClient(
-    val authCookie: Cookie,
+    val authCookie: HttpCookie,
     restTestClient: RestTestClient = mainRestTestClient
 ) {
 
@@ -38,26 +37,25 @@ class TherapistClient(
     val settings = TherapistSettingsApi(authCookie)
 
     fun getIndexPage(): Document {
-        return Given {
-            cookie(authCookie)
-        } When {
-            get("/therapist")
-        } Then {
-            statusCode(HttpStatus.OK.value())
-        } Extract {
-            Jsoup.parse(body().asString())
-        }
+        return pageRestTestClient.get()
+            .uri("/therapist")
+            .accept(MediaType.TEXT_HTML)
+            .cookie(authCookie.name, authCookie.value)
+            .exchange()
+            .expectStatus().isEqualTo(HttpStatus.OK)
+            .getBodyAsString()
+            .let { Jsoup.parse(it) }
     }
 
     companion object {
 
-        fun loginAsTheTherapist(): TherapistClient =
-            login(THE_THERAPIST_LOGIN, THE_THERAPIST_PASSWORD)
+        fun loginAsTheTherapist(): TherapistClient {
+            return login(THE_THERAPIST_LOGIN, THE_THERAPIST_PASSWORD)
+        }
 
-        fun login(email: String, password: String): TherapistClient =
-            TherapistClient(
-                PublicClient.authApi.login(email, password)
-            )
+        fun login(email: String, password: String): TherapistClient {
+            return TherapistClient(PublicClient.authApi.login(email, password))
+        }
 
     }
 

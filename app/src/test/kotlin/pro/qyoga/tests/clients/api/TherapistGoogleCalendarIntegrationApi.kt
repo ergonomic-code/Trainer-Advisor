@@ -1,8 +1,8 @@
 package pro.qyoga.tests.clients.api
 
-import io.restassured.http.Cookie
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import org.springframework.http.HttpCookie
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationResponse
 import org.springframework.test.web.servlet.client.RestTestClient
 import pro.qyoga.app.therapist.appointments.core.schedule.settings.GoogleCalendarSettingsController
@@ -11,8 +11,9 @@ import pro.qyoga.tests.platform.spring.rest_test_client.getBodyAsString
 import pro.qyoga.tests.platform.spring.rest_test_client.redirectLocation
 import java.net.URI
 
+
 class TherapistGoogleCalendarIntegrationApi(
-    override val authCookie: Cookie,
+    override val authCookie: HttpCookie,
     private val restTestClient: RestTestClient
 ) : AuthorizedApi {
 

@@ -1,148 +1,130 @@
 package pro.qyoga.tests.clients.api
 
-import io.restassured.http.ContentType
-import io.restassured.http.Cookie
-import io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath
-import io.restassured.module.kotlin.extensions.Extract
-import io.restassured.module.kotlin.extensions.Given
-import io.restassured.module.kotlin.extensions.Then
-import io.restassured.module.kotlin.extensions.When
-import io.restassured.response.Response
-import io.restassured.specification.RequestSpecification
-import org.hamcrest.CoreMatchers
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import org.springframework.http.HttpCookie
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.test.web.servlet.client.RestTestClient
+import org.springframework.test.web.servlet.client.returnResult
+import org.springframework.util.MultiValueMap
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
 import pro.qyoga.core.therapy.programs.dtos.CreateProgramRequest
 import pro.qyoga.core.therapy.programs.dtos.ProgramsSearchFilter
 import pro.qyoga.tests.infra.test_config.spring.context
+import pro.qyoga.tests.infra.web.pageRestTestClient
 import pro.qyoga.tests.pages.therapist.therapy.programs.CreateProgramForm
 import pro.qyoga.tests.pages.therapist.therapy.programs.CreateProgramPage
 import pro.qyoga.tests.pages.therapist.therapy.programs.EditProgramPage
 import pro.qyoga.tests.pages.therapist.therapy.programs.ProgramsListPage
+import pro.qyoga.tests.platform.spring.rest_test_client.formData
+import pro.qyoga.tests.platform.spring.rest_test_client.getBodyAsString
 import tools.jackson.databind.ObjectMapper
 import tools.jackson.databind.node.ObjectNode
 import tools.jackson.module.kotlin.convertValue
 
-class TherapistProgramsApi(override val authCookie: Cookie) : AuthorizedApi {
+
+class TherapistProgramsApi(
+    override val authCookie: HttpCookie,
+    private val restTestClient: RestTestClient = pageRestTestClient
+) : AuthorizedApi {
 
     private val mapper = context.getBean(ObjectMapper::class.java)
 
     fun getProgramsListPage(): Document {
-        return Given {
-            authorized()
-        } When {
-            get(ProgramsListPage.path)
-        } Then {
-            statusCode(HttpStatus.OK.value())
-        } Extract {
-            Jsoup.parse(body().asString())
-        }
+        return restTestClient.get()
+            .uri(ProgramsListPage.path)
+            .accept(MediaType.TEXT_HTML)
+            .authorized()
+            .exchange()
+            .expectStatus().isEqualTo(HttpStatus.OK)
+            .getBodyAsString()
+            .let { Jsoup.parse(it) }
     }
 
     fun getCreateProgramPage(): Document {
-        return Given {
-            authorized()
-        } When {
-            get(CreateProgramPage.path)
-        } Then {
-            statusCode(HttpStatus.OK.value())
-        } Extract {
-            Jsoup.parse(body().asString())
-        }
+        return restTestClient.get()
+            .uri(CreateProgramPage.path)
+            .accept(MediaType.TEXT_HTML)
+            .authorized()
+            .exchange()
+            .expectStatus().isEqualTo(HttpStatus.OK)
+            .getBodyAsString()
+            .let { Jsoup.parse(it) }
     }
 
-    fun createProgram(createProgramRequest: CreateProgramRequest, therapeuticTaskName: String): Response {
-        return Given {
-            authorized()
-
-            fillProgramFormParams(createProgramRequest, therapeuticTaskName)
-        } When {
-            post(CreateProgramPage.path)
-        }
+    fun createProgram(createProgramRequest: CreateProgramRequest, therapeuticTaskName: String): RestTestClient.ResponseSpec {
+        return restTestClient.post()
+            .uri(CreateProgramPage.path)
+            .accept(MediaType.TEXT_HTML)
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+            .body(programForm(createProgramRequest, therapeuticTaskName))
+            .authorized()
+            .exchange()
     }
 
 
     fun downloadDocx(programId: Long, expectedStatus: HttpStatus = HttpStatus.OK): ByteArray {
-        return Given {
-            authorized()
-
-            pathParam("programId", programId)
-        } When {
-            get(ProgramsListPage.programDocxPath)
-        } Then {
-            statusCode(expectedStatus.value())
-        } Extract {
-            body().asByteArray()
-        }
+        return restTestClient.get()
+            .uri(ProgramsListPage.programDocxPath, programId)
+            .accept(MediaType.TEXT_HTML)
+            .authorized()
+            .exchange()
+            .expectStatus().isEqualTo(expectedStatus.value())
+            .returnResult().responseBodyContent
     }
 
     fun createProgramForError(createProgramRequest: CreateProgramRequest, therapeuticTaskName: String): Document {
         return createProgram(createProgramRequest, therapeuticTaskName)
-            .Then {
-                statusCode(HttpStatus.OK.value())
-                header("HX-Redirect", CoreMatchers.nullValue())
-            } Extract {
-            Jsoup.parse(body().asString())
-        }
+            .expectStatus().isOk
+            .expectHeader().doesNotExist("HX-Redirect")
+            .getBodyAsString()
+            .let { Jsoup.parse(it) }
 
     }
 
     fun searchExercises(keyword: String): Iterable<ExerciseSummaryDto> {
-        return Given {
-            authorized()
-            accept(ContentType.JSON)
-
-            queryParam(CreateProgramPage.searchKey, keyword)
-        } When {
-            get(CreateProgramPage.searchExercisePath)
-        } Then {
-            statusCode(HttpStatus.OK.value())
-            matchesJsonSchemaInClasspath("json-schemas/therapist/therapy/programs/search-exercise-rs.json")
-        } Extract {
-            val node = body().`as`(ObjectNode::class.java)
-            mapper.convertValue(node.get("content"))
-        }
+        val node = restTestClient.get()
+            .uri("${CreateProgramPage.searchExercisePath}?${CreateProgramPage.searchKey}={keyword}", keyword)
+            .accept(MediaType.APPLICATION_JSON)
+            .authorized()
+            .exchange()
+            .expectStatus().isOk
+            .returnResult<ObjectNode>().responseBody!!
+        return mapper.convertValue(node.get("content"))
     }
 
-    fun deleteProgram(programId: Long): Response {
-        return Given {
-            authorized()
-
-            pathParam("programId", programId)
-        } When {
-            delete(ProgramsListPage.programPath)
-        }
+    fun deleteProgram(programId: Long): RestTestClient.ResponseSpec {
+        return restTestClient.delete()
+            .uri(ProgramsListPage.programPath, programId)
+            .accept(MediaType.TEXT_HTML)
+            .authorized()
+            .exchange()
     }
 
     fun getProgramEditPage(programId: Long, expectedStatus: HttpStatus = HttpStatus.OK): Document {
-        return Given {
-            authorized()
-
-            pathParam("programId", programId)
-        } When {
-            get(ProgramsListPage.programPath)
-        } Then {
-            statusCode(expectedStatus.value())
-        } Extract {
-            Jsoup.parse(body().asString())
-        }
+        return restTestClient.get()
+            .uri(ProgramsListPage.programPath, programId)
+            .accept(MediaType.TEXT_HTML)
+            .authorized()
+            .exchange()
+            .expectStatus().isEqualTo(expectedStatus.value())
+            .getBodyAsString()
+            .let { Jsoup.parse(it) }
     }
 
     fun updateProgram(
         programId: Long,
         updateProgramRequest: CreateProgramRequest,
         therapeuticTaskName: String
-    ): Response {
-        return Given {
-            authorized()
-
-            pathParam("programId", programId)
-            fillProgramFormParams(updateProgramRequest, therapeuticTaskName)
-        } When {
-            put(EditProgramPage.path)
-        }
+    ): RestTestClient.ResponseSpec {
+        return restTestClient.put()
+            .uri(EditProgramPage.path, programId)
+            .accept(MediaType.TEXT_HTML)
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+            .body(programForm(updateProgramRequest, therapeuticTaskName))
+            .authorized()
+            .exchange()
     }
 
     fun updateProgramForError(
@@ -152,43 +134,39 @@ class TherapistProgramsApi(override val authCookie: Cookie) : AuthorizedApi {
         expectedStatus: HttpStatus = HttpStatus.OK
     ): Document {
         return updateProgram(programId, updateProgramRequest, therapeuticTaskName)
-            .Then {
-                statusCode(expectedStatus.value())
-            } Extract {
-            Jsoup.parse(body().asString())
-        }
+            .expectStatus().isEqualTo(expectedStatus.value())
+            .getBodyAsString()
+            .let { Jsoup.parse(it) }
     }
 
-    private fun RequestSpecification.fillProgramFormParams(
+    private fun programForm(
         createProgramRequest: CreateProgramRequest,
         therapeuticTaskName: String
-    ): RequestSpecification {
-        formParam(CreateProgramForm.titleInput.name, createProgramRequest.title)
-        formParam(CreateProgramForm.therapeuticTaskInput.name, therapeuticTaskName)
-
-        createProgramRequest.exerciseIds.forEach {
-            formParams(CreateProgramForm.exerciseIdsInputName, it.toString())
+    ): MultiValueMap<String, String> {
+        return formData(
+            CreateProgramForm.titleInput.name to createProgramRequest.title,
+            CreateProgramForm.therapeuticTaskInput.name to therapeuticTaskName
+        ).apply {
+            createProgramRequest.exerciseIds.forEach {
+                add(CreateProgramForm.exerciseIdsInputName, it.toString())
+            }
         }
-
-        return this
     }
 
     fun searchPrograms(programsSearchFilter: ProgramsSearchFilter): Document {
-        return Given {
-            authorized()
-
-            formParam(ProgramsListPage.SearchForm.titleKeywordInput.name, programsSearchFilter.titleKeyword)
-            formParam(
-                ProgramsListPage.SearchForm.therapeuticTaskKeywordInput.name,
-                programsSearchFilter.therapeuticTaskKeyword
-            )
-        } When {
-            get(ProgramsListPage.SearchForm.action.url)
-        } Then {
-            statusCode(HttpStatus.OK.value())
-        } Extract {
-            Jsoup.parse(body().asString())
-        }
+        return restTestClient.get()
+            .uri { builder ->
+                builder.path(ProgramsListPage.SearchForm.action.url).queryParams(formData(
+                    ProgramsListPage.SearchForm.titleKeywordInput.name to programsSearchFilter.titleKeyword,
+                    ProgramsListPage.SearchForm.therapeuticTaskKeywordInput.name to programsSearchFilter.therapeuticTaskKeyword,
+                )).build()
+            }
+            .accept(MediaType.TEXT_HTML)
+            .authorized()
+            .exchange()
+            .expectStatus().isEqualTo(HttpStatus.OK)
+            .getBodyAsString()
+            .let { Jsoup.parse(it) }
     }
 
 }

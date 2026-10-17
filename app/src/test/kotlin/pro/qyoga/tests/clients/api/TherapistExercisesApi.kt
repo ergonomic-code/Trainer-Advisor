@@ -1,167 +1,151 @@
 package pro.qyoga.tests.clients.api
 
-import io.restassured.http.Cookie
-import io.restassured.module.kotlin.extensions.Extract
-import io.restassured.module.kotlin.extensions.Given
-import io.restassured.module.kotlin.extensions.Then
-import io.restassured.module.kotlin.extensions.When
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import org.springframework.http.HttpCookie
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.http.client.MultipartBodyBuilder
+import org.springframework.test.web.servlet.client.RestTestClient
 import pro.azhidkov.platform.file_storage.api.StoredFile
 import pro.azhidkov.platform.java.time.toDecimalMinutes
 import pro.qyoga.core.therapy.exercises.dtos.CreateExerciseRequest
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSearchDto
 import pro.qyoga.core.therapy.exercises.dtos.ExerciseSummaryDto
+import pro.qyoga.tests.infra.web.pageRestTestClient
 import pro.qyoga.tests.pages.therapist.therapy.exercises.*
+import pro.qyoga.tests.platform.spring.rest_test_client.formData
+import pro.qyoga.tests.platform.spring.rest_test_client.getBodyAsString
 
 
-class TherapistExercisesApi(override val authCookie: Cookie) : AuthorizedApi {
+class TherapistExercisesApi(
+    override val authCookie: HttpCookie,
+    private val restTestClient: RestTestClient = pageRestTestClient
+) : AuthorizedApi {
 
     fun getCreateExercisesPage(): Document {
-        return Given {
-            authorized()
-        } When {
-            get(CreateExercisePage.path)
-        } Then {
-            statusCode(HttpStatus.OK.value())
-        } Extract {
-            Jsoup.parse(body().asString())
-        }
+        return restTestClient.get()
+            .uri(CreateExercisePage.path)
+            .accept(MediaType.TEXT_HTML)
+            .authorized()
+            .exchange()
+            .expectStatus().isEqualTo(HttpStatus.OK)
+            .getBodyAsString()
+            .let { Jsoup.parse(it) }
 
     }
 
     fun createExercise(exercise: CreateExerciseRequest, images: Map<Long, StoredFile>) {
-        Given {
-            contentType("multipart/form-data; charset=UTF-8")
-            authorized()
-
-            formParam(CreateExerciseForm.title.name, exercise.summary.title)
-            formParam(CreateExerciseForm.duration.name, exercise.summary.duration.toDecimalMinutes())
-            formParam(CreateExerciseForm.type.name, exercise.summary.type)
-            formParam(CreateExerciseForm.description.name, exercise.summary.description)
-
-            exercise.steps.forEachIndexed { idx, step ->
-                formParam(CreateExerciseForm.stepsDescription(idx), step.description)
-                val image = images[idx.toLong()]
-                if (image != null) {
-                    multiPart(
-                        CreateExerciseForm.stepImage(idx),
-                        image.metaData.name,
-                        image.content,
-                        image.metaData.mediaType
-                    )
-                }
+        val multipart = MultipartBodyBuilder()
+        multipart.part(CreateExerciseForm.title.name, exercise.summary.title)
+        multipart.part(CreateExerciseForm.duration.name, exercise.summary.duration.toDecimalMinutes().toString())
+        multipart.part(CreateExerciseForm.type.name, exercise.summary.type.toString())
+        multipart.part(CreateExerciseForm.description.name, exercise.summary.description)
+        exercise.steps.forEachIndexed { idx, step ->
+            multipart.part(CreateExerciseForm.stepsDescription(idx), step.description)
+            val image = images[idx.toLong()]
+            if (image != null) {
+                multipart.part(CreateExerciseForm.stepImage(idx), image.content)
+                    .filename(image.metaData.name)
+                    .contentType(MediaType.parseMediaType(image.metaData.mediaType))
             }
-
-            this
-        } When {
-            post(CreateExerciseForm.action.url)
-        } Then {
-            statusCode(HttpStatus.OK.value())
-            header("HX-Redirect", ExercisesListPage.path)
         }
-
+        restTestClient.post()
+            .uri(CreateExerciseForm.action.url)
+            .accept(MediaType.TEXT_HTML)
+            .contentType(MediaType.MULTIPART_FORM_DATA)
+            .body(multipart.build())
+            .authorized()
+            .exchange()
+            .expectStatus().isOk
+            .expectHeader().valueEquals("HX-Redirect", ExercisesListPage.path)
     }
 
     fun getExercisesListPage(): Document {
-        return Given {
-            authorized()
-        } When {
-            get(ExercisesListPage.path)
-        } Then {
-            statusCode(HttpStatus.OK.value())
-        } Extract {
-            Jsoup.parse(body().asString())
-        }
+        return restTestClient.get()
+            .uri(ExercisesListPage.path)
+            .accept(MediaType.TEXT_HTML)
+            .authorized()
+            .exchange()
+            .expectStatus().isEqualTo(HttpStatus.OK)
+            .getBodyAsString()
+            .let { Jsoup.parse(it) }
 
     }
 
     fun searchExercises(searchDto: ExerciseSearchDto): Document {
-        return Given {
-            authorized()
-            formParam(ExercisesListPage.ExercisesSearchForm.title.name, searchDto.title)
-            formParam(ExercisesListPage.ExercisesSearchForm.exercisesType.name, searchDto.exerciseType)
-        } When {
-            get(ExercisesListPage.ExercisesSearchForm.action.url)
-        } Then {
-            statusCode(HttpStatus.OK.value())
-        } Extract {
-            Jsoup.parse(body().asString())
-        }
+        return restTestClient.get()
+            .uri { builder ->
+                builder.path(ExercisesListPage.ExercisesSearchForm.action.url).queryParams(formData(
+                    ExercisesListPage.ExercisesSearchForm.title.name to searchDto.title,
+                    ExercisesListPage.ExercisesSearchForm.exercisesType.name to searchDto.exerciseType,
+                )).build()
+            }
+            .accept(MediaType.TEXT_HTML)
+            .authorized()
+            .exchange()
+            .expectStatus().isEqualTo(HttpStatus.OK)
+            .getBodyAsString()
+            .let { Jsoup.parse(it) }
     }
 
     fun getEditExercisePage(exerciseId: Long, expectedStatus: HttpStatus = HttpStatus.OK): Document {
-        return Given {
-            authorized()
-            pathParam("exerciseId", exerciseId)
-        } When {
-            get(EditExercisePage.PATH)
-        } Then {
-            statusCode(expectedStatus.value())
-        } Extract {
-            Jsoup.parse(body().asString())
-        }
+        return restTestClient.get()
+            .uri(EditExercisePage.PATH, exerciseId)
+            .accept(MediaType.TEXT_HTML)
+            .authorized()
+            .exchange()
+            .expectStatus().isEqualTo(expectedStatus.value())
+            .getBodyAsString()
+            .let { Jsoup.parse(it) }
     }
 
     fun editExercise(exerciseId: Long, exercise: ExerciseSummaryDto) {
-        Given {
-            authorized()
-
-            pathParam("exerciseId", exerciseId)
-
-            formParam(EditExerciseForm.title.name, exercise.title)
-            formParam(EditExerciseForm.duration.name, exercise.duration.toDecimalMinutes())
-            formParam(EditExerciseForm.type.name, exercise.type)
-            formParam(EditExerciseForm.description.name, exercise.description)
-        } When {
-            put(EditExerciseForm.action.url)
-        } Then {
-            statusCode(HttpStatus.OK.value())
-            header("HX-Redirect", ExercisesListPage.path)
-        }
+        restTestClient.put()
+            .uri(EditExerciseForm.action.url, exerciseId)
+            .accept(MediaType.TEXT_HTML)
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+            .body(formData(
+                EditExerciseForm.title.name to exercise.title,
+                EditExerciseForm.duration.name to exercise.duration.toDecimalMinutes(),
+                EditExerciseForm.type.name to exercise.type,
+                EditExerciseForm.description.name to exercise.description,
+            ))
+            .authorized()
+            .exchange()
+            .expectStatus().isEqualTo(HttpStatus.OK)
+            .expectHeader().valueEquals("HX-Redirect", ExercisesListPage.path)
     }
 
     fun getStepImage(exerciseId: Long, stepIdx: Int, expectedStatus: HttpStatus = HttpStatus.OK): ByteArray {
-        return Given {
-            authorized()
-
-            pathParam("exerciseId", exerciseId)
-            pathParam("stepIdx", stepIdx)
-        } When {
-            get(EditExerciseForm.IMAGE_PATH)
-        } Then {
-            statusCode(expectedStatus.value())
-        } Extract {
-            asByteArray()
-        }
+        return restTestClient.get()
+            .uri(EditExerciseForm.IMAGE_PATH, exerciseId, stepIdx)
+            .accept(MediaType.TEXT_HTML)
+            .authorized()
+            .exchange()
+            .expectStatus().isEqualTo(expectedStatus.value())
+            .returnResult().responseBodyContent
     }
 
     fun deleteExercise(exerciseId: Long, expectedStatus: HttpStatus = HttpStatus.OK): ByteArray {
-        return Given {
-            authorized()
-
-            pathParam("exerciseId", exerciseId)
-        } When {
-            delete(ExercisesListPage.deleteAction)
-        } Then {
-            statusCode(expectedStatus.value())
-        } Extract {
-            asByteArray()
-        }
+        return restTestClient.delete()
+            .uri(ExercisesListPage.deleteAction, exerciseId)
+            .accept(MediaType.TEXT_HTML)
+            .authorized()
+            .exchange()
+            .expectStatus().isEqualTo(expectedStatus.value())
+            .returnResult().responseBodyContent
     }
 
     fun getExerciseModal(exerciseId: Long, expectedStatus: HttpStatus = HttpStatus.OK): Document {
-        return Given {
-            authorized()
-            pathParam("exerciseId", exerciseId)
-        } When {
-            get(ExerciseModal.PATH)
-        } Then {
-            statusCode(expectedStatus.value())
-        } Extract {
-            Jsoup.parse(body().asString())
-        }
+        return restTestClient.get()
+            .uri(ExerciseModal.PATH, exerciseId)
+            .accept(MediaType.TEXT_HTML)
+            .authorized()
+            .exchange()
+            .expectStatus().isEqualTo(expectedStatus.value())
+            .getBodyAsString()
+            .let { Jsoup.parse(it) }
     }
 
 }

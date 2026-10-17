@@ -81,7 +81,7 @@ class ProgramsListPageTest : QYogaAppIntegrationBaseTest() {
         val response = therapist.programs.deleteProgram(program.id)
 
         // Then
-        response.statusCode() shouldBe HttpStatus.OK.value()
+        response.expectStatus().isEqualTo(HttpStatus.OK)
         backgrounds.programs.findAll().toList() shouldHaveSize 0
     }
 

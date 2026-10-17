@@ -1,7 +1,6 @@
 package pro.qyoga.tests.cases.app.therapist.appointments.core
 
 import io.kotest.matchers.collections.shouldBeEmpty
-import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.http.HttpStatus
@@ -67,7 +66,7 @@ class EditAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
     @Test
     fun `Отредактированная запись на прием только с обязательными полями должна сохраняться`() {
-        // Сетап
+        // Given
         val appointment = appointmentBackgrounds.create()
         val newAppointmentType = backgrounds.appointmentTypes.createAppointmentType()
         val therapeuticTask = backgrounds.therapeuticTasks.createTherapeuticTask()
@@ -83,11 +82,11 @@ class EditAppointmentPageTest : QYogaAppIntegrationBaseTest() {
                 comment = randomCyrillicWord()
             )
 
-        // Действие
+        // When
         val response = theTherapist.appointments.editAppointment(appointment.ref(), editedAppointment)
 
-        // Проверка
-        response.statusCode() shouldBe HttpStatus.OK.value()
+        // Then
+        response.expectStatus().isEqualTo(HttpStatus.OK)
         response shouldBePage CalendarPage
 
         val persistedAppointment =
@@ -97,7 +96,7 @@ class EditAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
     @Test
     fun `Отредактированная запись на прием со всеми полями должна сохраняться`() {
-        // Сетап
+        // Given
         val appointment = appointmentBackgrounds.createFull()
         val editedAppointment =
             AppointmentsObjectMother.appointmentPatchRequest(
@@ -111,11 +110,11 @@ class EditAppointmentPageTest : QYogaAppIntegrationBaseTest() {
                 comment = null
             )
 
-        // Действие
+        // When
         val response = theTherapist.appointments.editAppointment(appointment.ref(), editedAppointment)
 
-        // Проверка
-        response.statusCode() shouldBe HttpStatus.OK.value()
+        // Then
+        response.expectStatus().isEqualTo(HttpStatus.OK)
         response shouldBePage CalendarPage
 
         val persistedAppointment = appointmentBackgrounds.findAll().single()
@@ -134,16 +133,16 @@ class EditAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
     @Test
     fun `При запросе на редактировании несуществующего приема должна возвращаться страница с ошибкой 404`() {
-        // Сетап
+        // Given
         val editAppointmentRequest = randomEditAppointmentRequest()
 
-        // Действие
+        // When
         val response = theTherapist.appointments.editAppointment(
             aAppointmentId(), editAppointmentRequest
         )
 
-        // Проверка
-        response.statusCode() shouldBe HttpStatus.NOT_FOUND.value()
+        // Then
+        response.expectStatus().isEqualTo(HttpStatus.NOT_FOUND)
         response shouldBePage NotFoundErrorPage
     }
 
@@ -185,18 +184,18 @@ class EditAppointmentPageTest : QYogaAppIntegrationBaseTest() {
 
     @Test
     fun `Удаление записи на прием должно быть постоянным и перенаправлять на указанный календарный день`() {
-        // Сетап
+        // Given
         val appointment = appointmentBackgrounds.create()
 
-        // Действие
+        // When
         val response = theTherapist.appointments.delete(appointment.ref(), appointment.wallClockDateTime.toLocalDate())
 
-        // Проверка
-        response.statusCode shouldBe HttpStatus.OK.value()
-        response.header("HX-Location") shouldBe SchedulePageController.DATE_PATH.replace(
+        // Then
+        response.expectStatus().isOk
+        response.expectHeader().valueEquals("HX-Location", SchedulePageController.DATE_PATH.replace(
             "{date}",
             appointment.wallClockDateTime.toLocalDate().toString()
-        )
+        ))
 
         appointmentBackgrounds.getDaySchedule(appointment.wallClockDateTime.toLocalDate()).shouldBeEmpty()
     }

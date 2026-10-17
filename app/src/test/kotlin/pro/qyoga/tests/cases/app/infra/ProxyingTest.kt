@@ -1,9 +1,7 @@
 package pro.qyoga.tests.cases.app.infra
 
-import io.restassured.module.kotlin.extensions.Then
-import org.hamcrest.CoreMatchers.startsWith
+import io.kotest.matchers.string.shouldStartWith
 import org.junit.jupiter.api.Test
-import org.springframework.http.HttpStatus
 import pro.qyoga.tests.clients.PublicClient
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_LOGIN
 import pro.qyoga.tests.fixture.object_mothers.therapists.THE_THERAPIST_PASSWORD
@@ -24,10 +22,9 @@ class ProxyingTest : QYogaAppIntegrationBaseTest() {
             headers = mapOf("X-Forwarded-Proto" to forwardedForProtocol)
         )
 
-        response.Then {
-            statusCode(HttpStatus.FOUND.value())
-            header("Location", startsWith(forwardedForProtocol))
-        }
+        // Then
+        response.expectStatus().isFound
+            .expectHeader().value("Location") { it shouldStartWith forwardedForProtocol }
     }
 
 }

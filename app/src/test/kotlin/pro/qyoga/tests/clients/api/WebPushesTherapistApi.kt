@@ -1,12 +1,13 @@
 package pro.qyoga.tests.clients.api
 
-import io.restassured.http.Cookie
+import org.springframework.http.HttpCookie
 import org.springframework.test.web.servlet.client.RestTestClient
 import pro.qyoga.app.pushes.web.WebPushesController
 import pro.qyoga.i9ns.pushes.web.model.WebPushSubscription
 
+
 class WebPushesTherapistApi(
-    override val authCookie: Cookie,
+    override val authCookie: HttpCookie,
     private val restTestClient: RestTestClient
 ) : AuthorizedApi {
 

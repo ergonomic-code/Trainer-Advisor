@@ -2,9 +2,7 @@ package pro.qyoga.tests.clients
 
 import org.springframework.http.HttpStatus
 import org.springframework.http.HttpStatusCode
-import org.springframework.http.ResponseEntity
 import org.springframework.test.web.servlet.client.RestTestClient
-import org.springframework.test.web.servlet.client.returnResult
 import pro.azhidkov.platform.spring.http.ErrorResponse
 import pro.qyoga.app.publc.surverys.SurveysController
 
@@ -15,7 +13,7 @@ class YandexFormsClient(
 
     fun createSurvey(surveyJsonStr: String): HttpStatusCode {
         return createSurveyForResponse(surveyJsonStr)
-            .returnResult<ResponseEntity<String>>()
+            .returnResult()
             .status
     }
 
@@ -24,7 +22,7 @@ class YandexFormsClient(
         expectedStatus: HttpStatus = HttpStatus.CONFLICT
     ): ErrorResponse {
         return createSurveyForResponse(entranceSurveyJsonStr)
-            .expectStatus().isEqualTo(expectedStatus)
+            .expectStatus().isEqualTo(expectedStatus.value())
             .returnResult(ErrorResponse::class.java)
             .responseBody!!
     }

@@ -3,9 +3,6 @@ package pro.qyoga.tests.cases.app.therapist.clients.files
 import io.kotest.matchers.collections.shouldHaveAtLeastSize
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
-import io.restassured.module.kotlin.extensions.Extract
-import io.restassured.module.kotlin.extensions.Then
-import org.jsoup.Jsoup
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.springframework.http.ContentDisposition
@@ -100,11 +97,9 @@ class ClientFilesPageTest : QYogaAppIntegrationBaseTest() {
         // When
         val response = therapist.clientFiles.download(client.id, -1)
 
-        response.Then {
-            statusCode(HttpStatus.NOT_FOUND.value())
-        } Extract {
-            Jsoup.parse(body().asString()) shouldBePage NotFoundErrorPage
-        }
+        // Then
+        response.expectStatus().isNotFound
+        response shouldBePage NotFoundErrorPage
     }
 
     @Test
@@ -118,14 +113,13 @@ class ClientFilesPageTest : QYogaAppIntegrationBaseTest() {
         // When
         val result = therapist.clientFiles.download(client.id, clientFile.id)
 
-        result.Then {
-            statusCode(HttpStatus.OK.value())
-            contentType(clientFile.fileRef.resolveOrThrow().mediaType)
-            header("Content-Length", clientFile.fileRef.resolveOrThrow().size.toString())
-        } Extract {
-            val body = asByteArray()
-            body shouldBe file.content
-        }
+        // Then
+        val exchange = result.expectStatus().isOk
+            .expectHeader().contentType(clientFile.fileRef.resolveOrThrow().mediaType)
+            .expectHeader().valueEquals("Content-Length", clientFile.fileRef.resolveOrThrow().size.toString())
+            .returnResult()
+        val body = exchange.responseBodyContent
+        body shouldBe file.content
     }
 
     @Test
@@ -139,16 +133,15 @@ class ClientFilesPageTest : QYogaAppIntegrationBaseTest() {
         // When
         val result = therapist.clientFiles.download(client.id, clientFile.id)
 
-        result.Then {
-            statusCode(HttpStatus.OK.value())
-            contentType(clientFile.fileRef.resolveOrThrow().mediaType)
-            header("Content-Length", clientFile.fileRef.resolveOrThrow().size.toString())
-        } Extract {
-            val contentDisposition = header("Content-Disposition")
-            ContentDisposition.parse(contentDisposition).filename shouldBe file.metaData.name
-            val body = asByteArray()
-            body shouldBe file.content
-        }
+        // Then
+        val exchange = result.expectStatus().isOk
+            .expectHeader().contentType(clientFile.fileRef.resolveOrThrow().mediaType)
+            .expectHeader().valueEquals("Content-Length", clientFile.fileRef.resolveOrThrow().size.toString())
+            .returnResult()
+        val contentDisposition = exchange.responseHeaders.getFirst("Content-Disposition")!!
+        ContentDisposition.parse(contentDisposition).filename shouldBe file.metaData.name
+        val body = exchange.responseBodyContent
+        body shouldBe file.content
     }
 
     @Test
@@ -213,12 +206,8 @@ class ClientFilesPageTest : QYogaAppIntegrationBaseTest() {
         val result = therapist.clientFiles.download(client.id, clientFile.id)
 
         // Then
-        result.Then {
-            statusCode(HttpStatus.OK.value())
-        } Extract {
-            val body = asByteArray()
-            body shouldBe file.content
-        }
+        val body = result.expectStatus().isOk.returnResult().responseBodyContent
+        body shouldBe file.content
     }
 
 }

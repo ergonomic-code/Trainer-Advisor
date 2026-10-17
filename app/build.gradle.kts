@@ -101,21 +101,11 @@ dependencies {
 	testImplementation(testFixtures(project(":app")))
 	testImplementation(enforcedPlatform(testLibs.jetty))
 	testImplementation(enforcedPlatform(testLibs.jetty.ee10))
-	testImplementation(testLibs.bundles.restassured)
 	testImplementation(testLibs.archunit)
 	testImplementation(testLibs.mockito.kotlin)
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.springframework.security:spring-security-test")
     testImplementation("org.springframework.boot:spring-boot-starter-webflux")
-
-	modules {
-		module("org.codehaus.groovy:groovy") {
-			replacedBy("org.apache.groovy:groovy", "conflicts in current rest-assured version")
-		}
-		module("org.codehaus.groovy:groovy-xml") {
-			replacedBy("org.apache.groovy:groovy-xml", "conflicts in current rest-assured version")
-		}
-	}
 }
 
 tasks.getByName<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {

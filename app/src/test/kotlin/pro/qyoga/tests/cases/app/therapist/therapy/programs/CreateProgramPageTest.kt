@@ -49,7 +49,7 @@ class CreateProgramPageTest : QYogaAppIntegrationBaseTest() {
         val response = therapist.programs.createProgram(createProgramRequest, therapeuticTask.name)
 
         // Then
-        response.header("HX-Redirect") shouldBe ProgramsListPage.path
+        response.expectHeader().valueEquals("HX-Redirect", ProgramsListPage.path)
 
         val program = backgrounds.programs.findAll().single()
         program shouldMatch (createProgramRequest to therapeuticTask.name)
