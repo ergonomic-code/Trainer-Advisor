@@ -32,7 +32,7 @@ class WelcomeMessageChannel(
                 Логин от вашего аккаунта: $to. 
                 Пароль от вашего аккаунта: $password.
                 
-                Теперь вы можете войти в систему на странице https://trainer-advisor.pro/login используя email и пароль из этого письма.
+                Теперь вы можете войти в систему на странице https://ta.azhidkov.pro/login используя email и пароль из этого письма.
                 
                 С уважением, команда Trainer Advisor.
             """.trimIndent()
